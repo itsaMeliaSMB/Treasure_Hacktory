@@ -1,6 +1,6 @@
-package com.example.android.treasurefactory.hackmaster
+package com.example.android.treasurefactory
 
-data class ArtObject(val artType: ArtType, val renown: Renown, val size: Size,
+data class HMArtObject(val artType: ArtType, val renown: Renown, val size: Size,
                      val condition: Condition, val materials: Materials, val quality: Quality,
                      val age: Age, val subject: Subject, val valueLevel: Int) {
 

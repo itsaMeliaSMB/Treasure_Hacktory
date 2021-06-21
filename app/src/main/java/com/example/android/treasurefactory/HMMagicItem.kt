@@ -1,6 +1,6 @@
-package com.example.android.treasurefactory.hackmaster
+package com.example.android.treasurefactory
 
-data class MagicItem(
+data class HMMagicItem(
     val typeOfItem: MagicItemType,val name: String,val sourceText: String,val sourcePage: Int,
     val xpValue: Int,val gpValue: Double,val notes: List<List<String>> = emptyList(),
     val extraNotes: List<List<String>> = emptyList()) {

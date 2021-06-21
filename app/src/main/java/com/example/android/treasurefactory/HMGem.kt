@@ -1,6 +1,6 @@
-package com.example.android.treasurefactory.hackmaster
+package com.example.android.treasurefactory
 
-data class Gem(val variety: Variety, val size: Size, val quality: Quality, val valueLevel: Int, val type: String,
+data class HMGem(val variety: Variety, val size: Size, val quality: Quality, val valueLevel: Int, val type: String,
                val opacity: Opacity = Opacity.TRANSPARENT, val description: String = "") {
 
     enum class Size(val valueMod: Int, val description: String, val gemCarat: Double,
