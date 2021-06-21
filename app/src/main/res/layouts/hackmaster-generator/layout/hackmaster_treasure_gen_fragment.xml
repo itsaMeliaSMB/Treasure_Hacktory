@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/hackmaster_gen_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textAllCaps="true"
+        android:text="@string/hoard_name_label"/>
+
+    <EditText
+        android:id="@+id/hackmaster_gen_name_entry"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:maxLines="1"
+        android:hint="Enter name of hoard or leave blank"/>
+
+    <TextView
+        android:id="@+id/hackmaster_gen_method_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textAllCaps="true"
+        android:text="@string/hoard_gen_label"/>
+
+    <RadioGroup
+        android:id="@+id/hackmaster_gen_method_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <RadioButton
+            android:id="@+id/hackmaster_gen_method_letter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="8dp"
+            android:textAllCaps="true"
+            android:checked="true"
+            android:text="@string/gen_method_letter_label"/>
+
+        <RadioButton
+            android:id="@+id/hackmaster_gen_method_specific"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="8dp"
+            android:textAllCaps="true"
+            android:text="@string/gen_method_specific_label"/>
+
+    </RadioGroup>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:layout_marginVertical="8dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:id="@+id/hackmaster_gen_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="Generate"/>
+
+</LinearLayout>

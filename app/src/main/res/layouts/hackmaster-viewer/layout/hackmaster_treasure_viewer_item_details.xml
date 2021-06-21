@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/treasure_viewer_item_details_icon"
+                android:layout_width="@dimen/hoard_icon_size"
+                android:layout_height="@dimen/hoard_icon_size"
+                android:layout_marginEnd="16dp"
+                android:scaleType="fitCenter"
+                tools:src="@drawable/clipart_info_vector_icon"/>
+
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/treasure_viewer_item_details_title"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    style="@style/item_details_title_style"
+                    tools:text="Item name"/>
+
+                <TextView
+                    android:id="@+id/treasure_viewer_item_details_subtitle"
+                    android:textSize="16sp"
+                    style="@style/item_details_title_style"
+                    tools:text="Item type and nickname"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/item_details_overview_holder"
+            android:layout_marginVertical="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- TODO: remove later -->
+            <include
+                tools:layout="@layout/hackmaster_treasure_viewer_item_overview_magic"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAllCaps="true"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Details"/>
+
+        <ListView
+            android:id="@+id/item_details_list_holder"
+            android:layout_marginVertical="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Add top drawables to buttons -->
+            <Button
+                android:id="@+id/item_details_modify_button"
+                android:text="Modify"
+                android:drawableTop="@drawable/clipart_edit_icon_vector"
+                style="@style/item_details_button_style" />
+
+            <Button
+
+                android:layout_marginHorizontal="16dp"
+                android:id="@+id/item_details_reroll_button"
+                android:drawableTop="@drawable/clipart_refresh_icon_vector"
+                android:text="Re-roll"
+                style="@style/item_details_button_style" />
+
+            <Button
+                android:id="@+id/item_details_delete_button"
+                android:drawableTop="@drawable/clipart_delete_icon_vector"
+                android:text="Delete"
+                style="@style/item_details_button_style"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

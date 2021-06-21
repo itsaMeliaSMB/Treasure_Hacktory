@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_hoard_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="[Hoard Name]"/>
+
+        <!-- Consider adding favorite icon here -->
+
+        <ImageView
+            android:id="@+id/treasure_viewer_overview_hoard_icon"
+            android:layout_width="@dimen/hoard_icon_size"
+            android:layout_height="@dimen/hoard_icon_size"
+            android:layout_marginStart="16dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="@string/time_date_gen_label"/>
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_time_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"
+            android:textAlignment="textEnd"
+            android:textStyle="italic"
+            android:text="XX/XX/XXXX at XX:XX:XX PM"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_type_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="@string/hoard_type_label"/>
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_type_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"
+            android:textAlignment="textEnd"
+            android:textStyle="italic"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="[A x1 , B x1, J x2, N x1]]"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_value_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="Total value:"/>
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_value_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"
+            android:textAlignment="textEnd"
+            android:textStyle="italic"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:text="[ . . . ] gp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="Hoard Breakdown"/>
+
+    <ListView
+        android:id="@+id/treasure_viewer_overview_asset_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginBottom="32dp">
+
+        <Button
+            android:id="@+id/treasure_viewer_view_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="16dp"
+            android:text="@string/view_hoard_button_label"/>
+
+        <Button
+            android:id="@+id/treasure_viewer_delete_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLines="1"
+            android:text="@string/delete_hoard_button_text"/>
+
+    </LinearLayout>
+
+</LinearLayout>

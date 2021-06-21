@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/hackmaster_gen_specific_group"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ExpandableListView
+        android:id="@+id/hackmaster_gen_coinage_exlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indicatorLeft="0dp"
+        android:childDivider=""
+        android:background="@color/teal_200"/>
+
+    <ExpandableListView
+        android:id="@+id/hackmaster_gen_gems_exlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:indicatorLeft="0dp"
+        android:childDivider=""
+        android:background="@color/teal_200"/>
+
+    <ExpandableListView
+        android:id="@+id/hackmaster_gen_art_exlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:indicatorLeft="0dp"
+        android:childDivider=""
+        android:background="@color/teal_200"/>
+
+    <ExpandableListView
+        android:id="@+id/hackmaster_gen_magic_exlist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:indicatorLeft="0dp"
+        android:childDivider=""
+        android:background="@color/teal_200"/>
+
+</LinearLayout>
