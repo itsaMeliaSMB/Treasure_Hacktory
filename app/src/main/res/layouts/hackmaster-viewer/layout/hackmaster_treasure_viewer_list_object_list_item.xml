@@ -72,6 +72,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="@dimen/list_item_element_margin"
         android:layout_gravity="center_vertical"
-        tools:src="@drawable/clipart_extranotes_icon_vector"/>
+        tools:src="@drawable/clipart_extranotes_vector_icon"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

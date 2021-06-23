@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/new_hoard"
-        android:icon="@drawable/clipart_treasure_chest_add_vector"
+        android:icon="@drawable/clipart_treasure_add_vector_icon"
         android:title="@string/new_hoard"
         app:showAsAction="ifRoom|withText"
         android:iconTint="?attr/colorOnPrimary"/>

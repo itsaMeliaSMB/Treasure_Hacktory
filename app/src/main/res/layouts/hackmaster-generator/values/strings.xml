@@ -4,4 +4,6 @@
     <string name="new_hoard">New hoard</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="diamond_emoji">💎</string>
+    <string name="art_emoji">🎨</string>
 </resources>

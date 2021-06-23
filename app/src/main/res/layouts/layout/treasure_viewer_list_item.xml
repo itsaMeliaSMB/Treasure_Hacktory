@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hoard_recycler_view"
+    android:layout_width="match_parent"
+    android:layout_height="92dp">
+
+    <ImageView
+        android:id="@+id/treasure_viewer_list_icon"
+        android:layout_width="@dimen/list_item_icon_size"
+        android:layout_height="@dimen/list_item_icon_size"
+        android:layout_marginHorizontal="16dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        tools:src="@drawable/coin_pile_icon"/>
+    <!-- TODO: implement hoard icon into itemView -->
+
+    <TextView
+        android:id="@+id/treasure_viewer_list_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:maxLines="1"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_toEndOf="@id/treasure_viewer_list_icon"
+        android:layout_alignParentTop="true"
+        tools:text="Hoard Name"/>
+
+    <TextView
+        android:id="@+id/treasure_viewer_list_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:gravity="center_vertical"
+        android:textSize="14sp"
+        android:layout_alignTop="@id/treasure_viewer_list_name"
+        android:layout_alignBottom="@id/treasure_viewer_list_name"
+        android:layout_alignParentEnd="true"
+        tools:text="12/31/2021"/>
+
+    <TextView
+        android:id="@+id/treasure_viewer_list_gp_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:layout_below="@id/treasure_viewer_list_name"
+        android:layout_alignStart="@id/treasure_viewer_list_name"
+        tools:text="worth 10000000000 gp"/>
+
+    <!-- Unique item counters -->
+    <TextView
+        android:id="@+id/treasure_viewer_list_gem_icon"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_below="@id/treasure_viewer_list_gp_value"
+        android:layout_alignStart="@id/treasure_viewer_list_name"
+        android:text="@string/diamond_emoji"/>
+
+    <TextView
+        android:id="@+id/treasure_viewer_list_gem_count"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/treasure_viewer_list_gp_value"
+        android:layout_toEndOf="@id/treasure_viewer_list_gem_icon"
+        tools:text="100"/>
+
+    <TextView
+        android:id="@+id/treasure_viewer_list_art_icon"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_below="@id/treasure_viewer_list_gp_value"
+        android:layout_toEndOf="@id/treasure_viewer_list_gem_count"
+        android:text="@string/art_emoji"/>
+
+    <TextView
+        android:id="@+id/treasure_viewer_list_art_count"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/treasure_viewer_list_gp_value"
+        android:layout_toEndOf="@id/treasure_viewer_list_art_icon"
+        tools:text="100"/>
+
+    <TextView
+        android:id="@+id/treasure_viewer_list_magic_icon"
+        android:layout_width="@dimen/emoji_size"
+        android:layout_height="@dimen/emoji_size"
+        android:layout_below="@id/treasure_viewer_list_gp_value"
+        android:layout_toEndOf="@id/treasure_viewer_list_art_count"
+        android:text="🔮"/>
+
+    <TextView
+        android:id="@+id/treasure_viewer_list_magic_count"
+        android:layout_width="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/treasure_viewer_list_gp_value"
+        android:layout_toEndOf="@id/treasure_viewer_list_magic_icon"
+        tools:text="100"/>
+
+    <ImageView
+        android:id="@+id/treasure_viewer_list_star"
+        android:layout_height="32dp"
+        android:layout_width="32dp"
+        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/clipart_unfilledstar_vector_icon"
+        app:tint="?attr/colorOnSurface" />
+
+</RelativeLayout>

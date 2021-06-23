@@ -81,20 +81,20 @@
             <Button
                 android:id="@+id/item_details_modify_button"
                 android:text="Modify"
-                android:drawableTop="@drawable/clipart_edit_icon_vector"
+                android:drawableTop="@drawable/clipart_edit_vector_icon"
                 style="@style/item_details_button_style" />
 
             <Button
 
                 android:layout_marginHorizontal="16dp"
                 android:id="@+id/item_details_reroll_button"
-                android:drawableTop="@drawable/clipart_refresh_icon_vector"
+                android:drawableTop="@drawable/clipart_refresh_vector_icon"
                 android:text="Re-roll"
                 style="@style/item_details_button_style" />
 
             <Button
                 android:id="@+id/item_details_delete_button"
-                android:drawableTop="@drawable/clipart_delete_icon_vector"
+                android:drawableTop="@drawable/clipart_delete_vector_icon"
                 android:text="Delete"
                 style="@style/item_details_button_style"/>
 
