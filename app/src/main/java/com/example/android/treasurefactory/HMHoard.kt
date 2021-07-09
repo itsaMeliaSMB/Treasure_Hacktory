@@ -1,9 +1,11 @@
 package com.example.android.treasurefactory
 
+import androidx.room.Entity
 import java.util.*
 
 // TODO: privatize some of the properties in the constructor
-data class HMHoard(val id: UUID = UUID.randomUUID(),
+@Entity
+data class HMHoard(@PrimaryKey val id: UUID = UUID.randomUUID(),
                     var hoardName: String = "",
                     var creationDate: Date = Date(),
                     var favorited: Boolean = false) {
@@ -19,4 +21,8 @@ data class HMHoard(val id: UUID = UUID.randomUUID(),
 
     //TODO Add function that returns totals of gems, artwork, and magic items
 
+    companion object {
+
+        private val file = File("data/treasureGenerator/Stones_${gemVariety.tier}.csv").readLines()
+    }
 }
