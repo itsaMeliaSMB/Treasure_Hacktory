@@ -6,10 +6,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.ViewAnimator
+import android.widget.*
 import androidx.fragment.app.Fragment
 
 class HMHoardGeneratorFragment : Fragment() {
@@ -19,9 +16,14 @@ class HMHoardGeneratorFragment : Fragment() {
     private lateinit var specificRadioButton: RadioButton
     private lateinit var viewAnimator: ViewAnimator
     private lateinit var generateButton: Button
+    private lateinit var byLetterExpandableList: ExpandableListView
 
-    val letterGroupList: MutableList<String> = ArrayList()
-    val letterChildList: MutableList<MutableList<String>> = ArrayList()
+    val letterGroupList: List<String> = listOf( //TODO: populate using String resources instead of hardcoding
+        "Lair Treasures",
+        "Individual and Small Lair Treasures")
+    val letterChildList: List<List<String>> = listOf(
+        HMLetterObject.lairLetters.toList(),
+        HMLetterObject.smallLetters.toList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,12 +43,13 @@ class HMHoardGeneratorFragment : Fragment() {
         letterRadioButton = view.findViewById(R.id.hackmaster_gen_method_letter) as RadioButton
         specificRadioButton = view.findViewById(R.id.hackmaster_gen_method_specific) as RadioButton
         viewAnimator = view.findViewById(R.id.hackmaster_gen_view_animator) as ViewAnimator
+
+        byLetterExpandableList = view.findViewById(R.id.hackmaster_gen_letter_exlist) as ExpandableListView
+
         generateButton = view.findViewById(R.id.hackmaster_gen_generate_button) as Button
 
-        // Setting widget properties (TODO: relabel this comment)
-        generateButton.apply {
-            isEnabled = false
-        }
+        //Set adapter for expandable list view
+        byLetterExpandableList.setAdapter(HMLetterAdapter(requireContext(),byLetterExpandableList,letterGroupList,letterChildList))
 
         // Return inflated view
         return view
@@ -74,6 +77,19 @@ class HMHoardGeneratorFragment : Fragment() {
 
         hoardTitleField.addTextChangedListener(hoardTitleWatcher)
 
+        // Setting widget properties (TODO: relabel this comment)
+        letterRadioButton.apply{
+            setOnCheckedChangeListener { _, isChecked ->
+                Toast.makeText(context,"By-Letter method is ${if (isChecked) "en" else "dis"}abled.",Toast.LENGTH_SHORT).show()
+            }
+        }
 
+        generateButton.apply {
+
+            isEnabled = true //TODO only enable button when valid input is available.
+            setOnClickListener {
+                Toast.makeText(context,"Generate button clicked.",Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

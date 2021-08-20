@@ -17,7 +17,10 @@ object HMLetterObject {
         "non-weapon magic item(s)",
         "magic item(s)")
 
-    val lairHoardLetters = mapOf(
+    val lairLetters = arrayOf("A","B","C","D","E","F","G","H","I")
+    val smallLetters = arrayOf("J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+
+    val lairHoardTable = mapOf(
 
         "A" to arrayOf(
             intArrayOf(25,1000,3000),
@@ -146,7 +149,7 @@ object HMLetterObject {
             intArrayOf(0,0,0),
             intArrayOf(15,1,1) )
     )
-    val smallHoardLetters = mapOf(
+    val smallHoardTable = mapOf(
 
         "J" to arrayOf(
             intArrayOf(100,3,24),
@@ -388,8 +391,8 @@ object HMLetterObject {
             intArrayOf(50,3,3) )
     )
 
-    val lairOddsList = getOddsList(lairHoardLetters)
-    val smallOddsList = getOddsList(smallHoardLetters)
+    val lairOddsList = getOddsList(lairHoardTable)
+    val smallOddsList = getOddsList(smallHoardTable)
 
     private fun getOddsList(hoardTable: Map<String,Array<IntArray>>) : List<String> {
 

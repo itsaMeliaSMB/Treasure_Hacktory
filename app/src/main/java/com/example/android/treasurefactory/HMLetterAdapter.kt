@@ -8,35 +8,55 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 
-class HMLetterAdapter(private val context: Context,
+class HMLetterAdapter(val context: Context,
                       var expandableListView: ExpandableListView,
-                      val groupList: MutableList<String>,
-                      val childList: MutableList<MutableList<String>>) : BaseExpandableListAdapter() {
+                      val groupList: List<String>,
+                      val childList: List<List<String>>) : BaseExpandableListAdapter() {
 
     //TODO Declare Lists/Maps/HashMaps/whatever for treasure types specifically here
-    val lettersCountArray = Array<Int>(26) { 0 }
-    val infoStrings = Array<String>(26)
-        { i -> HMLetterType.getOddsString(HMLetterType.values()[i]) }
-    val letterArray = Array<String>(26) { i -> HMLetterType.values()[i].name }
+    var lairCountMap = mutableMapOf<String,Int>(
+        "A" to 0,
+        "B" to 0,
+        "C" to 0,
+        "D" to 0,
+        "E" to 0,
+        "F" to 0,
+        "G" to 0,
+        "H" to 0,
+        "I" to 0)
+    var smallCountMap = mutableMapOf<String,Int>(
+        "J" to 0,
+        "K" to 0,
+        "L" to 0,
+        "M" to 0,
+        "N" to 0,
+        "O" to 0,
+        "P" to 0,
+        "Q" to 0,
+        "R" to 0,
+        "S" to 0,
+        "T" to 0,
+        "U" to 0,
+        "V" to 0,
+        "W" to 0,
+        "X" to 0,
+        "Y" to 0,
+        "Z" to 0)
 
-    override fun getChild(exListPos: Int, listPos: Int): Any {
-        return childList[exListPos][listPos]
-    }
+    override fun getChild(exListPos: Int, listPos: Int): Any = childList[exListPos][listPos]
 
-    override fun getChildId(groupPos: Int, childPos: Int): Long {
-        TODO("Not yet implemented")
-    }
+    override fun getChildId(exListPos: Int, listPos: Int): Long = listPos.toLong()
 
     override fun getChildView(exListPos: Int, listPos: Int, isLast: Boolean, convertView: View?, parent: ViewGroup?): View {
 
         var convertView = convertView
-        val flatListPos = listPos + if (exListPos > 0) { 9 } else { 0 }
 
-        if (convertView == null){ // might need to remove this per https://stackoverflow.com/questions/40895070/button-inside-childview-of-expandablelistview-is-not-working#comment69087483_40895555
+        if (convertView == null){ // Might need to remove this per https://stackoverflow.com/questions/40895070/button-inside-childview-of-expandablelistview-is-not-working#comment69087483_40895555
 
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            convertView = inflater.inflate(R.layout.hackmaster_treasure_gen_letter_list_item,null)
+            convertView = inflater.inflate(R.layout.hackmaster_treasure_gen_letter_list_child,null)
         }
+
         // *** Wire widgets to child view ***
         val infoDot     = convertView?.findViewById(R.id.treasure_type_info) as ImageView
         val typeLabel   = convertView.findViewById(R.id.treasure_type_label) as TextView
@@ -66,16 +86,25 @@ class HMLetterAdapter(private val context: Context,
         }
 
         // Set text of label and counter
+        if (exListPos == 0) {
 
-        "Type ${letterArray[flatListPos]}".also { typeLabel.text = it }
+            "Type ${HMLetterObject.lairLetters[listPos]}".also { typeLabel.text = it }
+            quantityEdit.setText(lairCountMap[HMLetterObject.lairLetters[listPos]].toString())
 
-        quantityEdit.setText(lettersCountArray[flatListPos].toString())
+        } else {
 
-        // *** Add listeners and getters/setters for widgets ***
+            "Type ${HMLetterObject.smallLetters[listPos]}".also { typeLabel.text = it }
+            quantityEdit.setText(smallCountMap[HMLetterObject.smallLetters[listPos]].toString())
+        }
+
+        // *** Add listeners for widgets ***
 
         infoDot.setOnClickListener {
 
-            Toast.makeText(context, infoStrings[flatListPos], Toast.LENGTH_LONG).show()
+            val toastString = if (exListPos == 0) HMLetterObject.lairOddsList[listPos] else
+                HMLetterObject.smallOddsList[listPos]
+
+            Toast.makeText(context, toastString, Toast.LENGTH_LONG).show()
         }
 
         minusButton.setOnClickListener {
@@ -119,7 +148,11 @@ class HMLetterAdapter(private val context: Context,
                 }
 
                 // Update stored value in model
-                lettersCountArray[flatListPos] = intValue
+                if (exListPos == 0) {
+                    lairCountMap[HMLetterObject.lairLetters[listPos]] = intValue
+                } else {
+                    smallCountMap[HMLetterObject.smallLetters[listPos]] = intValue
+                }
             }
         }
 
@@ -129,24 +162,29 @@ class HMLetterAdapter(private val context: Context,
         return convertView
     }
 
-    override fun getChildrenCount(p0: Int): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getChildrenCount(exListPos: Int): Int = childList[exListPos].size
 
-    override fun getGroup(exListPos: Int): Any {
-        TODO("Not yet implemented")
-    }
+    override fun getGroup(exListPos: Int): String = groupList[exListPos]
 
-    override fun getGroupCount(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getGroupCount(): Int = groupList.size
 
-    override fun getGroupId(p0: Int): Long {
-        TODO("Not yet implemented")
-    }
+    override fun getGroupId(exListPos: Int): Long = exListPos.toLong()
 
     override fun getGroupView(exListPos: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
-        TODO("Not yet implemented")
+
+        var convertView = convertView
+
+        if (convertView == null){ // Might need to remove this per https://stackoverflow.com/questions/40895070/button-inside-childview-of-expandablelistview-is-not-working#comment69087483_40895555
+
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            convertView = inflater.inflate(R.layout.hackmaster_treasure_gen_letter_list_group,null)
+        }
+
+        val header = convertView?.findViewById(R.id.hackmaster_treasure_gen_exlist_header) as TextView
+
+
+        return convertView
+
     }
 
     override fun hasStableIds(): Boolean = false

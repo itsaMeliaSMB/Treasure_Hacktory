@@ -70,21 +70,13 @@
         android:orientation="vertical"
         android:layout_weight="1">
 
-        <LinearLayout
-            android:id="@+id/hackmaster_gen_letter_group"
+        <ExpandableListView
+            android:id="@+id/hackmaster_gen_letter_exlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ExpandableListView
-                android:id="@+id/hackmaster_gen_letter_exlist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/exlist_bottom_margin"
-                android:indicatorLeft="0dp"
-                android:background="?attr/colorPrimary"/>
-
-        </LinearLayout>
+            android:layout_marginBottom="@dimen/exlist_bottom_margin"
+            android:indicatorLeft="0dp"
+            android:background="?attr/colorPrimary"/>
 
         <LinearLayout
             android:id="@+id/hackmaster_gen_specific_group"
