@@ -1,14 +1,16 @@
 package com.example.android.treasurefactory
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
 
 // TODO: privatize some of the properties in the constructor
+// TODO: find way to serialize custom POJOs, probably using JSON/GSON
 @Entity
 data class HMHoard(@PrimaryKey val id: UUID = UUID.randomUUID(),
-                    var hoardName: String = "",
-                    var creationDate: Date = Date(),
-                    var favorited: Boolean = false) {
+                   var hoardName: String = "",
+                   var creationDate: Date = Date(),
+                   var favorited: Boolean = false) {
 
     //TODO: Add initializer
     var coinage = HMCoinPile()
@@ -21,8 +23,8 @@ data class HMHoard(@PrimaryKey val id: UUID = UUID.randomUUID(),
 
     //TODO Add function that returns totals of gems, artwork, and magic items
 
-    companion object {
+    /*companion object {
 
         private val file = File("data/treasureGenerator/Stones_${gemVariety.tier}.csv").readLines()
-    }
+    }*/
 }

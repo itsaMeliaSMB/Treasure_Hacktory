@@ -21,12 +21,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:maxLines="1"
-        android:hint="Enter name of hoard or leave blank"/>
+        android:hint="@string/hoard_name_entry_hint"/>
 
     <TextView
         android:id="@+id/hackmaster_gen_method_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
         android:textAllCaps="true"
         android:text="@string/hoard_gen_label"/>
@@ -60,7 +61,8 @@
 
     </RadioGroup>
 
-    <ScrollView
+    <ViewAnimator
+        android:id="@+id/hackmaster_gen_view_animator"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -68,14 +70,68 @@
         android:orientation="vertical"
         android:layout_weight="1">
 
-        <FrameLayout
-            android:id="@+id/hackmaster_gen_frame_layout"
+        <LinearLayout
+            android:id="@+id/hackmaster_gen_letter_group"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ExpandableListView
+                android:id="@+id/hackmaster_gen_letter_exlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                android:indicatorLeft="0dp"
+                android:background="?attr/colorPrimary"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hackmaster_gen_specific_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ExpandableListView
+                android:id="@+id/hackmaster_gen_coinage_exlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indicatorLeft="0dp"
+                android:childDivider=""
+                android:background="?attr/colorSecondary"/>
+
+            <ExpandableListView
+                android:id="@+id/hackmaster_gen_gems_exlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                android:indicatorLeft="0dp"
+                android:childDivider=""
+                android:background="?attr/colorSecondary"/>
+
+            <ExpandableListView
+                android:id="@+id/hackmaster_gen_art_exlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                android:indicatorLeft="0dp"
+                android:childDivider=""
+                android:background="?attr/colorSecondary"/>
+
+            <ExpandableListView
+                android:id="@+id/hackmaster_gen_magic_exlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indicatorLeft="0dp"
+                android:childDivider=""
+                android:background="?attr/colorSecondary"/>
+
+        </LinearLayout>
         
-    </ScrollView>
+    </ViewAnimator>
 
     <Button
+        android:id="@+id/hackmaster_gen_generate_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"

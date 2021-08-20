@@ -2,4 +2,5 @@
 <resources>
     <dimen name="list_item_subicon_size">24dp</dimen>
     <dimen name="emoji_size">16dp</dimen>
+    <dimen name="exlist_bottom_margin">16dp</dimen>
 </resources>

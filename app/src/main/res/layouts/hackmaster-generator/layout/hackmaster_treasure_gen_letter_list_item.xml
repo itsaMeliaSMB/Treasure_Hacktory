@@ -62,7 +62,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/treasure_type_decrement_button"
         app:layout_constraintTop_toTopOf="@+id/treasure_type_decrement_button"
-        tools:text="0"/>
+        tools:text="1"/>
 
     <Button
         android:id="@+id/treasure_type_increment_button"
