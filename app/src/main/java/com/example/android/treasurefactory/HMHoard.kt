@@ -14,10 +14,13 @@ data class HMHoard(@PrimaryKey val id: UUID = UUID.randomUUID(),
 
     //TODO: Add initializer
     var coinage = HMCoinPile()
+
+    /* DUMMIED OUT SINCE WE AREN'T WORKING ON THE DB COMPONENTS RIGHT NOW
     var gemList = mutableListOf<HMGem>()
     var artList = mutableListOf<HMArtObject>()
     var magicList = mutableListOf<HMMagicItem>()
     var spellsList = mutableListOf<HMSpellCollection>()
+    */
 
     //TODO Add function to return total GP value of hoard
 

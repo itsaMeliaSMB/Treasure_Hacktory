@@ -18,12 +18,12 @@ data class HMGem(val variety: Variety, val size: Size, val quality: Quality, val
     }
     enum class Variety(val tier: String, val baseLevel: Int, val possibilities: Int, val gemMultiplier: Double){
 
-        ORNAMENTAL      ("Ornamental", 5, 12, 5.0),
-        SEMIPRECIOUS    ("Semiprecious", 6, 12, 3.0),
-        FANCY           ("Fancy", 7, 12, 2.0),
-        PRECIOUS        ("Precious", 8, 6, 1.0),
-        GEM             ("Gem", 9, 10, 0.75),
-        JEWEL           ("Jewel", 10, 6, 0.5)
+        ORNAMENTAL      ("ornamental", 5, 12, 5.0),
+        SEMIPRECIOUS    ("semiprecious", 6, 12, 3.0),
+        FANCY           ("fancy", 7, 12, 2.0),
+        PRECIOUS        ("precious", 8, 6, 1.0),
+        GEM             ("gem", 9, 10, 0.75),
+        JEWEL           ("jewel", 10, 6, 0.5)
     }
     enum class Opacity {
 

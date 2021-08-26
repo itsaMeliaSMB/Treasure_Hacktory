@@ -18,12 +18,10 @@ class HMHoardGeneratorFragment : Fragment() {
     private lateinit var generateButton: Button
     private lateinit var byLetterExpandableList: ExpandableListView
 
-    val letterGroupList: List<String> = listOf( //TODO: populate using String resources instead of hardcoding
+    private val letterGroupList: List<String> = listOf( //TODO: populate using String resources instead of hardcoding
         "Lair Treasures",
         "Individual and Small Lair Treasures")
-    val letterChildList: List<List<String>> = listOf(
-        HMLetterObject.lairLetters.toList(),
-        HMLetterObject.smallLetters.toList())
+    private val letterChildList = HMLetterObject.letterArray
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +86,9 @@ class HMHoardGeneratorFragment : Fragment() {
 
             isEnabled = true //TODO only enable button when valid input is available.
             setOnClickListener {
+                //Toast.makeText(context,"Generate button clicked.",Toast.LENGTH_SHORT).show()
+                var debugString = "DEBUG STRING:\n"
+
                 Toast.makeText(context,"Generate button clicked.",Toast.LENGTH_SHORT).show()
             }
         }

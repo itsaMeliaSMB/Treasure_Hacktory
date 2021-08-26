@@ -1,6 +1,8 @@
 package com.example.android.treasurefactory.database
 
 import androidx.room.TypeConverter
+import com.example.android.treasurefactory.HMCoinPile
+import com.google.gson.Gson
 import java.util.*
 
 class HoardTypeConverters {
@@ -20,4 +22,10 @@ class HoardTypeConverters {
 
     @TypeConverter
     fun toUUID(uuid: UUID?): String? = uuid?.toString()
+
+    @TypeConverter
+    fun fromCoinage(coinage: HMCoinPile): String? = Gson().toJson(coinage)
+
+    @TypeConverter
+    fun toCoinage(coinage: String): HMCoinPile = Gson().fromJson(coinage,HMCoinPile::class.java)
 }

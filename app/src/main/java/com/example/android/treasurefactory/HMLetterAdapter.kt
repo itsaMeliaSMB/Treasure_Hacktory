@@ -3,6 +3,7 @@ package com.example.android.treasurefactory
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +12,10 @@ import android.widget.*
 class HMLetterAdapter(val context: Context,
                       var expandableListView: ExpandableListView,
                       val groupList: List<String>,
-                      val childList: List<List<String>>) : BaseExpandableListAdapter() {
+                      val childList: Array<Array<String>>) : BaseExpandableListAdapter() {
 
     //TODO Declare Lists/Maps/HashMaps/whatever for treasure types specifically here
-    var lairCountMap = mutableMapOf<String,Int>(
+    /*val lairCountMap = mutableMapOf<String,Int>(
         "A" to 0,
         "B" to 0,
         "C" to 0,
@@ -24,7 +25,7 @@ class HMLetterAdapter(val context: Context,
         "G" to 0,
         "H" to 0,
         "I" to 0)
-    var smallCountMap = mutableMapOf<String,Int>(
+    val smallCountMap = mutableMapOf<String,Int>(
         "J" to 0,
         "K" to 0,
         "L" to 0,
@@ -41,7 +42,9 @@ class HMLetterAdapter(val context: Context,
         "W" to 0,
         "X" to 0,
         "Y" to 0,
-        "Z" to 0)
+        "Z" to 0)*/
+
+    var quantityHolder: Array<IntArray> = arrayOf(IntArray(9){0},IntArray(17){0}) //https://stackoverflow.com/questions/37117717/groupview-with-edittext-in-expandablelistview?
 
     override fun getChild(exListPos: Int, listPos: Int): Any = childList[exListPos][listPos]
 
@@ -49,12 +52,21 @@ class HMLetterAdapter(val context: Context,
 
     override fun getChildView(exListPos: Int, listPos: Int, isLast: Boolean, convertView: View?, parent: ViewGroup?): View {
 
+        var childViewHolder: ChildViewHolder
         var convertView = convertView
 
         if (convertView == null){ // Might need to remove this per https://stackoverflow.com/questions/40895070/button-inside-childview-of-expandablelistview-is-not-working#comment69087483_40895555
 
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             convertView = inflater.inflate(R.layout.hackmaster_treasure_gen_letter_list_child,null)
+
+            childViewHolder = ChildViewHolder(convertView)
+            quantityHolder[exListPos][listPos] = 0
+            convertView.tag = childViewHolder
+
+        } else {
+
+           childViewHolder = convertView.tag as ChildViewHolder
         }
 
         // *** Wire widgets to child view ***
@@ -80,29 +92,18 @@ class HMLetterAdapter(val context: Context,
 
         fun incrementCount(increment: Int) : Int {
 
-            val newValue = Integer.parseInt(quantityEdit.text.toString()) + increment
-
-            return correctCount(newValue)
+            return correctCount(Integer.parseInt(quantityEdit.text.toString()) + increment)
         }
 
         // Set text of label and counter
-        if (exListPos == 0) {
-
-            "Type ${HMLetterObject.lairLetters[listPos]}".also { typeLabel.text = it }
-            quantityEdit.setText(lairCountMap[HMLetterObject.lairLetters[listPos]].toString())
-
-        } else {
-
-            "Type ${HMLetterObject.smallLetters[listPos]}".also { typeLabel.text = it }
-            quantityEdit.setText(smallCountMap[HMLetterObject.smallLetters[listPos]].toString())
-        }
+        "Type ${childList[exListPos][listPos]}".also { typeLabel.text = it }
+        quantityEdit.setText(quantityHolder[exListPos][listPos].toString())
 
         // *** Add listeners for widgets ***
 
         infoDot.setOnClickListener {
 
-            val toastString = if (exListPos == 0) HMLetterObject.lairOddsList[listPos] else
-                HMLetterObject.smallOddsList[listPos]
+            val toastString = HMLetterObject.oddsList[exListPos][listPos]
 
             Toast.makeText(context, toastString, Toast.LENGTH_LONG).show()
         }
@@ -121,6 +122,7 @@ class HMLetterAdapter(val context: Context,
 
         val counterWatcher = object : TextWatcher {
 
+
             override fun beforeTextChanged(sequence: CharSequence?,
                                            start: Int,
                                            count: Int,
@@ -128,35 +130,36 @@ class HMLetterAdapter(val context: Context,
                 // Left intentionally blank
             }
 
-            override fun onTextChanged(sequence: CharSequence?,
+            override fun onTextChanged(sequence: CharSequence?, //https://stackoverflow.com/a/33089950
                                        start: Int,
                                        before: Int,
                                        count: Int) {
-                // Left intentionally blank
-            }
-
-            override fun afterTextChanged(sequence: Editable?) {
-
+                Log.d("HMLetterAdapter", "<1> BEFORE: Value at quantityHolder[$exListPos][$listPos]= ${quantityHolder[exListPos][listPos]}")
+                Log.d("HMLetterAdapter","<2> EditText at ${childList[exListPos][listPos]}= " + sequence.toString())
                 var intValue = Integer.parseInt(sequence.toString())
-                val fixedValue = correctCount(intValue)
+                /* val fixedValue = correctCount(intValue)
 
                 // Correct value if outside acceptable range
                 if (intValue != fixedValue) {
 
                     intValue = fixedValue
                     quantityEdit.setText(intValue.toString())
-                }
+                    Log.d("HMLetterAdapter","Value programmatically changed at ${childList[exListPos][listPos]}")
+                }*/
 
                 // Update stored value in model
-                if (exListPos == 0) {
-                    lairCountMap[HMLetterObject.lairLetters[listPos]] = intValue
-                } else {
-                    smallCountMap[HMLetterObject.smallLetters[listPos]] = intValue
-                }
+                quantityHolder[exListPos][listPos] = intValue
+                Log.d("HMLetterAdapter", "<3> AFTER: Value at quantityHolder[$exListPos][$listPos]= ${quantityHolder[exListPos][listPos]}")
+            }
+
+            override fun afterTextChanged(sequence: Editable?) {
+                //Log.d("HMLetterAdapter","Edit text at ${childList[exListPos][listPos]}")
             }
         }
 
         quantityEdit.addTextChangedListener(counterWatcher)
+
+        //log
 
         // *** Return view ***
         return convertView
@@ -182,6 +185,7 @@ class HMLetterAdapter(val context: Context,
 
         val header = convertView?.findViewById(R.id.hackmaster_treasure_gen_exlist_header) as TextView
 
+        header.text = groupList[exListPos]
 
         return convertView
 
@@ -191,4 +195,12 @@ class HMLetterAdapter(val context: Context,
 
     override fun isChildSelectable(listPos: Int, exListPos: Int): Boolean = true
 
+    private class ChildViewHolder(childView: View){
+        val infoDot     = childView?.findViewById(R.id.treasure_type_info) as ImageView
+        val typeLabel   = childView.findViewById(R.id.treasure_type_label) as TextView
+        val minusButton = childView.findViewById(R.id.treasure_type_decrement_button) as Button
+        val quantityEdit= childView.findViewById(R.id.treasure_type_counter) as EditText
+        val plusButton  = childView.findViewById(R.id.treasure_type_increment_button) as Button
+
+    }
 }

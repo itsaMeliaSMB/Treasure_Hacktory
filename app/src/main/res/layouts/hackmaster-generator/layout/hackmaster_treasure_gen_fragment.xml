@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -76,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/exlist_bottom_margin"
             android:indicatorLeft="0dp"
-            android:background="?attr/colorPrimary"/>
+            android:childDivider="@color/gray"/>
 
         <LinearLayout
             android:id="@+id/hackmaster_gen_specific_group"
@@ -89,33 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:indicatorLeft="0dp"
-                android:childDivider=""
-                android:background="?attr/colorSecondary"/>
-
-            <ExpandableListView
-                android:id="@+id/hackmaster_gen_gems_exlist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/exlist_bottom_margin"
-                android:indicatorLeft="0dp"
-                android:childDivider=""
-                android:background="?attr/colorSecondary"/>
-
-            <ExpandableListView
-                android:id="@+id/hackmaster_gen_art_exlist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/exlist_bottom_margin"
-                android:indicatorLeft="0dp"
-                android:childDivider=""
-                android:background="?attr/colorSecondary"/>
-
-            <ExpandableListView
-                android:id="@+id/hackmaster_gen_magic_exlist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indicatorLeft="0dp"
-                android:childDivider=""
+                android:childDivider="@color/gray"
                 android:background="?attr/colorSecondary"/>
 
         </LinearLayout>

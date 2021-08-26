@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!-- Dummied out until I add this back in
+
     <ExpandableListView
         android:id="@+id/hackmaster_gen_coinage_exlist"
         android:layout_width="match_parent"
@@ -40,5 +42,6 @@
         android:indicatorLeft="0dp"
         android:childDivider=""
         android:background="@color/teal_200"/>
+    -->
 
 </LinearLayout>

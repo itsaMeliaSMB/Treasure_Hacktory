@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -19,7 +20,10 @@ class HoardListFragment : Fragment() {
     private var adapter: HoardAdapter? = null
 
     // Modified from BNR pg 178 because of depreciated class
-    private val hoardListViewModel: HoardListViewModel by viewModels
+    private val hoardListViewModel: HoardListViewModel by lazy {
+
+        ViewModelProvider(this).get(hoardListViewModel::class.java)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -36,9 +40,9 @@ class HoardListFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val view = inflater.inflate(R.layout.fragment_hoard_list, container, false)
+        val view = inflater.inflate(R.layout.treasure_viewer_list, container, false)
 
-        hoardRecyclerView = view.findViewById(R.id.hoard_recycler_view) as RecyclerView
+        hoardRecyclerView = view.findViewById(R.id.treasure_viewer_list_recycler) as RecyclerView
 
         // Give RecyclerView a Layout manager [required]
         hoardRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -74,7 +78,7 @@ class HoardListFragment : Fragment() {
 
             this.hoard = hoard
             nameTextView.text = this.hoard.hoardName
-            dateTextView.text = this.hoard.creationDate
+            dateTextView.text = this.hoard.creationDate.toString()
 
             if (hoard.favorited) {
                 favImageView.setImageResource(R.drawable.clipart_filledstar_vector_icon)

@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/hackmaster_list_object_label_gp"
         app:layout_constraintStart_toEndOf="@id/hackmaster_list_object_icon"
-        android:textSize="18sp"
+        android:textSize="16sp"
         tools:text="[object name]"/>
 
     <TextView

@@ -1,5 +1,7 @@
 package com.example.android.treasurefactory
 
+import android.util.Log
+
 object HMLetterObject {
 
     val treasureLabels = listOf<String>(
@@ -17,12 +19,15 @@ object HMLetterObject {
         "non-weapon magic item(s)",
         "magic item(s)")
 
-    val lairLetters = arrayOf("A","B","C","D","E","F","G","H","I")
-    val smallLetters = arrayOf("J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+    val letterArray = arrayOf(
+        arrayOf("A","B","C","D","E","F","G","H","I"),
+        arrayOf("J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z")
+    )
 
-    val lairHoardTable = mapOf(
-
-        "A" to arrayOf(
+    val hoardTable = listOf(
+        // Lair treasure types
+        mapOf(
+            "A" to arrayOf(
             intArrayOf(25,1000,3000),
             intArrayOf(30,200,2000),
             intArrayOf(35,500,3000),
@@ -148,273 +153,284 @@ object HMLetterObject {
             intArrayOf(0,0,0),
             intArrayOf(0,0,0),
             intArrayOf(15,1,1) )
+        ),
+        // Individual and small lair treasure types
+        mapOf(
+
+            "J" to arrayOf(
+                intArrayOf(100,3,24),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "K" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(100,3,18),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "L" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,3,18),
+                intArrayOf(100,2,12),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "M" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,3,12),
+                intArrayOf(100,2,8),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "N" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,1,6),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "O" to arrayOf(
+                intArrayOf(100,10,40),
+                intArrayOf(100,10,30),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "P" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(100,10,60),
+                intArrayOf(100,3,30),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,1,20),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "Q" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,1,4),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "R" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,2,20),
+                intArrayOf(0,0,0),
+                intArrayOf(100,10,60),
+                intArrayOf(100,2,8),
+                intArrayOf(100,1,3),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "S" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,1,8),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "T" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,1,4),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "U" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(90,2,16),
+                intArrayOf(80,1,6),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(70,1,1) ),
+            "V" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,2,2) ),
+            "W" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,4,24),
+                intArrayOf(100,5,30),
+                intArrayOf(100,2,16),
+                intArrayOf(100,1,8),
+                intArrayOf(60,2,16),
+                intArrayOf(50,1,8),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(60,2,2) ),
+            "X" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,2,2),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "Y" to arrayOf(
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(100,200,1200),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0) ),
+            "Z" to arrayOf(
+                intArrayOf(100,100,300),
+                intArrayOf(100,100,400),
+                intArrayOf(100,100,500),
+                intArrayOf(100,100,600),
+                intArrayOf(100,100,500),
+                intArrayOf(100,100,500),
+                intArrayOf(55,1,6),
+                intArrayOf(50,2,12),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(0,0,0),
+                intArrayOf(50,3,3) )
+        )
     )
-    val smallHoardTable = mapOf(
 
-        "J" to arrayOf(
-            intArrayOf(100,3,24),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "K" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(100,3,18),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "L" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,3,18),
-            intArrayOf(100,2,12),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "M" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,3,12),
-            intArrayOf(100,2,8),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "N" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,1,6),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "O" to arrayOf(
-            intArrayOf(100,10,40),
-            intArrayOf(100,10,30),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "P" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(100,10,60),
-            intArrayOf(100,3,30),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,1,20),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "Q" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,1,4),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "R" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,2,20),
-            intArrayOf(0,0,0),
-            intArrayOf(100,10,60),
-            intArrayOf(100,2,8),
-            intArrayOf(100,1,3),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "S" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,1,8),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "T" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,1,4),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "U" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(90,2,16),
-            intArrayOf(80,1,6),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(70,1,1) ),
-        "V" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,2,2) ),
-        "W" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,4,24),
-            intArrayOf(100,5,30),
-            intArrayOf(100,2,16),
-            intArrayOf(100,1,8),
-            intArrayOf(60,2,16),
-            intArrayOf(50,1,8),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(60,2,2) ),
-        "X" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,2,2),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "Y" to arrayOf(
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(100,200,1200),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0) ),
-        "Z" to arrayOf(
-            intArrayOf(100,100,300),
-            intArrayOf(100,100,400),
-            intArrayOf(100,100,500),
-            intArrayOf(100,100,600),
-            intArrayOf(100,100,500),
-            intArrayOf(100,100,500),
-            intArrayOf(55,1,6),
-            intArrayOf(50,2,12),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(0,0,0),
-            intArrayOf(50,3,3) )
-    )
+    val oddsList = returnOddsList()
 
-    val lairOddsList = getOddsList(lairHoardTable)
-    val smallOddsList = getOddsList(smallHoardTable)
+    private fun returnOddsList() : List<List<String>> {
 
-    private fun getOddsList(hoardTable: Map<String,Array<IntArray>>) : List<String> {
-
-        val oddsList = mutableListOf<String>()
+        var oddsList = mutableListOf(listOf<String>())
         var oddsString: String
 
-        hoardTable.forEach{ (key, value) ->
+        hoardTable.forEach {
 
-            oddsString = "Type $key treasures provide:"
+            var subList = mutableListOf<String>()
 
-            value.forEachIndexed { index, stats ->
+            it.forEach(){ (key, value) ->
 
-                if (stats[0] != 0){
+                oddsString = "Type $key treasures provide:"
 
-                    oddsString.plus("\n${stats[0]}% chance of " +
-                            "${if (stats[1] == stats[2]) stats[1] else "${stats[1]} - ${stats[2]}" +
-                            " ${treasureLabels[index]}"} ") }
+                value.forEachIndexed { index, stats ->
+
+                    //if (stats[0] != 0) {
+
+                        oddsString.plus(
+                            "\n${stats[0]}% chance of " +
+                            "${if (stats[1] == stats[2]) stats[1] else "${stats[1]} - ${stats[2]}"}"
+                            + treasureLabels[index])
+                    //}
+                }
+
+                Log.d("HMLetterObject", "Adding string \n:$oddsString")
+                subList.add(oddsString)
             }
 
-            oddsList.add(oddsString)
+            oddsList.add(subList.toList())
         }
 
-        return oddsList
+        return oddsList.toList()
     }
 }
