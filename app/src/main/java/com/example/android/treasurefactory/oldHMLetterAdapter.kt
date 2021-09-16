@@ -9,10 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 
-class HMLetterAdapter(val context: Context,
-                      var expandableListView: ExpandableListView,
-                      val groupList: List<String>,
-                      val childList: Array<Array<String>>) : BaseExpandableListAdapter() {
+class oldHMLetterAdapter(val context: Context,
+                         var expandableListView: ExpandableListView,
+                         val groupList: List<String>,
+                         val childList: Array<Array<String>>) : BaseExpandableListAdapter() {
 
     //TODO Declare Lists/Maps/HashMaps/whatever for treasure types specifically here
     /*val lairCountMap = mutableMapOf<String,Int>(
@@ -103,7 +103,7 @@ class HMLetterAdapter(val context: Context,
 
         infoDot.setOnClickListener {
 
-            val toastString = HMLetterObject.oddsList[exListPos][listPos]
+            val toastString = oldHMLetterObject.oddsList[exListPos][listPos]
 
             Toast.makeText(context, toastString, Toast.LENGTH_LONG).show()
         }

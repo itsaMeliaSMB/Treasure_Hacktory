@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
@@ -69,15 +70,71 @@
         android:orientation="vertical"
         android:layout_weight="1">
 
-        <ExpandableListView
+        <!--<ExpandableListView
             android:id="@+id/hackmaster_gen_letter_exlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/exlist_bottom_margin"
             android:indicatorLeft="0dp"
-            android:childDivider="@color/gray"/>
+            android:childDivider="@color/gray"/>-->
+    
+        <androidx.cardview.widget.CardView
+            android:id="@+id/hackmaster_gen_lair_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/exlist_bottom_margin"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp">
 
-        <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Top of cardview (always visible) -->
+                <RelativeLayout
+                    android:id="@+id/hackmaster_gen_lair_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="12dp"
+                    android:background="?attr/colorPrimary">
+
+                    <ImageView
+                        android:id="@+id/hackmaster_gen_lair_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:src="@drawable/clipart_indicator_vector_icon"
+                        app:tint="?attr/colorOnPrimary"/>
+
+                    <TextView
+                        style="@style/letter_cardview_header"
+                        android:layout_alignTop="@id/hackmaster_gen_lair_indicator"
+                        android:layout_alignBottom="@id/hackmaster_gen_lair_indicator"
+                        android:layout_toEndOf="@id/hackmaster_gen_lair_indicator"
+                        android:text="@string/lair_treasures_cardview_header" />
+
+                    <ImageView
+                        app:tint="?attr/colorOnPrimary"
+                        android:src="@drawable/clipart_fortress_vector_icon"
+                        style="@style/cardview_letter_header_icon" />
+
+                </RelativeLayout>
+
+                <!-- Expandable portion of cardview -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hackmaster_gen_lair_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!--<LinearLayout
             android:id="@+id/hackmaster_gen_specific_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,7 +148,7 @@
                 android:childDivider="@color/gray"
                 android:background="?attr/colorSecondary"/>
 
-        </LinearLayout>
+        </LinearLayout>-->
         
     </ViewAnimator>
 

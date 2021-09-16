@@ -2,7 +2,7 @@ package com.example.android.treasurefactory
 
 import android.util.Log
 
-object HMLetterObject {
+object oldHMLetterObject {
 
     val treasureLabels = listOf<String>(
         "copper piece(s)",
