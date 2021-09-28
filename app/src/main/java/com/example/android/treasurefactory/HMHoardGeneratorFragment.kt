@@ -1,6 +1,11 @@
 package com.example.android.treasurefactory
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +25,7 @@ class HMHoardGeneratorFragment : Fragment() {
     //TODO See if it'd be better to use LiveData
 
     //region [ Property declarations ]
+
     private lateinit var hoardTitleField: EditText
     private lateinit var letterRadioButton: RadioButton
     private lateinit var specificRadioButton: RadioButton
@@ -28,15 +34,20 @@ class HMHoardGeneratorFragment : Fragment() {
     private lateinit var generateButton: Button
 
     private lateinit var lairCardView: CardView
+    private lateinit var lairHeaderGroup: RelativeLayout
+    private lateinit var lairIndicator: ImageView
     private lateinit var lairRecyclerView: RecyclerView
     private var lairAdapter: LetterAdapter? = null
-    //private lateinit var smallRecyclerView: RecyclerView
-    //private var smallAdapter: LetterAdapter? = null
 
-    //TODO define adapter and connect to fragment. See BNR guide
+    private lateinit var smallCardView: CardView
+    private lateinit var smallHeaderGroup: RelativeLayout
+    private lateinit var smallIndicator: ImageView
+    private lateinit var smallRecyclerView: RecyclerView
+    private var smallAdapter: LetterAdapter? = null
 
     private var lairList = generateLetterArrayList(0)
     private var smallList= generateLetterArrayList(1)
+
     //endregion
 
     //region [ Overridden functions ]
@@ -60,11 +71,18 @@ class HMHoardGeneratorFragment : Fragment() {
         viewAnimator = view.findViewById(R.id.hackmaster_gen_view_animator) as ViewAnimator
 
         lairCardView = view.findViewById(R.id.hackmaster_gen_lair_card) as CardView
+        lairHeaderGroup = view.findViewById(R.id.hackmaster_gen_lair_header) as RelativeLayout
+        lairIndicator = view.findViewById(R.id.hackmaster_gen_lair_indicator) as ImageView
         lairRecyclerView = view.findViewById(R.id.hackmaster_gen_lair_recyclerview) as RecyclerView
+
+        smallCardView = view.findViewById(R.id.hackmaster_gen_small_card) as CardView
+        smallHeaderGroup = view.findViewById(R.id.hackmaster_gen_small_header) as RelativeLayout
+        smallIndicator = view.findViewById(R.id.hackmaster_gen_small_indicator) as ImageView
+        smallRecyclerView = view.findViewById(R.id.hackmaster_gen_small_recyclerview) as RecyclerView
 
         // Define the letter adapters TODO consider moving to init block
         lairAdapter = LetterAdapter(lairList)
-        //smallAdapter = LetterAdapter(smallList)
+        smallAdapter = LetterAdapter(smallList)
 
         lairRecyclerView.apply{
             // Set up By-Letter recyclerview
@@ -72,7 +90,15 @@ class HMHoardGeneratorFragment : Fragment() {
             adapter = lairAdapter
             setHasFixedSize(true)
             // TODO Expandibility/Collapsiblity, remove divider when implemented
-            visibility = View.GONE
+            visibility = View.GONE //Start off collapsed
+        }
+        smallRecyclerView.apply{
+            // Set up By-Letter recyclerview
+            layoutManager = LinearLayoutManager(context)
+            adapter = smallAdapter
+            setHasFixedSize(true)
+            // TODO Expandibility/Collapsiblity, remove divider when implemented
+            visibility = View.GONE //Start off collapsed
         }
 
         resetButton = view.findViewById(R.id.hackmaster_gen_reset_button) as Button
@@ -89,11 +115,88 @@ class HMHoardGeneratorFragment : Fragment() {
 
         super.onStart()
 
-        // Setting widget properties (TODO: relabel this comment)
+        // Apply widget properties
         letterRadioButton.apply{
             setOnCheckedChangeListener { _, isChecked ->
                 Toast.makeText(context,"By-Letter method is ${if (isChecked) "en" else "dis"}abled.",Toast.LENGTH_SHORT).show()
             }
+        }
+
+        lairHeaderGroup.setOnClickListener {
+
+            // TODO Move functions outside listener.
+
+            if (lairRecyclerView.visibility == View.VISIBLE) {
+
+                val collapseAnimator = ObjectAnimator.ofFloat(lairIndicator, View.ROTATION, 90f, 0f)
+
+                // Rotate the indicator
+                collapseAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(lairHeaderGroup)
+                    start() }
+
+                // Hide the recycler view
+                lairRecyclerView.visibility = View.GONE
+                TransitionManager.beginDelayedTransition(lairCardView,AutoTransition())
+
+            } else {
+
+                val expandAnimator = ObjectAnimator.ofFloat(lairIndicator, View.ROTATION, 0f, 90f)
+
+                // Rotate the indicator
+                expandAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(lairHeaderGroup)
+                    start() }
+
+                // Reveal the recycler view
+                TransitionManager.beginDelayedTransition(lairCardView,AutoTransition())
+                lairRecyclerView.visibility = View.VISIBLE
+
+                //TODO automatically collapse other cardview if it is open.
+            }
+        }
+
+        smallHeaderGroup.setOnClickListener {
+
+            // TODO Move functions outside listener.
+
+            if (smallRecyclerView.visibility == View.VISIBLE) {
+
+                val collapseAnimator = ObjectAnimator.ofFloat(smallIndicator, View.ROTATION, 90f, 0f)
+
+                // Rotate the indicator
+                collapseAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(smallHeaderGroup)
+                    start() }
+
+                // Hide the recycler view
+                smallRecyclerView.visibility = View.GONE
+                TransitionManager.beginDelayedTransition(smallCardView,AutoTransition())
+
+            } else {
+
+                val expandAnimator = ObjectAnimator.ofFloat(smallIndicator, View.ROTATION, 0f, 90f)
+
+                // Rotate the indicator
+                expandAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(smallHeaderGroup)
+                    start() }
+
+                // Reveal the recycler view
+                TransitionManager.beginDelayedTransition(smallCardView,AutoTransition())
+                smallRecyclerView.visibility = View.VISIBLE
+
+                //TODO automatically collapse other cardview if it is open.
+            }
+        }
+
+        resetButton.apply{
+
+            setOnClickListener { resetLetterEntries() }
         }
 
         generateButton.apply {
@@ -168,6 +271,12 @@ class HMHoardGeneratorFragment : Fragment() {
         }
 
         fun getAdapterLetterEntries() : List<HMLetterEntry> = letterEntries
+
+        fun zeroAdapterLetterEntries() {
+
+            letterEntries.forEach { entry -> entry.quantity = 0 }
+            notifyDataSetChanged()
+        }
     }
 
     private inner class LetterHolder(view:View): RecyclerView.ViewHolder(view) {
@@ -212,6 +321,29 @@ class HMHoardGeneratorFragment : Fragment() {
         if (newCount > maxCount) newCount = maxCount
 
         return newCount
+    }
+
+    private fun resetLetterEntries() {
+        lairAdapter?.zeroAdapterLetterEntries()
+        smallAdapter?.zeroAdapterLetterEntries()
+        Toast.makeText(context,"Letter quantities reset.",Toast.LENGTH_SHORT).show()
+    }
+
+    private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
+
+        // This extension method listens for start/end events on an animation and disables
+        // the given view for the entirety of that animation.
+        // Taken from https://developer.android.com/codelabs/advanced-android-kotlin-training-property-animation
+
+        addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationStart(animation: Animator?) {
+                view.isEnabled = false
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                view.isEnabled = true
+            }
+        })
     }
 
     //endregion
