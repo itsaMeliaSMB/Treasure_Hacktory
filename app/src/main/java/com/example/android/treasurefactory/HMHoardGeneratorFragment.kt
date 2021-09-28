@@ -1,8 +1,6 @@
 package com.example.android.treasurefactory
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +13,20 @@ import androidx.recyclerview.widget.RecyclerView
 
 class HMHoardGeneratorFragment : Fragment() {
 
+    /*/ *** Fragment ViewModel ***
+    private val hoardGeneratorViewModel: HoardGeneratorViewModel by lazy {
+        ViewModelProvider(this).get(HoardGeneratorViewModel::class.java)
+    }*/
+    //TODO See if it'd be better to use LiveData
+
     //region [ Property declarations ]
     private lateinit var hoardTitleField: EditText
     private lateinit var letterRadioButton: RadioButton
     private lateinit var specificRadioButton: RadioButton
     private lateinit var viewAnimator: ViewAnimator
+    private lateinit var resetButton: Button
     private lateinit var generateButton: Button
+
     private lateinit var lairCardView: CardView
     private lateinit var lairRecyclerView: RecyclerView
     private var lairAdapter: LetterAdapter? = null
@@ -29,13 +35,15 @@ class HMHoardGeneratorFragment : Fragment() {
 
     //TODO define adapter and connect to fragment. See BNR guide
 
-//    private lateinit var byLetterExpandableList: ExpandableListView
-
     private var lairList = generateLetterArrayList(0)
     private var smallList= generateLetterArrayList(1)
     //endregion
 
     //region [ Overridden functions ]
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,12 +67,15 @@ class HMHoardGeneratorFragment : Fragment() {
         //smallAdapter = LetterAdapter(smallList)
 
         lairRecyclerView.apply{
-            // Set up By-Letter recyclerviews
+            // Set up By-Letter recyclerview
             layoutManager = LinearLayoutManager(context)
             adapter = lairAdapter
             setHasFixedSize(true)
+            // TODO Expandibility/Collapsiblity, remove divider when implemented
+            visibility = View.GONE
         }
 
+        resetButton = view.findViewById(R.id.hackmaster_gen_reset_button) as Button
         generateButton = view.findViewById(R.id.hackmaster_gen_generate_button) as Button
 
         //Set adapter for expandable list view
@@ -77,24 +88,6 @@ class HMHoardGeneratorFragment : Fragment() {
     override fun onStart() {
 
         super.onStart()
-
-        // Listener for hoard title EditText
-        val hoardTitleWatcher = object : TextWatcher {
-
-            override fun beforeTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
-                // Left intentionally blank (pg 163)
-            }
-
-            override fun onTextChanged(sequence: CharSequence?, start: Int, before: Int, count: Int) {
-                // hoard.HoardName = sequence.toString() TODO may not be necessary since not editing active hoard. Revisit.
-            }
-
-            override fun afterTextChanged(sequence: Editable?) {
-                // Left intentionally blank (pg 163)
-            }
-        }
-
-        hoardTitleField.addTextChangedListener(hoardTitleWatcher)
 
         // Setting widget properties (TODO: relabel this comment)
         letterRadioButton.apply{
@@ -109,11 +102,15 @@ class HMHoardGeneratorFragment : Fragment() {
             setOnClickListener {
                 //Toast.makeText(context,"Generate button clicked.",Toast.LENGTH_SHORT).show()
                 var debugString = "DEBUG STRING:\n"
+                val debugList = lairAdapter?.getAdapterLetterEntries()
 
                 Toast.makeText(context,"Check debug logs.",Toast.LENGTH_SHORT).show()
-                lairList.forEachIndexed(){ index, entry ->
-                    Log.d("","< $index > Type ${entry.letter} x${entry.quantity}")
+
+                // Return list quantities
+                debugList?.forEach {
+                    Log.d("Generate Button","Type ${it.letter} x${it.quantity}")
                 }
+                // TODO retrieve data from adapters. May need to bind adapter lists w/ model
             }
         }
     }
@@ -141,12 +138,12 @@ class HMHoardGeneratorFragment : Fragment() {
             val entry = letterEntries[holder.adapterPosition]
 
             // Prepare literals
-            val typeString = "Type +${entry.letter}"
+            val typeString = "Type ${entry.letter}"
             val oddsToast = letterEntries[holder.adapterPosition].odds
 
             // Bind items TODO move function to viewHolder per
             holder.typeLabel.text = typeString
-            holder.quantityEdit.setText(quantities[holder.adapterPosition].toString())
+            holder.quantityText.text = quantities[holder.adapterPosition].toString()
 
             // Attach listeners
             holder.infoDot.setOnClickListener {
@@ -168,63 +165,9 @@ class HMHoardGeneratorFragment : Fragment() {
 
                 notifyItemChanged(position)
             }
-            holder.quantityEdit.addTextChangedListener ( object : TextWatcher {
-
-                override fun beforeTextChanged(sequence: CharSequence?,
-                                               start: Int,
-                                               count: Int,
-                                               after: Int) {
-                    // Left intentionally blank
-                }
-
-                override fun afterTextChanged(sequence: Editable?) {
-                    // Left intentionally blank
-                }
-
-                override fun onTextChanged(sequence: CharSequence?, //https://stackoverflow.com/a/33089950
-                                           start: Int,
-                                           before: Int,
-                                           count: Int) {
-
-                    if (holder.quantityEdit.hasFocus()) {
-
-                        // Log initial values
-                        Log.d("LetterAdapter/textWatcher/${entry.letter}", "Before values:\n" +
-                                "sequence = $sequence\n" +
-                                "letterEntries[holder.adapterPosition].quantity = ${letterEntries[holder.adapterPosition].quantity}\n" +
-                                "quantities[holder.adapterPosition] = ${quantities[holder.adapterPosition]}")
-
-                        // Define values
-                        val quantityStr = sequence.toString()
-                        val quantityInt = if ((quantityStr.isNotEmpty()) &&
-                            (quantityStr.toIntOrNull() != null)) {
-
-                            correctCount(quantityStr.toInt())
-                            Log.d("LetterAdapter/textWatcher", "'$sequence' parsed successfully")
-
-                        } else {
-
-                            quantities[holder.adapterPosition]
-                            Log.d("LetterAdapter/textWatcher","quantityInt 'else' triggered")
-                        }
-
-                        // Update UI and model
-                        holder.quantityEdit.setText(quantityInt.toString())
-                        letterEntries[holder.adapterPosition].quantity = quantityInt
-
-                        Log.d("LetterAdapter/textWatcher/${entry.letter}", "Notifying Item change at ${holder.adapterPosition}")
-
-                        notifyItemChanged(holder.adapterPosition)
-
-                        //Log final values
-                        Log.d("LetterAdapter/textWatcher/${entry.letter}", "After values:\n" +
-                                "sequence = $sequence\n" +
-                                "letterEntries[holder.adapterPosition].quantity = ${letterEntries[holder.adapterPosition].quantity}\n" +
-                                "quantities[holder.adapterPosition] = ${quantities[holder.adapterPosition]}")
-                    }
-                }
-            })
         }
+
+        fun getAdapterLetterEntries() : List<HMLetterEntry> = letterEntries
     }
 
     private inner class LetterHolder(view:View): RecyclerView.ViewHolder(view) {
@@ -234,7 +177,7 @@ class HMHoardGeneratorFragment : Fragment() {
         var infoDot     = view.findViewById(R.id.treasure_type_info) as ImageView
         var typeLabel   = view.findViewById(R.id.treasure_type_label) as TextView
         var minusButton = view.findViewById(R.id.treasure_type_decrement_button) as Button
-        var quantityEdit= view.findViewById(R.id.treasure_type_counter) as EditText
+        var quantityText= view.findViewById(R.id.treasure_type_counter) as TextView
         var plusButton  = view.findViewById(R.id.treasure_type_increment_button) as Button
 
     }
@@ -242,6 +185,11 @@ class HMHoardGeneratorFragment : Fragment() {
     //endregion
 
     //region [ Helper functions ]
+
+    private fun updateUI() {
+
+
+    }
 
     fun generateLetterArrayList(parentIndex: Int) : ArrayList<HMLetterEntry> {
 
@@ -643,6 +591,11 @@ class HMHoardGeneratorFragment : Fragment() {
                     intArrayOf(50,3,3) )
             )
         )
+
+        fun newInstance(): HMHoardGeneratorFragment {
+            return HMHoardGeneratorFragment()
+        }
+
         private val treasureLabels = listOf<String>(
             "copper piece(s)",
             "silver piece(s)",
@@ -660,25 +613,24 @@ class HMHoardGeneratorFragment : Fragment() {
 
         private fun returnOddsString(odds: Array<IntArray>) : String {
 
-            var oddsList = mutableListOf<String>()
-            var oddsLine: String
+            val oddsList = mutableListOf<String>()
+            var oddsLineBuilder = StringBuilder()
 
             odds.forEachIndexed { index, oddsArray ->
 
-                oddsLine = ""
+                oddsLineBuilder.clear()
 
                 if (oddsArray[0] != 0) {
 
-                    oddsLine += "${oddsArray[0]}% chance of "
-                    if (oddsArray[1] == oddsArray[2]) {
-                        oddsLine += oddsArray[1]
-                    } else {
-                        oddsLine += "${oddsLine[1]} to ${oddsLine[2]}"
-                    }
-                    oddsLine += treasureLabels[index]
+                    oddsLineBuilder.append("${oddsArray[0]}% odds of: ")
+                        .append(if (oddsArray[1] == oddsArray[2]) {
+                                oddsArray[1].toString()
+                            } else {
+                                "${oddsArray[1]}-${oddsArray[2]}" })
+                        .append(" ${treasureLabels[index]}")
                 }
 
-                if (oddsLine.isNotBlank()) oddsList.add(oddsLine)
+                if (oddsLineBuilder.isNotEmpty()) oddsList.add(oddsLineBuilder.toString())
             }
 
             var result: String = oddsList[0]
@@ -696,3 +648,5 @@ class HMHoardGeneratorFragment : Fragment() {
 }
 
 //TODO https://stackoverflow.com/questions/52070524/edittext-and-textview-inside-recyclerview-android-kotlin-scrolling-issue
+//TODO https://stackoverflow.com/a/61513452
+//TODO https://stackoverflow.com/a/54842942

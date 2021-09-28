@@ -8,4 +8,5 @@
     <string name="art_emoji">🎨</string>
     <string name="hoard_name_entry_hint">Enter name of hoard or leave blank</string>
     <string name="lair_treasures_cardview_header">Lair Treasures</string>
+    <string name="small_treasures_cardview_header">Individual / Small Lair Treasures</string>
 </resources>
