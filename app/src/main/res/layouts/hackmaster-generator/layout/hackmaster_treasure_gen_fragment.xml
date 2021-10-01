@@ -68,13 +68,13 @@
         android:layout_weight="1"
         android:fillViewport="true"
         android:layout_marginVertical="8dp"
-        android:orientation="vertical"
-        android:scrollbars="vertical">
+>
 
         <LinearLayout
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:scrollbars="vertical">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/hackmaster_gen_lair_card"

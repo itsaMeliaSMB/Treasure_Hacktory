@@ -15,14 +15,18 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.random.Random
 
 class HMHoardGeneratorFragment : Fragment() {
 
     /*/ *** Fragment ViewModel ***
     private val hoardGeneratorViewModel: HoardGeneratorViewModel by lazy {
         ViewModelProvider(this).get(HoardGeneratorViewModel::class.java)
-    }*/
-    //TODO See if it'd be better to use LiveData
+    }
+    //TODO continue from page 178, potentially remove*/
+
+    //TODO add ViewModel/LiveData/UI persistence over config change after MVP complete
+    //TODO add Specific quantity generation method after completing MVP
 
     //region [ Property declarations ]
 
@@ -45,8 +49,8 @@ class HMHoardGeneratorFragment : Fragment() {
     private lateinit var smallRecyclerView: RecyclerView
     private var smallAdapter: LetterAdapter? = null
 
-    private var lairList = generateLetterArrayList(0)
-    private var smallList= generateLetterArrayList(1)
+    private var lairList = getLetterArrayList("A","I")
+    private var smallList= getLetterArrayList("J","Z")
 
     //endregion
 
@@ -104,9 +108,6 @@ class HMHoardGeneratorFragment : Fragment() {
         resetButton = view.findViewById(R.id.hackmaster_gen_reset_button) as Button
         generateButton = view.findViewById(R.id.hackmaster_gen_generate_button) as Button
 
-        //Set adapter for expandable list view
-        //byLetterExpandableList.setAdapter(HMLetterAdapter(requireContext(),byLetterExpandableList,letterGroupList,letterChildList))
-
         // Return inflated view
         return view
     }
@@ -137,8 +138,8 @@ class HMHoardGeneratorFragment : Fragment() {
                     start() }
 
                 // Hide the recycler view
-                lairRecyclerView.visibility = View.GONE
                 TransitionManager.beginDelayedTransition(lairCardView,AutoTransition())
+                lairRecyclerView.visibility = View.GONE
 
             } else {
 
@@ -173,8 +174,8 @@ class HMHoardGeneratorFragment : Fragment() {
                     start() }
 
                 // Hide the recycler view
-                smallRecyclerView.visibility = View.GONE
                 TransitionManager.beginDelayedTransition(smallCardView,AutoTransition())
+                smallRecyclerView.visibility = View.GONE
 
             } else {
 
@@ -237,18 +238,15 @@ class HMHoardGeneratorFragment : Fragment() {
 
         override fun onBindViewHolder(holder: LetterHolder, position: Int) { //TODO consider replacing position calls with holder.adapterPosition
 
-            // Get the model to reference
-            val entry = letterEntries[holder.adapterPosition]
+            val entry = letterEntries[position]
 
             // Prepare literals
-            val typeString = "Type ${entry.letter}"
             val oddsToast = letterEntries[holder.adapterPosition].odds
 
-            // Bind items TODO move function to viewHolder per
-            holder.typeLabel.text = typeString
-            holder.quantityText.text = quantities[holder.adapterPosition].toString()
+            // Bind items
+            holder.bind(entry)
 
-            // Attach listeners
+            // Attach listeners TODO Consider moving this to holder
             holder.infoDot.setOnClickListener {
 
                 Toast.makeText(context,oddsToast,Toast.LENGTH_LONG)
@@ -266,7 +264,7 @@ class HMHoardGeneratorFragment : Fragment() {
                 quantities[holder.adapterPosition] = correctCount(quantities[holder.adapterPosition],-1)
                 letterEntries[holder.adapterPosition].quantity = quantities[holder.adapterPosition]
 
-                notifyItemChanged(position)
+                notifyItemChanged(holder.adapterPosition)
             }
         }
 
@@ -274,7 +272,13 @@ class HMHoardGeneratorFragment : Fragment() {
 
         fun zeroAdapterLetterEntries() {
 
-            letterEntries.forEach { entry -> entry.quantity = 0 }
+            letterEntries.forEachIndexed { index, letterEntry ->
+                Log.d("zeroAdapter", "Before ${letterEntry.letter} = ${letterEntry.quantity}")
+                quantities[index] = 0
+                letterEntry.quantity = 0
+                Log.d("zeroAdapter", "After ${letterEntry.letter} = ${letterEntry.quantity}")
+            }
+
             notifyDataSetChanged()
         }
     }
@@ -282,12 +286,21 @@ class HMHoardGeneratorFragment : Fragment() {
     private inner class LetterHolder(view:View): RecyclerView.ViewHolder(view) {
 
         private lateinit var letterEntry: HMLetterEntry
+        private lateinit var typeString: String
 
-        var infoDot     = view.findViewById(R.id.treasure_type_info) as ImageView
-        var typeLabel   = view.findViewById(R.id.treasure_type_label) as TextView
-        var minusButton = view.findViewById(R.id.treasure_type_decrement_button) as Button
-        var quantityText= view.findViewById(R.id.treasure_type_counter) as TextView
-        var plusButton  = view.findViewById(R.id.treasure_type_increment_button) as Button
+        val infoDot     = view.findViewById(R.id.treasure_type_info) as ImageView
+        val typeLabel   = view.findViewById(R.id.treasure_type_label) as TextView
+        val minusButton = view.findViewById(R.id.treasure_type_decrement_button) as Button
+        val quantityText= view.findViewById(R.id.treasure_type_counter) as TextView
+        val plusButton  = view.findViewById(R.id.treasure_type_increment_button) as Button
+
+        fun bind(input: HMLetterEntry){
+            letterEntry = input
+            typeString = "Type ${letterEntry.letter}"
+
+            typeLabel.text = typeString
+            quantityText.text = letterEntry.quantity.toString()
+        }
 
     }
 
@@ -296,21 +309,20 @@ class HMHoardGeneratorFragment : Fragment() {
     //region [ Helper functions ]
 
     private fun updateUI() {
-
-
+        // TODO see if this is still necessary upon returning to generator fragment
     }
 
-    fun generateLetterArrayList(parentIndex: Int) : ArrayList<HMLetterEntry> {
+    private fun getLetterArrayList(firstKey: String, lastKey: String) : ArrayList<HMLetterEntry> {
 
         val list = ArrayList<HMLetterEntry>()
 
-        oddsTable[parentIndex].forEach{ (key, value) ->
+        oddsTable.subMap(firstKey,lastKey).forEach{ (key, value) ->
             list.add(HMLetterEntry( key, returnOddsString(value), 0))}
 
         return list
     }
 
-    fun correctCount(initCount : Int, increment: Int = 0,
+    private fun correctCount(initCount : Int, increment: Int = 0,
                      minCount: Int = 0, _maxCount: Int = 1000) : Int {
 
         val maxCount = if (_maxCount <= minCount) minCount + 1 else _maxCount
@@ -324,9 +336,94 @@ class HMHoardGeneratorFragment : Fragment() {
     }
 
     private fun resetLetterEntries() {
-        lairAdapter?.zeroAdapterLetterEntries()
-        smallAdapter?.zeroAdapterLetterEntries()
+
+        lairAdapter!!.zeroAdapterLetterEntries()
+        smallAdapter!!.zeroAdapterLetterEntries()
+
+        lairRecyclerView.adapter = lairAdapter
+        smallRecyclerView.adapter = smallAdapter
+
         Toast.makeText(context,"Letter quantities reset.",Toast.LENGTH_SHORT).show()
+    }
+
+    private fun convertLetterToHoardOrder() : HMHoardOrder {
+
+        fun rollEntry(oddsArray: IntArray): Int {
+
+            if (oddsArray[0] != 0) {
+
+                // If number rolled is below target odds number,
+                if (Random.nextInt(101) <= oddsArray[0]){
+
+                    // Return random amount within range
+                    return Random.nextInt(oddsArray[1],oddsArray[2] + 1)
+
+                    // Otherwise, add nothing for this entry.
+                } else return 0
+
+            } else return 0
+        }
+
+        val letterMap = mutableMapOf<String,Int>()
+
+        lairAdapter!!.getAdapterLetterEntries().forEach{ letterMap[it.letter] = it.quantity }
+        smallAdapter!!.getAdapterLetterEntries().forEach{ letterMap[it.letter] = it.quantity}
+
+        val initialDescription = "Initial composition: "
+        val lettersStringBuffer = StringBuffer(initialDescription)
+
+        val newOrder = HMHoardOrder("")
+
+        // Roll for each non-empty entry TODO: move to non-UI thread
+        letterMap.forEach { (key, value) ->
+            if ((oddsTable.containsKey(key))&&(value > 0)) {
+
+                // Roll for each type of treasure
+                repeat (value) {
+                    newOrder.copperPieces       += rollEntry(oddsTable[key]?.get(0)!!)
+                    newOrder.silverPieces       += rollEntry(oddsTable[key]?.get(1)!!)
+                    newOrder.electrumPieces     += rollEntry(oddsTable[key]?.get(2)!!)
+                    newOrder.goldPieces         += rollEntry(oddsTable[key]?.get(3)!!)
+                    newOrder.hardSilverPieces   += rollEntry(oddsTable[key]?.get(4)!!)
+                    newOrder.platinumPieces     += rollEntry(oddsTable[key]?.get(5)!!)
+                    newOrder.gems               += rollEntry(oddsTable[key]?.get(6)!!)
+                    newOrder.artObjects         += rollEntry(oddsTable[key]?.get(7)!!)
+                    newOrder.potions            += rollEntry(oddsTable[key]?.get(8)!!) //TODO double check potions or scrolls being first
+                    newOrder.scrolls            += rollEntry(oddsTable[key]?.get(9)!!)
+                    newOrder.armorOrWeapons     += rollEntry(oddsTable[key]?.get(10)!!)
+                    newOrder.anyButWeapons      += rollEntry(oddsTable[key]?.get(11)!!)
+                    newOrder.anyMagicItems      += rollEntry(oddsTable[key]?.get(12)!!)
+                }
+
+                // Log letter type in the StringBuffer
+                if (!(lettersStringBuffer.equals(initialDescription))) {
+                    // Add a comma if not the first entry
+                    lettersStringBuffer.append(", ")
+                }
+                // Add letter times quantity
+                    lettersStringBuffer.append("${key}x$value")
+            }
+        }
+
+        // Update description log
+        newOrder.creationDescription = lettersStringBuffer.toString()
+
+        // Log results to debug log
+        Log.d("convertLetterToHoardOrder","- - - NEW ORDER - - -")
+        Log.d("convertLetterToHoardOrder",newOrder.creationDescription)
+        Log.d("convertLetterToHoardOrder","COINAGE: ${newOrder.copperPieces} cp, " +
+                "${newOrder.silverPieces} sp, " + "${newOrder.electrumPieces} ep, " +
+                "${newOrder.goldPieces} gp, " + "${newOrder.hardSilverPieces} hsp, " +
+                "and ${newOrder.platinumPieces} pp")
+        Log.d("convertLetterToHoardOrder","OBJECTS: ${newOrder.gems} gems and " +
+                "${newOrder.artObjects} pieces of artwork")
+        Log.d("convertLetterToHoardOrder","MAGIC ITEMS: ${newOrder.potions} potions, " +
+                "${newOrder.scrolls} scrolls, ${newOrder.armorOrWeapons} armor/weapons, " +
+                "${newOrder.anyButWeapons} magic items (non-weapon), and " +
+                "${newOrder.anyMagicItems} magic items of any type")
+
+        // Return result
+        return newOrder
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
@@ -350,9 +447,8 @@ class HMHoardGeneratorFragment : Fragment() {
 
     companion object {
 
-        val oddsTable = listOf(
-            // Lair treasure types
-            mapOf(
+        val oddsTable = sortedMapOf(
+                // Lair treasure types
                 "A" to arrayOf(
                     intArrayOf(25,1000,3000),
                     intArrayOf(30,200,2000),
@@ -478,12 +574,9 @@ class HMHoardGeneratorFragment : Fragment() {
                     intArrayOf(0,0,0),
                     intArrayOf(0,0,0),
                     intArrayOf(0,0,0),
-                    intArrayOf(15,1,1) )
-            ),
+                    intArrayOf(15,1,1) ),
             // Individual and small lair treasure types
-            mapOf(
-
-                "J" to arrayOf(
+            "J" to arrayOf(
                     intArrayOf(100,3,24),
                     intArrayOf(0,0,0),
                     intArrayOf(0,0,0),
@@ -721,7 +814,6 @@ class HMHoardGeneratorFragment : Fragment() {
                     intArrayOf(0,0,0),
                     intArrayOf(0,0,0),
                     intArrayOf(50,3,3) )
-            )
         )
 
         fun newInstance(): HMHoardGeneratorFragment {
