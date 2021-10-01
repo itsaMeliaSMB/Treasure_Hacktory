@@ -49,8 +49,8 @@ class HMHoardGeneratorFragment : Fragment() {
     private lateinit var smallRecyclerView: RecyclerView
     private var smallAdapter: LetterAdapter? = null
 
-    private var lairList = getLetterArrayList("A","I")
-    private var smallList= getLetterArrayList("J","Z")
+    private var lairList = getLetterArrayList(true, defaultSplitKey)
+    private var smallList= getLetterArrayList(false,defaultSplitKey)
 
     //endregion
 
@@ -205,15 +205,14 @@ class HMHoardGeneratorFragment : Fragment() {
             isEnabled = true //TODO only enable button when valid input is available.
             setOnClickListener {
                 //Toast.makeText(context,"Generate button clicked.",Toast.LENGTH_SHORT).show()
-                var debugString = "DEBUG STRING:\n"
-                val debugList = lairAdapter?.getAdapterLetterEntries()
-
-                Toast.makeText(context,"Check debug logs.",Toast.LENGTH_SHORT).show()
-
-                // Return list quantities
-                debugList?.forEach {
-                    Log.d("Generate Button","Type ${it.letter} x${it.quantity}")
+                var hoardOrder = if (letterRadioButton.isChecked) {
+                    convertLetterToHoardOrder()
+                } else {
+                    HMHoardOrder("EMPTY HOARD ORDER FROM DUMMIED-OUT SPECIFIC METHOD")
                 }
+
+                Toast.makeText(context,"Order generated. Check debug logs.",Toast.LENGTH_SHORT).show()
+
                 // TODO retrieve data from adapters. May need to bind adapter lists w/ model
             }
         }
@@ -312,12 +311,19 @@ class HMHoardGeneratorFragment : Fragment() {
         // TODO see if this is still necessary upon returning to generator fragment
     }
 
-    private fun getLetterArrayList(firstKey: String, lastKey: String) : ArrayList<HMLetterEntry> {
+    private fun getLetterArrayList(isHeadMap: Boolean, splitKey: String) : ArrayList<HMLetterEntry> {
 
         val list = ArrayList<HMLetterEntry>()
 
-        oddsTable.subMap(firstKey,lastKey).forEach{ (key, value) ->
-            list.add(HMLetterEntry( key, returnOddsString(value), 0))}
+        if (isHeadMap) {
+            oddsTable.headMap(splitKey).forEach { (key, value) ->
+                list.add(HMLetterEntry(key, returnOddsString(value), 0))
+            }
+        } else {
+            oddsTable.tailMap(splitKey).forEach { (key, value) ->
+                list.add(HMLetterEntry(key, returnOddsString(value), 0))
+            }
+        }
 
         return list
     }
@@ -815,6 +821,8 @@ class HMHoardGeneratorFragment : Fragment() {
                     intArrayOf(0,0,0),
                     intArrayOf(50,3,3) )
         )
+
+        val defaultSplitKey = "J"
 
         fun newInstance(): HMHoardGeneratorFragment {
             return HMHoardGeneratorFragment()
