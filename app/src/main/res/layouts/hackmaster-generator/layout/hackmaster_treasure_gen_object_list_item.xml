@@ -57,6 +57,8 @@
 
     </LinearLayout>
 
+
+
     <RelativeLayout
         android:id="@+id/hackmaster_gen_object_min_group"
         android:layout_width="match_parent"
@@ -94,8 +96,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:textSize="16sp"
-            android:text="Maximum Value"/>
+            android:text="Maximum Value"
+            android:textSize="16sp" />
 
         <Spinner
             android:id="@+id/hackmaster_gen_object_max_spinner"
@@ -106,5 +108,18 @@
             android:textSize="16sp"/>
 
     </RelativeLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/hackmaster_gen_art_map_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:checked="false"
+        android:text="Maps can replace paper art"/>
+
 
 </LinearLayout>

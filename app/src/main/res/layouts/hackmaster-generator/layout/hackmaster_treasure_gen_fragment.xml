@@ -192,21 +192,7 @@
 
         </LinearLayout>
 
-        <!--<LinearLayout
-            android:id="@+id/hackmaster_gen_specific_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ExpandableListView
-                android:id="@+id/hackmaster_gen_coinage_exlist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:indicatorLeft="0dp"
-                android:childDivider="@color/gray"
-                android:background="?attr/colorSecondary"/>
-
-        </LinearLayout>-->
+        <!--TODO: Decide if specific quantity method will use dialogs or exlists-->
         
     </ViewAnimator>
 

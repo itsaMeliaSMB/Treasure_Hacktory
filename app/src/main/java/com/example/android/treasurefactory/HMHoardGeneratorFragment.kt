@@ -3,6 +3,7 @@ package com.example.android.treasurefactory
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -204,16 +205,25 @@ class HMHoardGeneratorFragment : Fragment() {
 
             isEnabled = true //TODO only enable button when valid input is available.
             setOnClickListener {
-                //Toast.makeText(context,"Generate button clicked.",Toast.LENGTH_SHORT).show()
-                var hoardOrder = if (letterRadioButton.isChecked) {
+
+                // Generate hoard order
+                val hoardOrder = if (letterRadioButton.isChecked) {
                     convertLetterToHoardOrder()
                 } else {
-                    HMHoardOrder("EMPTY HOARD ORDER FROM DUMMIED-OUT SPECIFIC METHOD")
+                    HMHoardOrder("EMPTY HOARD",
+                        "\"SPECIFIC AMOUNT\" method currently dummied out")
                 }
 
+                // Display contents in debug log
+                reportHoardOrderToDebug(hoardOrder)
+
+                // Toast in main app UI
                 Toast.makeText(context,"Order generated. Check debug logs.",Toast.LENGTH_SHORT).show()
 
-                // TODO retrieve data from adapters. May need to bind adapter lists w/ model
+                // TODO send hoard order to actual treasure factory (also, "Treasure Hacktory"?)
+
+                // Reset letters to 0
+                resetLetterEntries()
             }
         }
     }
@@ -269,6 +279,7 @@ class HMHoardGeneratorFragment : Fragment() {
 
         fun getAdapterLetterEntries() : List<HMLetterEntry> = letterEntries
 
+        @SuppressLint("NotifyDataSetChanged")
         fun zeroAdapterLetterEntries() {
 
             letterEntries.forEachIndexed { index, letterEntry ->
@@ -311,6 +322,7 @@ class HMHoardGeneratorFragment : Fragment() {
         // TODO see if this is still necessary upon returning to generator fragment
     }
 
+    @Suppress("SameParameterValue")
     private fun getLetterArrayList(isHeadMap: Boolean, splitKey: String) : ArrayList<HMLetterEntry> {
 
         val list = ArrayList<HMLetterEntry>()
@@ -372,13 +384,16 @@ class HMHoardGeneratorFragment : Fragment() {
 
         val letterMap = mutableMapOf<String,Int>()
 
+        // Put values for every letter key
         lairAdapter!!.getAdapterLetterEntries().forEach{ letterMap[it.letter] = it.quantity }
         smallAdapter!!.getAdapterLetterEntries().forEach{ letterMap[it.letter] = it.quantity}
 
         val initialDescription = "Initial composition: "
         val lettersStringBuffer = StringBuffer(initialDescription)
 
-        val newOrder = HMHoardOrder("")
+        val newOrder = HMHoardOrder()
+
+        newOrder.hoardName = hoardTitleField.text.toString()
 
         // Roll for each non-empty entry TODO: move to non-UI thread
         letterMap.forEach { (key, value) ->
@@ -403,7 +418,7 @@ class HMHoardGeneratorFragment : Fragment() {
 
                 // Log letter type in the StringBuffer
                 if (!(lettersStringBuffer.equals(initialDescription))) {
-                    // Add a comma if not the first entry
+                    // Add a comma if not the first entry TODO fix this
                     lettersStringBuffer.append(", ")
                 }
                 // Add letter times quantity
@@ -414,22 +429,23 @@ class HMHoardGeneratorFragment : Fragment() {
         // Update description log
         newOrder.creationDescription = lettersStringBuffer.toString()
 
-        // Log results to debug log
-        Log.d("convertLetterToHoardOrder","- - - NEW ORDER - - -")
-        Log.d("convertLetterToHoardOrder",newOrder.creationDescription)
-        Log.d("convertLetterToHoardOrder","COINAGE: ${newOrder.copperPieces} cp, " +
-                "${newOrder.silverPieces} sp, " + "${newOrder.electrumPieces} ep, " +
-                "${newOrder.goldPieces} gp, " + "${newOrder.hardSilverPieces} hsp, " +
-                "and ${newOrder.platinumPieces} pp")
-        Log.d("convertLetterToHoardOrder","OBJECTS: ${newOrder.gems} gems and " +
-                "${newOrder.artObjects} pieces of artwork")
-        Log.d("convertLetterToHoardOrder","MAGIC ITEMS: ${newOrder.potions} potions, " +
-                "${newOrder.scrolls} scrolls, ${newOrder.armorOrWeapons} armor/weapons, " +
-                "${newOrder.anyButWeapons} magic items (non-weapon), and " +
-                "${newOrder.anyMagicItems} magic items of any type")
-
         // Return result
         return newOrder
+    }
+
+    private fun reportHoardOrderToDebug(order: HMHoardOrder){
+        Log.d("convertLetterToHoardOrder","- - - NEW ORDER - - -")
+        Log.d("convertLetterToHoardOrder",order.creationDescription)
+        Log.d("convertLetterToHoardOrder","COINAGE: ${order.copperPieces} cp, " +
+                "${order.silverPieces} sp, " + "${order.electrumPieces} ep, " +
+                "${order.goldPieces} gp, " + "${order.hardSilverPieces} hsp, " +
+                "and $order.platinumPieces} pp")
+        Log.d("convertLetterToHoardOrder","OBJECTS: ${order.gems} gems and " +
+                "${order.artObjects} pieces of artwork")
+        Log.d("convertLetterToHoardOrder","MAGIC ITEMS: ${order.potions} potions, " +
+                "${order.scrolls} scrolls, ${order.armorOrWeapons} armor/weapons, " +
+                "${order.anyButWeapons} magic items (non-weapon), and " +
+                "${order.anyMagicItems} magic items of any type")
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
@@ -822,7 +838,7 @@ class HMHoardGeneratorFragment : Fragment() {
                     intArrayOf(50,3,3) )
         )
 
-        val defaultSplitKey = "J"
+        private const val defaultSplitKey = "J"
 
         fun newInstance(): HMHoardGeneratorFragment {
             return HMHoardGeneratorFragment()
