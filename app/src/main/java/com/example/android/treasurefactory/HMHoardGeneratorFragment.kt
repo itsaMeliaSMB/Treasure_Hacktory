@@ -57,10 +57,6 @@ class HMHoardGeneratorFragment : Fragment() {
 
     //region [ Overridden functions ]
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -409,7 +405,7 @@ class HMHoardGeneratorFragment : Fragment() {
                     newOrder.platinumPieces     += rollEntry(oddsTable[key]?.get(5)!!)
                     newOrder.gems               += rollEntry(oddsTable[key]?.get(6)!!)
                     newOrder.artObjects         += rollEntry(oddsTable[key]?.get(7)!!)
-                    newOrder.potions            += rollEntry(oddsTable[key]?.get(8)!!) //TODO double check potions or scrolls being first
+                    newOrder.potions            += rollEntry(oddsTable[key]?.get(8)!!)
                     newOrder.scrolls            += rollEntry(oddsTable[key]?.get(9)!!)
                     newOrder.armorOrWeapons     += rollEntry(oddsTable[key]?.get(10)!!)
                     newOrder.anyButWeapons      += rollEntry(oddsTable[key]?.get(11)!!)

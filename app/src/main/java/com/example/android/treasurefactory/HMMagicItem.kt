@@ -1,9 +1,13 @@
 package com.example.android.treasurefactory
 
-data class HMMagicItem(
-    val typeOfItem: MagicItemType,val name: String,val sourceText: String,val sourcePage: Int,
-    val xpValue: Int,val gpValue: Double,val notes: List<List<String>> = emptyList(),
-    val extraNotes: List<List<String>> = emptyList()) {
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class HMMagicItem(@PrimaryKey(autoGenerate = true) val mItemID: Int, var iconID: Int, //TODO Add necessary foreign keys
+    val typeOfItem: MagicItemType, val name: String, val sourceText: String, val sourcePage: Int, //TODO add var for nickname when architecture is clearer
+    val xpValue: Int,val gpValue: Double, val notes: List<List<String>> = emptyList(),
+    val userNotes: List<List<String>> = emptyList()) { //TODO Refactor lists to be more flat
 
     enum class MagicItemType(val description: String) {
 

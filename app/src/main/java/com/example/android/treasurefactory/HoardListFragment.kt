@@ -25,11 +25,6 @@ class HoardListFragment : Fragment() {
         ViewModelProvider(this).get(hoardListViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?){
-        super.onCreate(savedInstanceState)
-
-    }
-
     companion object{
         fun newInstance(): HoardListFragment {
             return HoardListFragment()
@@ -77,10 +72,10 @@ class HoardListFragment : Fragment() {
         fun bind(hoard: HMHoard) {
 
             this.hoard = hoard
-            nameTextView.text = this.hoard.hoardName
-            dateTextView.text = this.hoard.creationDate.toString()
+            nameTextView.text = this.hoard.getName()
+            dateTextView.text = this.hoard.getCreationDate().toString()
 
-            if (hoard.favorited) {
+            if (hoard.getFavorite()) {
                 favImageView.setImageResource(R.drawable.clipart_filledstar_vector_icon)
             } else {
                 favImageView.setImageResource(R.drawable.clipart_unfilledstar_vector_icon)
@@ -91,7 +86,7 @@ class HoardListFragment : Fragment() {
         override fun onClick(v: View) {
 
             //TODO: Change to go to hoard viewer
-            Toast.makeText(context, "${hoard.hoardName} pressed. Viewer not implemented.",
+            Toast.makeText(context, "${hoard.getName()} pressed. Viewer not implemented.",
                 Toast.LENGTH_SHORT).show()
         }
     }

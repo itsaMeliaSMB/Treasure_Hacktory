@@ -1,7 +1,11 @@
 package com.example.android.treasurefactory
 
-data class HMGem(val variety: Variety, val size: Size, val quality: Quality, val valueLevel: Int, val type: String,
-               val opacity: Opacity = Opacity.TRANSPARENT, val description: String = "") {
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class HMGem(@PrimaryKey val gemID: Int, val variety: Variety, val size: Size, val quality: Quality, val valueLevel: Int, val type: String,
+                 val opacity: Opacity = Opacity.TRANSPARENT, val description: String = "") {
 
     enum class Size(val valueMod: Int, val description: String, val gemCarat: Double,
                     val gemDiameterInches: Double){
@@ -56,7 +60,7 @@ data class HMGem(val variety: Variety, val size: Size, val quality: Quality, val
         7 to 100.0,
         8 to 500.0,
         9 to 1000.0,
-        10 to 5000.0,       // end of initial bse values
+        10 to 5000.0,       // end of initial base values
         11 to 10000.0,
         12 to 250000.0,
         13 to 500000.0,
@@ -67,6 +71,6 @@ data class HMGem(val variety: Variety, val size: Size, val quality: Quality, val
 
     val gpValue = valueLevelToGPValue[valueLevel]
 
-    val weightInCarats      = size.gemCarat * variety.gemMultiplier
-    val diameterInInches    = size.gemDiameterInches * variety.gemMultiplier
+    fun getWeightInCarats() = size.gemCarat * variety.gemMultiplier
+    fun getDiameterInInches() = size.gemDiameterInches * variety.gemMultiplier
 }
