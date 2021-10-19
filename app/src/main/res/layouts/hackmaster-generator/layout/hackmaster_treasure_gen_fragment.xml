@@ -67,130 +67,136 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:fillViewport="true"
-        android:layout_marginVertical="8dp"
->
+        android:layout_marginVertical="8dp">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/hackmaster_gen_letter_scroll_parent"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:scrollbars="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/hackmaster_gen_lair_card"
+            <LinearLayout
+                android:layout_height="match_parent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/exlist_bottom_margin"
-                app:cardUseCompatPadding="true"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/hackmaster_gen_lair_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                    app:cardUseCompatPadding="true"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
 
-                    <!-- Top of cardview (always visible) -->
-                    <RelativeLayout
-                        android:id="@+id/hackmaster_gen_lair_header"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="12dp"
-                        android:background="?attr/colorPrimary">
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/hackmaster_gen_lair_indicator"
-                            android:layout_width="wrap_content"
+                        <!-- Top of cardview (always visible) -->
+                        <RelativeLayout
+                            android:id="@+id/hackmaster_gen_lair_header"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:src="@drawable/clipart_indicator_vector_icon"
-                            app:tint="?attr/colorOnPrimary" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="12dp"
+                            android:background="?attr/colorPrimary">
 
-                        <TextView
-                            style="@style/letter_cardview_header"
-                            android:layout_alignTop="@id/hackmaster_gen_lair_indicator"
-                            android:layout_alignBottom="@id/hackmaster_gen_lair_indicator"
-                            android:layout_toEndOf="@id/hackmaster_gen_lair_indicator"
-                            android:text="@string/lair_treasures_cardview_header" />
+                            <ImageView
+                                android:id="@+id/hackmaster_gen_lair_indicator"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/clipart_indicator_vector_icon"
+                                app:tint="?attr/colorOnPrimary" />
 
-                        <ImageView
-                            app:tint="?attr/colorOnPrimary"
-                            android:src="@drawable/clipart_fortress_vector_icon"
-                            style="@style/cardview_letter_header_icon" />
+                            <TextView
+                                style="@style/letter_cardview_header"
+                                android:layout_alignTop="@id/hackmaster_gen_lair_indicator"
+                                android:layout_alignBottom="@id/hackmaster_gen_lair_indicator"
+                                android:layout_toEndOf="@id/hackmaster_gen_lair_indicator"
+                                android:text="@string/lair_treasures_cardview_header" />
 
-                    </RelativeLayout>
+                            <ImageView
+                                app:tint="?attr/colorOnPrimary"
+                                android:src="@drawable/clipart_fortress_vector_icon"
+                                style="@style/cardview_letter_header_icon" />
 
-                    <!-- Expandable portion of cardview -->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/hackmaster_gen_lair_recyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"/>
+                        </RelativeLayout>
 
-                </LinearLayout>
+                        <!-- Expandable portion of cardview -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/hackmaster_gen_lair_recyclerview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
 
-            </androidx.cardview.widget.CardView>
+                    </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/hackmaster_gen_small_card"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/exlist_bottom_margin"
-                app:cardUseCompatPadding="true"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
+                </androidx.cardview.widget.CardView>
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/hackmaster_gen_small_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                    app:cardUseCompatPadding="true"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
 
-                    <!-- Top of cardview (always visible) -->
-                    <RelativeLayout
-                        android:id="@+id/hackmaster_gen_small_header"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:padding="12dp"
-                        android:background="?attr/colorPrimary">
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/hackmaster_gen_small_indicator"
-                            android:layout_width="wrap_content"
+                        <!-- Top of cardview (always visible) -->
+                        <RelativeLayout
+                            android:id="@+id/hackmaster_gen_small_header"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:src="@drawable/clipart_indicator_vector_icon"
-                            app:tint="?attr/colorOnPrimary" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:padding="12dp"
+                            android:background="?attr/colorPrimary">
 
-                        <TextView
-                            style="@style/letter_cardview_header"
-                            android:layout_alignTop="@id/hackmaster_gen_small_indicator"
-                            android:layout_alignBottom="@id/hackmaster_gen_small_indicator"
-                            android:layout_toEndOf="@id/hackmaster_gen_small_indicator"
-                            android:text="@string/small_treasures_cardview_header" />
+                            <ImageView
+                                android:id="@+id/hackmaster_gen_small_indicator"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/clipart_indicator_vector_icon"
+                                app:tint="?attr/colorOnPrimary" />
 
-                        <ImageView
-                            app:tint="?attr/colorOnPrimary"
-                            android:src="@drawable/clipart_orc_vector_icon"
-                            style="@style/cardview_letter_header_icon" />
+                            <TextView
+                                style="@style/letter_cardview_header"
+                                android:layout_alignTop="@id/hackmaster_gen_small_indicator"
+                                android:layout_alignBottom="@id/hackmaster_gen_small_indicator"
+                                android:layout_toEndOf="@id/hackmaster_gen_small_indicator"
+                                android:text="@string/small_treasures_cardview_header" />
 
-                    </RelativeLayout>
+                            <ImageView
+                                app:tint="?attr/colorOnPrimary"
+                                android:src="@drawable/clipart_orc_vector_icon"
+                                style="@style/cardview_letter_header_icon" />
 
-                    <!-- Expandable portion of cardview -->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/hackmaster_gen_small_recyclerview"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"/>
+                        </RelativeLayout>
 
-                </LinearLayout>
+                        <!-- Expandable portion of cardview -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/hackmaster_gen_small_recyclerview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone" />
 
-            </androidx.cardview.widget.CardView>
+                    </LinearLayout>
 
-        </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <!--TODO: Decide if specific quantity method will use dialogs or exlists-->
         

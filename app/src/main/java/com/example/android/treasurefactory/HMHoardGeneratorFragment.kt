@@ -891,6 +891,6 @@ class HMHoardGeneratorFragment : Fragment() {
     }
 }
 
-//TODO https://stackoverflow.com/questions/52070524/edittext-and-textview-inside-recyclerview-android-kotlin-scrolling-issue
-//TODO https://stackoverflow.com/a/61513452
-//TODO https://stackoverflow.com/a/54842942
+data class HMLetterEntry(val letter: String,
+                         val odds: String,
+                         var quantity: Int = 0)

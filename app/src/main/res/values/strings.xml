@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Treasure Factory</string>
+    <string name="app_name">Treasure Hacktory</string>
     <string name="hoard_name_label">Hoard Name</string>
     <string name="hoard_gen_label">Generation Method</string>
     <string name="gen_method_letter_label">By Letter Code</string>

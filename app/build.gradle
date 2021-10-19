@@ -41,9 +41,13 @@ android {
                     [
                             'src/main/res/layouts/hackmaster-generator',
                             'src/main/res/layouts/hackmaster-viewer',
-                            'src/main/res/layouts/dnd-third-generator',
-                            'src/main/res/layouts/dnd-third-viewer',
                             'src/main/res/layouts',
+                            'src/main/res/drawable/items/gems',
+                            'src/main/res/drawable/items/art-objects',
+                            'src/main/res/drawable/items/magic-items',
+                            'src/main/res/drawable/items',
+                            'src/main/res/drawable/drawable-vectors',
+                            'src/main/res/drawable/',
                             'src/main/res'
                     ]
         }
@@ -57,11 +61,11 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.room:room-runtime:2.4.0-alpha04'
+    implementation 'androidx.room:room-runtime:2.4.0-alpha05'
 
-    kapt 'androidx.room:room-compiler:2.4.0-alpha04'
+    kapt 'androidx.room:room-compiler:2.4.0-alpha05'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
