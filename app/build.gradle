@@ -39,17 +39,16 @@ android {
         main {
             res.srcDirs =
                     [
-                            'src/main/res/layouts/hackmaster-generator',
-                            'src/main/res/layouts/hackmaster-viewer',
-                            'src/main/res/layouts',
-                            'src/main/res/drawable/items/gems',
-                            'src/main/res/drawable/items/art-objects',
-                            'src/main/res/drawable/items/magic-items',
-                            'src/main/res/drawable/items',
-                            'src/main/res/drawable/drawable-vectors',
-                            'src/main/res/drawable/',
-                            'src/main/res'
-                    ]
+                            'src/main/res/main-res/hackmaster-viewer/items/gems',
+                            'src/main/res/main-res/hackmaster-viewer/items/art-objects',
+                            'src/main/res/main-res/hackmaster-viewer/items/magic-items',
+                            'src/main/res/main-res/hackmaster-viewer/items/other',
+                            'src/main/res/main-res/hackmaster-viewer/items',
+                            'src/main/res/main-res/hackmaster-viewer',
+                            'src/main/res/main-res/hackmaster-generator',
+                            'src/main/res/main-res/vector-drawable',
+                            'src/main/res/main-res',
+                            'src/main/res']
         }
     }
 }
@@ -63,9 +62,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.room:room-runtime:2.4.0-alpha05'
+    implementation 'androidx.room:room-runtime:2.4.0-beta01'
 
-    kapt 'androidx.room:room-compiler:2.4.0-alpha05'
+    kapt 'androidx.room:room-compiler:2.4.0-beta01'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'

@@ -26,6 +26,7 @@
         app:layout_constraintStart_toEndOf="@id/hackmaster_list_object_number"
         android:layout_marginHorizontal="@dimen/list_item_element_margin"
         android:layout_gravity="center_vertical"
+        android:scaleType="fitCenter"
         tools:src="@drawable/clipart_info_vector_icon"/>
 
     <!-- Might need to add marquee -->
