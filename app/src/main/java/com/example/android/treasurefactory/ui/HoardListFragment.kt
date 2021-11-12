@@ -1,23 +1,37 @@
-package com.example.android.treasurefactory
+package com.example.android.treasurefactory.ui
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.treasurefactory.R
+import com.example.android.treasurefactory.model.HMHoard
+import com.example.android.treasurefactory.viewmodel.HoardListViewModel
 
 private const val TAG = "HoardListFragment"
 
 class HoardListFragment : Fragment() {
 
+    /**
+    * Required interface for hosting activities
+    */
+    interface Callbacks{
+        fun onHoardSelected(hoardID: Int)
+    }
+
+    private var callbacks: Callbacks? = null
+
     private lateinit var hoardRecyclerView: RecyclerView
-    private var adapter: HoardAdapter? = null
+    private var adapter: HoardAdapter? = HoardAdapter(emptyList())
 
     // Modified from BNR pg 178 because of depreciated class
     private val hoardListViewModel: HoardListViewModel by lazy {
@@ -31,6 +45,11 @@ class HoardListFragment : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
+    }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -42,14 +61,31 @@ class HoardListFragment : Fragment() {
         // Give RecyclerView a Layout manager [required]
         hoardRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        updateUI()
+        hoardRecyclerView.adapter = adapter
 
         return view
     }
 
-    private fun updateUI() {
+    // TODO re-add override to this
+    fun OnViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view,savedInstanceState)
 
-        val hoards = hoardListViewModel.hoards
+        hoardListViewModel.hoardListLiveData.observe(viewLifecycleOwner, //Updates whenever the list of hoards is updated per BNR 238
+            Observer { hoards -> hoards?.let{
+
+                Log.i(TAG,"Got ${hoards.size} treasure hoards")
+                updateUI(hoards)
+                }
+            })
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
+
+    private fun updateUI(hoards: List<HMHoard>) {
+
         adapter = HoardAdapter(hoards)
         hoardRecyclerView.adapter = adapter
     }
@@ -86,8 +122,7 @@ class HoardListFragment : Fragment() {
         override fun onClick(v: View) {
 
             //TODO: Change to go to hoard viewer
-            Toast.makeText(context, "${hoard.getName()} pressed. Viewer not implemented.",
-                Toast.LENGTH_SHORT).show()
+            callbacks?.onHoardSelected(hoard.hoardID)
         }
     }
 

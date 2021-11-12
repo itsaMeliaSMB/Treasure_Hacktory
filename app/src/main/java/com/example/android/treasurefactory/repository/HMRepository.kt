@@ -2,11 +2,11 @@ package com.example.android.treasurefactory.repository
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
-import com.example.android.treasurefactory.HMGem
 import com.example.android.treasurefactory.database.HMGemTemplate
 import com.example.android.treasurefactory.database.TreasureDatabase
+import com.example.android.treasurefactory.model.HMGem
+import com.example.android.treasurefactory.model.HMHoard
 
 private const val DATABASE_NAME = "treasure-database"
 
@@ -21,19 +21,35 @@ class HMRepository private constructor(context: Context) {
         DATABASE_NAME
     ).build()
 
+    private val hmHoardDao = database.hmHoardDao()
     private val hmGemDao = database.hmGemDao()
+    //TODO add other Daos as they are made
 
     // region [ Getter functions ]
 
+        // region [[ Hoard Functions ]]
+
+    fun getHoards(): LiveData<List<HMHoard>> = hmHoardDao.getHoards()
+
+        // endregion
+
+        // region [[ Gem functions ]]
+
     fun getGemTableByType(type: String) : LiveData<List<HMGemTemplate>> = hmGemDao.getGemTableByType(type)
 
-    fun getGemsByHoardID(id: Int) : MutableLiveData<List<HMGem>> = hmGemDao.getGems(id)
+    fun getGemsByHoardID(id: Int) : LiveData<List<HMGem>> = hmGemDao.getGems(id)
+
+    fun getGemByID(id: Int): LiveData<HMGem?> = hmGemDao.getGem(id)
+
+        // endregion
 
     // endregion
 
     //region [ Setter functions ]
 
-    //
+        // region [[ Gem functions ]]
+
+        // endregion
 
     //endregion
 

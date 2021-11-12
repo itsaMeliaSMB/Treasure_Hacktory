@@ -1,4 +1,4 @@
-package com.example.android.treasurefactory
+package com.example.android.treasurefactory.model
 
 data class HMHoardOrder(var hoardName: String = "Untitled Hoard",
                         var creationDescription: String = "",

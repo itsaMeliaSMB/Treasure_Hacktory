@@ -55,26 +55,21 @@
         android:id="@+id/treasure_viewer_list_gem_icon"
         android:layout_width="@dimen/emoji_size"
         android:layout_height="@dimen/emoji_size"
+        android:gravity="center"
         android:layout_below="@id/treasure_viewer_list_gp_value"
         android:layout_alignStart="@id/treasure_viewer_list_name"
-        android:text="@string/diamond_emoji"/>
+        android:text="@string/diamond_emoji" />
 
     <TextView
         android:id="@+id/treasure_viewer_list_gem_count"
         android:layout_width="wrap_content"
-        android:layout_marginHorizontal="8dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/treasure_viewer_list_gp_value"
-        android:layout_toEndOf="@id/treasure_viewer_list_gem_icon"
-        tools:text="100"/>
-
-    <TextView
-        android:id="@+id/treasure_viewer_list_art_icon"
-        android:layout_width="@dimen/emoji_size"
-        android:layout_height="@dimen/emoji_size"
-        android:layout_below="@id/treasure_viewer_list_gp_value"
-        android:layout_toEndOf="@id/treasure_viewer_list_gem_count"
-        android:text="@string/art_emoji"/>
+        android:layout_marginHorizontal="8dp"
+        android:layout_alignStart="@id/treasure_viewer_list_name"
+        android:drawablePadding="4dp"
+        tools:text="100"
+        app:drawableStartCompat="@drawable/clipart_gem_vector_icon" />
 
     <TextView
         android:id="@+id/treasure_viewer_list_art_count"
@@ -82,16 +77,10 @@
         android:layout_marginHorizontal="8dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/treasure_viewer_list_gp_value"
-        android:layout_toEndOf="@id/treasure_viewer_list_art_icon"
-        tools:text="100"/>
-
-    <TextView
-        android:id="@+id/treasure_viewer_list_magic_icon"
-        android:layout_width="@dimen/emoji_size"
-        android:layout_height="@dimen/emoji_size"
-        android:layout_below="@id/treasure_viewer_list_gp_value"
-        android:layout_toEndOf="@id/treasure_viewer_list_art_count"
-        android:text="🔮"/>
+        android:layout_toEndOf="@id/treasure_viewer_list_gem_count"
+        android:drawablePadding="4dp"
+        tools:text="100"
+        app:drawableStartCompat="@drawable/clipart_painting_vector_icon" />
 
     <TextView
         android:id="@+id/treasure_viewer_list_magic_count"
@@ -99,8 +88,10 @@
         android:layout_marginHorizontal="8dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/treasure_viewer_list_gp_value"
-        android:layout_toEndOf="@id/treasure_viewer_list_magic_icon"
-        tools:text="100"/>
+        android:layout_toEndOf="@id/treasure_viewer_list_art_count"
+        android:drawablePadding="4dp"
+        tools:text="100"
+        app:drawableStartCompat="@drawable/clipart_spellbook_vector_icon" />
 
     <ImageView
         android:id="@+id/treasure_viewer_list_star"

@@ -1,9 +1,12 @@
-package com.example.android.treasurefactory
+package com.example.android.treasurefactory.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.android.treasurefactory.R
 
-class MainActivity : AppCompatActivity() {
+private const val TAG = "MainActivity"
+
+class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -16,5 +19,14 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container,fragment)
                 .commit()
         }
+    }
+
+    override fun onHoardSelected(hoardID: Int) {
+        val fragment = HMHoardViewerFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container,fragment)
+            .addToBackStack(null)                   // See page 248 of BNR
+            .commit()
     }
 }

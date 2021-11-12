@@ -8,6 +8,13 @@
     android:layout_height="wrap_content"
     android:paddingVertical="4dp">
 
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="4dp"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/item_coin_hardsilver"/>
+
     <TextView
         android:id="@+id/treasure_viewer_overview_list_item_icon"
         android:layout_width="0dp"
@@ -16,9 +23,8 @@
         android:layout_gravity="center"
         android:gravity="center_vertical"
         android:layout_marginHorizontal="8dp"
-        android:drawablePadding="4dp"
+        android:layout_marginStart="4dp"
         android:textSize="12sp"
-        android:drawableStart="@drawable/coin_hardsilver_icon"
         tools:text="Hard silver pieces"/>
 
     <TextView

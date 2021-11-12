@@ -1,4 +1,4 @@
-package com.example.android.treasurefactory
+package com.example.android.treasurefactory.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
@@ -16,6 +16,8 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.treasurefactory.R
+import com.example.android.treasurefactory.model.HMHoardOrder
 import kotlin.random.Random
 
 class HMHoardGeneratorFragment : Fragment() {

@@ -1,13 +1,12 @@
 package com.example.android.treasurefactory.database
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Query
 import androidx.room.RoomDatabase
-import com.example.android.treasurefactory.HMGem
-import com.example.android.treasurefactory.HMHoard
+import com.example.android.treasurefactory.model.HMGem
+import com.example.android.treasurefactory.model.HMHoard
 
 /**
  * Singleton database for entire app.
@@ -16,6 +15,7 @@ import com.example.android.treasurefactory.HMHoard
 @Database(entities = [HMGemTemplate::class], version = 1)
 abstract class TreasureDatabase : RoomDatabase() {
 
+    abstract fun hmHoardDao(): HMHoardDao
     abstract fun hmGemDao(): HMGemDao
 
     /* Note for self:
@@ -43,10 +43,10 @@ interface HMGemDao {
     fun getGemTableByType(type: String): LiveData<List<HMGemTemplate>>
 
     @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:parentID)")
-    fun getGems(parentID: Int): MutableLiveData<List<HMGem>>
+    fun getGems(parentID: Int): LiveData<List<HMGem>>
 
     @Query("SELECT * FROM hackmaster_gem_table WHERE gemID=(:id)")
-    fun getGem(id: Int): MutableLiveData<HMGem?>
+    fun getGem(id: Int): LiveData<HMGem?>
 }
 
 //endregion
