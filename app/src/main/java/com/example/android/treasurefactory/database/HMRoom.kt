@@ -49,4 +49,21 @@ interface HMGemDao {
     fun getGem(id: Int): LiveData<HMGem?>
 }
 
+@Dao
+interface HMMagicItemDao {
+
+    @Query("SELECT * FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_row=null")
+    fun getItemTableByType(type: String): LiveData<List<HMGemTemplate>>
+
+    // Weighed item pull for base roll TODO
+
+    // Weighed item pull for child roll TODO
+
+    // Get all magic items from hoard TODO
+
+    // Get magic items from hoard TODO
+
+    // Add Magic Item to hoard TODO
+
+}
 //endregion

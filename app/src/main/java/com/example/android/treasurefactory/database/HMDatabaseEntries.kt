@@ -16,7 +16,7 @@ data class HMGemTemplate(@PrimaryKey(autoGenerate = true)
 )
 
 @Entity(tableName = "hackmaster_magic_item_reference")
-data class HMMagicItemTemplate(@PrimaryKey(autoGenerate = true)
+data class HMMagicItemTemplate(@PrimaryKey
                                @ColumnInfo(name="ref_id") val refId: Int,
                                val wt: Int,
                                val name: String,

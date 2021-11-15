@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey
  * Generated magic item following HackMaster 4e rules.
  *
  * @property templateID Primary key of the magic item template in the database reference table
- * @property classUsability Map of class type (fighter/thief/cleric/magic-user/druid) to its ability to use this item (true/false).
+ * @property classUsability Map of class type (fighter/thief/cleric/magic-user/druid) to its ability to use this item (true/false). Use lowercase for strings.
  * @property notes List of generated special notes for the object. First list should be a list of names for all the other lists.
  */
 @Entity(foreignKeys = [ForeignKey(
