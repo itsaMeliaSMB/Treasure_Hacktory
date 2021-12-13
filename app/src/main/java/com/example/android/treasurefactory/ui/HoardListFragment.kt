@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
-import com.example.android.treasurefactory.model.HMHoard
+import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.viewmodel.HoardListViewModel
 
 private const val TAG = "HoardListFragment"
@@ -66,8 +66,7 @@ class HoardListFragment : Fragment() {
         return view
     }
 
-    // TODO re-add override to this
-    fun OnViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view,savedInstanceState)
 
         hoardListViewModel.hoardListLiveData.observe(viewLifecycleOwner, //Updates whenever the list of hoards is updated per BNR 238
@@ -84,7 +83,7 @@ class HoardListFragment : Fragment() {
         callbacks = null
     }
 
-    private fun updateUI(hoards: List<HMHoard>) {
+    private fun updateUI(hoards: List<Hoard>) {
 
         adapter = HoardAdapter(hoards)
         hoardRecyclerView.adapter = adapter
@@ -94,7 +93,7 @@ class HoardListFragment : Fragment() {
     private inner class HoardHolder(view: View)
         : RecyclerView.ViewHolder(view), View.OnClickListener {
 
-        private lateinit var hoard: HMHoard
+        private lateinit var hoard: Hoard
 
         // seperate concerns from viewholder
         private val nameTextView: TextView = itemView.findViewById(R.id.treasure_viewer_list_name)
@@ -105,7 +104,7 @@ class HoardListFragment : Fragment() {
             itemView.setOnClickListener(this)
         }
 
-        fun bind(hoard: HMHoard) {
+        fun bind(hoard: Hoard) {
 
             this.hoard = hoard
             nameTextView.text = this.hoard.getName()
@@ -126,7 +125,7 @@ class HoardListFragment : Fragment() {
         }
     }
 
-    private inner class HoardAdapter(var hoards: List<HMHoard>)
+    private inner class HoardAdapter(var hoards: List<Hoard>)
         : RecyclerView.Adapter<HoardHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : HoardHolder {

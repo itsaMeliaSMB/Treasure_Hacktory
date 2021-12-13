@@ -1,11 +1,9 @@
 package com.example.android.treasurefactory
 
-import com.example.android.treasurefactory.database.HMMagicItemTemplate
-import com.example.android.treasurefactory.model.HMArtObject
-import com.example.android.treasurefactory.model.HMMagicItem
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashMap
+import com.example.android.treasurefactory.database.GemTemplate
+import com.example.android.treasurefactory.database.MagicItemTemplate
+import com.example.android.treasurefactory.database.SpellTemplate
+import com.example.android.treasurefactory.model.*
 import kotlin.random.Random
 
 const val ORDER_LABEL_STRING = "order_details"
@@ -15,97 +13,400 @@ class HMTreasureFactory {
 
     companion object {
 
+        private val ANY_GEM_LIST = listOf("Ornamental","Semiprecious","Fancy","Precious","Gem","Jewel")
 
-
-        val ANY_MAGIC_ITEM_LIST = listOf(
+        private val ANY_MAGIC_ITEM_LIST = listOf(
             "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
             "A17","A18","A21","A24")
 
-        val SAMPLE_MAGIC_ITEM_TEMPLATE = HMMagicItemTemplate(
-            0,5,"Robe of Scintillating Colors","GameMaster's Guide",263,
+        private val SAMPLE_ARCANE_SPELL = SpellTemplate(744,"Wildshield","Spellslinger's Guide to Wurld Domination",125,0,6,"Con","Wild_Mage/Guardian","","Wild","")
+
+        private val SAMPLE_DIVINE_SPELL = SpellTemplate(1146,"Exaction","Player’s Handbook",273,1,7,"Evo/Alt","","Charm/Summoning","","")
+
+        private val SAMPLE_GEM_TEMPLATE = GemTemplate(57,"Jewel","Ruby",5, 0,"clear red to deep crimson (Corundum)","gem_jewel_ruby")
+
+        private val SAMPLE_MAGIC_ITEM_TEMPLATE = MagicItemTemplate(
+            588,5,"Robe of Scintillating Colors","GameMaster's Guide",263,
             1250, 1500, 0, "",0,0,0,
             "A10","",0,0,1,1,0,0,
-            "","",0,"",0,"",
+            0,"",0,"",0,"",
             0,0,0,0,0,0
         )
 
         /* NOTE TO SELF: If I'm going to be using generic types for the rules, use the "is" operator
            to confirm a given setting is properly typed. https://kotlinlang.org/docs/typecasts.html */
 
-        //TODO Add discrimination logic for specified gem ranges
-        fun createGem(parentHoardID: Int, genRules: Map<String,Any>) {
+        /**
+         * Returns a gem.
+         *
+         * @param givenTemplate Primary key to query for a specific gem. Negative values are ignored.
+         * @param providedTypes Tables that are allowed to be queried to pick a gem.
+         */
+        fun createGem(parentHoardID: Int, givenTemplate: Int = -1,
+                      providedTypes: List<String> = ANY_GEM_LIST) : Gem {
 
+            val VALID_TABLE_TYPES = linkedSetOf("Ornamental","Semiprecious","Fancy","Precious","Gem","Jewel")
 
+            var gemValue = 5
+            var gemType = ""
+
+            val gemTemplate: GemTemplate
+            val gemSize : String
+            val gemQuality : String
+
+            val allowedTypes = VALID_TABLE_TYPES.filter { providedTypes.contains(it) }
+
+            // region [ Roll gem type ]
+
+            if (!(givenTemplate in 1..58)) {
+
+                do {
+                    when (Random.nextInt(1,101)) {
+
+                        in 1..25 -> {
+                            gemValue = 5
+                            gemType = "Ornamental"
+                        }
+
+                        in 26..50 -> {
+                            gemValue = 6
+                            gemType = "Semiprecious"
+                        }
+
+                        in 51..70 -> {
+                            gemValue = 7
+                            gemType = "Fancy"
+                        }
+
+                        in 71..90 -> {
+                            gemValue = 8
+                            gemType = "Precious"
+                        }
+
+                        in 91..99 -> {
+                            gemValue = 9
+                            gemType = "Gem"
+                        }
+
+                        100 -> {
+                            gemValue = 10
+                            gemType = "Jewel"
+                        }
+                    }
+                } while ((allowedTypes.isNotEmpty())&&!(allowedTypes.contains(gemType)))
+            }
+
+            // endregion
+
+            // region [ Pull gem template from database ] TODO
+
+            if (givenTemplate in 1..58) {
+
+                // Pull specified gem template
+                gemTemplate = SAMPLE_GEM_TEMPLATE
+                gemType = gemTemplate.type
+                gemValue = when (gemType) {
+
+                    "Ornamental"    -> 5
+                    "Semiprecious"  -> 6
+                    "Fancy"         -> 7
+                    "Precious"      -> 8
+                    "Gem"           -> 9
+                    "Jewel"         -> 10
+                    else            -> 5
+                }
+
+            } else {
+
+                // Pull random entry from given sub-table TODO
+                gemTemplate = SAMPLE_GEM_TEMPLATE
+            }
+
+            // endregion
+
+            // region [ Roll size ]
+
+            when(Random.nextInt(1,101)) {
+
+                in 1..5     -> {
+                    gemSize = "Tiny"
+                    gemValue -= 3
+                }
+
+                in 6..25    -> {
+                    gemSize = "Very small"
+                    gemValue -= 2
+                }
+
+                in 26..45   -> {
+                    gemSize = "Small"
+                    gemValue -= 1
+                }
+
+                in 46..65   -> gemSize = "Average"
+
+                in 66..85   -> {
+                    gemSize = "Large"
+                    gemValue += 1
+                }
+
+                in 86..90   -> {
+                    gemSize = "Very large"
+                    gemValue += 2
+                }
+
+                in 91..96   -> {
+                    gemSize = "Huge"
+                    gemValue += 3
+                }
+
+                in 97..99   -> {
+                    gemSize = "Massive"
+                    gemValue += 4
+                }
+
+                else        -> {
+                    gemSize = "Gargantuan"
+                    gemValue += 5
+                }
+            }
+
+            // endregion
+
+            // region [ Roll quality ]
+
+            when(Random.nextInt(1,101)) {
+
+                in 1..5     -> {
+                    gemQuality = "Badly flawed"
+                    gemValue -= 3
+                }
+
+                in 6..25    -> {
+                    gemQuality = "Flawed"
+                    gemValue -= 2
+                }
+
+                in 26..45   -> {
+                    gemQuality = "Minor inclusions"
+                    gemValue -= 1
+                }
+
+                in 46..65   -> gemQuality = "Average"
+
+                in 66..85   -> {
+                    gemQuality = "Good"
+                    gemValue += 1
+                }
+
+                in 86..90   -> {
+                    gemQuality = "Excellent"
+                    gemValue += 2
+                }
+
+                in 91..96   -> {
+                    gemQuality = "Near-perfect"
+                    gemValue += 3
+                }
+
+                in 97..99   -> {
+                    gemQuality = "Perfect"
+                    gemValue += 4
+                }
+
+                else        -> {
+                    gemQuality = "Flawless"
+                    gemValue += 5
+                }
+            }
+
+            // endregion
+
+            return Gem(0,
+                parentHoardID,gemTemplate.iconID,
+                gemSize,
+                gemType,
+                gemQuality,
+                gemValue,
+                gemTemplate.name,
+                gemTemplate.opacity,
+                gemTemplate.description)
         }
 
         /**
-         * Returns an art object.
-         *
+         * Returns an art object based on the method laid out in HackJournal #6
          */
-        fun createArtObject(parentHoardID: Int, genRules: Map<String,Any>) : HMArtObject {
+        fun createArtObject(parentHoardID: Int) : ArtObject {
 
             var temporaryRank:  Int
             var ageInYears:     Int
             var ageModifier:    Int
+            var ageRank:        Int
+            var condModifier:   Int
+            var renModifier:    Int
+            var artValue =      0
 
-            val artType:        HMArtObject.ArtType
-            val renown:         HMArtObject.Renown
-            val size:           HMArtObject.Size
-            val condition:      HMArtObject.Condition
-            val materials:      HMArtObject.Materials
-            val quality:        HMArtObject.Quality
-            val subject:        HMArtObject.Subject
+            val artType:        String
+            val iconID:         String
+            val renown:         String
+            val size:           String
+            val condition:      String
+            val materials:      String
+            val quality:        String
+            val subject:        String
 
-            val newArt:         HMArtObject
+            // region [ Type of art ]
 
-            // --- Roll for type of art object ---
+            when (Random.nextInt(1,101)) {
 
-            artType = when (Random.nextInt(1,101)) {
-
-                in 1..5     -> HMArtObject.ArtType.PAPER
-                in 6..15    -> HMArtObject.ArtType.FABRIC
-                in 16..30   -> HMArtObject.ArtType.FURNISHING
-                in 31..45   -> HMArtObject.ArtType.PAINTING
-                in 46..60   -> HMArtObject.ArtType.WOOD
-                in 61..70   -> HMArtObject.ArtType.CERAMIC
-                in 71..80   -> HMArtObject.ArtType.GLASS
-                in 81..90   -> HMArtObject.ArtType.STONE
-                in 91..99   -> HMArtObject.ArtType.METAL
-                else        -> HMArtObject.ArtType.MAGICAL
+                in 1..5     -> {
+                    artType = "Paper art"
+                    condModifier = -2
+                    ageModifier = -2
+                    iconID = "artwork_paper"
+                }
+                in 6..15    -> {
+                    artType = "Fabric art"
+                    condModifier = -2
+                    ageModifier = -2
+                    iconID = "artwork_fabric"
+                }
+                in 16..30   -> {
+                    artType = "Furnishing"
+                    condModifier = -1
+                    ageModifier = -1
+                    iconID = "artwork_furnishing"
+                }
+                in 31..45   -> {
+                    artType = "Painting"
+                    condModifier = -1
+                    ageModifier = -1
+                    iconID = "artwork_painting"
+                }
+                in 46..60   -> {
+                    artType = "Scrimshaw & woodwork"
+                    condModifier = -1
+                    ageModifier = -1
+                    iconID = "artwork_wood"
+                }
+                in 61..70   -> {
+                    artType = "Ceramics"
+                    condModifier = 0
+                    ageModifier = 0
+                    iconID = "artwork_ceramic"
+                }
+                in 71..80   -> {
+                    artType = "Glasswork"
+                    condModifier = 0
+                    ageModifier = 0
+                    iconID = "artwork_glass"
+                }
+                in 81..90   -> {
+                    artType = "Stonework"
+                    condModifier = 1
+                    ageModifier = 0
+                    iconID = "artwork_stone"
+                }
+                in 91..99   -> {
+                    artType = "Metalwork"
+                    condModifier = 2
+                    ageModifier = 0
+                    iconID = "artwork_metal"
+                }
+                else        -> {
+                    artType = "Magical"
+                    condModifier = 3
+                    ageModifier = 0
+                    iconID = "artwork_magical"
+                }
             }
 
-            //TODO: get resource ID as string for given item type
+            // endregion
 
-            // --- Roll for the renown of the artist ---
+            // region [ Renown of the artist ]
 
-            renown = when (Random.nextInt(1,101)) {
+            when (Random.nextInt(1,101)) {
 
-                in 1..15    -> HMArtObject.Renown.UNKNOWN
-                in 16..30   -> HMArtObject.Renown.OBSCURE
-                in 31..45   -> HMArtObject.Renown.CITY_RENOWNED
-                in 46..65   -> HMArtObject.Renown.REGIONALLY_RENOWNED
-                in 66..85   -> HMArtObject.Renown.NATIONALLY_RENOWNED
-                in 86..95   -> HMArtObject.Renown.CONTINENTALLY_RENOWNED
-                in 96..99   -> HMArtObject.Renown.WORLDLY_RENOWNED
-                else        -> HMArtObject.Renown.MOVEMENT_LEADER
+                in 1..15    -> {
+                    renown = "unknown"
+                    renModifier = -3
+                }
+                in 16..30   -> {
+                    renown = "obscure"
+                    renModifier = -2
+                }
+                in 31..45   -> {
+                    renown = "city-renowned"
+                    renModifier = -1
+                }
+                in 46..65   -> {
+                    renown = "regionally-renowned"
+                    renModifier = 0
+                }
+                in 66..85   -> {
+                    renown = "nationally-renowned"
+                    renModifier = 1
+                }
+                in 86..95   -> {
+                    renown = "continentally-renowned"
+                    renModifier = 2
+                }
+                in 96..99   -> {
+                    renown = "world-renowned"
+                    renModifier = 3
+                }
+                else        -> {
+                    renown = "a movement leader"
+                    renModifier = 4
+                }
             }
 
-            // --- Roll for size of art object ---
+            // endregion
 
-            size = when(Random.nextInt(1,101)) {
+            // region [ Size of artwork ]
 
-                in 1..5     -> HMArtObject.Size.TINY
-                in 6..25    -> HMArtObject.Size.VERY_SMALL
-                in 26..45   -> HMArtObject.Size.SMALL
-                in 46..65   -> HMArtObject.Size.AVERAGE
-                in 66..85   -> HMArtObject.Size.LARGE
-                in 86..90   -> HMArtObject.Size.VERY_LARGE
-                in 91..96   -> HMArtObject.Size.HUGE
-                in 97..99   -> HMArtObject.Size.MASSIVE
-                else        -> HMArtObject.Size.GARGANTUAN
+            when(Random.nextInt(1,101)) {
+
+                in 1..5     -> {
+                    size = "tiny"
+                    artValue -= 3
+                }
+                in 6..25    -> {
+                    size = "very small"
+                    artValue -= 2
+                }
+                in 26..45   -> {
+                    size = "small"
+                    artValue -= 1
+                }
+                in 46..65   -> {
+                    size = "average"
+                }
+                in 66..85   -> {
+                    size = "large"
+                    artValue += 1
+                }
+                in 86..90   -> {
+                    size = "very large"
+                    artValue += 2
+                }
+                in 91..96   -> {
+                    size = "huge"
+                    artValue += 3
+                }
+                in 97..99   -> {
+                    size = "massive"
+                    artValue += 4
+                }
+                else        -> {
+                    size = "gargantuan"
+                    artValue += 5
+                }
             }
 
-            // --- Roll for quality of materials used ---
+            // endregion
+
+            // region [ Quality of materials used ]
 
             temporaryRank = when (Random.nextInt(1,101)){ //convert to value rank for modification
 
@@ -118,24 +419,52 @@ class HMTreasureFactory {
                 in 91..96   -> 6
                 in 97..99   -> 7
                 else        -> 8
-            } + renown.valueMod
+            } + renModifier
 
             if (temporaryRank < 0) { temporaryRank = 0 }
 
-            materials = when (temporaryRank) {
+            when (temporaryRank) {
 
-                0       -> HMArtObject.Materials.AWFUL
-                1       -> HMArtObject.Materials.POOR
-                2       -> HMArtObject.Materials.BELOW_AVERAGE
-                3       -> HMArtObject.Materials.AVERAGE
-                4       -> HMArtObject.Materials.ABOVE_AVERAGE
-                5       -> HMArtObject.Materials.GOOD
-                6       -> HMArtObject.Materials.EXCELLENT
-                7       -> HMArtObject.Materials.FINEST
-                else    -> HMArtObject.Materials.UNIQUE
+                0       -> {
+                    materials = "awful"
+                    artValue -= 3
+                }
+                1       -> {
+                    materials = "poor"
+                    artValue -= 2
+                }
+                2       -> {
+                    materials = "below average"
+                    artValue -= 1
+                }
+                3       -> {
+                    materials = "average"
+                }
+                4       -> {
+                    materials = "above average"
+                    artValue += 1
+                }
+                5       -> {
+                    materials = "good"
+                    artValue += 2
+                }
+                6       -> {
+                    materials = "excellent"
+                    artValue += 3
+                }
+                7       -> {
+                    materials = "finest"
+                    artValue += 4
+                }
+                else    -> {
+                    materials = "unique"
+                    artValue += 5
+                }
             }
 
-            // --- Roll for quality of work done ---
+            // endregion
+
+            // region [ Quality of work done ]
 
             temporaryRank = when (Random.nextInt(1,101)){ //convert to value rank for modification
 
@@ -148,24 +477,52 @@ class HMTreasureFactory {
                 in 91..96   -> 6
                 in 97..99   -> 7
                 else        -> 8
-            } + renown.valueMod
+            } + renModifier
 
             if (temporaryRank < 0) { temporaryRank = 0 }
 
-            quality = when (temporaryRank) {
+            when (temporaryRank) {
 
-                0       -> HMArtObject.Quality.AWFUL
-                1       -> HMArtObject.Quality.POOR
-                2       -> HMArtObject.Quality.BELOW_AVERAGE
-                3       -> HMArtObject.Quality.AVERAGE
-                4       -> HMArtObject.Quality.ABOVE_AVERAGE
-                5       -> HMArtObject.Quality.GOOD
-                6       -> HMArtObject.Quality.EXCELLENT
-                7       -> HMArtObject.Quality.BRILLIANT
-                else    -> HMArtObject.Quality.MASTERPIECE
+                0       -> {
+                    quality = "awfully executed."
+                    artValue -= 3
+                }
+                1       -> {
+                    quality = "poorly executed."
+                    artValue -= 2
+                }
+                2       -> {
+                    quality = "below-averagely executed."
+                    artValue -= 1
+                }
+                3       -> {
+                    quality = "averagely executed."
+                }
+                4       -> {
+                    quality = "above-averagely executed."
+                    artValue += 1
+                }
+                5       -> {
+                    quality = "well executed."
+                    artValue += 2
+                }
+                6       -> {
+                    quality = "excellently executed."
+                    artValue += 3
+                }
+                7       -> {
+                    quality = "brilliantly executed."
+                    artValue += 4
+                }
+                else    -> {
+                    quality = "simply a masterpiece!"
+                    artValue += 5
+                }
             }
 
-            // --- Roll for age of artwork ---
+            // endregion
+
+            // region [ Age of artwork ]
 
             ageInYears =
                 rollPenetratingDice(5,20,0).getRollTotal() *       // 5d20 x 1d4, penetrate on all rolls
@@ -173,7 +530,8 @@ class HMTreasureFactory {
 
             if (ageInYears < 0) { ageInYears = 0 }
 
-            ageModifier = when (ageInYears) {
+            // Check age range of rolled value
+            ageRank = when (ageInYears) {
 
                 in 0..25        -> -2
                 in 26..75       -> -1
@@ -181,14 +539,88 @@ class HMTreasureFactory {
                 in 151..300     -> 1
                 in 301..600     -> 2
                 in 601..1500    -> 3
-                in 1500..3000   -> 4
+                in 1501..3000   -> 4
                 else            -> 5
-            } + artType.ageMod
+            }
 
-            if (ageModifier < -2) { ageModifier = -2 } else
-                if (ageModifier > 5) { ageModifier = 5 }
+            // Re-roll age in years by range if art type penalizes age rank
+            when (ageRank + ageModifier){
 
-            // --- Roll for condition of art object ---
+                -4  -> {
+                    if (ageInYears !in 0..25) {
+
+                        ageInYears = Random.nextInt(0,26)
+                        ageRank = -2
+                    }
+                }
+                -3  -> {
+                    if (ageInYears !in 0..25) {
+
+                        ageInYears = Random.nextInt(0,25)
+                        ageRank = -2
+                    }
+                }
+                -2  -> {
+                    if (ageInYears !in 0..25) {
+
+                        ageInYears = Random.nextInt(0,26)
+                        ageRank = -2
+                    }
+                }
+                -1  -> {
+                   if (ageInYears !in 26..75) {
+
+                       ageInYears = Random.nextInt(26,76)
+                       ageRank = -1
+                   }
+                }
+                0   -> {
+                    if (ageInYears !in 76..150) {
+
+                        ageInYears = Random.nextInt(76,151)
+                        ageRank = 0
+                    }
+                }
+                1   -> {
+                    if (ageInYears !in 151..300) {
+
+                        ageInYears = Random.nextInt(151,301)
+                        ageRank = 1
+                    }
+                }
+                2   -> {
+                    if (ageInYears !in 301..600) {
+
+                        ageInYears = Random.nextInt(301,601)
+                        ageRank = 2
+                    }
+                }
+                3   -> {
+                    if (ageInYears !in 601..1500) {
+
+                        ageInYears = Random.nextInt(601,1501)
+                        ageRank = 3
+                    }
+                }
+                4   -> {
+                    if (ageInYears !in 1501..3000) {
+
+                        ageInYears = Random.nextInt(1501,3000)
+                        ageRank = 4
+                    }
+                }
+            }
+
+            // Adjust age rank to fit at extremes of value range
+            if (ageRank < -2) { ageRank = -2 } else
+                if (ageRank > 5) { ageRank = 5 }
+
+            // Add age value to overall value rank
+            artValue += ageRank
+
+            // endregion
+
+            // region [ Condition of artwork ]
 
             temporaryRank = when (Random.nextInt(1,101)){ //convert to value rank for modification
 
@@ -201,42 +633,92 @@ class HMTreasureFactory {
                 in 91..96   -> 6
                 in 97..99   -> 7
                 else        -> 8
-            } + artType.conditionMod
+            } + condModifier
 
             if (temporaryRank < 0) { temporaryRank = 0 }
 
-            condition = when (temporaryRank) {
+            when (temporaryRank) {
 
-                0       -> HMArtObject.Condition.BADLY_DAMAGED
-                1       -> HMArtObject.Condition.DAMAGED
-                2       -> HMArtObject.Condition.WORN
-                3       -> HMArtObject.Condition.AVERAGE
-                4       -> HMArtObject.Condition.GOOD
-                5       -> HMArtObject.Condition.EXCELLENT
-                6       -> HMArtObject.Condition.NEAR_PERFECT
-                7       -> HMArtObject.Condition.PERFECT
-                else    -> HMArtObject.Condition.FLAWLESS
+                0       -> {
+                    condition = "badly damaged"
+                    artValue -= 3
+                }
+                1       -> {
+                    condition = "damaged"
+                    artValue -= 2
+                }
+                2       -> {
+                    condition = "worn"
+                    artValue -= 1
+                }
+                3       -> {
+                    condition = "average"
+                }
+                4       -> {
+                    condition = "good"
+                    artValue += 1
+                }
+                5       -> {
+                    condition = "excellent"
+                    artValue += 2
+                }
+                6       -> {
+                    condition = "near perfect"
+                    artValue += 3
+                }
+                7       -> {
+                    condition = "perfect"
+                    artValue += 4
+                }
+                else    -> {
+                    condition = "flawless"
+                    artValue += 5
+                }
             }
 
-            // --- Roll for subject matter of art object ---
+            // region [ Subject matter of art object ]
 
-            subject = when (Random.nextInt(1,101)) {
+            when (Random.nextInt(1,101)) {
 
-                in 1..10    -> HMArtObject.Subject.ABSTRACT
-                in 11..20   -> HMArtObject.Subject.MONSTER
-                in 21..30   -> HMArtObject.Subject.HUMAN
-                in 31..50   -> HMArtObject.Subject.NATURAL
-                in 51..70   -> HMArtObject.Subject.HISTORICAL
-                in 71..90   -> HMArtObject.Subject.RELIGIOUS
-                in 91..99   -> HMArtObject.Subject.NOBLE
-                else        -> HMArtObject.Subject.ROYALTY
+                in 1..10    -> {
+                    subject = "abstract"
+                    artValue -= 2
+                }
+                in 11..20   -> {
+                    subject = "monster"
+                    artValue -= 1
+                }
+                in 21..30   -> {
+                    subject = "human or demi-human"
+                }
+                in 31..50   -> {
+                    subject = "natural"
+                    artValue += 1
+                }
+                in 51..70   -> {
+                    subject = "historical"
+                    artValue += 2
+                }
+                in 71..90   -> {
+                    subject = "religious"
+                    artValue += 3
+                }
+                in 91..99   -> {
+                    subject = "wealthy/noble"
+                    artValue += 4
+                }
+                else        -> {
+                    subject = "royalty"
+                    artValue += 5
+                }
             }
+
+            //endregion
 
             // ---Generate and return new art object ---
 
-            return HMArtObject(0, parentHoardID,"",artType,renown,size,condition,materials,quality,ageInYears,
-                subject,(renown.valueMod + size.valueMod + materials.valueMod + quality.valueMod +
-                        ageModifier + condition.valueMod + subject.valueMod))
+            return ArtObject(0, parentHoardID,iconID,artType,renown,size,condition,materials,quality,ageInYears,
+                subject,artValue)
         }
 
         /**
@@ -246,8 +728,9 @@ class HMTreasureFactory {
          * @param providedTypes Tables that are allowed to be queried to pick an item.
          * @param mapSubChance Percentage chance of replacing a scroll with a treasure map. Can generate maps even when A3 is disallowed.
          */
-        fun createMagicItem(parentHoardID: Int, givenTemplate: Int = -1, providedTypes: List<String> = ANY_MAGIC_ITEM_LIST, mapSubChance :Int = 0,
-                            genRules: Map<String,Any>) : HMMagicItem {
+        fun createMagicItem(parentHoardID: Int, givenTemplate: Int = -1,
+                            providedTypes: List<String> = ANY_MAGIC_ITEM_LIST,
+                            mapSubChance :Int = 0, ) : MagicItem {
 
             val VALID_TABLE_TYPES = linkedSetOf<String>(
                 "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
@@ -264,6 +747,12 @@ class HMTreasureFactory {
                 "TN" to "True Neutral",
                 "NG" to "Neutral Good"
             )
+            val USABLE_BY_ALL = mapOf(
+                "fighter" to true,
+                "thief" to true,
+                "cleric" to true,
+                "magic-user" to true,
+                "druid" to true)
 
             /**
              * Returns full alignment string from valid abbreviations
@@ -369,7 +858,28 @@ class HMTreasureFactory {
                 return result
             }
 
-            var template:       HMMagicItemTemplate = SAMPLE_MAGIC_ITEM_TEMPLATE //TODO
+            /**
+             *
+             */
+            fun getWeightedItemMap(limTemplates: List<LimitedMagicItemTemplate>): List<Pair<IntRange, Int>> {
+
+                val listBuilder = mutableListOf<Pair<IntRange,Int>>()
+                var lastMax     = 0
+                var weight      : Int
+
+                limTemplates.forEach {
+
+                    weight = it.itemWeight
+
+                    listBuilder.plusAssign(Pair(IntRange(lastMax+1, lastMax + weight),it.primaryKey))
+
+                    lastMax += weight
+                }
+
+                return listBuilder.toList()
+            }
+
+            var template:       MagicItemTemplate = SAMPLE_MAGIC_ITEM_TEMPLATE //TODO
 
             var baseTemplateID: Int       // Container for primary key of the first template drawn. -1 indicates a template-less item
             var itemType:       String
@@ -382,19 +892,18 @@ class HMTreasureFactory {
 
             // region Magic item detail holders
 
-            var mTemplateID: Int
-            val mHoardID = parentHoardID // TODO Inline this later; hoard ID can be added outside this function
-            var mIconID: String
-            var mName = ""
-            var mSourceText: String
-            var mSourcePage: Int
-            var mXpValue: Int
-            var mGpValue: Double
-            val mClassUsability: Map<String,Boolean>
-            var mIsCursed: Boolean
-            var mAlignment: String
-            val mNotes: List<List<String>>
-            val mUserNotes = emptyList<String>()
+            var mTemplateID     = -1
+            val mHoardID        = parentHoardID // TODO Inline this later; hoard ID can be added outside this function
+            var mIconID         = "default"
+            var mName           = ""
+            var mSourceText     = "Source text"
+            var mSourcePage     = 0
+            var mXpValue        = 0
+            var mGpValue        = 0.0
+            var mClassUsability = USABLE_BY_ALL
+            var mIsCursed       = false
+            var mAlignment      = ""
+            val mNotes          : List<List<String>>
 
             // endregion
 
@@ -406,7 +915,7 @@ class HMTreasureFactory {
                 VALID_TABLE_TYPES.filter { providedTypes.contains(it) }
             }
 
-            fun getWeightedProbabilityTable(): List<IntRange> {
+            fun getWeightedProbabilityTable(): List<IntRange> { //TODO merge into getWeightedItemList()
 
                 val TABLE_A1_WEIGHT = mapOf(
                     "A2" to 20,
@@ -659,10 +1168,34 @@ class HMTreasureFactory {
 
             if ((itemType != "INVALID")&&(VALID_TABLE_TYPES.contains(itemType))&&!(gmChoice)){
 
-                // Pull base entry from appropriate table. TODO
+                // TODO Replace when Daos are accessible
+                val TEMPORARY_LIMITED_LIST = listOf(
+                    LimitedMagicItemTemplate(1,13),
+                    LimitedMagicItemTemplate(2,4),
+                    LimitedMagicItemTemplate(3,2),
+                    LimitedMagicItemTemplate(4,1)
+                )
 
-                // Set pulled template's refID as parent reference ID
-                baseTemplateID = template.refId
+                var limitedTemplateList: List<LimitedMagicItemTemplate>
+                var weightedItemTable: List<Pair<IntRange,Int>>
+
+                // Get list of items of given type using Dao TODO
+                limitedTemplateList = TEMPORARY_LIMITED_LIST
+
+                //TODO error handling for empty entry
+
+                // Pull primary key of magic item entry
+                weightedItemTable = getWeightedItemMap(limitedTemplateList)
+
+                var currentRoll: Int = Random.nextInt(weightedItemTable.first().first.first,
+                    weightedItemTable.last().first.last + 1)
+
+                baseTemplateID = weightedItemTable[
+                    weightedItemTable.indexOfFirst { it.first.contains(currentRoll) }
+                ].second
+
+                // Get base template by ID using Dao TODO
+                template = SAMPLE_MAGIC_ITEM_TEMPLATE
 
                 // Pull child entry if they exist TODO
                 while (template.hasChild != 0) {
@@ -703,8 +1236,6 @@ class HMTreasureFactory {
 
                 // region [ Modify name, if applicable ]
 
-                if (template.multiType == 3) mName = "${itemCharges}x $mName"
-
                 if (mName.startsWith("Pole Arm")) {
 
                     val poleArmList = listOf(
@@ -730,6 +1261,8 @@ class HMTreasureFactory {
                 }
 
                 itemCharges += template.dieMod
+
+                if (template.multiType == 3) mName = "${itemCharges}x $mName"
 
                 // endregion
 
@@ -761,7 +1294,7 @@ class HMTreasureFactory {
 
                     val keywords = template.imitationKeyword.split(";")
 
-                    val imitationTemplate: HMMagicItemTemplate
+                    val imitationTemplate: MagicItemTemplate
 
                     // Query DB for item imitate TODO
                     // keywords[Random.nextInt(0,keywords.size)]
@@ -887,7 +1420,7 @@ class HMTreasureFactory {
                         66 to "pearl",
                         67 to "pewter",
                         68 to "pink",
-                        69 to "pitch black", // nice.
+                        69 to "pitch black",
                         70 to "plum",
                         71 to "purple",
                         72 to "purple",
@@ -964,26 +1497,31 @@ class HMTreasureFactory {
                         in 1..2     -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: Porcelain Jar")
+                            if (mIconID == "potion_empty") mIconID = "potion_alabaster"
                         }
 
                         in 3..4     -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: Alabaster")
+                            if (mIconID == "potion_empty") mIconID = "potion_alabaster"
                         }
 
                         in 5..12    -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Round, long container")
+                            if (mIconID == "potion_empty") mIconID = "potion_round_long"
                         }
 
                         in 13..14   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Square, long container")
+                            if (mIconID == "potion_empty") mIconID = "potion_square_long"
                         }
 
                         in 15..19   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Conical bulb")
+                            if (mIconID == "potion_empty") mIconID = "potion_erlenmeyer"
 
                             isRoundBulb = true
                         }
@@ -991,6 +1529,7 @@ class HMTreasureFactory {
                         in 20..48   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Spherical bulb")
+                            if (mIconID == "potion_empty") mIconID = "potion_round_short"
 
                             isRoundBulb = true
                         }
@@ -998,6 +1537,7 @@ class HMTreasureFactory {
                         in 49..56   -> {
                             notesLists["Potion flavor text"]
                             ?.plusAssign("Container: $material - Oval, 'squashed' bulb")
+                            if (mIconID == "potion_empty") mIconID = "potion_squashed"
 
                             isRoundBulb = true
                         }
@@ -1005,54 +1545,62 @@ class HMTreasureFactory {
                         in 57..60   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Tapering neck, Conical flask")
+                            if (mIconID == "potion_empty") mIconID = "potion_fancy"
                         }
 
                         in 61..65   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Triangular bulb")
+                            if (mIconID == "potion_empty") mIconID = "potion_pointy"
                         }
 
                         in 66..69 -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("$material - Triangular, long container")
+                            if (mIconID == "potion_empty") mIconID = "potion_hexagonal"
                         }
 
                         in 70..73   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("$material - Twisted, almost misshapen neck, small diamond bulb")
+                            if (mIconID == "potion_empty") mIconID = "potion_pointy"
                         }
 
                         in 74..76   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Test-tube style")
+                            if (mIconID == "potion_empty") mIconID = "potion_tube"
                         }
 
                         in 77..78   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Lone wine bottle (Green glass):")
-
+                            if (mIconID == "potion_empty") mIconID = "potion_winebottle"
                             itemCharges = Random.nextInt(1,4)
 
                             notesLists["Potion flavor text"]
                                 ?.plusAssign(
                                     "This container holds $itemCharges dose(s) of " +
-                                            "potion - all f the same type. Liquid color is " +
+                                            "potion - all of the same type. Liquid color is " +
                                             "not immediately discernible. [1]")
                         }
 
                         in 79..80   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Rectangular bulb")
+                            if (mIconID == "potion_empty") mIconID = "potion_square_long"
                         }
 
                         in 81..84   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Hexagonal, long container")
+                            if (mIconID == "potion_empty") mIconID = "potion_hexagonal"
                         }
 
                         in 85..86 -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Curved, swirl bulb")
+                            if (mIconID == "potion_empty") mIconID = "potion_fancy"
 
                             isRoundBulb = true
                         }
@@ -1060,6 +1608,7 @@ class HMTreasureFactory {
                         in 87..88   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: $material - Rectangular, long container")
+                            if (mIconID == "potion_empty") mIconID = "potion_square_long"
                         }
 
                         89          -> {
@@ -1068,6 +1617,7 @@ class HMTreasureFactory {
                                         "with ${Random.nextInt(2,5)} round bulbs, " +
                                         "decreasing in size as they go up the bottle, all " +
                                         "totalling one dose of potion.")
+                            if (mIconID == "potion_empty") mIconID = "potion_other"
 
                             itemCharges = 1
 
@@ -1076,7 +1626,11 @@ class HMTreasureFactory {
 
                         90          -> {
                             notesLists["Potion flavor text"]
-                                ?.plusAssign("Container: Metal - Sealed tankard:")
+                                ?.plusAssign("Container: Metal - Sealed tankard")
+                            notesLists["Potion flavor text"]
+                                ?.plusAssign("Unless opened, these containers " +
+                                        "prevent the potion from being viewed. [2]")
+                            if (mIconID == "potion_empty") mIconID = "potion_tankard"
                         }
 
                         in 91..92   -> {
@@ -1086,12 +1640,15 @@ class HMTreasureFactory {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Unless opened, these containers " +
                                         "prevent the potion from being viewed. [2]")
+
+                            if (mIconID == "potion_empty") mIconID = "potion_metal_flask"
                         }
 
                         in 93..95   -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Special - Unusually shaped ${material.lowercase()} " +
                                     "(heart, skull, Apple, Standing Nymph, etc.)")
+                            if (mIconID == "potion_empty") mIconID = "potion_unusual"
                         }
 
                         96          -> {
@@ -1105,12 +1662,16 @@ class HMTreasureFactory {
                                         "must be fully consumed in order for their magic to " +
                                         "take effect. For some reason, these forms are " +
                                         "mainly prunes or dusty-tasting peach-like fruits. [3]")
+
+                            if (mIconID == "potion_empty") mIconID = "potion_berry"
                         }
 
                         97          -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: Special - Wooden or ${material.lowercase()} " +
                                         "charm hanging from a chain:")
+
+                            if (mIconID == "potion_empty") mIconID = "potion_charm"
 
                             isSealed = true
 
@@ -1127,6 +1688,7 @@ class HMTreasureFactory {
                         else        -> {
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Container: GM's option")
+                            if (mIconID == "potion_empty") mIconID = "potion_other"
                         }
                     }
 
@@ -1197,7 +1759,7 @@ class HMTreasureFactory {
                         else        -> {
 
                             notesLists["Potion flavor text"]
-                                ?.plusAssign("Sealant: Sealed glass neck:")
+                                ?.plusAssign("Sealant: Sealed $material neck:")
 
                             notesLists["Potion flavor text"]
                                 ?.plusAssign("Neck must be broken before use, one-chance " +
@@ -1206,7 +1768,6 @@ class HMTreasureFactory {
                                         "points of damage. Speed Penalty - an extra 2 segments " +
                                         "in combat must be spent opening a bottle like this. " +
                                         "(See footnote for Table HJ21-B)")
-
                         }
 
                     }
@@ -1489,7 +2050,7 @@ class HMTreasureFactory {
 
                 if (Random.nextInt(1,101) <= template.intel_chance) {
 
-                    var wIntelligence           = 12
+                    var wIntelligence:          Int
                     val wAlignment:             String
                     val weaponEgo:              Int
                     var wCommLevel              = 0
@@ -1542,18 +2103,6 @@ class HMTreasureFactory {
 
                     val COMM_LEVEL_LIST = listOf(
                         "Semi-empathy*","Empathy","Speech**","Speech and Telepathy***"
-                    )
-                    val OPPOSITE_ALIGNMENT = mapOf(
-
-                        "Chaotic Good" to "Lawful Evil",
-                        "Chaotic Neutral" to "Lawful Neutral",
-                        "Chaotic Evil" to "Lawful Good",
-                        "Neutral Evil" to "Neutral Good",
-                        "Lawful Evil" to "Chaotic Good",
-                        "Lawful Good" to "Chaotic Evil",
-                        "Lawful Neutral" to "Chaotic Neutral",
-                        "True Neutral" to "any extremely-aligned (LG/CG/CE/LE)",
-                        "Neutral Good" to "Neutral Evil"
                     )
 
                     fun setInitialProperties(inputIntelligence:Int) {
@@ -2449,13 +2998,6 @@ class HMTreasureFactory {
 
             } else {
 
-                val USABLE_BY_ALL = mapOf(
-                    "fighter" to true,
-                    "thief" to true,
-                    "cleric" to true,
-                    "magic-user" to true,
-                    "druid" to true)
-
                 // Generate magic item details for outliers and exceptional items TODO
                 when (mName) {
 
@@ -2555,7 +3097,7 @@ class HMTreasureFactory {
                         mGpValue =      0.0
                         mClassUsability = USABLE_BY_ALL
                         mIsCursed = !(isRealMap)
-                        //mIconRef TODO
+                        mIconID = "scroll_map"
                     }
 
                     "Spell Scroll"  -> {
@@ -2564,7 +3106,7 @@ class HMTreasureFactory {
                         mXpValue =      0
                         mGpValue =      0.0
                         mClassUsability = USABLE_BY_ALL
-                        //mIconID TODO
+                        mIconID = "scroll_base"
                     }
 
                     "GM's Choice"   -> {
@@ -2573,7 +3115,21 @@ class HMTreasureFactory {
                         mXpValue =      0
                         mGpValue =      0.0
                         mClassUsability = USABLE_BY_ALL
-                        //mIconID TODO
+                        mIconID = when (itemType){
+                            "A2"    -> "potion_empty"
+                            "A3"    -> "scroll_base"
+                            "A4"    -> "ring_gold"
+                            "A5"    -> "staff_ruby"
+                            "A6"    -> "staff_iron"
+                            "A7"    -> "wand_wood"
+                            "A8"    -> "book_normal"
+                            "A9"    -> "jewelry_box"
+                            "A13"   -> "container_full"
+                            "A14"   -> "dust_incense"
+                            "A15"   -> "music_instument_wood"
+                            "A24"   -> "artifact_box"
+                            else    -> "container_chest"
+                        }
                     }
                 }
             }
@@ -2643,11 +3199,7 @@ class HMTreasureFactory {
 
             // endregion
 
-            // region [ Assign dummy values to any unassigned fields ] TODO
-
-            // endregion
-
-            return HMMagicItem(
+            return MagicItem(
                 0,
                 mTemplateID,
                 mHoardID,
@@ -2661,18 +3213,345 @@ class HMTreasureFactory {
                 mClassUsability,
                 mIsCursed,
                 mAlignment,
-                mNotes,
-                mUserNotes)
+                mNotes)
         }
 
         /**
-         * Converts a provided HMMagicItem into a SpellCollection based on the item's notes[2] value.
+         * Converts a provided MagicItem into a SpellCollection based on the item's notes[2] value.
          */
-        fun convertItemToSpellCollection(inputItem: HMMagicItem) {
+        fun convertItemToSpellScroll(inputItem: MagicItem): SpellCollection {
 
-            //TODO not yet implemented. Should use provided xp and int values unless otherwise instructed.
+            val VALID_TYPES = setOf("Magic-User","Cleric","Druid")
+            val dummySpell = Spell(217,
+                "\"Push\"",
+                "\"Magic-User\"",
+                1,
+                "\"Player's Handbook\"",
+                184,
+                listOf("Con"),
+                emptyList<String>(),
+                "",
+                emptyList<String>(),
+                "(This is actually an error-handling entry)"
+            )
+
+            val spellList = ArrayList<Spell>()
+            val orderList = inputItem.notes[
+                    inputItem.notes[0].indexOfFirst{it == ORDER_LABEL_STRING} ]
+            val propertiesMap = mutableMapOf<String,Double>()
+            var curse = ""
+            var itemName = ""
+            val iconID : String
+
+            // region < Getter functions >
+
+            fun getType(): String {
+
+                val orderString = (orderList.firstOrNull() { it.startsWith("spell type = ") })
+                    ?: "spell type = Undefined"
+
+                val result = orderString.substringAfter("spell type = ","Undefined")
+
+                return if (VALID_TYPES.contains(result)) {
+                    result
+                } else {
+                    "Undefined" //TODO add handling for "undefined" db queries
+                }
+            }
+
+            fun getCount() : Int {
+
+                val orderString = (orderList.firstOrNull() { it.startsWith("number of spells = ") })
+                    ?: "number of spells = 1"
+                val parsedCount = orderString.substringAfter("number of spells = ","1").toInt()
+
+                return if (parsedCount > 0) parsedCount else 1
+            }
+
+            fun getRange() : IntRange {
+
+                val orderString = (orderList.firstOrNull() { it.startsWith("spell level range = ") })
+                    ?: "spell level range = 1 to 9"
+
+                val splitStrings = orderString.substringAfter("spell level range = ","1 to 7")
+                    .split(" to ")
+
+                val minimum = splitStrings.first().toIntOrNull() ?: 1
+                val maximum = splitStrings.last().toIntOrNull() ?: minimum
+
+                return IntRange(maximum,maximum)
+            }
+
+            // endregion
+
+            val spellType = getType()
+            val spellCount = getCount()
+            var spellRange = getRange()
+
+            // region [ Fix range, if applicable ]
+
+            if (spellType == "Magic-User") {
+
+                if (spellRange.first < 0) spellRange = (IntRange(0,spellRange.last))
+
+                if (spellRange.last > 9) spellRange = (IntRange(spellRange.first,9))
+
+            } else if ((spellType != "Magic-User")&&(spellRange.last > 7)) {
+
+                if (spellRange.first < 1) spellRange = (IntRange(1,spellRange.last))
+
+                if (spellRange.last > 7) spellRange = (IntRange(spellRange.first,7))
+
+            }
+
+            // endregion
+
+            // region [ Roll spells ] TODO
+
+            if (VALID_TYPES.contains(spellType)){
+
+                repeat(spellCount){
+
+                    //TODO query database instead of returning sample
+                    var spellTemplate = SAMPLE_ARCANE_SPELL
+
+                    // Add spell to running list
+                    spellList.add(convertTemplateToSpell(spellTemplate))
+                }
+
+            } else {
+
+                //Add error-handling entry
+                repeat(spellCount){spellList.add(dummySpell)}
+            }
+
+            // endregion
+
+            // region [ Roll non-spell details ]
+
+            // Roll container
+            propertiesMap.plusAssign( when (Random.nextInt(1,7)) {
+
+                1   -> Pair("Container: Ivory tube",0.0)
+                2   -> Pair("Container: Jade tube",0.0)
+                3   -> Pair("Container: Leather tube",0.0)
+                4   -> Pair("Container: Metal tube",0.0)
+                5   -> Pair("Container: Wooden tube",0.0)
+                else-> Pair("Container: None (found loose)",0.0)
+            }
+            )
+
+            // Roll material
+            propertiesMap.plusAssign( when (Random.nextInt(1,11)){
+                in 1..5 -> Pair("Material: Vellum",0.0)
+                in 6..8 -> Pair("Material: Parchment",0.0)
+                9       -> Pair("Material: Papyrus",0.0)
+                else    -> Pair("Material: Non-standard (GM's choice)",0.0)
+            } )
+
+            // endregion
+
+            // region [ Add recommended curse (if applicable) ]
+
+            // Roll to determine if erroneous scroll
+            if (Random.nextInt(1,101) in 1..Random.nextInt(5,11)) {
+                curse = "(GMG) Casting from this scroll will result in spell mishap (see GMG pg 212)."
+            }
+
+            // Add cursed effect from page 225-226 of GMG
+            if ((inputItem.isCursed)&&(curse.isNotBlank())) {
+
+                // Pick from curse list on GMG pgs 225-226 (plus custom effects)
+                val curseList = listOf(
+                    "(GMG) Bad luck (-1 on attacks and saving throws).",
+                    "(GMG) he character's beard grows one inch per minute.",
+                    "(GMG) The character is teleported away from the rest of the party.",
+                    "(GMG) Random monster appears and attacks (See GMG pg 319).",
+                    "(GMG) The character is polymorphed into a mouse.",
+                    "(GMG) The character shrinks to half his normal size.",
+                    "(GMG) This character is stricken with weakness, halving his Strength score.",
+                    "(GMG) The character falls into a deep sleep from which he cannot be roused.",
+                    "(GMG) The character develops an uncontrollable appetite.",
+                    "(GMG) The character must always talk in rhyme (preventing spell casting).",
+                    "(GMG) The character is stricken with cowardice and must make a morale check every time a monster is encountered.",
+                    "(GMG) The character's alignment is changed.",
+                    "(GMG) The character suffers amnesia.",
+                    "(GMG) The character feels compelled to give away all his belongings.",
+                    "(GMG) The character must save vs. paralyzation or suffer petrification.",
+                    "[GMG] The character suffers a spell mishap (see GMG pg 82, Table 7E).",
+                    "[GMG] The character develops some form insanity (see GMG pg 86, Table 7H).",
+                    "[GMG] The character suffers from a minor malevolent effect (see GMG pg 285, Table B125). Re-roll incompatible results.",
+                    "[SSG] The character suffers the effect of a Witch's Curse (see SSG pg 49, Table 5C).",
+                    "[SSG] The character experiences the effect of a Wild Surge (see SSG pg 38, Table 4L).",
+                    "[SSG] The character suffers from the effect of a Tattoo Effect (see SSG pg 35, Table 4G) for 1 week.",
+                    "[PHB] The character suffers the effect of Bestow Curse (see PHB page 215).",
+                    "[TrH] All reversible spells are reversed. Otherwise, 50% chance of spell failure.",
+                    "[TrH] All spells inscribed on the scroll go off at once, as if a spell-jacked caster mis-casted.",
+                    "[TrH] The character loses access to one of their talents, determined at random.",
+                    "[TrH] Loud, embarrassing sound is produced on casting. User must save vs. apology or lose 5 honor.",
+                    "[TrH] The target of any beneficial spell (or, fail that, the caster) will suffer a Fumble on their next attack (see GMG pg 124, Table 8KK).",
+                    "[TrH] All magic items in character's possessions rendered unusable for 10 turns.",
+                    "[TrH] Spell effect is subject to potion miscibility effect as if imbibed (see GMG pg 221, Table B1).",
+                    "[TrH] Scroll explodes into a puff of gas (see GMG pg 335, Table F20) when used.",
+                    "[TrH] Trap materializes and activates, targeting user (see GMG pg 335, Table F19). Re-roll if nonsensical.",
+                    "[TrH] All active magical enhancements are dispelled on all friendly creatures within 10 ft of caster.",
+                    "[TrH] All active magical detriments are doubled (GM chooses if duration, magnitude, etc) on all friendly creatures within 10 ft of caster.",
+                    "[TrH] Effects of any spells cast from this scroll are purely illusory.",
+                    "[TrH] All ink on items in character's possession disappears for 24 hours.",
+                    "[TrH] The character immediately becomes one step more intoxicated (see GMG pgs 170-172).",
+                    "[TrH] The GM may use a single GM coupon, provided they do so immediately and target the caster."
+                )
+                val curseEntry = Random.nextInt(0,curseList.size)
+                curse = curseList[curseEntry] + " {#${curseEntry}}"
+            }
+
+            // endregion
+
+            // region [ Get item name ]
+
+            itemName = "${if (curse.isNotEmpty()) "Cursed" else ""} $spellType Spell Scroll " +
+                    "(${spellCount}x Lv.${spellRange.first}-${spellRange.last})"
+
+            // endregion
+
+            // region [ Get Icon ID ]
+            iconID = if (curse.isBlank()) {
+
+                when (spellType) {
+
+                    "Magic-User"-> "scroll_red"
+                    "Cleric"    -> "scroll_blue"
+                    else        -> "scroll_base"
+                }
+
+            } else {
+
+                "scroll_cursed"
+            }
+
+            return SpellCollection(0,
+                inputItem.hoardID,
+                iconID,
+                itemName,
+                "Scroll",
+                propertiesMap.toMap(),
+                spellList.toList(),
+                curse
+            )
         }
 
-        fun createSpellCollection(constrainedRules: Boolean = false) {}
+        /**
+         * Converts a provided HMMagicItem into list of Ioun Stones per the rules on GMG page 258.
+         */
+        fun convertItemToIoun(inputItem: MagicItem): List<MagicItem> {
+
+            val iounList = arrayListOf<MagicItem>()
+            val currentSet = mutableSetOf<Int>()
+            val orderList = inputItem.notes[
+                    inputItem.notes[0].indexOfFirst{it == ORDER_LABEL_STRING} ]
+
+            fun getItemCount(): Int {
+
+                val orderString = (orderList.firstOrNull() { it.startsWith("count = ") })
+                        ?: "count = 1"
+
+                // Get number of stones to generate
+                return orderString.substringAfter("count = ","1").toInt()
+            }
+
+            val itemCount = getItemCount()
+            var currentStone = 0
+            var deadStones = 0
+            var iounIndex = 0 // Primary key of entry
+
+            // Roll which stones are present
+            repeat(itemCount) {
+
+                currentStone = Random.nextInt(1,21)
+
+                // Convert to 'dead' stone if rolled or already present
+                if ((currentSet.contains(currentStone))||(currentStone > 15)) currentStone = 15
+
+                if (currentStone == 15) deadStones += 1 else currentSet.add(currentStone)
+            }
+
+            // Retrieve stones from database TODO
+            currentSet.sorted().forEach { index ->
+
+                // Get template based on index rolled TODO replace with actual primary keys
+                iounIndex = index
+
+                // Add to running list
+                iounList.add(createMagicItem(inputItem.hoardID,index, listOf("A14"),0))
+            }
+
+            // Add dead stones TODO
+            if (deadStones > 0){
+
+                val deadStoneKey = inputItem.templateID //TODO replace with actual primary key
+                val deadStoneItem = createMagicItem(inputItem.hoardID,deadStoneKey, listOf("A14"),0)
+
+                repeat(deadStones) { iounList.add(deadStoneItem) }
+            }
+
+            // Return list of ioun stones
+            return iounList
+        }
+
+        /**
+         * Converts a provided HMMagicItem into a list of HMGem objects
+         */
+        fun convertItemToGutStone(inputItem: MagicItem): List<Gem> {
+
+            val GUT_STONE_KEY = 58
+
+            val gutStoneList = arrayListOf<Gem>()
+            val orderList = inputItem.notes[
+                    inputItem.notes[0].indexOfFirst{it == ORDER_LABEL_STRING} ]
+
+            fun getItemCount(): Int {
+
+                val orderString = (orderList.firstOrNull() { it.startsWith("count = ") })
+                        ?: "count = 1"
+
+                // Get number of stones to generate
+                return orderString.substringAfter("count = ","1").toInt()
+            }
+
+            repeat(getItemCount()){
+                gutStoneList.add(createGem(inputItem.hoardID,GUT_STONE_KEY,listOf("Jewel")))
+            }
+
+            return gutStoneList
+        }
+
+        fun convertTemplateToSpell(template:SpellTemplate): Spell {
+
+            fun getTypeFromInt() : String {
+
+                return when (template.type) {
+                    0   -> "Magic-User"
+                    1   -> "Cleric"
+                    2   -> "Druid"
+                    else-> "Undefined"
+                }
+            }
+
+            return Spell(
+                template.refId,
+                template.name,
+                getTypeFromInt(),
+                template.level,
+                template.source,
+                template.page,
+                template.schools.split("/"),
+                template.spellSpheres.split("/"),
+                template.subclass,
+                template.restrictions.split("/"),
+                template.note
+            )
+        }
     }
+
+
 }

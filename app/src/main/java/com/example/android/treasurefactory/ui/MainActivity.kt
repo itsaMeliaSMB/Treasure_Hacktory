@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
         if (currentFragment == null) {
-            val fragment = HMHoardGeneratorFragment()
+            val fragment = HoardGeneratorFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container,fragment)
                 .commit()
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
     }
 
     override fun onHoardSelected(hoardID: Int) {
-        val fragment = HMHoardViewerFragment()
+        val fragment = HoardViewerFragment()
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container,fragment)
