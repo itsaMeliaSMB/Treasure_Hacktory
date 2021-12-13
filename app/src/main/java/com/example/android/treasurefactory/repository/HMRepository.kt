@@ -29,7 +29,7 @@ class HMRepository private constructor(context: Context) {
     //TODO add other Daos as they are made
 
 
-    // region [[ Hoard Functions ]]
+    // region [ Hoard Functions ]
 
     fun getHoards() : LiveData<List<Hoard>> = hmHoardDao.getHoards()
 
@@ -37,7 +37,7 @@ class HMRepository private constructor(context: Context) {
 
     // endregion
 
-    // region [[ Gem functions ]]
+    // region [ Gem functions ]
 
     fun getGemTableByType(type: String) : LiveData<List<GemTemplate>> = hmGemDao.getGemTableByType(type)
 

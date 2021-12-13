@@ -10,7 +10,6 @@ const val ORDER_LABEL_STRING = "order_details"
 
 class HMTreasureFactory {
 
-
     companion object {
 
         private val ANY_GEM_LIST = listOf("Ornamental","Semiprecious","Fancy","Precious","Gem","Jewel")
@@ -730,7 +729,7 @@ class HMTreasureFactory {
          */
         fun createMagicItem(parentHoardID: Int, givenTemplate: Int = -1,
                             providedTypes: List<String> = ANY_MAGIC_ITEM_LIST,
-                            mapSubChance :Int = 0, ) : MagicItem {
+                            mapSubChance :Int = 0) : MagicItem {
 
             val VALID_TABLE_TYPES = linkedSetOf<String>(
                 "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
@@ -3552,6 +3551,4 @@ class HMTreasureFactory {
             )
         }
     }
-
-
 }

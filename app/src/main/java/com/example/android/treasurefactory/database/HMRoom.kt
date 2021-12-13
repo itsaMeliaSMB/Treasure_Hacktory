@@ -4,15 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.android.treasurefactory.model.*
 
+//TODO revisit this and consider seperating entities from data class: https://jacquessmuts.github.io/post/modularization_room/
+
 /**
  * Singleton database for entire app.
- * TODO: add other entities and Daos
  */
 @Database(
     entities = [
         Hoard::class,
         GemTemplate::class,
         MagicItemTemplate::class,
+        SpellTemplate::class,
         Gem::class,
         ArtObject::class,
         MagicItem::class,
@@ -27,11 +29,9 @@ abstract class TreasureDatabase : RoomDatabase() {
     abstract fun magicItemDao(): MagicItemDao
     abstract fun spellCollectionDao(): SpellCollectionDao
 
-
     /* Note for self:
     We do NOT need the singleton here, since this will be instantiated as part of the HM Repository
     class, which will have the singleton with context as necessary. Err on the side of BNR. */
-
 }
 
 //region [ Data Access Objects ]
@@ -132,5 +132,17 @@ interface SpellCollectionDao{
     // Add spell collection to hoard TODO
 
     // Update a spell collection in hoard TODO
+
+    // Pull specific spell template by ID
+    @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id(:id)")
+    fun getSpellTempByID(id: Int): LiveData<SpellTemplate?>
+
+    // Pull all spell IDs of a level and magical discipline (excluding restricted spells)
+    @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level) AND restricted_to=(NULL OR '')")
+    fun getSpellsOfLevelType(type: Int, level: Int): LiveData<List<Int>>
+
+    // Pull all spell IDs of a level and magical discipline
+    @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level)")
+    fun getAllSpellsOfLevelType(type: Int, level: Int): LiveData<List<Int>>
 }
 //endregion

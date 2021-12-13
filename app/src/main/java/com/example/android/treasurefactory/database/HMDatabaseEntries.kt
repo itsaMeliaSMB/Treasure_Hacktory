@@ -5,14 +5,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "hackmaster_gem_reference")
-data class GemTemplate(@PrimaryKey(autoGenerate = true)
+data class GemTemplate(@PrimaryKey
                         @ColumnInfo(name="ref_id") val refId: Int,
                        val type: String,
                        val name: String,
                        val ordinal: Int,
                        val opacity: Int,
                        val description: String,
-                       @ColumnInfo(name ="icon_id") val iconID : String //TODO add default ID for gem drawable
+                       @ColumnInfo(name ="icon_id") val iconID : String
 )
 
 @Entity(tableName = "hackmaster_magic_item_reference")
@@ -29,7 +29,7 @@ data class MagicItemTemplate(@PrimaryKey
                              @ColumnInfo(name="die_count") val dieCount: Int,
                              @ColumnInfo(name="die_sides") val dieSides: Int,
                              @ColumnInfo(name="die_mod") val dieMod: Int,
-                             @ColumnInfo(name="table_type") val tableType: String, //TODO Change magic item type from enum to string
+                             @ColumnInfo(name="table_type") val tableType: String,
                              @ColumnInfo(name="icon_ref") val iconRef: String,
                              @ColumnInfo(name="f_usable") val fUsable: Int,
                              @ColumnInfo(name="t_usable") val tUsable: Int,
