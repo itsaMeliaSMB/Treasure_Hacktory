@@ -1,5 +1,9 @@
 package com.example.android.treasurefactory.model
 
-data class LimitedMagicItemTemplate(val primaryKey: Int,
+import androidx.room.ColumnInfo
+
+data class LimitedMagicItemTemplate(@ColumnInfo(name="ref_id")
+                                    val primaryKey: Int,
+                                    @ColumnInfo(name="wt")
                                     val itemWeight: Int) {
 }

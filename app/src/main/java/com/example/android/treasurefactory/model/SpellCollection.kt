@@ -1,6 +1,10 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import org.jetbrains.annotations.NotNull
 
 @Entity(tableName = "hackmaster_spell_collection_table",
     foreignKeys = [ForeignKey(
@@ -8,14 +12,15 @@ import androidx.room.*
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("sCollectID"),
         onDelete = ForeignKey.CASCADE ) ])
-data class SpellCollection(@PrimaryKey(autoGenerate = true) val sCollectID: Int,
-                           val hoardID: Int,
-                           val iconID: String,
-                           val name: String = "<Spell Scroll>",
-                           val type: String = "scroll",
-                           var properties: Map<String,Double> = emptyMap(),
-                           @Embedded var spells: List<Spell> = listOf<Spell>(),
-                           val curse: String = "") {
+data class SpellCollection(
+    @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
+    val hoardID: Int,
+    var iconID: String,
+    var name: String = "<Spell Scroll>",
+    var type: String = "scroll",
+    var properties: Map<String,Double> = emptyMap(),
+    var spells: List<Spell> = listOf(),
+    var curse: String = "") {
 
     @Ignore
     fun getGpValue(): Double {
@@ -51,5 +56,4 @@ data class SpellCollection(@PrimaryKey(autoGenerate = true) val sCollectID: Int,
 
         return xpTotal
     }
-
 }
