@@ -20,7 +20,7 @@
             android:scaleType="fitCenter"
             android:layout_gravity="center"/>
 
-        <EditText
+        <TextView
             android:id="@+id/treasure_viewer_overview_hoard_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +40,17 @@
             android:layout_gravity="center_vertical"
             android:buttonTint="?attr/colorOnSurface"
             android:button="@drawable/toggleable_clipart_star_vector" />
+        <!--TODO Convert to imageview and remove logic in View layer-->
 
+        <ImageButton
+            android:id="@+id/treasure_viewer_header_edit_button"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_gravity="center"
+            android:backgroundTint="?attr/colorPrimary"
+            android:src="@drawable/clipart_edit_vector_icon"
+            app:tint="?attr/colorOnPrimary"/>
         <!-- TODO: add data binding to fav icon and hoard name -->
 
     </LinearLayout>
@@ -140,6 +150,46 @@
         android:background="@color/black"
         android:layout_marginTop="16dp"
         android:layout_marginHorizontal="96dp"
+        android:layout_marginBottom="8dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="Coinage totals"
+            android:textAllCaps="true"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/trasure_viewer_header_edit_button"
+            android:layout_width="48dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_alignParentEnd="true"
+            android:backgroundTint="?attr/colorPrimary"
+            android:src="@drawable/clipart_edit_vector_icon"
+            app:tint="?attr/colorOnPrimary" />
+
+    </RelativeLayout>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="96dp"
         android:layout_marginBottom="16dp"/>
 
     <TextView
@@ -149,7 +199,6 @@
         android:textStyle="bold"
         android:textAllCaps="true"
         android:text="Unique Object Overview"/>
-
 
     <LinearLayout
         android:layout_height="wrap_content"
@@ -161,36 +210,182 @@
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:cardUseCompatPadding="true"
             app:cardCornerRadius="8dp"
             app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:layout_height="match_parent"
+                android:padding="4dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="?attr/colorSurface">
+                android:background="?attr/colorPrimary">
 
                 <ImageView
                     android:id="@+id/treasure_viewer_overview_gem_icon"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/clipart_gem_vector_icon"
-                    app:tint="?attr/colorOnSurface"/>
+                    app:tint="?attr/colorOnPrimary"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="28sp"
                     android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface"
+                    android:textColor="?attr/colorOnPrimary"
                     android:drawablePadding="4dp"
                     tools:text="100" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:breakStrategy="simple"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:text="Gem stones"/>
 
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/colorPrimary">
+
+                <ImageView
+                    android:id="@+id/treasure_viewer_overview_art_icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/clipart_painting_vector_icon"
+                    app:tint="?attr/colorOnPrimary"/>
+
+                <TextView
+                    android:id="@+id/treasure_viewer_overview_art_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:drawablePadding="4dp"
+                    tools:text="100" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:breakStrategy="simple"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:text="Art Objects"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/colorPrimary">
+
+                <ImageView
+                    android:id="@+id/treasure_viewer_overview_magic_icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/clipart_wand_vector_icon"
+                    app:tint="?attr/colorOnPrimary"/>
+
+                <TextView
+                    android:id="@+id/treasure_viewer_overview_magic_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimary"
+                    tools:text="100" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:text="Magic Items"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="4dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="?attr/colorPrimary">
+
+                <ImageView
+                    android:id="@+id/treasure_viewer_overview_spells_icon"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/clipart_spellbook_vector_icon"
+                    app:tint="?attr/colorOnPrimary"/>
+
+                <TextView
+                    android:id="@+id/treasure_viewer_overview_spells_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimary"
+                    tools:text="100" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:breakStrategy="simple"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:text="Spell Caches"/>
 
             </LinearLayout>
 

@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -70,7 +69,7 @@ class HoardListFragment : Fragment() {
         super.onViewCreated(view,savedInstanceState)
 
         hoardListViewModel.hoardListLiveData.observe(viewLifecycleOwner, //Updates whenever the list of hoards is updated per BNR 238
-            Observer { hoards -> hoards?.let{
+            { hoards -> hoards?.let{
 
                 Log.i(TAG,"Got ${hoards.size} treasure hoards")
                 updateUI(hoards)
@@ -107,10 +106,10 @@ class HoardListFragment : Fragment() {
         fun bind(hoard: Hoard) {
 
             this.hoard = hoard
-            nameTextView.text = this.hoard.getName()
-            dateTextView.text = this.hoard.getCreationDate().toString()
+            nameTextView.text = this.hoard.name
+            dateTextView.text = this.hoard.creationDate.toString()
 
-            if (hoard.getFavorite()) {
+            if (hoard.isFavorite) {
                 favImageView.setImageResource(R.drawable.clipart_filledstar_vector_icon)
             } else {
                 favImageView.setImageResource(R.drawable.clipart_unfilledstar_vector_icon)
@@ -120,8 +119,8 @@ class HoardListFragment : Fragment() {
 
         override fun onClick(v: View) {
 
-            //TODO: Change to go to hoard viewer
             callbacks?.onHoardSelected(hoard.hoardID)
+            Log.d(TAG,"callback on hoard.hoardID (${hoard.hoardID})")
         }
     }
 

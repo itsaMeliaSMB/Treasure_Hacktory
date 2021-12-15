@@ -65,6 +65,19 @@ class HoardTypeConverters {
     fun toSpell(jsonSpell: String?) : Spell? = Gson().fromJson(jsonSpell,Spell::class.java)
 
     @TypeConverter
+    fun fromSpellList(list: List<Spell?>?) : String? = Gson().toJson(list)
+
+    @TypeConverter
+    fun toSpellList(jsonList: String?) : List<Spell?>? {
+
+        if (jsonList == null) return emptyList()
+
+        val typeToken = object : TypeToken<List<Spell?>?>() {}.type
+
+        return Gson().fromJson(jsonList,typeToken)
+    }
+
+    @TypeConverter
     fun fromBoolean(bool: Boolean) : String? = Gson().toJson(bool)
 
     @TypeConverter

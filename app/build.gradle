@@ -35,6 +35,11 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+    kapt {
+        arguments {
+            arg("room.schemaLocation","C:/Users/Jacob/AndroidStudioProjects/TreasureFactory")
+        }
+    }
     sourceSets{
         main {
             res.srcDirs =

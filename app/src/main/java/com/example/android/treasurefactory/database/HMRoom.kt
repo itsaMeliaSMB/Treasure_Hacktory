@@ -134,11 +134,11 @@ interface SpellCollectionDao{
     // Update a spell collection in hoard TODO
 
     // Pull specific spell template by ID
-    @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id(:id)")
+    @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id=(:id)")
     fun getSpellTempByID(id: Int): LiveData<SpellTemplate?>
 
     // Pull all spell IDs of a level and magical discipline (excluding restricted spells)
-    @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level) AND restricted_to=(NULL OR '')")
+    @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level) AND restricted_to=''")
     fun getSpellsOfLevelType(type: Int, level: Int): LiveData<List<Int>>
 
     // Pull all spell IDs of a level and magical discipline

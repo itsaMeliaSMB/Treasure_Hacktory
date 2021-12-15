@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.android.treasurefactory.database.GemTemplate
 import com.example.android.treasurefactory.database.MagicItemTemplate
+import com.example.android.treasurefactory.database.SpellTemplate
 import com.example.android.treasurefactory.database.TreasureDatabase
 import com.example.android.treasurefactory.model.*
 
@@ -26,8 +27,6 @@ class HMRepository private constructor(context: Context) {
     private val hmArtDao        = database.artDao()
     private val hmMagicItemDao  = database.magicItemDao()
     private val hmSpCollectDao  = database.spellCollectionDao()
-    //TODO add other Daos as they are made
-
 
     // region [ Hoard Functions ]
 
@@ -70,6 +69,8 @@ class HMRepository private constructor(context: Context) {
     fun getHoardSpellCollections(hoardID: Int) : LiveData<List<SpellCollection>> = hmSpCollectDao.getSpellCollections(hoardID)
 
     fun getSpellCollectionByID(collectionID: Int) : LiveData<SpellCollection?> = hmSpCollectDao.getSpellCollection(collectionID)
+
+    fun getSpellTempByID(templateID: Int) : LiveData<SpellTemplate?> = hmSpCollectDao.getSpellTempByID(templateID)
 
     // endregion
 

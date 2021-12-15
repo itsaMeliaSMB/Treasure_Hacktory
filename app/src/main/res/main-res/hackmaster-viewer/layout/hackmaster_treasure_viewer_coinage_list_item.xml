@@ -27,24 +27,50 @@
         android:textSize="12sp"
         tools:text="Hard silver pieces"/>
 
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnSurface"
+        android:layout_marginHorizontal="4dp"/>
+
     <TextView
-        android:id="@+id/treasure_viewer_overview_list_item_column_a"
+        android:id="@+id/treasure_viewer_overview_list_item_column_qty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:layout_marginEnd="8dp"
         android:textAlignment="viewEnd"
         android:textSize="12sp"
         android:text="x [ . . . ]"/>
 
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnSurface"
+        android:layout_marginHorizontal="4dp"/>
+
     <TextView
-        android:id="@+id/treasure_viewer_overview_list_item_column_b"
+        android:id="@+id/treasure_viewer_overview_list_item_column_ib"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:textAlignment="viewEnd"
+        android:textSize="12sp"
+        android:text="[ . . . ] ib"/>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnSurface"
+        android:layout_marginHorizontal="4dp"/>
+
+    <TextView
+        android:id="@+id/treasure_viewer_overview_list_item_column_gp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
         android:layout_marginEnd="8dp"
         android:textAlignment="viewEnd"
         android:textSize="12sp"
-        android:text="[ . . . ] ib"/>
+        android:text="[ . . . ] gp"/>
+
 
 </LinearLayout>

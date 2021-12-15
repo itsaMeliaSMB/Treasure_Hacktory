@@ -12,6 +12,7 @@ import java.util.*
 data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int,
                  var name: String = "",
                  var creationDate: Date = Date(),
+                 var creationDesc: String = "",
                  var iconID: String,
                  var gpTotal: Double,
                  var cp: Int,
