@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull
  * @param classUsability Map of class type (fighter/thief/cleric/magic-user/druid) to its ability to use this item (true/false). Use lowercase for strings.
  * @param notes List of generated special notes for the object. First list should be a list of names for all the other lists.
  */
-@Entity(foreignKeys = [ForeignKey(
+@Entity(tableName = "hackmaster_magic_item_table",
+    foreignKeys = [ForeignKey(
     entity = Hoard::class,
     parentColumns = arrayOf ("hoardID"),
     childColumns = arrayOf("mItemID"),
-    onDelete = ForeignKey.CASCADE
-) ] )
+    onDelete = ForeignKey.CASCADE) ] )
 data class MagicItem(
     @PrimaryKey(autoGenerate = true) @NotNull val mItemID: Int,
     val templateID: Int,

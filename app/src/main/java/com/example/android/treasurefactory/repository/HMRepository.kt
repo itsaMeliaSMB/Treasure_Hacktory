@@ -8,6 +8,7 @@ import com.example.android.treasurefactory.database.MagicItemTemplate
 import com.example.android.treasurefactory.database.SpellTemplate
 import com.example.android.treasurefactory.database.TreasureDatabase
 import com.example.android.treasurefactory.model.*
+import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "treasure-database"
 
@@ -27,12 +28,25 @@ class HMRepository private constructor(context: Context) {
     private val hmArtDao        = database.artDao()
     private val hmMagicItemDao  = database.magicItemDao()
     private val hmSpCollectDao  = database.spellCollectionDao()
+    private val executor        = Executors.newSingleThreadExecutor()
 
     // region [ Hoard Functions ]
 
-    fun getHoards() : LiveData<List<Hoard>> = hmHoardDao.getHoards()
+    fun getHoards(): LiveData<List<Hoard>> = hmHoardDao.getHoards()
 
-    fun getHoard(hoardID: Int) : LiveData<Hoard?> = hmHoardDao.getHoard(hoardID)
+    fun getHoard(hoardID: Int): LiveData<Hoard?> = hmHoardDao.getHoard(hoardID)
+
+    fun addHoard(hoard: Hoard) {
+        executor.execute {
+            hmHoardDao.addHoard(hoard)
+        }
+    }
+
+    fun updateHoard(hoard: Hoard) {
+        executor.execute {
+            hmHoardDao.updateHoard(hoard)
+        }
+    }
 
     // endregion
 
@@ -56,11 +70,13 @@ class HMRepository private constructor(context: Context) {
 
     //region [ Magic item functions ]
 
+    fun getHoardMagicItems(hoardID: Int) : LiveData<List<MagicItem>> = hmMagicItemDao.getMagicItems(hoardID)
+
     fun getLimitedTableByType(type: String) : LiveData<List<LimitedMagicItemTemplate>> = hmMagicItemDao.getBaseLimItemTempsByType(type)
 
     fun getLimitedTableByParent(parentID: Int) : LiveData<List<LimitedMagicItemTemplate>> = hmMagicItemDao.getChildLimItemTempsByParent(parentID)
 
-    fun getItemTemplateByID(itemID: Int) : LiveData<MagicItemTemplate> = hmMagicItemDao.getItemTemplateByID(itemID)
+    suspend fun getItemTemplateByID(itemID: Int) : MagicItemTemplate? = hmMagicItemDao.getItemTemplateByID(itemID)
 
     // endregion
 
@@ -70,7 +86,7 @@ class HMRepository private constructor(context: Context) {
 
     fun getSpellCollectionByID(collectionID: Int) : LiveData<SpellCollection?> = hmSpCollectDao.getSpellCollection(collectionID)
 
-    fun getSpellTempByID(templateID: Int) : LiveData<SpellTemplate?> = hmSpCollectDao.getSpellTempByID(templateID)
+    suspend fun getSpellTempByID(templateID: Int) : SpellTemplate? = hmSpCollectDao.getSpellTempByID(templateID)
 
     // endregion
 

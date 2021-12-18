@@ -44,6 +44,12 @@ interface HoardDao{
 
     @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
     fun getHoard(id: Int): LiveData<Hoard?>
+
+    @Insert
+    fun addHoard(hoard: Hoard)
+
+    @Update
+    fun updateHoard(hoard: Hoard)
 }
 
 @Dao
@@ -52,8 +58,8 @@ interface GemDao {
     @Query("SELECT * FROM hackmaster_gem_reference WHERE type=(:type) ORDER BY ordinal")
     fun getGemTableByType(type: String): LiveData<List<GemTemplate>>
 
-    @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:parentID)")
-    fun getGems(parentID: Int): LiveData<List<Gem>>
+    @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
+    fun getGems(hoardID: Int): LiveData<List<Gem>>
 
     @Query("SELECT * FROM hackmaster_gem_table WHERE gemID=(:id)")
     fun getGem(id: Int): LiveData<Gem?>
@@ -68,8 +74,8 @@ interface GemDao {
 @Dao
 interface ArtDao {
 
-    @Query("SELECT * FROM hackmaster_art_table WHERE hoardID=(:parentID)")
-    fun getArtObjects(parentID: Int): LiveData<List<ArtObject>>
+    @Query("SELECT * FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    fun getArtObjects(hoardID: Int): LiveData<List<ArtObject>>
 
     @Query("SELECT * FROM hackmaster_art_table WHERE artID=(:id)")
     fun getArtObject(id: Int): LiveData<ArtObject?>
@@ -106,9 +112,11 @@ interface MagicItemDao {
      * @param itemID Integer primary key ID number of entry to pull.
      */
     @Query("SELECT * FROM hackmaster_magic_item_reference WHERE ref_id=(:itemID) LIMIT 1")
-    fun getItemTemplateByID(itemID: Int): LiveData<MagicItemTemplate>
+    suspend fun getItemTemplateByID(itemID: Int): MagicItemTemplate?
 
     // Get magic items from hoard TODO
+    @Query("SELECT * FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
+    fun getMagicItems(hoardID: Int): LiveData<List<MagicItem>>
 
     // Add magic item to hoard TODO
 
@@ -122,8 +130,8 @@ interface MagicItemDao {
 interface SpellCollectionDao{
 
     // Pull all spell collections from a hoard TODO
-    @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:parentID)")
-    fun getSpellCollections(parentID: Int): LiveData<List<SpellCollection>>
+    @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    fun getSpellCollections(hoardID: Int): LiveData<List<SpellCollection>>
 
     // Pull specific spell collection from hoard with given ID TODO
     @Query("SELECT * FROM hackmaster_spell_collection_table WHERE sCollectID=(:id)")
@@ -135,14 +143,14 @@ interface SpellCollectionDao{
 
     // Pull specific spell template by ID
     @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id=(:id)")
-    fun getSpellTempByID(id: Int): LiveData<SpellTemplate?>
+    suspend fun getSpellTempByID(id: Int): SpellTemplate?
 
     // Pull all spell IDs of a level and magical discipline (excluding restricted spells)
     @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level) AND restricted_to=''")
-    fun getSpellsOfLevelType(type: Int, level: Int): LiveData<List<Int>>
+    suspend fun getSpellsOfLevelType(type: Int, level: Int): List<Int>
 
     // Pull all spell IDs of a level and magical discipline
     @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level)")
-    fun getAllSpellsOfLevelType(type: Int, level: Int): LiveData<List<Int>>
+    suspend fun getAllSpellsOfLevelType(type: Int, level: Int): List<Int>
 }
 //endregion

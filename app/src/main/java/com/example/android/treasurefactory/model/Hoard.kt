@@ -9,21 +9,22 @@ import java.util.*
 // TODO: Separately define Database object and app-level model for encapsulation https://stackoverflow.com/questions/64823212/use-android-room-without-breaking-encapsulation
 
 @Entity (tableName = "hackmaster_hoard_table")
-data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int,
+data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var name: String = "",
                  var creationDate: Date = Date(),
                  var creationDesc: String = "",
-                 var iconID: String,
-                 var gpTotal: Double,
-                 var cp: Int,
-                 var sp: Int,
-                 var ep: Int,
-                 var gp: Int,
-                 var hsp: Int,
-                 var pp: Int,
-                 var gemCount: Int,
-                 var artCount: Int,
-                 var magicCount: Int,
-                 var spellsCount: Int,
-                 var isFavorite: Boolean,
-                 var isNew: Boolean) {}
+                 var iconID: String = "",
+                 var gpTotal: Double = 0.0,
+                 var cp: Int = 0,
+                 var sp: Int = 0,
+                 var ep: Int = 0,
+                 var gp: Int = 0,
+                 var hsp: Int = 0,
+                 var pp: Int = 0,
+                 var xpGpRatio: Double = 5.0, //
+                 var gemCount: Int = 0,
+                 var artCount: Int = 0,
+                 var magicCount: Int = 0,
+                 var spellsCount: Int = 0,
+                 var isFavorite: Boolean = false,
+                 var isNew: Boolean = true) {}
