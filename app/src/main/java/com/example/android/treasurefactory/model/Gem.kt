@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
+import kotlin.math.roundToInt
 
 @Entity(tableName = "hackmaster_gem_table",
     foreignKeys = [ForeignKey(
@@ -22,10 +23,10 @@ data class Gem(
     val value: Int,
     val name: String,
     val opacity: Int,
-    val description: String = "") {
+    val description: String = "") : Evaluable {
 
     @Ignore
-    fun getGpValue(): Double {
+    override fun getGpValue(): Double {
 
         val valueLevelToGPValue = mapOf(
 
@@ -49,6 +50,14 @@ data class Gem(
         )
 
         return valueLevelToGPValue[value] ?: 0.0
+    }
+
+    @Ignore
+    override fun getXpValue(): Int {
+
+        val xpGpRatio = 0.2
+
+        return (getGpValue() * xpGpRatio).roundToInt()
     }
 
     @Ignore

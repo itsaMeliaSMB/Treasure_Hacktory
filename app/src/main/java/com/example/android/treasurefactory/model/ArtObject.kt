@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
+import kotlin.math.floor
 
 @Entity(tableName = "hackmaster_art_table",
     foreignKeys = [ForeignKey(
@@ -25,10 +26,10 @@ data class ArtObject(
     val quality: String,
     val age: Int,
     val subject: String,
-    var valueLevel: Int) {
+    var valueLevel: Int) : Evaluable{
 
     @Ignore
-    fun getGpValue() : Double {
+    override fun getGpValue() : Double {
 
         val valueLevelToGPValue = mapOf(
 
@@ -86,5 +87,13 @@ data class ArtObject(
         )
 
       return valueLevelToGPValue[valueLevel] ?: 0.0
+    }
+
+    @Ignore
+    override fun getXpValue(): Double {
+
+        val xpGpRatio = 0.2
+
+        return floor(getGpValue() * xpGpRatio)
     }
 }

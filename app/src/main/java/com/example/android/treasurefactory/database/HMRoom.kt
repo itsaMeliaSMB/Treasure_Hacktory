@@ -12,6 +12,7 @@ import com.example.android.treasurefactory.model.*
 @Database(
     entities = [
         Hoard::class,
+        HoardLeftover::class,
         GemTemplate::class,
         MagicItemTemplate::class,
         SpellTemplate::class,
@@ -50,6 +51,15 @@ interface HoardDao{
 
     @Update
     fun updateHoard(hoard: Hoard)
+
+    @Query("SELECT * FROM hackmaster_hoard_leftover_table WHERE leftoverID=(:id)")
+    fun getLeftover(id: Int): LiveData<HoardLeftover?>
+
+    @Insert
+    fun addLeftover(leftover: HoardLeftover)
+
+    @Update
+    fun updateLeftover(leftover: HoardLeftover)
 }
 
 @Dao

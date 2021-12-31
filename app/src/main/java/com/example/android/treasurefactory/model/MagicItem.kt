@@ -2,6 +2,7 @@ package com.example.android.treasurefactory.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
@@ -28,10 +29,17 @@ data class MagicItem(
     val name: String,
     val sourceText: String,
     val sourcePage: Int,
-    val xpValue: Int,
-    val gpValue: Double,
+    val xpWorth: Int,
+    val gpWorth: Double,
     val classUsability: Map<String,Boolean>,
     val isCursed: Boolean,
     val alignment: String,
     val notes: List<List<String>> = emptyList(),
-    val userNotes: List<String> = emptyList()) {}
+    val userNotes: List<String> = emptyList()) : Evaluable {
+
+    @Ignore
+    override fun getGpValue(): Double = gpWorth
+
+    @Ignore
+    override fun getXpValue(): Int = xpWorth
+    }

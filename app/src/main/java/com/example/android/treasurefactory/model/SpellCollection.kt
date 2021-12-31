@@ -20,10 +20,10 @@ data class SpellCollection(
     var type: String = "scroll",
     var properties: Map<String,Double> = emptyMap(),
     var spells: List<Spell> = listOf(),
-    var curse: String = "") {
+    var curse: String = "") : Evaluable{
 
     @Ignore
-    fun getGpValue(): Double {
+    override fun getGpValue(): Double {
 
         var gpTotal: Double = 0.0
 
@@ -43,7 +43,7 @@ data class SpellCollection(
     }
 
     @Ignore
-    fun getXpValue() : Int {
+    override fun getXpValue() : Int {
 
         var xpTotal = 0
 
