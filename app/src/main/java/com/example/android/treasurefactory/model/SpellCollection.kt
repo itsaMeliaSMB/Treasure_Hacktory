@@ -1,19 +1,10 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
-@Entity(tableName = "hackmaster_spell_collection_table",
-    foreignKeys = [ForeignKey(
-        entity = Hoard::class,
-        parentColumns = arrayOf ("hoardID"),
-        childColumns = arrayOf("sCollectID"),
-        onDelete = ForeignKey.CASCADE ) ])
 data class SpellCollection(
-    @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
+    @NotNull val sCollectID: Int,
     val hoardID: Int,
     var iconID: String,
     var name: String = "<Spell Scroll>",

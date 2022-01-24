@@ -3440,7 +3440,7 @@ class HMTreasureFactory {
         }
 
         /**
-         * Converts a provided HMMagicItem into list of Ioun Stones per the rules on GMG page 258.
+         * Converts a provided MagicItem into list of Ioun Stones per the rules on GMG page 258.
          */
         fun convertItemToIoun(inputItem: MagicItem): List<MagicItem> {
 
@@ -3498,7 +3498,7 @@ class HMTreasureFactory {
         }
 
         /**
-         * Converts a provided HMMagicItem into a list of HMGem objects
+         * Converts a provided HMMagicItem into a list of Gem objects
          */
         fun convertItemToGutStone(inputItem: MagicItem): List<Gem> {
 

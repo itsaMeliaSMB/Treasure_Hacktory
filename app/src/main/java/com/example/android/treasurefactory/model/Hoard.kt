@@ -1,7 +1,7 @@
 package com.example.android.treasurefactory.model
 
+import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.util.*
 
@@ -27,17 +27,10 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var magicCount: Int = 0,
                  var spellsCount: Int = 0,
                  var isFavorite: Boolean = false,
-                 var isNew: Boolean = true) {}
+                 var isNew: Boolean = true,
+                 @Embedded(prefix = "leftover_") val leftover: HoardLeftover)
 
-@Entity (tableName = "hackmaster_hoard_leftover_table",
-    foreignKeys = [ForeignKey(
-        entity = Hoard::class,
-        parentColumns = arrayOf ("hoardID"),
-        childColumns = arrayOf("leftoverID"),
-        onDelete = ForeignKey.CASCADE) ])
-data class HoardLeftover(@PrimaryKey(autoGenerate = true) val leftoverID: Int = 0,
-                         val hoardID: Int,
-                         val gems: Int = 0,
+data class HoardLeftover(val gems: Int = 0,
                          val artObjects: Int = 0,
                          val potions: Int = 0,
                          val scrolls: Int = 0,

@@ -7,13 +7,6 @@ import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 import kotlin.math.floor
 
-@Entity(tableName = "hackmaster_art_table",
-    foreignKeys = [ForeignKey(
-        entity = Hoard::class,
-        parentColumns = arrayOf ("hoardID"),
-        childColumns = arrayOf("artID"),
-        onDelete = ForeignKey.CASCADE
-    ) ] )
 data class ArtObject(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
     val hoardID: Int,
@@ -90,10 +83,10 @@ data class ArtObject(
     }
 
     @Ignore
-    override fun getXpValue(): Double {
+    override fun getXpValue(): Int {
 
         val xpGpRatio = 0.2
 
-        return floor(getGpValue() * xpGpRatio)
+        return floor(getGpValue() * xpGpRatio).toInt()
     }
 }

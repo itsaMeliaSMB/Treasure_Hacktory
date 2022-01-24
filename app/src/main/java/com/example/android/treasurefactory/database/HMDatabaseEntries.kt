@@ -2,7 +2,12 @@ package com.example.android.treasurefactory.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.example.android.treasurefactory.model.*
+import org.jetbrains.annotations.NotNull
+
+// region [ Read-only template entities ]
 
 @Entity(tableName = "hackmaster_gem_reference")
 data class GemTemplate(
@@ -63,7 +68,28 @@ data class SpellTemplate(
     @ColumnInfo(name="arcane_subclass") val subclass: String,
     val note: String)
 
-/*
+// endregion
+
+// region [ Database model classes ]
+
+@Entity(tableName = "hackmaster_gem_table",
+    foreignKeys = [ForeignKey(
+        entity = Hoard::class,
+        parentColumns = arrayOf ("hoardID"),
+        childColumns = arrayOf("gemID"),
+        onDelete = ForeignKey.CASCADE ) ])
+data class GemEntity(
+    @PrimaryKey(autoGenerate = true) @NotNull val gemID: Int = 0,
+    val hoardID: Int = 0,
+    val iconID: String,
+    val type: String,
+    val size: String,
+    val quality: String,
+    val value: Int,
+    val name: String,
+    val opacity: Int,
+    val description: String = "")
+
 @Entity(tableName = "hackmaster_art_table",
     foreignKeys = [ForeignKey(
         entity = Hoard::class,
@@ -71,62 +97,42 @@ data class SpellTemplate(
         childColumns = arrayOf("artID"),
         onDelete = ForeignKey.CASCADE
     ) ] )
-internal data class ArtObjectEntity(@PrimaryKey(autoGenerate = true) val artID: Int,
-                     val hoardID: Int,
-                     val iconID: String,
-                     val artType: String,
-                     val renown: String,
-                     val size: String,
-                     val condition: String,
-                     val materials: String,
-                     val quality: String,
-                     val age: Int,
-                     val subject: String,
-                     var valueLevel: Int) {
+data class ArtObjectEntity(
+    @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
+    val hoardID: Int,
+    val iconID: String,
+    val artType: String,
+    val renown: String,
+    val size: String,
+    val condition: String,
+    val materials: String,
+    val quality: String,
+    val age: Int,
+    val subject: String,
+    val valueLevel: Int)
 
-    companion object {
-        fun from(art: ArtObject): ArtObjectEntity {
-            return ArtObjectEntity(art.artID,art.hoardID,art.iconID,art.artType,art.renown,art.size,art.condition,art.materials,art.quality,art.age,art.subject,art.valueLevel)
-        }
-    }
-
-    fun toArtObject(): ArtObject {
-        return ArtObject(artID,hoardID,iconID,artType,renown,size,condition,materials,quality,age,subject,valueLevel)
-    }
-}
-
-@Entity(foreignKeys = [ForeignKey(
-    entity = Hoard::class,
-    parentColumns = arrayOf ("hoardID"),
-    childColumns = arrayOf("mItemID"),
-    onDelete = ForeignKey.CASCADE
-) ] )
-internal data class MagicItemEntity(@PrimaryKey(autoGenerate = true) val mItemID: Int,
-                     val templateID: Int,
-                     val hoardID: Int,
-                     val iconID: String,
-                     val typeOfItem: String,
-                     val name: String,
-                     val sourceText: String,
-                     val sourcePage: Int,
-                     val xpValue: Int,
-                     val gpValue: Double,
-                     val classUsability: Map<String,Boolean>,
-                     val isCursed: Boolean,
-                     val alignment: String,
-                     val notes: List<List<String>> = emptyList(),
-                     val userNotes: List<String> = emptyList()){ //TODO Refactor lists to be more flat
-
-    companion object {
-        fun from(item: MagicItem): MagicItemEntity {
-            return MagicItemEntity(item.mItemID,item.templateID,item.hoardID,item.iconID,item.typeOfItem,item.name,item.sourceText,item.sourcePage,item.xpValue,item.gpValue,item.classUsability,item.isCursed,item.alignment,item.notes,item.userNotes)
-        }
-    }
-
-    fun toMagicItem(): MagicItem {
-        return MagicItem(mItemID,templateID,hoardID,iconID,typeOfItem,name,sourceText,sourcePage,xpValue,gpValue,classUsability,isCursed,alignment,notes,userNotes)
-    }
-}
+@Entity(tableName = "hackmaster_magic_item_table",
+    foreignKeys = [ForeignKey(
+        entity = Hoard::class,
+        parentColumns = arrayOf ("hoardID"),
+        childColumns = arrayOf("mItemID"),
+        onDelete = ForeignKey.CASCADE) ] )
+data class MagicItemEntity(
+    @PrimaryKey(autoGenerate = true) @NotNull val mItemID: Int,
+    val templateID: Int,
+    val hoardID: Int,
+    val iconID: String,
+    val typeOfItem: String,
+    val name: String,
+    val sourceText: String,
+    val sourcePage: Int,
+    val xpWorth: Int,
+    val gpWorth: Double,
+    val classUsability: Map<String,Boolean>,
+    val isCursed: Boolean,
+    val alignment: String,
+    val notes: List<List<String>> = emptyList(),
+    val userNotes: List<String> = emptyList())
 
 @Entity(tableName = "hackmaster_spell_collection_table",
     foreignKeys = [ForeignKey(
@@ -134,21 +140,95 @@ internal data class MagicItemEntity(@PrimaryKey(autoGenerate = true) val mItemID
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("sCollectID"),
         onDelete = ForeignKey.CASCADE ) ])
-internal data class SpellCollectionEntity(@PrimaryKey(autoGenerate = true) val sCollectID: Int,
-                           val hoardID: Int,
-                           val iconID: String,
-                           val name: String = "<Spell Scroll>",
-                           val type: String = "scroll",
-                           var properties: Map<String,Double>,
-                           @Embedded var spells: List<Spell>,
-                           val curse: String = "") {
-    companion object {
-        fun from(spells: SpellCollection): SpellCollectionEntity {
-            return SpellCollectionEntity(spells.sCollectID,spells.hoardID,spells.iconID,spells.name,spells.type,spells.properties,spells.spells,spells.curse)
-        }
-    }
+data class SpellCollectionEntity(
+    @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
+    val hoardID: Int,
+    val iconID: String,
+    val name: String = "<Spell Scroll>",
+    val type: String = "scroll",
+    val properties: Map<String,Double> = emptyMap(),
+    val spells: List<Spell> = listOf(),
+    val curse: String = "")
 
-    fun toSpellCollection(): SpellCollection {
-        return SpellCollection(sCollectID,hoardID,iconID,name,type,properties,spells,curse)
+// endregion
+
+// region [ Mapping functions ]
+
+@JvmName("asDomainModelGemEntity")
+fun List<GemEntity>.asDomainModel(): List<Gem> {
+
+    return map {
+        Gem(
+            it.gemID,
+            it.hoardID,
+            it.iconID,
+            it.type,
+            it.size,
+            it.quality,
+            it.value,
+            it.name,
+            it.opacity,
+            it.description)
     }
-}*/
+}
+
+@JvmName("asDomainModelArtObjectEntity")
+fun List<ArtObjectEntity>.asDomainModel(): List<ArtObject> {
+
+    return map {
+        ArtObject(
+            it.artID,
+            it.hoardID,
+            it.iconID,
+            it.artType,
+            it.renown,
+            it.size,
+            it.condition,
+            it.materials,
+            it.quality,
+            it.age,
+            it.subject,
+            it.valueLevel)
+    }
+}
+
+@JvmName("asDomainModelMagicItemEntity")
+fun List<MagicItemEntity>.asDomainModel(): List<MagicItem> {
+
+    return map {
+        MagicItem(
+            it.mItemID,
+            it.templateID,
+            it.hoardID,
+            it.iconID,
+            it.typeOfItem,
+            it.name,
+            it.sourceText,
+            it.sourcePage,
+            it.xpWorth,
+            it.gpWorth,
+            it.classUsability,
+            it.isCursed,
+            it.alignment,
+            it.notes,
+            it.userNotes)
+    }
+}
+
+@JvmName("asDomainModelSpellCollectionEntity")
+fun List<SpellCollectionEntity>.asDomainModel(): List<SpellCollection> {
+
+    return map {
+        SpellCollection(
+            it.sCollectID,
+            it.hoardID,
+            it.iconID,
+            it.name,
+            it.type,
+            it.properties,
+            it.spells,
+            it.curse )
+    }
+}
+
+// endregion

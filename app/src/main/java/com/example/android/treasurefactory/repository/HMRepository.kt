@@ -3,11 +3,14 @@ package com.example.android.treasurefactory.repository
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
-import com.example.android.treasurefactory.database.GemTemplate
-import com.example.android.treasurefactory.database.MagicItemTemplate
-import com.example.android.treasurefactory.database.SpellTemplate
-import com.example.android.treasurefactory.database.TreasureDatabase
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.android.treasurefactory.database.*
 import com.example.android.treasurefactory.model.*
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import java.io.File
 import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "treasure-database"
@@ -15,20 +18,51 @@ private const val DATABASE_NAME = "treasure-database"
 /**
 * Repository for all HM classes in this app.
 */
-class HMRepository private constructor(context: Context) {
+class HMRepository private constructor(context: Context, scope: CoroutineScope) {
 
     private val database : TreasureDatabase = Room.databaseBuilder(
         context.applicationContext,
         TreasureDatabase::class.java,
         DATABASE_NAME
-    ).build()
+    ).addCallback(InitialPopulationCallback(scope))
+        .build()
 
     private val hmHoardDao      = database.hoardDao()
     private val hmGemDao        = database.gemDao()
     private val hmArtDao        = database.artDao()
     private val hmMagicItemDao  = database.magicItemDao()
     private val hmSpCollectDao  = database.spellCollectionDao()
+    
     private val executor        = Executors.newSingleThreadExecutor()
+
+    private class InitialPopulationCallback(
+        private val scope: CoroutineScope
+    ) : RoomDatabase.Callback() {
+
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            INSTANCE?.let { database ->
+                scope.launch {
+                    val gemDao = database.hmGemDao
+                    val magicDao = database.hmMagicItemDao
+                    val spellDao = database.hmSpCollectDao
+
+                    var csvFile : File
+
+                    // TODO: Check if template tables are empty before populating
+
+                    // Seed gem templates
+                    csvFile = csvReader().open("res/raw/")
+                    
+                    // Seed magic item templates
+
+                    // Seed spell templates
+
+
+                }
+            }
+        }
+    }
 
     // region [ Hoard Functions ]
 
@@ -93,7 +127,7 @@ class HMRepository private constructor(context: Context) {
     companion object {
         private var INSTANCE: HMRepository? = null
 
-        fun initialize(context: Context) { if (INSTANCE == null) INSTANCE = HMRepository(context) }
+        fun initialize(context: Context, scope: CoroutineScope) { if (INSTANCE == null) INSTANCE = HMRepository(context,scope) }
 
         fun get(): HMRepository = INSTANCE ?: throw IllegalStateException("HMRepository must be initialized")
     }

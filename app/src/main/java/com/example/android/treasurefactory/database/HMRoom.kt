@@ -12,14 +12,13 @@ import com.example.android.treasurefactory.model.*
 @Database(
     entities = [
         Hoard::class,
-        HoardLeftover::class,
         GemTemplate::class,
         MagicItemTemplate::class,
         SpellTemplate::class,
-        Gem::class,
-        ArtObject::class,
-        MagicItem::class,
-        SpellCollection::class],
+        GemEntity::class,
+        ArtObjectEntity::class,
+        MagicItemEntity::class,
+        SpellCollectionEntity::class],
     version = 1)
 @TypeConverters(HoardTypeConverters::class)
 abstract class TreasureDatabase : RoomDatabase() {
@@ -33,6 +32,7 @@ abstract class TreasureDatabase : RoomDatabase() {
     /* Note for self:
     We do NOT need the singleton here, since this will be instantiated as part of the HM Repository
     class, which will have the singleton with context as necessary. Err on the side of BNR. */
+
 }
 
 //region [ Data Access Objects ]
@@ -46,20 +46,11 @@ interface HoardDao{
     @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
     fun getHoard(id: Int): LiveData<Hoard?>
 
-    @Insert
-    fun addHoard(hoard: Hoard)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addHoard(hoard: Hoard)
 
     @Update
     fun updateHoard(hoard: Hoard)
-
-    @Query("SELECT * FROM hackmaster_hoard_leftover_table WHERE leftoverID=(:id)")
-    fun getLeftover(id: Int): LiveData<HoardLeftover?>
-
-    @Insert
-    fun addLeftover(leftover: HoardLeftover)
-
-    @Update
-    fun updateLeftover(leftover: HoardLeftover)
 }
 
 @Dao
@@ -67,6 +58,9 @@ interface GemDao {
 
     @Query("SELECT * FROM hackmaster_gem_reference WHERE type=(:type) ORDER BY ordinal")
     fun getGemTableByType(type: String): LiveData<List<GemTemplate>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun addGemTemplate(entry: GemTemplate)
 
     @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     fun getGems(hoardID: Int): LiveData<List<Gem>>
@@ -124,6 +118,9 @@ interface MagicItemDao {
     @Query("SELECT * FROM hackmaster_magic_item_reference WHERE ref_id=(:itemID) LIMIT 1")
     suspend fun getItemTemplateByID(itemID: Int): MagicItemTemplate?
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addMagicItemTemplate(entry: MagicItemTemplate)
+
     // Get magic items from hoard TODO
     @Query("SELECT * FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     fun getMagicItems(hoardID: Int): LiveData<List<MagicItem>>
@@ -162,5 +159,9 @@ interface SpellCollectionDao{
     // Pull all spell IDs of a level and magical discipline
     @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level)")
     suspend fun getAllSpellsOfLevelType(type: Int, level: Int): List<Int>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addSpellTemplate(entry: SpellTemplate)
 }
 //endregion
+
