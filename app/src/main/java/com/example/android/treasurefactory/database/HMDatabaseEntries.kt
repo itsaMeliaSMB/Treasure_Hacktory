@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull
 
 // region [ Read-only template entities ]
 
+//TODO May need to remove column info for template classes
+
 @Entity(tableName = "hackmaster_gem_reference")
 data class GemTemplate(
     @PrimaryKey @ColumnInfo(name="ref_id") val refId: Int,
@@ -45,7 +47,7 @@ data class MagicItemTemplate(
     @ColumnInfo(name="imitation_keyword") val imitationKeyword: String,
     @ColumnInfo(name="is_cursed") val isCursed: Int,
     @ColumnInfo(name="command_word") val commandWord: String,
-    @ColumnInfo(name="intel_chance") val intel_chance: Int,
+    @ColumnInfo(name="intel_chance") val intelChance: Int,
     val alignment: String,
     @ColumnInfo(name="i_power") val iPower: Int,
     @ColumnInfo(name="ii_power") val iiPower: Int,
