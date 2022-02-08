@@ -73,7 +73,6 @@ data class SpellTemplate(
 // endregion
 
 // region [ Database model classes ]
-
 @Entity(tableName = "hackmaster_gem_table",
     foreignKeys = [ForeignKey(
         entity = Hoard::class,
@@ -102,7 +101,7 @@ data class GemEntity(
 data class ArtObjectEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
     val hoardID: Int,
-    val iconID: String,
+    @ColumnInfo(name="icon_id") val iconID: String,
     val artType: String,
     val renown: String,
     val size: String,
@@ -123,7 +122,7 @@ data class MagicItemEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val mItemID: Int,
     val templateID: Int,
     val hoardID: Int,
-    val iconID: String,
+    @ColumnInfo(name="icon_id") val iconID: String,
     val typeOfItem: String,
     val name: String,
     val sourceText: String,
@@ -145,12 +144,23 @@ data class MagicItemEntity(
 data class SpellCollectionEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
     val hoardID: Int,
-    val iconID: String,
+    @ColumnInfo(name="icon_id") val iconID: String,
     val name: String = "<Spell Scroll>",
     val type: String = "scroll",
     val properties: Map<String,Double> = emptyMap(),
     val spells: List<Spell> = listOf(),
     val curse: String = "")
+
+// endregion
+
+// region [ Convenience Data Entities ]
+
+@Entity(tableName = "icon_id_int_directory")
+data class IconIDTuple(
+    @PrimaryKey val stringID: String,
+    val resID: Int,
+    val appVersion: Long,
+)
 
 // endregion
 

@@ -3,6 +3,7 @@ package com.example.android.treasurefactory.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.android.treasurefactory.model.*
 import kotlinx.coroutines.CoroutineScope
@@ -26,7 +27,8 @@ private const val DATABASE_NAME = "treasure-database"
         GemEntity::class,
         ArtObjectEntity::class,
         MagicItemEntity::class,
-        SpellCollectionEntity::class],
+        SpellCollectionEntity::class,
+        IconIDTuple::class],
     version = 1)
 @TypeConverters(HoardTypeConverters::class)
 abstract class TreasureDatabase : RoomDatabase() {
@@ -36,41 +38,31 @@ abstract class TreasureDatabase : RoomDatabase() {
     abstract fun artDao(): ArtDao
     abstract fun magicItemDao(): MagicItemDao
     abstract fun spellCollectionDao(): SpellCollectionDao
+    abstract fun utilityDao(): UtilityDao
 
-    companion object {
+    private class InitialPopulationCallback(
+        private val context: Context,
+        private val scope: CoroutineScope
+    ) : RoomDatabase.Callback() {
 
-        @Volatile
-        private var INSTANCE: TreasureDatabase? = null
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            INSTANCE?.let { database ->
+                scope.launch(Dispatchers.IO) {
 
-        fun getDatabase(context: Context, scope: CoroutineScope): TreasureDatabase {
+                    // Get app version
+                    val appVersionCode : Long = context.packageManager
+                        .getPackageInfo(context.packageName,0)
+                        .longVersionCode
 
-            return INSTANCE ?: synchronized(this) {
+                    // Populate Template db tables
+                    populateGemsByCSV(database.gemDao())
+                    populateItemsByCSV(database.magicItemDao())
+                    populateSpellsByCSV(database.spellCollectionDao())
 
-                val instance: TreasureDatabase = Room.databaseBuilder(
-                    context.applicationContext,
-                    TreasureDatabase::class.java,
-                    DATABASE_NAME
-                )
-                    .addCallback(InitialPopulationCallback(scope))
-                    .build()
-                INSTANCE = instance
+                    // Populate icon ID directory after templates are populated
 
-                instance
-            }
-        }
 
-        private class InitialPopulationCallback(
-            private val scope: CoroutineScope
-        ) : RoomDatabase.Callback() {
-
-            override fun onCreate(db: SupportSQLiteDatabase) {
-                super.onCreate(db)
-                INSTANCE?.let { database ->
-                    scope.launch(Dispatchers.IO) {
-                        populateGemsByCSV(database.gemDao())
-                        populateItemsByCSV(database.magicItemDao())
-                        populateSpellsByCSV(database.spellCollectionDao())
-                    }
                 }
             }
         }
@@ -244,6 +236,37 @@ abstract class TreasureDatabase : RoomDatabase() {
                     )
                 }
         }
+
+        suspend fun matchAllUniqueIconIDs(utilityDao: UtilityDao, verCode: Long) {
+
+            val iconStrings = utilityDao.getAllUniqueIconIDs().asSequence()
+
+
+        }
+    }
+
+    companion object {
+
+        @Volatile
+        private var INSTANCE: TreasureDatabase? = null
+
+        fun getDatabase(context: Context, scope: CoroutineScope): TreasureDatabase {
+
+            return INSTANCE ?: synchronized(this) {
+
+                val instance: TreasureDatabase = Room.databaseBuilder(
+                    context.applicationContext,
+                    TreasureDatabase::class.java,
+                    DATABASE_NAME
+                )
+                    .addCallback(InitialPopulationCallback(context, scope))
+                    .build()
+                INSTANCE = instance
+
+                instance
+            }
+        }
+
     }
 
 }
@@ -286,6 +309,7 @@ interface GemDao {
     // Update this gem in the hoard TODO
 
     // Remove this gem from hoard TODO
+
 }
 
 @Dao
@@ -376,5 +400,39 @@ interface SpellCollectionDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addSpellTemplate(entry: SpellTemplate)
 }
+
+/**
+ * Data access object for models unrelated to generated hoards
+ */
+@Dao
+interface UtilityDao{
+
+    @Insert(onConflict = REPLACE)
+    suspend fun addIDTuple(entry: IconIDTuple)
+
+    @Insert(onConflict = REPLACE)
+    suspend fun addIDTuples(entries: List<IconIDTuple>)
+
+    @Update
+    suspend fun updateIDTuple(entry: IconIDTuple)
+
+    @Query("SELECT resID FROM icon_id_int_directory WHERE stringID=(:stringID) LIMIT 1")
+    suspend fun getIconResID(stringID: String): Int
+
+    @Query("DELETE FROM icon_id_int_directory")
+    suspend fun deleteAllIDTuples()
+
+    @Query("SELECT icon_id FROM hackmaster_hoard_table UNION " +
+            "SELECT icon_id FROM hackmaster_gem_reference UNION " +
+            "SELECT iconID FROM hackmaster_gem_table UNION " +
+            "SELECT icon_id FROM hackmaster_art_table UNION " +
+            "SELECT icon_ref FROM hackmaster_magic_item_reference UNION " +
+            "SELECT icon_id FROM hackmaster_magic_item_table UNION " +
+            "SELECT icon_id FROM hackmaster_spell_collection_table")
+    suspend fun getAllUniqueIconIDs(): List<String>
+
+    //TODO add query for pulling all entries with a certain appVersionCode
+}
+
 //endregion
 

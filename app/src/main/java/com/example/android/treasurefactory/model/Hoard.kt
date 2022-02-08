@@ -1,5 +1,6 @@
 package com.example.android.treasurefactory.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -14,7 +15,7 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var name: String = "",
                  var creationDate: Date = Date(),
                  var creationDesc: String = "",
-                 var iconID: String = "",
+                 @ColumnInfo(name="icon_id") var iconID: String = "",
                  var gpTotal: Double = 0.0,
                  var cp: Int = 0,
                  var sp: Int = 0,
@@ -28,6 +29,7 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var spellsCount: Int = 0,
                  var isFavorite: Boolean = false,
                  var isNew: Boolean = true,
+                 var appVersion: Long,                // Version code of app hoard was generated on
                  @Embedded(prefix = "leftover_") val leftover: HoardLeftover)
 
 data class HoardLeftover(val gems: Int = 0,

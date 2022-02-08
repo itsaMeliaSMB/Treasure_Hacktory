@@ -14,7 +14,8 @@ class HMRepository (
     private val gemDao: GemDao,
     private val artDao: ArtDao,
     private val magicItemDao: MagicItemDao,
-    private val spellCollectionDao: SpellCollectionDao
+    private val spellCollectionDao: SpellCollectionDao,
+    private val utilityDao: UtilityDao
 ) {
 
     //TODO move over/rename Dao references per db/repo refactor
@@ -93,6 +94,30 @@ class HMRepository (
     suspend fun addSpellTemplate(spellTemplate: SpellTemplate) {
         spellCollectionDao.addSpellTemplate(spellTemplate)
     }
+
+    // endregion
+
+    // region [ Utility functions ]
+
+    @WorkerThread
+    suspend fun addIDTuples(entries: List<IconIDTuple>) { utilityDao.addIDTuples(entries) }
+
+    @WorkerThread
+    suspend fun addIDTuple(entry: IconIDTuple) { utilityDao.addIDTuple(entry) }
+
+    @WorkerThread
+    suspend fun updateIDTuple(entry: IconIDTuple) { utilityDao.updateIDTuple(entry) }
+
+    //TODO add error handling for non-existent entries
+    @WorkerThread
+    suspend fun getIconResID(stringID: String): Int = utilityDao.getIconResID(stringID)
+
+    @WorkerThread
+    suspend fun deleteAllIDTuples() { utilityDao.deleteAllIDTuples() }
+
+    @WorkerThread
+    suspend fun getAllUniqueIconIDs(): List<String> = utilityDao.getAllUniqueIconIDs()
+
 
     // endregion
 }
