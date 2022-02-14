@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/treasure_viewer_overview_list_footer"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:paddingVertical="2dp">
+
+    <View
+        android:id="@+id/treasure_viewer_overview_list_footer_hori_div"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="2dp"
+        android:background="?attr/colorOnSurface"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="2dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="4dp"
+            android:scaleType="fitCenter"
+            tools:src="@drawable/item_coin_pile"/>
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_list_footer_icon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginStart="4dp"
+            android:textSize="12sp"
+            tools:text="Coinage Totals"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?attr/colorOnSurface"
+            android:layout_marginHorizontal="1dp"/>
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_list_footer_column_qty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textAlignment="viewEnd"
+            android:textSize="12sp"
+            android:text="x [ . . . ]"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?attr/colorOnSurface"
+            android:layout_marginHorizontal="1dp"/>
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_list_footer_column_ib"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textAlignment="viewEnd"
+            android:textSize="12sp"
+            android:text="[ . . . ] ib"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="?attr/colorOnSurface"
+            android:layout_marginHorizontal="1dp"/>
+
+        <TextView
+            android:id="@+id/treasure_viewer_overview_list_footer_column_gp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginEnd="4dp"
+            android:textAlignment="viewEnd"
+            android:textSize="12sp"
+            android:text="[ . . . ] gp"/>
+
+
+    </LinearLayout>
+</LinearLayout>

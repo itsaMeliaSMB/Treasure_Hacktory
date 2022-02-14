@@ -6,7 +6,7 @@
     android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="4dp">
+    android:paddingVertical="2dp">
 
     <ImageView
         android:layout_width="24dp"
@@ -31,7 +31,7 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="?attr/colorOnSurface"
-        android:layout_marginHorizontal="4dp"/>
+        android:layout_marginHorizontal="1dp"/>
 
     <TextView
         android:id="@+id/treasure_viewer_overview_list_item_column_qty"
@@ -46,7 +46,7 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="?attr/colorOnSurface"
-        android:layout_marginHorizontal="4dp"/>
+        android:layout_marginHorizontal="1dp"/>
 
     <TextView
         android:id="@+id/treasure_viewer_overview_list_item_column_ib"
@@ -60,14 +60,14 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="?attr/colorOnSurface"
-        android:layout_marginHorizontal="4dp"/>
+        android:layout_marginHorizontal="1dp"/>
 
     <TextView
         android:id="@+id/treasure_viewer_overview_list_item_column_gp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:textAlignment="viewEnd"
         android:textSize="12sp"
         android:text="[ . . . ] gp"/>

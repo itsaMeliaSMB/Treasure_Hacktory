@@ -7,13 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.repository.HMRepository
 
-class HoardDetailsViewModel : ViewModel() {
+class HoardDetailsViewModel(private val repository: HMRepository) : ViewModel() {
 
-    private val hmRepository = HMRepository.get()
     private val hoardIDLiveData = MutableLiveData<Int>()
 
     var hoardLiveData: LiveData<Hoard?> = Transformations.switchMap(hoardIDLiveData) { hoardID ->
-        hmRepository.getHoard(hoardID)
+        repository.getHoard(hoardID)
     }
 
     // Helpful viewing for LiveData: https://www.youtube.com/watch?v=suC0OM5gGAA
@@ -30,6 +29,6 @@ class HoardDetailsViewModel : ViewModel() {
     }
 
     fun saveHoard(hoard: Hoard) {
-        hmRepository.updateHoard(hoard)
+        repository.updateHoard(hoard)
     }
 }

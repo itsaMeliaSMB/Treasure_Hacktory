@@ -3,10 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/new_hoard"
+        android:id="@+id/action_new_hoard"
         android:icon="@drawable/clipart_treasure_add_vector_icon"
         android:title="@string/new_hoard"
-        app:showAsAction="ifRoom|withText"
-        android:iconTint="?attr/colorOnPrimary"/>
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
+        app:showAsAction="never"/>
 
 </menu>

@@ -97,8 +97,9 @@ class HMRepository (
 
     // endregion
 
-    // region [ Utility functions ]
+    // region [ Utility functions TODO remove if needed ]
 
+    /*
     @WorkerThread
     suspend fun addIDTuples(entries: List<IconIDTuple>) { utilityDao.addIDTuples(entries) }
 
@@ -117,8 +118,7 @@ class HMRepository (
 
     @WorkerThread
     suspend fun getAllUniqueIconIDs(): List<String> = utilityDao.getAllUniqueIconIDs()
-
-
+    */
     // endregion
 }
 

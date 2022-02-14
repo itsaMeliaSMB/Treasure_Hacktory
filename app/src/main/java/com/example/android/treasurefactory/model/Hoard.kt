@@ -1,9 +1,6 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 import java.util.*
 
 // TODO: Figure out where I need to define foreign keys for nested relationships
@@ -38,4 +35,8 @@ data class HoardLeftover(val gems: Int = 0,
                          val scrolls: Int = 0,
                          val armorOrWeapons: Int = 0,
                          val anyButWeapons: Int = 0,
-                         val anyMagicItems: Int = 0)
+                         val anyMagicItems: Int = 0) {
+
+    @Ignore
+    fun isNotEmpty(): Boolean = !((gems == 0)||(artObjects==0)||((potions==0)||(scrolls==0)||(armorOrWeapons == 0)||(anyButWeapons==0)||(anyMagicItems==0)))
+}

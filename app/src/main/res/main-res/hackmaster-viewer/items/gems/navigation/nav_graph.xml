@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/hoardListFragment">
+
+    <fragment
+        android:id="@+id/hoardListFragment"
+        android:name="com.example.android.treasurefactory.ui.HoardListFragment"
+        android:label="HoardListFragment"
+        tools:layout="@layout/treasure_viewer_list">
+        <action
+            android:id="@+id/action_hoardListFragment_to_hoardGeneratorFragment"
+            app:destination="@id/hoardGeneratorFragment" />
+        <action
+            android:id="@+id/action_hoardListFragment_to_hoardViewerFragment"
+            app:destination="@id/hoardViewerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/hoardGeneratorFragment"
+        android:name="com.example.android.treasurefactory.ui.HoardGeneratorFragment"
+        android:label="HoardGeneratorFragment"
+        tools:layout="@layout/hackmaster_treasure_gen_fragment"/>
+    <fragment
+        android:id="@+id/hoardViewerFragment"
+        android:name="com.example.android.treasurefactory.ui.HoardViewerFragment"
+        android:label="HoardViewerFragment"
+        tools:layout="@layout/hackmaster_treasure_viewer_hoard_overview">
+        <action
+            android:id="@+id/action_hoardViewerFragment_to_placeholder"
+            app:destination="@id/placeholder_uniqueItemList" />
+    </fragment>
+    <fragment android:id="@+id/placeholder_uniqueItemList" >
+        <action
+            android:id="@+id/action_placeholder_uniqueItemList_to_placeholder_uniqueItemDetails"
+            app:destination="@id/placeholder_uniqueItemDetails" />
+    </fragment>
+    <fragment android:id="@+id/placeholder_uniqueItemDetails" />
+    <fragment android:id="@+id/placeholder_settings" />
+</navigation>

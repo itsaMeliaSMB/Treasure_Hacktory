@@ -155,12 +155,12 @@ data class SpellCollectionEntity(
 
 // region [ Convenience Data Entities ]
 
-@Entity(tableName = "icon_id_int_directory")
+/*@Entity(tableName = "icon_id_int_directory")
 data class IconIDTuple(
     @PrimaryKey val stringID: String,
     val resID: Int,
     val appVersion: Long,
-)
+)*/
 
 // endregion
 

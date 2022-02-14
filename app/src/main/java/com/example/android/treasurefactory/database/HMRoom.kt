@@ -3,7 +3,6 @@ package com.example.android.treasurefactory.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import androidx.room.OnConflictStrategy.REPLACE
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.android.treasurefactory.model.*
 import kotlinx.coroutines.CoroutineScope
@@ -27,8 +26,7 @@ private const val DATABASE_NAME = "treasure-database"
         GemEntity::class,
         ArtObjectEntity::class,
         MagicItemEntity::class,
-        SpellCollectionEntity::class,
-        IconIDTuple::class],
+        SpellCollectionEntity::class],
     version = 1)
 @TypeConverters(HoardTypeConverters::class)
 abstract class TreasureDatabase : RoomDatabase() {
@@ -38,7 +36,6 @@ abstract class TreasureDatabase : RoomDatabase() {
     abstract fun artDao(): ArtDao
     abstract fun magicItemDao(): MagicItemDao
     abstract fun spellCollectionDao(): SpellCollectionDao
-    abstract fun utilityDao(): UtilityDao
 
     private class InitialPopulationCallback(
         private val context: Context,
@@ -237,12 +234,6 @@ abstract class TreasureDatabase : RoomDatabase() {
                 }
         }
 
-        suspend fun matchAllUniqueIconIDs(utilityDao: UtilityDao, verCode: Long) {
-
-            val iconStrings = utilityDao.getAllUniqueIconIDs().asSequence()
-
-
-        }
     }
 
     companion object {
@@ -401,6 +392,7 @@ interface SpellCollectionDao{
     suspend fun addSpellTemplate(entry: SpellTemplate)
 }
 
+/*
 /**
  * Data access object for models unrelated to generated hoards
  */
@@ -433,6 +425,7 @@ interface UtilityDao{
 
     //TODO add query for pulling all entries with a certain appVersionCode
 }
+ */
 
 //endregion
 

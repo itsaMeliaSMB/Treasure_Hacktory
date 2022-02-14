@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
 
         if (currentFragment == null) {
-            val fragment = HoardGeneratorFragment()
+            val fragment = HoardListFragment()
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container,fragment)
                 .commit()
