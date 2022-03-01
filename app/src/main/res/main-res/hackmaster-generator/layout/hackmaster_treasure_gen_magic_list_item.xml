@@ -40,12 +40,12 @@
             android:layout_height="48dp"
             android:layout_marginHorizontal="8dp"
             android:layout_toStartOf="@id/hackmaster_gen_potion_quantity_increment"
-            android:minWidth="56dp"
             android:background="#E0E0E0"
             android:inputType="number"
-            android:textSize="16sp"
+            android:minWidth="56dp"
             android:textAlignment="center"
-            tools:text="0"/>
+            android:textSize="16sp"
+            tools:text="0" />
 
         <Button
             android:id="@+id/hackmaster_gen_potion_quantity_increment"

@@ -18,7 +18,6 @@ class TreasureHacktoryApplication : Application() {
             database.gemDao(),
             database.artDao(),
             database.magicItemDao(),
-            database.spellCollectionDao(),
-            database.utilityDao()) }
+            database.spellCollectionDao()) }
 
 }

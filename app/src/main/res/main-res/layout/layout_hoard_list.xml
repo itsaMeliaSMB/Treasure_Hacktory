@@ -5,28 +5,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--https://developer.android.com/guide/fragments/appbar#fragment-->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/hoard_list_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"/>
+
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/treasure_viewer_list_recycler"
+        android:id="@+id/hoard_list_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        tools:listitem="@layout/hoard_list_item"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/treasure_viewer_whenempty_group"
+        android:id="@+id/hoard_list_whenempty_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/backgroundColor"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
-            android:id="@+id/treasure_whenempty_image"
+            android:id="@+id/hoard_list_whenempty_image"
             android:layout_width="64dp"
             android:layout_height="64dp"
             app:tint="?attr/colorOnBackground"
             android:src="@drawable/clipart_treasure_add_vector_icon"
-            app:layout_constraintBottom_toTopOf="@+id/treasure_whenempty_text"
+            app:layout_constraintBottom_toTopOf="@+id/hoard_list_whenempty_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +44,7 @@
             android:layout_marginBottom="8dp"/>
 
         <TextView
-            android:id="@+id/treasure_whenempty_text"
+            android:id="@+id/hoard_list_whenempty_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingHorizontal="64dp"
@@ -45,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/treasure_whenempty_image"/>
+            app:layout_constraintTop_toBottomOf="@id/hoard_list_whenempty_image"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

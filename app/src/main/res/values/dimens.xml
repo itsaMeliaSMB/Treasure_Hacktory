@@ -2,6 +2,6 @@
 <resources>
     <dimen name="list_item_height">64dp</dimen>
     <dimen name="list_item_icon_size">52dp</dimen>
-    <dimen name="list_item_element_margin">4dp</dimen>
+    <dimen name="list_item_element_margin">8dp</dimen>
     <dimen name="hoard_icon_size">64dp</dimen>
 </resources>

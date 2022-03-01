@@ -15,7 +15,6 @@ class HMRepository (
     private val artDao: ArtDao,
     private val magicItemDao: MagicItemDao,
     private val spellCollectionDao: SpellCollectionDao,
-    private val utilityDao: UtilityDao
 ) {
 
     //TODO move over/rename Dao references per db/repo refactor

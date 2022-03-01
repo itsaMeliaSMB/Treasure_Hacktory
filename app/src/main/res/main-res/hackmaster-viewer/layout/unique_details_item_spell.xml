@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/spell_item_index"
+        android:layout_width="64dp"
+        android:layout_height="match_parent"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textColor="?attr/colorOnSecondary"
+        android:background="?attr/colorSecondary"
+        tools:text="100"/>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnSecondary"/>
+
+    <RelativeLayout
+        android:id="@+id/spell_item_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <TextView
+            android:id="@+id/spell_item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/spell_item_level"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:gravity="fill_vertical"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Sliggderlisp’s Particularly Noxious Depilatory Cloud" />
+
+        <TextView
+            android:id="@+id/spell_item_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="12sp"
+            tools:text="Mage Lv. 7" />
+
+        <TextView
+            android:id="@+id/spell_item_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            tools:text="Spellslinger's Guide to Wurld Domination, pg 888" />
+
+    </RelativeLayout>
+
+</LinearLayout>

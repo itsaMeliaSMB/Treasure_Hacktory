@@ -9,6 +9,7 @@
     android:paddingVertical="2dp">
 
     <ImageView
+        android:id="@+id/hoard_overview_coinage_item_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="4dp"
@@ -16,7 +17,7 @@
         tools:src="@drawable/item_coin_hardsilver"/>
 
     <TextView
-        android:id="@+id/treasure_viewer_overview_list_item_icon"
+        android:id="@+id/hoard_overview_coinage_item_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
@@ -34,7 +35,7 @@
         android:layout_marginHorizontal="1dp"/>
 
     <TextView
-        android:id="@+id/treasure_viewer_overview_list_item_column_qty"
+        android:id="@+id/hoard_overview_coinage_item_column_qty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
@@ -49,7 +50,7 @@
         android:layout_marginHorizontal="1dp"/>
 
     <TextView
-        android:id="@+id/treasure_viewer_overview_list_item_column_ib"
+        android:id="@+id/hoard_overview_coinage_item_column_wt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
@@ -63,7 +64,7 @@
         android:layout_marginHorizontal="1dp"/>
 
     <TextView
-        android:id="@+id/treasure_viewer_overview_list_item_column_gp"
+        android:id="@+id/hoard_overview_coinage_item_column_gp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
@@ -71,6 +72,5 @@
         android:textAlignment="viewEnd"
         android:textSize="12sp"
         android:text="[ . . . ] gp"/>
-
 
 </LinearLayout>

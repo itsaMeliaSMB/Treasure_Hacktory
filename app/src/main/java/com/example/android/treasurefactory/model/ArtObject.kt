@@ -19,7 +19,7 @@ data class ArtObject(
     val quality: String,
     val age: Int,
     val subject: String,
-    var valueLevel: Int) : Evaluable{
+    var valueLevel: Int) {
 
     @Ignore
     override fun getGpValue() : Double {

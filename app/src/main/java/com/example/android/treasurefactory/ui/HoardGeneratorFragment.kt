@@ -65,22 +65,22 @@ class HoardGeneratorFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.hackmaster_treasure_gen_fragment, container, false)
+        val view = inflater.inflate(R.layout.layout_generator_fragment, container, false)
 
         // Wire widgets to fragment
-        hoardTitleField = view.findViewById(R.id.hackmaster_gen_name_entry) as EditText
-        letterRadioButton = view.findViewById(R.id.hackmaster_gen_method_letter) as RadioButton
-        specificRadioButton = view.findViewById(R.id.hackmaster_gen_method_specific) as RadioButton
-        viewAnimator = view.findViewById(R.id.hackmaster_gen_view_animator) as ViewAnimator
+        hoardTitleField = view.findViewById(R.id.generator_name_edittext) as EditText
+        letterRadioButton = view.findViewById(R.id.generator_method_lettercode) as RadioButton
+        specificRadioButton = view.findViewById(R.id.generator_method_specific) as RadioButton
+        viewAnimator = view.findViewById(R.id.generator_animator_frame) as ViewAnimator
 
-        lairCardView = view.findViewById(R.id.hackmaster_gen_lair_card) as CardView
-        lairHeaderGroup = view.findViewById(R.id.hackmaster_gen_lair_header) as RelativeLayout
-        lairIndicator = view.findViewById(R.id.hackmaster_gen_lair_indicator) as ImageView
-        lairRecyclerView = view.findViewById(R.id.hackmaster_gen_lair_recyclerview) as RecyclerView
+        lairCardView = view.findViewById(R.id.generator_lair_card) as CardView
+        lairHeaderGroup = view.findViewById(R.id.generator_lair_header) as RelativeLayout
+        lairIndicator = view.findViewById(R.id.generator_lair_indicator) as ImageView
+        lairRecyclerView = view.findViewById(R.id.generator_lair_recyclerview) as RecyclerView
 
-        smallCardView = view.findViewById(R.id.hackmaster_gen_small_card) as CardView
-        smallHeaderGroup = view.findViewById(R.id.hackmaster_gen_small_header) as RelativeLayout
-        smallIndicator = view.findViewById(R.id.hackmaster_gen_small_indicator) as ImageView
+        smallCardView = view.findViewById(R.id.generator_small_card) as CardView
+        smallHeaderGroup = view.findViewById(R.id.generator_small_header) as RelativeLayout
+        smallIndicator = view.findViewById(R.id.generator_small_indicator) as ImageView
         smallRecyclerView = view.findViewById(R.id.hackmaster_gen_small_recyclerview) as RecyclerView
 
         // Define the letter adapters TODO consider moving to init block
@@ -104,8 +104,8 @@ class HoardGeneratorFragment : Fragment() {
             visibility = View.GONE //Start off collapsed
         }
 
-        resetButton = view.findViewById(R.id.hackmaster_gen_reset_button) as Button
-        generateButton = view.findViewById(R.id.hackmaster_gen_generate_button) as Button
+        resetButton = view.findViewById(R.id.generator_reset_button) as Button
+        generateButton = view.findViewById(R.id.generator_generate_button) as Button
 
         // Return inflated view
         return view
@@ -236,7 +236,7 @@ class HoardGeneratorFragment : Fragment() {
         var quantities = Array<Int>(letterEntries.size) {0}
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LetterHolder {
-            val view = layoutInflater.inflate(R.layout.hackmaster_treasure_gen_letter_list_child,
+            val view = layoutInflater.inflate(R.layout.lettercode_item,
                 parent,false)
             return LetterHolder(view)
         }
@@ -296,11 +296,11 @@ class HoardGeneratorFragment : Fragment() {
         private lateinit var letterEntry: HMLetterEntry
         private lateinit var typeString: String
 
-        val infoDot     = view.findViewById(R.id.treasure_type_info) as ImageView
-        val typeLabel   = view.findViewById(R.id.treasure_type_label) as TextView
-        val minusButton = view.findViewById(R.id.treasure_type_decrement_button) as Button
-        val quantityText= view.findViewById(R.id.treasure_type_counter) as TextView
-        val plusButton  = view.findViewById(R.id.treasure_type_increment_button) as Button
+        val infoDot     = view.findViewById(R.id.lettercode_item_infodot) as ImageView
+        val typeLabel   = view.findViewById(R.id.lettercode_item_name) as TextView
+        val minusButton = view.findViewById(R.id.lettercode_item_decrement_button) as Button
+        val quantityText= view.findViewById(R.id.lettercode_item_counter) as TextView
+        val plusButton  = view.findViewById(R.id.letterdode_item_increment_button) as Button
 
         fun bind(input: HMLetterEntry){
             letterEntry = input

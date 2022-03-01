@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/spell_dialog_school_1"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@id/spell_dialog_school_2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/spell_school_evocation" />
+
+    <ImageView
+        android:id="@+id/spell_dialog_school_2"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@id/spell_dialog_school_3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_school_1"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/spell_school_illusion" />
+
+    <ImageView
+        android:id="@+id/spell_dialog_school_3"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_school_2"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/spell_school_enchantment" />
+
+    <TextView
+        android:id="@+id/spell_dialog_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center_horizontal"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_school_1"
+        tools:text="Gargezone’s Sphere of Chromatic Fever" />
+
+    <View
+        android:id="@+id/spell_dialog_div"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="64dp"
+        android:layout_marginTop="16dp"
+        android:background="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_name" />
+
+    <TextView
+        android:id="@+id/spell_dialog_leveltype"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_div"
+        tools:text="Level 4 Magic-User spell" />
+
+    <TextView
+        android:id="@+id/spell_dialog_source_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/source"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_leveltype" />
+
+    <TextView
+        android:id="@+id/spell_dialog_source_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_source_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_leveltype"
+        tools:text="HackJournal #19" />
+
+    <TextView
+        android:id="@+id/spell_dialog_source_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_source_value"
+        tools:text="Page 4" />
+
+    <TextView
+        android:id="@+id/spell_dialog_subclass_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Subclass:"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_source_page" />
+
+    <TextView
+        android:id="@+id/spell_dialog_subclass_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_subclass_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Wild" />
+
+    <TextView
+        android:id="@+id/spell_dialog_spheres_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/clerical_spell_spheres"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_subclass_label" />
+
+    <ImageView
+        android:id="@+id/spell_dialog_sphere_1"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/spell_dialog_sphere_2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_spheres_label"
+        app:layout_constraintTop_toTopOf="@id/spell_dialog_spheres_label"
+        tools:srcCompat="@drawable/spell_sphere_fire" />
+
+    <ImageView
+        android:id="@+id/spell_dialog_sphere_2"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@id/spell_dialog_sphere_3"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_sphere_1"
+        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_1"
+        tools:srcCompat="@drawable/spell_sphere_air" />
+
+    <ImageView
+        android:id="@+id/spell_dialog_sphere_3"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@id/spell_dialog_sphere_4"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/spell_dialog_sphere_2"
+        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_1"
+        tools:srcCompat="@drawable/spell_sphere_water" />
+
+    <ImageView
+        android:id="@+id/spell_dialog_sphere_4"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_sphere_3"
+        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_1"
+        tools:srcCompat="@drawable/spell_sphere_earth" />
+
+    <TextView
+        android:id="@+id/spell_dialog_restrictions_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Restricted to:"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_sphere_1" />
+
+    <TextView
+        android:id="@+id/spell_dialog_restrictions_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:lineSpacingExtra="5sp"
+        android:textAlignment="viewEnd"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_restrictions_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="- Wild Mage\n- (fake)\n- (also fake)" />
+
+    <TextView
+        android:id="@+id/spell_dialog_note_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Please note:"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_restrictions_value" />
+
+    <TextView
+        android:id="@+id/spell_dialog_note_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:textAlignment="viewEnd"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_note_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_barrier_note"
+        tools:text="Something about an errata idk Lorem Ipsum or some nonsense blah blah blah Petal Crash" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/spell_dialog_barrier_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="spell_dialog_note_label" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:paddingHorizontal="32dp"
+        android:text="@string/ok_affirmative"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_note_value" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

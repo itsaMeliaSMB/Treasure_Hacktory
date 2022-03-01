@@ -1,7 +1,5 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.Ignore
-
 /**
  * Generated magic item following HackMaster 4e rules.
  *
@@ -18,17 +16,9 @@ data class MagicItem(
     val name: String,
     val sourceText: String,
     val sourcePage: Int,
-    val xpWorth: Int,
-    val gpWorth: Double,
+    val xpValue: Int,
+    val gpValue: Double,
     val classUsability: Map<String,Boolean>,
     val isCursed: Boolean,
     val alignment: String,
-    val notes: List<List<String>> = emptyList(),
-    val userNotes: List<String> = emptyList()) : Evaluable {
-
-    @Ignore
-    override fun getGpValue(): Double = gpWorth
-
-    @Ignore
-    override fun getXpValue(): Int = xpWorth
-    }
+    val notes: List<List<String>> = emptyList())

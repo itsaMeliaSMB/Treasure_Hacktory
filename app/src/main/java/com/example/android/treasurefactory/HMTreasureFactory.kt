@@ -4,6 +4,7 @@ import com.example.android.treasurefactory.database.GemTemplate
 import com.example.android.treasurefactory.database.MagicItemTemplate
 import com.example.android.treasurefactory.database.SpellTemplate
 import com.example.android.treasurefactory.model.*
+import java.util.*
 import kotlin.random.Random
 
 const val ORDER_LABEL_STRING = "order_details"
@@ -11,8 +12,6 @@ const val ORDER_LABEL_STRING = "order_details"
 class HMTreasureFactory {
 
     companion object {
-
-        private val ANY_GEM_LIST = listOf("Ornamental","Semiprecious","Fancy","Precious","Gem","Jewel")
 
         private val ANY_MAGIC_ITEM_LIST = listOf(
             "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
@@ -22,7 +21,7 @@ class HMTreasureFactory {
 
         private val SAMPLE_DIVINE_SPELL = SpellTemplate(1146,"Exaction","Player’s Handbook",273,1,7,"Evo/Alt","","Charm/Summoning","","")
 
-        private val SAMPLE_GEM_TEMPLATE = GemTemplate(57,"Jewel","Ruby",5, 0,"clear red to deep crimson (Corundum)","gem_jewel_ruby")
+        private val SAMPLE_GEM_TEMPLATE = GemTemplate(57,10,"ruby",5, 0,"clear red to deep crimson (Corundum)","gem_jewel_ruby")
 
         private val SAMPLE_MAGIC_ITEM_TEMPLATE = MagicItemTemplate(
             588,5,"Robe of Scintillating Colors","GameMaster's Guide",263,
@@ -36,188 +35,86 @@ class HMTreasureFactory {
            to confirm a given setting is properly typed. https://kotlinlang.org/docs/typecasts.html */
 
         /**
-         * Returns a gem.
+         * Returns a gem based on the method laid out on page 178 of the GameMaster's Guide.
          *
          * @param givenTemplate Primary key to query for a specific gem. Negative values are ignored.
-         * @param providedTypes Tables that are allowed to be queried to pick a gem.
          */
-        fun createGem(parentHoardID: Int, givenTemplate: Int = -1,
-                      providedTypes: List<String> = ANY_GEM_LIST) : Gem {
-
-            val VALID_TABLE_TYPES = linkedSetOf("Ornamental","Semiprecious","Fancy","Precious","Gem","Jewel")
-
-            var gemValue = 5
-            var gemType = ""
-
-            val gemTemplate: GemTemplate
-            val gemSize : String
-            val gemQuality : String
-
-            val allowedTypes = VALID_TABLE_TYPES.filter { providedTypes.contains(it) }
+        fun createGem(parentHoardID: Int, givenTemplate: Int = -1) : Gem {
 
             // region [ Roll gem type ]
 
-            if (!(givenTemplate in 1..58)) {
+            val gemType : Int = if (!(givenTemplate in 1..58)) {
 
-                do {
-                    when (Random.nextInt(1,101)) {
+                when (Random.nextInt(1,101)) {
 
-                        in 1..25 -> {
-                            gemValue = 5
-                            gemType = "Ornamental"
-                        }
-
-                        in 26..50 -> {
-                            gemValue = 6
-                            gemType = "Semiprecious"
-                        }
-
-                        in 51..70 -> {
-                            gemValue = 7
-                            gemType = "Fancy"
-                        }
-
-                        in 71..90 -> {
-                            gemValue = 8
-                            gemType = "Precious"
-                        }
-
-                        in 91..99 -> {
-                            gemValue = 9
-                            gemType = "Gem"
-                        }
-
-                        100 -> {
-                            gemValue = 10
-                            gemType = "Jewel"
-                        }
-                    }
-                } while ((allowedTypes.isNotEmpty())&&!(allowedTypes.contains(gemType)))
-            }
-
-            // endregion
-
-            // region [ Pull gem template from database ] TODO
-
-            if (givenTemplate in 1..58) {
-
-                // Pull specified gem template
-                gemTemplate = SAMPLE_GEM_TEMPLATE
-                gemType = gemTemplate.type
-                gemValue = when (gemType) {
-
-                    "Ornamental"    -> 5
-                    "Semiprecious"  -> 6
-                    "Fancy"         -> 7
-                    "Precious"      -> 8
-                    "Gem"           -> 9
-                    "Jewel"         -> 10
-                    else            -> 5
+                    in 1..25    -> 5
+                    in 26..50   -> 6
+                    in 51..70   -> 7
+                    in 71..90   -> 8
+                    in 91..99   -> 9
+                    100         -> 10
+                    else        -> 5
                 }
 
             } else {
 
-                // Pull random entry from given sub-table TODO
-                gemTemplate = SAMPLE_GEM_TEMPLATE
+                //TODO get gem template's type from ID; will require callbacks
+                5
             }
+
+            // endregion
+
+            // region [ Pull gem template ] TODO
+
+            val gemTemplate = SAMPLE_GEM_TEMPLATE // ?: SAMPLE_GEM_TEMPLATE
 
             // endregion
 
             // region [ Roll size ]
 
-            when(Random.nextInt(1,101)) {
+            val gemSize : Int = when(Random.nextInt(1,101)) {
 
-                in 1..5     -> {
-                    gemSize = "Tiny"
-                    gemValue -= 3
-                }
-
-                in 6..25    -> {
-                    gemSize = "Very small"
-                    gemValue -= 2
-                }
-
-                in 26..45   -> {
-                    gemSize = "Small"
-                    gemValue -= 1
-                }
-
-                in 46..65   -> gemSize = "Average"
-
-                in 66..85   -> {
-                    gemSize = "Large"
-                    gemValue += 1
-                }
-
-                in 86..90   -> {
-                    gemSize = "Very large"
-                    gemValue += 2
-                }
-
-                in 91..96   -> {
-                    gemSize = "Huge"
-                    gemValue += 3
-                }
-
-                in 97..99   -> {
-                    gemSize = "Massive"
-                    gemValue += 4
-                }
-
-                else        -> {
-                    gemSize = "Gargantuan"
-                    gemValue += 5
-                }
+                in 1..5     -> -3
+                in 6..25    -> -2
+                in 26..45   -> -1
+                in 46..65   -> 0
+                in 66..85   -> 1
+                in 86..90   -> 2
+                in 91..96   -> 3
+                in 97..99   -> 4
+                else        -> 5
             }
 
             // endregion
 
             // region [ Roll quality ]
 
-            when(Random.nextInt(1,101)) {
+            val gemQuality : Int = when(Random.nextInt(1,101)) {
 
-                in 1..5     -> {
-                    gemQuality = "Badly flawed"
-                    gemValue -= 3
-                }
-
-                in 6..25    -> {
-                    gemQuality = "Flawed"
-                    gemValue -= 2
-                }
-
-                in 26..45   -> {
-                    gemQuality = "Minor inclusions"
-                    gemValue -= 1
-                }
-
-                in 46..65   -> gemQuality = "Average"
-
-                in 66..85   -> {
-                    gemQuality = "Good"
-                    gemValue += 1
-                }
-
-                in 86..90   -> {
-                    gemQuality = "Excellent"
-                    gemValue += 2
-                }
-
-                in 91..96   -> {
-                    gemQuality = "Near-perfect"
-                    gemValue += 3
-                }
-
-                in 97..99   -> {
-                    gemQuality = "Perfect"
-                    gemValue += 4
-                }
-
-                else        -> {
-                    gemQuality = "Flawless"
-                    gemValue += 5
-                }
+                in 1..5     -> -3
+                in 6..25    -> -2
+                in 26..45   -> -1
+                in 46..65   -> 0
+                in 66..85   -> 1
+                in 86..90   -> 2
+                in 91..96   -> 3
+                in 97..99   -> 4
+                else        -> 5
             }
+
+            // endregion
+
+            // region [ Get initial market value ]
+
+            val initialGPValue = LootMutator.convertBaseGemValueToGP(gemType + gemSize + gemQuality)
+
+            // endregion
+
+            // region [ Start value history list ]
+
+            val valueHistory = listOf(
+                Pair(Calendar.getInstance().timeInMillis,"Initial market value: $initialGPValue gp.")
+            )
 
             // endregion
 
@@ -226,10 +123,13 @@ class HMTreasureFactory {
                 gemSize,
                 gemType,
                 gemQuality,
-                gemValue,
+                0,
                 gemTemplate.name,
                 gemTemplate.opacity,
-                gemTemplate.description)
+                gemTemplate.description,
+                initialGPValue,
+                valueHistory
+            )
         }
 
         /**
@@ -2047,7 +1947,7 @@ class HMTreasureFactory {
 
                 // region [ Roll "Intelligent weapon info" ]
 
-                if (Random.nextInt(1,101) <= template.intel_chance) {
+                if (Random.nextInt(1,101) <= template.intelChance) {
 
                     var wIntelligence:          Int
                     val wAlignment:             String
@@ -2441,7 +2341,7 @@ class HMTreasureFactory {
 
                     // endregion
 
-                } else if ( template.intel_chance == -1 ) {
+                } else if ( template.intelChance == -1 ) {
 
                     notesLists["Intelligent weapon info"]
                         ?.plusAssign("This weapon has a specific profile outlined in the " +
@@ -3518,7 +3418,7 @@ class HMTreasureFactory {
             }
 
             repeat(getItemCount()){
-                gutStoneList.add(createGem(inputItem.hoardID,GUT_STONE_KEY,listOf("Jewel")))
+                gutStoneList.add(createGem(inputItem.hoardID,GUT_STONE_KEY))
             }
 
             return gutStoneList

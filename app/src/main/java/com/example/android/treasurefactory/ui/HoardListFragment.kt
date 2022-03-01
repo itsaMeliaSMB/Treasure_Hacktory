@@ -33,6 +33,7 @@ class HoardListFragment : Fragment() {
     private lateinit var hoardRecyclerView: RecyclerView
     private lateinit var whenEmptyView: View
     private var adapter: HoardAdapter? = HoardAdapter(emptyList())
+    //TODO add bindings after renaming layout IDs
 
     // Modified from BNR pg 178 because of depreciated class
     private val hoardListViewModel: HoardListViewModel by lazy {
@@ -55,10 +56,9 @@ class HoardListFragment : Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val view = inflater.inflate(R.layout.treasure_viewer_list, container, false)
-
-        hoardRecyclerView = view.findViewById(R.id.treasure_viewer_list_recycler) as RecyclerView
-        whenEmptyView = view.findViewById(R.id.treasure_viewer_whenempty_group) as ConstraintLayout
+        val view = inflater.inflate(R.layout.layout_hoard_list, container, false)
+        hoardRecyclerView = view.findViewById(R.id.hoard_list_recycler) as RecyclerView
+        whenEmptyView = view.findViewById(R.id.hoard_list_whenempty_group) as ConstraintLayout
 
         // Give RecyclerView a Layout manager [required]
         hoardRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -70,6 +70,8 @@ class HoardListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view,savedInstanceState)
+
+
 
         hoardListViewModel.hoardListLiveData.observe(viewLifecycleOwner
         ) //Updates whenever the list of hoards is updated per BNR 238
@@ -102,16 +104,16 @@ class HoardListFragment : Fragment() {
         private lateinit var hoard: Hoard
 
         // Define views in layout
-        private val nameTextView: TextView = itemView.findViewById(R.id.treasure_viewer_list_name)
-        private val dateTextView: TextView = itemView.findViewById(R.id.treasure_viewer_list_date)
-        private val favImageView: ImageView = itemView.findViewById(R.id.treasure_viewer_list_star)
-        private val iconImageView: ImageView = itemView.findViewById(R.id.treasure_viewer_list_icon)
-        private val gpTextView: TextView = itemView.findViewById(R.id.treasure_viewer_list_gp_value)
-        private val gemTextView: TextView = itemView.findViewById(R.id.treasure_viewer_list_gem_count)
-        private val artTextView: TextView = itemView.findViewById(R.id.treasure_viewer_list_art_count)
-        private val mgcTextView: TextView = itemView.findViewById(R.id.treasure_viewer_list_magic_count)
-        private val splTextView: TextView = itemView.findViewById(R.id.treasure_viewer_list_spell_count)
-        private val leftoverIcon: ImageView = itemView.findViewById(R.id.treasure_viewer_list_leftover_icon)
+        private val nameTextView: TextView = itemView.findViewById(R.id.hoard_list_item_name)
+        private val dateTextView: TextView = itemView.findViewById(R.id.hoard_list_item_date)
+        private val favImageView: ImageView = itemView.findViewById(R.id.hoard_list_item_favorited)
+        private val iconImageView: ImageView = itemView.findViewById(R.id.hoard_list_item_list_icon)
+        private val gpTextView: TextView = itemView.findViewById(R.id.hoard_list_item_gp_value)
+        private val gemTextView: TextView = itemView.findViewById(R.id.hoard_list_item_gem_count)
+        private val artTextView: TextView = itemView.findViewById(R.id.hoard_list_item_art_count)
+        private val mgcTextView: TextView = itemView.findViewById(R.id.hoard_list_item_magic_count)
+        private val splTextView: TextView = itemView.findViewById(R.id.hoard_list_item_spell_count)
+        private val leftoverIcon: ImageView = itemView.findViewById(R.id.hoard_list_item_leftover_icon)
 
         init {
             itemView.setOnClickListener(this)
@@ -175,7 +177,7 @@ class HoardListFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : HoardViewHolder {
 
-            val view = layoutInflater.inflate(R.layout.treasure_viewer_list_item, parent, false)
+            val view = layoutInflater.inflate(R.layout.hoard_list_item, parent, false)
             return HoardViewHolder(view)
         }
 

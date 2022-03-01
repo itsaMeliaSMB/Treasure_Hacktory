@@ -4,8 +4,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
-import kotlin.math.roundToInt
 
 @Entity(tableName = "hackmaster_gem_table",
     foreignKeys = [ForeignKey(
@@ -17,100 +17,154 @@ data class Gem(
     @PrimaryKey(autoGenerate = true) @NotNull val gemID: Int = 0,
     val hoardID: Int = 0,
     val iconID: String,
-    val type: String,
-    val size: String,
-    val quality: String,
-    val value: Int,
+    val type: Int,
+    val size: Int,
+    val quality: Int,
+    val variation: Int,
     val name: String,
     val opacity: Int,
-    val description: String = "") : Evaluable {
+    val description: String = "",
+    val currentGPValue: Double = 0.0, //TODO refactor db entity et al to include this value
+    val valueHistory: List<Pair<Long,String>> = emptyList() //TODO refactor db entity et al to include this value
+    ) {
+
+    // TODO Refactor to include everything in new Gem schema
 
     @Ignore
-    override fun getGpValue(): Double {
+    fun getTypeAsString() : String {
 
-        val valueLevelToGPValue = mapOf(
+        val typeIntToString = mapOf(
 
-            0 to 0.1,
-            1 to 0.5,
-            2 to 1.0,
-            3 to 1.0,
-            4 to 5.0,
-            5 to 10.0,          // start of initial base values
-            6 to 50.0,
-            7 to 100.0,
-            8 to 500.0,
-            9 to 1000.0,
-            10 to 5000.0,       // end of initial base values
-            11 to 10000.0,
-            12 to 250000.0,
-            13 to 500000.0,
-            14 to 1000000.0,
-            15 to 2500000.0,
-            16 to 10000000.0
+            5 to "ornamental stone",
+            6 to "semiprecious stone",
+            7 to "fancy stone",
+            8 to "precious stone",
+            9 to "gemstone",
+            10 to "jewel"
         )
 
-        return valueLevelToGPValue[value] ?: 0.0
+        return typeIntToString.getOrDefault(type,"stone")
     }
 
     @Ignore
-    override fun getXpValue(): Int {
+    fun getSizeAsString() : String {
 
-        val xpGpRatio = 0.2
+        val sizeIntToString = mapOf(
 
-        return (getGpValue() * xpGpRatio).roundToInt()
+            -3 to "tiny",
+            -2 to "very small",
+            -1 to "small",
+            0 to "average-sized",
+            1 to "large",
+            2 to "very large",
+            3 to "huge",
+            4 to "massive",
+            5 to "gargantuan"
+        )
+
+        return sizeIntToString.getOrDefault(size,"oddly-sized")
     }
+
+    @Ignore
+    fun getQualityAsString() : String {
+
+        val qualityIntToString = mapOf(
+
+            -3 to "badly flawed",
+            -2 to "flawed",
+            -1 to "minorly included",
+            0 to "average",
+            1 to "good",
+            2 to "excellent",
+            3 to "near-perfect",
+            4 to "perfect",
+            5 to "flawless"
+        )
+
+        return qualityIntToString.getOrDefault(quality,"inscrutable")
+    }
+
+    @Ignore
+    fun getOpacityAsString() : String {
+
+        return when (opacity) {
+            0   -> "transparent"
+            1   -> "translucent"
+            2   -> "opaque"
+            else-> "unknown"
+        }
+    }
+
+    @Ignore
+    fun getDefaultBaseValue() : Int = type + size + quality
 
     @Ignore
     fun getWeightInCarats(): Double {
 
         val sizeToWeight = mapOf(
-            "Tiny" to 0.25,
-            "Very small" to .5,
-            "Small" to 1.0,
-            "Average" to 2.0,
-            "Large" to 3.0,
-            "Very large" to 6.0,
-            "Huge" to 9.0,
-            "Massive" to 14.0,
-            "Gargantuan" to 20.0
+            -3 to 0.25,
+            -2 to .5,
+            -1 to 1.0,
+            0 to 2.0,
+            1 to 3.0,
+            2 to 6.0,
+            3 to 9.0,
+            4 to 14.0,
+            5 to 20.0
         )
 
         val typeToMultiplier = mapOf(
-            "Ornamental" to 5.0,
-            "Semiprecious" to 3.0,
-            "Fancy" to 2.0,
-            "Precious" to 1.0,
-            "Gem" to 0.75,
-            "Jewel" to 0.5
+            5 to 5.0,
+            6 to 3.0,
+            7 to 2.0,
+            8 to 1.0,
+            9 to 0.75,
+            10 to 0.5
         )
 
-        return (sizeToWeight[size] ?: 2.0) * (typeToMultiplier[type] ?: 1.0)
+        return sizeToWeight.getOrDefault(size,2.0) * typeToMultiplier.getOrDefault(type,1.0)
     }
 
     @Ignore
     fun getDiameterInInches(): Double {
 
         val sizeToCarats = mapOf(
-            "Tiny" to 0.125,
-            "Very small" to 0.25,
-            "Small" to 0.375,
-            "Average" to 0.67,
-            "Large" to 1.0,
-            "Very large" to 1.33,
-            "Huge" to 1.67,
-            "Massive" to 2.375,
-            "Gargantuan" to 3.33
+            -3 to 0.125,
+            -2 to 0.25,
+            -1 to 0.375,
+            0 to 0.67,
+            1 to 1.0,
+            2 to 1.33,
+            3 to 1.67,
+            4 to 2.375,
+            5 to 3.33
         )
 
         val typeToMultiplier = mapOf(
-            "Ornamental" to 5.0,
-            "Semiprecious" to 3.0,
-            "Fancy" to 2.0,
-            "Precious" to 1.0,
-            "Gem" to 0.75,
-            "Jewel" to 0.5
+            5 to 5.0,
+            6 to 3.0,
+            7 to 2.0,
+            8 to 1.0,
+            9 to 0.75,
+            10 to 0.5
         )
 
-        return (sizeToCarats[size] ?: 0.67) * (typeToMultiplier[type] ?: 1.0)
+        return sizeToCarats.getOrDefault(size,0.67) * typeToMultiplier.getOrDefault(type,1.0)
+    }
+
+    @Ignore
+    fun getSubtitle(): String = getSizeAsString().capitalized() + ", " + getQualityAsString() +
+            " " + getTypeAsString()
+
+    @Ignore
+    fun getFlavorTextAsList(): List<Pair<String,String>> {
+
+        //TODO look up formatting for cast-double strings in kotlin for leading zeros and limited decimal places
+        return listOf(
+            Pair("Weight","${getWeightInCarats()} ct (~ ${getWeightInCarats() * 0.200} g)"),
+            Pair("Diameter","${getDiameterInInches()} in (~ ${getDiameterInInches() * 2.54} cm)"),
+            Pair("Opacity",getOpacityAsString().capitalized()),
+            Pair("Appearance",description.capitalized())
+        )
     }
 }

@@ -3,7 +3,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/treasure_viewer_overview_list_footer"
+    android:id="@+id/hoard_overview_coinage_footer"
     android:orientation="vertical"
     android:gravity="center_vertical"
     android:layout_width="match_parent"
@@ -12,7 +12,7 @@
     android:paddingVertical="2dp">
 
     <View
-        android:id="@+id/treasure_viewer_overview_list_footer_hori_div"
+        android:id="@+id/hoard_overview_coinage_footer_div"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="2dp"
@@ -33,7 +33,7 @@
             tools:src="@drawable/item_coin_pile"/>
 
         <TextView
-            android:id="@+id/treasure_viewer_overview_list_footer_icon"
+            android:id="@+id/hoard_overview_coinage_footer_icon"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -51,7 +51,7 @@
             android:layout_marginHorizontal="1dp"/>
 
         <TextView
-            android:id="@+id/treasure_viewer_overview_list_footer_column_qty"
+            android:id="@+id/hoard_overview_coinage_footer_column_qty"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -66,13 +66,14 @@
             android:layout_marginHorizontal="1dp"/>
 
         <TextView
-            android:id="@+id/treasure_viewer_overview_list_footer_column_ib"
+            android:id="@+id/hoard_overview_coinage_footer_column_wt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:textAlignment="viewEnd"
             android:textSize="12sp"
             android:text="[ . . . ] ib"/>
+
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"
@@ -80,7 +81,7 @@
             android:layout_marginHorizontal="1dp"/>
 
         <TextView
-            android:id="@+id/treasure_viewer_overview_list_footer_column_gp"
+            android:id="@+id/hoard_overview_coinage_footer_column_gp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -88,7 +89,6 @@
             android:textAlignment="viewEnd"
             android:textSize="12sp"
             android:text="[ . . . ] gp"/>
-
 
     </LinearLayout>
 </LinearLayout>

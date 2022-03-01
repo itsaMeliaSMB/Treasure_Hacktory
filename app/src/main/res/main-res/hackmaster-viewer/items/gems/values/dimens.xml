@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="unique_detail_thumbnail_side_length">64dp</dimen>
+    <dimen name="unique_details_standard_margin">16dp</dimen>
+    <dimen name="unique_details_short_margin">8dp</dimen>
+</resources>

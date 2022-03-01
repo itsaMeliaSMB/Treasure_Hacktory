@@ -32,7 +32,7 @@ class HoardViewerFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view =  inflater.inflate(R.layout.hackmaster_treasure_viewer_hoard_overview,container,false)
+        val view =  inflater.inflate(R.layout.layout_hoard_overview,container,false)
 
         return view
     }

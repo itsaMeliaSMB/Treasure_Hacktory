@@ -14,12 +14,14 @@ import org.jetbrains.annotations.NotNull
 @Entity(tableName = "hackmaster_gem_reference")
 data class GemTemplate(
     @PrimaryKey @ColumnInfo(name="ref_id") val refId: Int,
-    val type: String,
+    val type: Int,
     val name: String,
     val ordinal: Int,
     val opacity: Int,
     val description: String,
     @ColumnInfo(name ="icon_id") val iconID : String)
+
+// TODO Refactor to include everything in new Gem schema
 
 @Entity(tableName = "hackmaster_magic_item_reference")
 data class MagicItemTemplate(
@@ -83,13 +85,15 @@ data class GemEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val gemID: Int = 0,
     val hoardID: Int = 0,
     val iconID: String,
-    val type: String,
-    val size: String,
-    val quality: String,
-    val value: Int,
+    val type: Int,
+    val size: Int,
+    val quality: Int,
+    val variation: Int,
     val name: String,
     val opacity: Int,
-    val description: String = "")
+    val description: String,
+    val currentGPValue: Double,
+    val valueHistory: List<Pair<Long,String>>)
 
 @Entity(tableName = "hackmaster_art_table",
     foreignKeys = [ForeignKey(
@@ -132,8 +136,7 @@ data class MagicItemEntity(
     val classUsability: Map<String,Boolean>,
     val isCursed: Boolean,
     val alignment: String,
-    val notes: List<List<String>> = emptyList(),
-    val userNotes: List<String> = emptyList())
+    val notes: List<List<String>> = emptyList())
 
 @Entity(tableName = "hackmaster_spell_collection_table",
     foreignKeys = [ForeignKey(
@@ -177,10 +180,12 @@ fun List<GemEntity>.asDomainModel(): List<Gem> {
             it.type,
             it.size,
             it.quality,
-            it.value,
+            it.variation,
             it.name,
             it.opacity,
-            it.description)
+            it.description,
+            it.currentGPValue,
+            it.valueHistory)
     }
 }
 
@@ -222,8 +227,7 @@ fun List<MagicItemEntity>.asDomainModel(): List<MagicItem> {
             it.classUsability,
             it.isCursed,
             it.alignment,
-            it.notes,
-            it.userNotes)
+            it.notes)
     }
 }
 
