@@ -1,6 +1,5 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.Ignore
 import org.jetbrains.annotations.NotNull
 
 data class SpellCollection(
@@ -9,12 +8,13 @@ data class SpellCollection(
     var iconID: String,
     var name: String = "<Spell Scroll>",
     var type: String = "scroll",
-    var properties: Map<String,Double> = emptyMap(),
+    var properties: List<Pair<String,Double>> = emptyList(), //TODO refactor existing scroll generation to return list
+    var gpValue: Double = 0.0, //TODO add as field to db entities
+    var xpValue: Int = 0, //TODO add as field to db entities
     var spells: List<Spell> = listOf(),
-    var curse: String = "") : Evaluable{
+    var curse: String = "") {
 
-    @Ignore
-    override fun getGpValue(): Double {
+    fun calculateGPValue(): Double {
 
         var gpTotal: Double = 0.0
 
@@ -33,8 +33,7 @@ data class SpellCollection(
         return gpTotal
     }
 
-    @Ignore
-    override fun getXpValue() : Int {
+    fun calculateXpValue() : Int {
 
         var xpTotal = 0
 

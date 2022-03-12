@@ -3,10 +3,16 @@ package com.example.android.treasurefactory.model
 import androidx.room.*
 import java.util.*
 
-// TODO: Figure out where I need to define foreign keys for nested relationships
 
-// TODO: Separately define Database object and app-level model for encapsulation https://stackoverflow.com/questions/64823212/use-android-room-without-breaking-encapsulation
+// https://stackoverflow.com/questions/64823212/use-android-room-without-breaking-encapsulation
 
+// TODO: Add gp/xp ratio to hoard
+
+/**
+ * Parent class for distinct treasure hoard with it's own items.
+ *
+ * @param effortRating GP/XP value ratio of items without specific XP values based on difficulty of acquisition (average difficulty is considered 5.0 gp : 1 xp)
+ */
 @Entity (tableName = "hackmaster_hoard_table")
 data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var name: String = "",
@@ -14,6 +20,7 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var creationDesc: String = "",
                  @ColumnInfo(name="icon_id") var iconID: String = "",
                  var gpTotal: Double = 0.0,
+                 var effortRating: Double = 5.0,
                  var cp: Int = 0,
                  var sp: Int = 0,
                  var ep: Int = 0,
@@ -26,7 +33,8 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var spellsCount: Int = 0,
                  var isFavorite: Boolean = false,
                  var isNew: Boolean = true,
-                 var appVersion: Long,                // Version code of app hoard was generated on
+                 var appVersion: Long,                  // Version code of app hoard was generated on
+                 var history: ArrayList<Pair<Long,String>>,  // Log of important modifications to hoard TODO consider removing creationDesc and putting info here. Also embedding this as a table instead.
                  @Embedded(prefix = "leftover_") val leftover: HoardLeftover)
 
 data class HoardLeftover(val gems: Int = 0,

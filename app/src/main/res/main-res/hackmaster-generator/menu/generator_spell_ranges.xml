@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/spell_level_0"
+        android:title="Cantrips (CL 1)"
+        android:titleCondensed="0(1)"/>
+    <item android:id="@+id/spell_level_1"
+        android:title="Level 1"
+        android:titleCondensed="1"/>
+    <item android:id="@+id/spell_level_2"
+        android:title="Level 2"
+        android:titleCondensed="2"/>
+    <item android:id="@+id/spell_level_3"
+        android:title="Level 3"
+        android:titleCondensed="3"/>
+    <item android:id="@+id/spell_level_4"
+        android:title="Level 4"
+        android:titleCondensed="4"/>
+    <item android:id="@+id/spell_level_5"
+        android:title="Level 5"
+        android:titleCondensed="5"/>
+    <item android:id="@+id/spell_level_6"
+        android:title="Level 6"
+        android:titleCondensed="6"/>
+    <item android:id="@+id/spell_level_7"
+        android:title="Level 7"
+        android:titleCondensed="7"/>
+    <item android:id="@+id/spell_level_8"
+        android:title="Level 8 (CL 7)"
+        android:titleCondensed="8(7)"/>
+    <item android:id="@+id/spell_level_9"
+        android:title="Level 9 (CL 7)"
+        android:titleCondensed="9(7)"/>
+
+</menu>

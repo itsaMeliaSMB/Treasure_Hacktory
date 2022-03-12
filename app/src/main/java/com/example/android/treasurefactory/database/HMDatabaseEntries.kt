@@ -62,6 +62,7 @@ data class MagicItemTemplate(
 data class SpellTemplate(
     @PrimaryKey @ColumnInfo(name="ref_id") val refId: Int,
     val name: String,
+    @ColumnInfo(name="ref_type") val refType: Int,
     val source: String,
     val page: Int,
     val type: Int,
@@ -190,7 +191,7 @@ fun List<GemEntity>.asDomainModel(): List<Gem> {
 }
 
 @JvmName("asDomainModelArtObjectEntity")
-fun List<ArtObjectEntity>.asDomainModel(): List<ArtObject> {
+fun List<ArtObjectEntity>.asDomainModel(): List<ArtObject> { //TODO refactor mappings in light of new ArtObject schema
 
     return map {
         ArtObject(
@@ -232,7 +233,7 @@ fun List<MagicItemEntity>.asDomainModel(): List<MagicItem> {
 }
 
 @JvmName("asDomainModelSpellCollectionEntity")
-fun List<SpellCollectionEntity>.asDomainModel(): List<SpellCollection> {
+fun List<SpellCollectionEntity>.asDomainModel(): List<SpellCollection> { // TODO refactor mappings in light of new SpellCollection schema
 
     return map {
         SpellCollection(

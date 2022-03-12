@@ -1,27 +1,17 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.Ignore
-import androidx.room.PrimaryKey
 import com.example.android.treasurefactory.capitalized
-import org.jetbrains.annotations.NotNull
 
-@Entity(tableName = "hackmaster_gem_table",
-    foreignKeys = [ForeignKey(
-        entity = Hoard::class,
-        parentColumns = arrayOf ("hoardID"),
-        childColumns = arrayOf("gemID"),
-        onDelete = ForeignKey.CASCADE ) ])
 data class Gem(
-    @PrimaryKey(autoGenerate = true) @NotNull val gemID: Int = 0,
+    val gemID: Int = 0,
     val hoardID: Int = 0,
     val iconID: String,
     val type: Int,
     val size: Int,
     val quality: Int,
     val variation: Int,
-    val name: String,
+    var name: String,
     val opacity: Int,
     val description: String = "",
     val currentGPValue: Double = 0.0, //TODO refactor db entity et al to include this value
@@ -167,4 +157,5 @@ data class Gem(
             Pair("Appearance",description.capitalized())
         )
     }
+
 }

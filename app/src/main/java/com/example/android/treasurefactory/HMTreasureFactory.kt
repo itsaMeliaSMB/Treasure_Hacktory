@@ -17,9 +17,9 @@ class HMTreasureFactory {
             "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
             "A17","A18","A21","A24")
 
-        private val SAMPLE_ARCANE_SPELL = SpellTemplate(744,"Wildshield","Spellslinger's Guide to Wurld Domination",125,0,6,"Con","Wild_Mage/Guardian","","Wild","")
+        private val SAMPLE_ARCANE_SPELL = SpellTemplate(744,"Wildshield",1,"Spellslinger's Guide to Wurld Domination",125,0,6,"Con","Wild_Mage/Guardian","","Wild","")
 
-        private val SAMPLE_DIVINE_SPELL = SpellTemplate(1146,"Exaction","Player’s Handbook",273,1,7,"Evo/Alt","","Charm/Summoning","","")
+        private val SAMPLE_DIVINE_SPELL = SpellTemplate(1146,"Exaction",0,"Player’s Handbook",273,1,7,"Evo/Alt","","Charm/Summoning","","")
 
         private val SAMPLE_GEM_TEMPLATE = GemTemplate(57,10,"ruby",5, 0,"clear red to deep crimson (Corundum)","gem_jewel_ruby")
 
@@ -106,7 +106,7 @@ class HMTreasureFactory {
 
             // region [ Get initial market value ]
 
-            val initialGPValue = LootMutator.convertBaseGemValueToGP(gemType + gemSize + gemQuality)
+            val initialGPValue = LootMutator.convertGemValueToGP(gemType + gemSize + gemQuality)
 
             // endregion
 
@@ -141,82 +141,70 @@ class HMTreasureFactory {
             var ageInYears:     Int
             var ageModifier:    Int
             var ageRank:        Int
+            var subjectRank:    Int
             var condModifier:   Int
-            var renModifier:    Int
-            var artValue =      0
 
-            val artType:        String
-            val iconID:         String
-            val renown:         String
-            val size:           String
-            val condition:      String
-            val materials:      String
-            val quality:        String
-            val subject:        String
+            val artType:        Int
+            val renown:         Int
+            val size:           Int
+            val condition:      Int
+            val materials:      Int
+            val quality:        Int
+            val subject:        Int
 
             // region [ Type of art ]
 
             when (Random.nextInt(1,101)) {
 
                 in 1..5     -> {
-                    artType = "Paper art"
+                    artType = 0
                     condModifier = -2
                     ageModifier = -2
-                    iconID = "artwork_paper"
                 }
                 in 6..15    -> {
-                    artType = "Fabric art"
+                    artType = 1
                     condModifier = -2
                     ageModifier = -2
-                    iconID = "artwork_fabric"
                 }
                 in 16..30   -> {
-                    artType = "Furnishing"
+                    artType = 2
                     condModifier = -1
                     ageModifier = -1
-                    iconID = "artwork_furnishing"
                 }
                 in 31..45   -> {
-                    artType = "Painting"
+                    artType = 3
                     condModifier = -1
                     ageModifier = -1
-                    iconID = "artwork_painting"
                 }
                 in 46..60   -> {
-                    artType = "Scrimshaw & woodwork"
+                    artType = 4
                     condModifier = -1
                     ageModifier = -1
-                    iconID = "artwork_wood"
                 }
                 in 61..70   -> {
-                    artType = "Ceramics"
+                    artType = 5
                     condModifier = 0
                     ageModifier = 0
-                    iconID = "artwork_ceramic"
                 }
                 in 71..80   -> {
-                    artType = "Glasswork"
+                    artType = 6
                     condModifier = 0
                     ageModifier = 0
-                    iconID = "artwork_glass"
                 }
                 in 81..90   -> {
-                    artType = "Stonework"
+                    artType = 7
                     condModifier = 1
                     ageModifier = 0
-                    iconID = "artwork_stone"
                 }
                 in 91..99   -> {
-                    artType = "Metalwork"
+                    artType = 8
                     condModifier = 2
                     ageModifier = 0
-                    iconID = "artwork_metal"
                 }
                 else        -> {
-                    artType = "Magical"
+                    artType = 3
                     condModifier = 3
                     ageModifier = 0
-                    iconID = "artwork_magical"
                 }
             }
 
@@ -224,83 +212,33 @@ class HMTreasureFactory {
 
             // region [ Renown of the artist ]
 
-            when (Random.nextInt(1,101)) {
+            renown = when (Random.nextInt(1,101)) {
 
-                in 1..15    -> {
-                    renown = "unknown"
-                    renModifier = -3
-                }
-                in 16..30   -> {
-                    renown = "obscure"
-                    renModifier = -2
-                }
-                in 31..45   -> {
-                    renown = "city-renowned"
-                    renModifier = -1
-                }
-                in 46..65   -> {
-                    renown = "regionally-renowned"
-                    renModifier = 0
-                }
-                in 66..85   -> {
-                    renown = "nationally-renowned"
-                    renModifier = 1
-                }
-                in 86..95   -> {
-                    renown = "continentally-renowned"
-                    renModifier = 2
-                }
-                in 96..99   -> {
-                    renown = "world-renowned"
-                    renModifier = 3
-                }
-                else        -> {
-                    renown = "a movement leader"
-                    renModifier = 4
-                }
+                in 1..15    -> -3
+                in 16..30   -> -2
+                in 31..45   -> -1
+                in 46..65   -> 0
+                in 66..85   -> 1
+                in 86..95   -> 2
+                in 96..99   -> 3
+                else        -> 4
             }
 
             // endregion
 
             // region [ Size of artwork ]
 
-            when(Random.nextInt(1,101)) {
+            size = when(Random.nextInt(1,101)) {
 
-                in 1..5     -> {
-                    size = "tiny"
-                    artValue -= 3
-                }
-                in 6..25    -> {
-                    size = "very small"
-                    artValue -= 2
-                }
-                in 26..45   -> {
-                    size = "small"
-                    artValue -= 1
-                }
-                in 46..65   -> {
-                    size = "average"
-                }
-                in 66..85   -> {
-                    size = "large"
-                    artValue += 1
-                }
-                in 86..90   -> {
-                    size = "very large"
-                    artValue += 2
-                }
-                in 91..96   -> {
-                    size = "huge"
-                    artValue += 3
-                }
-                in 97..99   -> {
-                    size = "massive"
-                    artValue += 4
-                }
-                else        -> {
-                    size = "gargantuan"
-                    artValue += 5
-                }
+                in 1..5     -> -3
+                in 6..25    -> -2
+                in 26..45   -> -1
+                in 46..65   -> 0
+                in 66..85   -> 1
+                in 86..90   -> 2
+                in 91..96   -> 3
+                in 97..99   -> 4
+                else        -> 5
             }
 
             // endregion
@@ -318,48 +256,12 @@ class HMTreasureFactory {
                 in 91..96   -> 6
                 in 97..99   -> 7
                 else        -> 8
-            } + renModifier
+            } + renown
 
             if (temporaryRank < 0) { temporaryRank = 0 }
+            if (temporaryRank > 8) { temporaryRank = 8 }
 
-            when (temporaryRank) {
-
-                0       -> {
-                    materials = "awful"
-                    artValue -= 3
-                }
-                1       -> {
-                    materials = "poor"
-                    artValue -= 2
-                }
-                2       -> {
-                    materials = "below average"
-                    artValue -= 1
-                }
-                3       -> {
-                    materials = "average"
-                }
-                4       -> {
-                    materials = "above average"
-                    artValue += 1
-                }
-                5       -> {
-                    materials = "good"
-                    artValue += 2
-                }
-                6       -> {
-                    materials = "excellent"
-                    artValue += 3
-                }
-                7       -> {
-                    materials = "finest"
-                    artValue += 4
-                }
-                else    -> {
-                    materials = "unique"
-                    artValue += 5
-                }
-            }
+            materials = temporaryRank - 3
 
             // endregion
 
@@ -376,48 +278,12 @@ class HMTreasureFactory {
                 in 91..96   -> 6
                 in 97..99   -> 7
                 else        -> 8
-            } + renModifier
+            } + renown
 
             if (temporaryRank < 0) { temporaryRank = 0 }
+            if (temporaryRank > 8) { temporaryRank = 8 }
 
-            when (temporaryRank) {
-
-                0       -> {
-                    quality = "awfully executed."
-                    artValue -= 3
-                }
-                1       -> {
-                    quality = "poorly executed."
-                    artValue -= 2
-                }
-                2       -> {
-                    quality = "below-averagely executed."
-                    artValue -= 1
-                }
-                3       -> {
-                    quality = "averagely executed."
-                }
-                4       -> {
-                    quality = "above-averagely executed."
-                    artValue += 1
-                }
-                5       -> {
-                    quality = "well executed."
-                    artValue += 2
-                }
-                6       -> {
-                    quality = "excellently executed."
-                    artValue += 3
-                }
-                7       -> {
-                    quality = "brilliantly executed."
-                    artValue += 4
-                }
-                else    -> {
-                    quality = "simply a masterpiece!"
-                    artValue += 5
-                }
-            }
+            quality = temporaryRank - 3
 
             // endregion
 
@@ -427,12 +293,12 @@ class HMTreasureFactory {
                 rollPenetratingDice(5,20,0).getRollTotal() *       // 5d20 x 1d4, penetrate on all rolls
                     rollPenetratingDice(1,4,0).getRollTotal()
 
-            if (ageInYears < 0) { ageInYears = 0 }
+            if (ageInYears < 5) { ageInYears = 5 }
 
             // Check age range of rolled value
             ageRank = when (ageInYears) {
 
-                in 0..25        -> -2
+                in 5..25        -> -2
                 in 26..75       -> -1
                 in 76..150      -> 0
                 in 151..300     -> 1
@@ -446,23 +312,23 @@ class HMTreasureFactory {
             when (ageRank + ageModifier){
 
                 -4  -> {
-                    if (ageInYears !in 0..25) {
+                    if (ageInYears !in 5..25) {
 
-                        ageInYears = Random.nextInt(0,26)
+                        ageInYears = Random.nextInt(5,26)
                         ageRank = -2
                     }
                 }
                 -3  -> {
-                    if (ageInYears !in 0..25) {
+                    if (ageInYears !in 5..25) {
 
-                        ageInYears = Random.nextInt(0,25)
+                        ageInYears = Random.nextInt(5,26)
                         ageRank = -2
                     }
                 }
                 -2  -> {
-                    if (ageInYears !in 0..25) {
+                    if (ageInYears !in 5..25) {
 
-                        ageInYears = Random.nextInt(0,26)
+                        ageInYears = Random.nextInt(5,26)
                         ageRank = -2
                     }
                 }
@@ -514,9 +380,6 @@ class HMTreasureFactory {
             if (ageRank < -2) { ageRank = -2 } else
                 if (ageRank > 5) { ageRank = 5 }
 
-            // Add age value to overall value rank
-            artValue += ageRank
-
             // endregion
 
             // region [ Condition of artwork ]
@@ -535,80 +398,47 @@ class HMTreasureFactory {
             } + condModifier
 
             if (temporaryRank < 0) { temporaryRank = 0 }
+            if (temporaryRank > 8) { temporaryRank = 8 }
 
-            when (temporaryRank) {
+            condition = temporaryRank - 3
 
-                0       -> {
-                    condition = "badly damaged"
-                    artValue -= 3
-                }
-                1       -> {
-                    condition = "damaged"
-                    artValue -= 2
-                }
-                2       -> {
-                    condition = "worn"
-                    artValue -= 1
-                }
-                3       -> {
-                    condition = "average"
-                }
-                4       -> {
-                    condition = "good"
-                    artValue += 1
-                }
-                5       -> {
-                    condition = "excellent"
-                    artValue += 2
-                }
-                6       -> {
-                    condition = "near perfect"
-                    artValue += 3
-                }
-                7       -> {
-                    condition = "perfect"
-                    artValue += 4
-                }
-                else    -> {
-                    condition = "flawless"
-                    artValue += 5
-                }
-            }
+            // endregion
 
             // region [ Subject matter of art object ]
 
             when (Random.nextInt(1,101)) {
 
                 in 1..10    -> {
-                    subject = "abstract"
-                    artValue -= 2
+                    subject = -2
+                    subjectRank = -2
                 }
                 in 11..20   -> {
-                    subject = "monster"
-                    artValue -= 1
+                    subject = -1
+                    subjectRank = -1
                 }
                 in 21..30   -> {
-                    subject = "human or demi-human"
+                    subject = 0
+                    subjectRank = 0
                 }
                 in 31..50   -> {
-                    subject = "natural"
-                    artValue += 1
+                    subject = 1
+                    subjectRank = 0
                 }
                 in 51..70   -> {
-                    subject = "historical"
-                    artValue += 2
+                    subject = 2
+                    subjectRank = 0
                 }
                 in 71..90   -> {
-                    subject = "religious"
-                    artValue += 3
+                    subject = 3
+                    subjectRank = 0
                 }
                 in 91..99   -> {
-                    subject = "wealthy/noble"
-                    artValue += 4
+                    subject = 4
+                    subjectRank = 1
                 }
                 else        -> {
-                    subject = "royalty"
-                    artValue += 5
+                    subject = 5
+                    subjectRank = 2
                 }
             }
 
@@ -616,8 +446,9 @@ class HMTreasureFactory {
 
             // ---Generate and return new art object ---
 
-            return ArtObject(0, parentHoardID,iconID,artType,renown,size,condition,materials,quality,ageInYears,
-                subject,artValue)
+            return ArtObject(0, parentHoardID, ArtObject.getRandomName(artType,subject),
+                artType, renown, size, condition, materials, quality, ageInYears,
+                subject, ( renown + size + condition + quality + subjectRank + ageRank ) )
         }
 
         /**
@@ -627,9 +458,9 @@ class HMTreasureFactory {
          * @param providedTypes Tables that are allowed to be queried to pick an item.
          * @param mapSubChance Percentage chance of replacing a scroll with a treasure map. Can generate maps even when A3 is disallowed.
          */
-        fun createMagicItem(parentHoardID: Int, givenTemplate: Int = -1,
+        fun createMagicItemTuple(parentHoardID: Int, givenTemplate: Int = -1,
                             providedTypes: List<String> = ANY_MAGIC_ITEM_LIST,
-                            mapSubChance :Int = 0) : MagicItem {
+                            mapSubChance :Int = 0) : NewMagicItemTuple {
 
             val VALID_TABLE_TYPES = linkedSetOf<String>(
                 "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
@@ -1932,7 +1763,7 @@ class HMTreasureFactory {
                         in 93..95   -> "Tart"
                         in 96..97   -> "Vinegary"
                         in 98..100  -> "Watery"
-                        else        -> "I dunno, a bit like strawberries?"
+                        else        -> "iunno, a bit like strawberries?"
 
                     } )
 
@@ -3098,21 +2929,23 @@ class HMTreasureFactory {
 
             // endregion
 
-            return MagicItem(
-                0,
-                mTemplateID,
-                mHoardID,
-                mIconID,
-                itemType,
-                mName,
-                mSourceText,
-                mSourcePage,
-                mXpValue,
-                mGpValue,
-                mClassUsability,
-                mIsCursed,
-                mAlignment,
-                mNotes)
+            return NewMagicItemTuple(
+                MagicItem(
+                    0,
+                    mTemplateID,
+                    mHoardID,
+                    mIconID,
+                    itemType,
+                    mName,
+                    mSourceText,
+                    mSourcePage,
+                    mXpValue,
+                    mGpValue,
+                    mClassUsability,
+                    mIsCursed,
+                    mAlignment,
+                    mNotes),
+                null, null,)
         }
 
         /**
@@ -3137,7 +2970,7 @@ class HMTreasureFactory {
             val spellList = ArrayList<Spell>()
             val orderList = inputItem.notes[
                     inputItem.notes[0].indexOfFirst{it == ORDER_LABEL_STRING} ]
-            val propertiesMap = mutableMapOf<String,Double>()
+            val propertiesList = ArrayList<Pair<String,Double>>()
             var curse = ""
             var itemName = ""
             val iconID : String
@@ -3229,23 +3062,23 @@ class HMTreasureFactory {
             // region [ Roll non-spell details ]
 
             // Roll container
-            propertiesMap.plusAssign( when (Random.nextInt(1,7)) {
+            propertiesList.plusAssign( when (Random.nextInt(1,7)) {
 
-                1   -> Pair("Container: Ivory tube",0.0)
-                2   -> Pair("Container: Jade tube",0.0)
-                3   -> Pair("Container: Leather tube",0.0)
-                4   -> Pair("Container: Metal tube",0.0)
-                5   -> Pair("Container: Wooden tube",0.0)
-                else-> Pair("Container: None (found loose)",0.0)
+                1   -> "Container: Ivory tube" to 0.0
+                2   -> "Container: Jade tube" to 0.0
+                3   -> "Container: Leather tube" to 0.0
+                4   -> "Container: Metal tube" to 0.0
+                5   -> "Container: Wooden tube" to 0.0
+                else-> "Container: None (found loose)" to 0.0
             }
             )
 
             // Roll material
-            propertiesMap.plusAssign( when (Random.nextInt(1,11)){
-                in 1..5 -> Pair("Material: Vellum",0.0)
-                in 6..8 -> Pair("Material: Parchment",0.0)
-                9       -> Pair("Material: Papyrus",0.0)
-                else    -> Pair("Material: Non-standard (GM's choice)",0.0)
+            propertiesList.plusAssign( when (Random.nextInt(1,11)){
+                in 1..5 -> "Material: Vellum" to 0.0
+                in 6..8 -> "Material: Parchment" to 0.0
+                9       -> "Material: Papyrus" to 0.0
+                else    -> "Material: Non-standard (GM's choice)" to 0.0
             } )
 
             // endregion
@@ -3277,14 +3110,16 @@ class HMTreasureFactory {
                     "(GMG) The character suffers amnesia.",
                     "(GMG) The character feels compelled to give away all his belongings.",
                     "(GMG) The character must save vs. paralyzation or suffer petrification.",
-                    "[GMG] The character suffers a spell mishap (see GMG pg 82, Table 7E).",
-                    "[GMG] The character develops some form insanity (see GMG pg 86, Table 7H).",
-                    "[GMG] The character suffers from a minor malevolent effect (see GMG pg 285, Table B125). Re-roll incompatible results.",
+
+                    "[GMG+] The character suffers a spell mishap (see GMG pg 82, Table 7E).",
+                    "[GMG+] The character develops some form insanity (see GMG pg 86, Table 7H).",
+                    "[GMG+] The character suffers from a minor malevolent effect (see GMG pg 285, Table B125). Re-roll incompatible results.",
                     "[SSG] The character suffers the effect of a Witch's Curse (see SSG pg 49, Table 5C).",
                     "[SSG] The character experiences the effect of a Wild Surge (see SSG pg 38, Table 4L).",
                     "[SSG] The character suffers from the effect of a Tattoo Effect (see SSG pg 35, Table 4G) for 1 week.",
                     "[PHB] The character suffers the effect of Bestow Curse (see PHB page 215).",
-                    "[TrH] All reversible spells are reversed. Otherwise, 50% chance of spell failure.",
+
+                    "[TrH] All reversible spells are reversed. Otherwise, minimum 50% chance of spell failure.",
                     "[TrH] All spells inscribed on the scroll go off at once, as if a spell-jacked caster mis-casted.",
                     "[TrH] The character loses access to one of their talents, determined at random.",
                     "[TrH] Loud, embarrassing sound is produced on casting. User must save vs. apology or lose 5 honor.",
@@ -3333,7 +3168,9 @@ class HMTreasureFactory {
                 iconID,
                 itemName,
                 "Scroll",
-                propertiesMap.toMap(),
+                propertiesList.toList(),
+                0.0, //TODO port over GP value calculation
+                0, //TODO port over XP value calculation
                 spellList.toList(),
                 curse
             )
@@ -3381,14 +3218,14 @@ class HMTreasureFactory {
                 iounIndex = index
 
                 // Add to running list
-                iounList.add(createMagicItem(inputItem.hoardID,index, listOf("A14"),0))
+                iounList.add(createMagicItemTuple(inputItem.hoardID,index, listOf("A14"),0).magicItem)
             }
 
             // Add dead stones TODO
             if (deadStones > 0){
 
                 val deadStoneKey = inputItem.templateID //TODO replace with actual primary key
-                val deadStoneItem = createMagicItem(inputItem.hoardID,deadStoneKey, listOf("A14"),0)
+                val deadStoneItem = createMagicItemTuple(inputItem.hoardID,deadStoneKey, listOf("A14"),0).magicItem
 
                 repeat(deadStones) { iounList.add(deadStoneItem) }
             }
