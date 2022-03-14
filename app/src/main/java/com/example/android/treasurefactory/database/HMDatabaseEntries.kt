@@ -106,15 +106,15 @@ data class GemEntity(
 data class ArtObjectEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
     val hoardID: Int,
-    @ColumnInfo(name="icon_id") val iconID: String,
-    val artType: String,
-    val renown: String,
-    val size: String,
-    val condition: String,
-    val materials: String,
-    val quality: String,
+    val name: String,
+    val artType: Int,
+    val renown: Int,
+    val size: Int,
+    val condition: Int,
+    val materials: Int,
+    val quality: Int,
     val age: Int,
-    val subject: String,
+    val subject: Int,
     val valueLevel: Int)
 
 @Entity(tableName = "hackmaster_magic_item_table",
@@ -149,9 +149,11 @@ data class SpellCollectionEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
     val hoardID: Int,
     @ColumnInfo(name="icon_id") val iconID: String,
-    val name: String = "<Spell Scroll>",
-    val type: String = "scroll",
-    val properties: Map<String,Double> = emptyMap(),
+    val name: String,
+    val type: Int,
+    val properties: List<Pair<String,Double>>,
+    val gpValue: Double,
+    val xpValue: Int,
     val spells: List<Spell> = listOf(),
     val curse: String = "")
 
@@ -197,7 +199,7 @@ fun List<ArtObjectEntity>.asDomainModel(): List<ArtObject> { //TODO refactor map
         ArtObject(
             it.artID,
             it.hoardID,
-            it.iconID,
+            it.name,
             it.artType,
             it.renown,
             it.size,
@@ -241,8 +243,10 @@ fun List<SpellCollectionEntity>.asDomainModel(): List<SpellCollection> { // TODO
             it.hoardID,
             it.iconID,
             it.name,
-            it.type,
+            enumValues<SpCoType>()[it.type],
             it.properties,
+            it.gpValue,
+            it.xpValue,
             it.spells,
             it.curse )
     }

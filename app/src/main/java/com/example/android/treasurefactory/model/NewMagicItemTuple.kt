@@ -1,11 +1,7 @@
 package com.example.android.treasurefactory.model
 
-/**
- * Primary key for Gut Stone entry in gem database
- *
- * @since 03/11/2022
- */
-const val GUT_STONE_KEY = 57
+/** Primary key for Gut Stone entry in gem database */
+const val GUT_STONE_KEY = 58
 
 /** Return type of standard magic item generation procedure. */
 data class NewMagicItemTuple(val magicItem: MagicItem,
@@ -15,12 +11,13 @@ data class NewMagicItemTuple(val magicItem: MagicItem,
  * Messenger object for ordering one or many magic item(s) with special generation procedures.
  *
  * @param spellParams Parameters for items containing spells
+ * @param quantity How many to generate, determined during order creation. Ignored for non-ioun stone orders.
  */
-data class SpecialItemOrder(val itemType:SpItType, val spellParams: SpellCollectionOrder?)
+data class SpecialItemOrder(val parentHoard:Int, val itemType:SpItType, val spellParams: SpellCollectionOrder?, val quantity: Int = 0)
 
 /** Type of magic item to generate which has special generation procedures. */
 enum class SpItType(){
-    SPELL_SCROLL,RING_OF_SPELL_STORING,TREASURE_MAP
+    SPELL_SCROLL,RING_OF_SPELL_STORING,IOUN_STONES,TREASURE_MAP
 }
 
 // region [ Spell Collection classes ]
@@ -43,6 +40,7 @@ data class SpellCollectionOrder(val collectionType: SpCoType,
                                 val allowedSources: SpCoSources,
                                 val allowRestricted: Boolean,
                                 val genMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
+                                val isCursed: Boolean,
                                 val allowedCurses: SpCoCurses = SpCoCurses.ANY_CURSE)
 
 /** Type of spell collection to generate. */
@@ -50,6 +48,7 @@ enum class SpCoType{
     SCROLL,
     BOOK,
     ALLOTMENT,
+    RING,
     OTHER
 }
 

@@ -1,5 +1,7 @@
 package com.example.android.treasurefactory.model
 
+const val DEFAULT_MAX_SPELLS_PER_SCROLL = 7
+
 data class HoardOrder(var hoardName: String = "Untitled Hoard",
                       var creationDescription: String = "",
                       var copperPieces: Int = 0, // Coinage is determined before order is generated
@@ -18,26 +20,53 @@ data class HoardOrder(var hoardName: String = "Untitled Hoard",
                       val genParams: OrderParams = OrderParams()
 )
 
-data class OrderParams(val _gemMinLvl: Int = 0, val _gemMaxLvl : Int = 16,
-                       val _artMinLvl: Int = -19, val _artMaxLvl: Int = 31,
-                       val allowArtMaps: Boolean = false,
-                       val allowArcane: Boolean = true,
-                       val allowDivine: Boolean= true,
-                       val allowNonSpell: Boolean = true,
-                       val allowScrollMaps: Boolean= false,
-                       val _spellMinLvl: Int = 1, val _spellMaxLvl: Int = 9,
-                       val allowIntWeapons: Boolean = true,
-                       val allowArtifacts: Boolean = true) {
+/**
+ * Additional parameters for what may be generated with this order.
+ */
+data class OrderParams(val gemParams: GemRestrictions = GemRestrictions(),
+                       val artParams: ArtRestrictions = ArtRestrictions(),
+                       val magicParams: MagicItemRestrictions = MagicItemRestrictions())
 
-    val gemMinLvl = correctOOBInt(_gemMinLvl, 0, 16)
-    val gemMaxLvl = correctOOBInt(_gemMaxLvl, gemMinLvl, 16)
-    val artMinLvl = correctOOBInt(_artMinLvl, -19, 31)
-    val artMaxLvl = correctOOBInt(_artMaxLvl, artMinLvl, 31)
-    val spellMinLvl = correctOOBInt(_spellMinLvl, 0, 9)
-    val spellMaxLvl = correctOOBInt(_spellMaxLvl, spellMinLvl, 9)
-
-    private fun correctOOBInt (input: Int, min: Int, max: Int) =
-        if (input < min) { min } else { if (input > max) { max } else { input } }
-
-    // TODO: When go to spell generation, build in safeguards for generating divine spells despite ranges outside of 1..7
+data class GemRestrictions(val _minLvl: Int = 0, val _maxLvl : Int = 16) {
+    val levelRange = IntRange(
+        _minLvl.coerceIn(0,16),
+        if ( _minLvl.coerceIn(0,16) >= _maxLvl ) _minLvl.coerceIn(0,16) else _maxLvl.coerceIn(0,16)
+    )
 }
+
+data class ArtRestrictions(val _minLvl: Int = -19, val _maxLvl: Int = 31,
+                           val paperMapChance: Int = 0) {
+    val levelRange = IntRange(
+        _minLvl.coerceIn(-19,31),
+        if (_minLvl.coerceIn(-19,31) >= _maxLvl) _minLvl.coerceIn(-19,31) else _maxLvl.coerceIn(-19,31)
+    )
+}
+
+data class MagicItemRestrictions(val scrollMapChance: Int = 0,
+                                 val allowCursedItems: Boolean = true,
+                                 val allowIntWeapons: Boolean = true,
+                                 val allowArtifacts: Boolean = true,
+                                 val spellCoRestrictions: SpellCoRestrictions =
+                                     SpellCoRestrictions(allowCurse = allowCursedItems))
+
+data class SpellCoRestrictions(val _minLvl: Int = 0,
+                               val _maxLvl: Int = 9,
+                               val allowedDisciplines: AllowedDisciplines = AllowedDisciplines(),
+                               val spellCountMax: Int = DEFAULT_MAX_SPELLS_PER_SCROLL,
+                               val spellSources: SpCoSources = SpCoSources(true,false,false),
+                               val allowRestricted: Boolean = false,
+                               val allowCurse: Boolean = true,
+                               val allowedCurses: SpCoCurses = SpCoCurses.STRICT_GMG,
+                               val genMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
+) {
+    val levelRange = IntRange(
+        _minLvl.coerceIn(if (allowedDisciplines.arcane) 0..9 else 1..7),
+        if (_minLvl.coerceIn(if (allowedDisciplines.arcane) 0..9 else 1..7) >= _maxLvl) {
+            _minLvl.coerceIn(if (allowedDisciplines.arcane) 0..9 else 1..7)
+        } else {
+            _maxLvl.coerceIn(if (allowedDisciplines.arcane) 0..9 else 1..7)
+        }
+    )
+}
+
+data class AllowedDisciplines(val arcane: Boolean = true, val divine: Boolean = true, val natural: Boolean = false)

@@ -2,7 +2,7 @@ package com.example.android.treasurefactory.model
 
 import androidx.room.Ignore
 
-data class Spell(val templateID: Int = 0, val name: String = "<undefined spell>", val type: String,
+data class Spell(val templateID: Int = 0, val name: String = "<undefined spell>", val type: SpCoDiscipline,
                  val spellLevel: Int= 0,
                  val sourceText: String = "<undefined source>", val sourcePage: Int = 0,
                  val schools: List<String>, val spheres: List<String>, val subclass: String,

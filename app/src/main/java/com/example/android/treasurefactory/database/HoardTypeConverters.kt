@@ -1,6 +1,7 @@
 package com.example.android.treasurefactory.database
 
 import androidx.room.TypeConverter
+import com.example.android.treasurefactory.model.SpCoType
 import com.example.android.treasurefactory.model.Spell
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -78,10 +79,27 @@ class HoardTypeConverters {
     }
 
     @TypeConverter
+    fun fromSpCoType(spCoType: SpCoType) : Int = spCoType.ordinal
+
+    @TypeConverter
+    fun toSpCoType(ordinal: Int) : SpCoType = enumValues<SpCoType>()[ordinal]
+
+    @TypeConverter
     fun fromBoolean(bool: Boolean) : String? = Gson().toJson(bool)
 
     @TypeConverter
     fun toBoolean(jsonBool: String?): Boolean = Gson().fromJson(jsonBool,Boolean::class.java)
+
+    @TypeConverter
+    fun fromListOfDoubleStringPairs(list: List<Pair<Double,String>>?) : String? = Gson().toJson(list)
+
+    @TypeConverter
+    fun toListOfDoubleStringPairs(jsonList: String?) : List<Pair<Double,String>?>? {
+
+        val typeToken = object : TypeToken<List<Pair<Double,String>>>() {}.type
+
+        return Gson().fromJson(jsonList,typeToken)
+    }
 
     @TypeConverter
     fun fromListOfLongStringPairs(list: List<Pair<Long,String>>?) : String? = Gson().toJson(list)

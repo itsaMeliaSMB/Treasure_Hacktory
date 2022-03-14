@@ -9,6 +9,22 @@ import kotlin.random.Random
 
 const val ORDER_LABEL_STRING = "order_details"
 
+const val MAX_SPELLS_PER_SCROLL = 50
+const val MAX_SPELLS_PER_BOOK = 120
+
+/**
+ * Primary key of first single Ioun stone in database.
+ *
+ * @since 3/13/2022
+ * */
+const val FIRST_IOUN_STONE_KEY = 855
+/**
+ * Primary key of last (dead) single Ioun stone in database.
+ *
+ * @since 3/13/2022
+ * */
+const val LAST_IOUN_STONE_KEY = 868
+
 class HMTreasureFactory {
 
     companion object {
@@ -135,7 +151,8 @@ class HMTreasureFactory {
         /**
          * Returns an art object based on the method laid out in HackJournal #6
          */
-        fun createArtObject(parentHoardID: Int) : ArtObject {
+        fun createArtObject(parentHoardID: Int,
+                            itemRestrictions: ArtRestrictions) : Pair<ArtObject,MagicItem?> {
 
             var temporaryRank:  Int
             var ageInYears:     Int
@@ -156,52 +173,52 @@ class HMTreasureFactory {
 
             when (Random.nextInt(1,101)) {
 
-                in 1..5     -> {
+                in 1..5     -> { // Paper art
                     artType = 0
                     condModifier = -2
                     ageModifier = -2
                 }
-                in 6..15    -> {
+                in 6..15    -> { //
                     artType = 1
                     condModifier = -2
                     ageModifier = -2
                 }
-                in 16..30   -> {
+                in 16..30   -> { //
                     artType = 2
                     condModifier = -1
                     ageModifier = -1
                 }
-                in 31..45   -> {
+                in 31..45   -> { //
                     artType = 3
                     condModifier = -1
                     ageModifier = -1
                 }
-                in 46..60   -> {
+                in 46..60   -> { //
                     artType = 4
                     condModifier = -1
                     ageModifier = -1
                 }
-                in 61..70   -> {
+                in 61..70   -> { //
                     artType = 5
                     condModifier = 0
                     ageModifier = 0
                 }
-                in 71..80   -> {
+                in 71..80   -> { //
                     artType = 6
                     condModifier = 0
                     ageModifier = 0
                 }
-                in 81..90   -> {
+                in 81..90   -> { //
                     artType = 7
                     condModifier = 1
                     ageModifier = 0
                 }
-                in 91..99   -> {
+                in 91..99   -> { //
                     artType = 8
                     condModifier = 2
                     ageModifier = 0
                 }
-                else        -> {
+                else        -> { // Magical
                     artType = 3
                     condModifier = 3
                     ageModifier = 0
@@ -444,11 +461,23 @@ class HMTreasureFactory {
 
             //endregion
 
+            // region [ Append treasure map, if indicated ]
+
+            val paperTreasureMap = if ((artType == 0)||
+                (Random.nextInt(1,101)<= itemRestrictions.paperMapChance)) {
+
+                generateTreasureMap(parentHoardID,"paper artwork")
+
+            } else null
+
+            // endregion
+
             // ---Generate and return new art object ---
 
             return ArtObject(0, parentHoardID, ArtObject.getRandomName(artType,subject),
                 artType, renown, size, condition, materials, quality, ageInYears,
-                subject, ( renown + size + condition + quality + subjectRank + ageRank ) )
+                subject, ( renown + size + condition + quality + subjectRank + ageRank )
+            ) to paperTreasureMap
         }
 
         /**
@@ -456,11 +485,11 @@ class HMTreasureFactory {
          *
          * @param givenTemplate Primary key to query for a specific item. Negative values are ignored.
          * @param providedTypes Tables that are allowed to be queried to pick an item.
-         * @param mapSubChance Percentage chance of replacing a scroll with a treasure map. Can generate maps even when A3 is disallowed.
+         * @param itemRestrictions inherited parameters from hoard order limited what can be generated.
          */
         fun createMagicItemTuple(parentHoardID: Int, givenTemplate: Int = -1,
-                            providedTypes: List<String> = ANY_MAGIC_ITEM_LIST,
-                            mapSubChance :Int = 0) : NewMagicItemTuple {
+                                 providedTypes: List<String> = ANY_MAGIC_ITEM_LIST,
+                                 itemRestrictions: MagicItemRestrictions = MagicItemRestrictions()) : NewMagicItemTuple{
 
             val VALID_TABLE_TYPES = linkedSetOf<String>(
                 "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
@@ -619,6 +648,8 @@ class HMTreasureFactory {
             var currentRoll:    Int
 
             val notesLists=     LinkedHashMap<String,ArrayList<String>>()
+            var specialItemType : SpItType? = null
+            var spellListOrder : SpellCollectionOrder? = null
 
             // region Magic item detail holders
 
@@ -639,7 +670,7 @@ class HMTreasureFactory {
 
             // region [ Generate Weighted Table A1 list with only allowed item types ]
 
-            val allowedTypes = if (mapSubChance > 0) {
+            val allowedTypes = if (itemRestrictions.scrollMapChance > 0) {
                 VALID_TABLE_TYPES.filter { providedTypes.contains(it) } + listOf("A3")
             } else {
                 VALID_TABLE_TYPES.filter { providedTypes.contains(it) }
@@ -708,10 +739,14 @@ class HMTreasureFactory {
 
             // region [ If applicable, check for special generation rules ]
 
-            fun generateSpellScrollDetails(inheritedRoll:Int,
-                                           inheritedAffinity: Boolean? = null): ArrayList<String> {
+            fun generateSpellScrollOrder(inheritedRoll:Int,
+                                         isCursed: Boolean,
+                                         inheritedDiscipline: SpCoDiscipline = SpCoDiscipline.ALL_MAGIC): SpellCollectionOrder {
 
-                val useArcane = inheritedAffinity ?: Random.nextBoolean()
+                val useArcane = when (inheritedDiscipline){
+                    SpCoDiscipline.ARCANE -> true
+                    SpCoDiscipline.ALL_MAGIC -> Random.nextBoolean()
+                    else    -> false }
                 val halvedIndex: Int = if (inheritedRoll < 2) 1 else inheritedRoll / 2
                 val spellCount : Int
                 val spellRange: IntRange
@@ -772,10 +807,17 @@ class HMTreasureFactory {
                         spellRange = if (useArcane) IntRange(0,9) else IntRange(1,7)}
                 }
 
-                return arrayListOf(
-                    "spell type = ${if (useArcane) "Magic-User" else "Cleric"}",
-                    "number of spells = $spellCount",
-                    "spell level range = ${spellRange.first} to ${spellRange.last}")
+                return SpellCollectionOrder(
+                    SpCoType.SCROLL,
+                    if (useArcane) SpCoDiscipline.ARCANE else SpCoDiscipline.DIVINE,
+                    spellCount,
+                    spellRange,
+                    itemRestrictions.spellCoRestrictions.spellSources,
+                    itemRestrictions.spellCoRestrictions.allowRestricted,
+                    itemRestrictions.spellCoRestrictions.genMethod,
+                    isCursed,
+                    itemRestrictions.spellCoRestrictions.allowedCurses
+                )
             }
 
             when (itemType) {
@@ -784,10 +826,11 @@ class HMTreasureFactory {
 
                 "A3" -> {
 
-                    if ((mapSubChance > 0) &&
-                        (Random.nextInt(1, 101) <= mapSubChance)
+                    if ((itemRestrictions.scrollMapChance > 0) &&
+                        (Random.nextInt(1, 101) <= itemRestrictions.scrollMapChance)
                     ) {
 
+                        specialItemType = SpItType.TREASURE_MAP
                         itemType = "Map"
                         mName = "Treasure Map"
                         baseTemplateID = -1
@@ -801,9 +844,11 @@ class HMTreasureFactory {
                             if (currentRoll <= 33) {
 
                                 //Spell scroll result
+                                spellListOrder = generateSpellScrollOrder(currentRoll,false)
+
+                                //TODO Streamline Magic item details for when special orders are indicated
                                 itemType = "Spell Scroll"
                                 mName = "Spell Scroll"
-                                notesLists[ORDER_LABEL_STRING] = generateSpellScrollDetails(currentRoll)
                                 baseTemplateID = -1
 
                             } else {
@@ -812,11 +857,11 @@ class HMTreasureFactory {
 
                                     itemType = "Spell Scroll"
                                     mName = "Spell Scroll"
-                                    notesLists[ORDER_LABEL_STRING] =
-                                        generateSpellScrollDetails(Random.nextInt(1,34))
+                                    spellListOrder =
+                                        generateSpellScrollOrder(Random.nextInt(1,34),
+                                            itemRestrictions.allowCursedItems)
                                     baseTemplateID = -1
                                     mIsCursed = true
-                                    // TODO Add discrimination to magic-item-to-scroll function for cursed
 
                                 } else if (currentRoll >= 96) {
 
@@ -1781,7 +1826,6 @@ class HMTreasureFactory {
                 if (Random.nextInt(1,101) <= template.intelChance) {
 
                     var wIntelligence:          Int
-                    val wAlignment:             String
                     val weaponEgo:              Int
                     var wCommLevel              = 0
                     var wLanguagesKnown         = 0
@@ -1911,7 +1955,7 @@ class HMTreasureFactory {
 
                     // region [ Determine alignment ]
 
-                    wAlignment = if (mAlignment.isBlank()){
+                    val wAlignment = if (mAlignment.isBlank()){
 
                          abbrevToAlignment( when (Random.nextInt(1,101)){
 
@@ -2731,7 +2775,7 @@ class HMTreasureFactory {
                 // Generate magic item details for outliers and exceptional items TODO
                 when (mName) {
 
-                    "Treasure map"  -> {
+                    "Treasure map"  -> { //TODO port to own function, scoped within this class
 
                         val isRealMap: Boolean
                         val distanceRoll= Random.nextInt(1,21)
@@ -2929,6 +2973,31 @@ class HMTreasureFactory {
 
             // endregion
 
+            val specialItemOrder = if (specialItemType != null) {
+
+                when (specialItemType) {
+
+                    SpItType.SPELL_SCROLL ->
+                        if (spellListOrder != null)
+                            SpecialItemOrder(mHoardID,SpItType.SPELL_SCROLL,spellListOrder)
+                        else
+                            null
+
+                    SpItType.RING_OF_SPELL_STORING ->
+                        if (spellListOrder != null)
+                            SpecialItemOrder(mHoardID,SpItType.RING_OF_SPELL_STORING,spellListOrder)
+                        else
+                            null
+
+                    SpItType.IOUN_STONES ->
+                        SpecialItemOrder(mHoardID,SpItType.IOUN_STONES,null,itemCharges.coerceAtLeast(1))
+
+                    SpItType.TREASURE_MAP ->
+                        SpecialItemOrder(mHoardID,SpItType.TREASURE_MAP,null)
+                }
+
+            } else null
+
             return NewMagicItemTuple(
                 MagicItem(
                     0,
@@ -2945,18 +3014,84 @@ class HMTreasureFactory {
                     mIsCursed,
                     mAlignment,
                     mNotes),
-                null, null,)
+                null, null)
         }
 
-        /**
-         * Converts a provided MagicItem into a SpellCollection based on the item's notes[2] value.
-         */
-        fun convertItemToSpellScroll(inputItem: MagicItem): SpellCollection {
+        /** Converts a [SpellCollectionOrder] into a [SpellCollection], always as a scroll.*/
+        fun convertOrderToSpellScroll(parentHoard : Int, order: SpellCollectionOrder): SpellCollection {
 
-            val VALID_TYPES = setOf("Magic-User","Cleric","Druid")
-            val dummySpell = Spell(217,
-                "\"Push\"",
-                "\"Magic-User\"",
+            // region < Local extension functions >
+
+            fun SpCoGenMethod.fixGenerationMethod(inputType: SpCoDiscipline) : SpCoGenMethod {
+
+                return when (inputType) {
+
+                    SpCoDiscipline.ARCANE -> {
+                        if ((this == SpCoGenMethod.CHOSEN_ONE)||
+                            (this == SpCoGenMethod.ANY_PHYSICAL)) {
+                            SpCoGenMethod.TRUE_RANDOM
+                        } else {
+                            this
+                        }
+                    }
+
+                    SpCoDiscipline.DIVINE -> {
+                        if ((this == SpCoGenMethod.CHOSEN_ONE)||
+                            (this == SpCoGenMethod.SPELL_BOOK)||
+                            (this == SpCoGenMethod.LEVEL_ACQUISITION)) {
+                            SpCoGenMethod.TRUE_RANDOM
+                        } else {
+                            this
+                        }
+
+                    }
+
+                    else                  -> SpCoGenMethod.TRUE_RANDOM
+                }
+            }
+
+            fun IntRange.fixSpellRange(inputType: SpCoDiscipline = SpCoDiscipline.ALL_MAGIC) : IntRange {
+
+                val fixedMinimum: Int
+                val fixedMaximum: Int
+
+                if (inputType == SpCoDiscipline.ARCANE){
+
+                    fixedMinimum = this.first.coerceIn(0,9)
+
+                    fixedMaximum = if (this.last > fixedMinimum) {
+                        this.last.coerceIn(0,9)
+                    } else {
+                        fixedMinimum
+                    }
+                } else {
+
+                    fixedMinimum = this.first.coerceIn(1,7)
+
+                    fixedMaximum = if (this.last > fixedMinimum) {
+                        this.last.coerceIn(1,7)
+                    } else {
+                        fixedMinimum
+                    }
+                }
+
+                return IntRange(fixedMinimum,fixedMaximum)
+            }
+
+            fun SpCoDiscipline.asClassString() : String = when (this) {
+
+                SpCoDiscipline.ARCANE   -> "Magic-User"
+                SpCoDiscipline.DIVINE   -> "Cleric"
+                SpCoDiscipline.NATURAL  -> "Druid"
+                SpCoDiscipline.ALL_MAGIC-> "Assorted"
+            }
+
+            // endregion
+
+            val dummySpell = Spell(
+                217,
+                "“Push”",
+                SpCoDiscipline.ARCANE,
                 1,
                 "\"Player's Handbook\"",
                 184,
@@ -2968,93 +3103,34 @@ class HMTreasureFactory {
             )
 
             val spellList = ArrayList<Spell>()
-            val orderList = inputItem.notes[
-                    inputItem.notes[0].indexOfFirst{it == ORDER_LABEL_STRING} ]
             val propertiesList = ArrayList<Pair<String,Double>>()
-            var curse = ""
-            var itemName = ""
+            val itemName: String
             val iconID : String
+            val spellType = order.spellType
+            val generationMethod = order.genMethod.fixGenerationMethod(spellType)
+            val spellCount = if ((generationMethod == SpCoGenMethod.TRUE_RANDOM)||
+                (generationMethod == SpCoGenMethod.LEVEL_ACQUISITION)) {
 
-            // region < Getter functions >
-
-            fun getType(): String {
-
-                val orderString = (orderList.firstOrNull() { it.startsWith("spell type = ") })
-                    ?: "spell type = Undefined"
-
-                val result = orderString.substringAfter("spell type = ","Undefined")
-
-                return if (VALID_TYPES.contains(result)) {
-                    result
-                } else {
-                    "Undefined" //TODO add handling for "undefined" db queries
-                }
-            }
-
-            fun getCount() : Int {
-
-                val orderString = (orderList.firstOrNull() { it.startsWith("number of spells = ") })
-                    ?: "number of spells = 1"
-                val parsedCount = orderString.substringAfter("number of spells = ","1").toInt()
-
-                return if (parsedCount > 0) parsedCount else 1
-            }
-
-            fun getRange() : IntRange {
-
-                val orderString = (orderList.firstOrNull() { it.startsWith("spell level range = ") })
-                    ?: "spell level range = 1 to 9"
-
-                val splitStrings = orderString.substringAfter("spell level range = ","1 to 7")
-                    .split(" to ")
-
-                val minimum = splitStrings.first().toIntOrNull() ?: 1
-                val maximum = splitStrings.last().toIntOrNull() ?: minimum
-
-                return IntRange(maximum,maximum)
-            }
-
-            // endregion
-
-            val spellType = getType()
-            val spellCount = getCount()
-            var spellRange = getRange()
-
-            // region [ Fix range, if applicable ]
-
-            if (spellType == "Magic-User") {
-
-                if (spellRange.first < 0) spellRange = (IntRange(0,spellRange.last))
-
-                if (spellRange.last > 9) spellRange = (IntRange(spellRange.first,9))
-
-            } else if ((spellType != "Magic-User")&&(spellRange.last > 7)) {
-
-                if (spellRange.first < 1) spellRange = (IntRange(1,spellRange.last))
-
-                if (spellRange.last > 7) spellRange = (IntRange(spellRange.first,7))
-
-            }
-
-            // endregion
-
-            // region [ Roll spells ] TODO
-
-            if (VALID_TYPES.contains(spellType)){
-
-                repeat(spellCount){
-
-                    //TODO query database instead of returning sample
-                    var spellTemplate = SAMPLE_ARCANE_SPELL
-
-                    // Add spell to running list
-                    spellList.add(convertTemplateToSpell(spellTemplate))
-                }
+                order.spellCount.coerceIn(1..MAX_SPELLS_PER_SCROLL)
 
             } else {
 
-                //Add error-handling entry
-                repeat(spellCount){spellList.add(dummySpell)}
+                order.spellCount.coerceIn(0..MAX_SPELLS_PER_SCROLL)
+            }
+            val spellRange = order.spellLvRange.fixSpellRange(spellType)
+            var curse = ""
+
+            // region TODO [ Roll spells ] TODO
+
+            //TODO Add genMethod discrimination and alternate methods. For now, only TRUE_RANDOM is effectively implemented.
+
+            repeat(spellCount){
+
+                //TODO query database instead of returning sample
+                var spellTemplate = SAMPLE_ARCANE_SPELL
+
+                // Add spell to running list
+                spellList.add(convertTemplateToSpell(spellTemplate))
             }
 
             // endregion
@@ -3070,8 +3146,7 @@ class HMTreasureFactory {
                 4   -> "Container: Metal tube" to 0.0
                 5   -> "Container: Wooden tube" to 0.0
                 else-> "Container: None (found loose)" to 0.0
-            }
-            )
+            })
 
             // Roll material
             propertiesList.plusAssign( when (Random.nextInt(1,11)){
@@ -3079,22 +3154,22 @@ class HMTreasureFactory {
                 in 6..8 -> "Material: Parchment" to 0.0
                 9       -> "Material: Papyrus" to 0.0
                 else    -> "Material: Non-standard (GM's choice)" to 0.0
-            } )
+            })
 
             // endregion
 
             // region [ Add recommended curse (if applicable) ]
 
             // Roll to determine if erroneous scroll
-            if (Random.nextInt(1,101) in 1..Random.nextInt(5,11)) {
+            if ((Random.nextInt(1,101) in 1..Random.nextInt(5,11))||(order.allowedCurses != SpCoCurses.NONE)) {
                 curse = "(GMG) Casting from this scroll will result in spell mishap (see GMG pg 212)."
             }
 
-            // Add cursed effect from page 225-226 of GMG
-            if ((inputItem.isCursed)&&(curse.isNotBlank())) {
+            // Add cursed effect from indicated sources.
+            if ((order.isCursed)&&(curse.isNotBlank())) {
 
-                // Pick from curse list on GMG pgs 225-226 (plus custom effects)
-                val curseList = listOf(
+                /** Example curse list on GMG pgs 225-226 */
+                val cursesExample = listOf(
                     "(GMG) Bad luck (-1 on attacks and saving throws).",
                     "(GMG) he character's beard grows one inch per minute.",
                     "(GMG) The character is teleported away from the rest of the party.",
@@ -3110,7 +3185,10 @@ class HMTreasureFactory {
                     "(GMG) The character suffers amnesia.",
                     "(GMG) The character feels compelled to give away all his belongings.",
                     "(GMG) The character must save vs. paralyzation or suffer petrification.",
+                )
 
+                /** Curses extrapolated from official material, but not on example list */
+                val cursesExtended = listOf(
                     "[GMG+] The character suffers a spell mishap (see GMG pg 82, Table 7E).",
                     "[GMG+] The character develops some form insanity (see GMG pg 86, Table 7H).",
                     "[GMG+] The character suffers from a minor malevolent effect (see GMG pg 285, Table B125). Re-roll incompatible results.",
@@ -3118,7 +3196,10 @@ class HMTreasureFactory {
                     "[SSG] The character experiences the effect of a Wild Surge (see SSG pg 38, Table 4L).",
                     "[SSG] The character suffers from the effect of a Tattoo Effect (see SSG pg 35, Table 4G) for 1 week.",
                     "[PHB] The character suffers the effect of Bestow Curse (see PHB page 215).",
+                )
 
+                /** Homebrew curses thought up by app developer */
+                val cursesHomebrew = listOf(
                     "[TrH] All reversible spells are reversed. Otherwise, minimum 50% chance of spell failure.",
                     "[TrH] All spells inscribed on the scroll go off at once, as if a spell-jacked caster mis-casted.",
                     "[TrH] The character loses access to one of their talents, determined at random.",
@@ -3135,15 +3216,28 @@ class HMTreasureFactory {
                     "[TrH] The character immediately becomes one step more intoxicated (see GMG pgs 170-172).",
                     "[TrH] The GM may use a single GM coupon, provided they do so immediately and target the caster."
                 )
-                val curseEntry = Random.nextInt(0,curseList.size)
-                curse = curseList[curseEntry] + " {#${curseEntry}}"
+
+                val curseList = when (order.allowedCurses) {
+
+                    SpCoCurses.STRICT_GMG       -> cursesExample
+
+                    SpCoCurses.OFFICIAL_ONLY    -> listOf(cursesExample,cursesExtended).flatten()
+
+                    SpCoCurses.ANY_CURSE        -> listOf(cursesExample,cursesExtended,cursesHomebrew).flatten()
+
+                    SpCoCurses.NONE             -> listOf("")
+                }
+
+                val curseIndex = Random.nextInt(0,curseList.size)
+
+                curse = curseList[curseIndex] + if (curseList[curseIndex].isNotBlank()) " {#${curseIndex}}" else ""
             }
 
             // endregion
 
             // region [ Get item name ]
 
-            itemName = "${if (curse.isNotEmpty()) "Cursed" else ""} $spellType Spell Scroll " +
+            itemName = "${if (curse.isNotBlank()) "Cursed " else ""} $spellType Spell Scroll " +
                     "(${spellCount}x Lv.${spellRange.first}-${spellRange.last})"
 
             // endregion
@@ -3152,53 +3246,194 @@ class HMTreasureFactory {
             iconID = if (curse.isBlank()) {
 
                 when (spellType) {
-
-                    "Magic-User"-> "scroll_red"
-                    "Cleric"    -> "scroll_blue"
-                    else        -> "scroll_base"
+                    SpCoDiscipline.ARCANE   -> "scroll_red"
+                    SpCoDiscipline.DIVINE   -> "scroll_blue"
+                    SpCoDiscipline.NATURAL  -> "scroll_green"
+                    else                    -> "scroll_base"
                 }
 
             } else {
 
                 "scroll_cursed"
             }
+            // endregion
+
+            // region [ Calculate GP and XP value ]
+
+            var gpTotal = 0.0
+            var xpTotal = 0
+
+            if (propertiesList.isNotEmpty()) { propertiesList.forEach { (_, gpValue) -> gpTotal += gpValue} }
+
+            if (spellList.isNotEmpty()) { spellList.forEach {
+                gpTotal += if (it.spellLevel == 0) 75.0 else (300.0 * it.spellLevel)
+                if (!(order.isCursed)) xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel)
+            }}
+
+            // endregion
 
             return SpellCollection(0,
-                inputItem.hoardID,
+                parentHoard,
                 iconID,
                 itemName,
-                "Scroll",
+                SpCoType.SCROLL,
                 propertiesList.toList(),
-                0.0, //TODO port over GP value calculation
-                0, //TODO port over XP value calculation
+                gpTotal,
+                xpTotal,
                 spellList.toList(),
                 curse
             )
         }
 
-        /**
-         * Converts a provided MagicItem into list of Ioun Stones per the rules on GMG page 258.
-         */
-        fun convertItemToIoun(inputItem: MagicItem): List<MagicItem> {
+        /** Generates a treasure map, following the rules outlined on GMG pgs 181 and 182 */
+        fun generateTreasureMap(parentHoard: Int, sourceDesc: String = "", allowFalseMaps: Boolean = true): MagicItem {
+
+            val notesLists=     LinkedHashMap<String,ArrayList<String>>()
+
+            val nameBuilder=    StringBuilder("Treasure Map")
+
+            val mNotes          : List<List<String>>
+
+            val isRealMap: Boolean
+            val distanceRoll= Random.nextInt(1,21)
+
+            // Roll type of map
+            when (Random.nextInt(if (allowFalseMaps) 1 else 2,11)) {
+
+                1       -> {
+                    isRealMap = false
+                    notesLists["Map details"]?.plusAssign("False map " +
+                            "(No treasure or already looted")
+                    nameBuilder.append(" (False)")
+                }
+
+                in 2..7 -> {
+                    isRealMap = true
+                    notesLists["Map details"]?.plusAssign("Map to monetary treasure " +
+                            "(0% chance of art objects or magic items")
+                    nameBuilder.append(" (Monetary)")
+                }
+
+                in 8..9 -> {
+                    isRealMap = true
+                    notesLists["Map details"]?.plusAssign("Map to magical treasure " +
+                            "(0% chance of coin)")
+                    nameBuilder.append(" (Magical)")
+                }
+
+                else    -> {
+                    isRealMap = true
+                    notesLists["Map details"]?.plusAssign("Map to combined treasure")
+                    nameBuilder.append(" (Combined)")
+                }
+            }
+
+            // Roll direction of treasure location
+            when (Random.nextInt(1,9)){
+                1 -> notesLists["Map details"]?.plusAssign("Located north")
+                2 -> notesLists["Map details"]?.plusAssign("Located northeast")
+                3 -> notesLists["Map details"]?.plusAssign("Located east")
+                4 -> notesLists["Map details"]?.plusAssign("Located southeast")
+                5 -> notesLists["Map details"]?.plusAssign("Located south")
+                6 -> notesLists["Map details"]?.plusAssign("Located southwest")
+                7 -> notesLists["Map details"]?.plusAssign("Located west")
+                8 -> notesLists["Map details"]?.plusAssign("Located northwest")
+            }
+
+            // Roll distance of treasure
+            when (distanceRoll) {
+
+                in 1..2 -> notesLists["Map details"]?.plusAssign("Hoard located in " +
+                        "labyrinth of caves found in lair")
+
+                in 3..6 -> notesLists["Map details"]?.plusAssign("Hoard located " +
+                        "outdoors, 5-8 miles distant")
+
+                in 7..9 -> notesLists["Map details"]?.plusAssign("Hoard located " +
+                        "outdoors, 10-40 miles distant")
+
+                else    -> notesLists["Map details"]?.plusAssign("Hoard located " +
+                        "outdoors, 50-500 miles distant")
+            }
+
+            if (distanceRoll > 2) {
+
+                when (Random.nextInt(1,11)) {
+
+                    1       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                            "buried and unguarded")
+                    2       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                            "hidden in water")
+                    in 3..7 -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                            "guarded in a lair")
+                    8       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                            "somewhere in ruins")
+                    9       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                            "in a burial crypt")
+                    else    -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                            "secreted in a town")
+                }
+            }
+
+            // Roll type of treasure
+            if (isRealMap)
+                notesLists["Map details"]?.plusAssign("Treasure present: " +
+                        listOf("I","G","H","F","A","B","C","D","E","Z","A and Z","A and H").random())
+
+            // Note item map replaced
+            if (sourceDesc.isNotBlank()){
+                notesLists["Map details"]?.plusAssign("This map replaced $sourceDesc")
+            }
+
+            fun convertMapToNestedLists(input: LinkedHashMap<String,ArrayList<String>>) : List<List<String>> {
+
+                val listHolder = ArrayList<List<String>>()
+                val nameHolder = ArrayList<String>()
+
+                listHolder[0] = listOf("") // Placeholder for parent list
+
+                input.onEachIndexed { index, entry ->
+
+                    nameHolder.add(entry.key)
+                    listHolder.add(index + 1,entry.value.toList())
+                }
+
+                listHolder[0] = nameHolder.toList()
+
+                return listHolder.toList()
+            }
+
+            return MagicItem(
+                0,
+                -1,
+                parentHoard,
+                "scroll_map",
+                "Map",
+                nameBuilder.toString(),
+                "GameMaster's Guide",
+                182,
+                0,
+                0.0,
+                mapOf(
+                    "fighter" to true,
+                    "thief" to true,
+                    "cleric" to true,
+                    "magic-user" to true,
+                    "druid" to true),
+                !isRealMap,
+                "",
+                convertMapToNestedLists(notesLists))
+        }
+
+        /** Generates ioun stones when indicated by standard magic item generation methods */
+        fun generateIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
 
             val iounList = arrayListOf<MagicItem>()
             val currentSet = mutableSetOf<Int>()
-            val orderList = inputItem.notes[
-                    inputItem.notes[0].indexOfFirst{it == ORDER_LABEL_STRING} ]
 
-            fun getItemCount(): Int {
-
-                val orderString = (orderList.firstOrNull() { it.startsWith("count = ") })
-                        ?: "count = 1"
-
-                // Get number of stones to generate
-                return orderString.substringAfter("count = ","1").toInt()
-            }
-
-            val itemCount = getItemCount()
-            var currentStone = 0
+            val itemCount = qty.coerceIn(1,10)
+            var currentStone : Int
             var deadStones = 0
-            var iounIndex = 0 // Primary key of entry
 
             // Roll which stones are present
             repeat(itemCount) {
@@ -3206,26 +3441,25 @@ class HMTreasureFactory {
                 currentStone = Random.nextInt(1,21)
 
                 // Convert to 'dead' stone if rolled or already present
-                if ((currentSet.contains(currentStone))||(currentStone > 15)) currentStone = 15
-
-                if (currentStone == 15) deadStones += 1 else currentSet.add(currentStone)
+                if ((currentSet.contains(currentStone))||(currentStone > 14))
+                    deadStones ++
+                else currentSet.add(currentStone)
             }
 
-            // Retrieve stones from database TODO
-            currentSet.sorted().forEach { index ->
-
-                // Get template based on index rolled TODO replace with actual primary keys
-                iounIndex = index
+            // Retrieve stones from database
+            currentSet.sorted().forEach { indexAddend ->
 
                 // Add to running list
-                iounList.add(createMagicItemTuple(inputItem.hoardID,index, listOf("A14"),0).magicItem)
+                iounList.add(createMagicItemTuple(parentHoard,
+                    (FIRST_IOUN_STONE_KEY + (indexAddend - 1)),
+                    listOf("A14")).magicItem)
             }
 
-            // Add dead stones TODO
+            // Add dead stones
             if (deadStones > 0){
 
-                val deadStoneKey = inputItem.templateID //TODO replace with actual primary key
-                val deadStoneItem = createMagicItemTuple(inputItem.hoardID,deadStoneKey, listOf("A14"),0).magicItem
+                val deadStoneItem = createMagicItemTuple(parentHoard,
+                    LAST_IOUN_STONE_KEY, listOf("A14")).magicItem
 
                 repeat(deadStones) { iounList.add(deadStoneItem) }
             }
@@ -3234,49 +3468,35 @@ class HMTreasureFactory {
             return iounList
         }
 
-        /**
-         * Converts a provided HMMagicItem into a list of Gem objects
-         */
-        fun convertItemToGutStone(inputItem: MagicItem): List<Gem> {
-
-            val GUT_STONE_KEY = 58
+        /** Generate Gut Stones if indicated during magic item generation */
+        fun generateGutStones(parentHoard: Int, qty: Int): List<Gem> {
 
             val gutStoneList = arrayListOf<Gem>()
-            val orderList = inputItem.notes[
-                    inputItem.notes[0].indexOfFirst{it == ORDER_LABEL_STRING} ]
 
-            fun getItemCount(): Int {
-
-                val orderString = (orderList.firstOrNull() { it.startsWith("count = ") })
-                        ?: "count = 1"
-
-                // Get number of stones to generate
-                return orderString.substringAfter("count = ","1").toInt()
-            }
-
-            repeat(getItemCount()){
-                gutStoneList.add(createGem(inputItem.hoardID,GUT_STONE_KEY))
+            repeat(qty.coerceAtLeast(1)){
+                gutStoneList.add(createGem(parentHoard, GUT_STONE_KEY))
             }
 
             return gutStoneList
         }
 
+        /** Converts a [SpellTemplate] into a [Spell], converting [type][SpellTemplate.type] to a [SpCoDiscipline]*/
         fun convertTemplateToSpell(template:SpellTemplate): Spell {
 
-            fun getTypeFromInt() : String {
+            fun getDisciplineFromInt() : SpCoDiscipline {
 
                 return when (template.type) {
-                    0   -> "Magic-User"
-                    1   -> "Cleric"
-                    2   -> "Druid"
-                    else-> "Undefined"
+                    0   -> SpCoDiscipline.ARCANE
+                    1   -> SpCoDiscipline.DIVINE
+                    2   -> SpCoDiscipline.NATURAL
+                    else-> SpCoDiscipline.ALL_MAGIC
                 }
             }
 
             return Spell(
                 template.refId,
                 template.name,
-                getTypeFromInt(),
+                getDisciplineFromInt(),
                 template.level,
                 template.source,
                 template.page,

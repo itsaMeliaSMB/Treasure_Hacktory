@@ -7,11 +7,11 @@ data class SpellCollection(
     val hoardID: Int,
     var iconID: String,
     var name: String = "<Spell Scroll>",
-    var type: String = "scroll",
+    var type: SpCoType,
     var properties: List<Pair<String,Double>> = emptyList(), //TODO refactor existing scroll generation to return list
     var gpValue: Double = 0.0, //TODO add as field to db entities
     var xpValue: Int = 0, //TODO add as field to db entities
-    var spells: List<Spell> = listOf(),
+    var spells: List<Spell> = emptyList(),
     var curse: String = "") {
 
     fun calculateGPValue(): Double {
