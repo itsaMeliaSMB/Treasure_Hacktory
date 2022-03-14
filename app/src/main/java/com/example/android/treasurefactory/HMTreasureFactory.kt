@@ -640,16 +640,17 @@ class HMTreasureFactory {
 
             var template:       MagicItemTemplate = SAMPLE_MAGIC_ITEM_TEMPLATE //TODO
 
-            var baseTemplateID: Int       // Container for primary key of the first template drawn. -1 indicates a template-less item
-            var itemType:       String
-            var itemCharges=    0
-            var gmChoice =      false
+            var baseTemplateID:     Int       // Container for primary key of the first template drawn. -1 indicates a template-less item
+            var itemType:           String
+            var itemCharges=        0
+            var gmChoice =          false
 
-            var currentRoll:    Int
+            var currentRoll:        Int
 
-            val notesLists=     LinkedHashMap<String,ArrayList<String>>()
-            var specialItemType : SpItType? = null
-            var spellListOrder : SpellCollectionOrder? = null
+            val notesLists=         LinkedHashMap<String,ArrayList<String>>()
+            var specialItemType:    SpItType? = null
+            var spellListOrder :    SpellCollectionOrder? = null
+            var gemOrder:           GemOrder? = null
 
             // region Magic item detail holders
 
@@ -2772,8 +2773,9 @@ class HMTreasureFactory {
 
             } else {
 
-                // Generate magic item details for outliers and exceptional items TODO
-                when (mName) {
+                // Generate magic item details for outliers and exceptional items
+                // TODO Clean this chunk up in light of new Tuple schema
+                    when (mName) {
 
                     "Treasure map"  -> { //TODO port to own function, scoped within this class
 
@@ -2912,7 +2914,10 @@ class HMTreasureFactory {
 
                 when (mName) {
 
+                    // TODO refactor this function to return SpellCollectionOrder
                     "Ring of Spell Storing" -> {
+
+                        specialItemType = SpItType.RING_OF_SPELL_STORING
 
                         val useArcane = Random.nextBoolean()
                         val maxLevel = 6 + if (useArcane) 2 else 0
@@ -2935,15 +2940,9 @@ class HMTreasureFactory {
                         }
                     }
 
-                    "Gut Stones"    -> {
-                        notesLists[ORDER_LABEL_STRING]?.plusAssign(
-                        "count = $itemCharges")
-                    }
+                    "Gut Stones"    -> gemOrder = GemOrder(GUT_STONE_KEY,itemCharges)
 
-                    "Ioun Stones"    -> {
-                        notesLists[ORDER_LABEL_STRING]?.plusAssign(
-                            "count = $itemCharges")
-                    }
+                    "Ioun Stones"    -> specialItemType = SpItType.IOUN_STONES
                 }
             }
 
@@ -3014,7 +3013,7 @@ class HMTreasureFactory {
                     mIsCursed,
                     mAlignment,
                     mNotes),
-                null, null)
+                null, gemOrder)
         }
 
         /** Converts a [SpellCollectionOrder] into a [SpellCollection], always as a scroll.*/
@@ -3087,20 +3086,6 @@ class HMTreasureFactory {
             }
 
             // endregion
-
-            val dummySpell = Spell(
-                217,
-                "“Push”",
-                SpCoDiscipline.ARCANE,
-                1,
-                "\"Player's Handbook\"",
-                184,
-                listOf("Con"),
-                emptyList<String>(),
-                "",
-                emptyList<String>(),
-                "(This is actually an error-handling entry)"
-            )
 
             val spellList = ArrayList<Spell>()
             val propertiesList = ArrayList<Pair<String,Double>>()
@@ -3284,6 +3269,12 @@ class HMTreasureFactory {
                 curse
             )
         }
+
+        //TODO Add a NewMagicItemTuple processor for sorting valid magic items and special orders
+
+        //TODO Add function or class for spell generation beyond true random
+
+        //TODO Add function for generating ring of spell storing from SpecialItemOrder
 
         /** Generates a treasure map, following the rules outlined on GMG pgs 181 and 182 */
         fun generateTreasureMap(parentHoard: Int, sourceDesc: String = "", allowFalseMaps: Boolean = true): MagicItem {
