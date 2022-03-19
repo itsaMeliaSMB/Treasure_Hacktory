@@ -1,7 +1,6 @@
 package com.example.android.treasurefactory.model
 
-/** Primary key for Gut Stone entry in gem database */
-const val GUT_STONE_KEY = 58
+
 
 /** Return type of standard magic item generation procedure. */
 data class NewMagicItemTuple(val magicItem: MagicItem,
