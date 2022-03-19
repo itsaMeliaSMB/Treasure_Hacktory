@@ -71,9 +71,9 @@ abstract class TreasureDatabase : RoomDatabase() {
          */
         suspend fun populateGemsByCSV(gemDao: GemDao) {
 
-            val FILEPATH = "src/main/res/raw/seed_gem_v01.csv"
+            val csvFilePath = "src/main/res/raw/seed_gem_v01.csv"
 
-            File(FILEPATH)
+            File(csvFilePath)
                 .inputStream()
                 .bufferedReader()
                 .lineSequence()
@@ -82,7 +82,7 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val lineData = csvLine.split('¤')
 
                     val _refId: Int = lineData[0].toIntOrNull() ?: 0
-                    val _type: String = lineData[1]
+                    val _type: Int = lineData[1].toIntOrNull() ?: 0
                     val _name: String = lineData[2]
                     val _ordinal: Int = lineData[3].toIntOrNull() ?: 0
                     val _opacity: Int = lineData[4].toIntOrNull() ?: 0
@@ -108,9 +108,9 @@ abstract class TreasureDatabase : RoomDatabase() {
          */
         suspend fun populateItemsByCSV(magicItemDao: MagicItemDao) {
 
-            val FILEPATH = "src/main/res/raw/seed_magicitems_v01.csv"
+            val csvFilePath = "src/main/res/raw/seed_magicitems_v01.csv"
 
-            File(FILEPATH)
+            File(csvFilePath)
                 .inputStream()
                 .bufferedReader()
                 .lineSequence()
@@ -195,8 +195,10 @@ abstract class TreasureDatabase : RoomDatabase() {
          */
         suspend fun populateSpellsByCSV(spellDao: SpellCollectionDao) {
 
+            val csvFilePath = "src/main/res/raw/seed_spell_v01.csv"
+
             // Seed spell templates
-            File("src/main/res/raw/seed_spell_v01.csv")
+            File(csvFilePath)
                 .inputStream()
                 .bufferedReader()
                 .lineSequence()
@@ -206,20 +208,22 @@ abstract class TreasureDatabase : RoomDatabase() {
 
                     val _refId: Int = lineData[0].toIntOrNull() ?: 0
                     val _name: String = lineData[1]
-                    val _source: String = lineData[2]
-                    val _page: Int = lineData[3].toIntOrNull() ?: 0
-                    val _type: Int = lineData[4].toIntOrNull() ?: 0
-                    val _level: Int = lineData[5].toIntOrNull() ?: 0
-                    val _schools: String = lineData[6]
-                    val _restrictions: String = lineData[7]
-                    val _spellSpheres: String = lineData[8]
-                    val _subclass: String = lineData[9]
-                    val _note: String = lineData[10]
+                    val _refType: Int = lineData[2].toIntOrNull() ?: 3
+                    val _source: String = lineData[3]
+                    val _page: Int = lineData[4].toIntOrNull() ?: 0
+                    val _type: Int = lineData[5].toIntOrNull() ?: 0
+                    val _level: Int = lineData[6].toIntOrNull() ?: 0
+                    val _schools: String = lineData[7]
+                    val _restrictions: String = lineData[8]
+                    val _spellSpheres: String = lineData[9]
+                    val _subclass: String = lineData[10]
+                    val _note: String = lineData[11]
 
                     spellDao.addSpellTemplate(
                         SpellTemplate(
                             _refId,
                             _name,
+                            _refType,
                             _source,
                             _page,
                             _type,

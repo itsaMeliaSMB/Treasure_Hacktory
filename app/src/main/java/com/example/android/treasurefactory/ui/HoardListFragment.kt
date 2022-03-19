@@ -3,14 +3,14 @@ package com.example.android.treasurefactory.ui
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
@@ -52,6 +52,28 @@ class HoardListFragment : Fragment() {
         callbacks = context as Callbacks?
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.action_new_hoard   -> {
+                val actionID = R.id.action_hoardListFragment_to_hoardGeneratorFragment
+                findNavController().navigate(actionID)
+                true
+            }
+
+            R.id.action_settings    -> {
+                Toast.makeText(context, "Settings option selected.", Toast.LENGTH_SHORT).show()
+                true
+            }
+
+            else    -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -90,6 +112,11 @@ class HoardListFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callbacks = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate((R.menu.list_toolbar_menu),menu)
     }
 
     private fun updateUI(hoards: List<Hoard>) {

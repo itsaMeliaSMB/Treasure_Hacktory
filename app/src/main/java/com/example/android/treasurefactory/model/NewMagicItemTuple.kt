@@ -1,6 +1,6 @@
 package com.example.android.treasurefactory.model
 
-
+import com.example.android.treasurefactory.GUT_STONE_KEY
 
 /** Return type of standard magic item generation procedure. */
 data class NewMagicItemTuple(val magicItem: MagicItem,

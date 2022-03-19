@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
+import com.example.android.treasurefactory.databinding.LayoutGeneratorFragmentBinding
 import com.example.android.treasurefactory.model.HoardOrder
 import kotlin.random.Random
 
@@ -32,6 +33,8 @@ class HoardGeneratorFragment : Fragment() {
     //TODO add Specific quantity generation method after completing MVP
 
     //region [ Property declarations ]
+
+    private lateinit var binding = LayoutGeneratorFragmentBinding
 
     private lateinit var hoardTitleField: EditText
     private lateinit var letterRadioButton: RadioButton

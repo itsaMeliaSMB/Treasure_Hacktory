@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
     }
 
 
-    override fun onHoardSelected(selectedHoardID: Int) {
-        val fragment = HoardViewerFragment.newInstance(selectedHoardID)
+    override fun onHoardSelected(hoardID: Int) {
+        val fragment = HoardViewerFragment.newInstance(hoardID)
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container,fragment)

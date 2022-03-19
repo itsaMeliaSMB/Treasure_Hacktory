@@ -1,0 +1,5 @@
+<!--TODO : Attribute https://www.svgrepo.com/svg/352070/gem-->
+<vector android:height="16dp" android:viewportHeight="576"
+    android:viewportWidth="576" android:width="16dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#FF000000" android:pathData="M485.5,32L576,192L474.9,192L405.7,32h79.8zM357.5,32l69.2,160L149.3,192L218.5,32h139zM90.5,32h79.8l-69.2,160L0,192L90.5,32zM0,224h100.7l123,251.7c1.5,3.1 -2.7,5.9 -5,3.3L0,224zM148.2,224h279.6l-137,318.2c-1,2.4 -4.5,2.4 -5.5,0L148.2,224zM352.3,475.7l123,-251.7L576,224L357.3,478.9c-2.3,2.7 -6.5,-0.1 -5,-3.2z"/>
+</vector>
