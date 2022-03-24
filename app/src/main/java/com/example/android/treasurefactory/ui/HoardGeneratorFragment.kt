@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.Log
@@ -14,11 +16,21 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.databinding.LayoutGeneratorFragmentBinding
+import com.example.android.treasurefactory.databinding.LettercodeItemBinding
 import com.example.android.treasurefactory.model.HoardOrder
+import com.example.android.treasurefactory.model.LetterEntry
+import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModel
+import kotlin.math.floor
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class HoardGeneratorFragment : Fragment() {
@@ -29,34 +41,27 @@ class HoardGeneratorFragment : Fragment() {
     }
     //TODO continue from page 178, potentially remove*/
 
-    //TODO add ViewModel/LiveData/UI persistence over config change after MVP complete
     //TODO add Specific quantity generation method after completing MVP
 
     //region [ Property declarations ]
 
-    private lateinit var binding = LayoutGeneratorFragmentBinding
+    private var _binding: LayoutGeneratorFragmentBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var hoardTitleField: EditText
-    private lateinit var letterRadioButton: RadioButton
-    private lateinit var specificRadioButton: RadioButton
-    private lateinit var viewAnimator: ViewAnimator
-    private lateinit var resetButton: Button
-    private lateinit var generateButton: Button
+    private val generatorViewModel: HoardGeneratorViewModel by lazy {
 
-    private lateinit var lairCardView: CardView
-    private lateinit var lairHeaderGroup: RelativeLayout
-    private lateinit var lairIndicator: ImageView
-    private lateinit var lairRecyclerView: RecyclerView
+        ViewModelProvider(this).get(HoardGeneratorViewModel::class.java)
+    }
+
     private var lairAdapter: LetterAdapter? = null
 
-    private lateinit var smallCardView: CardView
-    private lateinit var smallHeaderGroup: RelativeLayout
-    private lateinit var smallIndicator: ImageView
-    private lateinit var smallRecyclerView: RecyclerView
     private var smallAdapter: LetterAdapter? = null
 
     private var lairList = getLetterArrayList(true, defaultSplitKey)
     private var smallList= getLetterArrayList(false,defaultSplitKey)
+
+    // TODO continue porting over logic from here to viewmodel
+    // TODO continue to refactor for viewbinding
 
     //endregion
 
@@ -68,47 +73,41 @@ class HoardGeneratorFragment : Fragment() {
     ): View? {
 
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.layout_generator_fragment, container, false)
+        _binding = LayoutGeneratorFragmentBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        // Wire widgets to fragment
-        hoardTitleField = view.findViewById(R.id.generator_name_edittext) as EditText
-        letterRadioButton = view.findViewById(R.id.generator_method_lettercode) as RadioButton
-        specificRadioButton = view.findViewById(R.id.generator_method_specific) as RadioButton
-        viewAnimator = view.findViewById(R.id.generator_animator_frame) as ViewAnimator
+        // region [ Prepare Letter Code views ]
+        // Define the letter adapters
+        lairAdapter = LetterAdapter(lairList, true)
+        smallAdapter = LetterAdapter(smallList, false)
 
-        lairCardView = view.findViewById(R.id.generator_lair_card) as CardView
-        lairHeaderGroup = view.findViewById(R.id.generator_lair_header) as RelativeLayout
-        lairIndicator = view.findViewById(R.id.generator_lair_indicator) as ImageView
-        lairRecyclerView = view.findViewById(R.id.generator_lair_recyclerview) as RecyclerView
-
-        smallCardView = view.findViewById(R.id.generator_small_card) as CardView
-        smallHeaderGroup = view.findViewById(R.id.generator_small_header) as RelativeLayout
-        smallIndicator = view.findViewById(R.id.generator_small_indicator) as ImageView
-        smallRecyclerView = view.findViewById(R.id.hackmaster_gen_small_recyclerview) as RecyclerView
-
-        // Define the letter adapters TODO consider moving to init block
-        lairAdapter = LetterAdapter(lairList)
-        smallAdapter = LetterAdapter(smallList)
-
-        lairRecyclerView.apply{
+        binding.generatorLairRecyclerview.apply{
             // Set up By-Letter recyclerview
             layoutManager = LinearLayoutManager(context)
             adapter = lairAdapter
             setHasFixedSize(true)
-            // TODO Expandibility/Collapsiblity, remove divider when implemented
             visibility = View.GONE //Start off collapsed
         }
-        smallRecyclerView.apply{
+        binding.generatorSmallRecyclerview.apply{
             // Set up By-Letter recyclerview
             layoutManager = LinearLayoutManager(context)
             adapter = smallAdapter
             setHasFixedSize(true)
-            // TODO Expandibility/Collapsiblity, remove divider when implemented
             visibility = View.GONE //Start off collapsed
         }
+        // endregion
 
-        resetButton = view.findViewById(R.id.generator_reset_button) as Button
-        generateButton = view.findViewById(R.id.generator_generate_button) as Button
+        // region [ Prepare Specific Quantity views ]
+        // Prepare arrays for dropdowns
+        val dropdownGemValues = resources.getStringArray(R.array.dropdown_gem_values)
+        val dropdownArtValues = resources.getStringArray(R.array.dropdown_art_values)
+        val dropdownSpellDisciplines = resources.getStringArray(R.array.dropdown_spell_disciplines)
+        val dropdownSpellLevels = resources.getStringArray(R.array.dropdown_spell_levels)
+        val dropdownSpellType = resources.getStringArray(R.array.dropdown_spell_type_both)
+
+        // Prepare adapters for dropdowns
+
+        // endregion
 
         // Return inflated view
         return view
@@ -118,101 +117,750 @@ class HoardGeneratorFragment : Fragment() {
 
         super.onStart()
 
-        // Apply widget properties
-        letterRadioButton.apply{
+        // Apply widget properties TODO animate between two LinearLayouts
+        binding.generatorMethodLettercode.apply{
             setOnCheckedChangeListener { _, isChecked ->
                 Toast.makeText(context,"By-Letter method is ${if (isChecked) "en" else "dis"}abled.",Toast.LENGTH_SHORT).show()
             }
         }
 
-        lairHeaderGroup.setOnClickListener {
+        // region [ Letter Code method groups ]
+
+        binding.generatorLairHeader.setOnClickListener {
 
             // TODO Move functions outside listener.
 
-            if (lairRecyclerView.visibility == View.VISIBLE) {
+            if (binding.generatorLairRecyclerview.visibility == View.VISIBLE) {
 
-                val collapseAnimator = ObjectAnimator.ofFloat(lairIndicator, View.ROTATION, 90f, 0f)
+                val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorLairIndicator, View.ROTATION, 90f, 0f)
 
                 // Rotate the indicator
                 collapseAnimator.apply{
                     duration = 250
-                    disableViewDuringAnimation(lairHeaderGroup)
+                    disableViewDuringAnimation(binding.generatorLairHeader)
                     start() }
 
                 // Hide the recycler view
-                TransitionManager.beginDelayedTransition(lairCardView,AutoTransition())
-                lairRecyclerView.visibility = View.GONE
+                TransitionManager.beginDelayedTransition(binding.generatorLairCard,AutoTransition())
+                binding.generatorLairRecyclerview.visibility = View.GONE
 
             } else {
 
-                val expandAnimator = ObjectAnimator.ofFloat(lairIndicator, View.ROTATION, 0f, 90f)
+                // Collapse Small-type card view if it is visible
+                if (binding.generatorSmallRecyclerview.visibility == View.VISIBLE) {
+
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorSmallIndicator, View.ROTATION, 90f, 0f)
+
+                    // Rotate the indicator
+                    collapseAnimator.apply{
+                        duration = 250
+                        disableViewDuringAnimation(binding.generatorSmallHeader)
+                        start() }
+
+                    // Hide the recycler view
+                    TransitionManager.beginDelayedTransition(binding.generatorSmallCard,AutoTransition())
+                    binding.generatorSmallRecyclerview.visibility = View.GONE
+                }
+
+                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorLairIndicator, View.ROTATION, 0f, 90f)
 
                 // Rotate the indicator
                 expandAnimator.apply{
                     duration = 250
-                    disableViewDuringAnimation(lairHeaderGroup)
+                    disableViewDuringAnimation(binding.generatorLairHeader)
                     start() }
 
                 // Reveal the recycler view
-                TransitionManager.beginDelayedTransition(lairCardView,AutoTransition())
-                lairRecyclerView.visibility = View.VISIBLE
-
-                //TODO automatically collapse other cardview if it is open.
+                TransitionManager.beginDelayedTransition(binding.generatorLairCard,AutoTransition())
+                binding.generatorLairRecyclerview.visibility = View.VISIBLE
             }
         }
 
-        smallHeaderGroup.setOnClickListener {
+        binding.generatorSmallHeader.setOnClickListener {
 
             // TODO Move functions outside listener.
 
-            if (smallRecyclerView.visibility == View.VISIBLE) {
+            // Collapse Lair-type card view if it is visible
+            if (binding.generatorSmallRecyclerview.visibility == View.VISIBLE) {
 
-                val collapseAnimator = ObjectAnimator.ofFloat(smallIndicator, View.ROTATION, 90f, 0f)
+                val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorSmallIndicator, View.ROTATION, 90f, 0f)
 
                 // Rotate the indicator
                 collapseAnimator.apply{
                     duration = 250
-                    disableViewDuringAnimation(smallHeaderGroup)
+                    disableViewDuringAnimation(binding.generatorSmallHeader)
                     start() }
 
                 // Hide the recycler view
-                TransitionManager.beginDelayedTransition(smallCardView,AutoTransition())
-                smallRecyclerView.visibility = View.GONE
+                TransitionManager.beginDelayedTransition(binding.generatorSmallCard,AutoTransition())
+                binding.generatorSmallRecyclerview.visibility = View.GONE
 
             } else {
 
-                val expandAnimator = ObjectAnimator.ofFloat(smallIndicator, View.ROTATION, 0f, 90f)
+                if (binding.generatorLairRecyclerview.visibility == View.VISIBLE) {
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorLairIndicator, View.ROTATION, 90f, 0f)
+
+                    // Rotate the indicator
+                    collapseAnimator.apply{
+                        duration = 250
+                        disableViewDuringAnimation(binding.generatorLairHeader)
+                        start() }
+
+                    // Hide the recycler view
+                    TransitionManager.beginDelayedTransition(binding.generatorLairCard,AutoTransition())
+                    binding.generatorLairRecyclerview.visibility = View.GONE
+                }
+
+                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorSmallIndicator, View.ROTATION, 0f, 90f)
 
                 // Rotate the indicator
                 expandAnimator.apply{
                     duration = 250
-                    disableViewDuringAnimation(smallHeaderGroup)
+                    disableViewDuringAnimation(binding.generatorSmallHeader)
                     start() }
 
                 // Reveal the recycler view
-                TransitionManager.beginDelayedTransition(smallCardView,AutoTransition())
-                smallRecyclerView.visibility = View.VISIBLE
-
-                //TODO automatically collapse other cardview if it is open.
+                TransitionManager.beginDelayedTransition(binding.generatorSmallCard,AutoTransition())
+                binding.generatorSmallRecyclerview.visibility = View.VISIBLE
             }
         }
 
-        resetButton.apply{
+        // endregion
 
-            setOnClickListener { resetLetterEntries() }
+        // region [ Specific Quantity method groups ]
+
+        binding.generatorCoinageHeader.setOnClickListener {
+            if (binding.generatorCoinageLayout.visibility == View.VISIBLE) {
+
+                val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorCoinageIndicator, View.ROTATION, 90f, 0f)
+
+                // Rotate the indicator
+                collapseAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorCoinageIndicator)
+                    start() }
+
+                // Hide the coinage layout
+                TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
+                binding.generatorCoinageLayout.visibility = View.GONE
+
+            } else {
+
+                // Collapse any other treasure layouts if there are expanded
+                when {
+                    (binding.generatorGemLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorGemIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorGemIndicator)
+                            start()
+                        }
+
+                        // Hide the gem layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorGemCard,
+                            AutoTransition()
+                        )
+                        binding.generatorGemLayout.visibility = View.GONE
+                    }
+                    (binding.generatorArtLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorArtIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorArtIndicator)
+                            start()
+                        }
+
+                        // Hide the art layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorArtCard,
+                            AutoTransition()
+                        )
+                        binding.generatorArtLayout.visibility = View.GONE
+                    }
+                    (binding.generatorMagicLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorMagicIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorMagicIndicator)
+                            start()
+                        }
+
+                        // Hide the magic layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorMagicCard,
+                            AutoTransition()
+                        )
+                        binding.generatorArtLayout.visibility = View.GONE
+                    }
+                    (binding.generatorSpellLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorSpellIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorSpellIndicator)
+                            start()
+                        }
+
+                        // Hide the spell layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorSpellCard,
+                            AutoTransition()
+                        )
+                        binding.generatorSpellLayout.visibility = View.GONE
+                    }
+                }
+
+                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorCoinageIndicator, View.ROTATION, 0f, 90f)
+
+                // Rotate the indicator
+                expandAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorCoinageHeader)
+                    start() }
+
+                // Reveal the coinage layout
+                TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
+                binding.generatorCoinageLayout.visibility = View.VISIBLE
+            }
         }
 
-        generateButton.apply {
+        binding.generatorGemHeader.setOnClickListener {
+            if (binding.generatorGemLayout.visibility == View.VISIBLE) {
+
+                val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorGemIndicator, View.ROTATION, 90f, 0f)
+
+                // Rotate the indicator
+                collapseAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorGemIndicator)
+                    start() }
+
+                // Hide the gem layout
+                TransitionManager.beginDelayedTransition(binding.generatorGemCard,AutoTransition())
+                binding.generatorGemLayout.visibility = View.GONE
+
+            } else {
+
+                // Collapse any other treasure layouts if there are expanded
+                when {
+                    (binding.generatorCoinageLayout.visibility == View.VISIBLE) -> {
+                        val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorCoinageIndicator, View.ROTATION, 90f, 0f)
+
+                        // Rotate the indicator
+                        collapseAnimator.apply{
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorCoinageIndicator)
+                            start() }
+
+                        // Hide the coinage layout
+                        TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
+                        binding.generatorCoinageLayout.visibility = View.GONE
+                    }
+                    (binding.generatorArtLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorArtIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorArtIndicator)
+                            start()
+                        }
+
+                        // Hide the art layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorArtCard,
+                            AutoTransition()
+                        )
+                        binding.generatorArtLayout.visibility = View.GONE
+                    }
+                    (binding.generatorMagicLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorMagicIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorMagicIndicator)
+                            start()
+                        }
+
+                        // Hide the magic layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorMagicCard,
+                            AutoTransition()
+                        )
+                        binding.generatorArtLayout.visibility = View.GONE
+                    }
+                    (binding.generatorSpellLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorSpellIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorSpellIndicator)
+                            start()
+                        }
+
+                        // Hide the recycler view
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorSpellCard,
+                            AutoTransition()
+                        )
+                        binding.generatorSpellLayout.visibility = View.GONE
+                    }
+                }
+
+                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorCoinageIndicator, View.ROTATION, 0f, 90f)
+
+                // Rotate the indicator
+                expandAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorCoinageHeader)
+                    start() }
+
+                // Reveal the coinage layout
+                TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
+                binding.generatorGemLayout.visibility = View.VISIBLE
+            }
+        }
+
+        binding.generatorArtHeader.setOnClickListener {
+            if (binding.generatorArtLayout.visibility == View.VISIBLE) {
+
+                val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorArtIndicator, View.ROTATION, 90f, 0f)
+
+                // Rotate the indicator
+                collapseAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorArtIndicator)
+                    start() }
+
+                // Hide the art layout
+                TransitionManager.beginDelayedTransition(binding.generatorArtCard,AutoTransition())
+                binding.generatorArtLayout.visibility = View.GONE
+
+            } else {
+
+                // Collapse any other treasure layouts if there are expanded
+                when {
+                    (binding.generatorCoinageLayout.visibility == View.VISIBLE) -> {
+                        val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorCoinageIndicator, View.ROTATION, 90f, 0f)
+
+                        // Rotate the indicator
+                        collapseAnimator.apply{
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorCoinageIndicator)
+                            start() }
+
+                        // Hide the coinage layout
+                        TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
+                        binding.generatorCoinageLayout.visibility = View.GONE
+                    }
+                    (binding.generatorGemLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorGemIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorGemIndicator)
+                            start()
+                        }
+
+                        // Hide the gem layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorGemCard,
+                            AutoTransition()
+                        )
+                        binding.generatorGemLayout.visibility = View.GONE
+                    }
+                    (binding.generatorMagicLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorMagicIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorMagicIndicator)
+                            start()
+                        }
+
+                        // Hide the magic layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorMagicCard,
+                            AutoTransition()
+                        )
+                        binding.generatorArtLayout.visibility = View.GONE
+                    }
+                    (binding.generatorSpellLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorSpellIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorSpellIndicator)
+                            start()
+                        }
+
+                        // Hide the spell layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorSpellCard,
+                            AutoTransition()
+                        )
+                        binding.generatorSpellLayout.visibility = View.GONE
+                    }
+                }
+
+                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorArtIndicator, View.ROTATION, 0f, 90f)
+
+                // Rotate the indicator
+                expandAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorArtHeader)
+                    start() }
+
+                // Reveal the gem layout
+                TransitionManager.beginDelayedTransition(binding.generatorArtCard,AutoTransition())
+                binding.generatorArtLayout.visibility = View.VISIBLE
+            }
+        }
+
+        binding.generatorMagicHeader.setOnClickListener {
+            if (binding.generatorMagicLayout.visibility == View.VISIBLE) {
+
+                val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorMagicIndicator, View.ROTATION, 90f, 0f)
+
+                // Rotate the indicator
+                collapseAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorMagicHeader)
+                    start() }
+
+                // Hide the magic item layout
+                TransitionManager.beginDelayedTransition(binding.generatorMagicCard,AutoTransition())
+                binding.generatorMagicLayout.visibility = View.GONE
+
+            } else {
+
+                // Collapse any other treasure layouts if there are expanded
+                when {
+                    (binding.generatorCoinageLayout.visibility == View.VISIBLE) -> {
+                        val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorCoinageIndicator, View.ROTATION, 90f, 0f)
+
+                        // Rotate the indicator
+                        collapseAnimator.apply{
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorCoinageIndicator)
+                            start() }
+
+                        // Hide the coinage layout
+                        TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
+                        binding.generatorCoinageLayout.visibility = View.GONE
+                    }
+                    (binding.generatorGemLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorGemIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorGemIndicator)
+                            start()
+                        }
+
+                        // Hide the gem layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorGemCard,
+                            AutoTransition()
+                        )
+                        binding.generatorGemLayout.visibility = View.GONE
+                    }
+                    (binding.generatorMagicLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorMagicIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorMagicIndicator)
+                            start()
+                        }
+
+                        // Hide the magic layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorMagicCard,
+                            AutoTransition()
+                        )
+                        binding.generatorArtLayout.visibility = View.GONE
+                    }
+                    (binding.generatorSpellLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorSpellIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorSpellIndicator)
+                            start()
+                        }
+
+                        // Hide the spell layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorSpellCard,
+                            AutoTransition()
+                        )
+                        binding.generatorSpellLayout.visibility = View.GONE
+                    }
+                }
+
+                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorMagicIndicator, View.ROTATION, 0f, 90f)
+
+                // Rotate the indicator
+                expandAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorMagicHeader)
+                    start() }
+
+                // Reveal the magic item layout
+                TransitionManager.beginDelayedTransition(binding.generatorMagicCard,AutoTransition())
+                binding.generatorMagicLayout.visibility = View.VISIBLE
+            }
+        }
+
+        binding.generatorSpellHeader.setOnClickListener {
+            if (binding.generatorSpellLayout.visibility == View.VISIBLE) {
+
+                val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorSpellIndicator, View.ROTATION, 90f, 0f)
+
+                // Rotate the indicator
+                collapseAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorSpellHeader)
+                    start() }
+
+                // Hide the spell layout
+                TransitionManager.beginDelayedTransition(binding.generatorSpellCard,AutoTransition())
+                binding.generatorSpellLayout.visibility = View.GONE
+
+            } else {
+
+                // Collapse any other treasure layouts if there are expanded
+                when {
+                    (binding.generatorCoinageLayout.visibility == View.VISIBLE) -> {
+                        val collapseAnimator = ObjectAnimator.ofFloat(binding.generatorCoinageIndicator, View.ROTATION, 90f, 0f)
+
+                        // Rotate the indicator
+                        collapseAnimator.apply{
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorCoinageIndicator)
+                            start() }
+
+                        // Hide the coinage layout
+                        TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
+                        binding.generatorCoinageLayout.visibility = View.GONE
+                    }
+                    (binding.generatorGemLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorGemIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorGemIndicator)
+                            start()
+                        }
+
+                        // Hide the gem layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorGemCard,
+                            AutoTransition()
+                        )
+                        binding.generatorGemLayout.visibility = View.GONE
+                    }
+                    (binding.generatorArtLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorArtIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorArtIndicator)
+                            start()
+                        }
+
+                        // Hide the art layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorArtCard,
+                            AutoTransition()
+                        )
+                        binding.generatorArtLayout.visibility = View.GONE
+                    }
+                    (binding.generatorMagicLayout.visibility == View.VISIBLE) -> {
+
+                        val collapseAnimator = ObjectAnimator.ofFloat(
+                            binding.generatorMagicIndicator,
+                            View.ROTATION,
+                            90f,
+                            0f
+                        )
+
+                        // Rotate the indicator
+                        collapseAnimator.apply {
+                            duration = 250
+                            disableViewDuringAnimation(binding.generatorMagicIndicator)
+                            start()
+                        }
+
+                        // Hide the magic layout
+                        TransitionManager.beginDelayedTransition(
+                            binding.generatorMagicCard,
+                            AutoTransition()
+                        )
+                        binding.generatorArtLayout.visibility = View.GONE
+                    }
+                }
+
+                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorSpellIndicator, View.ROTATION, 0f, 90f)
+
+                // Rotate the indicator
+                expandAnimator.apply{
+                    duration = 250
+                    disableViewDuringAnimation(binding.generatorSpellHeader)
+                    start() }
+
+                // Reveal the spell layout
+                TransitionManager.beginDelayedTransition(binding.generatorSpellCard,AutoTransition())
+                binding.generatorSpellLayout.visibility = View.VISIBLE
+            }
+        }
+
+        //Coinage
+
+        // endregion
+
+        binding.generatorResetButton.apply{
+
+            setOnClickListener {
+                if (binding.generatorMethodLettercode.isChecked){
+                    // Zero out type counters
+                    generatorViewModel.clearLairCount()
+                    generatorViewModel.clearSmallCount()
+                    // Update recyclerviews
+                    lairAdapter = LetterAdapter(lairList, true)
+                    smallAdapter = LetterAdapter(smallList, false)
+                    binding.generatorLairRecyclerview.adapter = lairAdapter
+                    binding.generatorSmallRecyclerview.adapter = smallAdapter
+                } else {
+                    //TODO unimplemented
+                }
+            }
+        }
+
+        binding.generatorGenerateButton.apply {
 
             isEnabled = true //TODO only enable button when valid input is available.
             setOnClickListener {
 
+                val hoardOrder: HoardOrder
+
                 // Generate hoard order
-                val hoardOrder = if (letterRadioButton.isChecked) {
-                    convertLetterToHoardOrder()
+                hoardOrder = if (binding.generatorMethodLettercode.isChecked) {
+                    generatorViewModel.compileLetterCodeHoardOrder()
                 } else {
-                    HoardOrder("EMPTY HOARD",
-                        "\"SPECIFIC AMOUNT\" method currently dummied out")
+                    val (coinMin,coinMax,coinSet) = getSpecificCoinageParams()
+
+                    generatorViewModel.compileSpecificQtyHoardOrder(
+                        coinMin,coinMax,coinSet,)
                 }
 
                 // Display contents in debug log
@@ -222,148 +870,119 @@ class HoardGeneratorFragment : Fragment() {
                 Toast.makeText(context,"Order generated. Check debug logs.",Toast.LENGTH_SHORT).show()
 
                 // TODO send hoard order to actual treasure factory (also, "Treasure Hacktory"?)
-
-                // Reset letters to 0
-                resetLetterEntries()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     //endregion
 
     //region [ Inner classes ]
 
-    private inner class LetterAdapter(var letterEntries: MutableList<HMLetterEntry>)
-        : RecyclerView.Adapter<LetterHolder>() {
-
-        var quantities = Array<Int>(letterEntries.size) {0}
+    private inner class LetterAdapter(
+        val letterEntries: ArrayList<LetterEntry>, private val isLairAdapter: Boolean)
+        : ListAdapter<LetterEntry,LetterAdapter.LetterHolder>(LetterDiffCallback()) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LetterHolder {
-            val view = layoutInflater.inflate(R.layout.lettercode_item,
-                parent,false)
-            return LetterHolder(view)
+            val binding = LettercodeItemBinding
+                .inflate(LayoutInflater.from(parent.context),parent,false)
+            return LetterHolder(binding)
         }
-
-        override fun getItemCount() = letterEntries.size
 
         override fun onBindViewHolder(holder: LetterHolder, position: Int) { //TODO consider replacing position calls with holder.adapterPosition
 
             val entry = letterEntries[position]
 
             // Prepare literals
-            val oddsToast = letterEntries[holder.adapterPosition].odds
+            val oddsToast = letterEntries[position].oddsDesc
 
             // Bind items
             holder.bind(entry)
 
-            // Attach listeners TODO Consider moving this to holder
-            holder.infoDot.setOnClickListener {
+            //TODO fix UI update if it doesn't work when tested
 
-                Toast.makeText(context,oddsToast,Toast.LENGTH_LONG)
-                    .show()
-            }
-            holder.plusButton.setOnClickListener {
+            // Apply onClick listeners
+            holder.binding.apply {
+                lettercodeItemInfodot.setOnClickListener {
 
-                quantities[holder.adapterPosition] = correctCount(quantities[holder.adapterPosition],1)
-                letterEntries[holder.adapterPosition].quantity = quantities[holder.adapterPosition]
+                    Toast.makeText(context,oddsToast,Toast.LENGTH_LONG).show()
+                }
+                lettercodeItemDecrementButton.setOnClickListener {
 
-                notifyItemChanged(holder.adapterPosition)
-            }
-            holder.minusButton.setOnClickListener {
+                    generatorViewModel.decrementLetterQty(holder.adapterPosition,isLairAdapter)
+                    if(isLairAdapter){
+                        submitList(generatorViewModel.lairList)
+                    } else {
+                        submitList(generatorViewModel.smallList)
+                    }
+                    //TODO add Eatrhbound-like animation on counter textview
+                    notifyItemChanged(position)
+                }
+                lettercodeItemIncrementButton.setOnClickListener {
 
-                quantities[holder.adapterPosition] = correctCount(quantities[holder.adapterPosition],-1)
-                letterEntries[holder.adapterPosition].quantity = quantities[holder.adapterPosition]
-
-                notifyItemChanged(holder.adapterPosition)
+                    generatorViewModel.incrementLetterQty(holder.adapterPosition,isLairAdapter)
+                    if(isLairAdapter){
+                        submitList(generatorViewModel.lairList)
+                    } else {
+                        submitList(generatorViewModel.smallList)
+                    }
+                    notifyItemChanged(position)
+                }
             }
         }
 
-        fun getAdapterLetterEntries() : List<HMLetterEntry> = letterEntries
+        private inner class LetterHolder (val binding: LettercodeItemBinding)
+            : RecyclerView.ViewHolder(binding.root) {
 
-        @SuppressLint("NotifyDataSetChanged")
-        fun zeroAdapterLetterEntries() {
+            private lateinit var typeString: String
 
-            letterEntries.forEachIndexed { index, letterEntry ->
-                Log.d("zeroAdapter", "Before ${letterEntry.letter} = ${letterEntry.quantity}")
-                quantities[index] = 0
-                letterEntry.quantity = 0
-                Log.d("zeroAdapter", "After ${letterEntry.letter} = ${letterEntry.quantity}")
+            /*
+            val infoDot     = view.findViewById(R.id.lettercode_item_infodot) as ImageView
+            val typeLabel   = view.findViewById(R.id.lettercode_item_name) as TextView
+            val minusButton = view.findViewById(R.id.lettercode_item_decrement_button) as Button
+            val quantityText= view.findViewById(R.id.lettercode_item_counter) as TextView
+            val plusButton  = view.findViewById(R.id.letterdode_item_increment_button) as Button
+            */
+
+            fun bind(letterEntry: LetterEntry){
+
+                typeString = "Type ${letterEntry.letterCode}"
+
+                binding.lettercodeItemName.text = typeString
+                binding.lettercodeItemCounter.text  = letterEntry.quantity.toString()
             }
 
+        }
+
+        fun getAdapterLetterEntries() : List<LetterEntry> = letterEntries
+
+        @SuppressLint("NotifyDataSetChanged")
+        fun resetLetterCounter(){
+            if (isLairAdapter) generatorViewModel.clearLairCount() else generatorViewModel.clearSmallCount()
             notifyDataSetChanged()
         }
     }
 
-    private inner class LetterHolder(view:View): RecyclerView.ViewHolder(view) {
+    inner class LetterDiffCallback : DiffUtil.ItemCallback<LetterEntry>() {
 
-        private lateinit var letterEntry: HMLetterEntry
-        private lateinit var typeString: String
+        override fun areItemsTheSame(
+            oldItem: LetterEntry,
+            newItem: LetterEntry
+        ): Boolean = oldItem.letterCode == newItem.letterCode
 
-        val infoDot     = view.findViewById(R.id.lettercode_item_infodot) as ImageView
-        val typeLabel   = view.findViewById(R.id.lettercode_item_name) as TextView
-        val minusButton = view.findViewById(R.id.lettercode_item_decrement_button) as Button
-        val quantityText= view.findViewById(R.id.lettercode_item_counter) as TextView
-        val plusButton  = view.findViewById(R.id.letterdode_item_increment_button) as Button
-
-        fun bind(input: HMLetterEntry){
-            letterEntry = input
-            typeString = "Type ${letterEntry.letter}"
-
-            typeLabel.text = typeString
-            quantityText.text = letterEntry.quantity.toString()
-        }
-
+        override fun areContentsTheSame(
+            oldItem: LetterEntry,
+            newItem: LetterEntry
+        ): Boolean = oldItem == newItem
     }
 
     //endregion
 
     //region [ Helper functions ]
-
-    private fun updateUI() {
-        // TODO see if this is still necessary upon returning to generator fragment
-    }
-
-    @Suppress("SameParameterValue")
-    private fun getLetterArrayList(isHeadMap: Boolean, splitKey: String) : ArrayList<HMLetterEntry> {
-
-        val list = ArrayList<HMLetterEntry>()
-
-        if (isHeadMap) {
-            oddsTable.headMap(splitKey).forEach { (key, value) ->
-                list.add(HMLetterEntry(key, returnOddsString(value), 0))
-            }
-        } else {
-            oddsTable.tailMap(splitKey).forEach { (key, value) ->
-                list.add(HMLetterEntry(key, returnOddsString(value), 0))
-            }
-        }
-
-        return list
-    }
-
-    private fun correctCount(initCount : Int, increment: Int = 0,
-                     minCount: Int = 0, _maxCount: Int = 1000) : Int {
-
-        val maxCount = if (_maxCount <= minCount) minCount + 1 else _maxCount
-
-        var newCount = initCount + increment
-
-        if (newCount < minCount) newCount = minCount
-        if (newCount > maxCount) newCount = maxCount
-
-        return newCount
-    }
-
-    private fun resetLetterEntries() {
-
-        lairAdapter!!.zeroAdapterLetterEntries()
-        smallAdapter!!.zeroAdapterLetterEntries()
-
-        lairRecyclerView.adapter = lairAdapter
-        smallRecyclerView.adapter = smallAdapter
-
-        Toast.makeText(context,"Letter quantities reset.",Toast.LENGTH_SHORT).show()
-    }
 
     private fun convertLetterToHoardOrder() : HoardOrder {
 
@@ -466,380 +1085,31 @@ class HoardGeneratorFragment : Fragment() {
         })
     }
 
+    private fun getSpecificCoinageParams(): Triple<Double,Double,Set<Pair<Double,String>>> {
+
+        val minimumInput = binding.generatorCoinageMinimumEdit.text.toString()
+            .toDoubleOrNull() ?: 0.0
+        val maximumInput = binding.generatorCoinageMaximumEdit.text.toString()
+            .toDoubleOrNull() ?: 0.0
+        val allowedCoins = mutableSetOf<Pair<Double,String>>()
+
+        if (binding.generatorCoinageAllowedCp.isChecked) allowedCoins.plusAssign(0.01 to "cp")
+        if (binding.generatorCoinageAllowedSp.isChecked) allowedCoins.plusAssign(0.1 to "sp")
+        if (binding.generatorCoinageAllowedEp.isChecked) allowedCoins.plusAssign(0.5 to "ep")
+        if (binding.generatorCoinageAllowedGp.isChecked) allowedCoins.plusAssign(1.0 to "gp")
+        if (binding.generatorCoinageAllowedHsp.isChecked) allowedCoins.plusAssign(2.0 to "hsp")
+        if (binding.generatorCoinageAllowedPp.isChecked) allowedCoins.plusAssign(5.0 to "pp")
+
+        return Triple(minimumInput,maximumInput,allowedCoins.toSet())
+    }
+
+    //private fun getSpecificSpellCoParams():
+
+
+
     //endregion
 
     companion object {
-
-        val oddsTable = sortedMapOf(
-                // Lair treasure types
-                "A" to arrayOf(
-                    intArrayOf(25,1000,3000),
-                    intArrayOf(30,200,2000),
-                    intArrayOf(35,500,3000),
-                    intArrayOf(40,1000,6000),
-                    intArrayOf(35,500,3000),
-                    intArrayOf(35,300,1800),
-                    intArrayOf(60,10,40),
-                    intArrayOf(50,2,12),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(30,3,3) ),
-                "B" to arrayOf(
-                    intArrayOf(50,1000,6000),
-                    intArrayOf(25,1000,3000),
-                    intArrayOf(25,300,1800),
-                    intArrayOf(25,200,2000),
-                    intArrayOf(25,150,1500),
-                    intArrayOf(25,100,1000),
-                    intArrayOf(30,1,8),
-                    intArrayOf(20,1,4),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(10,1,1),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "C" to arrayOf(
-                    intArrayOf(20,1000,10000),
-                    intArrayOf(30,1000,6000),
-                    intArrayOf(40,1000,3000),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(10,100,600),
-                    intArrayOf(25,1,6),
-                    intArrayOf(20,1,3),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(10,2,2) ),
-                "D" to arrayOf(
-                    intArrayOf(10,1000,6000),
-                    intArrayOf(15,1000,10000),
-                    intArrayOf(25,1000,12000),
-                    intArrayOf(50,1000,3000),
-                    intArrayOf(0,0,0),
-                    intArrayOf(15,100,600),
-                    intArrayOf(30,1,10),
-                    intArrayOf(25,1,6),
-                    intArrayOf(15,1,1),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(15,2,2) ),
-                "E" to arrayOf(
-                    intArrayOf(5,1000,6000),
-                    intArrayOf(25,1000,10000),
-                    intArrayOf(45,1000,12000),
-                    intArrayOf(25,1000,4000),
-                    intArrayOf(15,100,1200),
-                    intArrayOf(25,300,1800),
-                    intArrayOf(15,1,12),
-                    intArrayOf(10,1,6),
-                    intArrayOf(0,0,0),
-                    intArrayOf(25,1,1),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(25,3,3) ),
-                "F" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(10,3000,18000),
-                    intArrayOf(25,2000,12000),
-                    intArrayOf(40,1000,6000),
-                    intArrayOf(30,500,5000),
-                    intArrayOf(15,1000,4000),
-                    intArrayOf(20,2,20),
-                    intArrayOf(10,1,8),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(30,5,5),
-                    intArrayOf(0,0,0) ),
-                "G" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(15,3000,24000),
-                    intArrayOf(50,2000,20000),
-                    intArrayOf(50,1500,15000),
-                    intArrayOf(50,1000,10000),
-                    intArrayOf(30,3,18),
-                    intArrayOf(25,1,6),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(35,5,5) ),
-                "H" to arrayOf(
-                    intArrayOf(25,3000,18000),
-                    intArrayOf(35,2000,20000),
-                    intArrayOf(45,2000,20000),
-                    intArrayOf(55,2000,20000),
-                    intArrayOf(45,2000,20000),
-                    intArrayOf(35,1000,8000),
-                    intArrayOf(50,3,30),
-                    intArrayOf(50,2,20),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(15,6,6) ),
-                "I" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(15,100,400),
-                    intArrayOf(30,100,600),
-                    intArrayOf(55,2,12),
-                    intArrayOf(50,2,8),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(15,1,1) ),
-            // Individual and small lair treasure types
-            "J" to arrayOf(
-                    intArrayOf(100,3,24),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "K" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,3,18),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "L" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,3,18),
-                    intArrayOf(100,2,12),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "M" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,3,12),
-                    intArrayOf(100,2,8),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "N" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,1,6),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "O" to arrayOf(
-                    intArrayOf(100,10,40),
-                    intArrayOf(100,10,30),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "P" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,10,60),
-                    intArrayOf(100,3,30),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,1,20),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "Q" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,1,4),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "R" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,2,20),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,10,60),
-                    intArrayOf(100,2,8),
-                    intArrayOf(100,1,3),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "S" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,1,8),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "T" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,1,4),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "U" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(90,2,16),
-                    intArrayOf(80,1,6),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(70,1,1) ),
-                "V" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,2,2) ),
-                "W" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,4,24),
-                    intArrayOf(100,5,30),
-                    intArrayOf(100,2,16),
-                    intArrayOf(100,1,8),
-                    intArrayOf(60,2,16),
-                    intArrayOf(50,1,8),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(60,2,2) ),
-                "X" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,2,2),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "Y" to arrayOf(
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(100,200,1200),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0) ),
-                "Z" to arrayOf(
-                    intArrayOf(100,100,300),
-                    intArrayOf(100,100,400),
-                    intArrayOf(100,100,500),
-                    intArrayOf(100,100,600),
-                    intArrayOf(100,100,500),
-                    intArrayOf(100,100,500),
-                    intArrayOf(55,1,6),
-                    intArrayOf(50,2,12),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(0,0,0),
-                    intArrayOf(50,3,3) )
-        )
-
-        private const val defaultSplitKey = "J"
 
         fun newInstance(): HoardGeneratorFragment {
             return HoardGeneratorFragment()
@@ -859,43 +1129,5 @@ class HoardGeneratorFragment : Fragment() {
             "magic weapon(s)/armor",
             "non-weapon magic item(s)",
             "magic item(s)")
-
-        private fun returnOddsString(odds: Array<IntArray>) : String {
-
-            val oddsList = mutableListOf<String>()
-            var oddsLineBuilder = StringBuilder()
-
-            odds.forEachIndexed { index, oddsArray ->
-
-                oddsLineBuilder.clear()
-
-                if (oddsArray[0] != 0) {
-
-                    oddsLineBuilder.append("${oddsArray[0]}% odds of: ")
-                        .append(if (oddsArray[1] == oddsArray[2]) {
-                                oddsArray[1].toString()
-                            } else {
-                                "${oddsArray[1]}-${oddsArray[2]}" })
-                        .append(" ${treasureLabels[index]}")
-                }
-
-                if (oddsLineBuilder.isNotEmpty()) oddsList.add(oddsLineBuilder.toString())
-            }
-
-            var result: String = oddsList[0]
-
-            if (oddsList.size > 1) {
-
-                for( index in 1 until oddsList.size) {
-                    result += "\n${oddsList[index]}"
-                }
-            }
-
-            return result
-        }
     }
 }
-
-data class HMLetterEntry(val letter: String,
-                         val odds: String,
-                         var quantity: Int = 0)

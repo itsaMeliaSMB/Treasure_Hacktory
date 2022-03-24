@@ -9,4 +9,116 @@
     <string name="hoard_name_entry_hint">Enter name of hoard or leave blank</string>
     <string name="lair_treasures_cardview_header">Lair Treasures</string>
     <string name="small_treasures_cardview_header">Individual / Small Lair Treasures</string>
+    <string-array name="dropdown_gem_values">
+        <item>Don\'t care</item>
+        <item>1 sp</item>
+        <item>5 sp</item>
+        <item>10 sp</item>
+        <item>1 gp</item>
+        <item>5 gp</item>
+        <item>10 gp</item>
+        <item>50 gp</item>
+        <item>100 gp</item>
+        <item>500 gp</item>
+        <item>1,000 gp</item>
+        <item>5,000 gp</item>
+        <item>10,000 gp</item>
+        <item>25,000 gp</item>
+        <item>50,000 gp</item>
+        <item>100,000 gp</item>
+        <item>250,000 gp</item>
+        <item>500,000 gp</item>
+        <item>1,000,000 gp</item>
+    </string-array>
+    <string-array name="dropdown_art_values">
+        <item>Don\'t care</item>
+        <item>1 gp</item>
+        <item>10 gp</item>
+        <item>20 gp</item>
+        <item>30 gp</item>
+        <item>40 gp</item>
+        <item>50 gp</item>
+        <item>60 gp</item>
+        <item>70 gp</item>
+        <item>85 gp</item>
+        <item>100 gp</item>
+        <item>125 gp</item>
+        <item>150 gp</item>
+        <item>200 gp</item>
+        <item>250 gp</item>
+        <item>325 gp</item>
+        <item>400 gp</item>
+        <item>500 gp</item>
+        <item>650 gp</item>
+        <item>800 gp</item>
+        <item>1,000 gp</item>
+        <item>1,250 gp</item>
+        <item>1,500 gp</item>
+        <item>2,000 gp</item>
+        <item>2,500 gp</item>
+        <item>3,000 gp</item>
+        <item>4,000 gp</item>
+        <item>5,000 gp</item>
+        <item>6,000 gp</item>
+        <item>7,500 gp</item>
+        <item>10,000 gp</item>
+        <item>12,500 gp</item>
+        <item>15,000 gp</item>
+        <item>20,000 gp</item>
+        <item>25,000 gp</item>
+        <item>30,000 gp</item>
+        <item>40,000 gp</item>
+        <item>50,000 gp</item>
+        <item>60,000 gp</item>
+        <item>70,000 gp</item>
+        <item>85,000 gp</item>
+        <item>100,000 gp</item>
+        <item>125,000 gp</item>
+        <item>150,000 gp</item>
+        <item>200,000 gp</item>
+        <item>250,000 gp</item>
+        <item>300,000 gp</item>
+        <item>400,000 gp</item>
+        <item>500,000 gp</item>
+        <item>650,000 gp</item>
+        <item>800,000 gp</item>
+        <item>1,000,000 gp</item>
+    </string-array>
+    <string-array name="dropdown_spell_disciplines">
+        <item>Arcane or Divine</item>
+        <item>Arcane only</item>
+        <item>Divine only</item>
+    </string-array>
+    <string-array name="dropdown_spell_levels">
+        <item>Cantrips (CL 1)</item>
+        <item>Level 1</item>
+        <item>Level 2</item>
+        <item>Level 3</item>
+        <item>Level 4</item>
+        <item>Level 5</item>
+        <item>Level 6</item>
+        <item>Level 7</item>
+        <item>Level 8 (CL 7)</item>
+        <item>Level 9 (CL 7)</item>
+    </string-array>
+    <string-array name="dropdown_spell_type_both">
+        <item>Random\n(as Spell Scroll)</item>
+        <item>Leveling\n(as Scroll Spell)</item>
+        <!--item>Chosen One\'s spell allotment</item-->
+        <!--item>M-U Creation\n(as Spell Book)</item-->
+        <!--item>Any method\n(as any physical)</item-->
+    </string-array>
+    <string-array name="dropdown_spell_type_arcane">
+        <item>Random\n(as Spell Scroll)</item>
+        <item>Leveling\n(as Scroll Spell)</item>
+        <!--item>M-U Creation\n(as Spell Book)</item-->
+        <!--item>Any method\n(as any physical)</item-->
+    </string-array>
+    <string-array name="dropdown_spell_type_divine">
+        <item>Random\n(as Spell Scroll)</item>
+        <!--item>Chosen One, Cleric-only\n(as Spell Scroll)</item-->
+        <!--item>Chosen One\'s spell allotment</item-->
+        <!--item>Any method\n(as any physical)</item-->
+    </string-array>
+
 </resources>

@@ -24,7 +24,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="letter_cardview_header">
+    <style name="generator_letter_cardview_header">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">4dp</item>
@@ -34,7 +34,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="cardview_letter_header_icon">
+    <style name="generator_cardview_letter_header_icon">
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
         <item name="android:layout_alignParentEnd">true</item>

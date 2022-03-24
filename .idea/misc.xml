@@ -52,6 +52,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/layouts/layout/treasure_viewer_list.xml" value="0.13601823708206687" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/layouts/layout/treasure_viewer_list_item.xml" value="0.25" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/drawable/favorite_star_drawable.xml" value="0.15729166666666666" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout/dropdown_menu_item.xml" value="0.13601823708206687" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout/hackmaster_treasure_gen_coinage_list_item.xml" value="0.165" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout/hackmaster_treasure_gen_fragment.xml" value="0.165" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout/hackmaster_treasure_gen_letter_list_child.xml" value="0.165" />
@@ -65,6 +66,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/menu/generator_gem_ranges.xml" value="0.25" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/menu/generator_spell_disciplines.xml" value="0.2796875" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/menu/generator_spell_ranges.xml" value="0.21388888888888888" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/menu/generator_spell_type.xml" value="0.1" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/menu/generator_spell_type_both.xml" value="0.20833333333333334" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/drawable/two_spell_gradient.xml" value="0.1255" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/hackmaster_treasure_viewer_coinage.xml" value="0.335" />
