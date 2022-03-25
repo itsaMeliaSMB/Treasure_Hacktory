@@ -1,6 +1,7 @@
 package com.example.android.treasurefactory.database
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -14,12 +15,11 @@ import java.io.File
 
 private const val DATABASE_NAME = "treasure-database"
 
-/**
- * Singleton database for entire app.
- */
+/** Singleton database for entire app. */
 @Database(
     entities = [
         Hoard::class,
+        HoardEvent::class,
         GemTemplate::class,
         MagicItemTemplate::class,
         SpellTemplate::class,
@@ -42,6 +42,8 @@ abstract class TreasureDatabase : RoomDatabase() {
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
 
+        // https://developer.android.com/codelabs/android-room-with-a-view-kotlin#13
+
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let { database ->
@@ -57,21 +59,17 @@ abstract class TreasureDatabase : RoomDatabase() {
                     populateItemsByCSV(database.magicItemDao())
                     populateSpellsByCSV(database.spellCollectionDao())
 
-                    // Populate icon ID directory after templates are populated
-
-
                 }
             }
         }
 
         // Since it was so hard to find, https://discuss.kotlinlang.org/t/why-would-using-coroutines-be-slower-than-sequential-for-a-big-file/7698/7
 
-        /**
-         * Populates gem template table using hardcoded CSV file.
-         */
+        /** Populates gem template table using hardcoded CSV file. */
         suspend fun populateGemsByCSV(gemDao: GemDao) {
 
             val csvFilePath = "src/main/res/raw/seed_gem_v01.csv"
+            var iterationCount = 0
 
             File(csvFilePath)
                 .inputStream()
@@ -100,15 +98,18 @@ abstract class TreasureDatabase : RoomDatabase() {
                             _iconID
                         )
                     )
+                    iterationCount ++
                 }
+
+            Log.d("InitialPopulationCallback","Gem template addition by CSV ran. " +
+                    "[ Iteration count = $iterationCount ]")
         }
 
-        /**
-         * Populates magic item template table using hardcoded CSV file.
-         */
+        /** Populates magic item template table using hardcoded CSV file. */
         suspend fun populateItemsByCSV(magicItemDao: MagicItemDao) {
 
             val csvFilePath = "src/main/res/raw/seed_magicitems_v01.csv"
+            var iterationCount = 0
 
             File(csvFilePath)
                 .inputStream()
@@ -187,15 +188,19 @@ abstract class TreasureDatabase : RoomDatabase() {
                             _viPower
                         )
                     )
+
+                    iterationCount ++
                 }
+
+            Log.d("InitialPopulationCallback","Magic item template addition by CSV ran. " +
+                    "[ Iteration count = $iterationCount ]")
         }
 
-        /**
-         * Populates spell template table using hardcoded CSV file.
-         */
+        /** Populates spell template table using hardcoded CSV file. */
         suspend fun populateSpellsByCSV(spellDao: SpellCollectionDao) {
 
             val csvFilePath = "src/main/res/raw/seed_spell_v01.csv"
+            var iterationCount = 0
 
             // Seed spell templates
             File(csvFilePath)
@@ -235,7 +240,11 @@ abstract class TreasureDatabase : RoomDatabase() {
                             _note
                         )
                     )
+                    iterationCount ++
                 }
+
+            Log.d("InitialPopulationCallback","Spell template addition by CSV ran. " +
+                    "[ Iteration count = $iterationCount ]")
         }
 
     }
@@ -257,17 +266,14 @@ abstract class TreasureDatabase : RoomDatabase() {
                     .addCallback(InitialPopulationCallback(context, scope))
                     .build()
                 INSTANCE = instance
-
                 instance
             }
         }
-
     }
 
 }
 
 //region [ Data Access Objects ]
-
 @Dao
 interface HoardDao{
 
@@ -426,8 +432,6 @@ interface UtilityDao{
             "SELECT icon_id FROM hackmaster_magic_item_table UNION " +
             "SELECT icon_id FROM hackmaster_spell_collection_table")
     suspend fun getAllUniqueIconIDs(): List<String>
-
-    //TODO add query for pulling all entries with a certain appVersionCode
 }
  */
 

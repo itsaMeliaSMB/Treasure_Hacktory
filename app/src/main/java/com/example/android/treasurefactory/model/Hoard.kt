@@ -3,10 +3,7 @@ package com.example.android.treasurefactory.model
 import androidx.room.*
 import java.util.*
 
-
 // https://stackoverflow.com/questions/64823212/use-android-room-without-breaking-encapsulation
-
-// TODO: Add gp/xp ratio to hoard
 
 /**
  * Parent class for distinct treasure hoard with it's own items.
@@ -33,9 +30,8 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var spellsCount: Int = 0,
                  var isFavorite: Boolean = false,
                  var isNew: Boolean = true,
-                 var appVersion: Long,                  // Version code of app hoard was generated on
-                 var history: ArrayList<Pair<Long,String>>,  // Log of important modifications to hoard TODO consider removing creationDesc and putting info here. Also embedding this as a table instead.
-                 @Embedded(prefix = "leftover_") val leftover: HoardLeftover)
+                 var appVersion: Long = 0L,           // Version code of app hoard was generated on
+                 @Embedded(prefix = "leftover_") val leftover: HoardLeftover = HoardLeftover())
 
 data class HoardLeftover(val gems: Int = 0,
                          val artObjects: Int = 0,
@@ -44,7 +40,6 @@ data class HoardLeftover(val gems: Int = 0,
                          val armorOrWeapons: Int = 0,
                          val anyButWeapons: Int = 0,
                          val anyMagicItems: Int = 0) {
-
     @Ignore
     fun isNotEmpty(): Boolean = !((gems == 0)||(artObjects==0)||((potions==0)||(scrolls==0)||(armorOrWeapons == 0)||(anyButWeapons==0)||(anyMagicItems==0)))
 }

@@ -71,6 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:checked="false"
                 android:paddingStart="8dp"
                 android:text="@string/gen_method_specific_label"
                 android:textAllCaps="true" />
@@ -89,7 +90,131 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
-                android:fillViewport="true">
+                android:fillViewport="true"
+                android:inAnimation="@anim/nav_default_enter_anim"
+                android:outAnimation="@anim/nav_default_exit_anim">
+
+                <LinearLayout
+                    android:id="@+id/generator_lettercode_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_lair_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_lair_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_lair_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_lair_indicator"
+                                    android:layout_alignBottom="@id/generator_lair_indicator"
+                                    android:layout_toEndOf="@id/generator_lair_indicator"
+                                    android:text="@string/lair_treasures_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_fortress_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/generator_lair_recyclerview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_small_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_small_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_small_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_small_indicator"
+                                    android:layout_alignBottom="@id/generator_small_indicator"
+                                    android:layout_toEndOf="@id/generator_small_indicator"
+                                    android:text="@string/small_treasures_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_orc_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/generator_small_recyclerview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/generator_specific_layout"
@@ -419,13 +544,11 @@
 
 
                                     <!--https://material.io/components/menus/android#dropdown-menus-->
-                                    <!--TODO Add layout resource for dropdown items-->
                                     <AutoCompleteTextView
                                         android:id="@+id/generator_gem_minimum_auto"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="none"
-
                                         tools:text="Don't Care"/>
 
                                 </com.google.android.material.textfield.TextInputLayout>
@@ -1241,128 +1364,6 @@
 
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/generator_lettercode_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/generator_lair_card"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/exlist_bottom_margin"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp"
-                        app:cardUseCompatPadding="true">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <!-- Top of cardview (always visible) -->
-                            <RelativeLayout
-                                android:id="@+id/generator_lair_header"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/colorPrimary"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:padding="12dp">
-
-                                <ImageView
-                                    android:id="@+id/generator_lair_indicator"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentStart="true"
-                                    android:src="@drawable/clipart_indicator_vector_icon"
-                                    app:tint="?attr/colorOnPrimary" />
-
-                                <TextView
-                                    style="@style/generator_letter_cardview_header"
-                                    android:layout_alignTop="@id/generator_lair_indicator"
-                                    android:layout_alignBottom="@id/generator_lair_indicator"
-                                    android:layout_toEndOf="@id/generator_lair_indicator"
-                                    android:text="@string/lair_treasures_cardview_header" />
-
-                                <ImageView
-                                    style="@style/generator_cardview_letter_header_icon"
-                                    android:src="@drawable/clipart_fortress_vector_icon"
-                                    app:tint="?attr/colorOnPrimary" />
-
-                            </RelativeLayout>
-
-                            <!-- Expandable portion of cardview -->
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/generator_lair_recyclerview"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone" />
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/generator_small_card"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/exlist_bottom_margin"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp"
-                        app:cardUseCompatPadding="true">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <!-- Top of cardview (always visible) -->
-                            <RelativeLayout
-                                android:id="@+id/generator_small_header"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="?attr/colorPrimary"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:padding="12dp">
-
-                                <ImageView
-                                    android:id="@+id/generator_small_indicator"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentStart="true"
-                                    android:src="@drawable/clipart_indicator_vector_icon"
-                                    app:tint="?attr/colorOnPrimary" />
-
-                                <TextView
-                                    style="@style/generator_letter_cardview_header"
-                                    android:layout_alignTop="@id/generator_small_indicator"
-                                    android:layout_alignBottom="@id/generator_small_indicator"
-                                    android:layout_toEndOf="@id/generator_small_indicator"
-                                    android:text="@string/small_treasures_cardview_header" />
-
-                                <ImageView
-                                    style="@style/generator_cardview_letter_header_icon"
-                                    android:src="@drawable/clipart_orc_vector_icon"
-                                    app:tint="?attr/colorOnPrimary" />
-
-                            </RelativeLayout>
-
-                            <!-- Expandable portion of cardview -->
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/generator_small_recyclerview"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone" />
 
                         </LinearLayout>
 

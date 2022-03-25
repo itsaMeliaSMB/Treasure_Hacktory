@@ -7,7 +7,6 @@ import com.example.android.treasurefactory.repository.HMRepository
 class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
 
     val hoardListLiveData = repository.getHoards()
-
 }
 
 class HoardListViewModelFactory(private val repository: HMRepository) : ViewModelProvider.Factory {

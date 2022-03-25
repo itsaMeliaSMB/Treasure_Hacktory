@@ -6455,7 +6455,7 @@ class LootGeneratorAsync : BaseLootGenerator {
             template.schools.split("/"),
             template.spellSpheres.split("/"),
             template.subclass,
-            template.restrictions.split("/"),
+            template.restrictions.split("/"), //TODO - Maybe convert to readable strings with Spell companion object functions
             listOf(listOf(template.note),appendedNotes).flatten()
         )
     }

@@ -1,9 +1,8 @@
 package com.example.android.treasurefactory.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.android.treasurefactory.model.HoardOrder
 import com.example.android.treasurefactory.model.LetterEntry
-import com.example.android.treasurefactory.model.OrderParams
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -425,6 +424,12 @@ class HoardGeneratorViewModel(): ViewModel() {
         "non-weapon magic item(s)",
         "magic item(s)")
 
+    /**
+     * Index of displayed child view group and method to use for order generation.
+     * 0 = Letter-code, 1 = Specific quantity.
+     */
+    private var generationMethodPos = 0
+
     val lairList = getLetterArrayList(true)
     val smallList = getLetterArrayList(false)
 
@@ -559,7 +564,6 @@ class HoardGeneratorViewModel(): ViewModel() {
         return result
     }
 
-    //TODO refactor all uses of HMLetterEntry to Triple<String,String,Int>
     /** Returns an ArrayList of letter-coded treasure types. */
     private fun getLetterArrayList(isHeadMap: Boolean): ArrayList<LetterEntry> {
 
@@ -576,6 +580,17 @@ class HoardGeneratorViewModel(): ViewModel() {
         }
 
         return list
+    }
+
+    fun getGeneratorMethodPos() : Int = generationMethodPos
+
+    fun setGeneratorMethodPos(newViewGroupIndex: Int){
+        if (newViewGroupIndex in 0..1) {
+            generationMethodPos = newViewGroupIndex
+            Log.d("generatorViewModel","Value updated for generationMethodPos. [generationMethodPos = $generationMethodPos]")
+        } else {
+            Log.d("generatorViewModel","Out of bounds new value for generationMethodPos. [generationMethodPos = $generationMethodPos]")
+        }
     }
 
     fun incrementLetterQty(position: Int, targetLairList: Boolean) {
@@ -612,6 +627,7 @@ class HoardGeneratorViewModel(): ViewModel() {
 
     fun clearSmallCount() { smallList.forEach { entry -> entry.quantity = 0 } }
 
+    /* Temporarily dummied-out order compilation functions.
     fun compileLetterCodeHoardOrder() : HoardOrder {
 
         // TODO refactor to new schema
@@ -631,6 +647,7 @@ class HoardGeneratorViewModel(): ViewModel() {
             } else return 0
         }
 
+        // Put values for every letter key
         val letterMap = mutableMapOf<String,Int>()
 
         // Put values for every letter key
@@ -701,6 +718,7 @@ class HoardGeneratorViewModel(): ViewModel() {
             platinumPieces = coinPileMap.getOrDefault("pp",0),
         )
     }
+     */
 
     fun getRandomCoinDistribution(_minimum: Double, _maximum: Double,
                                           allowedDenoms: Set<Pair<Double,String>>) : Map<String,Int> {

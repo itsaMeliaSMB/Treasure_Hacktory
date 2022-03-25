@@ -4,35 +4,37 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
+import com.example.android.treasurefactory.databinding.HoardListItemBinding
+import com.example.android.treasurefactory.databinding.LayoutHoardListBinding
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.viewmodel.HoardListViewModel
+import java.text.DecimalFormat
+import java.time.format.DateTimeFormatter
 
 private const val TAG = "HoardListFragment"
 
 class HoardListFragment : Fragment() {
 
     /**
-    * Required interface for hosting activities
+    * Required interface for hosting activities, allows callbacks to hosting activity.
     */
     interface Callbacks{
-        fun onHoardSelected(hoardID: Int)
+        fun onHoardSelected(view: View, hoardID: Int)
     }
 
     private var callbacks: Callbacks? = null
 
-    private lateinit var hoardRecyclerView: RecyclerView
-    private lateinit var whenEmptyView: View
-    private var adapter: HoardAdapter? = HoardAdapter(emptyList())
+    private var _binding: LayoutHoardListBinding? = null
+    private val binding get() = _binding!!
+
+    private var hoardAdapter: HoardAdapter? = null
     //TODO add bindings after renaming layout IDs
 
     // Modified from BNR pg 178 because of depreciated class
@@ -76,24 +78,26 @@ class HoardListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
 
-        val view = inflater.inflate(R.layout.layout_hoard_list, container, false)
-        hoardRecyclerView = view.findViewById(R.id.hoard_list_recycler) as RecyclerView
-        whenEmptyView = view.findViewById(R.id.hoard_list_whenempty_group) as ConstraintLayout
+        // Inflate the layout for this fragment
+        _binding = LayoutHoardListBinding.inflate(inflater, container, false)
+        val view = binding.root
+
+        // Define adapters
+        hoardAdapter = HoardAdapter(emptyList())
 
         // Give RecyclerView a Layout manager [required]
-        hoardRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        hoardRecyclerView.adapter = adapter
+        binding.hoardListRecycler.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = hoardAdapter
+        }
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view,savedInstanceState)
-
-
 
         hoardListViewModel.hoardListLiveData.observe(viewLifecycleOwner
         ) //Updates whenever the list of hoards is updated per BNR 238
@@ -105,7 +109,7 @@ class HoardListFragment : Fragment() {
             }
 
             // Show placeholder view when the hoard list is empty
-            whenEmptyView.visibility = if (hoards.isEmpty()) View.VISIBLE else View.GONE
+            binding.hoardListWhenemptyGroup.visibility = if (hoards.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
@@ -121,80 +125,78 @@ class HoardListFragment : Fragment() {
 
     private fun updateUI(hoards: List<Hoard>) {
 
-        adapter = HoardAdapter(hoards)
-        hoardRecyclerView.adapter = adapter
+        hoardAdapter = HoardAdapter(hoards)
+        binding.hoardListRecycler.adapter = hoardAdapter
     }
 
-    private inner class HoardViewHolder(view: View)
-        : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class HoardViewHolder(val binding: HoardListItemBinding)
+        : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         private lateinit var hoard: Hoard
-
-        // Define views in layout
-        private val nameTextView: TextView = itemView.findViewById(R.id.hoard_list_item_name)
-        private val dateTextView: TextView = itemView.findViewById(R.id.hoard_list_item_date)
-        private val favImageView: ImageView = itemView.findViewById(R.id.hoard_list_item_favorited)
-        private val iconImageView: ImageView = itemView.findViewById(R.id.hoard_list_item_list_icon)
-        private val gpTextView: TextView = itemView.findViewById(R.id.hoard_list_item_gp_value)
-        private val gemTextView: TextView = itemView.findViewById(R.id.hoard_list_item_gem_count)
-        private val artTextView: TextView = itemView.findViewById(R.id.hoard_list_item_art_count)
-        private val mgcTextView: TextView = itemView.findViewById(R.id.hoard_list_item_magic_count)
-        private val splTextView: TextView = itemView.findViewById(R.id.hoard_list_item_spell_count)
-        private val leftoverIcon: ImageView = itemView.findViewById(R.id.hoard_list_item_leftover_icon)
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bind(hoard: Hoard) {
+        fun bind(newHoard: Hoard) {
 
-            this.hoard = hoard
+            hoard = newHoard
 
             // Set hoard name and [ NEW ] visibility
-            nameTextView.text = this.hoard.name
-            if (hoard.isNew) {
-                nameTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.clipart_new_vector_icon,0,0,0)
-            } else {
-                nameTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,0,0)
+            binding.hoardListItemName.apply {
+                text = hoard.name
+                if (hoard.isNew) {
+                    setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.clipart_new_vector_icon,0,0,0)
+                } else {
+                    setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,0,0)
+                }
             }
 
             // Set hoard date
-            dateTextView.text = this.hoard.creationDate.toString()
+            binding.hoardListItemDate.text = hoard.creationDesc.format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
 
             // Set text for gp value counter
-            "Worth " + String.format("%.2f",hoard.gpTotal) + " gp".also { gpTextView.text = it }
+            ("Worth ${DecimalFormat("#,##0.0#")
+                .format(hoard.gpTotal)
+                .removeSuffix(".0")} gp").also { binding.hoardListItemGpValue.text = it }
 
             // Set text for unique item counters
-            gemTextView.text = String.format("%03d",hoard.gemCount)
-            artTextView.text = String.format("%03d",hoard.artCount)
-            mgcTextView.text = String.format("%03d",hoard.magicCount)
-            splTextView.text = String.format("%03d",hoard.spellsCount)
+            binding.hoardListItemGemCount.text = String.format("%03d",hoard.gemCount)
+            binding.hoardListItemArtCount.text = String.format("%03d",hoard.artCount)
+            binding.hoardListItemMagicCount.text = String.format("%03d",hoard.magicCount)
+            binding.hoardListItemSpellCount.text = String.format("%03d",hoard.spellsCount)
 
             // Set visibility of hoard leftover icon
-            leftoverIcon.visibility = if (hoard.leftover.isNotEmpty()) View.VISIBLE else View.GONE
+            binding.hoardListItemLeftoverIcon.visibility = if (hoard.leftover.isNotEmpty()) {
+                View.VISIBLE
+            } else View.GONE
 
             // Set icon for hoard TODO set icon as most valuable item (by gp value) in hoard
             try {
 
-                iconImageView.setImageResource(resources.getIdentifier(hoard.iconID,"drawable",view?.context?.packageName))
+                binding.hoardListItemListIcon
+                    .setImageResource(resources
+                        .getIdentifier(hoard.iconID,"drawable",view?.context?.packageName))
 
             } catch (e: Exception) {
 
-                iconImageView.setImageResource(R.drawable.clipart_default_image)
+                binding.hoardListItemListIcon
+                    .setImageResource(R.drawable.clipart_default_image)
             }
 
             // Set filled status of favorite star icon
-            if (hoard.isFavorite) {
-                favImageView.setImageResource(R.drawable.clipart_filledstar_vector_icon)
-            } else {
-                favImageView.setImageResource(R.drawable.clipart_unfilledstar_vector_icon)
-            }
-
+            binding.hoardListItemFavorited.setImageResource(
+                if (hoard.isFavorite) {
+                    R.drawable.clipart_filledstar_vector_icon
+                } else {
+                    R.drawable.clipart_unfilledstar_vector_icon
+                }
+            )
         }
 
         override fun onClick(v: View) {
 
-            callbacks?.onHoardSelected(hoard.hoardID)
+            callbacks?.onHoardSelected(v,hoard.hoardID)
             Log.d(TAG,"callback on hoard.hoardID (${hoard.hoardID})")
         }
     }
@@ -204,8 +206,9 @@ class HoardListFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : HoardViewHolder {
 
-            val view = layoutInflater.inflate(R.layout.hoard_list_item, parent, false)
-            return HoardViewHolder(view)
+            val binding = HoardListItemBinding
+                .inflate(LayoutInflater.from(parent.context),parent,false)
+            return HoardViewHolder(binding)
         }
 
         override fun getItemCount() = hoards.size

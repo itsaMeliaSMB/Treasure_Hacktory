@@ -72,10 +72,28 @@ data class SpellTemplate(
     @ColumnInfo(name="spell_spheres") val spellSpheres: String,
     @ColumnInfo(name="arcane_subclass") val subclass: String,
     val note: String)
-
 // endregion
 
 // region [ Database model classes ]
+/**
+ * Record of an event that occurred in a [Hoard]'s history.
+ * @param timestamp Milliseconds since Unix epoch that the event occurred on.
+ * @param description User-readable description of event.
+ * @param tag Identifier for source/type of event.
+ */
+@Entity(tableName = "hoard_events_log",
+    foreignKeys = [ForeignKey(
+        entity = Hoard::class,
+        parentColumns = arrayOf ("hoardID"),
+        childColumns = arrayOf("gemID"),
+        onDelete = ForeignKey.CASCADE ) ])
+data class HoardEvent(
+    @PrimaryKey(autoGenerate = true) @NotNull val eventID: Int = 0,
+    val hoardID: Int = 0,
+    val timestamp: Long,
+    val description: String,
+    val tag: String)
+
 @Entity(tableName = "hackmaster_gem_table",
     foreignKeys = [ForeignKey(
         entity = Hoard::class,
@@ -156,7 +174,6 @@ data class SpellCollectionEntity(
     val xpValue: Int,
     val spells: List<Spell> = listOf(),
     val curse: String = "")
-
 // endregion
 
 // region [ Convenience Data Entities ]
@@ -171,7 +188,6 @@ data class IconIDTuple(
 // endregion
 
 // region [ Mapping functions ]
-
 @JvmName("asDomainModelGemEntity")
 fun List<GemEntity>.asDomainModel(): List<Gem> {
 

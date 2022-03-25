@@ -5,33 +5,27 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.cardview.widget.CardView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.databinding.LayoutGeneratorFragmentBinding
 import com.example.android.treasurefactory.databinding.LettercodeItemBinding
 import com.example.android.treasurefactory.model.HoardOrder
 import com.example.android.treasurefactory.model.LetterEntry
 import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModel
-import kotlin.math.floor
-import kotlin.math.roundToInt
-import kotlin.random.Random
 
 class HoardGeneratorFragment : Fragment() {
 
@@ -57,9 +51,6 @@ class HoardGeneratorFragment : Fragment() {
 
     private var smallAdapter: LetterAdapter? = null
 
-    private var lairList = getLetterArrayList(true, defaultSplitKey)
-    private var smallList= getLetterArrayList(false,defaultSplitKey)
-
     // TODO continue porting over logic from here to viewmodel
     // TODO continue to refactor for viewbinding
 
@@ -78,8 +69,8 @@ class HoardGeneratorFragment : Fragment() {
 
         // region [ Prepare Letter Code views ]
         // Define the letter adapters
-        lairAdapter = LetterAdapter(lairList, true)
-        smallAdapter = LetterAdapter(smallList, false)
+        lairAdapter = LetterAdapter(generatorViewModel.lairList, true)
+        smallAdapter = LetterAdapter(generatorViewModel.smallList, false)
 
         binding.generatorLairRecyclerview.apply{
             // Set up By-Letter recyclerview
@@ -103,14 +94,36 @@ class HoardGeneratorFragment : Fragment() {
         val dropdownArtValues = resources.getStringArray(R.array.dropdown_art_values)
         val dropdownSpellDisciplines = resources.getStringArray(R.array.dropdown_spell_disciplines)
         val dropdownSpellLevels = resources.getStringArray(R.array.dropdown_spell_levels)
-        val dropdownSpellType = resources.getStringArray(R.array.dropdown_spell_type_both)
+        val dropdownSpellTypesBoth = resources.getStringArray(R.array.dropdown_spell_type_both)
+        val dropdownSpellTypesMU = resources.getStringArray(R.array.dropdown_spell_type_arcane)
+        val dropdownSpellTypesCl = resources.getStringArray(R.array.dropdown_spell_type_divine)
 
         // Prepare adapters for dropdowns
+        val dropdownGemValuesAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_menu_item, dropdownGemValues)
+        val dropdownArtValuesAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownArtValues)
+        val dropdownSpellDisciplinesAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownSpellDisciplines)
+        val dropdownSpellTypeAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownSpellTypesBoth)
+        val dropdownSpellLevelsAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownSpellLevels)
 
+        // Apply adapters for dropdowns
+        (binding.generatorGemMinimumInput.editText as? AutoCompleteTextView)?.setAdapter(dropdownGemValuesAdapter)
+        (binding.generatorGemMaximumInput.editText as? AutoCompleteTextView)?.setAdapter(dropdownGemValuesAdapter)
+        (binding.generatorArtMinimumInput.editText as? AutoCompleteTextView)?.setAdapter(dropdownArtValuesAdapter)
+        (binding.generatorArtMaximumInput.editText as? AutoCompleteTextView)?.setAdapter(dropdownArtValuesAdapter)
+        (binding.generatorSpellDisciplineInput.editText as? AutoCompleteTextView)?.setAdapter(dropdownSpellDisciplinesAdapter)
+        (binding.generatorSpellTypeInput.editText as? AutoCompleteTextView)?.setAdapter(dropdownSpellTypeAdapter)
+        (binding.generatorSpellMinimumInput.editText as? AutoCompleteTextView)?.setAdapter(dropdownSpellLevelsAdapter)
+        (binding.generatorSpellMaximumInput.editText as? AutoCompleteTextView)?.setAdapter(dropdownSpellLevelsAdapter)
         // endregion
 
         // Return inflated view
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // TODO Not yet implemented - for use in EditText/ViewModel binding.
+        // https://syrop.github.io/jekyll/update/2019/01/17/TextInputEditText-and-LiveData.html
     }
 
     override fun onStart() {
@@ -118,9 +131,46 @@ class HoardGeneratorFragment : Fragment() {
         super.onStart()
 
         // Apply widget properties TODO animate between two LinearLayouts
-        binding.generatorMethodLettercode.apply{
-            setOnCheckedChangeListener { _, isChecked ->
-                Toast.makeText(context,"By-Letter method is ${if (isChecked) "en" else "dis"}abled.",Toast.LENGTH_SHORT).show()
+        binding.generatorMethodGroup.apply{
+            setOnCheckedChangeListener { _, checkedId ->
+
+                debugReportMethodVisibility("Before: ")
+
+                // TODO Disable during transition
+                when (checkedRadioButtonId){
+                    R.id.generator_method_lettercode-> {
+                        if (binding.generatorAnimatorFrame.displayedChild != 0){
+
+                            binding.generatorAnimatorFrame.displayedChild = 0
+                            // TODO + If it doesn't do so, animate transition
+                            // TODO + Disable Viewgroups during animation
+                            Log.d("generatorMethodGroup", "By-letter method activated.")
+                        } else {
+                            Log.d("generatorMethodGroup", "By-letter method was already set.")
+                        }
+                    }
+
+                    R.id.generator_method_specific  -> {
+                        if (binding.generatorAnimatorFrame.displayedChild != 1){
+
+                            binding.generatorAnimatorFrame.displayedChild = 1
+                            // + If it doesn't do so, animate transition
+                            // + Disable Viewgroups during animation
+                            Log.d("generatorMethodGroup", "Specific-quantity method activated.")
+                        } else {
+                            Log.d("generatorMethodGroup", "Specific-quantity method was already set.")
+                        }
+                    }
+
+                    else -> {
+                        Log.d("generatorMethodGroup","No active method set.")
+                    }
+                }
+
+                debugReportMethodVisibility("After: ")
+
+                generatorViewModel
+                    .setGeneratorMethodPos(binding.generatorAnimatorFrame.displayedChild)
             }
         }
 
@@ -824,10 +874,11 @@ class HoardGeneratorFragment : Fragment() {
             }
         }
 
-        //Coinage
+        // Coinage
 
         // endregion
 
+        // region [ Buttons ]
         binding.generatorResetButton.apply{
 
             setOnClickListener {
@@ -836,10 +887,7 @@ class HoardGeneratorFragment : Fragment() {
                     generatorViewModel.clearLairCount()
                     generatorViewModel.clearSmallCount()
                     // Update recyclerviews
-                    lairAdapter = LetterAdapter(lairList, true)
-                    smallAdapter = LetterAdapter(smallList, false)
-                    binding.generatorLairRecyclerview.adapter = lairAdapter
-                    binding.generatorSmallRecyclerview.adapter = smallAdapter
+                    updateLetterAdapters()
                 } else {
                     //TODO unimplemented
                 }
@@ -854,17 +902,27 @@ class HoardGeneratorFragment : Fragment() {
                 val hoardOrder: HoardOrder
 
                 // Generate hoard order
-                hoardOrder = if (binding.generatorMethodLettercode.isChecked) {
-                    generatorViewModel.compileLetterCodeHoardOrder()
-                } else {
-                    val (coinMin,coinMax,coinSet) = getSpecificCoinageParams()
+                when (binding.generatorMethodGroup.checkedRadioButtonId) {
+                    R.id.generator_method_lettercode-> {
+                        Toast.makeText(context,"Generator button pressed (Letter method)",Toast.LENGTH_SHORT).show()
+                        Log.d("generatorGenerateButton","Procedure for generating hoard order by letter method called.")
+                        // hoardOrder = generatorViewModel.compileLetterCodeHoardOrder()
+                    }
+                    R.id.generator_method_specific  ->{
+                        Toast.makeText(context,"Generator button pressed (Specific method)",Toast.LENGTH_SHORT).show()
+                        Log.d("generatorGenerateButton","Procedure for generating hoard order by specific method called.")
+                        // val (coinMin,coinMax,coinSet) = getSpecificCoinageParams()
 
-                    generatorViewModel.compileSpecificQtyHoardOrder(
-                        coinMin,coinMax,coinSet,)
+                        // hoardOrder = generatorViewModel.compileSpecificQtyHoardOrder()
+                    }
+                    else -> {
+                        Toast.makeText(context,"Generator button pressed (No method?)",Toast.LENGTH_SHORT).show()
+                        Log.d("generatorGenerateButton","No method specified.")
+                    }
                 }
 
                 // Display contents in debug log
-                reportHoardOrderToDebug(hoardOrder)
+                // TODO dummied out - reportHoardOrderToDebug(hoardOrder)
 
                 // Toast in main app UI
                 Toast.makeText(context,"Order generated. Check debug logs.",Toast.LENGTH_SHORT).show()
@@ -872,16 +930,32 @@ class HoardGeneratorFragment : Fragment() {
                 // TODO send hoard order to actual treasure factory (also, "Treasure Hacktory"?)
             }
         }
+        // endregion
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
     //endregion
 
     //region [ Inner classes ]
+
+    // TODO Simplify with custom callback once app is navigable
+    /** Updates the adapter of the letter RecyclerView to reflect the ViewModel's copy. */
+    private fun updateLetterAdapter(targetLairAdapter: Boolean) {
+        if (targetLairAdapter) {
+            lairAdapter!!.submitList(generatorViewModel.lairList)
+        } else {
+            smallAdapter!!.submitList(generatorViewModel.smallList)
+        }
+    }
+
+    /** Updates adapter of both the letter RecyclerViews to reflect the ViewModel's copies. */
+    private fun updateLetterAdapters() {
+        lairAdapter!!.submitList(generatorViewModel.lairList)
+        smallAdapter!!.submitList(generatorViewModel.smallList)
+    }
 
     private inner class LetterAdapter(
         val letterEntries: ArrayList<LetterEntry>, private val isLairAdapter: Boolean)
@@ -895,10 +969,10 @@ class HoardGeneratorFragment : Fragment() {
 
         override fun onBindViewHolder(holder: LetterHolder, position: Int) { //TODO consider replacing position calls with holder.adapterPosition
 
-            val entry = letterEntries[position]
+            val entry = getItem(position)
 
             // Prepare literals
-            val oddsToast = letterEntries[position].oddsDesc
+            val oddsToast = Toast.makeText(context,entry.oddsDesc,Toast.LENGTH_LONG)
 
             // Bind items
             holder.bind(entry)
@@ -909,28 +983,18 @@ class HoardGeneratorFragment : Fragment() {
             holder.binding.apply {
                 lettercodeItemInfodot.setOnClickListener {
 
-                    Toast.makeText(context,oddsToast,Toast.LENGTH_LONG).show()
+                    oddsToast.show()
                 }
                 lettercodeItemDecrementButton.setOnClickListener {
 
                     generatorViewModel.decrementLetterQty(holder.adapterPosition,isLairAdapter)
-                    if(isLairAdapter){
-                        submitList(generatorViewModel.lairList)
-                    } else {
-                        submitList(generatorViewModel.smallList)
-                    }
-                    //TODO add Eatrhbound-like animation on counter textview
-                    notifyItemChanged(position)
+                    updateLetterAdapter(isLairAdapter)
+                    //notifyItemChanged(position)
                 }
                 lettercodeItemIncrementButton.setOnClickListener {
 
                     generatorViewModel.incrementLetterQty(holder.adapterPosition,isLairAdapter)
-                    if(isLairAdapter){
-                        submitList(generatorViewModel.lairList)
-                    } else {
-                        submitList(generatorViewModel.smallList)
-                    }
-                    notifyItemChanged(position)
+                    updateLetterAdapter(isLairAdapter)
                 }
             }
         }
@@ -977,80 +1041,30 @@ class HoardGeneratorFragment : Fragment() {
         override fun areContentsTheSame(
             oldItem: LetterEntry,
             newItem: LetterEntry
-        ): Boolean = oldItem == newItem
+        ): Boolean = oldItem.quantity == newItem.quantity
     }
-
     //endregion
 
     //region [ Helper functions ]
-
-    private fun convertLetterToHoardOrder() : HoardOrder {
-
-        fun rollEntry(oddsArray: IntArray): Int {
-
-            if (oddsArray[0] != 0) {
-
-                // If number rolled is below target odds number,
-                if (Random.nextInt(101) <= oddsArray[0]){
-
-                    // Return random amount within range
-                    return Random.nextInt(oddsArray[1],oddsArray[2] + 1)
-
-                    // Otherwise, add nothing for this entry.
-                } else return 0
-
-            } else return 0
-        }
-
-        val letterMap = mutableMapOf<String,Int>()
-
-        // Put values for every letter key
-        lairAdapter!!.getAdapterLetterEntries().forEach{ letterMap[it.letter] = it.quantity }
-        smallAdapter!!.getAdapterLetterEntries().forEach{ letterMap[it.letter] = it.quantity}
-
-        val initialDescription = "Initial composition: "
-        val lettersStringBuffer = StringBuffer(initialDescription)
-
-        val newOrder = HoardOrder()
-
-        newOrder.hoardName = hoardTitleField.text.toString()
-
-        // Roll for each non-empty entry TODO: move to non-UI thread
-        letterMap.forEach { (key, value) ->
-            if ((oddsTable.containsKey(key))&&(value > 0)) {
-
-                // Roll for each type of treasure
-                repeat (value) {
-                    newOrder.copperPieces       += rollEntry(oddsTable[key]?.get(0)!!)
-                    newOrder.silverPieces       += rollEntry(oddsTable[key]?.get(1)!!)
-                    newOrder.electrumPieces     += rollEntry(oddsTable[key]?.get(2)!!)
-                    newOrder.goldPieces         += rollEntry(oddsTable[key]?.get(3)!!)
-                    newOrder.hardSilverPieces   += rollEntry(oddsTable[key]?.get(4)!!)
-                    newOrder.platinumPieces     += rollEntry(oddsTable[key]?.get(5)!!)
-                    newOrder.gems               += rollEntry(oddsTable[key]?.get(6)!!)
-                    newOrder.artObjects         += rollEntry(oddsTable[key]?.get(7)!!)
-                    newOrder.potions            += rollEntry(oddsTable[key]?.get(8)!!)
-                    newOrder.scrolls            += rollEntry(oddsTable[key]?.get(9)!!)
-                    newOrder.armorOrWeapons     += rollEntry(oddsTable[key]?.get(10)!!)
-                    newOrder.anyButWeapons      += rollEntry(oddsTable[key]?.get(11)!!)
-                    newOrder.anyMagicItems      += rollEntry(oddsTable[key]?.get(12)!!)
-                }
-
-                // Log letter type in the StringBuffer
-                if (!(lettersStringBuffer.equals(initialDescription))) {
-                    // Add a comma if not the first entry TODO fix this
-                    lettersStringBuffer.append(", ")
-                }
-                // Add letter times quantity
-                    lettersStringBuffer.append("${key}x$value")
-            }
-        }
-
-        // Update description log
-        newOrder.creationDescription = lettersStringBuffer.toString()
-
-        // Return result
-        return newOrder
+    private fun debugReportMethodVisibility(prefix: String = "", suffix: String =""){
+        Log.d("generatorMethodGroup",prefix + "1st child (id ${
+            binding.generatorAnimatorFrame.getChildAt(0).id
+        }) is ${
+            when (binding.generatorAnimatorFrame.getChildAt(0).visibility){
+                View.VISIBLE    -> "visible"
+                View.INVISIBLE  -> "invisible"
+                View.GONE       -> "gone"
+                else            -> "unknown"
+            }}." + suffix)
+        Log.d("generatorMethodGroup",prefix + "2nd child (id ${
+            binding.generatorAnimatorFrame.getChildAt(1).id
+        }) is ${
+            when (binding.generatorAnimatorFrame.getChildAt(1).visibility){
+                View.VISIBLE    -> "visible"
+                View.INVISIBLE  -> "invisible"
+                View.GONE       -> "gone"
+                else            -> "unknown"
+            }}." + suffix)
     }
 
     private fun reportHoardOrderToDebug(order: HoardOrder){
@@ -1080,7 +1094,7 @@ class HoardGeneratorFragment : Fragment() {
             }
 
             override fun onAnimationEnd(animation: Animator?) {
-                view.isEnabled = true
+                view.isEnabled = (view.visibility == View.VISIBLE)
             }
         })
     }
@@ -1105,8 +1119,6 @@ class HoardGeneratorFragment : Fragment() {
 
     //private fun getSpecificSpellCoParams():
 
-
-
     //endregion
 
     companion object {
@@ -1114,20 +1126,5 @@ class HoardGeneratorFragment : Fragment() {
         fun newInstance(): HoardGeneratorFragment {
             return HoardGeneratorFragment()
         }
-
-        private val treasureLabels = listOf<String>(
-            "copper piece(s)",
-            "silver piece(s)",
-            "electrum piece(s)",
-            "gold piece(s)",
-            "hard silver piece(s)",
-            "platinum piece(s)",
-            "gem(s)",
-            "art object(s)",
-            "potion(s)/oil(s)",
-            "scroll(s)",
-            "magic weapon(s)/armor",
-            "non-weapon magic item(s)",
-            "magic item(s)")
     }
 }

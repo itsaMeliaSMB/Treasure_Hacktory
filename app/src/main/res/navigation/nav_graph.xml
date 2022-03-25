@@ -31,6 +31,10 @@
         <action
             android:id="@+id/action_hoardViewerFragment_to_placeholder"
             app:destination="@id/placeholder_uniqueItemList" />
+        <argument
+            android:name="selectedHoardID"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment android:id="@+id/placeholder_uniqueItemList" >
         <action
