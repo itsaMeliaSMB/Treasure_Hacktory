@@ -19,6 +19,7 @@
         android:id="@+id/hoard_list_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_centerInParent="true"
         android:scrollbarStyle="outsideOverlay"
         android:scrollbars="vertical"
         tools:listitem="@layout/hoard_list_item"/>
@@ -27,7 +28,7 @@
         android:id="@+id/hoard_list_whenempty_group"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/backgroundColor"
+        android:layout_centerInParent="true"
         android:visibility="gone">
 
         <ImageView

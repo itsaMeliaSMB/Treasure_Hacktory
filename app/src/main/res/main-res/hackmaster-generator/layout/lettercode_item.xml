@@ -59,8 +59,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/lettercode_item_decrement_button"
         app:layout_constraintTop_toTopOf="@+id/lettercode_item_decrement_button"
-        tools:text="1000"
-        app:letterQuantity="@{}"/>
+        tools:text="1000"/>
 
     <Button
         android:id="@+id/lettercode_item_increment_button"

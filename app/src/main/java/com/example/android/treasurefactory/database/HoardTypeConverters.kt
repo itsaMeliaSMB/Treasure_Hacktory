@@ -91,12 +91,12 @@ class HoardTypeConverters {
     fun toBoolean(jsonBool: String?): Boolean = Gson().fromJson(jsonBool,Boolean::class.java)
 
     @TypeConverter
-    fun fromListOfDoubleStringPairs(list: List<Pair<Double,String>>?) : String? = Gson().toJson(list)
+    fun fromListOfStringDoublePairs(list: List<Pair<String,Double>>?) : String? = Gson().toJson(list)
 
     @TypeConverter
-    fun toListOfDoubleStringPairs(jsonList: String?) : List<Pair<Double,String>?>? {
+    fun toListOfStringDoublePairs(jsonList: String?) : List<Pair<String,Double>?>? {
 
-        val typeToken = object : TypeToken<List<Pair<Double,String>>>() {}.type
+        val typeToken = object : TypeToken<List<Pair<String,Double>>>() {}.type
 
         return Gson().fromJson(jsonList,typeToken)
     }

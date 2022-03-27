@@ -9,7 +9,6 @@ import com.example.android.treasurefactory.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
 
 //TODO revisit this and consider seperating entities from data class: https://jacquessmuts.github.io/post/modularization_room/
 
@@ -68,11 +67,17 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates gem template table using hardcoded CSV file. */
         suspend fun populateGemsByCSV(gemDao: GemDao) {
 
-            val csvFilePath = "src/main/res/raw/seed_gem_v01.csv"
+            // val csvFilePath = "src/main/res/raw/seed_gem_v01.csv"
             var iterationCount = 0
 
+            val inputStream = context.resources.openRawResource(
+                context.resources.getIdentifier("seed_gem_v01","raw",context.packageName))
+
+            /*
             File(csvFilePath)
                 .inputStream()
+            */
+            inputStream
                 .bufferedReader()
                 .lineSequence()
                 .forEach { csvLine ->
@@ -108,11 +113,13 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates magic item template table using hardcoded CSV file. */
         suspend fun populateItemsByCSV(magicItemDao: MagicItemDao) {
 
-            val csvFilePath = "src/main/res/raw/seed_magicitems_v01.csv"
+            //val csvFilePath = "src/main/res/raw/seed_magicitems_v01.csv"
             var iterationCount = 0
 
-            File(csvFilePath)
-                .inputStream()
+            val inputStream = context.resources.openRawResource(
+                context.resources.getIdentifier("seed_magicitems_v01","raw",context.packageName))
+
+            inputStream
                 .bufferedReader()
                 .lineSequence()
                 .forEach { csvLine ->
@@ -199,12 +206,14 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates spell template table using hardcoded CSV file. */
         suspend fun populateSpellsByCSV(spellDao: SpellCollectionDao) {
 
-            val csvFilePath = "src/main/res/raw/seed_spell_v01.csv"
+            //val csvFilePath = "src/main/res/raw/seed_spell_v01.csv"
             var iterationCount = 0
 
+            val inputStream = context.resources.openRawResource(
+                context.resources.getIdentifier("seed_spell_v01","raw",context.packageName))
+
             // Seed spell templates
-            File(csvFilePath)
-                .inputStream()
+            inputStream
                 .bufferedReader()
                 .lineSequence()
                 .forEach { csvLine ->

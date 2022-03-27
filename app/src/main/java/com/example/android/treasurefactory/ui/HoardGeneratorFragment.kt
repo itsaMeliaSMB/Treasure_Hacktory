@@ -29,14 +29,6 @@ import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModel
 
 class HoardGeneratorFragment : Fragment() {
 
-    /*/ *** Fragment ViewModel ***
-    private val hoardGeneratorViewModel: HoardGeneratorViewModel by lazy {
-        ViewModelProvider(this).get(HoardGeneratorViewModel::class.java)
-    }
-    //TODO continue from page 178, potentially remove*/
-
-    //TODO add Specific quantity generation method after completing MVP
-
     //region [ Property declarations ]
 
     private var _binding: LayoutGeneratorFragmentBinding? = null
@@ -44,7 +36,7 @@ class HoardGeneratorFragment : Fragment() {
 
     private val generatorViewModel: HoardGeneratorViewModel by lazy {
 
-        ViewModelProvider(this).get(HoardGeneratorViewModel::class.java)
+        ViewModelProvider(this)[HoardGeneratorViewModel::class.java]
     }
 
     private var lairAdapter: LetterAdapter? = null
@@ -61,7 +53,7 @@ class HoardGeneratorFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // Inflate the layout for this fragment
         _binding = LayoutGeneratorFragmentBinding.inflate(inflater, container, false)
@@ -404,6 +396,9 @@ class HoardGeneratorFragment : Fragment() {
                 TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
                 binding.generatorCoinageLayout.visibility = View.VISIBLE
             }
+
+            // Scroll to top of card
+            binding.generatorSpecificLayout.scrollTo(0,binding.generatorCoinageCard.top)
         }
 
         binding.generatorGemHeader.setOnClickListener {
@@ -509,18 +504,21 @@ class HoardGeneratorFragment : Fragment() {
                     }
                 }
 
-                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorCoinageIndicator, View.ROTATION, 0f, 90f)
+                val expandAnimator = ObjectAnimator.ofFloat(binding.generatorGemIndicator, View.ROTATION, 0f, 90f)
 
                 // Rotate the indicator
                 expandAnimator.apply{
                     duration = 250
-                    disableViewDuringAnimation(binding.generatorCoinageHeader)
+                    disableViewDuringAnimation(binding.generatorGemHeader)
                     start() }
 
-                // Reveal the coinage layout
-                TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
+                // Reveal the gem layout
+                TransitionManager.beginDelayedTransition(binding.generatorGemCard,AutoTransition())
                 binding.generatorGemLayout.visibility = View.VISIBLE
             }
+
+            // Scroll to top of card
+            binding.generatorSpecificLayout.scrollTo(0,binding.generatorGemCard.top)
         }
 
         binding.generatorArtHeader.setOnClickListener {
@@ -638,6 +636,9 @@ class HoardGeneratorFragment : Fragment() {
                 TransitionManager.beginDelayedTransition(binding.generatorArtCard,AutoTransition())
                 binding.generatorArtLayout.visibility = View.VISIBLE
             }
+
+            // Scroll to top of card
+            binding.generatorSpecificLayout.scrollTo(0,binding.generatorArtCard.top)
         }
 
         binding.generatorMagicHeader.setOnClickListener {
@@ -755,6 +756,9 @@ class HoardGeneratorFragment : Fragment() {
                 TransitionManager.beginDelayedTransition(binding.generatorMagicCard,AutoTransition())
                 binding.generatorMagicLayout.visibility = View.VISIBLE
             }
+
+            // Scroll to top of card
+            binding.generatorSpecificLayout.scrollTo(0,binding.generatorMagicCard.top)
         }
 
         binding.generatorSpellHeader.setOnClickListener {
@@ -858,6 +862,8 @@ class HoardGeneratorFragment : Fragment() {
                         )
                         binding.generatorArtLayout.visibility = View.GONE
                     }
+
+
                 }
 
                 val expandAnimator = ObjectAnimator.ofFloat(binding.generatorSpellIndicator, View.ROTATION, 0f, 90f)
@@ -872,9 +878,10 @@ class HoardGeneratorFragment : Fragment() {
                 TransitionManager.beginDelayedTransition(binding.generatorSpellCard,AutoTransition())
                 binding.generatorSpellLayout.visibility = View.VISIBLE
             }
-        }
 
-        // Coinage
+            // Scroll to top of card
+            binding.generatorSpecificLayout.scrollTo(0,binding.generatorSpellCard.top)
+        }
 
         // endregion
 
@@ -989,12 +996,13 @@ class HoardGeneratorFragment : Fragment() {
 
                     generatorViewModel.decrementLetterQty(holder.adapterPosition,isLairAdapter)
                     updateLetterAdapter(isLairAdapter)
-                    //notifyItemChanged(position)
+                    notifyItemChanged(position)
                 }
                 lettercodeItemIncrementButton.setOnClickListener {
 
                     generatorViewModel.incrementLetterQty(holder.adapterPosition,isLairAdapter)
                     updateLetterAdapter(isLairAdapter)
+                    notifyItemChanged(position)
                 }
             }
         }

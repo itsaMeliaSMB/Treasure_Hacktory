@@ -6,15 +6,17 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
+import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.databinding.HoardListItemBinding
 import com.example.android.treasurefactory.databinding.LayoutHoardListBinding
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.viewmodel.HoardListViewModel
+import com.example.android.treasurefactory.viewmodel.HoardListViewModelFactory
 import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
 
@@ -34,14 +36,19 @@ class HoardListFragment : Fragment() {
     private var _binding: LayoutHoardListBinding? = null
     private val binding get() = _binding!!
 
-    private var hoardAdapter: HoardAdapter? = null
+    private var hoardAdapter: HoardAdapter? = HoardAdapter(emptyList())
     //TODO add bindings after renaming layout IDs
 
+    // https://darrenfinch.com/how-to-get-a-view-model-with-viewmodelprovider-property-delegates/
     // Modified from BNR pg 178 because of depreciated class
-    private val hoardListViewModel: HoardListViewModel by lazy {
+    private val hoardListViewModel: HoardListViewModel by viewModels {
+        HoardListViewModelFactory((this.requireActivity().application as TreasureHacktoryApplication).repository)
+    }
+
+    /*by lazy {
 
         ViewModelProvider(this).get(hoardListViewModel::class.java)
-    }
+    }*/
 
     companion object{
         fun newInstance(): HoardListFragment {
@@ -78,14 +85,11 @@ class HoardListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+                              savedInstanceState: Bundle?): View? {
 
         // Inflate the layout for this fragment
         _binding = LayoutHoardListBinding.inflate(inflater, container, false)
         val view = binding.root
-
-        // Define adapters
-        hoardAdapter = HoardAdapter(emptyList())
 
         // Give RecyclerView a Layout manager [required]
         binding.hoardListRecycler.apply {
@@ -124,7 +128,6 @@ class HoardListFragment : Fragment() {
     }
 
     private fun updateUI(hoards: List<Hoard>) {
-
         hoardAdapter = HoardAdapter(hoards)
         binding.hoardListRecycler.adapter = hoardAdapter
     }

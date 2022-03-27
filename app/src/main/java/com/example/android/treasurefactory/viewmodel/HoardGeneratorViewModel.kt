@@ -3,6 +3,10 @@ package com.example.android.treasurefactory.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.android.treasurefactory.model.LetterEntry
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.component3
+import kotlin.collections.set
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -432,6 +436,28 @@ class HoardGeneratorViewModel(): ViewModel() {
 
     val lairList = getLetterArrayList(true)
     val smallList = getLetterArrayList(false)
+
+    /*
+    Pending refactor for live data before safety commit.
+    https://www.rockandnull.com/jetpack-viewmodel-initialization/
+    https://medium.com/@fluxtah/two-ways-to-keep-livedata-t-immutable-and-mutable-only-from-a-single-source-a4a1dcdc0ef
+
+    val _lairListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
+    val lairListLiveData: LiveData<ArrayList<LetterEntry>> = liveData {
+        emit(getLetterArrayList(true))
+    }
+    val _smallListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
+    val smallListLiveData: LiveData<ArrayList<LetterEntry>>
+        get() = _smallListLiveData
+
+
+    init {
+        viewModelScope.launch {
+            _lairListLiveData.value = getLetterArrayList(true)
+            _smallListLiveData.value = getLetterArrayList(false)
+        }
+    }
+    */
 
     val coinageValues = object {
         var minimum = 0.0

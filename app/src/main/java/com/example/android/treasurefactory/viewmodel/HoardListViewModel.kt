@@ -10,7 +10,7 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
 }
 
 class HoardListViewModelFactory(private val repository: HMRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HoardListViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return HoardListViewModel(repository) as T
