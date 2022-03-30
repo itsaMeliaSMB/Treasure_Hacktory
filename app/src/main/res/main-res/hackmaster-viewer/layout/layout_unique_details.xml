@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--TODO for implementing nested recyclerviews instead of expandablelisteview
+    https://medium.com/nerd-for-tech/nested-recyclerview-in-android-e5afb2b9771a-->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/unique_details_toolbar"
         android:layout_width="match_parent"

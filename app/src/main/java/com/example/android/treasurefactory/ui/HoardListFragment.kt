@@ -132,6 +132,9 @@ class HoardListFragment : Fragment() {
         binding.hoardListRecycler.adapter = hoardAdapter
     }
 
+    // For list item selection:
+    // https://developer.android.com/guide/topics/ui/layout/recyclerview-custom#select
+
     private inner class HoardViewHolder(val binding: HoardListItemBinding)
         : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 

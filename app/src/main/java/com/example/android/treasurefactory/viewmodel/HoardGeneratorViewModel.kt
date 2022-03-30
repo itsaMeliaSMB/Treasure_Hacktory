@@ -1,8 +1,11 @@
 package com.example.android.treasurefactory.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.example.android.treasurefactory.model.LetterEntry
+import java.util.*
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.component3
@@ -438,27 +441,23 @@ class HoardGeneratorViewModel(): ViewModel() {
     val smallList = getLetterArrayList(false)
 
     /*
-    Pending refactor for live data before safety commit.
+    Pending refactor for live data before safety commit. TODO left off here
     https://www.rockandnull.com/jetpack-viewmodel-initialization/
     https://medium.com/@fluxtah/two-ways-to-keep-livedata-t-immutable-and-mutable-only-from-a-single-source-a4a1dcdc0ef
+    https://stackoverflow.com/questions/50629402/how-to-properly-update-androids-recyclerview-using-livedata
+    https://stackoverflow.com/questions/66595863/update-a-row-in-recyclerview-with-listadapter
+    */
 
-    val _lairListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
+    //val _lairListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
     val lairListLiveData: LiveData<ArrayList<LetterEntry>> = liveData {
         emit(getLetterArrayList(true))
     }
-    val _smallListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
-    val smallListLiveData: LiveData<ArrayList<LetterEntry>>
-        get() = _smallListLiveData
-
-
-    init {
-        viewModelScope.launch {
-            _lairListLiveData.value = getLetterArrayList(true)
-            _smallListLiveData.value = getLetterArrayList(false)
-        }
+    //val _smallListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
+    val smallListLiveData: LiveData<ArrayList<LetterEntry>> = liveData {
+        emit(getLetterArrayList(false))
     }
-    */
 
+    // region [ Specific Quantity value container objects ]
     val coinageValues = object {
         var minimum = 0.0
         var maximum = 0.0
@@ -551,6 +550,7 @@ class HoardGeneratorViewModel(): ViewModel() {
             restrictChecked = false
         }
     }
+    // endregion
 
     /**
      *  Returns a multi-line String for a given [oddsTable] value array.
@@ -619,32 +619,64 @@ class HoardGeneratorViewModel(): ViewModel() {
         }
     }
 
-    fun incrementLetterQty(position: Int, targetLairList: Boolean) {
+    private fun updateLetterLiveDataEntry(position: Int, newQty : Int, targetLairAdapter: Boolean){
+        if (targetLairAdapter){
+            if (!(lairListLiveData.value.isNullOrEmpty())
+                &&(position in 0 until lairListLiveData.value!!.size)) {
 
-        if (targetLairList) {
-            try{
-                lairList[position].quantity = (lairList[position].quantity + 1)
-                    .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
-            } catch (e: ArrayIndexOutOfBoundsException) {}
+                Log.d("updateLetterLiveDataEntry",
+                    "Before: lairListLiveData.value!![$position] was ${lairListLiveData.value!![position]}")
+                lairListLiveData.value!![position].quantity = newQty
+                Log.d("updateLetterLiveDataEntry",
+                    "After: lairListLiveData.value!![$position] is ${lairListLiveData.value!![position]} (New value was $newQty)")
+
+            } else {
+
+                Log.d("updateLetterLiveDataEntry",
+                    "ERROR: Position $position was not in lairListLiveData's range.")
+            }
         } else {
-            try{
-                smallList[position].quantity = (smallList[position].quantity + 1)
-                    .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
-            } catch (e: ArrayIndexOutOfBoundsException) {}
+            if (!(smallListLiveData.value.isNullOrEmpty())
+                &&(position in 0 until smallListLiveData.value!!.size)) {
+
+                Log.d("updateLetterLiveDataEntry",
+                    "Before: smallListLiveData.value!![$position] was ${smallListLiveData.value!![position]}")
+                smallListLiveData.value!![position].quantity = newQty
+                Log.d("updateLetterLiveDataEntry",
+                    "After: lairListLiveData.value!![$position] is ${smallListLiveData.value!![position]} (New value was $newQty)")
+            } else {
+
+                Log.d("updateLetterLiveDataEntry",
+                    "ERROR: Position $position was not in smallListLiveData's range.")
+            }
         }
+
+        //TODO Left off here. LiveData updates correctly, but recyclerview doesn't. Start there.
     }
 
-    fun decrementLetterQty(position: Int, targetLairList: Boolean) {
+    fun incrementLetterQty(position: Int, increment: Int, targetLairList: Boolean) {
 
         if (targetLairList) {
             try{
-                lairList[position].quantity = (lairList[position].quantity - 1)
-                    .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
+                //lairList[position].quantity = (lairList[position].quantity + increment)
+                //    .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
+                updateLetterLiveDataEntry(
+                    position,
+                    (lairListLiveData.value!![position].quantity + increment)
+                        .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY),
+                    targetLairList
+                )
             } catch (e: ArrayIndexOutOfBoundsException) {}
         } else {
             try{
-                smallList[position].quantity = (smallList[position].quantity - 1)
-                    .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
+                //smallList[position].quantity = (smallList[position].quantity + increment)
+                //    .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
+                updateLetterLiveDataEntry(
+                    position,
+                    (smallListLiveData.value!![position].quantity + increment)
+                        .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY),
+                    targetLairList
+                )
             } catch (e: ArrayIndexOutOfBoundsException) {}
         }
     }
@@ -755,7 +787,7 @@ class HoardGeneratorViewModel(): ViewModel() {
         fun getSortedDenominations() : MutableList<Pair<Double,String>> {
             return allowedDenoms.filter { it.first in 0.01..5.00 }
                 .sortedBy{it.first}
-                .map { (gpValue, name) -> gpValue.roundToTwoDecimal() to name.toLowerCase() }
+                .map { (gpValue, name) -> gpValue.roundToTwoDecimal() to name.lowercase(Locale.getDefault()) }
                 .toMutableList()
         }
 

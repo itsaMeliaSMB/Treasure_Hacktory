@@ -3,7 +3,6 @@ package com.example.android.treasurefactory.ui
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -61,8 +60,8 @@ class HoardGeneratorFragment : Fragment() {
 
         // region [ Prepare Letter Code views ]
         // Define the letter adapters
-        lairAdapter = LetterAdapter(generatorViewModel.lairList, true)
-        smallAdapter = LetterAdapter(generatorViewModel.smallList, false)
+        lairAdapter = LetterAdapter(true)
+        smallAdapter = LetterAdapter(false)
 
         binding.generatorLairRecyclerview.apply{
             // Set up By-Letter recyclerview
@@ -114,6 +113,16 @@ class HoardGeneratorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        generatorViewModel.apply {
+            lairListLiveData.observe(viewLifecycleOwner) { lairList ->
+                lairAdapter!!.submitList(lairList)
+            }
+            smallListLiveData.observe(viewLifecycleOwner) { smallList ->
+                smallAdapter!!.submitList(smallList)
+            }
+        }
+
         // TODO Not yet implemented - for use in EditText/ViewModel binding.
         // https://syrop.github.io/jekyll/update/2019/01/17/TextInputEditText-and-LiveData.html
     }
@@ -965,7 +974,8 @@ class HoardGeneratorFragment : Fragment() {
     }
 
     private inner class LetterAdapter(
-        val letterEntries: ArrayList<LetterEntry>, private val isLairAdapter: Boolean)
+        //val letterEntries: ArrayList<LetterEntry>,
+        private val isLairAdapter: Boolean)
         : ListAdapter<LetterEntry,LetterAdapter.LetterHolder>(LetterDiffCallback()) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LetterHolder {
@@ -976,66 +986,41 @@ class HoardGeneratorFragment : Fragment() {
 
         override fun onBindViewHolder(holder: LetterHolder, position: Int) { //TODO consider replacing position calls with holder.adapterPosition
 
-            val entry = getItem(position)
+            val currentItem = getItem(position)
 
-            // Prepare literals
-            val oddsToast = Toast.makeText(context,entry.oddsDesc,Toast.LENGTH_LONG)
-
-            // Bind items
-            holder.bind(entry)
-
-            //TODO fix UI update if it doesn't work when tested
-
-            // Apply onClick listeners
-            holder.binding.apply {
-                lettercodeItemInfodot.setOnClickListener {
-
-                    oddsToast.show()
-                }
-                lettercodeItemDecrementButton.setOnClickListener {
-
-                    generatorViewModel.decrementLetterQty(holder.adapterPosition,isLairAdapter)
-                    updateLetterAdapter(isLairAdapter)
-                    notifyItemChanged(position)
-                }
-                lettercodeItemIncrementButton.setOnClickListener {
-
-                    generatorViewModel.incrementLetterQty(holder.adapterPosition,isLairAdapter)
-                    updateLetterAdapter(isLairAdapter)
-                    notifyItemChanged(position)
-                }
-            }
+            holder.bind(currentItem)
         }
 
         private inner class LetterHolder (val binding: LettercodeItemBinding)
             : RecyclerView.ViewHolder(binding.root) {
 
-            private lateinit var typeString: String
-
-            /*
-            val infoDot     = view.findViewById(R.id.lettercode_item_infodot) as ImageView
-            val typeLabel   = view.findViewById(R.id.lettercode_item_name) as TextView
-            val minusButton = view.findViewById(R.id.lettercode_item_decrement_button) as Button
-            val quantityText= view.findViewById(R.id.lettercode_item_counter) as TextView
-            val plusButton  = view.findViewById(R.id.letterdode_item_increment_button) as Button
-            */
-
             fun bind(letterEntry: LetterEntry){
 
-                typeString = "Type ${letterEntry.letterCode}"
+                val typeString = "Type ${letterEntry.letterCode}"
+                val oddsToast = Toast.makeText(context,letterEntry.oddsDesc,Toast.LENGTH_LONG)
 
-                binding.lettercodeItemName.text = typeString
-                binding.lettercodeItemCounter.text  = letterEntry.quantity.toString()
+                //TODO move OnClickListeners back to OnBindViewHolder if new binding schema fails
+                binding.apply {
+                    lettercodeItemName.text = typeString
+                    lettercodeItemInfodot.setOnClickListener {
+
+                        oddsToast.show()
+                    }
+                    lettercodeItemDecrementButton.setOnClickListener {
+
+                        generatorViewModel.incrementLetterQty(adapterPosition,-1, isLairAdapter)
+                        //updateLetterAdapter(isLairAdapter)
+                        //notifyItemChanged(position)
+                    }
+                    lettercodeItemIncrementButton.setOnClickListener {
+
+                        generatorViewModel.incrementLetterQty(adapterPosition,1, isLairAdapter)
+                        //updateLetterAdapter(isLairAdapter)
+                        //notifyItemChanged(position)
+                    }
+                    lettercodeItemCounter.text  = letterEntry.quantity.toString()
+                }
             }
-
-        }
-
-        fun getAdapterLetterEntries() : List<LetterEntry> = letterEntries
-
-        @SuppressLint("NotifyDataSetChanged")
-        fun resetLetterCounter(){
-            if (isLairAdapter) generatorViewModel.clearLairCount() else generatorViewModel.clearSmallCount()
-            notifyDataSetChanged()
         }
     }
 
@@ -1044,12 +1029,12 @@ class HoardGeneratorFragment : Fragment() {
         override fun areItemsTheSame(
             oldItem: LetterEntry,
             newItem: LetterEntry
-        ): Boolean = oldItem.letterCode == newItem.letterCode
+        ) = oldItem.letterCode == newItem.letterCode
 
         override fun areContentsTheSame(
             oldItem: LetterEntry,
             newItem: LetterEntry
-        ): Boolean = oldItem.quantity == newItem.quantity
+        ) = oldItem.quantity == newItem.quantity
     }
     //endregion
 

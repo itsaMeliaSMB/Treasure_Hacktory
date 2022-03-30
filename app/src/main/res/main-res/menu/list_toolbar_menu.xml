@@ -5,6 +5,7 @@
     <item
         android:id="@+id/action_new_hoard"
         android:icon="@drawable/clipart_treasure_add_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
         android:title="@string/new_hoard"
         app:showAsAction="ifRoom"/>
 
