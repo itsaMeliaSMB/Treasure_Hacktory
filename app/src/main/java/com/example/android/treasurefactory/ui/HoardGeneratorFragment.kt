@@ -3,6 +3,7 @@ package com.example.android.treasurefactory.ui
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -38,12 +39,8 @@ class HoardGeneratorFragment : Fragment() {
         ViewModelProvider(this)[HoardGeneratorViewModel::class.java]
     }
 
-    private var lairAdapter: LetterAdapter? = null
-
-    private var smallAdapter: LetterAdapter? = null
-
-    // TODO continue porting over logic from here to viewmodel
-    // TODO continue to refactor for viewbinding
+    private val lairAdapter: LetterAdapter = LetterAdapter(true)
+    private val smallAdapter: LetterAdapter = LetterAdapter(false)
 
     //endregion
 
@@ -59,10 +56,6 @@ class HoardGeneratorFragment : Fragment() {
         val view = binding.root
 
         // region [ Prepare Letter Code views ]
-        // Define the letter adapters
-        lairAdapter = LetterAdapter(true)
-        smallAdapter = LetterAdapter(false)
-
         binding.generatorLairRecyclerview.apply{
             // Set up By-Letter recyclerview
             layoutManager = LinearLayoutManager(context)
@@ -115,11 +108,13 @@ class HoardGeneratorFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         generatorViewModel.apply {
-            lairListLiveData.observe(viewLifecycleOwner) { lairList ->
-                lairAdapter!!.submitList(lairList)
+            lairListLiveData.observe(viewLifecycleOwner) { newLairList ->
+                lairAdapter.submitList(newLairList)
+                Log.d("HoardGeneratorFragment","lairListLiveData on ViewModel observed.")
             }
-            smallListLiveData.observe(viewLifecycleOwner) { smallList ->
-                smallAdapter!!.submitList(smallList)
+            smallListLiveData.observe(viewLifecycleOwner) { newSmallList ->
+                smallAdapter.submitList(newSmallList)
+                Log.d("HoardGeneratorFragment","smallListLiveData on ViewModel observed.")
             }
         }
 
@@ -127,6 +122,7 @@ class HoardGeneratorFragment : Fragment() {
         // https://syrop.github.io/jekyll/update/2019/01/17/TextInputEditText-and-LiveData.html
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onStart() {
 
         super.onStart()
@@ -134,8 +130,6 @@ class HoardGeneratorFragment : Fragment() {
         // Apply widget properties TODO animate between two LinearLayouts
         binding.generatorMethodGroup.apply{
             setOnCheckedChangeListener { _, checkedId ->
-
-                debugReportMethodVisibility("Before: ")
 
                 // TODO Disable during transition
                 when (checkedRadioButtonId){
@@ -168,15 +162,12 @@ class HoardGeneratorFragment : Fragment() {
                     }
                 }
 
-                debugReportMethodVisibility("After: ")
-
                 generatorViewModel
                     .setGeneratorMethodPos(binding.generatorAnimatorFrame.displayedChild)
             }
         }
 
         // region [ Letter Code method groups ]
-
         binding.generatorLairHeader.setOnClickListener {
 
             // TODO Move functions outside listener.
@@ -275,11 +266,9 @@ class HoardGeneratorFragment : Fragment() {
                 binding.generatorSmallRecyclerview.visibility = View.VISIBLE
             }
         }
-
         // endregion
 
         // region [ Specific Quantity method groups ]
-
         binding.generatorCoinageHeader.setOnClickListener {
             if (binding.generatorCoinageLayout.visibility == View.VISIBLE) {
 
@@ -404,10 +393,10 @@ class HoardGeneratorFragment : Fragment() {
                 // Reveal the coinage layout
                 TransitionManager.beginDelayedTransition(binding.generatorCoinageCard,AutoTransition())
                 binding.generatorCoinageLayout.visibility = View.VISIBLE
-            }
 
-            // Scroll to top of card
-            binding.generatorSpecificLayout.scrollTo(0,binding.generatorCoinageCard.top)
+                // Scroll to top of card
+                binding.generatorScrollview.scrollTo(0,binding.generatorCoinageCard.top)
+            }
         }
 
         binding.generatorGemHeader.setOnClickListener {
@@ -524,10 +513,10 @@ class HoardGeneratorFragment : Fragment() {
                 // Reveal the gem layout
                 TransitionManager.beginDelayedTransition(binding.generatorGemCard,AutoTransition())
                 binding.generatorGemLayout.visibility = View.VISIBLE
-            }
 
-            // Scroll to top of card
-            binding.generatorSpecificLayout.scrollTo(0,binding.generatorGemCard.top)
+                // Scroll to top of card
+                binding.generatorScrollview.scrollTo(0,binding.generatorGemCard.top)
+            }
         }
 
         binding.generatorArtHeader.setOnClickListener {
@@ -644,10 +633,10 @@ class HoardGeneratorFragment : Fragment() {
                 // Reveal the gem layout
                 TransitionManager.beginDelayedTransition(binding.generatorArtCard,AutoTransition())
                 binding.generatorArtLayout.visibility = View.VISIBLE
-            }
 
-            // Scroll to top of card
-            binding.generatorSpecificLayout.scrollTo(0,binding.generatorArtCard.top)
+                // Scroll to top of card
+                binding.generatorScrollview.scrollTo(0,binding.generatorArtCard.top)
+            }
         }
 
         binding.generatorMagicHeader.setOnClickListener {
@@ -764,10 +753,10 @@ class HoardGeneratorFragment : Fragment() {
                 // Reveal the magic item layout
                 TransitionManager.beginDelayedTransition(binding.generatorMagicCard,AutoTransition())
                 binding.generatorMagicLayout.visibility = View.VISIBLE
-            }
 
-            // Scroll to top of card
-            binding.generatorSpecificLayout.scrollTo(0,binding.generatorMagicCard.top)
+                // Scroll to top of card
+                binding.generatorScrollview.scrollTo(0,binding.generatorMagicCard.top)
+            }
         }
 
         binding.generatorSpellHeader.setOnClickListener {
@@ -886,12 +875,11 @@ class HoardGeneratorFragment : Fragment() {
                 // Reveal the spell layout
                 TransitionManager.beginDelayedTransition(binding.generatorSpellCard,AutoTransition())
                 binding.generatorSpellLayout.visibility = View.VISIBLE
+
+                // Scroll to top of card
+                binding.generatorScrollview.scrollTo(0,binding.generatorSpellCard.top)
             }
-
-            // Scroll to top of card
-            binding.generatorSpecificLayout.scrollTo(0,binding.generatorSpellCard.top)
         }
-
         // endregion
 
         // region [ Buttons ]
@@ -902,8 +890,9 @@ class HoardGeneratorFragment : Fragment() {
                     // Zero out type counters
                     generatorViewModel.clearLairCount()
                     generatorViewModel.clearSmallCount()
-                    // Update recyclerviews
-                    updateLetterAdapters()
+                    // Update recyclerviews TODO see why DiffUtil doesn't automatically update
+                    binding.generatorLairRecyclerview.adapter?.notifyDataSetChanged()
+                    binding.generatorSmallRecyclerview.adapter?.notifyDataSetChanged()
                 } else {
                     //TODO unimplemented
                 }
@@ -957,22 +946,6 @@ class HoardGeneratorFragment : Fragment() {
 
     //region [ Inner classes ]
 
-    // TODO Simplify with custom callback once app is navigable
-    /** Updates the adapter of the letter RecyclerView to reflect the ViewModel's copy. */
-    private fun updateLetterAdapter(targetLairAdapter: Boolean) {
-        if (targetLairAdapter) {
-            lairAdapter!!.submitList(generatorViewModel.lairList)
-        } else {
-            smallAdapter!!.submitList(generatorViewModel.smallList)
-        }
-    }
-
-    /** Updates adapter of both the letter RecyclerViews to reflect the ViewModel's copies. */
-    private fun updateLetterAdapters() {
-        lairAdapter!!.submitList(generatorViewModel.lairList)
-        smallAdapter!!.submitList(generatorViewModel.smallList)
-    }
-
     private inner class LetterAdapter(
         //val letterEntries: ArrayList<LetterEntry>,
         private val isLairAdapter: Boolean)
@@ -1008,15 +981,15 @@ class HoardGeneratorFragment : Fragment() {
                     }
                     lettercodeItemDecrementButton.setOnClickListener {
 
-                        generatorViewModel.incrementLetterQty(adapterPosition,-1, isLairAdapter)
+                        generatorViewModel.incrementLetterQty(adapterPosition,false, isLairAdapter)
                         //updateLetterAdapter(isLairAdapter)
-                        //notifyItemChanged(position)
+                        notifyItemChanged(adapterPosition)
                     }
                     lettercodeItemIncrementButton.setOnClickListener {
 
-                        generatorViewModel.incrementLetterQty(adapterPosition,1, isLairAdapter)
+                        generatorViewModel.incrementLetterQty(adapterPosition,true, isLairAdapter)
                         //updateLetterAdapter(isLairAdapter)
-                        //notifyItemChanged(position)
+                        notifyItemChanged(adapterPosition)
                     }
                     lettercodeItemCounter.text  = letterEntry.quantity.toString()
                 }
@@ -1024,7 +997,7 @@ class HoardGeneratorFragment : Fragment() {
         }
     }
 
-    inner class LetterDiffCallback : DiffUtil.ItemCallback<LetterEntry>() {
+    private class LetterDiffCallback : DiffUtil.ItemCallback<LetterEntry>() {
 
         override fun areItemsTheSame(
             oldItem: LetterEntry,
@@ -1039,27 +1012,6 @@ class HoardGeneratorFragment : Fragment() {
     //endregion
 
     //region [ Helper functions ]
-    private fun debugReportMethodVisibility(prefix: String = "", suffix: String =""){
-        Log.d("generatorMethodGroup",prefix + "1st child (id ${
-            binding.generatorAnimatorFrame.getChildAt(0).id
-        }) is ${
-            when (binding.generatorAnimatorFrame.getChildAt(0).visibility){
-                View.VISIBLE    -> "visible"
-                View.INVISIBLE  -> "invisible"
-                View.GONE       -> "gone"
-                else            -> "unknown"
-            }}." + suffix)
-        Log.d("generatorMethodGroup",prefix + "2nd child (id ${
-            binding.generatorAnimatorFrame.getChildAt(1).id
-        }) is ${
-            when (binding.generatorAnimatorFrame.getChildAt(1).visibility){
-                View.VISIBLE    -> "visible"
-                View.INVISIBLE  -> "invisible"
-                View.GONE       -> "gone"
-                else            -> "unknown"
-            }}." + suffix)
-    }
-
     private fun reportHoardOrderToDebug(order: HoardOrder){
         Log.d("convertLetterToHoardOrder","- - - NEW ORDER - - -")
         Log.d("convertLetterToHoardOrder",order.creationDescription)

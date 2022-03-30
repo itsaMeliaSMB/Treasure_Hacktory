@@ -1,9 +1,8 @@
 package com.example.android.treasurefactory.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
 import com.example.android.treasurefactory.model.LetterEntry
 import java.util.*
 import kotlin.collections.component1
@@ -437,11 +436,11 @@ class HoardGeneratorViewModel(): ViewModel() {
      */
     private var generationMethodPos = 0
 
-    val lairList = getLetterArrayList(true)
-    val smallList = getLetterArrayList(false)
+    private val lairList = getLetterArrayList(true)
+    private val smallList = getLetterArrayList(false)
 
     /*
-    Pending refactor for live data before safety commit. TODO left off here
+    Pending refactor for live data before safety commit.
     https://www.rockandnull.com/jetpack-viewmodel-initialization/
     https://medium.com/@fluxtah/two-ways-to-keep-livedata-t-immutable-and-mutable-only-from-a-single-source-a4a1dcdc0ef
     https://stackoverflow.com/questions/50629402/how-to-properly-update-androids-recyclerview-using-livedata
@@ -449,13 +448,9 @@ class HoardGeneratorViewModel(): ViewModel() {
     */
 
     //val _lairListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
-    val lairListLiveData: LiveData<ArrayList<LetterEntry>> = liveData {
-        emit(getLetterArrayList(true))
-    }
+    val lairListLiveData = MutableLiveData(lairList.toList())
     //val _smallListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
-    val smallListLiveData: LiveData<ArrayList<LetterEntry>> = liveData {
-        emit(getLetterArrayList(false))
-    }
+    val smallListLiveData = MutableLiveData(smallList.toList())
 
     // region [ Specific Quantity value container objects ]
     val coinageValues = object {
@@ -619,6 +614,47 @@ class HoardGeneratorViewModel(): ViewModel() {
         }
     }
 
+    // region ( Letter update functions )
+    /**
+     * Updates the list of [LetterEntries][LetterEntry] and posts new value to LiveData.
+     *
+     * @param position adapterPosition of entry to update.
+     * @param providedValue Integer value to add to entry.
+     * @param targetLairList If true, the [lairList] will be modified. Otherwise, [smallList] will be modified.
+     */
+    private fun addLetterListEntry(position: Int, providedValue: Int, targetLairList: Boolean) {
+
+        val newValue: Int
+
+        if (targetLairList){
+            if (!(lairList.isNullOrEmpty())&&(position in 0 until lairList.size)) {
+
+                val oldValue = lairList[position].quantity
+                newValue = (oldValue + providedValue).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
+
+                lairList[position].quantity = newValue
+                lairListLiveData.postValue(lairList.toList())
+
+                Log.d("updateLetterListEntry","Updated Qty of lairList[$position] from " +
+                    "$oldValue to $newValue (instructed to add $providedValue)")
+            }
+        } else {
+            if (!(smallList.isNullOrEmpty())&&(position in 0 until smallList.size)) {
+
+                val oldValue = smallList[position].quantity
+                newValue = (oldValue + providedValue).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
+
+                smallList[position].quantity = newValue
+                smallListLiveData.postValue(smallList.toList())
+
+                Log.d("updateLetterListEntry","Updated Qty of smallList[$position] from " +
+                        "$oldValue to $newValue (instructed to add $providedValue)")
+            }
+        }
+    }
+
+
+    // ---OLD LIVEDATA IMPLEMENTATION FUNCTION--- TODO delete when new implementation works
     private fun updateLetterLiveDataEntry(position: Int, newQty : Int, targetLairAdapter: Boolean){
         if (targetLairAdapter){
             if (!(lairListLiveData.value.isNullOrEmpty())
@@ -650,40 +686,23 @@ class HoardGeneratorViewModel(): ViewModel() {
                     "ERROR: Position $position was not in smallListLiveData's range.")
             }
         }
-
-        //TODO Left off here. LiveData updates correctly, but recyclerview doesn't. Start there.
     }
 
-    fun incrementLetterQty(position: Int, increment: Int, targetLairList: Boolean) {
+    fun incrementLetterQty(position: Int, isPositive: Boolean, targetLairList: Boolean) {
 
-        if (targetLairList) {
-            try{
-                //lairList[position].quantity = (lairList[position].quantity + increment)
-                //    .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
-                updateLetterLiveDataEntry(
-                    position,
-                    (lairListLiveData.value!![position].quantity + increment)
-                        .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY),
-                    targetLairList
-                )
-            } catch (e: ArrayIndexOutOfBoundsException) {}
-        } else {
-            try{
-                //smallList[position].quantity = (smallList[position].quantity + increment)
-                //    .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
-                updateLetterLiveDataEntry(
-                    position,
-                    (smallListLiveData.value!![position].quantity + increment)
-                        .coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY),
-                    targetLairList
-                )
-            } catch (e: ArrayIndexOutOfBoundsException) {}
-        }
+        addLetterListEntry(position, if (isPositive) 1 else -1, targetLairList)
     }
 
-    fun clearLairCount() { lairList.forEach { entry -> entry.quantity = 0 } }
+    fun clearLairCount() {
+        lairList.forEach { entry -> entry.quantity = 0 }
+        lairListLiveData.postValue(lairList.toList())
+    }
 
-    fun clearSmallCount() { smallList.forEach { entry -> entry.quantity = 0 } }
+    fun clearSmallCount() {
+        smallList.forEach { entry -> entry.quantity = 0 }
+        smallListLiveData.postValue(smallList.toList())
+    }
+    // endregion
 
     /* Temporarily dummied-out order compilation functions.
     fun compileLetterCodeHoardOrder() : HoardOrder {
