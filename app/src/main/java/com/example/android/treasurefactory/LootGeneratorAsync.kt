@@ -3001,8 +3001,7 @@ class LootGeneratorAsync : BaseLootGenerator {
 
                 SpCoDiscipline.DIVINE -> {
                     if ((this == SpCoGenMethod.CHOSEN_ONE)||
-                        (this == SpCoGenMethod.SPELL_BOOK)||
-                        (this == SpCoGenMethod.LEVEL_ACQUISITION)) {
+                        (this == SpCoGenMethod.SPELL_BOOK)) {
                         SpCoGenMethod.TRUE_RANDOM
                     } else {
                         this
@@ -3059,7 +3058,7 @@ class LootGeneratorAsync : BaseLootGenerator {
         val spellType = order.spellType
         val generationMethod = order.genMethod.fixGenerationMethod(spellType)
         val spellCount = if ((generationMethod == SpCoGenMethod.TRUE_RANDOM)||
-            (generationMethod == SpCoGenMethod.LEVEL_ACQUISITION)) {
+            (generationMethod == SpCoGenMethod.BY_THE_BOOK)) {
 
             order.spellCount.coerceIn(1..MAX_SPELLS_PER_SCROLL)
 

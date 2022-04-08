@@ -18,7 +18,7 @@ data class HoardOrder(var hoardName: String = "Untitled Hoard",
                       var anyButWeapons: Int = 0,
                       var anyMagicItems: Int = 0,
                       var extraSpellCols: Int = 0,
-                      val genParams: OrderParams = OrderParams()
+                      var genParams: OrderParams = OrderParams()
 )
 
 /**

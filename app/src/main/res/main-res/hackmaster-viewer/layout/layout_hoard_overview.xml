@@ -80,6 +80,7 @@
             android:layout_marginStart="8dp"
             android:textSize="12sp"
             android:textAlignment="textEnd"
+            android:gravity="end"
             android:textStyle="italic"
             tools:text="XX/XX/XXXX at XX:XX:XX PM"/>
 
@@ -110,6 +111,7 @@
             android:layout_marginStart="8dp"
             android:textSize="12sp"
             android:textAlignment="textEnd"
+            android:gravity="end"
             android:textStyle="italic"
             tools:text="[A x1 , B x1, J x2, N x1]"/>
 
@@ -140,6 +142,7 @@
             android:layout_marginStart="8dp"
             android:textSize="12sp"
             android:textAlignment="textEnd"
+            android:gravity="end"
             android:textStyle="italic"
             android:marqueeRepeatLimit="marquee_forever"
             tools:text="[ . . . ] gp"/>
@@ -273,6 +276,7 @@
                     android:layout_height="wrap_content"
                     android:textAllCaps="true"
                     android:textStyle="bold"
+                    android:gravity="center"
                     android:textAlignment="center"
                     android:breakStrategy="simple"
                     android:textColor="?attr/colorOnPrimary"
@@ -323,6 +327,7 @@
                     android:textAllCaps="true"
                     android:textStyle="bold"
                     android:textAlignment="center"
+                    android:gravity="center"
                     android:breakStrategy="simple"
                     android:textColor="?attr/colorOnPrimary"
                     android:text="Art Objects"/>
@@ -371,6 +376,7 @@
                     android:textAllCaps="true"
                     android:textStyle="bold"
                     android:textAlignment="center"
+                    android:gravity="center"
                     android:textColor="?attr/colorOnPrimary"
                     android:text="Magic Items"/>
 
@@ -418,6 +424,7 @@
                     android:textAllCaps="true"
                     android:textStyle="bold"
                     android:textAlignment="center"
+                    android:gravity="center"
                     android:breakStrategy="simple"
                     android:textColor="?attr/colorOnPrimary"
                     android:text="Spell Caches"/>

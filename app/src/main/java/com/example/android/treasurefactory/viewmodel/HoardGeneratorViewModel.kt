@@ -3,7 +3,9 @@ package com.example.android.treasurefactory.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.treasurefactory.model.LetterEntry
+import com.example.android.treasurefactory.model.*
+import com.example.android.treasurefactory.ui.GenDropdownTag
+import com.example.android.treasurefactory.ui.GenEditTextTag
 import java.util.*
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -17,6 +19,14 @@ const val FIRST_SMALL_TREASURE_TYPE = "J"
 
 const val MINIMUM_LETTER_QTY = 0
 const val MAXIMUM_LETTER_QTY = 20
+
+const val MAXIMUM_UNIQUE_QTY = 100
+const val MAXIMUM_SPELLS_PER_SCROLL = 7
+
+const val MAXIMUM_COINAGE_AMOUNT = 10000000.0
+
+const val ART_MAP_CHANCE = 5
+const val SCROLL_MAP_CHANCE = 10
 
 class HoardGeneratorViewModel(): ViewModel() {
 
@@ -430,6 +440,8 @@ class HoardGeneratorViewModel(): ViewModel() {
         "non-weapon magic item(s)",
         "magic item(s)")
 
+    private var hoardName = ""
+
     /**
      * Index of displayed child view group and method to use for order generation.
      * 0 = Letter-code, 1 = Specific quantity.
@@ -447,104 +459,82 @@ class HoardGeneratorViewModel(): ViewModel() {
     https://stackoverflow.com/questions/66595863/update-a-row-in-recyclerview-with-listadapter
     */
 
-    //val _lairListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
     val lairListLiveData = MutableLiveData(lairList.toList())
-    //val _smallListLiveData = MutableLiveData<ArrayList<LetterEntry>>()
     val smallListLiveData = MutableLiveData(smallList.toList())
 
-    // region [ Specific Quantity value container objects ]
-    val coinageValues = object {
-        var minimum = 0.0
-        var maximum = 0.0
-        var cpChecked = false
-        var spChecked = false
-        var epChecked = false
-        var gpChecked = false
-        var hspChecked = false
-        var ppChecked = false
-        fun reset(){
-            minimum = 0.0
-            maximum = 0.0
-            cpChecked = false
-            spChecked = false
-            epChecked = false
-            gpChecked = false
-            hspChecked = false
-            ppChecked = false
-        }
-    }
-    val gemValues = object {
-        var quantity = 0
-        var minimumPos = 0
-        var maximumPos = 0
-        fun reset(){
-            quantity = 0
-            minimumPos = 0
-            maximumPos = 0
-        }
-    }
-    val artValues = object {
-        var quantity = 0
-        var minimumPos = 0
-        var maximumPos = 0
-        var mapAllowed = false
-        fun reset() {
-            quantity = 0
-            minimumPos = 0
-            maximumPos = 0
-            mapAllowed = false
-        }
-    }
-    val magicItemValues = object {
-        var potionQty = 0
-        var scrollQty = 0
-        var armWepQty = 0
-        var anyButQty = 0
-        var anyQty = 0
-        var spellChecked = false
-        var nonSpChecked = false
-        var treMapChecked = false
-        var intWepChecked = false
-        var cursedChecked = true
-        var relicsChecked = true
-        fun reset(){
-            potionQty = 0
-            scrollQty = 0
-            armWepQty = 0
-            anyButQty = 0
-            anyQty = 0
-            spellChecked = false
-            nonSpChecked = false
-            treMapChecked = false
-            intWepChecked = false
-            cursedChecked = true
-            relicsChecked = true
-        }
-    }
-    val spellCoValues = object {
-        var quantity = 0
-        var maxSpells = 1
-        var disciplinePos = 0
-        var genMethodPos = 0
-        var minimumPos = 0
-        var maximumPos = 9
-        var splatChecked = false
-        var hackJChecked = false
-        var otherChecked = false
-        var restrictChecked = false
-        fun reset() {
-            quantity = 0
-            maxSpells = 1
-            disciplinePos = 0
-            genMethodPos = 0
-            minimumPos = 0
-            maximumPos = 9
-            splatChecked = false
-            hackJChecked = false
-            otherChecked = false
-            restrictChecked = false
-        }
-    }
+    // region [ Specific Quantity value containers ]
+    private var coinMin = 0.0
+    private var coinMax = 0.0
+    var cpChecked = false
+    var spChecked = false
+    var epChecked = false
+    var gpChecked = false
+    var hspChecked = false
+    var ppChecked = false
+
+    private var gemQty = 0
+    private var gemMinPos = 0
+    private var gemMaxPos = 0
+
+    private var artQty = 0
+    private var artMinPos = 0
+    private var artMaxPos = 0
+    var artMapChecked = false
+
+    private var potionQty = 0
+    private var scrollQty = 0
+    private var armWepQty = 0
+    private var anyButQty = 0
+    private var anyMgcQty = 0
+    var spellScrollChecked = false
+    var nonSpScrollChecked = false
+    var scrollMapChecked = false
+    var intWepChecked = false
+    var cursedChecked = true
+    var relicsChecked = true
+
+    private var spCoQty = 0
+    private var maxSpellsPerSpCo = 1
+    private var splDisciplinePos = 0
+    private var genMethodPos = 0
+    private var enabledGenMetArray = BooleanArray(1)
+    private var spLvlMinPos = 1
+    private var spLvlMaxPos = 9
+    var splatChecked = false
+    var hackJChecked = false
+    var otherChecked = false
+    var restrictChecked = false
+    private var spCoCursesPos = 0
+
+    // region ( Public getters )
+    fun getGenerationMethodPos() = generationMethodPos
+    fun getCoinMin() = coinMin
+    fun getCoinMax() = coinMax
+
+    fun getGemQty() = gemQty
+    fun getGemMinPos() = gemMinPos
+    fun getGemMaxPos() = gemMaxPos
+
+    fun getArtQty() = artQty
+    fun getArtMinPos() = artMinPos
+    fun getArtMaxPos() = artMaxPos
+
+    fun getPotionQty() = potionQty
+    fun getScrollQty() = scrollQty
+    fun getArmWepQty() = armWepQty
+    fun getAnyButQty() = anyButQty
+    fun getAnyMgcQty() = anyMgcQty
+
+    fun getSpCoQty() = spCoQty
+    fun getMaxSpellsPerSpCo() = maxSpellsPerSpCo
+    fun getSplDisciplinePos() = splDisciplinePos
+    fun getGenMethodPos() = genMethodPos
+    fun getEnabledGenMetArray() = enabledGenMetArray
+    fun getSpLvlMinPos() = spLvlMinPos
+    fun getSpLvlMaxPos() = spLvlMaxPos
+    fun getSpCoCursesPos() = spCoCursesPos
+    // endregion
+
     // endregion
 
     /**
@@ -603,8 +593,6 @@ class HoardGeneratorViewModel(): ViewModel() {
         return list
     }
 
-    fun getGeneratorMethodPos() : Int = generationMethodPos
-
     fun setGeneratorMethodPos(newViewGroupIndex: Int){
         if (newViewGroupIndex in 0..1) {
             generationMethodPos = newViewGroupIndex
@@ -615,14 +603,15 @@ class HoardGeneratorViewModel(): ViewModel() {
     }
 
     // region ( Letter update functions )
+
     /**
      * Updates the list of [LetterEntries][LetterEntry] and posts new value to LiveData.
      *
      * @param position adapterPosition of entry to update.
-     * @param providedValue Integer value to add to entry.
+     * @param addend Integer value to add to entry.
      * @param targetLairList If true, the [lairList] will be modified. Otherwise, [smallList] will be modified.
      */
-    private fun addLetterListEntry(position: Int, providedValue: Int, targetLairList: Boolean) {
+    private fun addToLetterListEntryQty(position: Int, addend: Int, targetLairList: Boolean) {
 
         val newValue: Int
 
@@ -630,81 +619,451 @@ class HoardGeneratorViewModel(): ViewModel() {
             if (!(lairList.isNullOrEmpty())&&(position in 0 until lairList.size)) {
 
                 val oldValue = lairList[position].quantity
-                newValue = (oldValue + providedValue).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
+                newValue = (oldValue + addend).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
 
                 lairList[position].quantity = newValue
                 lairListLiveData.postValue(lairList.toList())
 
                 Log.d("updateLetterListEntry","Updated Qty of lairList[$position] from " +
-                    "$oldValue to $newValue (instructed to add $providedValue)")
+                    "$oldValue to $newValue (instructed to add $addend)")
             }
         } else {
             if (!(smallList.isNullOrEmpty())&&(position in 0 until smallList.size)) {
 
                 val oldValue = smallList[position].quantity
-                newValue = (oldValue + providedValue).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
+                newValue = (oldValue + addend).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
 
                 smallList[position].quantity = newValue
                 smallListLiveData.postValue(smallList.toList())
 
                 Log.d("updateLetterListEntry","Updated Qty of smallList[$position] from " +
-                        "$oldValue to $newValue (instructed to add $providedValue)")
-            }
-        }
-    }
-
-
-    // ---OLD LIVEDATA IMPLEMENTATION FUNCTION--- TODO delete when new implementation works
-    private fun updateLetterLiveDataEntry(position: Int, newQty : Int, targetLairAdapter: Boolean){
-        if (targetLairAdapter){
-            if (!(lairListLiveData.value.isNullOrEmpty())
-                &&(position in 0 until lairListLiveData.value!!.size)) {
-
-                Log.d("updateLetterLiveDataEntry",
-                    "Before: lairListLiveData.value!![$position] was ${lairListLiveData.value!![position]}")
-                lairListLiveData.value!![position].quantity = newQty
-                Log.d("updateLetterLiveDataEntry",
-                    "After: lairListLiveData.value!![$position] is ${lairListLiveData.value!![position]} (New value was $newQty)")
-
-            } else {
-
-                Log.d("updateLetterLiveDataEntry",
-                    "ERROR: Position $position was not in lairListLiveData's range.")
-            }
-        } else {
-            if (!(smallListLiveData.value.isNullOrEmpty())
-                &&(position in 0 until smallListLiveData.value!!.size)) {
-
-                Log.d("updateLetterLiveDataEntry",
-                    "Before: smallListLiveData.value!![$position] was ${smallListLiveData.value!![position]}")
-                smallListLiveData.value!![position].quantity = newQty
-                Log.d("updateLetterLiveDataEntry",
-                    "After: lairListLiveData.value!![$position] is ${smallListLiveData.value!![position]} (New value was $newQty)")
-            } else {
-
-                Log.d("updateLetterLiveDataEntry",
-                    "ERROR: Position $position was not in smallListLiveData's range.")
+                        "$oldValue to $newValue (instructed to add $addend)")
             }
         }
     }
 
     fun incrementLetterQty(position: Int, isPositive: Boolean, targetLairList: Boolean) {
 
-        addLetterListEntry(position, if (isPositive) 1 else -1, targetLairList)
+        addToLetterListEntryQty(position, if (isPositive) 1 else -1, targetLairList)
     }
 
-    fun clearLairCount() {
+    fun resetLairCount() {
         lairList.forEach { entry -> entry.quantity = 0 }
         lairListLiveData.postValue(lairList.toList())
     }
 
-    fun clearSmallCount() {
+    fun resetSmallCount() {
         smallList.forEach { entry -> entry.quantity = 0 }
         smallListLiveData.postValue(smallList.toList())
     }
     // endregion
 
-    /* Temporarily dummied-out order compilation functions.
+    // region ( Specific update functions )
+    fun resetSpecificQtyValues() {
+        coinMin = 0.0
+        coinMax = 0.0
+        cpChecked = false
+        spChecked = false
+        epChecked = false
+        gpChecked = false
+        hspChecked = false
+        ppChecked = false
+
+        gemQty = 0
+        gemMinPos = 0
+        gemMaxPos = 0
+
+        artQty = 0
+        artMinPos = 0
+        artMaxPos = 0
+        artMapChecked = false
+        potionQty = 0
+        scrollQty = 0
+        armWepQty = 0
+        anyButQty = 0
+        anyMgcQty = 0
+        spellScrollChecked = false
+        nonSpScrollChecked = false
+        scrollMapChecked = false
+        intWepChecked = false
+        cursedChecked = true
+        relicsChecked = true
+
+        spCoQty = 0
+        maxSpellsPerSpCo = 1
+        splDisciplinePos = 0
+        genMethodPos = 0
+        spLvlMinPos = 1
+        spLvlMaxPos = 9
+        splatChecked = false
+        hackJChecked = false
+        otherChecked = false
+        restrictChecked = false
+        spCoCursesPos = 0
+    }
+
+    /**
+     * Sets value of GeneratorViewModel field from data passed from an <<<LISTENER>>>
+     * from GeneratorHoardFragment. Returns a string to be set as the calling view's error message
+     * if it fails validation.
+     */
+    fun setValueFromEditText(sourceViewTag: GenEditTextTag, capturedString: String) : String? {
+
+        var errorString : String? = null
+
+        /**
+         * Validate captured [String] as an [Int].
+         *
+         * @param floor Lowest allowed value. When set to a negative value, floor is ignored.
+         * @param ceiling Highest allowed value. When set to a negative value, ceiling is ignored.
+         */
+        fun validateAsInt(floor: Int = -1, ceiling: Int = -1) : String? {
+
+            val parsedValue = capturedString.trim().toIntOrNull()
+
+            if (parsedValue != null) {
+
+                when (sourceViewTag) {
+
+                    GenEditTextTag.GEM_QTY  -> if (parsedValue != gemQty) {
+
+                        gemQty = parsedValue
+                    }
+
+                    GenEditTextTag.ART_QTY  -> if (parsedValue != artQty) {
+
+                        artQty = parsedValue
+                    }
+
+                    GenEditTextTag.POTION_QTY   -> if (parsedValue != potionQty) {
+
+                        potionQty = parsedValue
+                    }
+
+                    GenEditTextTag.SCROLL_QTY   -> if (parsedValue != scrollQty) {
+
+                        scrollQty = parsedValue
+                    }
+
+                    GenEditTextTag.WEAPON_ARMOR_QTY -> if (parsedValue != armWepQty) {
+
+                        armWepQty = parsedValue
+                    }
+
+                    GenEditTextTag.ANY_BUT_WEAP_QTY -> if (parsedValue != anyButQty) {
+
+                        anyButQty = parsedValue
+                    }
+
+                    GenEditTextTag.ANY_MAGIC_QTY -> if (parsedValue != anyMgcQty) {
+
+                        anyMgcQty = parsedValue
+                    }
+
+                    GenEditTextTag.SPELL_CO_QTY -> if (parsedValue != spCoQty) {
+
+                        spCoQty = parsedValue
+                    }
+
+                    GenEditTextTag.MAX_SPELL_PER -> if (parsedValue != maxSpellsPerSpCo) {
+
+                        maxSpellsPerSpCo = parsedValue
+                    }
+
+                    else -> Log.e("setValueFromEditText | validateAsInt",
+                        "Invalid GenEditTextTag entered. No value was changed.")
+                }
+
+                errorString = when {
+
+                    (floor >= 0) && (parsedValue < floor)    -> "Input too low."
+                    (ceiling >= 0) && (parsedValue > ceiling)-> "Input too high."
+                    else -> errorString
+                }
+
+            } else {
+
+                Log.e("setValueFromEditText | validateAsInt",
+                    "No parsable integer in string. No value changed.")
+            }
+
+            return errorString
+        }
+
+        fun validateAsDouble() {
+
+            val parsedValue = capturedString.trim().toDoubleOrNull()
+
+            if (parsedValue != null) {
+
+                when (sourceViewTag) {
+
+                    GenEditTextTag.COIN_MINIMUM -> {
+
+                        if (coinMin != parsedValue) {
+                            coinMin = parsedValue
+                        }
+
+                        if (parsedValue !in 0.0..MAXIMUM_COINAGE_AMOUNT) {
+
+                            errorString = "Amount out of bounds"
+                        }
+                    }
+
+                    GenEditTextTag.COIN_MAXIMUM -> {
+
+                        if (coinMax != parsedValue) {
+
+                            coinMax = parsedValue
+                        }
+
+                        if (parsedValue !in 0.0..MAXIMUM_COINAGE_AMOUNT) {
+
+                            errorString = "Amount out of bounds."
+                        }
+
+                        validateCoinageMaximum().also {
+                            if (!(it.isNullOrBlank())) {
+                                errorString = it
+                            }
+                        }
+                    }
+
+                    else -> Log.e("setValueFromEditText | validateAsDouble",
+                        "Invalid GenEditTextTag entered. No value was changed.")
+                }
+            } else {
+
+                Log.e("setValueFromEditText | validateAsDouble",
+                    "No parsable double in string. No value changed.")
+            }
+        }
+
+        when (sourceViewTag){
+
+            GenEditTextTag.HOARD_NAME       -> hoardName = capturedString
+            GenEditTextTag.COIN_MINIMUM     -> validateAsDouble()
+            GenEditTextTag.COIN_MAXIMUM     -> validateAsDouble()
+            GenEditTextTag.GEM_QTY          -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.ART_QTY          -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.POTION_QTY       -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.SCROLL_QTY       -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.WEAPON_ARMOR_QTY -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.ANY_BUT_WEAP_QTY -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.ANY_MAGIC_QTY    -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.SPELL_CO_QTY     -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.MAX_SPELL_PER    -> validateAsInt(1, MAXIMUM_SPELLS_PER_SCROLL)
+        }
+
+        return errorString
+    }
+
+    /**
+     * Sets value of GeneratorViewModel field from data passed from an OnItemSelectedListener
+     * from GeneratorHoardFragment. Returns a string to be set as the calling view's error message
+     * if it fails validation.
+     */
+    fun setValueFromDropdown(sourceViewTag: GenDropdownTag, position: Int, childEnabled: Boolean) : String? {
+
+        var errorString : String? = null
+
+        fun validateEnabled(){
+            if (!childEnabled) errorString = "Invalid method for chosen discipline."
+        }
+
+        when (sourceViewTag) {
+
+            GenDropdownTag.GEM_MINIMUM -> {
+                Log.d("setValueFromDropdown($sourceViewTag,$position,$childEnabled)",
+                    "Before: gemMinPos = ${gemMinPos}, gemMaxPos = $gemMaxPos")
+
+                gemMinPos = position
+
+                Log.d("setValueFromDropdown($sourceViewTag,$position,$childEnabled)",
+                    "After: gemMinPos = ${gemMinPos}, gemMaxPos = $gemMaxPos")
+            }
+
+            GenDropdownTag.GEM_MAXIMUM -> {
+
+                errorString = validateDropdownMaximum(sourceViewTag,position).takeIf { it != null }
+                gemMaxPos = position
+            }
+
+            GenDropdownTag.ART_MINIMUM -> artMinPos = position
+
+            GenDropdownTag.ART_MAXIMUM -> {
+                errorString = validateDropdownMaximum(sourceViewTag,position).takeIf { it != null }
+                artMaxPos = position
+            }
+
+            GenDropdownTag.SPELL_DISCIPLINE -> {
+                splDisciplinePos = position
+            }
+
+            GenDropdownTag.SPELL_TYPE -> {
+                validateEnabled()
+                genMethodPos
+            }
+
+            GenDropdownTag.SPELL_MINIMUM -> spLvlMinPos = position
+
+            GenDropdownTag.SPELL_MAXIMUM -> {
+                errorString = validateDropdownMaximum(sourceViewTag,position).takeIf { it != null }
+                spLvlMaxPos = position
+            }
+
+            GenDropdownTag.SPELL_CURSES -> {
+                spCoCursesPos = position
+            }
+        }
+
+        Log.d("setValueFromDropdown($sourceViewTag,$position,$childEnabled)",
+            "Final errorString = " +
+            if (errorString != null) "\"$errorString\"" else "null")
+
+        return errorString
+    }
+
+    fun setEnabledItemsByDiscipline(splDisPos: Int, splTypeArraySize: Int) : BooleanArray {
+
+        val newArray = BooleanArray( splTypeArraySize.takeUnless { it < 1 } ?: 1 ) { false }
+
+        val templateArray = when (splDisPos) {
+            0   -> booleanArrayOf(true,true)
+            //1   -> booleanArrayOf(true,true,false,true) TODO spellbooks implemented
+            //2   -> booleanArrayOf(true,true,true) TODO Chosen One is implemented
+            else-> booleanArrayOf(true,true)
+        }
+
+        val templateArrayLastIndex = templateArray.lastIndex
+
+        // Apply template over properly-size array
+        newArray.forEachIndexed { index, _ ->
+
+            newArray[index] = if (index <= templateArrayLastIndex) {
+                templateArray[index]
+            } else {
+                false
+            }
+        }
+
+        enabledGenMetArray = newArray
+
+        return newArray
+    }
+
+    // endregion
+
+    private fun reportHoardOrderToDebug(order: HoardOrder) {
+        Log.d("convertLetterToHoardOrder","Received name: ${order.hoardName}")
+        Log.d("convertLetterToHoardOrder",order.creationDescription)
+        Log.d("convertLetterToHoardOrder","\n- - - QUANTITIES - - -")
+        Log.d("convertLetterToHoardOrder","> COINAGE:")
+        Log.d("convertLetterToHoardOrder","${order.copperPieces} cp, " +
+                "${order.silverPieces} sp, " + "${order.electrumPieces} ep, " +
+                "${order.goldPieces} gp, " + "${order.hardSilverPieces} hsp, " +
+                "and ${order.platinumPieces} pp")
+        Log.d("convertLetterToHoardOrder","> ART OBJECTS:")
+        Log.d("convertLetterToHoardOrder","${order.gems} gems and " +
+                "${order.artObjects} pieces of artwork")
+        Log.d("convertLetterToHoardOrder","> MAGIC ITEMS:")
+        Log.d("convertLetterToHoardOrder","${order.potions} potions, " +
+                "${order.scrolls} scrolls, ${order.armorOrWeapons} armor/weapons, " +
+                "${order.anyButWeapons} magic items (non-weapon), and " +
+                "${order.anyMagicItems} magic items of any type")
+        Log.d("convertLetterToHoardOrder", "> SPELL COLLECTIONS:")
+        Log.d("convertLetterToHoardOrder","${order.extraSpellCols} explicitly- generated" +
+                "spell collections")
+        Log.d("convertLetterToHoardOrder.genParameters","\n- - - PARAMETERS - - -")
+        Log.d("convertLetterToHoardOrder.genParameters","> GEM PARAMS:")
+        Log.d("convertLetterToHoardOrder.genParameters","Value bias range: " +
+                "${order.genParams.gemParams._minLvl}-${order.genParams.gemParams._maxLvl} (" +
+                order.genParams.gemParams.levelRange.toString() + ")")
+        Log.d("convertLetterToHoardOrder.genParameters","> ART PARAMS:")
+        Log.d("convertLetterToHoardOrder.genParameters","Value bias range: " +
+                "${order.genParams.artParams._minLvl}-${order.genParams.artParams._maxLvl} (" +
+                order.genParams.artParams.levelRange.toString() + "), Paper map chance: " +
+                order.genParams.artParams.paperMapChance.toString() + "%")
+        Log.d("convertLetterToHoardOrder.genParameters","> MAGIC ITEM PARAMS:")
+        Log.d("convertLetterToHoardOrder.genParameters","Scroll map chance: " +
+                "${order.genParams.magicParams.scrollMapChance}%, " +
+                "Allow cursed [${order.genParams.magicParams.allowCursedItems}], " +
+                "Allow int. weapons [${order.genParams.magicParams.allowIntWeapons}], " +
+                "Allow artifacts [${order.genParams.magicParams.allowCursedItems}]"
+        )
+        Log.d("convertLetterToHoardOrder.genParameters","> SPELL CO PARAMS:")
+        Log.d("convertLetterToHoardOrder.genParameters","Level range: ${
+            order.genParams.magicParams.spellCoRestrictions._minLvl}-${
+            order.genParams.magicParams.spellCoRestrictions._maxLvl
+        } (" + order.genParams.magicParams.spellCoRestrictions.levelRange.toString() +
+                "), Allowed disciplines: ${
+                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.arcane)
+                        "<arcane>" else "<>"} ${
+                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.divine)
+                        "<divine>" else "<>"} ${
+                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.natural)
+                        "<natural>" else "<>"}, Max spell count: " +
+                order.genParams.magicParams.spellCoRestrictions.spellCountMax.toString() +
+                ", sources: " + order.genParams.magicParams.spellCoRestrictions.spellSources.toString() +
+                ", Allow restricted [${order.genParams.magicParams.spellCoRestrictions.allowRestricted}]" +
+                ", Allow cursed [${order.genParams.magicParams.spellCoRestrictions.allowCurse}]" +
+                ", Allowed curses <${order.genParams.magicParams.spellCoRestrictions.allowedCurses}>" +
+                ", Generation method: ${order.genParams.magicParams.spellCoRestrictions.genMethod}\n")
+    }
+
+    // region [ Validation functions ]
+    fun validateDropdownMaximum(sourceViewTag: GenDropdownTag, position: Int): String? {
+
+        var errorString : String? = null
+
+        Log.d("validateDropdownMaximum($sourceViewTag, $position)",
+            "Dropdown maximum validation process started.")
+
+        val minPosition = when (sourceViewTag) {
+            GenDropdownTag.GEM_MAXIMUM  -> gemMinPos
+            GenDropdownTag.ART_MAXIMUM  -> artMinPos
+            GenDropdownTag.SPELL_MAXIMUM-> spLvlMinPos
+            else    -> {
+                Log.e("setValueFromDropdown()","Invalid sourceViewTag $sourceViewTag " +
+                        "passed in validateMaximum()")
+                0
+            }
+        }
+
+        Log.d("validateDropdownMaximum($sourceViewTag, $position)",
+            "minPosition = $minPosition, position = $position")
+
+        if ( !( ( (position == 0) && (sourceViewTag != GenDropdownTag.SPELL_MAXIMUM) )
+                    || (position >= minPosition) ) ) {
+            errorString = "Maximum cannot be lower than Minimum."
+
+            Log.e("validateDropdownMaximum($sourceViewTag, $position)",
+                "Invalid maximum detected.")
+        }
+
+        Log.d("validateDropdownMaximum($sourceViewTag, $position)",
+            "Dropdown maximum validation process completed." +
+                    if (errorString != null) " (\"$errorString\")" else "(no errorString)")
+
+        return errorString
+    }
+
+    fun validateCoinageMaximum() : String? {
+
+        return when {
+            (coinMax < coinMin) -> "Cannot be lower than minimum"
+            (coinMax !in 0.0..MAXIMUM_COINAGE_AMOUNT) -> "Value out of bounds"
+            else -> null
+        }
+    }
+
+    fun validateLetterCodeValues() : Boolean {
+
+        return (listOf(lairList, smallList).flatten().indexOfFirst { entry -> entry.quantity > 0 }) != -1
+    }
+    // endregion
+
+    // region [ Order compiliation functions ]
     fun compileLetterCodeHoardOrder() : HoardOrder {
 
         // TODO refactor to new schema
@@ -728,15 +1087,15 @@ class HoardGeneratorViewModel(): ViewModel() {
         val letterMap = mutableMapOf<String,Int>()
 
         // Put values for every letter key
-        lairAdapter!!.getAdapterLetterEntries().forEach{ letterMap[it.letter] = it.quantity }
-        smallAdapter!!.getAdapterLetterEntries().forEach{ letterMap[it.letter] = it.quantity}
+        lairList.forEach{ letterMap[it.letterCode] = it.quantity }
+        smallList.forEach{ letterMap[it.letterCode] = it.quantity}
 
         val initialDescription = "Initial composition: "
-        val lettersStringBuffer = StringBuffer(initialDescription)
+        val lettersStringBuilder = StringBuilder(initialDescription)
 
         val newOrder = HoardOrder()
 
-        newOrder.hoardName = hoardTitleField.text.toString()
+        newOrder.hoardName = hoardName
 
         // Roll for each non-empty entry TODO: move to non-UI thread
         letterMap.forEach { (key, value) ->
@@ -760,47 +1119,111 @@ class HoardGeneratorViewModel(): ViewModel() {
                 }
 
                 // Log letter type in the StringBuffer
-                if (!(lettersStringBuffer.equals(initialDescription))) {
+                if (!(lettersStringBuilder.equals(initialDescription))) {
                     // Add a comma if not the first entry TODO fix this
-                    lettersStringBuffer.append(", ")
+                    lettersStringBuilder.append(", ")
                 }
                 // Add letter times quantity
-                lettersStringBuffer.append("${key}x$value")
+                lettersStringBuilder.append("${key}x$value")
             }
         }
 
         // Update description log
-        newOrder.creationDescription = lettersStringBuffer.toString()
+        newOrder.creationDescription = lettersStringBuilder.toString()
+
+        // DEBUG ONLY: Log results
+        reportHoardOrderToDebug(newOrder)
 
         // Return result
         return newOrder
     }
 
-    fun compileSpecificQtyHoardOrder(_coinMin: Double, _coinMax: Double,
-                                     _coinSet: Set<Pair<Double,String>>,
-                                     _gemQty: Int, _artQty: Int,
-                                     _potQty: Int, _scrQty: Int, _aOWQty: Int,
-                                     _aBWQty: Int, _anyQty: Int,
-                                     _exSCQty: Int, _params: OrderParams) : HoardOrder {
+    fun compileSpecificQtyHoardOrder() : HoardOrder {
 
-        val coinPileMap = getRandomCoinDistribution(_coinMin,_coinMax,_coinSet)
+        val newOrder : HoardOrder
 
-        return HoardOrder(
-            creationDescription = "Custom loot quantity",
+        // Roll coinage values
+        val coinDenomsAsSet = mutableSetOf<Pair<Double,String>>()
+
+        if (cpChecked) coinDenomsAsSet.add(0.01 to "cp")
+        if (spChecked) coinDenomsAsSet.add(0.1 to "sp")
+        if (epChecked) coinDenomsAsSet.add(0.5 to "ep")
+        if (gpChecked) coinDenomsAsSet.add(1.0 to "cp")
+        if (hspChecked) coinDenomsAsSet.add(2.0 to "hsp")
+        if (ppChecked) coinDenomsAsSet.add(5.0 to "pp")
+
+        val coinPileMap = getRandomCoinDistribution(coinMin,coinMax,coinDenomsAsSet.toSet())
+
+        // Compile order parameters
+        val newParams = OrderParams(
+            GemRestrictions(
+                if (gemMinPos == 0) 0 else gemMinPos,
+                if (gemMaxPos == 0) 16 else gemMaxPos),
+            ArtRestrictions(
+                if (artMinPos == 0) -19 else artMinPos - 20,
+                if (artMaxPos == 0) 31 else artMaxPos - 20,
+                if (artMapChecked) ART_MAP_CHANCE else 0),
+            MagicItemRestrictions(
+                if (scrollMapChecked) SCROLL_MAP_CHANCE else 0,
+                cursedChecked,
+                intWepChecked,
+                relicsChecked,
+                SpellCoRestrictions(
+                    spLvlMinPos,
+                    spLvlMaxPos,
+                    when(splDisciplinePos){
+                        0   -> AllowedDisciplines(true,true,false)
+                        1   -> AllowedDisciplines(true,false,false)
+                        2   -> AllowedDisciplines(false,true,false)
+                        else-> AllowedDisciplines(true,true,true) },
+                    maxSpellsPerSpCo,
+                    SpCoSources(splatChecked,hackJChecked,otherChecked),
+                    restrictChecked,
+                    cursedChecked,
+                    when(spCoCursesPos){
+                        0   -> SpCoCurses.STRICT_GMG
+                        1   -> SpCoCurses.OFFICIAL_ONLY
+                        2   -> SpCoCurses.ANY_CURSE
+                        else-> SpCoCurses.NONE },
+                    when (genMethodPos) {
+                        0   -> SpCoGenMethod.TRUE_RANDOM
+                        1   -> SpCoGenMethod.BY_THE_BOOK
+                        2   -> SpCoGenMethod.CHOSEN_ONE
+                        3   -> SpCoGenMethod.SPELL_BOOK
+                        else-> SpCoGenMethod.ANY_PHYSICAL }
+                )
+            )
+        )
+
+        newOrder = HoardOrder(
+            this@HoardGeneratorViewModel.hoardName,
+            creationDescription = "User-specified loot quantity",
             copperPieces = coinPileMap.getOrDefault("cp",0),
             silverPieces = coinPileMap.getOrDefault("sp",0),
             electrumPieces = coinPileMap.getOrDefault("ep",0),
             goldPieces = coinPileMap.getOrDefault("gp",0),
             hardSilverPieces = coinPileMap.getOrDefault("hsp",0),
             platinumPieces = coinPileMap.getOrDefault("pp",0),
+            gems = gemQty,
+            artObjects = artQty,
+            potions = potionQty,
+            scrolls = scrollQty,
+            armorOrWeapons = armWepQty,
+            anyButWeapons = anyButQty,
+            anyMagicItems = anyMgcQty,
+            extraSpellCols = spCoQty,
+            genParams = newParams
         )
+
+        // DEBUG ONLY: Log results
+        reportHoardOrderToDebug(newOrder)
+
+        return newOrder
     }
-     */
+    // endregion
 
     fun getRandomCoinDistribution(_minimum: Double, _maximum: Double,
                                           allowedDenoms: Set<Pair<Double,String>>) : Map<String,Int> {
-
-        fun Double.roundToTwoDecimal():Double = (this * 100.00).roundToInt() / 100.00
 
         /** Returns a mutable list of gpVale/name pairs from [allowedDenoms], starting with lowest value */
         fun getSortedDenominations() : MutableList<Pair<Double,String>> {
@@ -887,4 +1310,6 @@ class HoardGeneratorViewModel(): ViewModel() {
 
         return newCoinageMap
     }
+
+    fun Double.roundToTwoDecimal():Double = (this * 100.00).roundToInt() / 100.00
 }

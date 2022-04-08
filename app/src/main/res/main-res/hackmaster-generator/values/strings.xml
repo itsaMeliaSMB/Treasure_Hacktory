@@ -101,24 +101,18 @@
         <item>Level 8 (CL 7)</item>
         <item>Level 9 (CL 7)</item>
     </string-array>
-    <string-array name="dropdown_spell_type_both">
+    <string-array name="dropdown_spell_types">
         <item>Random\n(as Spell Scroll)</item>
-        <item>Leveling\n(as Scroll Spell)</item>
-        <!--item>Chosen One\'s spell allotment</item-->
-        <!--item>M-U Creation\n(as Spell Book)</item-->
-        <!--item>Any method\n(as any physical)</item-->
+        <item>By-the-Book\n(as Spell Scroll)</item>
+        <item>Chosen One\'s spell allotment</item>
+        <item>M-U Creation\n(as Spell Book)</item>
+        <item>Any method\n(as any physical)</item>
     </string-array>
-    <string-array name="dropdown_spell_type_arcane">
-        <item>Random\n(as Spell Scroll)</item>
-        <item>Leveling\n(as Scroll Spell)</item>
-        <!--item>M-U Creation\n(as Spell Book)</item-->
-        <!--item>Any method\n(as any physical)</item-->
-    </string-array>
-    <string-array name="dropdown_spell_type_divine">
-        <item>Random\n(as Spell Scroll)</item>
-        <!--item>Chosen One, Cleric-only\n(as Spell Scroll)</item-->
-        <!--item>Chosen One\'s spell allotment</item-->
-        <!--item>Any method\n(as any physical)</item-->
+    <string-array name="dropdown_spell_curses">
+        <item>GMG curses only</item>
+        <item>Official only</item>
+        <item>Anything goes</item>
+        <item>None (ignore)</item>
     </string-array>
 
 </resources>

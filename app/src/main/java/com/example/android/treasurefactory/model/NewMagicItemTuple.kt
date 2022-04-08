@@ -110,17 +110,10 @@ enum class SpCoGenMethod{
     TRUE_RANDOM,
 
     /**
-     * Follow rules on GMG pg 75 and SSG pg 6 for spell generation.
-     * Starting spells are not counted towards spellCount.
-     * Duplicates are disallowed.
-     * Upper-level spells are rolled using [LEVEL_ACQUISITION] rules.
+     * For magic users, follows spell acquisition rules for level-up procedure on SSG pg 7. For clerics,
+     * use cleric spells from Chosen One
      */
-    SPELL_BOOK, //TODO Unimplemented
-
-    /**
-     * Follows spell acquisition rules for magic-user level-up procedure on SSG pg 7.
-     */
-    LEVEL_ACQUISITION, //TODO Unimplemented
+    BY_THE_BOOK, //TODO Unimplemented
 
     /**
      * Follows Chosen One daily spell allotment from ZG pgs 6 and 132-133.
@@ -128,7 +121,15 @@ enum class SpCoGenMethod{
     CHOSEN_ONE, //TODO Unimplemented
 
     /**
-     * Combination of [TRUE_RANDOM], [SPELL_BOOK], and [LEVEL_ACQUISITION].
+     * Follow rules on GMG pg 75 and SSG pg 6 for spell generation.
+     * Starting spells are not counted towards spellCount.
+     * Duplicates are disallowed.
+     * Upper-level spells are rolled using [BY_THE_BOOK] rules.
+     */
+    SPELL_BOOK, //TODO Unimplemented
+
+    /**
+     * Combination of [TRUE_RANDOM], [SPELL_BOOK], and [BY_THE_BOOK].
      */
     ANY_PHYSICAL //TODO Unimplemented
 }
