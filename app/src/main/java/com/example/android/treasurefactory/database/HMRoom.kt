@@ -293,10 +293,13 @@ interface HoardDao{
     fun getHoard(id: Int): LiveData<Hoard?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addHoard(hoard: Hoard)
+    suspend fun addHoard(hoard: Hoard) : Long
 
     @Update
     fun updateHoard(hoard: Hoard)
+
+    @Query("SELECT hoardID FROM hackmaster_hoard_table WHERE ROWID=(:hoardRowID)")
+    fun getIdByRowId(hoardRowID: Long) : Int
 }
 
 @Dao
@@ -315,11 +318,16 @@ interface GemDao {
     fun getGem(id: Int): LiveData<Gem?>
 
     // Add a gem to the hoard TODO
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addGemEntity(newGem: GemEntity)
 
     // Update this gem in the hoard TODO
+    @Update
+    fun updateGemEntity(gemToUpdate: GemEntity)
 
     // Remove this gem from hoard TODO
-
+    @Delete
+    fun removeGemEntity(gemToDelete: GemEntity)
 }
 
 @Dao

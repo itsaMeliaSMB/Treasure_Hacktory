@@ -12,7 +12,7 @@ data class NewMagicItemTuple(val magicItem: MagicItem,
  * @param spellParams Parameters for items containing spells
  * @param quantity How many to generate, determined during order creation. Ignored for non-ioun stone orders.
  */
-data class SpecialItemOrder(val parentHoard:Int, val itemType:SpItType, val spellParams: SpellCollectionOrder?, val quantity: Int = 0)
+data class SpecialItemOrder(val itemType:SpItType, val spellParams: SpellCollectionOrder?, val quantity: Int = 0)
 
 /** Type of magic item to generate which has special generation procedures. */
 enum class SpItType(){
@@ -28,9 +28,10 @@ enum class SpItType(){
  * @param spellCount How many spells to explicitly generate. If [genMethod] is set to [CHOSEN_ONE][SpCoGenMethod.CHOSEN_ONE], represents Chosen One's CHA Comeliness modifier.
  * @param spellLvRange Level of spells to generate, prioritizing minimum. If [genMethod] is set to [CHOSEN_ONE][SpCoGenMethod.CHOSEN_ONE], minimum is used as Chosen One's level.
  * @param allowedSources What source material spells may be pulled from. PHB is always allowed.
- * @param allowRestricted Whether or not specialist-restricted spells may be included. For spell books, may generate specialist's spell books.
- * @param genMethod How to pick which spells are generated.
  * @param allowedCurses What set of curses may be applied to this collection.
+ * @param rerollChoices Whether any GM or player choice options should be re-rolled, if applicable.
+ * @param genMethod How to pick which spells are generated.
+ * @param allowRestricted Whether or not specialist-restricted spells may be included. For spell books, may generate specialist's spell books.
  */
 data class SpellCollectionOrder(val collectionType: SpCoType,
                                 val spellType: SpCoDiscipline,
@@ -38,9 +39,10 @@ data class SpellCollectionOrder(val collectionType: SpCoType,
                                 val spellLvRange: IntRange,
                                 val allowedSources: SpCoSources,
                                 val allowRestricted: Boolean,
-                                val genMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
                                 val isCursed: Boolean,
-                                val allowedCurses: SpCoCurses = SpCoCurses.ANY_CURSE)
+                                val rerollChoices: Boolean,
+                                val genMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
+                                val allowedCurses: SpCoCurses = SpCoCurses.ANY_CURSE,)
 
 /** Type of spell collection to generate. */
 enum class SpCoType{

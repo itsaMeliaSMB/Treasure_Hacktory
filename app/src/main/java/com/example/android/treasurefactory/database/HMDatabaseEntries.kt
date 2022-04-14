@@ -100,7 +100,7 @@ data class HoardEvent(
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("gemID"),
         onDelete = ForeignKey.CASCADE ) ])
-data class GemEntity(
+internal data class GemEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val gemID: Int = 0,
     val hoardID: Int = 0,
     val iconID: String,
@@ -112,7 +112,18 @@ data class GemEntity(
     val opacity: Int,
     val description: String,
     val currentGPValue: Double,
-    val valueHistory: List<Pair<Long,String>>)
+    val valueHistory: List<Pair<Long,String>>) {
+
+    companion object {
+        fun from(gem: Gem): GemEntity {
+            return GemEntity(gem.gemID,gem.hoardID,gem.iconID,gem.type,gem.size,gem.quality,gem.variation,gem.name,gem.opacity,gem.description,gem.currentGPValue,gem.valueHistory)
+        }
+    }
+
+    fun toUser(): Gem {
+        return Gem(gemID,hoardID,iconID,type,size,quality,variation,name, opacity, description, currentGPValue, valueHistory)
+    }
+}
 
 @Entity(tableName = "hackmaster_art_table",
     foreignKeys = [ForeignKey(
@@ -121,7 +132,7 @@ data class GemEntity(
         childColumns = arrayOf("artID"),
         onDelete = ForeignKey.CASCADE
     ) ] )
-data class ArtObjectEntity(
+internal data class ArtObjectEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
     val hoardID: Int,
     val name: String,
@@ -141,7 +152,7 @@ data class ArtObjectEntity(
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("mItemID"),
         onDelete = ForeignKey.CASCADE) ] )
-data class MagicItemEntity(
+internal data class MagicItemEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val mItemID: Int,
     val templateID: Int,
     val hoardID: Int,
@@ -163,7 +174,7 @@ data class MagicItemEntity(
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("sCollectID"),
         onDelete = ForeignKey.CASCADE ) ])
-data class SpellCollectionEntity(
+internal data class SpellCollectionEntity(
     @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
     val hoardID: Int,
     val iconID: String,
@@ -174,17 +185,6 @@ data class SpellCollectionEntity(
     val xpValue: Int,
     val spells: List<Spell> = listOf(),
     val curse: String = "")
-// endregion
-
-// region [ Convenience Data Entities ]
-
-/*@Entity(tableName = "icon_id_int_directory")
-data class IconIDTuple(
-    @PrimaryKey val stringID: String,
-    val resID: Int,
-    val appVersion: Long,
-)*/
-
 // endregion
 
 // region [ Mapping functions ]
@@ -259,7 +259,7 @@ fun List<SpellCollectionEntity>.asDomainModel(): List<SpellCollection> { // TODO
             it.hoardID,
             it.iconID,
             it.name,
-            enumValues<SpCoType>()[it.type],
+            enumValues<SpCoType>()[it.type ],
             it.properties,
             it.gpValue,
             it.xpValue,

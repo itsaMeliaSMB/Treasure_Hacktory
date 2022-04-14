@@ -6,7 +6,7 @@ data class SpellCollection(
     @NotNull val sCollectID: Int,
     val hoardID: Int,
     var iconID: String,
-    var name: String = "<Spell Scroll>",
+    var name: String = "<Spell Collection>",
     var type: SpCoType,
     var properties: List<Pair<String,Double>> = emptyList(), //TODO refactor existing scroll generation to return list
     var gpValue: Double = 0.0, //TODO add as field to db entities
@@ -15,6 +15,8 @@ data class SpellCollection(
     var curse: String = "") {
 
     fun calculateGPValue(): Double {
+
+        if (type == SpCoType.RING) return 7000.0
 
         var gpTotal: Double = 0.0
 
@@ -34,6 +36,8 @@ data class SpellCollection(
     }
 
     fun calculateXpValue() : Int {
+
+        if (type == SpCoType.RING) return 2500
 
         var xpTotal = 0
 

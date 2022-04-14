@@ -60,8 +60,27 @@ interface BaseLootGenerator {
         itemRestrictions: MagicItemRestrictions = MagicItemRestrictions()
     ): NewMagicItemTuple
 
+    /** Generates a treasure map, following the rules outlined on GMG pgs 181 and 182 */
+    fun createTreasureMap(
+        parentHoard: Int,
+        sourceDesc: String = "",
+        allowFalseMaps: Boolean = true
+    ): MagicItem
+
+    /** Generates ioun stones when indicated by standard magic item generation methods */
+    fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem>
+
+    /** Generate Gems */
+    fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem>
+
+    fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection
+
     /** Converts a [SpellCollectionOrder] into a [SpellCollection], always as a scroll.*/
     fun convertOrderToSpellScroll(parentHoard: Int, order: SpellCollectionOrder): SpellCollection
+
+    /** Gets a random spell from allowed sources of the level, discipline, and restriction provided. */
+    fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
+                       sources: SpCoSources, allowRestricted: Boolean): Spell
 
     /** Returns a magic-user spell as if acquired by leveling up, outlined in the GMG/SSG */
     fun getSpellByLevelUp(
@@ -76,6 +95,21 @@ interface BaseLootGenerator {
         useSSG: Boolean = true
     ): List<Spell>
 
+    /**
+     * Returns a cleric or druid spell using Appendix E on pgs 132-133 of ZG
+     *
+     * @param _inputLevel Spell level of the spell to be generated.
+     * @param allowDruid If false, any druid-only spells will be re-rolled.
+     * @param useZG If false, spells not in the PHB will be re-rolled.
+     * @param _maxCastable Highest castable spell level of theoretical caster. If 0, any
+     * restrictions (i.e. spell level of Indulgence) regarding spell level are ignored.
+     */
+    fun getSpellByChosenOneTable(
+        _inputLevel: Int,
+        allowDruid: Boolean,
+        useZG: Boolean,
+        _maxCastable: Int = 0) : Spell
+
     /* TODO finish implementing after first shipped build
     /** Returns a [SpellCollection] of a spellbook following the procedure mentioned on SSG pgs 82-87 */
     fun createSpellBook(parentHoard: Int, _effectiveLevel: Int, _extraSpells: Int,
@@ -84,19 +118,6 @@ interface BaseLootGenerator {
                         useSSG: Boolean = true,
                         allowRestricted: Boolean): SpellCollection
      */
-
-    /** Generates a treasure map, following the rules outlined on GMG pgs 181 and 182 */
-    fun createTreasureMap(
-        parentHoard: Int,
-        sourceDesc: String = "",
-        allowFalseMaps: Boolean = true
-    ): MagicItem
-
-    /** Generates ioun stones when indicated by standard magic item generation methods */
-    fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem>
-
-    /** Generate Gut Stones if indicated during magic item generation */
-    fun createGutStones(parentHoard: Int, qty: Int): List<Gem>
 
     /** Converts a [SpellTemplate] into a [Spell], converting [type][SpellTemplate.type] to a [SpCoDiscipline]*/
     fun convertTemplateToSpell(

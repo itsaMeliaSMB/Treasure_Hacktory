@@ -3,9 +3,14 @@ package com.example.android.treasurefactory.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.android.treasurefactory.LootGeneratorAsync
 import com.example.android.treasurefactory.model.*
+import com.example.android.treasurefactory.repository.HMRepository
 import com.example.android.treasurefactory.ui.GenDropdownTag
 import com.example.android.treasurefactory.ui.GenEditTextTag
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -28,9 +33,21 @@ const val MAXIMUM_COINAGE_AMOUNT = 10000000.0
 const val ART_MAP_CHANCE = 5
 const val SCROLL_MAP_CHANCE = 10
 
-class HoardGeneratorViewModel(): ViewModel() {
+class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel() {
 
-    val oddsTable = sortedMapOf(
+    //region << Values, variables, and containers >>
+    // region ( Method-agnostic variables )
+    private var hoardName = ""
+
+    /**
+     * Index of displayed child view group and method to use for order generation.
+     * 0 = Letter-code, 1 = Specific quantity.
+     */
+    private var generationMethodPos = 0
+    // endregion
+
+    // region ( Letter Code value containers )
+    private val oddsTable = sortedMapOf(
         // Lair treasure types
         "A" to arrayOf(
             intArrayOf(25, 1000, 3000),
@@ -440,29 +457,14 @@ class HoardGeneratorViewModel(): ViewModel() {
         "non-weapon magic item(s)",
         "magic item(s)")
 
-    private var hoardName = ""
-
-    /**
-     * Index of displayed child view group and method to use for order generation.
-     * 0 = Letter-code, 1 = Specific quantity.
-     */
-    private var generationMethodPos = 0
-
     private val lairList = getLetterArrayList(true)
     private val smallList = getLetterArrayList(false)
 
-    /*
-    Pending refactor for live data before safety commit.
-    https://www.rockandnull.com/jetpack-viewmodel-initialization/
-    https://medium.com/@fluxtah/two-ways-to-keep-livedata-t-immutable-and-mutable-only-from-a-single-source-a4a1dcdc0ef
-    https://stackoverflow.com/questions/50629402/how-to-properly-update-androids-recyclerview-using-livedata
-    https://stackoverflow.com/questions/66595863/update-a-row-in-recyclerview-with-listadapter
-    */
-
     val lairListLiveData = MutableLiveData(lairList.toList())
     val smallListLiveData = MutableLiveData(smallList.toList())
+    // endregion
 
-    // region [ Specific Quantity value containers ]
+    // region ( Specific Quantity value containers )
     private var coinMin = 0.0
     private var coinMax = 0.0
     var cpChecked = false
@@ -537,62 +539,16 @@ class HoardGeneratorViewModel(): ViewModel() {
 
     // endregion
 
-    /**
-     *  Returns a multi-line String for a given [oddsTable] value array.
-     *
-     *  @param rawLetterOdds Probability table of a given treasure's likelihood to appear. Decomposes into percentChance, minYield, and maxYield.
-     */
-    private fun returnOddsString(rawLetterOdds: Array<IntArray>) : String {
+    /*
+    LiveData links TODO remove before shipped build
+    https://www.rockandnull.com/jetpack-viewmodel-initialization/
+    https://medium.com/@fluxtah/two-ways-to-keep-livedata-t-immutable-and-mutable-only-from-a-single-source-a4a1dcdc0ef
+    https://stackoverflow.com/questions/50629402/how-to-properly-update-androids-recyclerview-using-livedata
+    https://stackoverflow.com/questions/66595863/update-a-row-in-recyclerview-with-listadapter
+    */
+    // endregion
 
-        val oddsList = mutableListOf<String>()
-
-        rawLetterOdds.forEachIndexed { index, (percentChance,minYield,maxYield) ->
-
-            val oddsLineBuilder = StringBuilder()
-
-            if (percentChance != 0) {
-
-                oddsLineBuilder.append("${percentChance}% odds of: ")
-                    .append(if (minYield >= maxYield) {
-                        minYield.toString()
-                    } else {
-                        "$minYield-$maxYield" })
-                    .append(" ${treasureLabels[index]}")
-            }
-
-            if (oddsLineBuilder.isNotEmpty()) oddsList.add(oddsLineBuilder.toString())
-        }
-
-        var result: String = oddsList[0]
-
-        if (oddsList.size > 1) {
-
-            for( index in 1 until oddsList.size) {
-                result += "\n${oddsList[index]}"
-            }
-        }
-
-        return result
-    }
-
-    /** Returns an ArrayList of letter-coded treasure types. */
-    private fun getLetterArrayList(isHeadMap: Boolean): ArrayList<LetterEntry> {
-
-        val list = ArrayList<LetterEntry>()
-
-        if (isHeadMap) {
-            oddsTable.headMap(FIRST_SMALL_TREASURE_TYPE).forEach { (letterCode, rawLetterOdds) ->
-                list.add(LetterEntry(letterCode, returnOddsString(rawLetterOdds), 0))
-            }
-        } else {
-            oddsTable.tailMap(FIRST_SMALL_TREASURE_TYPE).forEach { (letterCode, rawLetterOdds) ->
-                list.add(LetterEntry(letterCode, returnOddsString(rawLetterOdds), 0))
-            }
-        }
-
-        return list
-    }
-
+    // region [ Setter functions ]
     fun setGeneratorMethodPos(newViewGroupIndex: Int){
         if (newViewGroupIndex in 0..1) {
             generationMethodPos = newViewGroupIndex
@@ -951,65 +907,8 @@ class HoardGeneratorViewModel(): ViewModel() {
 
         return newArray
     }
-
     // endregion
-
-    private fun reportHoardOrderToDebug(order: HoardOrder) {
-        Log.d("convertLetterToHoardOrder","Received name: ${order.hoardName}")
-        Log.d("convertLetterToHoardOrder",order.creationDescription)
-        Log.d("convertLetterToHoardOrder","\n- - - QUANTITIES - - -")
-        Log.d("convertLetterToHoardOrder","> COINAGE:")
-        Log.d("convertLetterToHoardOrder","${order.copperPieces} cp, " +
-                "${order.silverPieces} sp, " + "${order.electrumPieces} ep, " +
-                "${order.goldPieces} gp, " + "${order.hardSilverPieces} hsp, " +
-                "and ${order.platinumPieces} pp")
-        Log.d("convertLetterToHoardOrder","> ART OBJECTS:")
-        Log.d("convertLetterToHoardOrder","${order.gems} gems and " +
-                "${order.artObjects} pieces of artwork")
-        Log.d("convertLetterToHoardOrder","> MAGIC ITEMS:")
-        Log.d("convertLetterToHoardOrder","${order.potions} potions, " +
-                "${order.scrolls} scrolls, ${order.armorOrWeapons} armor/weapons, " +
-                "${order.anyButWeapons} magic items (non-weapon), and " +
-                "${order.anyMagicItems} magic items of any type")
-        Log.d("convertLetterToHoardOrder", "> SPELL COLLECTIONS:")
-        Log.d("convertLetterToHoardOrder","${order.extraSpellCols} explicitly- generated" +
-                "spell collections")
-        Log.d("convertLetterToHoardOrder.genParameters","\n- - - PARAMETERS - - -")
-        Log.d("convertLetterToHoardOrder.genParameters","> GEM PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters","Value bias range: " +
-                "${order.genParams.gemParams._minLvl}-${order.genParams.gemParams._maxLvl} (" +
-                order.genParams.gemParams.levelRange.toString() + ")")
-        Log.d("convertLetterToHoardOrder.genParameters","> ART PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters","Value bias range: " +
-                "${order.genParams.artParams._minLvl}-${order.genParams.artParams._maxLvl} (" +
-                order.genParams.artParams.levelRange.toString() + "), Paper map chance: " +
-                order.genParams.artParams.paperMapChance.toString() + "%")
-        Log.d("convertLetterToHoardOrder.genParameters","> MAGIC ITEM PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters","Scroll map chance: " +
-                "${order.genParams.magicParams.scrollMapChance}%, " +
-                "Allow cursed [${order.genParams.magicParams.allowCursedItems}], " +
-                "Allow int. weapons [${order.genParams.magicParams.allowIntWeapons}], " +
-                "Allow artifacts [${order.genParams.magicParams.allowCursedItems}]"
-        )
-        Log.d("convertLetterToHoardOrder.genParameters","> SPELL CO PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters","Level range: ${
-            order.genParams.magicParams.spellCoRestrictions._minLvl}-${
-            order.genParams.magicParams.spellCoRestrictions._maxLvl
-        } (" + order.genParams.magicParams.spellCoRestrictions.levelRange.toString() +
-                "), Allowed disciplines: ${
-                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.arcane)
-                        "<arcane>" else "<>"} ${
-                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.divine)
-                        "<divine>" else "<>"} ${
-                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.natural)
-                        "<natural>" else "<>"}, Max spell count: " +
-                order.genParams.magicParams.spellCoRestrictions.spellCountMax.toString() +
-                ", sources: " + order.genParams.magicParams.spellCoRestrictions.spellSources.toString() +
-                ", Allow restricted [${order.genParams.magicParams.spellCoRestrictions.allowRestricted}]" +
-                ", Allow cursed [${order.genParams.magicParams.spellCoRestrictions.allowCurse}]" +
-                ", Allowed curses <${order.genParams.magicParams.spellCoRestrictions.allowedCurses}>" +
-                ", Generation method: ${order.genParams.magicParams.spellCoRestrictions.genMethod}\n")
-    }
+    // endregion
 
     // region [ Validation functions ]
     fun validateDropdownMaximum(sourceViewTag: GenDropdownTag, position: Int): String? {
@@ -1063,7 +962,7 @@ class HoardGeneratorViewModel(): ViewModel() {
     }
     // endregion
 
-    // region [ Order compiliation functions ]
+    // region [ Order compilation functions ]
     fun compileLetterCodeHoardOrder() : HoardOrder {
 
         // TODO refactor to new schema
@@ -1222,6 +1121,84 @@ class HoardGeneratorViewModel(): ViewModel() {
     }
     // endregion
 
+    // region [ Hoard generation functions ]
+
+    fun generateHoard() {
+
+        //https://developer.android.com/kotlin/coroutines
+
+        viewModelScope.launch {
+
+            val lootGenerator = LootGeneratorAsync(hmRepository)
+
+            val hoardOrder = if (generationMethodPos == 1) {
+                compileSpecificQtyHoardOrder()
+            } else {
+                compileLetterCodeHoardOrder()
+            }
+
+
+        }
+    }
+    // endregion
+
+    // region [ Helper functions ]
+    /**
+     *  Returns a multi-line String for a given [oddsTable] value array.
+     *
+     *  @param rawLetterOdds Probability table of a given treasure's likelihood to appear. Decomposes into percentChance, minYield, and maxYield.
+     */
+    private fun returnOddsString(rawLetterOdds: Array<IntArray>) : String {
+
+        val oddsList = mutableListOf<String>()
+
+        rawLetterOdds.forEachIndexed { index, (percentChance,minYield,maxYield) ->
+
+            val oddsLineBuilder = StringBuilder()
+
+            if (percentChance != 0) {
+
+                oddsLineBuilder.append("${percentChance}% odds of: ")
+                    .append(if (minYield >= maxYield) {
+                        minYield.toString()
+                    } else {
+                        "$minYield-$maxYield" })
+                    .append(" ${treasureLabels[index]}")
+            }
+
+            if (oddsLineBuilder.isNotEmpty()) oddsList.add(oddsLineBuilder.toString())
+        }
+
+        var result: String = oddsList[0]
+
+        if (oddsList.size > 1) {
+
+            for( index in 1 until oddsList.size) {
+                result += "\n${oddsList[index]}"
+            }
+        }
+
+        return result
+    }
+
+    /** Returns an ArrayList of letter-coded treasure types. */
+    private fun getLetterArrayList(isHeadMap: Boolean): ArrayList<LetterEntry> {
+
+        val list = ArrayList<LetterEntry>()
+
+        if (isHeadMap) {
+            oddsTable.headMap(FIRST_SMALL_TREASURE_TYPE).forEach { (letterCode, rawLetterOdds) ->
+                list.add(LetterEntry(letterCode, returnOddsString(rawLetterOdds), 0))
+            }
+        } else {
+            oddsTable.tailMap(FIRST_SMALL_TREASURE_TYPE).forEach { (letterCode, rawLetterOdds) ->
+                list.add(LetterEntry(letterCode, returnOddsString(rawLetterOdds), 0))
+            }
+        }
+
+        return list
+    }
+
     fun getRandomCoinDistribution(_minimum: Double, _maximum: Double,
                                           allowedDenoms: Set<Pair<Double,String>>) : Map<String,Int> {
 
@@ -1311,5 +1288,73 @@ class HoardGeneratorViewModel(): ViewModel() {
         return newCoinageMap
     }
 
+    private fun reportHoardOrderToDebug(order: HoardOrder) {
+        Log.d("convertLetterToHoardOrder","Received name: ${order.hoardName}")
+        Log.d("convertLetterToHoardOrder",order.creationDescription)
+        Log.d("convertLetterToHoardOrder","\n- - - QUANTITIES - - -")
+        Log.d("convertLetterToHoardOrder","> COINAGE:")
+        Log.d("convertLetterToHoardOrder","${order.copperPieces} cp, " +
+                "${order.silverPieces} sp, " + "${order.electrumPieces} ep, " +
+                "${order.goldPieces} gp, " + "${order.hardSilverPieces} hsp, " +
+                "and ${order.platinumPieces} pp")
+        Log.d("convertLetterToHoardOrder","> ART OBJECTS:")
+        Log.d("convertLetterToHoardOrder","${order.gems} gems and " +
+                "${order.artObjects} pieces of artwork")
+        Log.d("convertLetterToHoardOrder","> MAGIC ITEMS:")
+        Log.d("convertLetterToHoardOrder","${order.potions} potions, " +
+                "${order.scrolls} scrolls, ${order.armorOrWeapons} armor/weapons, " +
+                "${order.anyButWeapons} magic items (non-weapon), and " +
+                "${order.anyMagicItems} magic items of any type")
+        Log.d("convertLetterToHoardOrder", "> SPELL COLLECTIONS:")
+        Log.d("convertLetterToHoardOrder","${order.extraSpellCols} explicitly- generated" +
+                "spell collections")
+        Log.d("convertLetterToHoardOrder.genParameters","\n- - - PARAMETERS - - -")
+        Log.d("convertLetterToHoardOrder.genParameters","> GEM PARAMS:")
+        Log.d("convertLetterToHoardOrder.genParameters","Value bias range: " +
+                "${order.genParams.gemParams._minLvl}-${order.genParams.gemParams._maxLvl} (" +
+                order.genParams.gemParams.levelRange.toString() + ")")
+        Log.d("convertLetterToHoardOrder.genParameters","> ART PARAMS:")
+        Log.d("convertLetterToHoardOrder.genParameters","Value bias range: " +
+                "${order.genParams.artParams._minLvl}-${order.genParams.artParams._maxLvl} (" +
+                order.genParams.artParams.levelRange.toString() + "), Paper map chance: " +
+                order.genParams.artParams.paperMapChance.toString() + "%")
+        Log.d("convertLetterToHoardOrder.genParameters","> MAGIC ITEM PARAMS:")
+        Log.d("convertLetterToHoardOrder.genParameters","Scroll map chance: " +
+                "${order.genParams.magicParams.scrollMapChance}%, " +
+                "Allow cursed [${order.genParams.magicParams.allowCursedItems}], " +
+                "Allow int. weapons [${order.genParams.magicParams.allowIntWeapons}], " +
+                "Allow artifacts [${order.genParams.magicParams.allowCursedItems}]"
+        )
+        Log.d("convertLetterToHoardOrder.genParameters","> SPELL CO PARAMS:")
+        Log.d("convertLetterToHoardOrder.genParameters","Level range: ${
+            order.genParams.magicParams.spellCoRestrictions._minLvl}-${
+            order.genParams.magicParams.spellCoRestrictions._maxLvl
+        } (" + order.genParams.magicParams.spellCoRestrictions.levelRange.toString() +
+                "), Allowed disciplines: ${
+                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.arcane)
+                        "<arcane>" else "<>"} ${
+                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.divine)
+                        "<divine>" else "<>"} ${
+                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.natural)
+                        "<natural>" else "<>"}, Max spell count: " +
+                order.genParams.magicParams.spellCoRestrictions.spellCountMax.toString() +
+                ", sources: " + order.genParams.magicParams.spellCoRestrictions.spellSources.toString() +
+                ", Allow restricted [${order.genParams.magicParams.spellCoRestrictions.allowRestricted}]" +
+                ", Allow cursed [${order.genParams.magicParams.spellCoRestrictions.allowCurse}]" +
+                ", Allowed curses <${order.genParams.magicParams.spellCoRestrictions.allowedCurses}>" +
+                ", Generation method: ${order.genParams.magicParams.spellCoRestrictions.genMethod}\n")
+    }
+
     fun Double.roundToTwoDecimal():Double = (this * 100.00).roundToInt() / 100.00
+    // endregion
+}
+
+class HoardGeneratorViewModelFactory(private val hmRepository: HMRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(HoardGeneratorViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return HoardGeneratorViewModel(hmRepository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

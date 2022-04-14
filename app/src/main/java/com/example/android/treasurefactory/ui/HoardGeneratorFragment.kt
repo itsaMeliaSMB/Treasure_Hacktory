@@ -18,16 +18,18 @@ import android.widget.Filter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
+import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.databinding.LayoutGeneratorFragmentBinding
 import com.example.android.treasurefactory.databinding.LettercodeItemBinding
 import com.example.android.treasurefactory.model.LetterEntry
 import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModel
+import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModelFactory
 
 class HoardGeneratorFragment : Fragment() {
 
@@ -36,9 +38,11 @@ class HoardGeneratorFragment : Fragment() {
     private var _binding: LayoutGeneratorFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val generatorViewModel: HoardGeneratorViewModel by lazy {
+    //https://www.rockandnull.com/jetpack-viewmodel-initialization/
+    //https://developer.android.com/codelabs/android-room-with-a-view-kotlin#9
 
-        ViewModelProvider(this)[HoardGeneratorViewModel::class.java]
+    private val generatorViewModel: HoardGeneratorViewModel by viewModels {
+        HoardGeneratorViewModelFactory((activity?.application as TreasureHacktoryApplication).repository)
     }
 
     // String arrays for dropdown menus

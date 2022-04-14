@@ -30,7 +30,7 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var spellsCount: Int = 0,
                  var isFavorite: Boolean = false,
                  var isNew: Boolean = true,
-                 var appVersion: Long = 0L,           // Version code of app hoard was generated on
+                 var appVersion: Int = 0,           // Version code of app hoard was generated on
                  @Embedded(prefix = "leftover_") val leftover: HoardLeftover = HoardLeftover())
 
 data class HoardLeftover(val gems: Int = 0,

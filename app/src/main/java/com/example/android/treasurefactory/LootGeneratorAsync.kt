@@ -1,5 +1,7 @@
 package com.example.android.treasurefactory
 
+import android.util.Log
+import androidx.annotation.WorkerThread
 import androidx.core.graphics.component1
 import androidx.core.graphics.component2
 import androidx.core.graphics.component3
@@ -7,11 +9,14 @@ import com.example.android.treasurefactory.database.GemTemplate
 import com.example.android.treasurefactory.database.MagicItemTemplate
 import com.example.android.treasurefactory.database.SpellTemplate
 import com.example.android.treasurefactory.model.*
+import com.example.android.treasurefactory.repository.HMRepository
 import java.util.*
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class LootGeneratorAsync : BaseLootGenerator {
+class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerator {
 
+    //region << Sample entries and constants >>
     override val ANY_MAGIC_ITEM_LIST = listOf(
         "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
         "A17","A18","A21","A24")
@@ -29,7 +34,196 @@ class LootGeneratorAsync : BaseLootGenerator {
         0,"",0,"",0,"",
         0,0,0,0,0,0
     )
+    // endregion
 
+    // region << Variables >>
+
+    // endregion
+
+    // region [ Order processing functions ]
+
+    @WorkerThread
+    suspend fun createHoardFromOrder(hoardOrder: HoardOrder) {
+        //TODO unimplemented
+        val newHoardID : Int
+        val gemPile = ArrayList<Gem>()
+        val artPile = ArrayList<ArtObject>()
+        val itemPile = ArrayList<MagicItem>()
+        val spellPile = ArrayList<SpellCollection>()
+        val maxRerolls = 20
+
+        // region [ Generate parent hoard entity ]
+        fun createParentHoard() : Hoard {
+            val newName = hoardOrder.hoardName.takeUnless{ it.isBlank()} ?: "Untitled Hoard"
+            val iconId = "container_chest"
+            val effortValue = 5.0
+            val gpTotal = (hoardOrder.copperPieces * 0.01) + (hoardOrder.silverPieces * 0.1) +
+                    (hoardOrder.electrumPieces * 0.5) + (hoardOrder.goldPieces * 1.0) +
+                    (hoardOrder.hardSilverPieces * 2.0) + (hoardOrder.platinumPieces * 5.0)
+            val xpTotal = (gpTotal / effortValue).roundToInt()
+
+            return Hoard(0,newName,Date(System.currentTimeMillis()),
+                hoardOrder.creationDescription, iconId, gpTotal, effortValue,
+                hoardOrder.copperPieces, hoardOrder.silverPieces, hoardOrder.electrumPieces,
+                hoardOrder.goldPieces, hoardOrder.hardSilverPieces, hoardOrder.platinumPieces,
+                appVersion = BuildConfig.VERSION_CODE
+            )
+        }
+
+        newHoardID = repository.getIdByRowId(repository.addHoard(createParentHoard()))
+        // endregion
+
+        // region [ Generate hoard unique objects ]
+        fun NewMagicItemTuple.parseNewMagicItemTuple() {
+
+            when {
+                (this.gemOrder != null)    ->
+
+                    createGemsFromGemOrder(newHoardID, this.gemOrder).also {gemPile.addAll(it)}
+
+                (this.specialItemOrder != null)    ->
+
+                    when (this.specialItemOrder.itemType) {
+
+                        SpItType.SPELL_SCROLL ->
+                            convertOrderToSpellScroll(
+                                newHoardID, this.specialItemOrder.spellParams!!
+                            ).also {spellPile.add(it)}
+
+                        SpItType.RING_OF_SPELL_STORING ->
+                            createRingOfSpellStoring(
+                                newHoardID,this.specialItemOrder.spellParams!!
+                            ).also {spellPile.add(it)}
+
+                        SpItType.IOUN_STONES ->
+                            createIounStones(newHoardID,this.specialItemOrder.quantity)
+                                .also {itemPile.addAll(it)}
+
+                        SpItType.TREASURE_MAP -> createTreasureMap(
+                            newHoardID,"scroll item (Table A3)",
+                            hoardOrder.genParams.magicParams.allowCursedItems).also {itemPile.add(it)}
+                    }
+
+                else -> itemPile.add(this.magicItem)
+            }
+        }
+
+        // Generate gems
+        repeat(hoardOrder.gems){
+
+            var newGem : Gem
+            var rollsMade = 0
+
+            // TODO go back and fix values in strings.xml for gem values, OrderParams
+            do {
+                newGem = createGem(newHoardID) //TODO add
+                rollsMade ++
+            } while ((rollsMade < maxRerolls) &&
+                ((newGem.type + newGem.size + newGem.quality + newGem.variation)
+                    .coerceIn(0..17) !in hoardOrder.genParams.gemParams.levelRange))
+
+            gemPile.add(newGem)
+        }
+
+        // Generate art objects
+        repeat(hoardOrder.artObjects){
+
+            var newArtPair : Pair<ArtObject,MagicItem?>
+            var rollsMade = 0
+
+            do {
+                newArtPair = createArtObject(newHoardID,hoardOrder.genParams.artParams)
+                rollsMade ++
+            } while ((rollsMade < maxRerolls) &&
+                (newArtPair.second != null) &&
+                (newArtPair.first.valueLevel !in hoardOrder.genParams.artParams.levelRange))
+
+            // Add map over art object, if present.
+            if (newArtPair.second != null) {
+                itemPile.add(newArtPair.second!!)
+            } else {
+                artPile.add(newArtPair.first)
+            }
+        }
+
+        // Generate magic items
+        repeat(hoardOrder.potions){
+
+            val rollableTables = listOf("A2")
+
+            val newPotion = createMagicItemTuple(newHoardID, -1, rollableTables,
+                hoardOrder.genParams.magicParams).magicItem
+
+            itemPile.add(newPotion)
+        }
+
+        repeat(hoardOrder.scrolls){
+
+            val rollableTables = listOf("A3")
+
+            val newScrollTuple = createMagicItemTuple(newHoardID, -1, rollableTables,
+                hoardOrder.genParams.magicParams)
+
+            if ((newScrollTuple.specialItemOrder != null) &&
+                (newScrollTuple.specialItemOrder.itemType == SpItType.SPELL_SCROLL) &&
+                (newScrollTuple.specialItemOrder.spellParams != null)) {
+
+                val newSpellScroll = convertOrderToSpellScroll(newHoardID,
+                    newScrollTuple.specialItemOrder.spellParams
+                )
+
+                spellPile.add(newSpellScroll)
+
+            } else itemPile.add(newScrollTuple.magicItem)
+        }
+
+        repeat(hoardOrder.armorOrWeapons){
+
+            val rollableTables = listOf("A18","A21")
+
+            createMagicItemTuple(newHoardID,-1,
+                rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
+        }
+
+        repeat(hoardOrder.anyButWeapons){
+
+            val rollableTables = listOf("A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12",
+                "A13","A14","A15","A16","A17","A18")
+
+            createMagicItemTuple(newHoardID,-1,
+                rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
+        }
+
+        repeat(hoardOrder.anyMagicItems){
+
+            val rollableTables = listOf("A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12",
+                "A13","A14","A15","A16","A17","A18","A21","A24")
+
+            createMagicItemTuple(newHoardID,-1,
+                rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
+        }
+
+        // Generate spell collections
+        repeat(hoardOrder.extraSpellCols) {
+
+            createSpellCollection(newHoardID,hoardOrder.genParams.magicParams.spellCoRestrictions)
+        }
+        // endregion
+
+        //TODO Left off here (4/11). Finish implementing DAOs on repository and implement repository
+        // calls on createItem functions. Remember to go back and fix the gem value levels. Also,
+        // sort out what you're doing with db and domain entity mapping and adding suspend modifiers
+
+        // Add lists to database
+        // TODO When finished, be sure to go back and add proper calls and callbacks to viewmodel
+        //  and fragment for Generator.
+    }
+
+    //TODO Add a NewMagicItemTuple processor for sorting valid magic items and special orders
+
+    // endregion
+
+    //region [ Item generation functions ]
     override fun createGem(parentHoardID: Int, givenTemplate: Int) : Gem {
 
         // region [ Roll gem type ]
@@ -781,8 +975,9 @@ class LootGeneratorAsync : BaseLootGenerator {
                 spellRange,
                 itemRestrictions.spellCoRestrictions.spellSources,
                 itemRestrictions.spellCoRestrictions.allowRestricted,
-                itemRestrictions.spellCoRestrictions.genMethod,
                 isCursed,
+                false, // TODO add property to SpellCoRestrictions for choice reroll behavior
+                itemRestrictions.spellCoRestrictions.genMethod,
                 itemRestrictions.spellCoRestrictions.allowedCurses
             )
         }
@@ -2944,21 +3139,21 @@ class LootGeneratorAsync : BaseLootGenerator {
 
                 SpItType.SPELL_SCROLL ->
                     if (spellListOrder != null)
-                        SpecialItemOrder(mHoardID,SpItType.SPELL_SCROLL,spellListOrder)
+                        SpecialItemOrder(SpItType.SPELL_SCROLL,spellListOrder)
                     else
                         null
 
                 SpItType.RING_OF_SPELL_STORING ->
                     if (spellListOrder != null)
-                        SpecialItemOrder(mHoardID,SpItType.RING_OF_SPELL_STORING,spellListOrder)
+                        SpecialItemOrder(SpItType.RING_OF_SPELL_STORING,spellListOrder)
                     else
                         null
 
                 SpItType.IOUN_STONES ->
-                    SpecialItemOrder(mHoardID,SpItType.IOUN_STONES,null,itemCharges.coerceAtLeast(1))
+                    SpecialItemOrder(SpItType.IOUN_STONES,null, itemCharges.coerceAtLeast(1))
 
                 SpItType.TREASURE_MAP ->
-                    SpecialItemOrder(mHoardID,SpItType.TREASURE_MAP,null)
+                    SpecialItemOrder(SpItType.TREASURE_MAP,null)
             }
 
         } else null
@@ -2982,6 +3177,376 @@ class LootGeneratorAsync : BaseLootGenerator {
             null, gemOrder)
     }
 
+    override fun createTreasureMap(parentHoard: Int, sourceDesc: String, allowFalseMaps: Boolean): MagicItem {
+
+        val notesLists=     LinkedHashMap<String,ArrayList<String>>()
+
+        val nameBuilder=    StringBuilder("Treasure Map")
+
+        val mNotes          : List<List<String>>
+
+        val isRealMap: Boolean
+        val distanceRoll= Random.nextInt(1,21)
+
+        // Roll type of map
+        when (Random.nextInt(if (allowFalseMaps) 1 else 2,11)) {
+
+            1       -> {
+                isRealMap = false
+                notesLists["Map details"]?.plusAssign("False map " +
+                        "(No treasure or already looted")
+                nameBuilder.append(" (False)")
+            }
+
+            in 2..7 -> {
+                isRealMap = true
+                notesLists["Map details"]?.plusAssign("Map to monetary treasure " +
+                        "(0% chance of art objects or magic items")
+                nameBuilder.append(" (Monetary)")
+            }
+
+            in 8..9 -> {
+                isRealMap = true
+                notesLists["Map details"]?.plusAssign("Map to magical treasure " +
+                        "(0% chance of coin)")
+                nameBuilder.append(" (Magical)")
+            }
+
+            else    -> {
+                isRealMap = true
+                notesLists["Map details"]?.plusAssign("Map to combined treasure")
+                nameBuilder.append(" (Combined)")
+            }
+        }
+
+        // Roll direction of treasure location
+        when (Random.nextInt(1,9)){
+            1 -> notesLists["Map details"]?.plusAssign("Located north")
+            2 -> notesLists["Map details"]?.plusAssign("Located northeast")
+            3 -> notesLists["Map details"]?.plusAssign("Located east")
+            4 -> notesLists["Map details"]?.plusAssign("Located southeast")
+            5 -> notesLists["Map details"]?.plusAssign("Located south")
+            6 -> notesLists["Map details"]?.plusAssign("Located southwest")
+            7 -> notesLists["Map details"]?.plusAssign("Located west")
+            8 -> notesLists["Map details"]?.plusAssign("Located northwest")
+        }
+
+        // Roll distance of treasure
+        when (distanceRoll) {
+
+            in 1..2 -> notesLists["Map details"]?.plusAssign("Hoard located in " +
+                    "labyrinth of caves found in lair")
+
+            in 3..6 -> notesLists["Map details"]?.plusAssign("Hoard located " +
+                    "outdoors, 5-8 miles distant")
+
+            in 7..9 -> notesLists["Map details"]?.plusAssign("Hoard located " +
+                    "outdoors, 10-40 miles distant")
+
+            else    -> notesLists["Map details"]?.plusAssign("Hoard located " +
+                    "outdoors, 50-500 miles distant")
+        }
+
+        if (distanceRoll > 2) {
+
+            when (Random.nextInt(1,11)) {
+
+                1       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                        "buried and unguarded")
+                2       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                        "hidden in water")
+                in 3..7 -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                        "guarded in a lair")
+                8       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                        "somewhere in ruins")
+                9       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                        "in a burial crypt")
+                else    -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                        "secreted in a town")
+            }
+        }
+
+        // Roll type of treasure
+        if (isRealMap)
+            notesLists["Map details"]?.plusAssign("Treasure present: " +
+                    listOf("I","G","H","F","A","B","C","D","E","Z","A and Z","A and H").random())
+
+        // Note item map replaced
+        if (sourceDesc.isNotBlank()){
+            notesLists["Map details"]?.plusAssign("This map replaced $sourceDesc")
+        }
+
+        fun convertMapToNestedLists(input: LinkedHashMap<String,ArrayList<String>>) : List<List<String>> {
+
+            val listHolder = ArrayList<List<String>>()
+            val nameHolder = ArrayList<String>()
+
+            listHolder[0] = listOf("") // Placeholder for parent list
+
+            input.onEachIndexed { index, entry ->
+
+                nameHolder.add(entry.key)
+                listHolder.add(index + 1,entry.value.toList())
+            }
+
+            listHolder[0] = nameHolder.toList()
+
+            return listHolder.toList()
+        }
+
+        return MagicItem(
+            0,
+            -1,
+            parentHoard,
+            "scroll_map",
+            "Map",
+            nameBuilder.toString(),
+            "GameMaster's Guide",
+            182,
+            0,
+            0.0,
+            mapOf(
+                "fighter" to true,
+                "thief" to true,
+                "cleric" to true,
+                "magic-user" to true,
+                "druid" to true),
+            !isRealMap,
+            "",
+            convertMapToNestedLists(notesLists))
+    }
+
+    override fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
+
+        val iounList = arrayListOf<MagicItem>()
+        val currentSet = mutableSetOf<Int>()
+
+        val itemCount = qty.coerceIn(1,10)
+        var currentStone : Int
+        var deadStones = 0
+
+        // Roll which stones are present
+        repeat(itemCount) {
+
+            currentStone = Random.nextInt(1,21)
+
+            // Convert to 'dead' stone if rolled or already present
+            if ((currentSet.contains(currentStone))||(currentStone > 14))
+                deadStones ++
+            else currentSet.add(currentStone)
+        }
+
+        // Retrieve stones from database
+        currentSet.sorted().forEach { indexAddend ->
+
+            // Add to running list
+            iounList.add(createMagicItemTuple(parentHoard,
+                (FIRST_IOUN_STONE_KEY + (indexAddend - 1)),
+                listOf("A14")).magicItem)
+        }
+
+        // Add dead stones
+        if (deadStones > 0){
+
+            val deadStoneItem = createMagicItemTuple(parentHoard,
+                LAST_IOUN_STONE_KEY, listOf("A14")).magicItem
+
+            repeat(deadStones) { iounList.add(deadStoneItem) }
+        }
+
+        // Return list of ioun stones
+        return iounList
+    }
+
+    override fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem> {
+
+        val gemTemplate = gemOrder.gemTemplate.coerceIn(1..58)
+        val orderGemList = arrayListOf<Gem>()
+
+        repeat(gemOrder.qtyToMake.coerceAtLeast(1)){
+            orderGemList.add(createGem(parentHoard, gemTemplate))
+        }
+
+        return orderGemList
+    }
+
+    override fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection {
+
+        val ringName = "Ring of Spell Storing" + if (order.spellType == SpCoDiscipline.ARCANE) {
+            " (Magic-User)" } else " (Cleric)"
+        val spellList = arrayListOf<Spell>()
+
+        if (order.genMethod == SpCoGenMethod.BY_THE_BOOK) {
+
+            if (order.spellType == SpCoDiscipline.ARCANE) {
+
+                repeat(order.spellCount) {
+
+                    val spellLevel =
+                        Random.nextInt(1, 9).takeUnless { it == 8 } ?: Random.nextInt(1, 7)
+
+                    spellList.add(
+                        getSpellByLevelUp(
+                            spellLevel, "",
+                            order.rerollChoices, order.allowedSources.splatbooksOK
+                        )
+                    )
+                }
+            } else {
+
+                repeat(order.spellCount) {
+
+                    val spellLevel =
+                        Random.nextInt(1, 7).takeUnless { it == 6 } ?: Random.nextInt(1, 5)
+
+                    spellList.add(
+                        getSpellByChosenOneTable(
+                            spellLevel, false,
+                            order.allowedSources.splatbooksOK
+                        )
+                    )
+                }
+            }
+        } else {
+
+            if (order.spellType == SpCoDiscipline.ARCANE) {
+
+                val spellLevel =
+                    Random.nextInt(1, 9).takeUnless { it == 8 } ?: Random.nextInt(1, 7)
+
+                repeat(order.spellCount) {
+                    spellList.add(getRandomSpell(spellLevel,SpCoDiscipline.ARCANE,
+                        order.allowedSources,order.allowRestricted
+                    ))
+                }
+
+            } else {
+
+                val spellLevel =
+                    Random.nextInt(1, 7).takeUnless { it == 6 } ?: Random.nextInt(1, 5)
+
+                repeat(order.spellCount) {
+                    spellList.add(getRandomSpell(spellLevel,SpCoDiscipline.DIVINE,
+                        order.allowedSources,order.allowRestricted
+                    ))
+                }
+            }
+        }
+
+        return SpellCollection(0, parentHoard,"ring_runes",ringName,SpCoType.RING,
+            gpValue = 7000.00, xpValue = 2500,
+            spells = spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name })))
+    }
+
+    /* TODO finish implementing after first shipped build
+    override fun createSpellBook(parentHoard: Int, _effectiveLevel: Int, _extraSpells: Int,
+                        _specialistType: String, extraProperties: Int,
+                        extraSpellMethod: SpCoGenMethod,
+                        useSSG: Boolean,
+                        allowRestricted: Boolean) : SpellCollection {
+
+        var pageType = object {
+            var featureName         = "Parchment"
+            var costPerFourPages    = 3.0   // Given in
+            var timePerFourPages    = 2.0   // Given in hours
+            var pagesPerHalfPound   = 48
+        }
+        var inkType = object {
+            var featureName         = "Standard Ink"
+            var costPerFourPages    = 25.0
+            var timePerFourPages    = 1.0
+        }
+        var bindingType = object {
+            var featureName         = "Standard binding"
+            var time                = 2.0
+            var weight              = 0.5
+        }
+        var coverType = object {
+            var featureName         = "Leather cover"
+            var cost                = 20.0
+            var time                = 2.0
+            var weight : Pair<Double,Double> = 1.5 to 0.75
+        }
+        val enhancements = object{
+            val pageEnhancements = mutableSetOf<Pair<String,Double>>()
+            val inkEnhancements = mutableSetOf<Pair<String,Double>>()
+            val bindingEnhancements = mutableSetOf<Pair<String,Double>>()
+            val coverEnhancements = mutableSetOf<Pair<String,Double>>()
+            val securityEnhancements =  mutableSetOf<Pair<String,Double>>()
+            val carryingEnhancements = mutableSetOf<Pair<String,Double>>()
+        }
+
+        var pageCount   = 64
+        var materialCost= 0.0
+        var prodTime    = 0.0
+        var totalWeight = 0.0
+
+        val effectiveLevel = _effectiveLevel.coerceIn(1..20)
+        val specialistType = if (Spell.mageSpecialistTags.contains(_specialistType)) {
+            _specialistType
+        } else ""
+        var iconID = "book_silverbound"
+        val nameBuilder = StringBuilder()
+
+        val spells = arrayListOf<Spell>()
+        val extraProperties = arrayListOf<Pair<String,Double>>()
+
+        fun convertEnhancementsToList() { // TODO implement
+            }
+        fun getInitialGPValue() : Double {
+
+            var gpTotal: Double = materialCost
+
+            if (extraProperties.isNotEmpty()) {
+                extraProperties.forEach { (_, gpValue) -> gpTotal += gpValue }
+            }
+
+            if (spells.isNotEmpty()) {
+                spells.forEach {
+
+                    gpTotal += if (it.spellLevel == 0) {
+                        75.0
+                    } else {
+                        (300.0 * it.spellLevel)
+                    }
+                }
+            }
+
+            return gpTotal
+        }
+        fun getInitialXpValue() : Int {
+
+            var xpTotal = 0
+
+            if (spells.isNotEmpty()) { spells.forEach {
+
+                xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel) }
+            }
+
+            return xpTotal
+        }
+
+        fun addRandomEnhancement() {
+
+
+            when (Random.nextInt(1,7)){
+                else-> {
+
+                }
+            }
+
+        }
+
+        //TODO Implement specialist-specific spellbooks.
+
+        return SpellCollection(0,parentHoard,iconID,nameBuilder.toString(),
+        SpCoType.BOOK,extraProperties.toList(),getInitialGPValue(),getInitialXpValue(),
+        spells.toList(),"")
+    } */
+
+    // endregion
+
+    // region [ Spell-related functions ]
     override fun convertOrderToSpellScroll(parentHoard : Int, order: SpellCollectionOrder): SpellCollection {
 
         // region < Local extension functions >
@@ -3010,6 +3575,17 @@ class LootGeneratorAsync : BaseLootGenerator {
                 }
 
                 else                  -> SpCoGenMethod.TRUE_RANDOM
+            }
+        }
+
+        fun SpCoDiscipline.decideSpellDiscipline(): SpCoDiscipline {
+
+            return when (this) {
+
+                SpCoDiscipline.ARCANE   -> this
+                SpCoDiscipline.DIVINE   -> this
+                SpCoDiscipline.NATURAL  -> this
+                SpCoDiscipline.ALL_MAGIC-> listOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE).random()
             }
         }
 
@@ -3055,7 +3631,7 @@ class LootGeneratorAsync : BaseLootGenerator {
         val propertiesList = ArrayList<Pair<String,Double>>()
         val itemName: String
         val iconID : String
-        val spellType = order.spellType
+        val spellType = order.spellType.decideSpellDiscipline()
         val generationMethod = order.genMethod.fixGenerationMethod(spellType)
         val spellCount = if ((generationMethod == SpCoGenMethod.TRUE_RANDOM)||
             (generationMethod == SpCoGenMethod.BY_THE_BOOK)) {
@@ -3071,15 +3647,71 @@ class LootGeneratorAsync : BaseLootGenerator {
 
         // region TODO [ Roll spells ] TODO
 
-        //TODO Add genMethod discrimination and alternate methods. For now, only TRUE_RANDOM is effectively implemented.
+        when (generationMethod) {
 
-        repeat(spellCount){
+            SpCoGenMethod.TRUE_RANDOM   -> {
 
-            //TODO query database instead of returning sample
-            var spellTemplate = SAMPLE_ARCANE_SPELL
+                repeat(spellCount) {
 
-            // Add spell to running list
-            spellList.add(convertTemplateToSpell(spellTemplate))
+                    val spellLevel = spellRange.random()
+
+                    spellList.add(getRandomSpell(spellLevel,spellType,
+                        order.allowedSources,order.allowRestricted
+                    ))
+                }
+            }
+
+            SpCoGenMethod.BY_THE_BOOK   -> {
+
+                when (spellType) {
+
+                    SpCoDiscipline.ARCANE   -> {
+
+                        repeat(spellCount) {
+
+                            val spellLevel = spellRange.random()
+
+                            spellList.add(getSpellByLevelUp(spellLevel,"",
+                                order.rerollChoices,order.allowedSources.splatbooksOK))
+                        }
+                    }
+
+                    SpCoDiscipline.DIVINE   -> {
+
+                        repeat(spellCount) {
+
+                            val spellLevel = spellRange.random()
+
+                            spellList.add(getSpellByChosenOneTable(spellLevel,false,
+                                order.allowedSources.splatbooksOK))
+                        }
+                    }
+
+                    else -> {
+                        Log.e("convertOrderToSpellScroll($parentHoard, order)",
+                            "Invalid spell type for spell scroll slipped through.\n" +
+                                    "Order has $spellCount spells of range $spellRange.")
+                    }
+                }
+            }
+
+            SpCoGenMethod.CHOSEN_ONE    -> {
+                //TODO Unimplemented
+                Log.e("convertOrderToSpellScroll($parentHoard, order)",
+                    "Unimplemented spell generation method called ($generationMethod).")
+            }
+
+            SpCoGenMethod.SPELL_BOOK    -> {
+                //TODO Unimplemented
+                Log.e("convertOrderToSpellScroll($parentHoard, order)",
+                    "Unimplemented spell generation method called ($generationMethod).")
+            }
+
+            SpCoGenMethod.ANY_PHYSICAL  -> {
+                //TODO Unimplemented
+                Log.e("convertOrderToSpellScroll($parentHoard, order)",
+                    "Unimplemented spell generation method called ($generationMethod).")
+            }
         }
 
         // endregion
@@ -3229,14 +3861,129 @@ class LootGeneratorAsync : BaseLootGenerator {
             propertiesList.toList(),
             gpTotal,
             xpTotal,
-            spellList.toList(),
+            spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name })),
             curse
         )
     }
 
-    //TODO Add a NewMagicItemTuple processor for sorting valid magic items and special orders
+    private fun SpellCollectionOrder.convertToScroll(parentHoard: Int): SpellCollection =
+        convertOrderToSpellScroll(parentHoard,this)
 
-    //TODO Add function or class for spell generation beyond true random
+    fun createSpellCollection(parentHoard: Int, spCoParams: SpellCoRestrictions) : SpellCollection {
+
+        return when (spCoParams.genMethod) {
+
+            SpCoGenMethod.TRUE_RANDOM -> {
+                createNewScrollOrder(spCoParams,false).convertToScroll(parentHoard)
+            }
+
+            SpCoGenMethod.BY_THE_BOOK -> {
+                createNewScrollOrder(spCoParams,true).convertToScroll(parentHoard)
+            }
+
+            else    -> {
+                Log.d("createSpellCollection()",
+                    "Unimplemented generation method passed; defaulting to True Random scroll")
+                createNewScrollOrder(spCoParams,false).convertToScroll(parentHoard)
+            }
+        }
+    }
+
+    fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
+
+        val scrollDiscipline: SpCoDiscipline
+        val effectiveLvlRange: IntRange
+        val spellCount = Random.nextInt(1,scrollParams.spellCountMax + 1)
+        val scrollMethod = if (isByBook) SpCoGenMethod.BY_THE_BOOK else SpCoGenMethod.TRUE_RANDOM
+
+        fun chooseSpCoDiscipline() : SpCoDiscipline {
+
+            val randomBookLegalDiscipline = setOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE).random()
+
+            if (isByBook){
+
+                val setOfDisciplines = mutableSetOf<SpCoDiscipline>().apply{
+                    if (scrollParams.allowedDisciplines.arcane) { add(SpCoDiscipline.ARCANE) }
+                    if (scrollParams.allowedDisciplines.divine) { add(SpCoDiscipline.DIVINE) }
+                }
+
+                return when (setOfDisciplines.size) {
+
+                    0   -> {
+                        Log.e("chooseSpCoDiscipline","No allowed spell collections passed in!")
+                        setOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE).random()
+                    }
+
+                    1   -> setOfDisciplines.first()
+
+                    else-> setOfDisciplines.random()
+                }
+
+            } else {
+
+                val setOfDisciplines = mutableSetOf<SpCoDiscipline>().apply{
+                    if (scrollParams.allowedDisciplines.arcane) { add(SpCoDiscipline.ARCANE) }
+                    if (scrollParams.allowedDisciplines.divine) { add(SpCoDiscipline.DIVINE) }
+                    if (scrollParams.allowedDisciplines.natural) { add(SpCoDiscipline.NATURAL) }
+                }
+
+                when (setOfDisciplines.size) {
+
+                    0   -> {
+                        Log.e("chooseSpCoDiscipline","No allowed spell collections passed in!")
+                        return SpCoDiscipline.ALL_MAGIC
+                    }
+
+                    1   -> return setOfDisciplines.first()
+
+                    else-> {
+                        // Ignore natural spells if an alternative is present
+                        if (setOfDisciplines.contains(SpCoDiscipline.ARCANE) ||
+                            setOfDisciplines.contains(SpCoDiscipline.DIVINE)) {
+
+                            setOfDisciplines.remove(SpCoDiscipline.NATURAL)
+                        }
+
+                        return setOfDisciplines.random().also {
+                            Log.d("chooseSpCoDiscipline","Multiple options entered (picked $it)")
+                        }
+                    }
+                }
+            }
+        }
+
+        scrollDiscipline = chooseSpCoDiscipline()
+
+        effectiveLvlRange = if (scrollDiscipline != SpCoDiscipline.ARCANE) {
+            val newMin = scrollParams.levelRange.first.coerceAtLeast(1)
+            val newMax = scrollParams.levelRange.last.coerceIn(newMin,7)
+            IntRange(newMin,newMax)
+        } else scrollParams.levelRange
+
+        return SpellCollectionOrder(SpCoType.SCROLL,scrollDiscipline,spellCount,effectiveLvlRange,
+            scrollParams.spellSources,scrollParams.allowRestricted,scrollParams.allowCurse,
+            true,SpCoGenMethod.TRUE_RANDOM,scrollParams.allowedCurses)
+    }
+
+    override fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
+                                   sources: SpCoSources, allowRestricted: Boolean): Spell {
+
+        val discipline = if (_discipline == SpCoDiscipline.ALL_MAGIC) {
+                listOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE,SpCoDiscipline.NATURAL).random()
+            } else _discipline
+        val inputLevel = if (discipline == SpCoDiscipline.ARCANE) {
+            _inputLevel.coerceIn(0..9) } else { _inputLevel.coerceIn(1..7) }
+        var tempHolder = SAMPLE_ARCANE_SPELL
+
+        // TODO implement Dao function for grabbing random spell meeting criteria
+        // Placeholder value for random spell
+        tempHolder = when (discipline) {
+            SpCoDiscipline.ARCANE   -> SAMPLE_ARCANE_SPELL
+            else                    -> SAMPLE_DIVINE_SPELL
+        }
+
+        return convertTemplateToSpell(tempHolder)
+    }
 
     override fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: String, rerollChoices: Boolean,
                                    useSSG: Boolean): Spell {
@@ -6132,304 +6879,571 @@ class LootGeneratorAsync : BaseLootGenerator {
         return spellList
     }
 
-    //TODO Add function for generating ring of spell storing from SpecialItemOrder
+    override fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int) : Spell {
 
-    /* TODO finish implementing after first shipped build
-    override fun createSpellBook(parentHoard: Int, _effectiveLevel: Int, _extraSpells: Int,
-                        _specialistType: String, extraProperties: Int,
-                        extraSpellMethod: SpCoGenMethod,
-                        useSSG: Boolean,
-                        allowRestricted: Boolean) : SpellCollection {
+        val inputLevel = _inputLevel.coerceIn(1..7)
+        val maxCastable = _maxCastable.coerceIn(0..7)
+        var spellName: String?
+        var tempHolder = SAMPLE_DIVINE_SPELL
 
-        var pageType = object {
-            var featureName         = "Parchment"
-            var costPerFourPages    = 3.0   // Given in
-            var timePerFourPages    = 2.0   // Given in hours
-            var pagesPerHalfPound   = 48
-        }
-        var inkType = object {
-            var featureName         = "Standard Ink"
-            var costPerFourPages    = 25.0
-            var timePerFourPages    = 1.0
-        }
-        var bindingType = object {
-            var featureName         = "Standard binding"
-            var time                = 2.0
-            var weight              = 0.5
-        }
-        var coverType = object {
-            var featureName         = "Leather cover"
-            var cost                = 20.0
-            var time                = 2.0
-            var weight : Pair<Double,Double> = 1.5 to 0.75
-        }
-        val enhancements = object{
-            val pageEnhancements = mutableSetOf<Pair<String,Double>>()
-            val inkEnhancements = mutableSetOf<Pair<String,Double>>()
-            val bindingEnhancements = mutableSetOf<Pair<String,Double>>()
-            val coverEnhancements = mutableSetOf<Pair<String,Double>>()
-            val securityEnhancements =  mutableSetOf<Pair<String,Double>>()
-            val carryingEnhancements = mutableSetOf<Pair<String,Double>>()
+        fun checkIndulgence(): String? {
+
+            return if (((maxCastable == 0)||(maxCastable == inputLevel))||(useZG)) {
+                "Indulgence"
+            } else null
         }
 
-        var pageCount   = 64
-        var materialCost= 0.0
-        var prodTime    = 0.0
-        var totalWeight = 0.0
+        do {
 
-        val effectiveLevel = _effectiveLevel.coerceIn(1..20)
-        val specialistType = if (Spell.mageSpecialistTags.contains(_specialistType)) {
-            _specialistType
-        } else ""
-        var iconID = "book_silverbound"
-        val nameBuilder = StringBuilder()
+            var isDruidic = false
+            var isFromZG = false
 
-        val spells = arrayListOf<Spell>()
-        val extraProperties = arrayListOf<Pair<String,Double>>()
+            when (inputLevel) {
 
-        fun convertEnhancementsToList() { // TODO implement
-            }
-        fun getInitialGPValue() : Double {
+                // TODO Optimize by grouping like-weighted entries into a list and pulling random
+                //  entry from sublist similar to how M-U level advancement method works.
 
-            var gpTotal: Double = materialCost
+                    1 -> when (Random.nextInt(1,101)) {
 
-            if (extraProperties.isNotEmpty()) {
-                extraProperties.forEach { (_, gpValue) -> gpTotal += gpValue }
-            }
-
-            if (spells.isNotEmpty()) {
-                spells.forEach {
-
-                    gpTotal += if (it.spellLevel == 0) {
-                        75.0
-                    } else {
-                        (300.0 * it.spellLevel)
-                    }
+                    in 1..2     -> { isDruidic = true
+                        isFromZG = true
+                        spellName = "Animal Friendship" }
+                    in 3..4     -> { isFromZG = true
+                        spellName = "Awaken" }
+                    in 5..6     -> spellName = "Befriend"
+                    in 7..8     -> spellName = "Bless"
+                    in 9..10    -> spellName = "Call Upon Faith"
+                    in 11..12   -> spellName = "Cause Light Wounds"
+                    in 13..14   -> spellName = "Ceremony"
+                    in 15..16   -> spellName = "Combine"
+                    in 17..18   -> spellName = "Command"
+                    in 19..20   -> spellName = "Create Water"
+                    in 21..22   -> spellName = "Cure Light Wounds"
+                    in 23..24   -> spellName = "Curse"
+                    in 25..26   -> spellName = "Darkness"
+                    in 27..28   -> spellName = "Destroy Water"
+                    29          -> { isDruidic = true
+                        spellName = "Detect Balance" }
+                    in 30..31   -> spellName = "Detect Evil"
+                    in 32..33   -> spellName = "Detect Good"
+                    in 34..35   -> spellName = "Detect Magic"
+                    in 36..37   -> { isDruidic = true
+                        spellName = "Detect Poison" }
+                    in 38..39   -> { isDruidic = true
+                        spellName = "Detect Snares & Pits"}
+                    in 40..41   -> { isFromZG = true
+                        spellName = "Diagnose Injury" }
+                    in 42..43   -> spellName = "Endure Cold"
+                    in 44..45   -> spellName = "Endure Heat"
+                    in 46..47   -> { isDruidic = true
+                        spellName = "Entangle" }
+                    in 48..49   -> { isDruidic = true
+                        spellName = "Faerie Fire" }
+                    in 50..51   -> { isDruidic = true
+                        spellName = "Fog Vision" }
+                    in 52..53   -> spellName = checkIndulgence()
+                    in 54..55   -> { isDruidic = true
+                        spellName = "Invisibility to Animals" }
+                    in 56..57   -> spellName = "Invisibility to Undead"
+                    in 58..59   -> { isFromZG = true
+                        spellName = "Know Direction" }
+                    in 60..62   -> spellName = "Light"
+                    in 63..64   -> { isDruidic = true
+                        spellName = "Locate Animals or Plants" }
+                    65          -> { isFromZG = true
+                        spellName = "Log of Everburning" }
+                    in 66..67   -> spellName = "Magical Stone"
+                    in 68..69   -> { isDruidic = true
+                        spellName = "Pass Without Trace" }
+                    in 70..71   -> { isDruidic = true
+                        spellName = "Precipitation" }
+                    in 72..73   -> { isDruidic = true
+                        spellName = "Predict Weather" }
+                    in 74..75   -> spellName = "Protection From Evil"
+                    in 76..77   -> spellName = "Protection From Good"
+                    in 78..79   -> spellName = "Purify Food & Drink"
+                    in 80..81   -> spellName = "Putrify Food & Drink"
+                    in 82..83   -> spellName = "Remove Fear"
+                    in 84..85   -> spellName = "Alleviate Headache"         // was "Repair Headache"
+                    in 86..87   -> { isFromZG = true
+                        spellName = "Repair Strain or Injury" }
+                    in 88..89   -> spellName = "Sanctuary"
+                    in 90..92   -> { isDruidic = true
+                        spellName = "Shillelagh" }
+                    in 93..94   -> { isFromZG = true
+                        spellName = "Strength of Stone" }
+                    in 95..96   -> { isFromZG = true
+                        spellName = "Summon Divine Lackey" }       // was "Summon Divine Temp"
+                    in 97..98   -> spellName = "Walking Corpse"
+                    in 99..100  -> { isFromZG = true
+                        spellName = "Wind Column" }                // was "Weathertell"
+                    else        -> spellName = null
                 }
-            }
 
-            return gpTotal
-        }
-        fun getInitialXpValue() : Int {
+                2 -> when (Random.nextInt(1,101)) {
 
-            var xpTotal = 0
-
-            if (spells.isNotEmpty()) { spells.forEach {
-
-                xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel) }
-            }
-
-            return xpTotal
-        }
-
-        fun addRandomEnhancement() {
-
-
-            when (Random.nextInt(1,7)){
-                else-> {
-
+                    1           -> spellName = "Adjustable Light*"
+                    in 2..3     -> spellName = "Aid"
+                    in 4..5     -> spellName = "Animate Corpse"
+                    in 6..7     -> spellName = "Augury"
+                    8           -> { isFromZG = true
+                        spellName = "Aura of Comfort" }
+                    9           -> { isDruidic = true
+                        spellName = "Badberry" }
+                    in 10..11   -> { isDruidic = true
+                        spellName = "Barkskin" }
+                    in 12..13   -> spellName = "Cause Moderate Wounds"
+                    in 14..15   -> spellName = "Charm Person"
+                    in 16..17   -> spellName = "Chant"
+                    18          -> { isDruidic = true
+                        spellName = "Chill Metal" }
+                    in 19..20   -> { isFromZG = true
+                        spellName = "Create Holy Symbol" }
+                    in 21..22   -> spellName = "Create Water"
+                    23          -> { isFromZG = true
+                        spellName = "Cure Color Blindness" }
+                    in 24..25   -> spellName = "Cause Moderate Wounds"
+                    26          -> spellName = "Detect Charm"
+                    27          -> spellName = "Diminished Rite"
+                    in 28..29   -> { isFromZG = true
+                        spellName = "Draw Upon Holy Might" }
+                    in 30..31   -> spellName = "Dust Devil"
+                    in 32..33   -> spellName = "Enthrall"
+                    34          -> { isDruidic = true
+                        spellName = "Extinguish" }
+                    in 35..36   -> spellName = "Find Traps"
+                    in 37..38   -> { isDruidic = true
+                        spellName = "Fire Trap" }
+                    in 39..40   -> { isDruidic = true
+                        spellName = "Flame Blade" }
+                    in 41..42   -> { isDruidic = true
+                        spellName = "Goodberry" }
+                    in 43..44   -> spellName = "Heal Light Wounds"
+                    in 45..46   -> { isDruidic = true
+                        spellName = "Heat Metal" }
+                    47          -> { isFromZG = true
+                        spellName = "Hold Person" }
+                    in 48..49   -> spellName = "Ignite"
+                    50          -> spellName = checkIndulgence()
+                    in 51..52   -> spellName = "Know Alignment"
+                    53          -> { isFromZG = true
+                        spellName = "Lighten Load" }
+                    in 54..55   -> { isFromZG = true
+                        spellName = "Mend Limb" }
+                    in 56..57   -> { isFromZG = true
+                        spellName = "Mend Tendon" }
+                    58          -> { isDruidic = true
+                        spellName = "Messenger" }
+                    in 59..60   -> { isDruidic = true
+                        spellName = "Obscurement" }
+                    in 61..62   -> spellName = "Premonition"
+                    in 63..64   -> { isDruidic = true
+                        spellName = "Produce Flame" }
+                    in 65..66   -> { isDruidic = true
+                        spellName = "Reflecting Pool" }
+                    in 67..68   -> spellName = "Resist Cold"
+                    in 69..70   -> { isFromZG = true
+                        spellName = "Resist Electricity" }
+                    in 71..72   -> spellName = "Resist Fire"
+                    73          -> { isFromZG = true
+                        spellName = "Resist Gas" }
+                    in 74..75   -> { isFromZG = true
+                        spellName = "Restore Movement" }
+                    76          -> spellName = "Rigor Mortis"
+                    in 77..78   -> spellName = "Silence, 15' Radius"
+                    in 79..80   -> spellName = "Slow Poison"
+                    in 81..82   -> spellName = "Snake Charm"
+                    in 83..84   -> { isDruidic = true
+                        spellName = "Soften Stone" }
+                    85          -> spellName = "Speak With Animals"
+                    86          -> { isFromZG = true
+                        spellName = "Spider Charm" }
+                    in 87..88   -> spellName = "Spiritual Hammer"
+                    in 89..90   -> { isFromZG = true
+                        spellName = "Staunch Bleeding" }       // was "Stop Bleeding"
+                    in 91..92   -> { isDruidic = true
+                        spellName = "Straighten Wood" }
+                    93          -> { isDruidic = true
+                        spellName = "Trip" }
+                    94          -> spellName = "Undetectable Alignment"
+                    95          -> spellName = "Undetectable Charm"
+                    in 96..97   -> { isDruidic = true
+                        spellName = "Warp Wood" }
+                    in 98..99   -> spellName = "Withdraw"
+                    100         -> spellName = "Wyvern Watch"
+                    else        -> spellName = null
                 }
+
+                3 -> when (Random.nextInt(1,101)) {
+
+                    1           -> { isDruidic = true
+                        spellName = "Air Breathing" }
+                    in 2..3     -> spellName = "Animate Dead"
+                    4           -> spellName = "Bestow Curse"
+                    5           -> { isDruidic = true
+                        spellName = "Call Lightning" }
+                    in 6..7     -> spellName = "Cause Blindness/Deafness"
+                    in 8..9     -> spellName = "Cause Disease"
+                    in 10..11   -> spellName = "Cause Nasty Wounds"
+                    12          -> { isDruidic = true
+                        spellName = "Cloudburst" }
+                    in 13..14   -> spellName = "Continual Darkness"
+                    in 15..16   -> spellName = "Continual Light"
+                    17          -> { isDruidic = true
+                        spellName = "Create Campfire" }
+                    in 18..19   -> spellName = "Create Food & Water"
+                    in 20..21   -> spellName = "Cure Blindness/Deafness"
+                    in 22..23   -> spellName = "Cure Disease"
+                    in 24..25   -> spellName = "Cause Nasty Wounds"
+                    in 26..27   -> spellName = "Dispel Magic"
+                    in 28..29   -> { isFromZG = true
+                        spellName = "Emotion Control" }
+                    in 30..31   -> { isDruidic = true
+                        spellName = "Enstrangle" }
+                    in 32..33   -> spellName = "Feign Death"
+                    in 34..35   -> spellName = "Flame Walk"
+                    in 36..37   -> spellName = "Glyph of Warding"
+                    in 38..39   -> spellName = "Heal Moderate Wounds"
+                    in 40..41   -> { isFromZG = true
+                        spellName = "Helping Hand" }
+                    in 42..43   -> { isDruidic = true
+                        spellName = "Hold Animals" }
+                    44          -> { isFromZG = true
+                        spellName = "Hold Persons" }
+                    in 45..46   -> spellName = checkIndulgence()
+                    in 47..48   -> spellName = "Lesser Reanimation"
+                    in 49..50   -> spellName = "Locate Object"
+                    in 51..52   -> spellName = "Magic Vestment"
+                    53          -> spellName = "Meld Into Stone"
+                    in 54..55   -> { isFromZG = true
+                        spellName = "Mend Broken Bone" }
+                    in 56..57   -> spellName = "Negative Plane Protection"
+                    in 58..59   -> spellName = "Obscure Object"
+                    in 60..61   -> spellName = "Prayer"
+                    in 62..63   -> { isDruidic = true
+                        spellName = "Protection From Fire" }
+                    64          -> { isDruidic = true
+                        spellName = "Pyrotechnics" }
+                    in 65..66   -> spellName = "Remove Curse"
+                    67          -> spellName = "Remove Paralysis"
+                    in 68..69   -> { isFromZG = true
+                        spellName = "Resist Acid and Caustic" }
+                    in 70..71   -> { isFromZG = true
+                        spellName = "Shock Therapy" }
+                    in 72..73   -> { isDruidic = true
+                        spellName = "Snare" }
+                    in 74..75   -> spellName = "Speak to the Dead"
+                    76          -> spellName = "Spike Growth"
+                    77          -> spellName = "Spike Stones"
+                    in 78..79   -> { isDruidic = true
+                        spellName = "Starshine" }
+                    in 80..81   -> { isDruidic = true
+                        spellName = "Stone Shape" }
+                    in 82..83   -> { isDruidic = true
+                        spellName = "Summon Insects" }
+                    in 84..85   -> { isDruidic = true
+                        spellName = "Tree" }
+                    in 86..87   -> {isFromZG = true
+                        spellName = "Turn" }
+                    in 88..89   -> { isFromZG = true
+                        spellName = "Vitality" }
+                    in 90..91   -> spellName = "Ward Off Evil"
+                    92          -> spellName = "Ward Off Good"
+                    in 93..94   -> { isDruidic = true
+                        spellName = "Water Breathing" }
+                    in 95..96   -> spellName = "Water Walk"
+                    97          -> { isFromZG = true
+                        spellName = "Weather Prediction" }
+                    in 98..99   -> spellName = "White Hot Metal"
+                    100         -> { isDruidic = true
+                        spellName = "Wood Shape" }
+                    else        -> spellName = null
+                }
+
+                4 -> when (Random.nextInt(1,101)) {
+
+                    in 1..2     -> spellName = "Abjure"
+                    in 3..4     -> { isDruidic = true
+                        spellName = "Animal Summoning I" }
+                    in 5..6     -> spellName = "Babble"
+                    in 7..8     -> { isFromZG = true
+                        spellName = "Blessed Warmth" }
+                    9           -> { isDruidic = true
+                        spellName = "Call Woodland Beings" }
+                    10          -> { isFromZG = true
+                        spellName = "Cause Lycanthropy" }
+                    in 11..12   -> spellName = "Cause Serious Wounds"
+                    in 13..14   -> { isDruidic = true
+                        spellName = "Control Temperature, 10' Radius" }
+                    in 15..16   -> spellName = "Cure Serious Wounds"
+                    in 17..18   -> spellName = "Detect Lie"
+                    in 19..20   -> spellName = "Divination"
+                    in 21..22   -> { isFromZG = true
+                        spellName = "Feign Life" }
+                    in 23..24   -> spellName = "Free Action"
+                    in 25..26   -> spellName = "Giant Insect"
+                    27          -> spellName = "Gourmet Dinner"
+                    28          -> { isFromZG = true
+                        spellName = "Greater Restore Movement" }
+                    in 29..30   -> { isDruidic = true
+                        spellName = "Grow" }
+                    31          -> { isDruidic = true
+                        spellName = "Hallucinatory Forest" }
+                    in 32..33   -> spellName = "Heal Nasty Wounds"
+                    34          -> { isDruidic = true
+                        spellName = "Hold Plant" }
+                    in 35..36   -> spellName = "Imbue With Spell Ability"
+                    in 37..38   -> spellName = checkIndulgence()
+                    39          -> { isFromZG = true
+                        spellName = "Join With Astral Traveler" }
+                    in 40..41   -> { isDruidic = true
+                        spellName = "Lower Water" }
+                    in 42..43   -> spellName = "Minor Raise Dead"
+                    in 44..45   -> spellName = "Neutralize Poison"
+                    in 46..47   -> spellName = "No Fear"
+                    48          -> { isDruidic = true
+                        spellName = "Plant Door" }
+                    in 49..50   -> spellName = "Poison"
+                    in 51..52   -> { isDruidic = true
+                        spellName = "Produce Fire" }
+                    in 53..54   -> { isDruidic = true
+                        spellName = "Protection from Elementals" }
+                    in 55..56   -> { isDruidic = true
+                        spellName = "Protection from Lightning" }
+                    in 57..58   -> { isFromZG = true
+                        spellName = "Protection from Lycanthropes" }
+                    59          -> { isDruidic = true
+                        spellName = "Protection from Plants and Fungus" }
+                    in 60..61   -> { isFromZG = true
+                        spellName = "Protection from Possession" }
+                    in 62..63   -> { isFromZG = true
+                        spellName = "Protection from Undead" }
+                    in 64..65   -> { isDruidic = true
+                        spellName = "Protection from Water" }
+                    66          -> { isDruidic = true
+                        spellName = "Quench" }
+                    in 67..68   -> { isDruidic = true
+                        spellName = "Raise Water" }
+                    in 69..70   -> { isDruidic = true
+                        spellName = "Reflecting Pool" }
+                    in 71..72   -> { isDruidic = true
+                        spellName = "Repel Insects" }
+                    in 73..74   -> spellName = "Rigor Mortis, 10' Radius*"
+                    75          -> spellName = "Shrink Insect"
+                    in 76..77   -> spellName = "Snakes to Sticks"
+                    in 78..79   -> { isDruidic = true
+                        spellName = "Speak with Plants" }
+                    in 80..81   -> spellName = "Spell Immunity"
+                    82          -> spellName = "Spiders to Stones"
+                    in 83..84   -> { isFromZG = true
+                        spellName = "Spiritual Brigade" }
+                    in 85..86   -> spellName = "Sticks to Snakes"
+                    in 87..88   -> { isDruidic = true
+                        spellName = "Stone Passage" }
+                    in 89..90   -> { isFromZG = true
+                        spellName = "Stones to Spiders" }
+                    in 91..92   -> spellName = "Tongues"
+                    in 93..94   -> spellName = "Touch of Death"
+                    95          -> spellName = "Undetectable Lie"
+                    in 96..97   -> { isDruidic = true
+                        spellName = "Warp Stone or Metal" }
+                    in 98..99   -> { isDruidic = true
+                        spellName = "Weather Stasis" }
+                    100         -> { isDruidic = true
+                        spellName = "Zone of Sweet Air" }
+                    else    -> spellName = null
+                }
+
+                5 -> when (Random.nextInt(1,101)) {
+
+                    in 1..3     -> spellName = "Air Walk"
+                    in 4..5     -> { isDruidic = true
+                        spellName = "Animal Growth" }
+                    in 6..7     -> { isDruidic = true
+                        spellName = "Animal Reduction" }
+                    in 8..9     -> { isDruidic = true
+                        spellName = "Animal Summoning II" }
+                    in 10..11   -> { isDruidic = true
+                        spellName = "Anti-Plant Shell" }
+                    in 12..14   -> spellName = "Atonement"
+                    in 15..18   -> { isFromZG = true
+                        spellName = "Blessed Abundance" }
+                    in 19..20   -> spellName = "Cause Critical Wounds"
+                    in 21..22   -> spellName = "Commune"
+                    in 23..24   -> { isDruidic = true
+                        spellName = "Commune With Nature" }
+                    in 25..27   -> { isDruidic = true
+                        spellName = "Control Winds" }
+                    in 28..30   -> spellName = "Cure Critical Wounds"
+                    in 31..33   -> spellName = "Detect Ulterior Motives"
+                    in 34..36   -> spellName = "Dispel Evil"
+                    in 37..39   -> spellName = "Dispel Good"
+                    in 40..42   -> { isFromZG = true
+                        spellName = "Exorcism" }
+                    in 43..44   -> spellName = "False Seeing"
+                    in 45..46   -> { isDruidic = true
+                        spellName = "Feeblemind" }
+                    in 47..50   -> spellName = "Flame Strike"
+                    in 51..53   -> spellName = "Heal Serious Wounds"
+                    in 54..55   -> spellName = checkIndulgence()
+                    in 56..58   -> spellName = "Insect Plague"
+                    in 59..60   -> spellName = "Magic Font"
+                    in 61..63   -> { isDruidic = true
+                        spellName = "Moonbeam" }
+                    in 64..65   -> { isDruidic = true
+                        spellName = "Pass Plant" }
+                    in 66..68   -> { isDruidic = true
+                        spellName = "Plane Shift" }
+                    in 69..72   -> { isFromZG = true
+                        spellName = "Protection from Nefarians" }
+                    in 73..75   -> spellName = "Quest"
+                    in 76..77   -> spellName = "Rainbow"
+                    in 78..80   -> spellName = "Raise Dead"
+                    in 81..83   -> { isFromZG = true
+                        spellName = "Reattach Limb" }
+                    in 84..85   -> { isDruidic = true
+                        spellName = "Sink Into Earth" }
+                    in 86..87   -> spellName = "Slay Living"
+                    in 88..90   -> { isDruidic = true
+                        spellName = "Spike Stones" }
+                    in 91..92   -> spellName = "Transmute Mud to Rock"
+                    in 93..94   -> spellName = "Transmute Rock to Mud"
+                    in 95..97   -> spellName = "True Seeing"
+                    in 98..100  -> { isDruidic = true
+                        spellName = "Wall of Fire" }
+                    else        -> spellName = null
+                }
+
+                6 -> when (Random.nextInt(1,101)) {
+
+                    1           -> spellName = "Aerial Servant"
+                    in 2..5     -> { isDruidic = true
+                        spellName = "Animal Summoning III" }
+                    in 6..7     -> spellName = "Animate Object"
+                    in 8..11    -> { isDruidic = true
+                        spellName = "Anti-Animal Shell" }
+                    in 12..13   -> { isFromZG = true
+                        spellName = "Attach Limb" }
+                    in 14..17   -> spellName = "Blade Barrier"
+                    in 18..21   -> spellName = "Conjure Animals"
+                    in 22..23   -> { isDruidic = true
+                        spellName = "Conjure Fire Elemental" }
+                    in 24..26   -> { isFromZG = true
+                        spellName = "Control Winds" }
+                    in 27..30   -> spellName = "Cure-All"
+                    in 31..34   -> { isFromZG = true
+                        spellName = "Easy March" }
+                    in 35..36   -> { isFromZG = true
+                        spellName = "False Dawn" }
+                    in 37..40   -> { isFromZG = true
+                        spellName = "Find the Path" }
+                    in 41..44   -> spellName = "Forbiddance"
+                    in 45..48   -> { isDruidic = true
+                        spellName = "Greater Enstrangle" }
+                    in 49..51   -> spellName = "Harm"
+                    in 52..54   -> { isFromZG = true
+                        spellName = "Hold Crowd" }
+                    in 55..58   -> spellName = checkIndulgence()
+                    in 59..61   -> { isDruidic = true
+                        spellName = "Live Oak" }
+                    in 62..63   -> spellName = "Lose the Path"
+                    in 64..66   -> spellName = "Part Water"
+                    in 67..69   -> { isFromZG = true
+                        spellName = "Rain of Fire" }
+                    in 70..73   -> spellName = "Speak With Monsters"
+                    in 74..76   -> spellName = "Stone Tell"
+                    in 77..79   -> { isDruidic = true
+                        spellName = "Transmute Water to Dust" }
+                    in 80..82   -> { isDruidic = true
+                        spellName = "Transmute Dust to Water" }  // was "Transmute Dust ot Water"
+                    in 83..85   -> { isDruidic = true
+                        spellName = "Transport via Plants" }
+                    in 86..88   -> { isDruidic = true
+                        spellName = "Turn Wood" }
+                    in 89..91   -> { isDruidic = true
+                        spellName = "Wall of Thorns" }
+                    in 92..94   -> { isDruidic = true
+                        spellName = "Weather Summoning" }
+                    in 95..97   -> { isFromZG = true
+                        spellName = "Whirlwind" }
+                    in 98..100  -> spellName = "Word of Recall"
+                    else        -> spellName = null
+                }
+
+                7 -> when (Random.nextInt(1,101)) {
+
+                    1           -> { isDruidic = true
+                        spellName = "Animate Rock" }
+                    in 2..3     -> spellName = "Astral Spell"
+                    in 4..6     -> { isDruidic = true
+                        spellName = "Cause Inclement Weather" }
+                    in 7..10    -> { isDruidic = true
+                        spellName = "Changestaff" }
+                    in 11..12   -> { isDruidic = true
+                        spellName = "Chariot of Sustarre" }
+                    in 13..14   -> { isDruidic = true
+                        spellName = "Confusion" }
+                    in 15..17   -> { isDruidic = true
+                        spellName = "Conjure Earth Elemental" }
+                    in 18..19   -> { isFromZG = true
+                        spellName = "Construct Temple" }
+                    in 20..21   -> spellName = "Control Weather"
+                    in 22..24   -> { isDruidic = true
+                        spellName = "Creeping Doom" }
+                    in 25..27   -> spellName = "Destruction"
+                    in 28..29   -> { isDruidic = true
+                        spellName = "Dismiss Earth Elemental" }
+                    in 30..31   -> { isFromZG = true
+                        spellName = "Divine Inspiration" }
+                    in 32..34   -> spellName = "Earthquake"
+                    in 35..37   -> spellName = "Exaction"
+                    in 38..40   -> { isDruidic = true
+                        spellName = "Finger of Death" }
+                    in 41..43   -> { isDruidic = true
+                        spellName = "Fire Quench" }
+                    in 44..46   -> { isDruidic = true
+                        spellName = "Fire Storm" }
+                    in 47..49   -> spellName = "Gate"
+                    in 50..52   -> spellName = "Holy Word"
+                    in 53..55   -> spellName = "Indulgence"     // If this is rolled, it is necessarily the highest castable lv.
+                    in 56..58   -> spellName = "Regenerate"
+                    in 59..61   -> { isDruidic = true
+                        spellName = "Reincarnation" } // was "Reincarnate"
+                    in 62..64   -> { isDruidic = true
+                        spellName = "Repel Living Creatures and Plants" }
+                    in 65..67   -> spellName = "Restoration"
+                    in 68..70   -> spellName = "Restorative Cure-All"
+                    in 71..73   -> spellName = "Resurrection"
+                    in 74..76   -> spellName = "Succor"
+                    in 77..79   -> spellName = "Sunray"
+                    in 80..82   -> spellName = "Symbol"
+                    in 83..85   -> { isDruidic = true
+                        spellName = "Transmute Lava to Rock" }
+                    in 86..87   -> { isDruidic = true
+                        spellName = "Transmute Metal to Wood" }
+                    in 88..89   -> { isDruidic = true
+                        spellName = "Transmute Rock to Lava" }
+                    in 90..91   -> { isDruidic = true
+                        spellName = "Transmute Wood to Metal" }
+                    in 92..93   -> spellName = "Unholy Word"
+                    in 94..96   -> spellName = "Wind Walk"
+                    in 97..100  -> { isDruidic = true
+                        spellName = "Wither" }
+                    else        -> spellName = null
+                }
+
+                else -> spellName = null
             }
 
-        }
+            println("DEBUG: Spell picked is \"$spellName\" and is${if (isDruidic) " " else " NOT "}exclusively druidic}")
 
-        //TODO Implement specialist-specific spellbooks.
+        } while ((spellName == null)
+            || (isDruidic && !allowDruid)
+            || (isFromZG && !useZG ))
 
-        return SpellCollection(0,parentHoard,iconID,nameBuilder.toString(),
-        SpCoType.BOOK,extraProperties.toList(),getInitialGPValue(),getInitialXpValue(),
-        spells.toList(),"")
-    } */
+        //TODO fetch spell matching level and name from db
 
-    override fun createTreasureMap(parentHoard: Int, sourceDesc: String, allowFalseMaps: Boolean): MagicItem {
-
-        val notesLists=     LinkedHashMap<String,ArrayList<String>>()
-
-        val nameBuilder=    StringBuilder("Treasure Map")
-
-        val mNotes          : List<List<String>>
-
-        val isRealMap: Boolean
-        val distanceRoll= Random.nextInt(1,21)
-
-        // Roll type of map
-        when (Random.nextInt(if (allowFalseMaps) 1 else 2,11)) {
-
-            1       -> {
-                isRealMap = false
-                notesLists["Map details"]?.plusAssign("False map " +
-                        "(No treasure or already looted")
-                nameBuilder.append(" (False)")
-            }
-
-            in 2..7 -> {
-                isRealMap = true
-                notesLists["Map details"]?.plusAssign("Map to monetary treasure " +
-                        "(0% chance of art objects or magic items")
-                nameBuilder.append(" (Monetary)")
-            }
-
-            in 8..9 -> {
-                isRealMap = true
-                notesLists["Map details"]?.plusAssign("Map to magical treasure " +
-                        "(0% chance of coin)")
-                nameBuilder.append(" (Magical)")
-            }
-
-            else    -> {
-                isRealMap = true
-                notesLists["Map details"]?.plusAssign("Map to combined treasure")
-                nameBuilder.append(" (Combined)")
-            }
-        }
-
-        // Roll direction of treasure location
-        when (Random.nextInt(1,9)){
-            1 -> notesLists["Map details"]?.plusAssign("Located north")
-            2 -> notesLists["Map details"]?.plusAssign("Located northeast")
-            3 -> notesLists["Map details"]?.plusAssign("Located east")
-            4 -> notesLists["Map details"]?.plusAssign("Located southeast")
-            5 -> notesLists["Map details"]?.plusAssign("Located south")
-            6 -> notesLists["Map details"]?.plusAssign("Located southwest")
-            7 -> notesLists["Map details"]?.plusAssign("Located west")
-            8 -> notesLists["Map details"]?.plusAssign("Located northwest")
-        }
-
-        // Roll distance of treasure
-        when (distanceRoll) {
-
-            in 1..2 -> notesLists["Map details"]?.plusAssign("Hoard located in " +
-                    "labyrinth of caves found in lair")
-
-            in 3..6 -> notesLists["Map details"]?.plusAssign("Hoard located " +
-                    "outdoors, 5-8 miles distant")
-
-            in 7..9 -> notesLists["Map details"]?.plusAssign("Hoard located " +
-                    "outdoors, 10-40 miles distant")
-
-            else    -> notesLists["Map details"]?.plusAssign("Hoard located " +
-                    "outdoors, 50-500 miles distant")
-        }
-
-        if (distanceRoll > 2) {
-
-            when (Random.nextInt(1,11)) {
-
-                1       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                        "buried and unguarded")
-                2       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                        "hidden in water")
-                in 3..7 -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                        "guarded in a lair")
-                8       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                        "somewhere in ruins")
-                9       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                        "in a burial crypt")
-                else    -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                        "secreted in a town")
-            }
-        }
-
-        // Roll type of treasure
-        if (isRealMap)
-            notesLists["Map details"]?.plusAssign("Treasure present: " +
-                    listOf("I","G","H","F","A","B","C","D","E","Z","A and Z","A and H").random())
-
-        // Note item map replaced
-        if (sourceDesc.isNotBlank()){
-            notesLists["Map details"]?.plusAssign("This map replaced $sourceDesc")
-        }
-
-        fun convertMapToNestedLists(input: LinkedHashMap<String,ArrayList<String>>) : List<List<String>> {
-
-            val listHolder = ArrayList<List<String>>()
-            val nameHolder = ArrayList<String>()
-
-            listHolder[0] = listOf("") // Placeholder for parent list
-
-            input.onEachIndexed { index, entry ->
-
-                nameHolder.add(entry.key)
-                listHolder.add(index + 1,entry.value.toList())
-            }
-
-            listHolder[0] = nameHolder.toList()
-
-            return listHolder.toList()
-        }
-
-        return MagicItem(
-            0,
-            -1,
-            parentHoard,
-            "scroll_map",
-            "Map",
-            nameBuilder.toString(),
-            "GameMaster's Guide",
-            182,
-            0,
-            0.0,
-            mapOf(
-                "fighter" to true,
-                "thief" to true,
-                "cleric" to true,
-                "magic-user" to true,
-                "druid" to true),
-            !isRealMap,
-            "",
-            convertMapToNestedLists(notesLists))
-    }
-
-    override fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
-
-        val iounList = arrayListOf<MagicItem>()
-        val currentSet = mutableSetOf<Int>()
-
-        val itemCount = qty.coerceIn(1,10)
-        var currentStone : Int
-        var deadStones = 0
-
-        // Roll which stones are present
-        repeat(itemCount) {
-
-            currentStone = Random.nextInt(1,21)
-
-            // Convert to 'dead' stone if rolled or already present
-            if ((currentSet.contains(currentStone))||(currentStone > 14))
-                deadStones ++
-            else currentSet.add(currentStone)
-        }
-
-        // Retrieve stones from database
-        currentSet.sorted().forEach { indexAddend ->
-
-            // Add to running list
-            iounList.add(createMagicItemTuple(parentHoard,
-                (FIRST_IOUN_STONE_KEY + (indexAddend - 1)),
-                listOf("A14")).magicItem)
-        }
-
-        // Add dead stones
-        if (deadStones > 0){
-
-            val deadStoneItem = createMagicItemTuple(parentHoard,
-                LAST_IOUN_STONE_KEY, listOf("A14")).magicItem
-
-            repeat(deadStones) { iounList.add(deadStoneItem) }
-        }
-
-        // Return list of ioun stones
-        return iounList
-    }
-
-    override fun createGutStones(parentHoard: Int, qty: Int): List<Gem> {
-
-        val gutStoneList = arrayListOf<Gem>()
-
-        repeat(qty.coerceAtLeast(1)){
-            gutStoneList.add(createGem(parentHoard, GUT_STONE_KEY))
-        }
-
-        return gutStoneList
+        return convertTemplateToSpell(SAMPLE_DIVINE_SPELL)
     }
 
     override fun convertTemplateToSpell(template:SpellTemplate, appendedNotes: List<String>): Spell {
@@ -6458,5 +7472,5 @@ class LootGeneratorAsync : BaseLootGenerator {
             listOf(listOf(template.note),appendedNotes).flatten()
         )
     }
-
+    // endregion
 }

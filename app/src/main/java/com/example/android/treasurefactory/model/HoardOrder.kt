@@ -28,10 +28,10 @@ data class OrderParams(val gemParams: GemRestrictions = GemRestrictions(),
                        val artParams: ArtRestrictions = ArtRestrictions(),
                        val magicParams: MagicItemRestrictions = MagicItemRestrictions())
 
-data class GemRestrictions(val _minLvl: Int = 0, val _maxLvl : Int = 16) {
+data class GemRestrictions(val _minLvl: Int = 0, val _maxLvl : Int = 17) {
     val levelRange = IntRange(
-        _minLvl.coerceIn(0,16),
-        if ( _minLvl.coerceIn(0,16) >= _maxLvl ) _minLvl.coerceIn(0,16) else _maxLvl.coerceIn(0,16)
+        _minLvl.coerceIn(0,17),
+        if ( _minLvl.coerceIn(0,17) >= _maxLvl ) _minLvl.coerceIn(0,17) else _maxLvl.coerceIn(0,17)
     )
 }
 
