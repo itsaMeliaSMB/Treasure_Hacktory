@@ -70,7 +70,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             )
         }
 
-        newHoardID = repository.getIdByRowId(repository.addHoard(createParentHoard()))
+        newHoardID = repository.getHoardIdByRowId(repository.addHoard(createParentHoard()))
         // endregion
 
         // region [ Generate hoard unique objects ]
@@ -385,7 +385,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 ageModifier = 0
             }
             else        -> { // Magical
-                artType = 3
+                artType = 9
                 condModifier = 3
                 ageModifier = 0
             }
@@ -3981,6 +3981,12 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             SpCoDiscipline.ARCANE   -> SAMPLE_ARCANE_SPELL
             else                    -> SAMPLE_DIVINE_SPELL
         }
+
+        // Get ArrayList of primary keys for spells
+        // Pull random key and get corresponding template
+        // Scrutinize template by restrictions
+        //      On pass, convert to spell and return it.
+        //      On fail, remove key from ArrayList and pull another.
 
         return convertTemplateToSpell(tempHolder)
     }

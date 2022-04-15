@@ -17,7 +17,7 @@ class LootMutator {
         val hasChanged : Boolean
 
         var currentVariation = inputGem.variation
-        var newGPValue = inputGem.currentGPValue
+        val newGPValue: Double
         var continueRolling = false
         var roll: Int
         var minAllowed = 1
@@ -135,7 +135,6 @@ class LootMutator {
             newGPValue,
             valueHistoryList.toList()
         )
-
     }
 
     companion object {

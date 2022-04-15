@@ -1,9 +1,19 @@
 package com.example.android.treasurefactory.model
 
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
+@Entity(tableName = "hackmaster_spell_collection_table",
+    foreignKeys = [ForeignKey(
+        entity = Hoard::class,
+        parentColumns = arrayOf ("hoardID"),
+        childColumns = arrayOf("sCollectID"),
+        onDelete = ForeignKey.CASCADE ) ])
 data class SpellCollection(
-    @NotNull val sCollectID: Int,
+    @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
     val hoardID: Int,
     var iconID: String,
     var name: String = "<Spell Collection>",
@@ -14,6 +24,7 @@ data class SpellCollection(
     var spells: List<Spell> = emptyList(),
     var curse: String = "") {
 
+    @Ignore
     fun calculateGPValue(): Double {
 
         if (type == SpCoType.RING) return 7000.0
@@ -35,6 +46,7 @@ data class SpellCollection(
         return gpTotal
     }
 
+    @Ignore
     fun calculateXpValue() : Int {
 
         if (type == SpCoType.RING) return 2500

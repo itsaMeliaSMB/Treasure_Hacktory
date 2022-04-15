@@ -1,6 +1,10 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+import org.jetbrains.annotations.NotNull
 import java.util.*
 
 // https://stackoverflow.com/questions/64823212/use-android-room-without-breaking-encapsulation
@@ -31,8 +35,10 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var isFavorite: Boolean = false,
                  var isNew: Boolean = true,
                  var appVersion: Int = 0,           // Version code of app hoard was generated on
-                 @Embedded(prefix = "leftover_") val leftover: HoardLeftover = HoardLeftover())
+    )
 
+/*
+TODO Dummied out HoardLeftover in favor of recording leftovers as a HoardEvent. Refactor layouts accordingly.
 data class HoardLeftover(val gems: Int = 0,
                          val artObjects: Int = 0,
                          val potions: Int = 0,
@@ -42,4 +48,23 @@ data class HoardLeftover(val gems: Int = 0,
                          val anyMagicItems: Int = 0) {
     @Ignore
     fun isNotEmpty(): Boolean = !((gems == 0)||(artObjects==0)||((potions==0)||(scrolls==0)||(armorOrWeapons == 0)||(anyButWeapons==0)||(anyMagicItems==0)))
-}
+}*/
+
+/**
+ * Record of an event that occurred in a [Hoard]'s history.
+ * @param timestamp Milliseconds since Unix epoch that the event occurred on.
+ * @param description User-readable description of event.
+ * @param tag Identifier for source/type of event.
+ */
+@Entity(tableName = "hoard_events_log",
+    foreignKeys = [ForeignKey(
+        entity = Hoard::class,
+        parentColumns = arrayOf ("hoardID"),
+        childColumns = arrayOf("eventID"),
+        onDelete = ForeignKey.CASCADE ) ])
+data class HoardEvent(
+    @PrimaryKey(autoGenerate = true) @NotNull val eventID: Int = 0,
+    val hoardID: Int = 0,
+    val timestamp: Long,
+    val description: String,
+    val tag: String)

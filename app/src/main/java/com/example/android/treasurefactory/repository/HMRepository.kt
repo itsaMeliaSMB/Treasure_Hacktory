@@ -2,9 +2,9 @@ package com.example.android.treasurefactory.repository
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import androidx.room.*
 import com.example.android.treasurefactory.database.*
-import com.example.android.treasurefactory.model.Hoard
-import java.util.concurrent.Executors
+import com.example.android.treasurefactory.model.*
 
 /**
 * Repository for all HM classes in this app.
@@ -17,45 +17,69 @@ class HMRepository (
     private val spellCollectionDao: SpellCollectionDao,
 ) {
 
-    //TODO move over/rename Dao references per db/repo refactor
-
+    /*
     private val executor        = Executors.newSingleThreadExecutor()
+    executor.execute {
+        hoardDao.updateHoard(hoard)
+    }*/
 
     // region [ Hoard Functions ]
 
+    // region ( Hoard )
     fun getHoards(): LiveData<List<Hoard>> = hoardDao.getHoards()
 
     fun getHoard(hoardID: Int): LiveData<Hoard?> = hoardDao.getHoard(hoardID)
 
-    @WorkerThread
     suspend fun addHoard(hoard: Hoard) : Long {
         return hoardDao.addHoard(hoard)
     }
 
-    //TODO update per db/repo refactor
-    fun updateHoard(hoard: Hoard) {
-        executor.execute {
-            hoardDao.updateHoard(hoard)
-        }
-    }
+    suspend fun updateHoard(hoardToUpdate: Hoard) = hoardDao.updateHoard(hoardToUpdate)
 
-    @WorkerThread
-    suspend fun getIdByRowId(rowID: Long) : Int = hoardDao.getIdByRowId(rowID)
+    suspend fun deleteHoard(hoardToDelete: Hoard) = hoardDao.deleteHoard(hoardToDelete)
+
+    suspend fun getHoardIdByRowId(rowID: Long) : Int = hoardDao.getIdByRowId(rowID)
+    // endregion
+
+    // region ( HoardEvent )
+    fun getHoardEvents(parentHoardId: Int) : LiveData<List<HoardEvent>> = hoardDao.getHoardEvents(parentHoardId)
+
+    suspend fun addHoardEvent(newEvent: HoardEvent) = hoardDao.addHoardEvent(newEvent)
+    // endregion
 
     // endregion
 
     // region [ Gem functions ]
 
-    //fun getGemTableByType(type: String) : LiveData<List<GemTemplate>> = gemDao.getGemTableByType(type)
-    //fun getHoardGems(hoardID: Int) : LiveData<List<Gem>> = gemDao.getGems(hoardID)
-    //fun getGemByID(id: Int): LiveData<Gem?> = gemDao.getGem(id)
+    // region ( GemTemplate )
+    suspend fun getGemTemplatesByType(type: Int) : List<GemTemplate> = gemDao.getGemTemplatesByType(type)
+
+    suspend fun getGemTemplate(templateID: Int) : GemTemplate? = gemDao.getGemTemplate(templateID)
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun addGemTemplate(gemTemplate: GemTemplate){
         gemDao.addGemTemplate(gemTemplate)
     }
+    // endregion
 
+    // region ( Gem )
+    fun getGems(hoardId: Int): LiveData<List<Gem>> = gemDao.getGems(hoardId)
+
+    fun getGem(gemId: Int): LiveData<Gem?> = gemDao.getGem(gemId)
+
+    suspend fun addGem(newGem: Gem) {
+        gemDao.addGem(newGem)
+    }
+
+    suspend fun updateGem(gemToUpdate: Gem) {
+        gemDao.updateGem(gemToUpdate)
+    }
+
+    suspend fun deleteGem(gemToDelete: Gem) {
+        gemDao.deleteGem(gemToDelete)
+    }
+    // endregion
     // endregion
 
     //region [ Art object functions ]
@@ -63,14 +87,53 @@ class HMRepository (
     //fun getHoardArt(hoardID: Int) : LiveData<List<ArtObject>> = artDao.getArtObjects(hoardID)
     //fun getArtById(id: Int): LiveData<ArtObject?> = artDao.getArtObject(id)
 
+    // region ( ArtObject )
+    fun getArtObjects(hoardId: Int): LiveData<List<ArtObject>> = artDao.getArtObjects(hoardId)
+
+    fun getArtObject(artId: Int): LiveData<ArtObject?> = artDao.getArtObject(artId)
+
+    suspend fun addArtObject(newArt: ArtObject) {
+        artDao.addArtObject(newArt)
+    }
+
+    suspend fun updateArtObject(artToUpdate: ArtObject) {
+        artDao.updateArtObject(artToUpdate)
+    }
+
+    suspend fun deleteArtObject(artToDelete: ArtObject) {
+        artDao.deleteArtObject(artToDelete)
+    }
+    // endregion
+
     // endregion
 
     //region [ Magic item functions ]
 
-    //fun getHoardMagicItems(hoardID: Int) : LiveData<List<MagicItem>> = magicItemDao.getMagicItems(hoardID)
-    //fun getLimitedTableByType(type: String) : LiveData<List<LimitedMagicItemTemplate>> = magicItemDao.getBaseLimItemTempsByType(type)
-    //fun getLimitedTableByParent(parentID: Int) : LiveData<List<LimitedMagicItemTemplate>> = magicItemDao.getChildLimItemTempsByParent(parentID)
-    //suspend fun getItemTemplateByID(itemID: Int) : MagicItemTemplate? = magicItemDao.getItemTemplateByID(itemID)
+    // region ( MagicItemTemplate )
+
+    /**
+     * Pulls all item entries lacking a parent belonging to a given type as a LimitedMagicItemTemplate.
+     *
+     * @param type String to match in table_type column
+     */
+    suspend fun getBaseLimItemTempsByType(type: String): List<LimitedMagicItemTemplate> =
+        magicItemDao.getBaseLimItemTempsByType(type)
+
+    /**
+     * Pulls all item entries with given ref_id as a LimitedMagicItemTemplate.
+     *
+     * @param parentId Integer primary key id number of parent entry.
+     */
+    suspend fun getChildLimItemTempsByParent(parentId: Int): List<LimitedMagicItemTemplate> =
+        magicItemDao.getChildLimItemTempsByParent(parentId)
+
+    /**
+     * Pulls item entry matching given ref_id as MagicItemTemplate.
+     *
+     * @param templateID Integer primary key ID number of entry to pull.
+     */
+    suspend fun getMagicItemTemplate(templateId: Int): MagicItemTemplate? =
+        magicItemDao.getMagicItemTemplate(templateId)
 
     @WorkerThread
     suspend fun addMagicItemTemplate(magicItemTemplate: MagicItemTemplate) {
@@ -78,16 +141,61 @@ class HMRepository (
     }
     // endregion
 
-    //region [ Spell collection functions ]
+    // region ( MagicItem )
+    fun getMagicItems(hoardId: Int): LiveData<List<MagicItem>> = magicItemDao.getMagicItems(hoardId)
 
-    //fun getHoardSpellCollections(hoardID: Int) : LiveData<List<SpellCollection>> = spellCollectionDao.getSpellCollections(hoardID)
-    //fun getSpellCollectionByID(collectionID: Int) : LiveData<SpellCollection?> = spellCollectionDao.getSpellCollection(collectionID)
-    //suspend fun getSpellTempByID(templateID: Int) : SpellTemplate? = spellCollectionDao.getSpellTempByID(templateID)
+    fun getMagicItem(itemId: Int): LiveData<MagicItem?> = magicItemDao.getMagicItem(itemId)
 
-    @WorkerThread
-    suspend fun addSpellTemplate(spellTemplate: SpellTemplate) {
-        spellCollectionDao.addSpellTemplate(spellTemplate)
+    suspend fun addMagicItem(newItem: MagicItem) {
+        magicItemDao.addMagicItem(newItem)
     }
 
+    suspend fun updateMagicItem(itemToUpdate: MagicItem) {
+        magicItemDao.updateMagicItem(itemToUpdate)
+    }
+
+    suspend fun deleteMagicItem(itemToDelete: MagicItem) {
+        magicItemDao.deleteMagicItem(itemToDelete)
+    }
+    // endregion
+    // endregion
+
+    //region [ Spell collection functions ]
+
+    // region ( SpellTemplate )
+
+    suspend fun getSpellTemplate(spellId: Int): SpellTemplate? =
+        spellCollectionDao.getSpellTemplate(spellId)
+
+    suspend fun getSpellTemplateByName(spellName: Int, discipline: Int, level: Int): SpellTemplate? =
+        spellCollectionDao.getSpellTemplateByName(spellName, discipline, level)
+
+    suspend fun getSpellTemplateIDs(discipline: Int, level: Int): List<Int> =
+        spellCollectionDao.getSpellTemplateIDs(discipline, level)
+
+    suspend fun addSpellTemplate(entry: SpellTemplate) {
+        spellCollectionDao.addSpellTemplate(entry)
+    }
+    // endregion
+
+    // region ( SpellCollection )
+    fun getSpellCollections(hoardId: Int): LiveData<List<SpellCollection>> =
+        spellCollectionDao.getSpellCollections(hoardId)
+
+    fun getSpellCollection(spCoId: Int): LiveData<SpellCollection?> =
+        spellCollectionDao.getSpellCollection(spCoId)
+
+    suspend fun addSpellCollection(newSpellCollection: SpellCollection) {
+        spellCollectionDao.addSpellCollection(newSpellCollection)
+    }
+
+    suspend fun updateSpellCollection(spellCollectionToUpdate: SpellCollection) {
+        spellCollectionDao.updateSpellCollection(spellCollectionToUpdate)
+    }
+
+    suspend fun deleteSpellCollection(spellCollectionToDelete: SpellCollection) {
+        spellCollectionDao.deleteSpellCollection(spellCollectionToDelete)
+    }
+    // endregion
     // endregion
 }

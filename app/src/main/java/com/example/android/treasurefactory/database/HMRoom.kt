@@ -22,10 +22,10 @@ private const val DATABASE_NAME = "treasure-database"
         GemTemplate::class,
         MagicItemTemplate::class,
         SpellTemplate::class,
-        GemEntity::class,
-        ArtObjectEntity::class,
-        MagicItemEntity::class,
-        SpellCollectionEntity::class],
+        Gem::class,
+        ArtObject::class,
+        MagicItem::class,
+        SpellCollection::class],
     version = 1)
 @TypeConverters(HoardTypeConverters::class)
 abstract class TreasureDatabase : RoomDatabase() {
@@ -255,7 +255,6 @@ abstract class TreasureDatabase : RoomDatabase() {
             Log.d("InitialPopulationCallback","Spell template addition by CSV ran. " +
                     "[ Iteration count = $iterationCount ]")
         }
-
     }
 
     companion object {
@@ -284,78 +283,101 @@ abstract class TreasureDatabase : RoomDatabase() {
 
 //region [ Data Access Objects ]
 @Dao
-interface HoardDao{
+interface HoardDao {
 
+    // region ( Hoard )
     @Query("SELECT * FROM hackmaster_hoard_table")
     fun getHoards(): LiveData<List<Hoard>>
 
     @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
     fun getHoard(id: Int): LiveData<Hoard?>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addHoard(hoard: Hoard) : Long
 
     @Update
-    fun updateHoard(hoard: Hoard)
+    suspend fun updateHoard(hoardToUpdate: Hoard)
+
+    @Delete
+    suspend fun deleteHoard(hoardToDelete: Hoard)
 
     @Query("SELECT hoardID FROM hackmaster_hoard_table WHERE ROWID=(:hoardRowID)")
     fun getIdByRowId(hoardRowID: Long) : Int
+    // endregion
+
+    // region ( HoardEvent )
+    @Query("SELECT * FROM hoard_events_log WHERE hoardID=(:parentHoardId)")
+    fun getHoardEvents(parentHoardId: Int) : LiveData<List<HoardEvent>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addHoardEvent(newEvent: HoardEvent)
+    // endregion
 }
 
 @Dao
 interface GemDao {
 
+    // region ( GemTemplate )
     @Query("SELECT * FROM hackmaster_gem_reference WHERE type=(:type) ORDER BY ordinal")
-    fun getGemTableByType(type: String): LiveData<List<GemTemplate>>
+    suspend fun getGemTemplatesByType(type: Int) : List<GemTemplate>
+
+    @Query("SELECT * FROM hackmaster_gem_reference WHERE ref_id=(:templateID)")
+    suspend fun getGemTemplate(templateID: Int) : GemTemplate?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addGemTemplate(entry: GemTemplate)
+    // endregion
 
+    // region ( Gem )
     @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     fun getGems(hoardID: Int): LiveData<List<Gem>>
 
     @Query("SELECT * FROM hackmaster_gem_table WHERE gemID=(:id)")
     fun getGem(id: Int): LiveData<Gem?>
 
-    // Add a gem to the hoard TODO
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addGemEntity(newGem: GemEntity)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addGem(newGem: Gem)
 
-    // Update this gem in the hoard TODO
     @Update
-    fun updateGemEntity(gemToUpdate: GemEntity)
+    suspend fun updateGem(gemToUpdate: Gem)
 
-    // Remove this gem from hoard TODO
     @Delete
-    fun removeGemEntity(gemToDelete: GemEntity)
+    suspend fun deleteGem(gemToDelete: Gem)
+    //endregion
 }
 
 @Dao
 interface ArtDao {
 
+    // region ( ArtObject )
     @Query("SELECT * FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
     fun getArtObjects(hoardID: Int): LiveData<List<ArtObject>>
 
-    @Query("SELECT * FROM hackmaster_art_table WHERE artID=(:id)")
-    fun getArtObject(id: Int): LiveData<ArtObject?>
+    @Query("SELECT * FROM hackmaster_art_table WHERE artID=(:artId)")
+    fun getArtObject(artId: Int): LiveData<ArtObject?>
 
-    // Add art object to the hoard TODO
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addArtObject(newArt: ArtObject)
 
-    // Update this art object in the hoard TODO
+    @Update
+    suspend fun updateArtObject(artToUpdate: ArtObject)
 
-    // Remove this art object from hoard TODO
+    @Delete
+    suspend fun deleteArtObject(artToDelete: ArtObject)
+    // endregion
 }
 
 @Dao
 interface MagicItemDao {
 
+    // region ( Templates )
     /**
      * Pulls all item entries lacking a parent belonging to a given type as a LimitedMagicItemTemplate.
      *
      * @param type String to match in table_type column
      */
     @Query("SELECT ref_id, wt FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_id=0")
-    fun getBaseLimItemTempsByType(type: String): LiveData<List<LimitedMagicItemTemplate>>
+    suspend fun getBaseLimItemTempsByType(type: String): List<LimitedMagicItemTemplate>
 
     /**
      * Pulls all item entries with given ref_id as a LimitedMagicItemTemplate.
@@ -363,7 +385,7 @@ interface MagicItemDao {
      * @param parentID Integer primary key id number of parent entry.
      */
     @Query("SELECT ref_id, wt FROM hackmaster_magic_item_reference WHERE table_type=(:parentID)")
-    fun getChildLimItemTempsByParent(parentID: Int): LiveData<List<LimitedMagicItemTemplate>>
+    suspend fun getChildLimItemTempsByParent(parentID: Int): List<LimitedMagicItemTemplate>
 
     /**
      * Pulls item entry matching given ref_id as MagicItemTemplate.
@@ -371,86 +393,64 @@ interface MagicItemDao {
      * @param itemID Integer primary key ID number of entry to pull.
      */
     @Query("SELECT * FROM hackmaster_magic_item_reference WHERE ref_id=(:itemID) LIMIT 1")
-    suspend fun getItemTemplateByID(itemID: Int): MagicItemTemplate?
+    suspend fun getMagicItemTemplate(itemID: Int): MagicItemTemplate?
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMagicItemTemplate(entry: MagicItemTemplate)
+    // endregion
 
-    // Get magic items from hoard TODO
+    //region ( MagicItem )
     @Query("SELECT * FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     fun getMagicItems(hoardID: Int): LiveData<List<MagicItem>>
 
-    // Add magic item to hoard TODO
+    @Query("SELECT * FROM hackmaster_magic_item_table WHERE mItemID=(:itemID)")
+    fun getMagicItem(itemId: Int): LiveData<MagicItem?>
 
-    // Update this magic item in hoard TODO
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addMagicItem(newItem: MagicItem)
 
-    // Remove this magic item from hoard TODO
+    @Update
+    suspend fun updateMagicItem(itemToUpdate: MagicItem)
 
+    @Delete
+    suspend fun deleteMagicItem(itemToDelete: MagicItem)
+    // endregion
 }
 
 @Dao
 interface SpellCollectionDao{
 
-    // Pull all spell collections from a hoard TODO
+    // region ( SpellTemplate )
+    @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id=(:spellId)")
+    suspend fun getSpellTemplate(spellId: Int): SpellTemplate?
+
+    @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id=(:spellId) AND type=(:discipline) AND level=(:level)")
+    suspend fun getSpellTemplateByName(spellName: Int, discipline: Int, level: Int): SpellTemplate?
+
+    @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:discipline) " +
+            "AND level=(:level)")
+    suspend fun getSpellTemplateIDs(discipline: Int, level: Int): List<Int>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addSpellTemplate(entry: SpellTemplate)
+    // endregion
+
+    // region ( SpellCollection )
     @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
     fun getSpellCollections(hoardID: Int): LiveData<List<SpellCollection>>
 
-    // Pull specific spell collection from hoard with given ID TODO
-    @Query("SELECT * FROM hackmaster_spell_collection_table WHERE sCollectID=(:id)")
-    fun getSpellCollection(id: Int): LiveData<SpellCollection?>
+    @Query("SELECT * FROM hackmaster_spell_collection_table WHERE sCollectID=(:spCoId)")
+    fun getSpellCollection(spCoId: Int): LiveData<SpellCollection?>
 
-    // Add spell collection to hoard TODO
-
-    // Update a spell collection in hoard TODO
-
-    // Pull specific spell template by ID
-    @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id=(:id)")
-    suspend fun getSpellTempByID(id: Int): SpellTemplate?
-
-    // Pull all spell IDs of a level and magical discipline (excluding restricted spells)
-    @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level) AND restricted_to=''")
-    suspend fun getSpellsOfLevelType(type: Int, level: Int): List<Int>
-
-    // Pull all spell IDs of a level and magical discipline
-    @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:type) AND level=(:level)")
-    suspend fun getAllSpellsOfLevelType(type: Int, level: Int): List<Int>
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addSpellTemplate(entry: SpellTemplate)
-}
-
-/*
-/**
- * Data access object for models unrelated to generated hoards
- */
-@Dao
-interface UtilityDao{
-
-    @Insert(onConflict = REPLACE)
-    suspend fun addIDTuple(entry: IconIDTuple)
-
-    @Insert(onConflict = REPLACE)
-    suspend fun addIDTuples(entries: List<IconIDTuple>)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addSpellCollection(newSpellCollection: SpellCollection)
 
     @Update
-    suspend fun updateIDTuple(entry: IconIDTuple)
+    suspend fun updateSpellCollection(spellCollectionToUpdate: SpellCollection)
 
-    @Query("SELECT resID FROM icon_id_int_directory WHERE stringID=(:stringID) LIMIT 1")
-    suspend fun getIconResID(stringID: String): Int
-
-    @Query("DELETE FROM icon_id_int_directory")
-    suspend fun deleteAllIDTuples()
-
-    @Query("SELECT icon_id FROM hackmaster_hoard_table UNION " +
-            "SELECT icon_id FROM hackmaster_gem_reference UNION " +
-            "SELECT iconID FROM hackmaster_gem_table UNION " +
-            "SELECT icon_id FROM hackmaster_art_table UNION " +
-            "SELECT icon_ref FROM hackmaster_magic_item_reference UNION " +
-            "SELECT icon_id FROM hackmaster_magic_item_table UNION " +
-            "SELECT icon_id FROM hackmaster_spell_collection_table")
-    suspend fun getAllUniqueIconIDs(): List<String>
+    @Delete
+    suspend fun deleteSpellCollection(spellCollectionToDelete: SpellCollection)
+    // endregion
 }
- */
-
 //endregion
 

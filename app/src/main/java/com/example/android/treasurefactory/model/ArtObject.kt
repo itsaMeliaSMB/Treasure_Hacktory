@@ -1,11 +1,20 @@
 package com.example.android.treasurefactory.model
 
+import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
 import kotlin.random.Random
 
+@Entity(tableName = "hackmaster_art_table",
+    foreignKeys = [ForeignKey(
+        entity = Hoard::class,
+        parentColumns = arrayOf ("hoardID"),
+        childColumns = arrayOf("artID"),
+        onDelete = ForeignKey.CASCADE
+    ) ] )
 data class ArtObject(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
     val hoardID: Int, // NOTE: removed iconID; TODO refactor accordingly
@@ -266,13 +275,15 @@ data class ArtObject(
                 0 -> listOf( // Paper artwork types
                     "calligraphy",
                     "illuminated manuscript",
+                    "illustration",
                     "napkin sketch",
                     "origami",
                     "papercraft",
+                    "paper collage",
                     "paper print",
                     "papyrus art",
                     "parchment",
-                    "sketch",
+                    "sketch"
                 ).random()
 
                 1 -> listOf( // Fabric artwork types
@@ -281,10 +292,12 @@ data class ArtObject(
                     "cushion",
                     "embroidery",
                     "kilim",
+                    "pillowcase",
                     "quilt",
+                    "tablecloth",
                     "tapestry",
                     "textile",
-                    "vestements"
+                    "vestments"
                 ).random()
 
                 2 -> listOf( // Furnishing types
@@ -435,6 +448,7 @@ data class ArtObject(
                         "joy",
                         "magic",
                         "nothingness",
+                        "opposite",
                         "resonance",
                         "scent",
                         "shadow",
@@ -452,6 +466,7 @@ data class ArtObject(
                         "air",
                         "art",
                         "capitalism",
+                        "charity",
                         "colors",
                         "concepts",
                         "divinity",
@@ -466,8 +481,10 @@ data class ArtObject(
                         "greed",
                         "hate",
                         "ignorance",
+                        "kitsch",
                         "knowledge",
                         "love",
+                        "love, laugh, live",
                         "magic",
                         "militarism",
                         "nihilism",
@@ -620,6 +637,7 @@ data class ArtObject(
                         "foppish",
                         "forceful",
                         "friendly",
+                        "fussy",
                         "greedy",
                         "grumpy",
                         "hedonistic",
@@ -659,6 +677,7 @@ data class ArtObject(
                     ).random()
 
                     val humanRace = listOf(
+                        "beastkin",
                         "brownie",
                         "dracon",
                         "drow",
@@ -680,7 +699,7 @@ data class ArtObject(
                         "gnomish",
                         "gnome titan",
                         "grevan",
-                        "gronnanarian",
+                        "Gronnanarian",
                         "human",
                         "human",
                         "human",
@@ -694,6 +713,7 @@ data class ArtObject(
                         "halfling",
                         "lizard man",
                         "nixie",
+                        "nymph",
                         "pixie",
                         "pixie-fairy",
                         "pixie-sprite"
@@ -781,7 +801,9 @@ data class ArtObject(
                         "at it again",
                         "at rest",
                         "attacking",
+                        "being total bros",
                         "building/creating",
+                        "celebrating",
                         "cleaning up",
                         "contemplating",
                         "conversing",
@@ -790,6 +812,7 @@ data class ArtObject(
                         "defending",
                         "devastated",
                         "drinking",
+                        "eating",
                         "eating a book",
                         "engrossed",
                         "fighting",
@@ -814,6 +837,7 @@ data class ArtObject(
                         "preparing for battle",
                         "questioning",
                         "reading a book",
+                        "showing off",
                         "sitting still",
                         "slacking off",
                         "striking a pose",
@@ -840,7 +864,7 @@ data class ArtObject(
 
                     } else {
 
-                        nameBuilder.append(" $humanAdjective $humanRace $humanProfession")
+                        nameBuilder.append("$humanAdjective $humanRace $humanProfession")
                     }
 
                     nameBuilder.append(" $humanActivity")
@@ -849,7 +873,6 @@ data class ArtObject(
                 1 -> { // Natural subject matter
 
                     when (Random.nextInt(1,4)) {
-
 
                         1   -> { // Creature focus
 
@@ -995,7 +1018,7 @@ data class ArtObject(
                             ).random()
 
                             if (creatureCount > 1){
-                                nameBuilder.append("$creatureAdjective $creatureCount ${creatureType.second} $creatureAction")
+                                nameBuilder.append("$creatureCount $creatureAdjective ${creatureType.second} $creatureAction")
                             } else {
                                 nameBuilder.append("$creatureAdjective ${creatureType.first} $creatureAction")
                             }
@@ -1079,7 +1102,7 @@ data class ArtObject(
                             ).random()
 
                             if (objectCount > 1){
-                                nameBuilder.append("$objectAdjective ${if(objectCount>5) "many" else objectCount} ${objectNoun.second}")
+                                nameBuilder.append("${if(objectCount>5) "many" else objectCount} $objectAdjective ${objectNoun.second}")
                             } else {
                                 nameBuilder.append("$objectAdjective ${objectNoun.first}")
                             }
@@ -1294,7 +1317,7 @@ data class ArtObject(
                                     "Matriarch",
                                     "Mother",
                                     "Oracle",
-                                    "Preiestess",
+                                    "Priestess",
                                     "Prioress",
                                     "Prophet",
                                     "Rabbi",
@@ -1486,7 +1509,7 @@ data class ArtObject(
                                 "the Seelie Court",
                                 "the Seldarine",
                                 "the War of the Shadow",
-                                "the War of the Table of the Ages",
+                                "the War of the Tablet of the Ages",
                                 "the Zelaurian creation story",
                                 "the exodus of the evangelists",
                                 "the resurrection of Osiris",
@@ -1786,8 +1809,10 @@ data class ArtObject(
                         "Thrifty",
                         "Torturer",
                         "Truthseeker",
+                        "Unready",
                         "Valiant",
                         "Vengeful",
+                        "Well-endowed",
                         "Whisperer",
                         "Whole of Body",
                         "Wizard of the 12th Realm of Ephysiyies, etc."
@@ -1811,7 +1836,8 @@ data class ArtObject(
                             "Archduke",
                             "Duke",
                             "Crown Prince",
-                            "Prince"
+                            "Prince",
+                            "High Sorcerer"
                         ).random()
                     } else {
                         listOf(
@@ -1823,7 +1849,8 @@ data class ArtObject(
                             "Archduchess",
                             "Duchess",
                             "Crown Princess",
-                            "Princess"
+                            "Princess",
+                            "High Sorceress"
                         ).random()
                     }
 
@@ -1867,6 +1894,7 @@ data class ArtObject(
                     } else {
                         listOf(
                             "Alice",
+                            "Amelia",
                             "Anastasia",
                             "Anne",
                             "Beatrice",
@@ -1905,7 +1933,8 @@ data class ArtObject(
                         " III",
                         " IV",
                         " V",
-                        " VI"
+                        " VI",
+                        " VII"
                     ).random()
 
                     val royalNickname = listOf(
@@ -1934,6 +1963,7 @@ data class ArtObject(
                         "Famous Champion",
                         "Gallant",
                         "Generous",
+                        "Great",
                         "Guardian",
                         "HacKleric",
                         "HackFighter",
@@ -1946,10 +1976,12 @@ data class ArtObject(
                         "Just",
                         "Kind",
                         "Lawgiver",
+                        "Legendary",
                         "Magnanimous",
                         "Magnificent",
                         "Mastermind Philosopher",
                         "Midas Touched",
+                        "Most Serene",
                         "Noble",
                         "Overseer",
                         "Paragon",
@@ -1958,7 +1990,7 @@ data class ArtObject(
                         "Pensive",
                         "Purple",
                         "Rowdy",
-                        "Sage",
+                        "Sagacious",
                         "Schemer",
                         "Scholar",
                         "Seducer",
@@ -1967,6 +1999,7 @@ data class ArtObject(
                         "Spider",
                         "Strategist",
                         "Tactician",
+                        "Terrible",
                         "Theologian",
                         "Torturer",
                         "Truthseeker",

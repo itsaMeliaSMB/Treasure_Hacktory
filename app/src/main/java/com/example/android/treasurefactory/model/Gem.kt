@@ -1,21 +1,31 @@
 package com.example.android.treasurefactory.model
 
+import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.example.android.treasurefactory.capitalized
+import org.jetbrains.annotations.NotNull
 
+@Entity(tableName = "hackmaster_gem_table",
+    foreignKeys = [ForeignKey(
+        entity = Hoard::class,
+        parentColumns = arrayOf ("hoardID"),
+        childColumns = arrayOf("gemID"),
+        onDelete = ForeignKey.CASCADE ) ])
 data class Gem(
-    val gemID: Int = 0,
+    @PrimaryKey(autoGenerate = true) @NotNull val gemID: Int = 0,
     val hoardID: Int = 0,
     val iconID: String,
     val type: Int,
     val size: Int,
     val quality: Int,
-    val variation: Int,
+    var variation: Int,
     var name: String,
     val opacity: Int,
-    val description: String = "",
-    val currentGPValue: Double = 0.0, //TODO refactor db entity et al to include this value
-    val valueHistory: List<Pair<Long,String>> = emptyList() //TODO refactor db entity et al to include this value
+    var description: String = "",
+    var currentGPValue: Double = 0.0,
+    var valueHistory: List<Pair<Long,String>> = emptyList()
     ) {
 
     // TODO Refactor to include everything in new Gem schema
