@@ -319,7 +319,7 @@
 318¤2¤"Rod of Alertness"¤"GameMaster’s Guide"¤233¤3000¤50000¤0¤¤1¤10¤40¤"A5"¤"weapon_mace"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"alarm"¤0¤¤0¤0¤0¤0¤0¤0
 319¤1¤"Rod of Beguiling"¤"GameMaster’s Guide"¤234¤2000¤30000¤0¤¤1¤10¤40¤"A5"¤"staff_psychic"¤0¤1¤1¤1¤0¤0¤0¤¤¤0¤"charm"¤0¤¤0¤0¤0¤0¤0¤0
 320¤1¤"Rod of Cancellation"¤"GameMaster’s Guide"¤234¤5000¤15000¤0¤"See Table B27 on GMG pg 234"¤1¤10¤40¤"A5"¤"staff_null"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"nullify"¤0¤¤0¤0¤0¤0¤0¤0
-321¤1¤"Rod of Gender Bending"¤"GameMaster’s Guide"¤234¤2000¤18000¤0¤¤1¤10¤40¤"A5"¤"staff_psychic"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"transform"¤0¤¤0¤0¤0¤0¤0¤0
+321¤1¤"Rod of Gender Bending"¤"GameMaster’s Guide"¤234¤2000¤18000¤0¤¤1¤10¤40¤"A5"¤"staff_psychic"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"genderbend"¤0¤¤0¤0¤0¤0¤0¤0
 322¤1¤"Rod of Demon Turning"¤"GameMaster’s Guide"¤234¤3000¤50000¤0¤¤1¤10¤40¤"A5"¤"staff_holy"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"exorcism"¤0¤¤0¤0¤0¤0¤0¤0
 323¤1¤"Rod of Flailing"¤"GameMaster’s Guide"¤234¤1000¤20000¤0¤¤1¤10¤40¤"A5"¤"weapon_fancy_flail"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"flail"¤0¤¤0¤0¤0¤0¤0¤0
 324¤1¤"Rod of Lordly Might"¤"GameMaster’s Guide"¤234¤3000¤20000¤0¤¤1¤10¤40¤"A5"¤"staff_iron"¤1¤0¤0¤0¤0¤0¤0¤¤¤0¤"lord"¤0¤¤0¤0¤0¤0¤0¤0

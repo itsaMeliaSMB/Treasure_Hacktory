@@ -3,6 +3,7 @@ package com.example.android.treasurefactory.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import org.jetbrains.annotations.NotNull
 
 // region [ Read-only template entities ]
 
@@ -69,4 +70,9 @@ data class SpellTemplate(
     @ColumnInfo(name="spell_spheres") val spellSpheres: String,
     @ColumnInfo(name="arcane_subclass") val subclass: String,
     val note: String)
+
+@Entity(tableName = "command_word_suggestions")
+data class CommandWord(
+    @PrimaryKey @NotNull val commandWord: String,
+    val themeWord: String )
 // endregion

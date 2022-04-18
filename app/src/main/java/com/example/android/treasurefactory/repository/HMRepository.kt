@@ -112,19 +112,21 @@ class HMRepository (
     // region ( MagicItemTemplate )
 
     /**
-     * Pulls all item entries lacking a parent belonging to a given type as a LimitedMagicItemTemplate.
+     * Pulls all item entries lacking a parent belonging to a given type as a Pair<Int,Int>.
      *
      * @param type String to match in table_type column
+     * @return Pair of the (1) the primary key of the entry and (2) its probability weight
      */
-    suspend fun getBaseLimItemTempsByType(type: String): List<LimitedMagicItemTemplate> =
+    suspend fun getBaseLimItemTempsByType(type: String): List<Pair<Int,Int>> =
         magicItemDao.getBaseLimItemTempsByType(type)
 
     /**
-     * Pulls all item entries with given ref_id as a LimitedMagicItemTemplate.
+     * Pulls all item entries with given ref_id as a Pair<Int,Int>.
      *
      * @param parentId Integer primary key id number of parent entry.
+     * @return Pair of the (1) the primary key of the entry and (2) its probability weight
      */
-    suspend fun getChildLimItemTempsByParent(parentId: Int): List<LimitedMagicItemTemplate> =
+    suspend fun getChildLimItemTempsByParent(parentId: Int): List<Pair<Int,Int>> =
         magicItemDao.getChildLimItemTempsByParent(parentId)
 
     /**
@@ -139,6 +141,8 @@ class HMRepository (
     suspend fun addMagicItemTemplate(magicItemTemplate: MagicItemTemplate) {
         magicItemDao.addMagicItemTemplate(magicItemTemplate)
     }
+
+    suspend fun getNamesToImitate(keyword: String) : List<String> = magicItemDao.getNamesToImitate(keyword)
     // endregion
 
     // region ( MagicItem )
@@ -157,7 +161,6 @@ class HMRepository (
     suspend fun deleteMagicItem(itemToDelete: MagicItem) {
         magicItemDao.deleteMagicItem(itemToDelete)
     }
-    // endregion
     // endregion
 
     //region [ Spell collection functions ]
@@ -197,5 +200,17 @@ class HMRepository (
         spellCollectionDao.deleteSpellCollection(spellCollectionToDelete)
     }
     // endregion
+
+    // region ( CommandWord )
+    suspend fun getThemedCommandWords(theme: String): List<String> =
+        spellCollectionDao.getThemedCommandWords(theme)
+
+    suspend fun getAllCommandWords(): List<String> =
+        spellCollectionDao.getAllCommandWords()
+
+    suspend fun addCommandWord(wordToAdd: CommandWord) =
+        spellCollectionDao.addCommandWord(wordToAdd)
+    // endregion
+
     // endregion
 }

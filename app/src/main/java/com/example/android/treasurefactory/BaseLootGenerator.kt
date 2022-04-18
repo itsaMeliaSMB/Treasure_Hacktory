@@ -37,7 +37,7 @@ interface BaseLootGenerator {
      *
      * @param givenTemplate Primary key to query for a specific gem. Negative values are ignored.
      */
-    fun createGem(parentHoardID: Int, givenTemplate: Int = -1): Gem
+    suspend fun createGem(parentHoardID: Int, givenTemplate: Int = -1): Gem
 
     /**
      * Returns an art object based on the method laid out in HackJournal #6
@@ -54,7 +54,7 @@ interface BaseLootGenerator {
      * @param providedTypes Tables that are allowed to be queried to pick an item.
      * @param itemRestrictions inherited parameters from hoard order limited what can be generated.
      */
-    fun createMagicItemTuple(
+    suspend fun createMagicItemTuple(
         parentHoardID: Int, givenTemplate: Int = -1,
         providedTypes: List<String> = ANY_MAGIC_ITEM_LIST,
         itemRestrictions: MagicItemRestrictions = MagicItemRestrictions()
@@ -68,10 +68,10 @@ interface BaseLootGenerator {
     ): MagicItem
 
     /** Generates ioun stones when indicated by standard magic item generation methods */
-    fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem>
+    suspend fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem>
 
     /** Generate Gems */
-    fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem>
+    suspend fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem>
 
     fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection
 

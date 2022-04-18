@@ -74,7 +74,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         // endregion
 
         // region [ Generate hoard unique objects ]
-        fun NewMagicItemTuple.parseNewMagicItemTuple() {
+        suspend fun NewMagicItemTuple.parseNewMagicItemTuple() {
 
             when {
                 (this.gemOrder != null)    ->
@@ -224,11 +224,11 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     // endregion
 
     //region [ Item generation functions ]
-    override fun createGem(parentHoardID: Int, givenTemplate: Int) : Gem {
+    override suspend fun createGem(parentHoardID: Int, givenTemplate: Int) : Gem {
 
         // region [ Roll gem type ]
 
-        val gemType : Int = if (!(givenTemplate in 1..58)) {
+        val gemType : Int = if (givenTemplate !in 1..58) {
 
             when (Random.nextInt(1,101)) {
 
@@ -243,16 +243,31 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         } else {
 
-            //TODO get gem template's type from ID; will require callbacks
-            5
-        }
+            when (Random.nextInt(1,101)) {
 
+                in 1..25    -> 5
+                in 26..50   -> 6
+                in 51..70   -> 7
+                in 71..90   -> 8
+                in 91..99   -> 9
+                100         -> 10
+                else        -> 5
+            }
+        }
         // endregion
 
-        // region [ Pull gem template ] TODO
+        // region [ Pull gem template ]
 
-        val gemTemplate = SAMPLE_GEM_TEMPLATE // ?: SAMPLE_GEM_TEMPLATE
+        val gemTemplate = if (givenTemplate in 1..58){
 
+            repository.getGemTemplate(givenTemplate) ?: SAMPLE_GEM_TEMPLATE //TODO refactor default return
+
+        } else {
+
+            repository.getGemTemplatesByType(gemType).let{
+                if (it.isNotEmpty()) { it.random() } else { SAMPLE_GEM_TEMPLATE }
+            }
+        }
         // endregion
 
         // region [ Roll size ]
@@ -269,7 +284,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             in 97..99   -> 4
             else        -> 5
         }
-
         // endregion
 
         // region [ Roll quality ]
@@ -304,7 +318,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         // endregion
 
         return Gem(0,
-            parentHoardID,gemTemplate.iconID,
+            parentHoardID,
+            gemTemplate.iconID,
             gemSize,
             gemType,
             gemQuality,
@@ -322,10 +337,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         var temporaryRank:  Int
         var ageInYears:     Int
-        var ageModifier:    Int
+        val ageModifier:    Int
         var ageRank:        Int
-        var subjectRank:    Int
-        var condModifier:   Int
+        val subjectRank:    Int
+        val condModifier:   Int
 
         val artType:        Int
         val renown:         Int
@@ -646,7 +661,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         ) to paperTreasureMap
     }
 
-    override fun createMagicItemTuple(parentHoardID: Int, givenTemplate: Int,
+    override suspend fun createMagicItemTuple(parentHoardID: Int, givenTemplate: Int,
                                       providedTypes: List<String>,
                                       itemRestrictions: MagicItemRestrictions
     ) : NewMagicItemTuple{
@@ -654,7 +669,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         val VALID_TABLE_TYPES = linkedSetOf<String>(
             "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
             "A17","A18","A21","A24")
-        val EXCEPTIONAL_ITEMS = setOf("Ring of Spell Storing", "Gut Stones", "Ioun Stones")
         val ALIGNMENT_MAP = mapOf(
             "CG" to "Chaotic Good",
             "CN" to "Chaotic Neutral",
@@ -777,20 +791,20 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             return result
         }
 
-        /**
-         *
-         */
-        fun getWeightedItemMap(limTemplates: List<LimitedMagicItemTemplate>): List<Pair<IntRange, Int>> {
+        fun getWeightedItemMap(limTemplates: List<Pair<Int,Int>>): List<Pair<IntRange, Int>> {
 
-            val listBuilder = mutableListOf<Pair<IntRange,Int>>()
+            val listBuilder = arrayListOf<Pair<IntRange,Int>>()
             var lastMax     = 0
             var weight      : Int
 
-            limTemplates.forEach {
+            limTemplates.forEach { (primaryKey, itemWeight) ->
 
-                weight = it.itemWeight
+                weight = itemWeight
 
-                listBuilder.plusAssign(Pair(IntRange(lastMax+1, lastMax + weight),it.primaryKey))
+                if ( weight > 0 ) {
+
+                    listBuilder.add(Pair(IntRange(lastMax+1, lastMax + weight), primaryKey))
+                }
 
                 lastMax += weight
             }
@@ -800,19 +814,13 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         var template:       MagicItemTemplate = SAMPLE_MAGIC_ITEM_TEMPLATE //TODO
 
-        var baseTemplateID:     Int       // Container for primary key of the first template drawn. -1 indicates a template-less item
+        // region < Magic item detail holders >
+
+        /** Container for primary key of the first template drawn. -1 indicates a template-less item. */
+        var baseTemplateID:     Int
         var itemType:           String
         var itemCharges=        0
         var gmChoice =          false
-
-        var currentRoll:        Int
-
-        val notesLists=         LinkedHashMap<String,ArrayList<String>>()
-        var specialItemType:    SpItType? = null
-        var spellListOrder :    SpellCollectionOrder? = null
-        var gemOrder:           GemOrder? = null
-
-        // region Magic item detail holders
 
         var mTemplateID     = -1
         val mHoardID        = parentHoardID // TODO Inline this later; hoard ID can be added outside this function
@@ -827,75 +835,86 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         var mAlignment      = ""
         val mNotes          : List<List<String>>
 
+        val notesLists=         LinkedHashMap<String,ArrayList<String>>()
+        var specialItemType:    SpItType? = null
+        var spellListOrder :    SpellCollectionOrder? = null
+        var gemOrder:           GemOrder? = null
         // endregion
-
-        // region [ Generate Weighted Table A1 list with only allowed item types ]
-
-        val allowedTypes = if (itemRestrictions.scrollMapChance > 0) {
-            VALID_TABLE_TYPES.filter { providedTypes.contains(it) } + listOf("A3")
-        } else {
-            VALID_TABLE_TYPES.filter { providedTypes.contains(it) }
-        }
-
-        fun getWeightedProbabilityTable(): List<IntRange> { //TODO merge into getWeightedItemList()
-
-            val TABLE_A1_WEIGHT = mapOf(
-                "A2" to 20,
-                "A3" to 15,
-                "A4" to 5,
-                "A5" to 1,
-                "A6" to 1,
-                "A7" to 3,
-                "A8" to 1,
-                "A9" to 2,
-                "A10" to 2,
-                "A11" to 2,
-                "A12" to 1,
-                "A13" to 2,
-                "A14" to 1,
-                "A15" to 1,
-                "A16" to 1,
-                "A17" to 2,
-                "A18" to 15,
-                "A21" to 24,
-                "A24" to 1)
-
-            val listBuilder = mutableListOf<IntRange>()
-
-            var lastMax = 0
-            var weight = 0
-
-            allowedTypes.forEach { allowedKey ->
-
-                weight = TABLE_A1_WEIGHT[allowedKey]!!
-
-                listBuilder.add(IntRange(lastMax+1, lastMax + weight))
-
-                lastMax += weight
-            }
-
-            return listBuilder.toList()
-        }
-
-        val allowedProbabilities = getWeightedProbabilityTable()
-
-        //endregion
 
         // region [ Determine type of magic item ]
 
-        if (allowedTypes.isNotEmpty()) {
+        // region ( Generate Weighted Table A1 list with only allowed item types )
 
-            currentRoll = Random.nextInt(1,allowedProbabilities.last().last + 1)
-
-            itemType =
-                allowedTypes[ allowedProbabilities.indexOfFirst{ it.contains(currentRoll) } ]
-
+        val allowedTypes = if (itemRestrictions.scrollMapChance > 0) {
+            VALID_TABLE_TYPES.intersect(providedTypes.union(listOf("A3"))).sorted()
         } else {
-
-            itemType = "INVALID"
-            baseTemplateID = -1
+            VALID_TABLE_TYPES.intersect(providedTypes).sorted()
         }
 
+        fun getItemTypesAsWeightPairs() : List<Pair<Int,Int>> {
+
+            val tableA1Values = mapOf(
+                2 to 20,
+                3 to 15,
+                4 to 5,
+                5 to 1,
+                6 to 1,
+                7 to 3,
+                8 to 1,
+                9 to 2,
+                10 to 2,
+                11 to 2,
+                12 to 1,
+                13 to 2,
+                14 to 1,
+                15 to 1,
+                16 to 1,
+                17 to 2,
+                18 to 15,
+                21 to 24,
+                24 to 1)
+
+            fun String.asInt() = this.substringAfter("A").toInt()
+
+            return allowedTypes.map { type ->
+
+                type.asInt() to ( tableA1Values[type.asInt()] ?: 0 )
+            }
+        }
+
+        val allowedProbabilities = getWeightedItemMap(getItemTypesAsWeightPairs())
+        //endregion
+
+        if (givenTemplate < 1) {
+
+            if (allowedTypes.isNotEmpty()) {
+
+                val currentRoll = Random.nextInt(1,allowedProbabilities.last().first.last + 1)
+
+                var matchingEntry = allowedProbabilities.indexOfFirst { (rollRange, _) ->
+                    currentRoll in rollRange
+                }
+
+                if (matchingEntry !in allowedProbabilities.indices) {
+                    Log.e("createMagicItemTuple | Table A1","Invalid index ($matchingEntry)" +
+                            "provided (valid range: ${allowedProbabilities.indices})")
+
+                    matchingEntry = allowedProbabilities.indices.random()
+
+                    Log.d("createMagicItemTuple | Table A1","Pulling index $matchingEntry instead.")
+                }
+
+                itemType = "A" + allowedProbabilities[matchingEntry].second
+
+            } else {
+
+                itemType = "INVALID"
+                baseTemplateID = -1
+            }
+        } else {
+
+            itemType = "Provided"
+        }
         // endregion
 
         // region [ If applicable, check for special generation rules ]
@@ -993,7 +1012,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 ) {
 
                     specialItemType = SpItType.TREASURE_MAP
-                    itemType = "Map"
+                    itemType = "A3"
                     mName = "Treasure Map"
                     baseTemplateID = -1
 
@@ -1001,7 +1020,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     if ((providedTypes.contains("A3"))) {
 
-                        currentRoll = Random.nextInt(1, 101)
+                        val currentRoll = Random.nextInt(1, 101)
 
                         if (currentRoll <= 33) {
 
@@ -1009,7 +1028,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             spellListOrder = generateSpellScrollOrder(currentRoll,false)
 
                             //TODO Streamline Magic item details for when special orders are indicated
-                            itemType = "Spell Scroll"
+                            itemType = "A3"
                             mName = "Spell Scroll"
                             baseTemplateID = -1
 
@@ -1017,7 +1036,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                             if (currentRoll in 85..91) {
 
-                                itemType = "Spell Scroll"
+                                itemType = "A3"
                                 mName = "Spell Scroll"
                                 spellListOrder =
                                     generateSpellScrollOrder(Random.nextInt(1,34),
@@ -1087,72 +1106,116 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             "A23"-> { if (Random.nextInt(1, 1001) >= 997) gmChoice = true }
 
             "A24"-> { if (Random.nextInt(1, 101) >= 97) gmChoice = true }
-
-            else -> {
-                itemType = "INVALID"
-                baseTemplateID = -1
-            }
         }
 
         if (gmChoice) {
             baseTemplateID = -1
             mName = "GM's Choice"
         }
-
         // endregion
 
         // region [ Pull template from database ] TODO
 
-        if ((itemType != "INVALID")&&(VALID_TABLE_TYPES.contains(itemType))&&!(gmChoice)){
+        fun MagicItemTemplate?.nullCheck(tagSuffix: String = "", msgStr: String =""): MagicItemTemplate {
 
-            // TODO Replace when Daos are accessible
-            val TEMPORARY_LIMITED_LIST = listOf(
-                LimitedMagicItemTemplate(1,13),
-                LimitedMagicItemTemplate(2,4),
-                LimitedMagicItemTemplate(3,2),
-                LimitedMagicItemTemplate(4,1)
+            val noteString = "Failed item request¶tagSuffix: $tagSuffix¶msgStr: $msgStr"
+
+            val failedResultTemplate = MagicItemTemplate(
+                -1,0,"Null item","???",0,
+                0, 0, 0, noteString,0,0,0,
+                "A17","",0,0,0,0,0,0,
+                0,"",0,"",0,"",
+                0,0,0,0,0,0
             )
 
-            var limitedTemplateList: List<LimitedMagicItemTemplate>
-            var weightedItemTable: List<Pair<IntRange,Int>>
+            return if (this != null) {
 
-            // Get list of items of given type using Dao TODO
-            limitedTemplateList = TEMPORARY_LIMITED_LIST
+                this
 
-            //TODO error handling for empty entry
+            } else {
 
-            // Pull primary key of magic item entry
-            weightedItemTable = getWeightedItemMap(limitedTemplateList)
-
-            var currentRoll: Int = Random.nextInt(weightedItemTable.first().first.first,
-                weightedItemTable.last().first.last + 1)
-
-            baseTemplateID = weightedItemTable[
-                    weightedItemTable.indexOfFirst { it.first.contains(currentRoll) }
-            ].second
-
-            // Get base template by ID using Dao TODO
-            template = SAMPLE_MAGIC_ITEM_TEMPLATE
-
-            // Pull child entry if they exist TODO
-            while (template.hasChild != 0) {
-
-                // Try to pull child listing. TODO
-                // On catch, return base listing, but with hasChild = 0 TODO
-
+                Log.d("createMagicItemTuple | $tagSuffix",msgStr)
+                failedResultTemplate
             }
-
-        } else { // otherwise, pull proper presets for magic items without templates TODO
-
-            baseTemplateID = -1
-
         }
 
+        if (givenTemplate > 0) {
+
+            baseTemplateID = givenTemplate
+
+            template = repository.getMagicItemTemplate(baseTemplateID).nullCheck("Given Template",
+                "No template found for $baseTemplateID.")
+
+        } else {    // No template provided, roll from table
+
+            if ((itemType != "INVALID" && VALID_TABLE_TYPES.contains(itemType))&&!(gmChoice)){
+
+                // Get list of items of given type
+                val baseTemplateList = repository.getBaseLimItemTempsByType(itemType)
+
+                if ( baseTemplateList.isNotEmpty() ) {
+
+                    // Pull primary key of magic item entry
+                    val baseItemTable = getWeightedItemMap(baseTemplateList)
+
+                    var currentRoll: Int = Random.nextInt(baseItemTable.first().first.first,
+                        baseItemTable.last().first.last + 1)
+
+                    baseTemplateID = baseItemTable[
+                            baseItemTable.indexOfFirst { it.first.contains(currentRoll) }
+                    ].second
+
+                    // Get base template by ID
+                    template = repository.getMagicItemTemplate(baseTemplateID).nullCheck(
+                        "No given template",
+                        "Empty base table returned for type entered ($itemType).")
+
+                    // Pull child entry if they exist
+                    while (template.hasChild != 0) {
+
+                        val childTemplateList = repository.getChildLimItemTempsByParent(template.refId)
+
+                        if (childTemplateList.isNotEmpty()) {
+
+                            val childItemTable = getWeightedItemMap(childTemplateList)
+
+                            currentRoll = Random.nextInt(childItemTable.first().first.first,
+                                childItemTable.last().first.last + 1)
+
+                            val childTemplateID = childItemTable[
+                                    childItemTable.indexOfFirst { it.first.contains(currentRoll) }
+                            ].second
+
+                            template = repository.getMagicItemTemplate(childTemplateID).takeIf{
+                                it != null } ?: template.copy(hasChild = 0)
+
+                        } else {
+
+                            Log.e("createMagicItemTuple | Child table","Empty childTemplateList.")
+                            template = template.copy(hasChild = 0)
+                        }
+                    }
+                } else {
+
+                    baseTemplateID = -1
+
+                    Log.d("createMagicItemTuple | No given template","Empty base table " +
+                            "returned for type entered ($itemType).")
+                    template = null.nullCheck("No given template",
+                        "Empty base table returned for type entered ($itemType).")
+                }
+
+            } else { // otherwise, pull proper presets for magic items without templates TODO
+
+                baseTemplateID = -1
+
+            }
+        }
         // endregion
 
         // region [ Generate valid magic item ] TODO
 
-        if (baseTemplateID != -1) {
+        if (baseTemplateID > 0) {
 
             // Use template to populate magic item's details
 
@@ -1168,7 +1231,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 "Magic-User" to (template.mUsable == 1),
                 "Druid" to (template.dUsable == 1)
             )
-            mIconID = template.iconRef //TODO add db table for looking up resource ID from this keyword
+            mIconID = template.iconRef
             mAlignment = abbrevToAlignment(template.alignment)
 
             // region [ Modify name, if applicable ]
@@ -1200,7 +1263,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             itemCharges += template.dieMod
 
             if (template.multiType == 3) mName = "${itemCharges}x $mName"
-
             // endregion
 
             // region [ Determine XP and GP value of item ]
@@ -1222,27 +1284,31 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 else-> { mXpValue = template.xpValue
                     mGpValue = template.gpValue.toDouble() }
             }
-
             // endregion
 
             // region [ Roll up "Additional Notes" ]
 
             if (template.imitationKeyword.isNotBlank()){
 
-                val keywords = template.imitationKeyword.split(";")
+                val keywords = template.imitationKeyword.split(";").map{"$it%"}
 
-                val imitationTemplate: MagicItemTemplate
+                val imitationList = ArrayList<String>()
+
+                keywords.forEach { key -> imitationList.addAll(repository.getNamesToImitate(key)) }
 
                 // Query DB for item imitate TODO
                 // keywords[Random.nextInt(0,keywords.size)]
-                imitationTemplate = SAMPLE_MAGIC_ITEM_TEMPLATE
+                val imitationName = imitationList.randomOrNull() ?: ""
 
-                val useAn : Boolean = setOf("a","e","i","o","u")
-                    .contains(imitationTemplate.name.substring(0,endIndex = 1))
+                if (imitationName.isNotBlank()) {
 
-                notesLists["Additional notes"]?.plusAssign(
-                    "Appears to be ${if (useAn) "an" else "a"} ${imitationTemplate.name}"
-                )
+                    val useAn : Boolean = setOf("a","e","i","o","u")
+                        .contains(imitationName.substring(0,endIndex = 1))
+
+                    notesLists["Additional notes"]?.plusAssign(
+                        "Appears to be ${if (useAn) "an" else "a"} $imitationName"
+                    )
+                }
             }
 
             if (template.notes.isNotBlank()) {
@@ -1270,18 +1336,47 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             if (template.commandWord.isNotBlank()){
 
-                val keywords = template.commandWord.split(";")
+                val keywords = if (template.commandWord == "THREE"){
+                    listOf("ANY","ANY","ANY")
+                } else template.commandWord.split(";")
 
-                notesLists["Additional notes"]?.plusAssign("Has ${keywords.size} command word" +
-                        (if (keywords.size > 1) {
-                            "s. Here are some randomly-generated suggestions:"
-                        } else {"Here is a randomly-generated suggestion:"})
-                )
+                val commandWords = ArrayList<String>()
+                val textBuilder = StringBuilder().apply {
+                    append("Has ${keywords.size} command word" +
+                        if (keywords.size > 1) {
+                            "s. Here are some randomly-generated suggestions: "
+                        } else "Here is a randomly-generated suggestion: ")
+                }
 
-                // Pull a word from API for random generation TODO
-                keywords.forEach { "${it.uppercase()} (based on \"$it\")" }
+                keywords.forEach { currentKeyword ->
+
+                    val wordSet = if (currentKeyword == "ANY") {
+
+                        repository.getAllCommandWords().toMutableSet()
+
+                    } else repository.getThemedCommandWords(currentKeyword).toMutableSet()
+
+                    wordSet.removeAll(commandWords)
+
+                    commandWords.add(wordSet.randomOrNull() ?: currentKeyword.uppercase())
+                }
+
+                commandWords.forEachIndexed { index, entry ->
+
+                    textBuilder.append( if (index > 0) " / $entry" else entry )
+                }
+
+                textBuilder.append("Has ${keywords.size} command word" +
+                        if (keywords.size > 1) {
+                            "s. Here are some randomly-generated suggestions: "
+                        } else "Here is a randomly-generated suggestion: ")
+
+                notesLists["Additional notes"]?.plusAssign(textBuilder.toString())
+
+                // TODO Left off here. Finish up magic item gen refactor and spell co refactor.
+                //  Next goal is full generation procedure being callable from generatorViewModel,
+                //  followed by plain-text printout of hoard on tap from main list fragment.
             }
-
             // endregion
 
             // region [ Roll up "Potion flavor text" ]
@@ -1712,6 +1807,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 // --- Roll for bottle embellishments ---
 
                 if (Random.nextInt(1,101) <= Random.nextInt(10,16)) {
+
+                    var currentRoll : Int
 
                     do {
 
@@ -3071,40 +3168,37 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             }
         }
 
-        if (EXCEPTIONAL_ITEMS.contains(mName)) {
 
-            when (mName) {
+        when (mName) {
 
-                // TODO refactor this function to return SpellCollectionOrder
-                "Ring of Spell Storing" -> {
+            "Ring of Spell Storing" -> {
 
-                    specialItemType = SpItType.RING_OF_SPELL_STORING
+                specialItemType = SpItType.RING_OF_SPELL_STORING
 
-                    val useArcane = Random.nextBoolean()
-                    val maxLevel = 6 + if (useArcane) 2 else 0
+                val useArcane = Random.nextBoolean()
+                val maxLevel = 6 + if (useArcane) 2 else 0
 
-                    var rollHolder : Int
+                var rollHolder : Int
+
+                notesLists[ORDER_LABEL_STRING]?.plusAssign(
+                    "spell type = ${if (useArcane) "Magic-User" else "Cleric"}"
+                )
+
+                repeat(Random.nextInt(2,6)) {
+
+                    rollHolder = Random.nextInt(1,maxLevel+1)
+
+                    if (rollHolder == maxLevel) rollHolder = Random.nextInt(1,maxLevel-1)
 
                     notesLists[ORDER_LABEL_STRING]?.plusAssign(
-                        "spell type = ${if (useArcane) "Magic-User" else "Cleric"}"
+                        "level = $rollHolder}"
                     )
-
-                    repeat(Random.nextInt(2,6)) {
-
-                        rollHolder = Random.nextInt(1,maxLevel+1)
-
-                        if (rollHolder == maxLevel) rollHolder = Random.nextInt(1,maxLevel-1)
-
-                        notesLists[ORDER_LABEL_STRING]?.plusAssign(
-                            "level = $rollHolder}"
-                        )
-                    }
                 }
-
-                "Gut Stones"    -> gemOrder = GemOrder(GUT_STONE_KEY,itemCharges)
-
-                "Ioun Stones"    -> specialItemType = SpItType.IOUN_STONES
             }
+
+            "Gut Stones"    -> gemOrder = GemOrder(GUT_STONE_KEY,itemCharges)
+
+            "Ioun Stones"    -> specialItemType = SpItType.IOUN_STONES
         }
 
         //endregion
@@ -3299,7 +3393,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             -1,
             parentHoard,
             "scroll_map",
-            "Map",
+            "A3",
             nameBuilder.toString(),
             "GameMaster's Guide",
             182,
@@ -3316,7 +3410,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             convertMapToNestedLists(notesLists))
     }
 
-    override fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
+    override suspend fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
 
         val iounList = arrayListOf<MagicItem>()
         val currentSet = mutableSetOf<Int>()
@@ -3358,7 +3452,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         return iounList
     }
 
-    override fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem> {
+    override suspend fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem> {
 
         val gemTemplate = gemOrder.gemTemplate.coerceIn(1..58)
         val orderGemList = arrayListOf<Gem>()
