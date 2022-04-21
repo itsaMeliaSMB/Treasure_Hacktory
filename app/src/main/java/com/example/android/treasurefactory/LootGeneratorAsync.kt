@@ -25,6 +25,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
     override val SAMPLE_DIVINE_SPELL = SpellTemplate(1146,"Exaction",0,"Player’s Handbook",273,1,7,"Evo/Alt","","Charm/Summoning","","")
 
+    val DUMMY_SPELL = SpellTemplate(0,"\"Push\"",0,"\"Player's Handbook\"",184,0,1,"Con","","","","Invalid spell.")
+
     override val SAMPLE_GEM_TEMPLATE = GemTemplate(57,10,"ruby",5, 0,"clear red to deep crimson (Corundum)","gem_jewel_ruby")
 
     override val SAMPLE_MAGIC_ITEM_TEMPLATE = MagicItemTemplate(
@@ -687,6 +689,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             "magic-user" to true,
             "druid" to true)
 
+
+
         /**
          * Returns full alignment string from valid abbreviations
          *
@@ -825,7 +829,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         var mTemplateID     = -1
         val mHoardID        = parentHoardID // TODO Inline this later; hoard ID can be added outside this function
         var mIconID         = "default"
-        var mName           = ""
+        var mName           = "Magic Item"
         var mSourceText     = "Source text"
         var mSourcePage     = 0
         var mXpValue        = 0
@@ -995,7 +999,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 itemRestrictions.spellCoRestrictions.spellSources,
                 itemRestrictions.spellCoRestrictions.allowRestricted,
                 isCursed,
-                false, // TODO add property to SpellCoRestrictions for choice reroll behavior
+                itemRestrictions.spellCoRestrictions.rerollChoice,
                 itemRestrictions.spellCoRestrictions.genMethod,
                 itemRestrictions.spellCoRestrictions.allowedCurses
             )
@@ -1012,7 +1016,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 ) {
 
                     specialItemType = SpItType.TREASURE_MAP
-                    itemType = "A3"
+                    itemType = "A3 (Map)"
                     mName = "Treasure Map"
                     baseTemplateID = -1
 
@@ -1024,19 +1028,18 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                         if (currentRoll <= 33) {
 
-                            //Spell scroll result
-                            spellListOrder = generateSpellScrollOrder(currentRoll,false)
-
-                            //TODO Streamline Magic item details for when special orders are indicated
-                            itemType = "A3"
+                            specialItemType = SpItType.SPELL_SCROLL
+                            itemType = "A3 (Spell)"
                             mName = "Spell Scroll"
+                            spellListOrder = generateSpellScrollOrder(currentRoll,false)
                             baseTemplateID = -1
 
                         } else {
 
                             if (currentRoll in 85..91) {
 
-                                itemType = "A3"
+                                specialItemType = SpItType.SPELL_SCROLL
+                                itemType = "A3 (Spell)"
                                 mName = "Spell Scroll"
                                 spellListOrder =
                                     generateSpellScrollOrder(Random.nextInt(1,34),
@@ -1114,28 +1117,27 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         }
         // endregion
 
-        // region [ Pull template from database ] TODO
+        // region [ Pull template from database ]
 
         fun MagicItemTemplate?.nullCheck(tagSuffix: String = "", msgStr: String =""): MagicItemTemplate {
 
-            val noteString = "Failed item request¶tagSuffix: $tagSuffix¶msgStr: $msgStr"
+            if (this != null) {
 
-            val failedResultTemplate = MagicItemTemplate(
-                -1,0,"Null item","???",0,
-                0, 0, 0, noteString,0,0,0,
-                "A17","",0,0,0,0,0,0,
-                0,"",0,"",0,"",
-                0,0,0,0,0,0
-            )
-
-            return if (this != null) {
-
-                this
+                return this
 
             } else {
 
+                val noteString = "Failed item request¶tagSuffix: $tagSuffix¶msgStr: $msgStr"
+
                 Log.d("createMagicItemTuple | $tagSuffix",msgStr)
-                failedResultTemplate
+
+                return MagicItemTemplate(
+                    -1,0,"Null item","???",0,
+                    0, 0, 0, noteString,0,0,0,
+                    "A17","",0,0,0,0,0,0,
+                    0,"",0,"",0,"",
+                    0,0,0,0,0,0
+                )
             }
         }
 
@@ -1148,7 +1150,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         } else {    // No template provided, roll from table
 
-            if ((itemType != "INVALID" && VALID_TABLE_TYPES.contains(itemType))&&!(gmChoice)){
+            if (VALID_TABLE_TYPES.contains(itemType) && !gmChoice){
 
                 // Get list of items of given type
                 val baseTemplateList = repository.getBaseLimItemTempsByType(itemType)
@@ -1205,25 +1207,25 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         "Empty base table returned for type entered ($itemType).")
                 }
 
-            } else { // otherwise, pull proper presets for magic items without templates TODO
+            } else { // otherwise, pull proper presets for magic items without templates
 
                 baseTemplateID = -1
-
             }
         }
         // endregion
 
-        // region [ Generate valid magic item ] TODO
+        // region [ Generate valid magic item ]
 
         if (baseTemplateID > 0) {
 
             // Use template to populate magic item's details
 
+            mTemplateID = template.refId
             mName = template.name
             mSourceText = template.source
             mSourcePage = template.page
             itemType = template.tableType
-            mIsCursed = (template.isCursed == 1)
+            mIsCursed = template.isCursed == 1
             mClassUsability= mapOf(
                 "Fighter" to (template.fUsable == 1),
                 "Thief" to (template.tUsable == 1),
@@ -1248,7 +1250,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 mName = mName.replace("Pole Arm",poleArmList[Random.nextInt(poleArmList.size)])
             }
-
             // endregion
 
             // region [ Roll charges/uses, if applicable ]
@@ -1992,7 +1993,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 notesLists["Potion flavor text"]
                     ?.plusAssign("Substance consistency: " +
                             when (Random.nextInt(1,101)) {
-
                                 in 1..19    -> "Bubbling"
                                 in 20..29   -> "Cloudy"
                                 in 30..39   -> "Effervescent"
@@ -2003,8 +2003,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 in 75..79   -> "Vaporous"
                                 in 80..84   -> "Viscous"
                                 else        -> "Watery"
-
-                            })
+                            }
+                    )
 
                 // --- Roll potion appearance/color(s) ---
 
@@ -2067,17 +2067,14 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 in 93..95   -> "Tart"
                                 in 96..97   -> "Vinegary"
                                 in 98..100  -> "Watery"
-                                else        -> "iunno, a bit like strawberries?"
-
+                                else        -> "Inscrutable"
                             } )
 
                 // --- Add dosages remaining ---
 
                 notesLists["Potion flavor text"]
                     ?.plusAssign("Found with $itemCharges dose(s) remaining")
-
             }
-
             // endregion
 
             // region [ Roll "Intelligent weapon info" ]
@@ -2185,16 +2182,16 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     }
                 }
 
-                fun getLanguageNumber(firstRoll: Boolean): Int = when
-                                                                         (Random.nextInt(1,if (firstRoll) 101 else 100)) {
+                fun getLanguageNumber(firstRoll: Boolean): Int =
+                    when (Random.nextInt(1,if (firstRoll) 101 else 100)) {
 
-                    in 1..40    -> 1
-                    in 41..70   -> 2
-                    in 71..85   -> 3
-                    in 86..95   -> 4
-                    in 96..99   -> 5
-                    else        -> 6
-                }
+                        in 1..40    -> 1
+                        in 41..70   -> 2
+                        in 71..85   -> 3
+                        in 86..95   -> 4
+                        in 96..99   -> 5
+                        else        -> 6
+                    }
 
                 // region [ Determine intelligence ]
 
@@ -2209,7 +2206,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 }
 
                 setInitialProperties(wIntelligence)
-
                 // endregion
 
                 // region [ Determine alignment ]
@@ -2233,7 +2229,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     abbrevToAlignment(mAlignment)
                 }
-
                 // endregion
 
                 // region [ Determine primary abilities ]
@@ -2258,7 +2253,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     if (wPrimaryAbilities>0) wPrimaryAbilities -- else wExtraPrimaryRolls --
                 }
-
                 // endregion
 
                 // region [ Determine extraordinary powers ]
@@ -2325,7 +2319,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     if (wExtraordinaryPowers > 0) {wExtraordinaryPowers --} else {wExtraExtraordinaryRolls --}
                 }
-
                 // endregion
 
                 // region [ Determine special purpose ]
@@ -2346,36 +2339,30 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         else        -> "Other"
                     }
 
-                    when (Random.nextInt(1,101)) {
+                    wSpecialPurposePower = when (Random.nextInt(1,101)) {
 
-                        in 1..10    -> wSpecialPurposePower = "Blindness for 2d6 rounds " +
-                                "(Upon scoring a with w/ weapon, unless opponent saves vs. " +
-                                "Spell)"
+                        in 1..10    ->  "Blindness for 2d6 rounds (Upon scoring a with w/ " +
+                                "weapon, unless opponent saves vs. Spell)"
 
-                        in 11..20   -> wSpecialPurposePower = "Confusion for 2d6 rounds " +
-                                "(Upon scoring a with w/ weapon, unless opponent saves vs. " +
-                                "Spell)"
+                        in 11..20   -> "Confusion for 2d6 rounds (Upon scoring a with w/ weapon, " +
+                                "unless opponent saves vs. Spell)"
 
-                        in 21..25   -> wSpecialPurposePower = "Disintegrate (Upon scoring a " +
-                                "with w/ weapon, unless opponent saves vs. Spell)"
-
-                        in 26..55   -> wSpecialPurposePower = "Fear for 1d4 rounds (Upon " +
-                                "scoring a with w/ weapon, unless opponent saves vs. Spell)"
-
-                        in 56..65   -> wSpecialPurposePower = "Zarba's Sphere of Insanity " +
-                                "for 1d4 rounds (Upon scoring a with w/ weapon, unless " +
+                        in 21..25   -> "Disintegrate (Upon scoring a with w/ weapon, unless " +
                                 "opponent saves vs. Spell)"
 
-                        in 66..80   -> wSpecialPurposePower = "Paralyzation for 1d4 rounds " +
-                                "(Upon scoring a with w/ weapon, unless opponent saves " +
-                                "vs. Spell)"
+                        in 26..55   ->  "Fear for 1d4 rounds (Upon scoring a with w/ weapon, " +
+                                "unless opponent saves vs. Spell)"
 
-                        else        -> wSpecialPurposePower = "+2 to all wielder's saving " +
-                                "throws, -1 to each die of damage sustained"
+                        in 56..65   -> "Zarba's Sphere of Insanity for 1d4 rounds (Upon scoring " +
+                                "a with w/ weapon, unless opponent saves vs. Spell)"
+
+                        in 66..80   -> "Paralyzation for 1d4 rounds (Upon scoring a with w/ " +
+                                "weapon, unless opponent saves vs. Spell)"
+
+                        else        -> "+2 to all wielder's saving throws, -1 to each die of " +
+                                "damage sustained"
                     }
-
                 }
-
                 // endregion
 
                 // region [ Determine languages known ]
@@ -2391,23 +2378,20 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     if (wLanguagesKnown < 6) wLanguagesKnown = 6
                 }
-
                 // endregion
 
                 // region [ Calculate ego ]
 
-                weaponEgo =
-                    effectiveWeaponMod +
-                            primaryAbilityList.size +
-                            (extraordinaryPowerList.size * 2) +
-                            ( if (wSpecialPurpose.isNotEmpty()) {5} else {0} ) +
-                            wLanguagesKnown +
-                            ( when (wIntelligence) {
-                                16  -> 1
-                                17  -> 4
-                                else-> 0
-                            })
-
+                weaponEgo = effectiveWeaponMod +
+                        primaryAbilityList.size +
+                        (extraordinaryPowerList.size * 2) +
+                        ( if (wSpecialPurpose.isNotEmpty()) {5} else {0} ) +
+                        wLanguagesKnown +
+                        ( when (wIntelligence) {
+                            16  -> 1
+                            17  -> 4
+                            else-> 0
+                        })
                 // endregion
 
                 // region [ Record info on table ]
@@ -2469,10 +2453,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     notesLists["Intelligent weapon info"]
                         ?.plusAssign("Special purpose: $wSpecialPurpose")
                     notesLists["Intelligent weapon info"]
-                        ?.plusAssign("Spec. purpose power: $wSpecialPurposePower")
-
+                        ?.plusAssign("Special purpose power: $wSpecialPurposePower")
                 }
-
                 // endregion
 
             } else if ( template.intelChance == -1 ) {
@@ -2482,7 +2464,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             "source text. As such, please refer to this item's entry for" +
                             " specifics.")
             }
-
             // endregion
 
             // region [ "Roll Artifact Powers/Effects" ]
@@ -3023,114 +3004,21 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     notesLists["Artifact particulars"]?.plusAssign(
                         "For more information, see GMG pages 284-286")
                 }
-
                 // endregion
             }
-
             // endregion
 
         } else {
 
-            // Generate magic item details for outliers and exceptional items
-            // TODO Clean this chunk up in light of new Tuple schema
+            // Generate magic item details for exceptional items
             when (mName) {
 
-                "Treasure map"  -> { //TODO port to own function, scoped within this class
-
-                    val isRealMap: Boolean
-                    val distanceRoll= Random.nextInt(1,21)
-
-                    // Roll type of map
-                    when (Random.nextInt(1,11)) {
-
-                        1       -> {
-                            isRealMap = false
-                            notesLists["Map details"]?.plusAssign("False map " +
-                                    "(No treasure or already looted")
-                        }
-
-                        in 2..7 -> {
-                            isRealMap = true
-                            notesLists["Map details"]?.plusAssign("Map to monetary treasure " +
-                                    "(0% chance of art objects or magic items")
-                        }
-
-                        in 8..9 -> {
-                            isRealMap = true
-                            notesLists["Map details"]?.plusAssign("Map to magical treasure " +
-                                    "(0% chance of coin)")
-                        }
-
-                        else    -> {
-                            isRealMap = true
-                            notesLists["Map details"]?.plusAssign("Map to combined treasure")
-                        }
-                    }
-
-                    // Roll direction of treasure location
-                    when (Random.nextInt(1,9)){
-                        1 -> notesLists["Map details"]?.plusAssign("Located north")
-                        2 -> notesLists["Map details"]?.plusAssign("Located northeast")
-                        3 -> notesLists["Map details"]?.plusAssign("Located east")
-                        4 -> notesLists["Map details"]?.plusAssign("Located southeast")
-                        5 -> notesLists["Map details"]?.plusAssign("Located south")
-                        6 -> notesLists["Map details"]?.plusAssign("Located southwest")
-                        7 -> notesLists["Map details"]?.plusAssign("Located west")
-                        8 -> notesLists["Map details"]?.plusAssign("Located northwest")
-                    }
-
-                    // Roll distance of treasure
-                    when (distanceRoll) {
-
-                        in 1..2 -> notesLists["Map details"]?.plusAssign("Hoard located in " +
-                                "labyrinth of caves found in lair")
-
-                        in 3..6 -> notesLists["Map details"]?.plusAssign("Hoard located " +
-                                "outdoors, 5-8 miles distant")
-
-                        in 7..9 -> notesLists["Map details"]?.plusAssign("Hoard located " +
-                                "outdoors, 10-40 miles distant")
-
-                        else    -> notesLists["Map details"]?.plusAssign("Hoard located " +
-                                "outdoors, 50-500 miles distant")
-                    }
-
-                    if (distanceRoll > 2) {
-
-                        when (Random.nextInt(1,11)) {
-
-                            1       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                                    "buried and unguarded")
-                            2       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                                    "hidden in water")
-                            in 3..7 -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                                    "guarded in a lair")
-                            8       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                                    "somewhere in ruins")
-                            9       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                                    "in a burial crypt")
-                            else    -> notesLists["Map details"]?.plusAssign("Treasure shown " +
-                                    "secreted in a town")
-                        }
-                    }
-
-                    // Roll type of treasure
-                    if (isRealMap) {
-
-                        val treasureTypesList = listOf(
-                            "I","G","H","F","A","B","C","D","E","Z","A and Z","A and H"
-                        )
-
-                        notesLists["Map details"]?.plusAssign("Treasure present: " +
-                                treasureTypesList[Random.nextInt(1,13)])
-                    }
-
+                "Treasure map"  -> {
                     mSourceText =   "GameMaster's Guide"
                     mSourcePage =   182
                     mXpValue =      0
                     mGpValue =      0.0
                     mClassUsability = USABLE_BY_ALL
-                    mIsCursed = !(isRealMap)
                     mIconID = "scroll_map"
                 }
 
@@ -3160,14 +3048,12 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         "A9"    -> "jewelry_box"
                         "A13"   -> "container_full"
                         "A14"   -> "dust_incense"
-                        "A15"   -> "music_instument_wood"
                         "A24"   -> "artifact_box"
                         else    -> "container_chest"
                     }
                 }
             }
         }
-
 
         when (mName) {
 
@@ -3176,31 +3062,25 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 specialItemType = SpItType.RING_OF_SPELL_STORING
 
                 val useArcane = Random.nextBoolean()
-                val maxLevel = 6 + if (useArcane) 2 else 0
 
-                var rollHolder : Int
-
-                notesLists[ORDER_LABEL_STRING]?.plusAssign(
-                    "spell type = ${if (useArcane) "Magic-User" else "Cleric"}"
+                spellListOrder = SpellCollectionOrder(
+                    SpCoType.RING,
+                    if (useArcane) SpCoDiscipline.ARCANE else SpCoDiscipline.DIVINE,
+                    itemCharges,
+                    IntRange(1, 6 + (if (useArcane) 2 else 0) ),
+                    itemRestrictions.spellCoRestrictions.spellSources,
+                    itemRestrictions.spellCoRestrictions.allowRestricted,
+                    isCursed = false,
+                    itemRestrictions.spellCoRestrictions.rerollChoice,
+                    itemRestrictions.spellCoRestrictions.genMethod,
+                    itemRestrictions.spellCoRestrictions.allowedCurses
                 )
-
-                repeat(Random.nextInt(2,6)) {
-
-                    rollHolder = Random.nextInt(1,maxLevel+1)
-
-                    if (rollHolder == maxLevel) rollHolder = Random.nextInt(1,maxLevel-1)
-
-                    notesLists[ORDER_LABEL_STRING]?.plusAssign(
-                        "level = $rollHolder}"
-                    )
-                }
             }
 
             "Gut Stones"    -> gemOrder = GemOrder(GUT_STONE_KEY,itemCharges)
 
             "Ioun Stones"    -> specialItemType = SpItType.IOUN_STONES
         }
-
         //endregion
 
         // region [ Convert mapped lists to nested list ]
@@ -3224,7 +3104,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         }
 
         mNotes = convertMapToNestedLists(notesLists)
-
         // endregion
 
         val specialItemOrder = if (specialItemType != null) {
@@ -3268,7 +3147,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 mIsCursed,
                 mAlignment,
                 mNotes),
-            null, gemOrder)
+            specialItemOrder, gemOrder)
     }
 
     override fun createTreasureMap(parentHoard: Int, sourceDesc: String, allowFalseMaps: Boolean): MagicItem {
@@ -3464,7 +3343,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         return orderGemList
     }
 
-    override fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection {
+    override suspend fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection {
 
         val ringName = "Ring of Spell Storing" + if (order.spellType == SpCoDiscipline.ARCANE) {
             " (Magic-User)" } else " (Cleric)"
@@ -3641,7 +3520,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     // endregion
 
     // region [ Spell-related functions ]
-    override fun convertOrderToSpellScroll(parentHoard : Int, order: SpellCollectionOrder): SpellCollection {
+    override suspend fun convertOrderToSpellScroll(parentHoard : Int, order: SpellCollectionOrder): SpellCollection {
 
         // region < Local extension functions >
 
@@ -3739,7 +3618,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         val spellRange = order.spellLvRange.fixSpellRange(spellType)
         var curse = ""
 
-        // region TODO [ Roll spells ] TODO
+        // region [ Roll spells ]
 
         when (generationMethod) {
 
@@ -3960,10 +3839,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         )
     }
 
-    private fun SpellCollectionOrder.convertToScroll(parentHoard: Int): SpellCollection =
+    private suspend fun SpellCollectionOrder.convertToScroll(parentHoard: Int): SpellCollection =
         convertOrderToSpellScroll(parentHoard,this)
 
-    fun createSpellCollection(parentHoard: Int, spCoParams: SpellCoRestrictions) : SpellCollection {
+    suspend fun createSpellCollection(parentHoard: Int, spCoParams: SpellCoRestrictions) : SpellCollection {
 
         return when (spCoParams.genMethod) {
 
@@ -4056,37 +3935,54 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         return SpellCollectionOrder(SpCoType.SCROLL,scrollDiscipline,spellCount,effectiveLvlRange,
             scrollParams.spellSources,scrollParams.allowRestricted,scrollParams.allowCurse,
-            true,SpCoGenMethod.TRUE_RANDOM,scrollParams.allowedCurses)
+            scrollParams.rerollChoice,scrollMethod,scrollParams.allowedCurses
+        )
     }
 
-    override fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
-                                   sources: SpCoSources, allowRestricted: Boolean): Spell {
+    override suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
+                                        sources: SpCoSources, allowRestricted: Boolean): Spell {
 
         val discipline = if (_discipline == SpCoDiscipline.ALL_MAGIC) {
                 listOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE,SpCoDiscipline.NATURAL).random()
             } else _discipline
         val inputLevel = if (discipline == SpCoDiscipline.ARCANE) {
             _inputLevel.coerceIn(0..9) } else { _inputLevel.coerceIn(1..7) }
-        var tempHolder = SAMPLE_ARCANE_SPELL
+        val spellIDs = when (discipline) {
+            SpCoDiscipline.ARCANE   -> repository.getSpellTemplateIDs(0,inputLevel).toMutableSet()
+            SpCoDiscipline.DIVINE   -> repository.getSpellTemplateIDs(1,inputLevel).toMutableSet()
+            else                    -> repository.getSpellTemplateIDs(2,inputLevel).toMutableSet()
+        }
+        val validSources = mutableListOf(0).apply {
+            if (sources.splatbooksOK) add(1)
+            if (sources.hackJournalsOK) add(2)
+            if (sources.splatbooksOK) add(3)
+        }.toList()
 
-        // TODO implement Dao function for grabbing random spell meeting criteria
-        // Placeholder value for random spell
-        tempHolder = when (discipline) {
-            SpCoDiscipline.ARCANE   -> SAMPLE_ARCANE_SPELL
-            else                    -> SAMPLE_DIVINE_SPELL
+        var tempHolder : SpellTemplate? = null
+
+        fun SpellTemplate?.isNotValid() : Boolean {
+
+            return ( this == null ) ||
+                    !( validSources.contains(this.refType) &&
+                            (this.restrictions.isBlank() || allowRestricted) )
         }
 
-        // Get ArrayList of primary keys for spells
-        // Pull random key and get corresponding template
-        // Scrutinize template by restrictions
-        //      On pass, convert to spell and return it.
-        //      On fail, remove key from ArrayList and pull another.
+        while(spellIDs.isNotEmpty() && tempHolder == null) {
 
-        return convertTemplateToSpell(tempHolder)
+            val pulledID = spellIDs.random()
+
+            spellIDs.remove(pulledID)
+
+            tempHolder = repository.getSpellTemplate(pulledID)
+
+            if (tempHolder.isNotValid()) tempHolder = null
+        }
+
+        return convertTemplateToSpell(tempHolder ?: DUMMY_SPELL)
     }
 
-    override fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: String, rerollChoices: Boolean,
-                                   useSSG: Boolean): Spell {
+    override suspend fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: String, rerollChoices: Boolean,
+                                           useSSG: Boolean): Spell {
 
         val gmgSpellTablePgs = mapOf(
             "Div" to 77,
@@ -4111,10 +4007,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         val inputLevel = _inputLevel.coerceIn(1..9)
         var spellName: String
-        var tempHolder = SAMPLE_ARCANE_SPELL
-        var querySuccessful = false
+        var tempHolder : SpellTemplate? = null
 
-        // Determine school of spell to roll.
+        // Determine school of spell to roll
         val school = if (Spell.checkIfValidSchool(enforcedSchool)) {
 
             enforcedSchool.lowercase().capitalized()
@@ -6467,50 +6362,40 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             else    -> "GM Choice"
         }
 
-        //TODO implement function for try/catch of querying db for template and setting querySuccessful to true if successful
-        fun tryTempFetch() {
-            tempHolder = SAMPLE_ARCANE_SPELL //TODO actually query DB using inputLevel and spellName as arguments.
-            querySuccessful = true           //TODO only return true if valid spell template is found
+        fun SpellTemplate?.isNotValid(): Boolean {
+
+            return ( this == null ) ||
+                    !((this.refType == 0 || useSSG) &&
+                            (this.name.endsWith(" Choice") || rerollChoices))
         }
 
         //minor to-do: Add spell lists for specialists/unorthodox practitioners
 
         // Attempt to roll a valid spell
-        do {
+        while (tempHolder == null) {
 
             // Get spell name from copied tables
             spellName = getSpellName()
 
-            // Fetch first valid entry from database TODO Not implemented; just returns same spell for now.
-            if ((spellName == "GM Choice")||(spellName == "Player Choice")){
-                if (rerollChoices) {
+            // Fetch first valid entry from database
+            tempHolder = if ((spellName == "GM Choice")||(spellName == "Player Choice")){
 
-                    // Re-roll until non-choice entry is selected.
-                    while ((spellName == "GM Choice")||(spellName == "Player Choice")) { spellName = getSpellName() }
-
-                    tryTempFetch()
-
-                } else {
-
-                    // Return a custom "Choice" SpellTemplate
-                    tempHolder = SpellTemplate(0,spellName,0,
-                        if (useSSG) {
-                            "Spellslinger's Guide to Wurld Domination"
-                        } else {"Gamemaster's Guide"},
-                        if (useSSG) {
-                            ssgSpellTablePgs.getOrDefault(school,7)
-                        } else {
-                            gmgSpellTablePgs.getOrDefault(school,77) },
-                        0, inputLevel, school, "", "", "", "")
-
-                    querySuccessful = true
-                }
+                // Return a custom "Choice" SpellTemplate
+                SpellTemplate(0,spellName,0,
+                    if (useSSG) {
+                        "Spellslinger's Guide to Wurld Domination"
+                    } else {"Gamemaster's Guide"},
+                    if (useSSG) {
+                        ssgSpellTablePgs.getOrDefault(school,7)
+                    } else {
+                        gmgSpellTablePgs.getOrDefault(school,77) },
+                    0, inputLevel, school, "", "", "", "")
             } else {
-
-                tryTempFetch()
+                 repository.getSpellTemplateByName(spellName,0,inputLevel)
             }
 
-        } while (!(querySuccessful)||((rerollChoices)&&((spellName == "GM Choice")||(spellName == "Player Choice"))))
+            if (tempHolder.isNotValid()) tempHolder = null
+        }
 
         return convertTemplateToSpell(tempHolder)
     }
@@ -6979,12 +6864,14 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         return spellList
     }
 
-    override fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int) : Spell {
+    override suspend fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int) : Spell {
 
         val inputLevel = _inputLevel.coerceIn(1..7)
         val maxCastable = _maxCastable.coerceIn(0..7)
         var spellName: String?
-        var tempHolder = SAMPLE_DIVINE_SPELL
+        var isDruidic: Boolean
+        var isFromZG: Boolean
+        var tempHolder : SpellTemplate? = null
 
         fun checkIndulgence(): String? {
 
@@ -6993,10 +6880,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             } else null
         }
 
-        do {
+        while (tempHolder == null) {
 
-            var isDruidic = false
-            var isFromZG = false
+            isDruidic = false
+            isFromZG = false
 
             when (inputLevel) {
 
@@ -7535,15 +7422,17 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 else -> spellName = null
             }
 
-            println("DEBUG: Spell picked is \"$spellName\" and is${if (isDruidic) " " else " NOT "}exclusively druidic}")
+            tempHolder = if (!(spellName == null || (isDruidic && !allowDruid) || (isFromZG && !useZG))) {
 
-        } while ((spellName == null)
-            || (isDruidic && !allowDruid)
-            || (isFromZG && !useZG ))
+                repository.getSpellTemplateByName(
+                    spellName,
+                    if (isDruidic) 2 else 1,
+                    inputLevel)
 
-        //TODO fetch spell matching level and name from db
+            } else null
+        }
 
-        return convertTemplateToSpell(SAMPLE_DIVINE_SPELL)
+        return convertTemplateToSpell(tempHolder) //TODO Left off here. Finish up createHoardFromOrder()
     }
 
     override fun convertTemplateToSpell(template:SpellTemplate, appendedNotes: List<String>): Spell {

@@ -99,13 +99,6 @@ class HoardGeneratorFragment : Fragment() {
 
         // Apply adapters for dropdowns
 
-        /*binding.generatorGemMinimumAuto.apply {
-            val defaultPosition = 0
-            setAdapter(dropdownGemValuesAdapter)
-            setText(dropdownGemValues[defaultPosition],false)
-            (adapter as DropdownAdapter<*>).setSelectedPosition(defaultPosition)
-        } Saving in case function doesn't work*/
-
         binding.generatorGemMinimumAuto.initializeAsDropdown(dropdownGemValuesAdapter,generatorViewModel.getGemMinPos())
         binding.generatorGemMaximumAuto.initializeAsDropdown(dropdownGemValuesAdapter,generatorViewModel.getGemMaxPos())
 
@@ -1152,6 +1145,9 @@ class HoardGeneratorFragment : Fragment() {
             generatorRestrictedSwitch.setOnCheckedChangeListener { _, isChecked ->
                 generatorViewModel.restrictChecked = isChecked
             }
+            generatorChoiceRerollSwitch.setOnCheckedChangeListener { _, isChecked ->
+                generatorViewModel.rerollChecked = isChecked
+            }
             generatorSpellCursesAuto.setOnItemClickListener {  parent, view, position, id ->
 
                 Log.d("generatorSpellCursesAuto.setOnItemClickListener",
@@ -1166,7 +1162,6 @@ class HoardGeneratorFragment : Fragment() {
             // endregion
         }
         // endregion
-
         // endregion
 
         // region [ Buttons ]
@@ -1696,6 +1691,7 @@ class HoardGeneratorFragment : Fragment() {
         generatorSpellSourceHjCheckbox.isChecked = generatorViewModel.hackJChecked
         generatorSpellSourceModulesCheckbox.isChecked = generatorViewModel.otherChecked
         generatorRestrictedSwitch.isChecked = generatorViewModel.restrictChecked
+        generatorChoiceRerollSwitch.isChecked = generatorViewModel.rerollChecked
         generatorSpellCursesAuto.apply {
 
             val position = generatorViewModel.getSpCoCursesPos()
@@ -1707,7 +1703,6 @@ class HoardGeneratorFragment : Fragment() {
             error =
                 generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_CURSES,position,true)
         }
-
     }
 
     private fun AutoCompleteTextView.initializeAsDropdown(dropdownAdapter: DropdownAdapter<*>,

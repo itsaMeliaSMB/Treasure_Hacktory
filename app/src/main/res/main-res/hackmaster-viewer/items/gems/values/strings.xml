@@ -103,4 +103,7 @@
     <string name="spell_type_chosen_one">Chosen One\'s spell allotment</string>
     <string name="spell_type_any_physical">Any method\n(as any physical)</string>
     <string name="generator_coinage_maximum_input_hint">Maximum (in gp)</string>
+    <string name="generator_choice_reroll_switch_label">Re-roll \"GM/Player\'s Choice\" results</string>
+    <string name="generator_restricted_switch_label">Include specialty-restricted spells</string>
+    <string name="generator_spell_source_label">Include spells from:</string>
 </resources>

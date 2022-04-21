@@ -1107,8 +1107,7 @@
                                 android:id="@+id/generator_spell_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone"
-                                tools:visibility="visible">
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/generator_spell_discipline_label"
@@ -1305,13 +1304,12 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="16dp"
                                     android:paddingEnd="24dp"
-                                    android:text="Include spells from:"
+                                    android:text="@string/generator_spell_source_label"
                                     android:textSize="14sp"
                                     android:textStyle="italic"
-                                    app:layout_constraintBottom_toBottomOf="@id/generator_spell_source_phb_checkbox"
+                                    app:layout_constraintBaseline_toBaselineOf="@id/generator_spell_source_splat_checkbox"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="@+id/generator_spell_source_phb_checkbox" />
-
+                                    />
 
                                 <androidx.constraintlayout.widget.Barrier
                                     android:id="@+id/generator_spell_source_barrier"
@@ -1321,25 +1319,14 @@
                                     app:constraint_referenced_ids="generator_spell_source_label" />
 
                                 <CheckBox
-                                    android:id="@+id/generator_spell_source_phb_checkbox"
-                                    style="@style/style_generator_scroll_checkbox"
-                                    android:layout_marginTop="8dp"
-                                    android:checked="true"
-                                    android:enabled="false"
-                                    android:text="Player's Handbook"
-                                    android:textColor="?attr/colorOnSurface"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@id/generator_spell_source_barrier"
-                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_maximum_input" />
-
-                                <CheckBox
                                     android:id="@+id/generator_spell_source_splat_checkbox"
                                     style="@style/style_generator_scroll_checkbox"
+                                    android:layout_marginTop="8dp"
                                     android:text="Splatbooks"
                                     android:textColor="?attr/colorOnSurface"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@id/generator_spell_source_barrier"
-                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_source_phb_checkbox" />
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_maximum_input" />
 
                                 <CheckBox
                                     android:id="@+id/generator_spell_source_hj_checkbox"
@@ -1366,12 +1353,24 @@
                                     android:layout_marginStart="16dp"
                                     android:layout_marginTop="8dp"
                                     android:layout_marginEnd="8dp"
-                                    android:paddingBottom="16dp"
-                                    android:text="Include restricted spells"
+                                    android:text="@string/generator_restricted_switch_label"
                                     android:textStyle="italic"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@id/generator_spell_source_modules_checkbox" />
+
+                                <androidx.appcompat.widget.SwitchCompat
+                                    android:id="@+id/generator_choice_reroll_switch"
+                                    android:layout_width="0dp"
+                                    android:layout_height="48dp"
+                                    android:layout_marginStart="16dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    android:text="@string/generator_choice_reroll_switch_label"
+                                    android:textStyle="italic"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_restricted_switch" />
 
                                 <TextView
                                     android:id="@+id/generator_spell_curses_label"
@@ -1397,7 +1396,7 @@
                                     android:minWidth="88dp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toEndOf="@id/generator_spell_level_barrier"
-                                    app:layout_constraintTop_toBottomOf="@id/generator_restricted_switch">
+                                    app:layout_constraintTop_toBottomOf="@id/generator_choice_reroll_switch">
 
                                     <AutoCompleteTextView
                                         android:id="@+id/generator_spell_curses_auto"

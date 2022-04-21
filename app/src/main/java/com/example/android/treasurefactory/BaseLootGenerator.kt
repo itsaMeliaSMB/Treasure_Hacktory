@@ -73,17 +73,17 @@ interface BaseLootGenerator {
     /** Generate Gems */
     suspend fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem>
 
-    fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection
+    suspend fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection
 
     /** Converts a [SpellCollectionOrder] into a [SpellCollection], always as a scroll.*/
-    fun convertOrderToSpellScroll(parentHoard: Int, order: SpellCollectionOrder): SpellCollection
+    suspend fun convertOrderToSpellScroll(parentHoard: Int, order: SpellCollectionOrder): SpellCollection
 
     /** Gets a random spell from allowed sources of the level, discipline, and restriction provided. */
-    fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
+    suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
                        sources: SpCoSources, allowRestricted: Boolean): Spell
 
     /** Returns a magic-user spell as if acquired by leveling up, outlined in the GMG/SSG */
-    fun getSpellByLevelUp(
+    suspend fun getSpellByLevelUp(
         _inputLevel: Int,
         enforcedSchool: String = "",
         rerollChoices: Boolean = false,
@@ -104,7 +104,7 @@ interface BaseLootGenerator {
      * @param _maxCastable Highest castable spell level of theoretical caster. If 0, any
      * restrictions (i.e. spell level of Indulgence) regarding spell level are ignored.
      */
-    fun getSpellByChosenOneTable(
+    suspend fun getSpellByChosenOneTable(
         _inputLevel: Int,
         allowDruid: Boolean,
         useZG: Boolean,

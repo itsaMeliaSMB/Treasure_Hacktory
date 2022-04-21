@@ -36,6 +36,7 @@ const val SCROLL_MAP_CHANCE = 10
 class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel() {
 
     //region << Values, variables, and containers >>
+
     // region ( Method-agnostic variables )
     private var hoardName = ""
 
@@ -506,9 +507,11 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
     var hackJChecked = false
     var otherChecked = false
     var restrictChecked = false
+    var rerollChecked = false
     private var spCoCursesPos = 0
 
     // region ( Public getters )
+
     fun getGenerationMethodPos() = generationMethodPos
     fun getCoinMin() = coinMin
     fun getCoinMax() = coinMax
@@ -536,7 +539,6 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
     fun getSpLvlMaxPos() = spLvlMaxPos
     fun getSpCoCursesPos() = spCoCursesPos
     // endregion
-
     // endregion
 
     /*
@@ -655,6 +657,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
         hackJChecked = false
         otherChecked = false
         restrictChecked = false
+        rerollChecked = false
         spCoCursesPos = 0
     }
 
@@ -1078,6 +1081,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
                     maxSpellsPerSpCo,
                     SpCoSources(splatChecked,hackJChecked,otherChecked),
                     restrictChecked,
+                    rerollChecked,
                     cursedChecked,
                     when(spCoCursesPos){
                         0   -> SpCoCurses.STRICT_GMG
@@ -1340,6 +1344,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
                 order.genParams.magicParams.spellCoRestrictions.spellCountMax.toString() +
                 ", sources: " + order.genParams.magicParams.spellCoRestrictions.spellSources.toString() +
                 ", Allow restricted [${order.genParams.magicParams.spellCoRestrictions.allowRestricted}]" +
+                ", Re-roll choices [${order.genParams.magicParams.spellCoRestrictions.rerollChoice}]" +
                 ", Allow cursed [${order.genParams.magicParams.spellCoRestrictions.allowCurse}]" +
                 ", Allowed curses <${order.genParams.magicParams.spellCoRestrictions.allowedCurses}>" +
                 ", Generation method: ${order.genParams.magicParams.spellCoRestrictions.genMethod}\n")

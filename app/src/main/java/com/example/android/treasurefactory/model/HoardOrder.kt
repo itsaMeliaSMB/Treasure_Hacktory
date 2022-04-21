@@ -48,17 +48,21 @@ data class MagicItemRestrictions(val scrollMapChance: Int = 0,
                                  val allowIntWeapons: Boolean = true,
                                  val allowArtifacts: Boolean = true,
                                  val spellCoRestrictions: SpellCoRestrictions =
-                                     SpellCoRestrictions(allowCurse = allowCursedItems))
+                                     SpellCoRestrictions(
+                                         allowCurse = allowCursedItems
+                                     ))
 
-data class SpellCoRestrictions(val _minLvl: Int = 0,
-                               val _maxLvl: Int = 9,
-                               val allowedDisciplines: AllowedDisciplines = AllowedDisciplines(),
-                               val spellCountMax: Int = DEFAULT_MAX_SPELLS_PER_SCROLL,
-                               val spellSources: SpCoSources = SpCoSources(true,false,false),
-                               val allowRestricted: Boolean = false,
-                               val allowCurse: Boolean = true,
-                               val allowedCurses: SpCoCurses = SpCoCurses.STRICT_GMG,
-                               val genMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
+data class SpellCoRestrictions(
+    val _minLvl: Int = 0,
+    val _maxLvl: Int = 9,
+    val allowedDisciplines: AllowedDisciplines = AllowedDisciplines(),
+    val spellCountMax: Int = DEFAULT_MAX_SPELLS_PER_SCROLL,
+    val spellSources: SpCoSources = SpCoSources(true, false, false),
+    val allowRestricted: Boolean = false,
+    val rerollChoice: Boolean = false,
+    val allowCurse: Boolean = true,
+    val allowedCurses: SpCoCurses = SpCoCurses.STRICT_GMG,
+    val genMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
 ) {
     val levelRange = IntRange(
         _minLvl.coerceIn(if (allowedDisciplines.arcane) 0..9 else 1..7),

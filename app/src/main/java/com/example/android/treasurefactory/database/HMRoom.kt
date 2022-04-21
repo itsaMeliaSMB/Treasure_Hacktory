@@ -1004,8 +1004,8 @@ interface SpellCollectionDao{
     @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id=(:spellId)")
     suspend fun getSpellTemplate(spellId: Int): SpellTemplate?
 
-    @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id=(:spellId) AND type=(:discipline) AND level=(:level)")
-    suspend fun getSpellTemplateByName(spellName: Int, discipline: Int, level: Int): SpellTemplate?
+    @Query("SELECT * FROM hackmaster_spell_reference WHERE name=(:spellName) AND type=(:discipline) AND level=(:level)")
+    suspend fun getSpellTemplateByName(spellName: String, discipline: Int, level: Int): SpellTemplate?
 
     @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:discipline) " +
             "AND level=(:level)")

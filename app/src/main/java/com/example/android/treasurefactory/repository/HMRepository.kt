@@ -170,7 +170,7 @@ class HMRepository (
     suspend fun getSpellTemplate(spellId: Int): SpellTemplate? =
         spellCollectionDao.getSpellTemplate(spellId)
 
-    suspend fun getSpellTemplateByName(spellName: Int, discipline: Int, level: Int): SpellTemplate? =
+    suspend fun getSpellTemplateByName(spellName: String, discipline: Int, level: Int): SpellTemplate? =
         spellCollectionDao.getSpellTemplateByName(spellName, discipline, level)
 
     suspend fun getSpellTemplateIDs(discipline: Int, level: Int): List<Int> =
