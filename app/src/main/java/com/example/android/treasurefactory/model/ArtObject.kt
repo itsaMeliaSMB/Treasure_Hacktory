@@ -18,6 +18,7 @@ import kotlin.random.Random
 data class ArtObject(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
     val hoardID: Int, // NOTE: removed iconID; TODO refactor accordingly
+    val creationTime: Long,
     var name: String, // NOT: added name field; TODO refactor accordingly
     val artType: Int,
     val renown: Int,
@@ -27,7 +28,8 @@ data class ArtObject(
     val quality: Int,
     val age: Int,
     val subject: Int,
-    var valueLevel: Int) {
+    var valueLevel: Int,
+    var gpValue: Double = 0.0) {
 
     @Ignore
     fun generateNewName() { name = getRandomName(artType, subject) }
@@ -191,16 +193,13 @@ data class ArtObject(
     @Ignore
     private fun updateValueLevel() {
 
-        var newValueLevel = renown + size + condition + quality + getSubjectAsRank() + getAgeInYearsAsRank()
-
-        if (newValueLevel < -19) newValueLevel = -19
-        if (newValueLevel > 31) newValueLevel = 31
-
-        valueLevel = newValueLevel
+        valueLevel =
+            ( renown + size + condition + quality + getSubjectAsRank() + getAgeInYearsAsRank() )
+                .coerceIn(-19,31)
     }
 
     @Ignore
-    fun getGpValue() : Double {
+    fun setGpValueFromLevel() : Double {
 
         updateValueLevel()
 
@@ -259,7 +258,9 @@ data class ArtObject(
             31 to 1000000.0
         )
 
-      return (valueLevelToGPValue[valueLevel])!!
+        gpValue = (valueLevelToGPValue[valueLevel])!!
+
+        return (valueLevelToGPValue[valueLevel])!!
     }
 
     companion object {

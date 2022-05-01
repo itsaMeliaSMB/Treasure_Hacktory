@@ -122,19 +122,10 @@ class LootMutator {
         valueHistoryList.add(Pair(timestamp,resultsBuilder.toString()))
 
         // Return result as new Gem()
-        return Gem(
-            inputGem.gemID,
-            inputGem.hoardID,
-            inputGem.iconID,
-            inputGem.type, inputGem.size,
-            inputGem.quality,
-            currentVariation,
-            inputGem.name,
-            inputGem.opacity,
-            inputGem.description,
-            newGPValue,
-            valueHistoryList.toList()
-        )
+        return inputGem.copy(
+            variation = currentVariation,
+            currentGPValue = newGPValue,
+            valueHistory = valueHistoryList.toList())
     }
 
     companion object {

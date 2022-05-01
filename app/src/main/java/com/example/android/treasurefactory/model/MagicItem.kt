@@ -22,6 +22,7 @@ data class MagicItem(
     @PrimaryKey(autoGenerate = true) @NotNull val mItemID: Int,
     val templateID: Int,
     val hoardID: Int,
+    val creationTime: Long,
     val iconID: String,
     val typeOfItem: String, //TODO add function for converting table to descriptive label
     val name: String,

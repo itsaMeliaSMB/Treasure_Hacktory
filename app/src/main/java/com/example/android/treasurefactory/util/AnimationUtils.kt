@@ -1,4 +1,4 @@
-package com.example.android.treasurefactory
+package com.example.android.treasurefactory.util
 
 // https://darrenfinch.com/fully-featured-recyclerview-for-beginners-part-2-expandable-card-view/
 

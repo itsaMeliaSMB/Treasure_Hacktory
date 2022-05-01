@@ -45,6 +45,10 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
      * 0 = Letter-code, 1 = Specific quantity.
      */
     private var generationMethodPos = 0
+
+    private var isRunningAsync = false
+
+    val isRunningAsyncLiveData = MutableLiveData(isRunningAsync)
     // endregion
 
     // region ( Letter Code value containers )
@@ -560,6 +564,12 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
         }
     }
 
+    private fun setRunningAsync(newValue: Boolean) {
+
+        isRunningAsync = newValue
+        isRunningAsyncLiveData.postValue(isRunningAsync)
+    }
+
     // region ( Letter update functions )
 
     /**
@@ -1033,7 +1043,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
         // Update description log
         newOrder.creationDescription = lettersStringBuilder.toString()
 
-        // DEBUG ONLY: Log results
+        // TODO DEBUG ONLY: Log results
         reportHoardOrderToDebug(newOrder)
 
         // Return result
@@ -1066,11 +1076,13 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
                 if (artMaxPos == 0) 31 else artMaxPos - 20,
                 if (artMapChecked) ART_MAP_CHANCE else 0),
             MagicItemRestrictions(
-                if (scrollMapChecked) SCROLL_MAP_CHANCE else 0,
-                cursedChecked,
-                intWepChecked,
-                relicsChecked,
-                SpellCoRestrictions(
+                spellScrollEnabled = spellScrollChecked,
+                nonScrollEnabled = nonSpScrollChecked,
+                scrollMapChance = if (scrollMapChecked) SCROLL_MAP_CHANCE else 0,
+                allowCursedItems = cursedChecked,
+                allowIntWeapons = intWepChecked,
+                allowArtifacts = relicsChecked,
+                spellCoRestrictions = SpellCoRestrictions(
                     spLvlMinPos,
                     spLvlMaxPos,
                     when(splDisciplinePos){
@@ -1118,7 +1130,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
             genParams = newParams
         )
 
-        // DEBUG ONLY: Log results
+        // TODO DEBUG ONLY: Log results
         reportHoardOrderToDebug(newOrder)
 
         return newOrder
@@ -1133,15 +1145,23 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
         viewModelScope.launch {
 
+            setRunningAsync(true)
+
             val lootGenerator = LootGeneratorAsync(hmRepository)
 
             val hoardOrder = if (generationMethodPos == 1) {
+
                 compileSpecificQtyHoardOrder()
+
             } else {
                 compileLetterCodeHoardOrder()
             }
 
+            val newHoardId = lootGenerator.createHoardFromOrder(hoardOrder)
 
+            setRunningAsync(false)
+
+            //TODO left off here. Set calls from Fragment and make dialog fragment for successful generation.
         }
     }
     // endregion
@@ -1323,11 +1343,13 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
                 order.genParams.artParams.levelRange.toString() + "), Paper map chance: " +
                 order.genParams.artParams.paperMapChance.toString() + "%")
         Log.d("convertLetterToHoardOrder.genParameters","> MAGIC ITEM PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters","Scroll map chance: " +
-                "${order.genParams.magicParams.scrollMapChance}%, " +
-                "Allow cursed [${order.genParams.magicParams.allowCursedItems}], " +
-                "Allow int. weapons [${order.genParams.magicParams.allowIntWeapons}], " +
-                "Allow artifacts [${order.genParams.magicParams.allowCursedItems}]"
+        Log.d("convertLetterToHoardOrder.genParameters",
+            "Allow spell scrolls [${order.genParams.magicParams.spellScrollEnabled}], " +
+                    "Allow non-spell scrolls [${order.genParams.magicParams.nonScrollEnabled}], " +
+                    "Scroll map chance: ${order.genParams.magicParams.scrollMapChance}%, " +
+                    "Allow cursed [${order.genParams.magicParams.allowCursedItems}], " +
+                    "Allow int. weapons [${order.genParams.magicParams.allowIntWeapons}], " +
+                    "Allow artifacts [${order.genParams.magicParams.allowCursedItems}]"
         )
         Log.d("convertLetterToHoardOrder.genParameters","> SPELL CO PARAMS:")
         Log.d("convertLetterToHoardOrder.genParameters","Level range: ${

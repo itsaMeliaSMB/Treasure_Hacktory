@@ -9,6 +9,8 @@
         android:id="@+id/generator_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:title="@string/hoard_generator_fragment_title"
+        app:navigationIcon="@drawable/clipart_back_vector_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -1419,37 +1421,72 @@
 
         </ScrollView>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:minHeight="64dp">
 
-            <Button
-                android:id="@+id/generator_reset_button"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/generator_bottom_button_group"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="24dp"
-                android:backgroundTint="?attr/colorPrimaryVariant"
-                android:padding="8dp"
-                android:text="@string/reset"
-                android:textAllCaps="true"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:gravity="center"
+                android:minHeight="64dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/generator_generate_button"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:backgroundTint="?attr/colorPrimaryVariant"
-                android:padding="8dp"
-                android:text="@string/generate"
-                android:textAllCaps="true"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/generator_reset_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="24dp"
+                    android:backgroundTint="?attr/colorPrimaryVariant"
+                    android:padding="8dp"
+                    android:text="@string/reset"
+                    android:textAllCaps="true"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-        </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/generator_generate_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:padding="8dp"
+                    android:text="@string/generate"
+                    android:textAllCaps="true"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/generator_bottom_waiting_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/generator_waiting_progress"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:indeterminateOnly="true"
+                    android:layout_marginVertical="8dp"
+                    android:layout_marginEnd="16dp" />
+
+                <TextView
+                    android:id="@+id/generator_waiting_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/generator_waiting_text_string"
+                    android:textSize="20sp"
+                    android:layout_gravity="center_vertical"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 

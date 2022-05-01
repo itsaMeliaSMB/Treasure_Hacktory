@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull
 data class Gem(
     @PrimaryKey(autoGenerate = true) @NotNull val gemID: Int = 0,
     val hoardID: Int = 0,
+    val creationTime: Long,
     val iconID: String,
     val type: Int,
     val size: Int,
@@ -161,11 +162,12 @@ data class Gem(
 
         //TODO look up formatting for cast-double strings in kotlin for leading zeros and limited decimal places
         return listOf(
-            Pair("Weight","${getWeightInCarats()} ct (~ ${getWeightInCarats() * 0.200} g)"),
-            Pair("Diameter","${getDiameterInInches()} in (~ ${getDiameterInInches() * 2.54} cm)"),
+            Pair("Weight","${String.format("%.3f",getWeightInCarats())} ct (~ ${
+                String.format("%.3f",getWeightInCarats() * 0.200)} g)"),
+            Pair("Diameter","${String.format("%.3f",getDiameterInInches())} in (~ ${
+                String.format("%.3f",getDiameterInInches() * 2.54)} cm)"),
             Pair("Opacity",getOpacityAsString().capitalized()),
             Pair("Appearance",description.capitalized())
         )
     }
-
 }

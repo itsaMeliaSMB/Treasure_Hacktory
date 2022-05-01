@@ -855,7 +855,6 @@ abstract class TreasureDatabase : RoomDatabase() {
             }
         }
     }
-
 }
 
 //region [ Data Access Objects ]
@@ -877,6 +876,9 @@ interface HoardDao {
 
     @Delete
     suspend fun deleteHoard(hoardToDelete: Hoard)
+
+    @Query("DELETE FROM hackmaster_hoard_table")
+    suspend fun deleteAllHoards()
 
     @Query("SELECT hoardID FROM hackmaster_hoard_table WHERE ROWID=(:hoardRowID)")
     fun getIdByRowId(hoardRowID: Long) : Int
@@ -906,6 +908,12 @@ interface GemDao {
     // endregion
 
     // region ( Gem )
+    @Query("SELECT COUNT(*) FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
+    fun getGemCount(hoardID: Int): LiveData<Int>
+
+    @Query("SELECT SUM(currentGPValue) FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
+    fun getGemValueTotal(hoardID: Int): LiveData<Double>
+
     @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     fun getGems(hoardID: Int): LiveData<List<Gem>>
 
@@ -927,6 +935,12 @@ interface GemDao {
 interface ArtDao {
 
     // region ( ArtObject )
+    @Query("SELECT COUNT(*) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    fun getArtCount(hoardID: Int): LiveData<Int>
+
+    @Query("SELECT SUM(gpValue) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    fun getArtValueTotal(hoardID: Int): LiveData<Double>
+
     @Query("SELECT * FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
     fun getArtObjects(hoardID: Int): LiveData<List<ArtObject>>
 
@@ -980,6 +994,12 @@ interface MagicItemDao {
     // endregion
 
     //region ( MagicItem )
+    @Query("SELECT COUNT(*) FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
+    fun getMagicItemCount(hoardID: Int): LiveData<Int>
+
+    @Query("SELECT SUM(gpValue) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    fun getMagicItemValueTotal(hoardID: Int): LiveData<Double>
+
     @Query("SELECT * FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     fun getMagicItems(hoardID: Int): LiveData<List<MagicItem>>
 
@@ -1016,6 +1036,12 @@ interface SpellCollectionDao{
     // endregion
 
     // region ( SpellCollection )
+    @Query("SELECT COUNT(*) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    fun getSpellCollectionCount(hoardID: Int): LiveData<Int>
+
+    @Query("SELECT SUM(gpValue) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    fun getSpellCollectionValueTotal(hoardID: Int): LiveData<Double>
+
     @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
     fun getSpellCollections(hoardID: Int): LiveData<List<SpellCollection>>
 

@@ -38,6 +38,8 @@ class HMRepository (
 
     suspend fun deleteHoard(hoardToDelete: Hoard) = hoardDao.deleteHoard(hoardToDelete)
 
+    suspend fun deleteAllHoards() = hoardDao.deleteAllHoards()
+
     suspend fun getHoardIdByRowId(rowID: Long) : Int = hoardDao.getIdByRowId(rowID)
     // endregion
 
@@ -64,6 +66,11 @@ class HMRepository (
     // endregion
 
     // region ( Gem )
+
+    fun getGemCount(hoardID: Int): LiveData<Int> = gemDao.getGemCount(hoardID)
+
+    fun getGemValueTotal(hoardID: Int): LiveData<Double> = gemDao.getGemValueTotal(hoardID)
+
     fun getGems(hoardId: Int): LiveData<List<Gem>> = gemDao.getGems(hoardId)
 
     fun getGem(gemId: Int): LiveData<Gem?> = gemDao.getGem(gemId)
@@ -84,10 +91,12 @@ class HMRepository (
 
     //region [ Art object functions ]
 
-    //fun getHoardArt(hoardID: Int) : LiveData<List<ArtObject>> = artDao.getArtObjects(hoardID)
-    //fun getArtById(id: Int): LiveData<ArtObject?> = artDao.getArtObject(id)
-
     // region ( ArtObject )
+
+    fun getArtCount(hoardID: Int): LiveData<Int> = artDao.getArtCount(hoardID)
+
+    fun getArtValueTotal(hoardID: Int): LiveData<Double> = artDao.getArtValueTotal(hoardID)
+
     fun getArtObjects(hoardId: Int): LiveData<List<ArtObject>> = artDao.getArtObjects(hoardId)
 
     fun getArtObject(artId: Int): LiveData<ArtObject?> = artDao.getArtObject(artId)
@@ -146,6 +155,12 @@ class HMRepository (
     // endregion
 
     // region ( MagicItem )
+
+    fun getMagicItemCount(hoardID: Int): LiveData<Int> = magicItemDao.getMagicItemCount(hoardID)
+
+    fun getMagicItemValueTotal(hoardID: Int): LiveData<Double> =
+        magicItemDao.getMagicItemValueTotal(hoardID)
+
     fun getMagicItems(hoardId: Int): LiveData<List<MagicItem>> = magicItemDao.getMagicItems(hoardId)
 
     fun getMagicItem(itemId: Int): LiveData<MagicItem?> = magicItemDao.getMagicItem(itemId)
@@ -161,6 +176,8 @@ class HMRepository (
     suspend fun deleteMagicItem(itemToDelete: MagicItem) {
         magicItemDao.deleteMagicItem(itemToDelete)
     }
+    // endregion
+
     // endregion
 
     //region [ Spell collection functions ]
@@ -182,6 +199,13 @@ class HMRepository (
     // endregion
 
     // region ( SpellCollection )
+
+    fun getSpellCollectionCount(hoardID: Int): LiveData<Int> =
+        spellCollectionDao.getSpellCollectionCount(hoardID)
+
+    fun getSpellCollectionValueTotal(hoardID: Int) : LiveData<Double> =
+        spellCollectionDao.getSpellCollectionValueTotal(hoardID)
+
     fun getSpellCollections(hoardId: Int): LiveData<List<SpellCollection>> =
         spellCollectionDao.getSpellCollections(hoardId)
 

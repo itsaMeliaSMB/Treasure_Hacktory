@@ -23,6 +23,7 @@
         android:name="com.example.android.treasurefactory.ui.HoardGeneratorFragment"
         android:label="HoardGeneratorFragment"
         tools:layout="@layout/layout_generator_fragment"/>
+
     <fragment
         android:id="@+id/hoardViewerFragment"
         android:name="com.example.android.treasurefactory.ui.HoardViewerFragment"

@@ -52,7 +52,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/unique_details_standard_margin"
-        android:textSize="16sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/unique_details_type_label"
         app:layout_constraintEnd_toStartOf="@id/unique_details_end_barrier"
@@ -67,8 +69,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/unique_details_standard_margin"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:textStyle="italic"
+        android:gravity="end"
         app:layout_constraintBottom_toBottomOf="@id/unique_details_header_bottom_barrier"
         app:layout_constraintEnd_toStartOf="@id/unique_details_end_barrier"
         app:layout_constraintHorizontal_bias="0.5"
@@ -88,28 +91,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:layout_constraintTop_toTopOf="@id/unique_details_thumbnail"
-        app:constraint_referenced_ids="unique_details_thumbnail"/>
+        app:constraint_referenced_ids="unique_details_thumbnail"
+        app:layout_constraintTop_toTopOf="@id/unique_details_thumbnail" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/unique_details_header_bottom_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="top"
-        app:layout_constraintBottom_toBottomOf="@id/unique_details_thumbnail"
-        app:constraint_referenced_ids="unique_details_thumbnail"/>
+        app:constraint_referenced_ids="unique_details_thumbnail"
+        app:layout_constraintBottom_toBottomOf="@id/unique_details_thumbnail" />
+
+    <TextView
+        android:id="@+id/unique_details_full_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/unique_details_standard_margin"
+        android:layout_marginTop="@dimen/unique_details_standard_margin"
+        android:text="Full name:"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/unique_details_thumbnail" />
+
+
+    <TextView
+        android:id="@+id/unique_details_full_name_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/unique_details_standard_margin"
+        android:textSize="14sp"
+        android:textStyle="italic"
+        android:gravity="end"
+        app:layout_constraintBaseline_toBaselineOf="@id/unique_details_full_name_label"
+        app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+        app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+        tools:text="Combination Ring of Invisibility and Demon Spawn Slaying" />
 
     <TextView
         android:id="@+id/unique_details_source_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/unique_details_standard_margin"
-        android:layout_marginTop="@dimen/unique_details_standard_margin"
+        android:layout_marginTop="@dimen/unique_details_short_margin"
+        app:layout_goneMarginTop="@dimen/unique_details_standard_margin"
         android:text="@string/source"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/unique_details_thumbnail" />
+        app:layout_constraintTop_toBottomOf="@id/unique_details_full_name_value" />
 
     <TextView
         android:id="@+id/unique_details_source_value"
@@ -118,6 +148,8 @@
         android:layout_marginEnd="@dimen/unique_details_standard_margin"
         android:textSize="14sp"
         android:textStyle="italic"
+        android:gravity="end"
+        app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
         app:layout_constraintBaseline_toBaselineOf="@id/unique_details_source_label"
         app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
         tools:text="GameMaster's Guide" />
@@ -151,6 +183,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/unique_details_standard_margin"
         android:textSize="14sp"
+        android:gravity="end"
+        app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
         app:layout_constraintBaseline_toBaselineOf="@id/unique_details_xp_label"
         app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
         tools:text="3000 xp" />
@@ -175,6 +209,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/unique_details_standard_margin"
         android:textSize="14sp"
+        android:gravity="end"
+        app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
         app:layout_constraintBaseline_toBaselineOf="@id/unique_details_gp_label"
         app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
         tools:text="20000.00 gp" />
@@ -183,38 +219,45 @@
         android:id="@+id/unique_details_div_1"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/unique_details_gp_label"
         android:layout_marginHorizontal="64dp"
         android:layout_marginTop="@dimen/unique_details_standard_margin"
-        android:background="?attr/colorOnSurface"/>
+        android:background="?attr/colorOnSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/unique_details_gp_label" />
 
     <TextView
         android:id="@+id/unique_details_list_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/unique_details_div_1"
         android:layout_marginTop="@dimen/unique_details_standard_margin"
         android:text="@string/item_details"
-        android:textStyle="bold"
-        android:textSize="16sp"
         android:textAllCaps="true"
-        />
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/unique_details_div_1" />
 
     <ExpandableListView
         android:id="@+id/unique_details_list_expandable"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/unique_details_standard_margin"
         android:layout_marginHorizontal="@dimen/unique_details_standard_margin"
-        app:layout_constraintTop_toBottomOf="@id/unique_details_list_label"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginVertical="@dimen/unique_details_standard_margin"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_height="72dp"
-        tools:background="?attr/colorPrimary"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/unique_details_list_label"
+        tools:background="?attr/colorPrimary"
+        tools:layout_height="72dp" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/unique_details_label_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:barrierMargin="8dp"
+        app:constraint_referenced_ids="unique_details_gp_label,unique_details_xp_label,unique_details_source_label,unique_details_full_name_label" />
 
     <!--TODO: Just gonna trust that you can figure out heterogeneous item types for
     ExpandableListAdapters, at least implement an interface on all

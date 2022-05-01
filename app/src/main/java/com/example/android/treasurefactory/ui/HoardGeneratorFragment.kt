@@ -16,9 +16,12 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Filter
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -34,6 +37,8 @@ import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModelFact
 class HoardGeneratorFragment : Fragment() {
 
     //region [ Property declarations ]
+
+    private var shortAnimationDuration: Int = 0
 
     private var _binding: LayoutGeneratorFragmentBinding? = null
     private val binding get() = _binding!!
@@ -67,7 +72,31 @@ class HoardGeneratorFragment : Fragment() {
     private val dropdownSpellCursesAdapter by lazy { DropdownAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownSpellCurses, null) }
     //endregion
 
-    //region [ Overridden functions ]
+    // region [ Callbacks ]
+
+    private val backCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+
+            if (generatorViewModel.isRunningAsyncLiveData.value != true) {
+
+                findNavController().popBackStack()
+
+            } else {
+
+                Toast.makeText(context,"Cannot navigate back; still generating treasure.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    // endregion
+
+    // region [ Overridden functions ]
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this,backCallback)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -112,6 +141,30 @@ class HoardGeneratorFragment : Fragment() {
         binding.generatorSpellCursesAuto.initializeAsDropdown(dropdownSpellCursesAdapter, generatorViewModel.getSpCoCursesPos())
         // endregion
 
+        // region [ Prepare button views ]
+
+        shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
+
+        // Immediately hide buttons in Async task is indicated to be running
+        if (generatorViewModel.isRunningAsyncLiveData.value == true) {
+
+            binding.apply{
+                generatorBottomButtonGroup.visibility = View.GONE
+                generatorResetButton.isEnabled = false
+                generatorGenerateButton.isEnabled = false
+                generatorBottomWaitingGroup.visibility = View.VISIBLE
+            }
+        } else {
+
+            binding.apply{
+                generatorBottomButtonGroup.visibility = View.VISIBLE
+                generatorResetButton.isEnabled = true
+                generatorGenerateButton.isEnabled = true
+                generatorBottomWaitingGroup.visibility = View.GONE
+            }
+        }
+        // endregion
+
         // Return inflated view
         return view
     }
@@ -128,6 +181,24 @@ class HoardGeneratorFragment : Fragment() {
             smallListLiveData.observe(viewLifecycleOwner) { newSmallList ->
                 smallAdapter.submitList(newSmallList)
                 Log.d("HoardGeneratorFragment","smallListLiveData on ViewModel observed.")
+            }
+        }
+
+        binding.generatorToolbar.apply {
+
+            navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
+
+            setNavigationOnClickListener {
+
+                if (generatorViewModel.isRunningAsyncLiveData.value != true) {
+
+                    findNavController().popBackStack()
+
+                } else {
+
+                    Toast.makeText(context,"Cannot navigate back; still generating treasure.",
+                        Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -1165,6 +1236,39 @@ class HoardGeneratorFragment : Fragment() {
         // endregion
 
         // region [ Buttons ]
+        generatorViewModel.isRunningAsyncLiveData.observe(viewLifecycleOwner) { isRunningAsync ->
+
+            if (isRunningAsync) {
+
+                if (binding.generatorBottomButtonGroup.visibility == View.VISIBLE) {
+
+                    hideButtonsCrossfade()
+
+                } else {
+
+                    // Set properties without animation
+                    binding.generatorBottomButtonGroup.visibility = View.GONE
+                    binding.generatorBottomWaitingGroup.visibility = View.VISIBLE
+                    binding.generatorResetButton.isEnabled = false
+                    binding.generatorGenerateButton.isEnabled = false
+                }
+            } else {
+
+                if (binding.generatorBottomButtonGroup.visibility == View.GONE) {
+
+                    showButtonsCrossfade()
+
+                } else {
+
+                    // Set properties without animation
+                    binding.generatorBottomButtonGroup.visibility = View.VISIBLE
+                    binding.generatorBottomWaitingGroup.visibility = View.GONE
+                    binding.generatorResetButton.isEnabled = true
+                    binding.generatorGenerateButton.isEnabled = true
+                }
+            }
+        }
+
         binding.generatorResetButton.setOnClickListener {
 
                 if (binding.generatorMethodLettercode.isChecked){
@@ -1182,8 +1286,6 @@ class HoardGeneratorFragment : Fragment() {
 
         binding.generatorGenerateButton.setOnClickListener {
 
-            //val hoardOrder: HoardOrder
-
             // Generate hoard order
             when (binding.generatorMethodGroup.checkedRadioButtonId) {
 
@@ -1200,7 +1302,7 @@ class HoardGeneratorFragment : Fragment() {
 
                     } else {
 
-                        Toast.makeText(context,"Letter code validation unsuccessful",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Please indicate at least one treasure type to generate.",Toast.LENGTH_SHORT).show()
                     }
                 }
                 R.id.generator_method_specific  ->{
@@ -1557,6 +1659,69 @@ class HoardGeneratorFragment : Fragment() {
 
             binding.generatorMethodGroup.check(R.id.generator_method_specific)
             binding.generatorAnimatorFrame.displayedChild = 1
+        }
+    }
+
+    private fun showButtonsCrossfade() {
+
+        binding.generatorBottomButtonGroup.apply {
+
+            alpha = 0f
+            visibility = View.VISIBLE
+
+            // Animate the content view to 100% opacity, and clear any animation
+            // listener set on the view.
+            animate()
+                .alpha(1f)
+                .setDuration(shortAnimationDuration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.generatorResetButton.isEnabled = true
+                        binding.generatorGenerateButton.isEnabled = true
+                    }
+                })
+        }
+
+        binding.generatorBottomWaitingGroup.apply {
+            alpha = 1f
+            visibility = View.VISIBLE
+            animate()
+                .alpha(0f)
+                .setDuration(shortAnimationDuration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.generatorBottomWaitingGroup.visibility = View.GONE
+                    }
+                })
+        }
+    }
+
+    private fun hideButtonsCrossfade() {
+
+        binding.generatorBottomWaitingGroup.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+            animate()
+                .alpha(1f)
+                .setDuration(shortAnimationDuration.toLong())
+                .setListener(null)
+        }
+
+        binding.generatorBottomButtonGroup.apply {
+
+            binding.generatorResetButton.isEnabled = false
+            binding.generatorGenerateButton.isEnabled = false
+            alpha = 1f
+            visibility = View.VISIBLE
+
+            animate()
+                .alpha(0f)
+                .setDuration(shortAnimationDuration.toLong())
+                .setListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator) {
+                        binding.generatorBottomButtonGroup.visibility = View.GONE
+                    }
+                })
         }
     }
 

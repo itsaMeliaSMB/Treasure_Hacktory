@@ -9,6 +9,8 @@
         android:id="@+id/generator_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:title="@string/hoard_generator_fragment_title"
+        app:navigationIcon="@drawable/clipart_back_vector_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -67,7 +69,6 @@
                 android:id="@+id/generator_method_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:orientation="vertical"
                 android:weightSum="2">
 
@@ -91,36 +92,65 @@
 
             </RadioGroup>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <Button
-                    android:id="@+id/generator_reset_button"
+                <LinearLayout
+                    android:id="@+id/generator_bottom_button_group"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:backgroundTint="?attr/colorPrimaryVariant"
-                    android:text="@string/reset"
-                    android:textAllCaps="true"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/generator_generate_button"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/generator_reset_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/reset"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/generator_generate_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/generate"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/generator_bottom_waiting_group"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:backgroundTint="?attr/colorPrimaryVariant"
-                    android:text="@string/generate"
-                    android:textAllCaps="true"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone">
 
-            </LinearLayout>
+                    <ProgressBar
+                        android:id="@+id/generator_waiting_progress"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateOnly="true"
+                        android:layout_marginVertical="8dp" />
+
+                    <TextView
+                        android:id="@+id/generator_waiting_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/generator_waiting_text_string"
+                        android:textSize="20sp"/>
+
+                </LinearLayout>
+
+            </FrameLayout>
 
         </LinearLayout>
 

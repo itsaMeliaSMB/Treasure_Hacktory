@@ -26,7 +26,8 @@ data class HoardOrder(var hoardName: String = "Untitled Hoard",
  */
 data class OrderParams(val gemParams: GemRestrictions = GemRestrictions(),
                        val artParams: ArtRestrictions = ArtRestrictions(),
-                       val magicParams: MagicItemRestrictions = MagicItemRestrictions())
+                       val magicParams: MagicItemRestrictions = MagicItemRestrictions()
+)
 
 data class GemRestrictions(val _minLvl: Int = 0, val _maxLvl : Int = 17) {
     val levelRange = IntRange(
@@ -43,14 +44,18 @@ data class ArtRestrictions(val _minLvl: Int = -19, val _maxLvl: Int = 31,
     )
 }
 
-data class MagicItemRestrictions(val scrollMapChance: Int = 0,
-                                 val allowCursedItems: Boolean = true,
-                                 val allowIntWeapons: Boolean = true,
-                                 val allowArtifacts: Boolean = true,
-                                 val spellCoRestrictions: SpellCoRestrictions =
-                                     SpellCoRestrictions(
-                                         allowCurse = allowCursedItems
-                                     ))
+data class MagicItemRestrictions(
+    val spellScrollEnabled: Boolean = true,
+    val nonScrollEnabled: Boolean = true,
+    val scrollMapChance: Int = 0,
+    val allowCursedItems: Boolean = true,
+    val allowIntWeapons: Boolean = true,
+    val allowArtifacts: Boolean = true,
+    val spellCoRestrictions: SpellCoRestrictions =
+        SpellCoRestrictions(
+            allowCurse = allowCursedItems
+        )
+)
 
 data class SpellCoRestrictions(
     val _minLvl: Int = 0,

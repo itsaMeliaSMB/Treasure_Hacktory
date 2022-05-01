@@ -106,4 +106,6 @@
     <string name="generator_choice_reroll_switch_label">Re-roll \"GM/Player\'s Choice\" results</string>
     <string name="generator_restricted_switch_label">Include specialty-restricted spells</string>
     <string name="generator_spell_source_label">Include spells from:</string>
+    <string name="generator_waiting_text_string">Please wait...</string>
+    <string name="action_delete_all_hoards_label">Delete all hoards</string>
 </resources>

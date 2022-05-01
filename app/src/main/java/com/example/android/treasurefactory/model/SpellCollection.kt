@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull
 data class SpellCollection(
     @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
     val hoardID: Int,
+    val creationTime: Long,
     var iconID: String,
     var name: String = "<Spell Collection>",
     var type: SpCoType,

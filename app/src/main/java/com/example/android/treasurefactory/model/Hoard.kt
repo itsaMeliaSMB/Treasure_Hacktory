@@ -1,11 +1,9 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 import org.jetbrains.annotations.NotNull
 import java.util.*
+import kotlin.math.roundToInt
 
 // https://stackoverflow.com/questions/64823212/use-android-room-without-breaking-encapsulation
 
@@ -34,8 +32,18 @@ data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
                  var spellsCount: Int = 0,
                  var isFavorite: Boolean = false,
                  var isNew: Boolean = true,
+                 var successful : Boolean = false,
                  var appVersion: Int = 0,           // Version code of app hoard was generated on
-    )
+    ) {
+
+    @Ignore
+    fun getTotalCoinageValue(): Double {
+
+        return (
+                ((cp * 0.01) + (sp * 0.1) + (ep * 0.5) + (gp * 1.0) + (hsp * 2.0) + (pp * 5.0))
+                        * 100.00).roundToInt() / 100.00
+    }
+}
 
 /*
 TODO Dummied out HoardLeftover in favor of recording leftovers as a HoardEvent. Refactor layouts accordingly.

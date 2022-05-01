@@ -1,126 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/hoard_recycler_view"
     android:layout_width="match_parent"
-    android:layout_height="92dp"
+    android:layout_height="wrap_content"
     android:background="?colorSurface">
+
+    <ImageView
+        android:id="@+id/hoard_list_item_list_frame_foreground"
+        android:layout_width="@dimen/list_item_icon_size"
+        android:layout_height="@dimen/list_item_icon_size"
+        android:elevation="2dp"
+        android:src="@drawable/itemframe_foreground"
+        app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintEnd_toEndOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintStart_toStartOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintTop_toTopOf="@+id/hoard_list_item_list_icon" />
 
     <ImageView
         android:id="@+id/hoard_list_item_list_icon"
         android:layout_width="@dimen/list_item_icon_size"
         android:layout_height="@dimen/list_item_icon_size"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginHorizontal="16dp"
-        tools:src="@drawable/gem_jewel_blacksapphire" />
-    <!-- TODO: implement hoard icon into itemView -->
+        android:layout_marginVertical="12dp"
+        android:layout_marginStart="12dp"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/item_coin_pile" />
+
+    <ImageView
+        android:id="@+id/hoard_list_item_list_frame_background"
+        android:layout_width="@dimen/list_item_icon_size"
+        android:layout_height="@dimen/list_item_icon_size"
+        android:elevation="0dp"
+        android:src="@drawable/itemframe_background_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintEnd_toEndOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintStart_toStartOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintTop_toTopOf="@+id/hoard_list_item_list_icon" />
 
     <TextView
         android:id="@+id/hoard_list_item_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="16dp"
-        android:layout_toEndOf="@id/hoard_list_item_list_icon"
-        android:maxLines="1"
-        android:textSize="18sp"
-        android:textStyle="bold"
         android:drawablePadding="4dp"
-        tools:text="Hoard Name"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:drawableStartCompat="@drawable/clipart_new_vector_icon"
-        app:drawableTint="?colorOnSurface"/>
+        app:drawableTint="?colorOnSurface"
+        app:layout_constraintEnd_toStartOf="@+id/hoard_list_item_date"
+        app:layout_constraintStart_toEndOf="@id/hoard_list_item_start_barrier"
+        app:layout_constraintTop_toTopOf="@+id/hoard_list_item_list_icon"
+        tools:text="Hoard Name but really really" />
 
     <TextView
         android:id="@+id/hoard_list_item_date"
-        android:layout_width="wrap_content"
+        android:layout_width="88dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:gravity="center_vertical"
+        android:layout_marginEnd="12dp"
         android:textSize="14sp"
-        android:layout_alignTop="@id/hoard_list_item_name"
-        android:layout_alignBottom="@id/hoard_list_item_name"
-        android:layout_alignParentEnd="true"
-        tools:text="12/31/2021"/>
+        android:gravity="end"
+        app:layout_constraintBaseline_toBaselineOf="@+id/hoard_list_item_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="12/31/2022" />
 
     <TextView
         android:id="@+id/hoard_list_item_gp_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="12sp"
         android:textStyle="italic"
-        android:layout_below="@id/hoard_list_item_name"
-        android:layout_alignStart="@id/hoard_list_item_name"
-        tools:text="worth 10000000000 gp"/>
+        app:layout_constraintBottom_toTopOf="@+id/hoard_list_item_gem_count"
+        app:layout_constraintStart_toStartOf="@id/hoard_list_item_start_barrier"
+        app:layout_constraintTop_toBottomOf="@+id/hoard_list_item_name"
+        tools:text="worth 10000000000 gp" />
 
     <!-- Unique item counters -->
     <TextView
         android:id="@+id/hoard_list_item_gem_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/hoard_list_item_gp_value"
-        android:layout_alignStart="@id/hoard_list_item_name"
         android:drawablePadding="4dp"
         app:drawableStartCompat="@drawable/clipart_gem_vector_icon"
         app:drawableTint="?colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintEnd_toStartOf="@+id/hoard_list_item_art_count"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@id/hoard_list_item_start_barrier"
         tools:text="100" />
 
     <TextView
         android:id="@+id/hoard_list_item_art_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/hoard_list_item_gp_value"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/hoard_list_item_gem_count"
         android:drawablePadding="4dp"
         app:drawableStartCompat="@drawable/clipart_painting_vector_icon"
         app:drawableTint="?colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintEnd_toStartOf="@+id/hoard_list_item_magic_count"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/hoard_list_item_gem_count"
         tools:text="100" />
 
     <TextView
         android:id="@+id/hoard_list_item_magic_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/hoard_list_item_gp_value"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/hoard_list_item_art_count"
         android:drawablePadding="4dp"
         app:drawableStartCompat="@drawable/clipart_wand_vector_icon"
         app:drawableTint="?colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintEnd_toStartOf="@+id/hoard_list_item_spell_count"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/hoard_list_item_art_count"
         tools:text="100" />
 
     <TextView
         android:id="@+id/hoard_list_item_spell_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/hoard_list_item_gp_value"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/hoard_list_item_magic_count"
         android:drawablePadding="4dp"
         app:drawableStartCompat="@drawable/clipart_spellbook_vector_icon"
         app:drawableTint="?colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintEnd_toStartOf="@id/hoard_list_item_end_barrier"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/hoard_list_item_magic_count"
         tools:text="100" />
 
     <ImageView
-        android:id="@+id/hoard_list_item_leftover_icon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_alignBottom="@id/hoard_list_item_spell_count"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/hoard_list_item_spell_count"
-        android:src="@drawable/clipart_treasure_add_vector_icon"
-        app:tint="?colorOnSurface" />
-
-    <ImageView
         android:id="@+id/hoard_list_item_favorited"
-        android:layout_height="32dp"
-        android:layout_width="32dp"
-        android:layout_margin="16dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="12dp"
         android:scaleType="fitCenter"
         android:src="@drawable/clipart_unfilledstar_vector_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:tint="?attr/colorOnSurface" />
 
-</RelativeLayout>
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/hoard_list_item_start_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:barrierMargin="16dp"
+        app:constraint_referenced_ids="hoard_list_item_list_icon" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/hoard_list_item_end_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="hoard_list_item_date" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
