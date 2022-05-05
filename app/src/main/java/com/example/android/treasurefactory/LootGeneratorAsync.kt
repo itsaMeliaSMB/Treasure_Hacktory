@@ -47,7 +47,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     }
 
     // region [ Order processing functions ]
-
+    // TODO still needs concurrency rework
     @WorkerThread
     suspend fun createHoardFromOrder(hoardOrder: HoardOrder): Int {
 
@@ -1077,7 +1077,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             createTreasureMap(parentHoardID,"paper artwork")
 
         } else null
-
         // endregion
 
         fun convertValueLevelToGP() : Double {
@@ -1157,7 +1156,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                       itemRestrictions: MagicItemRestrictions
     ) : NewMagicItemTuple{
 
-        val VALID_TABLE_TYPES = linkedSetOf<String>(
+        val VALID_TABLE_TYPES = linkedSetOf(
             "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
             "A17","A18","A21","A24")
         val ALIGNMENT_MAP = mapOf(
@@ -1177,9 +1176,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             "cleric" to true,
             "magic-user" to true,
             "druid" to true)
-
-
-
         /**
          * Returns full alignment string from valid abbreviations
          *
@@ -1305,18 +1301,17 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             return listBuilder.toList()
         }
 
-        var template:       MagicItemTemplate = SAMPLE_MAGIC_ITEM_TEMPLATE //TODO
+        var template:       MagicItemTemplate = SAMPLE_MAGIC_ITEM_TEMPLATE //TODO REPLACE REPLACE REPLACE REPLACE REPLACE
 
         // region < Magic item detail holders >
 
         /** Container for primary key of the first template drawn. -1 indicates a template-less item. */
-        var baseTemplateID:     Int
-        var itemType:           String
-        var itemCharges=        0
-        var gmChoice =          false
+        var baseTemplateID  : Int
+        var itemType        : String
+        var itemCharges     = 0
+        var gmChoice        = false
 
         var mTemplateID     = -1
-        val mHoardID        = parentHoardID // TODO Inline this later; hoard ID can be added outside this function
         var mIconID         = "default"
         var mName           = "Magic Item"
         var mSourceText     = "Source text"
@@ -1326,12 +1321,11 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         var mClassUsability = USABLE_BY_ALL
         var mIsCursed       = false
         var mAlignment      = ""
-        val mNotes          : List<List<String>>
 
-        val notesLists=         LinkedHashMap<String,ArrayList<String>>()
-        var specialItemType:    SpItType? = null
-        var spellListOrder :    SpellCollectionOrder? = null
-        var gemOrder:           GemOrder? = null
+        val notesLists      = LinkedHashMap<String,ArrayList<String>>()
+        var specialItemType : SpItType? = null
+        var spellListOrder  : SpellCollectionOrder? = null
+        var gemOrder        : GemOrder? = null
         // endregion
 
         // region [ Determine type of magic item ]
@@ -1640,9 +1634,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 Log.d("createMagicItemTuple | $tagSuffix",msgStr)
 
                 return MagicItemTemplate(
-                    -1,0,"Null item","???",0,
+                    0,0,"Null item","???",0,
                     0, 0, 0, noteString,0,0,0,
-                    "A17","",0,0,0,0,0,0,
+                    "Mundane","",0,0,0,0,0,0,
                     0,"",0,"",0,"",
                     0,0,0,0,0,0
                 )
@@ -1660,8 +1654,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             if (VALID_TABLE_TYPES.contains(itemType) && !gmChoice){
 
-                // Get list of items of given type
-                val baseTemplateList = repository.getBaseLimItemTempsByType(itemType)
+                // Get list of limited items of given type
+                val baseTemplateList = repository.getBaseLimItemTempsByType(
+                    itemType, itemRestrictions.allowCursedItems)
 
                 if ( baseTemplateList.isNotEmpty() ) {
 
@@ -1683,7 +1678,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     // Pull child entry if they exist
                     while (template.hasChild != 0) {
 
-                        val childTemplateList = repository.getChildLimItemTempsByParent(template.refId)
+                        val childTemplateList = repository.getChildLimItemTempsByParent(
+                            template.refId, itemRestrictions.allowCursedItems)
 
                         if (childTemplateList.isNotEmpty()) {
 
@@ -1714,7 +1710,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     template = null.nullCheck("No given template",
                         "Empty base table returned for type entered ($itemType).")
                 }
-
             } else { // otherwise, pull proper presets for magic items without templates
 
                 baseTemplateID = -1
@@ -1726,7 +1721,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         if (baseTemplateID > 0) {
 
-            // Use template to populate magic item's details
+            // region < Use template to populate magic item's details >
 
             mTemplateID = template.refId
             mName = template.name
@@ -1743,6 +1738,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             )
             mIconID = template.iconRef
             mAlignment = abbrevToAlignment(template.alignment)
+            // endregion
 
             // region [ Modify name, if applicable ]
 
@@ -1797,6 +1793,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             // region [ Roll up "Additional Notes" ]
 
+            // region ( Grab imitation name, if applicable )
             if (template.imitationKeyword.isNotBlank()){
 
                 val keywords = template.imitationKeyword.split(";").map{"$it%"}
@@ -1819,14 +1816,18 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     )
                 }
             }
+            // endregion
 
+            // region ( Add notes indicated in template )
             if (template.notes.isNotBlank()) {
 
                 val splitNotes = template.notes.split("¶")
 
                 splitNotes.forEach { notesLists["Additional notes"]?.plusAssign(it) }
             }
+            // endregion
 
+            // region ( Add note for remaining uses, if applicable )
             if ((itemCharges > 0)&&(itemType != "A2")) {
 
                 if (template.multiType != 3) {
@@ -1842,7 +1843,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             "flavor text\" for remaining doses.")
                 }
             }
+            // endregion
 
+            // region ( Add command word, if applicable )
             if (template.commandWord.isNotBlank()){
 
                 val keywords = if (template.commandWord == "THREE"){
@@ -1882,10 +1885,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 notesLists["Additional notes"]?.plusAssign(textBuilder.toString())
 
-                // TODO Left off here. Finish up magic item gen refactor and spell co refactor.
-                //  Next goal is full generation procedure being callable from generatorViewModel,
-                //  followed by plain-text printout of hoard on tap from main list fragment.
             }
+            // endregion
+
             // endregion
 
             // region [ Roll up "Potion flavor text" ]
@@ -2031,7 +2033,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 fun getSubstanceColor(): String? = COLOR_MAP[Random.nextInt(1,101)]
 
-                // --- Roll for potion container ---
+                // region ( Roll for potion container )
 
                 when (Random.nextInt(1,101)) {
 
@@ -2232,8 +2234,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         if (mIconID == "potion_empty") mIconID = "potion_other"
                     }
                 }
+                // endregion
 
-                // --- Roll for ridges ---
+                // region ( Roll for ridges )
 
                 if (Random.nextInt(1,101) <= 30) {
 
@@ -2243,8 +2246,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 "ridges running parallel with one another, or small, fancy " +
                                 "decorative layers on top of the bulb")
                 }
+                // endregion
 
-                // --- Roll for potion container sealant ---
+                // region ( Roll for potion container sealant )
 
                 when (Random.nextInt(if (isSealed) 12 else 1,101)) {
 
@@ -2312,8 +2316,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     }
 
                 }
+                //endregion
 
-                // --- Roll for bottle embellishments ---
+                // region ( Roll for bottle embellishments )
 
                 if (Random.nextInt(1,101) <= Random.nextInt(10,16)) {
 
@@ -2495,8 +2500,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         }
                     }
                 }
+                // endregion
 
-                // --- Roll potion consistency ---
+                // region ( Roll potion consistency )
 
                 notesLists["Potion flavor text"]
                     ?.plusAssign("Substance consistency: " +
@@ -2513,8 +2519,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 else        -> "Watery"
                             }
                     )
+                // endregion
 
-                // --- Roll potion appearance/color(s) ---
+                // region ( Roll potion appearance/color(s) )
 
                 notesLists["Potion flavor text"]
                     ?.plusAssign("Appearance (unless entry says otherwise): " +
@@ -2536,8 +2543,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 else        -> "Varigated (${getSubstanceColor()}, " +
                                         "${getSubstanceColor()}, and maybe some ${getSubstanceColor()})"
                             } )
+                // endregion
 
-                // --- Roll potion taste/odor ---
+                // region ( Roll potion taste/odor )
 
                 notesLists["Potion flavor text"]
                     ?.plusAssign( "Taste and/or Odor (unless entry says otherwise): " +
@@ -2577,11 +2585,13 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 in 98..100  -> "Watery"
                                 else        -> "Inscrutable"
                             } )
+                // endregion
 
-                // --- Add dosages remaining ---
+                // region ( Add dosages remaining  )
 
                 notesLists["Potion flavor text"]
                     ?.plusAssign("Found with $itemCharges dose(s) remaining")
+                //endregion
             }
             // endregion
 
@@ -2981,9 +2991,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 if (template.multiType == 4) notesLists["Artifact particulars"]?.plusAssign(
                     "THIS IS A HACKMASTER-CLASS ITEM!")
 
-                // region [ Roll up artifact powers and effects ]
-
-                // Minor benign effects
+                // region ( Roll minor benign effects )
                 if (template.iPower in 1..46){
 
                     val minorBenignEffects = listOf(
@@ -3061,8 +3069,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             ?.plusAssign("${index + 1}) ${minorBenignEffects[entry]}")
                     }
                 }
+                // endregion
 
-                // Major benign effects
+                // region ( Roll major benign effects )
                 if (template.iiPower in 1..50){
 
                     val majorBenignEffects = listOf(
@@ -3138,14 +3147,16 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         typeIIList.add(newEffect)
                     }
 
+
                     // Add effects once all are generated
                     typeIIList.forEachIndexed {index, entry ->
                         notesLists["Artifact particulars"]
                             ?.plusAssign("${index + 1}) ${majorBenignEffects[entry]}")
                     }
                 }
+                //endregion
 
-                // Minor malevolent effects
+                // region ( Roll minor malevolent effects )
                 if (template.iiiPower in 1..25){
 
                     val minorMalevolentEffects = listOf(
@@ -3202,8 +3213,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             ?.plusAssign("${index + 1}) ${minorMalevolentEffects[entry]}")
                     }
                 }
+                // endregion
 
-                // Major malevolent effects
+                // region ( Roll major malevolent effects )
                 if (template.ivPower in 1..34){
 
                     val majorMalevolentEffects = listOf(
@@ -3306,8 +3318,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             ?.plusAssign("${index + 1}) ${majorMalevolentEffects[entry]}")
                     }
                 }
+                // endregion
 
-                // Prime powers
+                // region ( Roll prime powers )
                 if (template.vPower in 1..37){
 
                     val primePowers = listOf(
@@ -3433,8 +3446,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             ?.plusAssign("${index + 1}) ${primePowers[entry]}")
                     }
                 }
+                //endregion
 
-                // Side effects
+                // region ( Roll side effects )
                 if (template.viPower in 1..18){
 
                     val sideEffects = listOf(
@@ -3505,6 +3519,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             ?.plusAssign("${index + 1}) ${sideEffects[entry]}")
                     }
                 }
+                // endregion
 
                 // Add footnote if artifact has any additional effects whatsoever
                 if ((template.iPower > 0)||(template.iiPower > 0)||(template.iiiPower > 0)||
@@ -3512,7 +3527,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     notesLists["Artifact particulars"]?.plusAssign(
                         "For more information, see GMG pages 284-286")
                 }
-                // endregion
+
             }
             // endregion
 
@@ -3593,25 +3608,15 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         // region [ Convert mapped lists to nested list ]
 
-        fun convertMapToNestedLists(input: LinkedHashMap<String,ArrayList<String>>) : List<List<String>> {
+        fun convertMapToNestedLists(
+            input: LinkedHashMap<String,ArrayList<String>>): List<Pair<String,List<String>>> {
 
-            val listHolder = ArrayList<List<String>>()
-            val nameHolder = ArrayList<String>()
-
-            listHolder[0] = listOf("") // Placeholder for parent list
-
-            input.onEachIndexed { index, entry ->
-
-                nameHolder.add(entry.key)
-                listHolder.add(index + 1,entry.value.toList())
+            return if (input.isEmpty()) {
+                emptyList()
+            } else {
+                input.map { entry -> entry.key to entry.value.toList() }
             }
-
-            listHolder[0] = nameHolder.toList()
-
-            return listHolder.toList()
         }
-
-        mNotes = convertMapToNestedLists(notesLists)
         // endregion
 
         val specialItemOrder = if (specialItemType != null) {
@@ -3639,14 +3644,43 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         } else null
 
+        fun getMagicItemType() : MagicItemType {
+
+            return when (itemType) {
+                "A2" -> MagicItemType.A2
+                "A3" -> MagicItemType.A3
+                "A4" -> MagicItemType.A4
+                "A5" -> MagicItemType.A5
+                "A6" -> MagicItemType.A6
+                "A7" -> MagicItemType.A7
+                "A8" -> MagicItemType.A8
+                "A9" -> MagicItemType.A9
+                "A10" -> MagicItemType.A10
+                "A11" -> MagicItemType.A11
+                "A12" -> MagicItemType.A12
+                "A13" -> MagicItemType.A13
+                "A14" -> MagicItemType.A14
+                "A15" -> MagicItemType.A15
+                "A16" -> MagicItemType.A16
+                "A17" -> MagicItemType.A17
+                "A18" -> MagicItemType.A18
+                "A20" -> MagicItemType.A20
+                "A21" -> MagicItemType.A21
+                "A23" -> MagicItemType.A23
+                "A24" -> MagicItemType.A24
+                "Map" -> MagicItemType.Map
+                else -> MagicItemType.Mundane
+            }
+        }
+
         return NewMagicItemTuple(
             MagicItem(
                 0,
                 mTemplateID,
-                mHoardID,
+                parentHoardID,
                 System.currentTimeMillis(),
                 mIconID,
-                itemType,
+                getMagicItemType(),
                 mName,
                 mSourceText,
                 mSourcePage,
@@ -3655,7 +3689,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 mClassUsability,
                 mIsCursed,
                 mAlignment,
-                mNotes),
+                convertMapToNestedLists(notesLists)
+            ),
             specialItemOrder, gemOrder)
     }
 
@@ -3664,8 +3699,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         val notesLists=     LinkedHashMap<String,ArrayList<String>>()
 
         val nameBuilder=    StringBuilder("Treasure Map")
-
-        val mNotes          : List<List<String>>
 
         val isRealMap: Boolean
         val distanceRoll= Random.nextInt(1,21)
@@ -3758,22 +3791,14 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             notesLists["Map details"]?.plusAssign("This map replaced $sourceDesc")
         }
 
-        fun convertMapToNestedLists(input: LinkedHashMap<String,ArrayList<String>>) : List<List<String>> {
+        fun convertMapToNestedLists(
+            input: LinkedHashMap<String,ArrayList<String>>): List<Pair<String,List<String>>> {
 
-            val listHolder = ArrayList<List<String>>()
-            val nameHolder = ArrayList<String>()
-
-            listHolder[0] = listOf("") // Placeholder for parent list
-
-            input.onEachIndexed { index, entry ->
-
-                nameHolder.add(entry.key)
-                listHolder.add(index + 1,entry.value.toList())
+            return if (input.isEmpty()) {
+                emptyList()
+            } else {
+                input.map { entry -> entry.key to entry.value.toList() }
             }
-
-            listHolder[0] = nameHolder.toList()
-
-            return listHolder.toList()
         }
 
         return MagicItem(
@@ -3782,7 +3807,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             parentHoard,
             System.currentTimeMillis(),
             "scroll_map",
-            "A3",
+            MagicItemType.Map,
             nameBuilder.toString(),
             "GameMaster's Guide",
             182,
@@ -3808,7 +3833,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         var currentStone : Int
         var deadStones = 0
 
-        // Roll which stones are present
+        // region ( Roll which stones are present )
+
         repeat(itemCount) {
 
             currentStone = Random.nextInt(1,21)
@@ -3818,8 +3844,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 deadStones ++
             else currentSet.add(currentStone)
         }
+        // endregion
 
-        // Retrieve stones from database
+        // region ( Retrieve stones from database )
         currentSet.sorted().forEach { indexAddend ->
 
             // Add to running list
@@ -3827,8 +3854,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 (FIRST_IOUN_STONE_KEY + (indexAddend - 1)),
                 listOf("A14")).magicItem)
         }
+        // endregion
 
-        // Add dead stones
+        // region ( Add dead stones )
         if (deadStones > 0){
 
             val deadStoneItem = createMagicItemTuple(parentHoard,
@@ -3836,8 +3864,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             repeat(deadStones) { iounList.add(deadStoneItem) }
         }
+        // endregion
 
-        // Return list of ioun stones
         return iounList
     }
 

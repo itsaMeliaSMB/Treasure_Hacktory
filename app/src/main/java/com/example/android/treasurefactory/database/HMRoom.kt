@@ -87,11 +87,11 @@ abstract class TreasureDatabase : RoomDatabase() {
 
                     val _refId: Int = lineData[0].toIntOrNull() ?: 0
                     val _type: Int = lineData[1].toIntOrNull() ?: 0
-                    val _name: String = lineData[2]
+                    val _name: String = lineData[2].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _ordinal: Int = lineData[3].toIntOrNull() ?: 0
                     val _opacity: Int = lineData[4].toIntOrNull() ?: 0
-                    val _description: String = lineData[5]
-                    val _iconID : String = lineData[6]
+                    val _description: String = lineData[5].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _iconID : String = lineData[6].trim('"').takeUnless { it.isBlank() } ?: ""
 
                     gemDao.addGemTemplate(
                         GemTemplate(
@@ -118,7 +118,7 @@ abstract class TreasureDatabase : RoomDatabase() {
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_magicitems_v01","raw",context.packageName))
+                context.resources.getIdentifier("seed_magicitems_v02","raw",context.packageName))
 
             inputStream
                 .bufferedReader()
@@ -129,18 +129,18 @@ abstract class TreasureDatabase : RoomDatabase() {
 
                     val _refId: Int = lineData[0].toIntOrNull() ?: 0
                     val _wt: Int = lineData[1].toIntOrNull() ?: 0
-                    val _name: String = lineData[2]
-                    val _source: String = lineData[3]
+                    val _name: String = lineData[2].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _source: String = lineData[3].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _page: Int = lineData[4].toIntOrNull() ?: 0
                     val _xpValue: Int = lineData[5].toIntOrNull() ?: 0
                     val _gpValue: Int  = lineData[6].toIntOrNull() ?: 0
                     val _multiType: Int = lineData[7].toIntOrNull() ?: 0
-                    val _notes: String  = lineData[8]
+                    val _notes: String  = lineData[8].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _dieCount: Int = lineData[9].toIntOrNull() ?: 0
                     val _dieSides: Int = lineData[10].toIntOrNull() ?: 0
                     val _dieMod: Int = lineData[11].toIntOrNull() ?: 0
-                    val _tableType: String = lineData[12]
-                    val _iconRef: String = lineData[13]
+                    val _tableType: String = lineData[12].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _iconRef: String = lineData[13].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _fUsable: Int =  lineData[14].toIntOrNull() ?: 0
                     val _tUsable: Int = lineData[15].toIntOrNull() ?: 0
                     val _cUsable: Int = lineData[16].toIntOrNull() ?: 0
@@ -148,11 +148,11 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val _dUsable: Int = lineData[18].toIntOrNull() ?: 0
                     val _hasChild: Int = lineData[19].toIntOrNull() ?: 0
                     val _parentID: Int = lineData[20].toIntOrNull() ?: 0
-                    val _imitationKeyword: String = lineData[21]
+                    val _imitationKeyword: String = lineData[21].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _isCursed: Int  = lineData[22].toIntOrNull() ?: 0
-                    val _commandWord: String = lineData[23]
+                    val _commandWord: String = lineData[23].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _intelChance: Int = lineData[24].toIntOrNull() ?: 0
-                    val _alignment: String = lineData[25]
+                    val _alignment: String = lineData[25].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _iPower: Int = lineData[26].toIntOrNull() ?: 0
                     val _iiPower: Int = lineData[27].toIntOrNull() ?: 0
                     val _iiiPower: Int = lineData[28].toIntOrNull() ?: 0
@@ -211,7 +211,7 @@ abstract class TreasureDatabase : RoomDatabase() {
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_spell_v01","raw",context.packageName))
+                context.resources.getIdentifier("seed_spell_v02","raw",context.packageName))
 
             // Seed spell templates
             inputStream
@@ -222,17 +222,17 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val lineData = csvLine.split('¤')
 
                     val _refId: Int = lineData[0].toIntOrNull() ?: 0
-                    val _name: String = lineData[1]
+                    val _name: String = lineData[1].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _refType: Int = lineData[2].toIntOrNull() ?: 3
-                    val _source: String = lineData[3]
+                    val _source: String = lineData[3].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _page: Int = lineData[4].toIntOrNull() ?: 0
                     val _type: Int = lineData[5].toIntOrNull() ?: 0
                     val _level: Int = lineData[6].toIntOrNull() ?: 0
-                    val _schools: String = lineData[7]
-                    val _restrictions: String = lineData[8]
-                    val _spellSpheres: String = lineData[9]
-                    val _subclass: String = lineData[10]
-                    val _note: String = lineData[11]
+                    val _schools: String = lineData[7].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _restrictions: String = lineData[8].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _spellSpheres: String = lineData[9].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _subclass: String = lineData[10].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _note: String = lineData[11].trim('"').takeUnless { it.isBlank() } ?: ""
 
                     spellDao.addSpellTemplate(
                         SpellTemplate(
@@ -963,20 +963,20 @@ interface MagicItemDao {
 
     // region ( Templates )
     /**
-     * Pulls all item entries lacking a parent belonging to a given type as a Pair<Int,Int>.
+     * Pulls all item entries lacking a parent belonging to a given type as a LimitedItemTemplate
      *
      * @param type String to match in table_type column
      */
-    @Query("SELECT ref_id, wt FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_id=0")
-    suspend fun getBaseLimItemTempsByType(type: String): List<Pair<Int,Int>>
+    @Query("SELECT ref_id, wt, is_cursed FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_id=0")
+    suspend fun getBaseLimItemTempsByType(type: String): List<LimitedItemTemplate>
 
     /**
-     * Pulls all item entries with given parent ref_id as a Pair<Int,Int>
+     * Pulls all item entries with given parent ref_id as a LimitedItemTemplate
      *
      * @param parentID Integer primary key id number of parent entry.
      */
-    @Query("SELECT ref_id, wt FROM hackmaster_magic_item_reference WHERE table_type=(:parentID)")
-    suspend fun getChildLimItemTempsByParent(parentID: Int): List<Pair<Int,Int>>
+    @Query("SELECT ref_id, wt, is_cursed FROM hackmaster_magic_item_reference WHERE table_type=(:parentID)")
+    suspend fun getChildLimItemTempsByParent(parentID: Int): List<LimitedItemTemplate>
 
     /**
      * Pulls item entry matching given ref_id as MagicItemTemplate.
@@ -1004,7 +1004,7 @@ interface MagicItemDao {
     fun getMagicItems(hoardID: Int): LiveData<List<MagicItem>>
 
     @Query("SELECT * FROM hackmaster_magic_item_table WHERE mItemID=(:itemID)")
-    fun getMagicItem(itemId: Int): LiveData<MagicItem?>
+    fun getMagicItem(itemID: Int): LiveData<MagicItem?>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMagicItem(newItem: MagicItem)

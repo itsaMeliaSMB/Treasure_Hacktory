@@ -121,22 +121,26 @@ class HMRepository (
     // region ( MagicItemTemplate )
 
     /**
-     * Pulls all item entries lacking a parent belonging to a given type as a Pair<Int,Int>.
+     * Pulls all item entries lacking a parent belonging to a given type as a LimitedItemTemplate.
      *
      * @param type String to match in table_type column
      * @return Pair of the (1) the primary key of the entry and (2) its probability weight
      */
-    suspend fun getBaseLimItemTempsByType(type: String): List<Pair<Int,Int>> =
+    suspend fun getBaseLimItemTempsByType(type: String, allowCursed: Boolean): List<Pair<Int,Int>> =
         magicItemDao.getBaseLimItemTempsByType(type)
+            .dropWhile { it.isCursed == 1 && !allowCursed }
+            .map { it -> it.templateID to it.weight }
 
     /**
-     * Pulls all item entries with given ref_id as a Pair<Int,Int>.
+     * Pulls all item entries with given ref_id as a LimitedItemTemplate.
      *
      * @param parentId Integer primary key id number of parent entry.
      * @return Pair of the (1) the primary key of the entry and (2) its probability weight
      */
-    suspend fun getChildLimItemTempsByParent(parentId: Int): List<Pair<Int,Int>> =
+    suspend fun getChildLimItemTempsByParent(parentId: Int, allowCursed: Boolean): List<Pair<Int,Int>> =
         magicItemDao.getChildLimItemTempsByParent(parentId)
+            .dropWhile { it.isCursed == 1 && !allowCursed }
+            .map { it -> it.templateID to it.weight }
 
     /**
      * Pulls item entry matching given ref_id as MagicItemTemplate.

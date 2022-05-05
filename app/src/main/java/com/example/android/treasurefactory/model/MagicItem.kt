@@ -5,6 +5,32 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
+enum class MagicItemType(tableLabel: String) {
+    A2 ("Potions and Oils"),
+    A3 ("Scrolls"),
+    A4 ("Rings"),
+    A5 ("Rods"),
+    A6 ("Staves"),
+    A7 ("Wands"),
+    A8 ("Books, Librams, Manuals, Tomes"),
+    A9 ("Jewels, Jewelry, Phylacteries"),
+    A10("Cloaks and Robes"),
+    A11("Boots, Bracers, Gloves"),
+    A12("Belts, Girdles, Hats, Helms"),
+    A13("Bags, Bottles, Pouches, Containers"),
+    A14("Candles, Dusts, Ointments, Incense, and Stones"),
+    A15("Household Items and Tools"),
+    A16("Musical Instruments"),
+    A17("The Weird Stuff"),
+    A18("Standard Armor and Shields"),
+    A20("Special Armors"),
+    A21("Standard Weapons"),
+    A23("Special Weapons"),
+    A24("Artifacts and Relics"),
+    Map("Treasure Map"),
+    Mundane("Non-Magical Unique Items")
+}
+
 /**
  * Generated magic item following HackMaster 4e rules.
  *
@@ -24,7 +50,7 @@ data class MagicItem(
     val hoardID: Int,
     val creationTime: Long,
     val iconID: String,
-    val typeOfItem: String, //TODO add function for converting table to descriptive label
+    val typeOfItem: MagicItemType,
     val name: String,
     val sourceText: String,
     val sourcePage: Int,
@@ -33,4 +59,4 @@ data class MagicItem(
     val classUsability: Map<String,Boolean>,
     val isCursed: Boolean,
     val alignment: String,
-    val notes: List<List<String>> = emptyList())
+    val notes: List<Pair<String,List<String>>> = emptyList())

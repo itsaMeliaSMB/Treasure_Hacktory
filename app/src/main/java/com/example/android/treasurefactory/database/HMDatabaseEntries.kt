@@ -19,7 +19,9 @@ data class GemTemplate(
     val description: String,
     @ColumnInfo(name ="icon_id") val iconID : String)
 
-// TODO Refactor to include everything in new Gem schema
+data class LimitedItemTemplate(@ColumnInfo(name = "ref_id") val templateID: Int,
+                               @ColumnInfo(name = "wt") val weight: Int,
+                               @ColumnInfo(name = "is_cursed") val isCursed: Int)
 
 @Entity(tableName = "hackmaster_magic_item_reference")
 data class MagicItemTemplate(

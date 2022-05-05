@@ -1,6 +1,7 @@
 package com.example.android.treasurefactory.database
 
 import androidx.room.TypeConverter
+import com.example.android.treasurefactory.model.MagicItemType
 import com.example.android.treasurefactory.model.SpCoType
 import com.example.android.treasurefactory.model.Spell
 import com.google.gson.Gson
@@ -27,12 +28,12 @@ class HoardTypeConverters {
     fun toDate(msecSinceEpoch: Long?) : Date? = msecSinceEpoch?.let { Date(it) }
 
     @TypeConverter
-    fun fromNestedStringList(nList: List<List<String?>?>?) : String? = Gson().toJson(nList)
+    fun fromStringListPair(nList: List<Pair<String?,List<String?>?>?>) : String? = Gson().toJson(nList)
 
     @TypeConverter
-    fun toNestedStringList(jsonNList: String?) : List<List<String?>?>? {
+    fun toStringListPair(jsonNList: String?) : List<Pair<String?,List<String?>?>?> {
 
-        val typeToken = object : TypeToken<List<List<String>>>() {}.type
+        val typeToken = object : TypeToken<List<Pair<String?,List<String?>?>?>>() {}.type
 
         return Gson().fromJson(jsonNList,typeToken)
     }
@@ -83,6 +84,12 @@ class HoardTypeConverters {
 
     @TypeConverter
     fun toSpCoType(ordinal: Int) : SpCoType = enumValues<SpCoType>()[ordinal]
+
+    @TypeConverter
+    fun fromMagicItemType(itemType: MagicItemType) : Int = itemType.ordinal
+
+    @TypeConverter
+    fun toMagicItemType(ordinal: Int) : MagicItemType = enumValues<MagicItemType>()[ordinal]
 
     @TypeConverter
     fun fromBoolean(bool: Boolean) : String? = Gson().toJson(bool)

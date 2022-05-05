@@ -1,11 +1,9 @@
 package com.example.android.treasurefactory.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.repository.HMRepository
+import kotlinx.coroutines.launch
 
 class HoardDetailsViewModel(private val repository: HMRepository) : ViewModel() {
 
@@ -29,6 +27,7 @@ class HoardDetailsViewModel(private val repository: HMRepository) : ViewModel() 
     }
 
     fun saveHoard(hoard: Hoard) {
-        repository.updateHoard(hoard)
+
+        viewModelScope.launch { repository.updateHoard(hoard) }
     }
 }
