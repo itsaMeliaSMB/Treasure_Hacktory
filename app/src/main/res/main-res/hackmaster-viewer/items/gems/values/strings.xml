@@ -108,4 +108,5 @@
     <string name="generator_spell_source_label">Include spells from:</string>
     <string name="generator_waiting_text_string">Please wait...</string>
     <string name="action_delete_all_hoards_label">Delete all hoards</string>
+    <string name="action_wait_three_seconds_label">Wait (3 seconds)</string>
 </resources>

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.android.treasurefactory.repository.HMRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
@@ -19,11 +20,23 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
 
         viewModelScope.launch {
 
-            setRunningAsync(false)
+            setRunningAsync(true)
 
             repository.deleteAllHoards()
 
+            setRunningAsync(false)
+        }
+    }
+
+    fun waitThreeSeconds() {
+
+        viewModelScope.launch {
+
             setRunningAsync(true)
+
+            delay(3000L)
+
+            setRunningAsync(false)
         }
     }
 

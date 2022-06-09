@@ -27,10 +27,11 @@ const val GUT_STONE_KEY = 58
 
 interface BaseLootGenerator {
     val ANY_MAGIC_ITEM_LIST: List<String>
-    val SAMPLE_ARCANE_SPELL: SpellTemplate
-    val SAMPLE_DIVINE_SPELL: SpellTemplate
     val SAMPLE_GEM_TEMPLATE: GemTemplate
     val SAMPLE_MAGIC_ITEM_TEMPLATE: MagicItemTemplate
+    val DUMMY_SPELL : SpellTemplate
+
+    suspend fun createHoardFromOrder(hoardOrder: HoardOrder): Int
 
     /**
      * Returns a gem based on the method laid out on page 178 of the GameMaster's Guide.
@@ -77,6 +78,11 @@ interface BaseLootGenerator {
 
     /** Converts a [SpellCollectionOrder] into a [SpellCollection], always as a scroll.*/
     suspend fun convertOrderToSpellScroll(parentHoard: Int, order: SpellCollectionOrder): SpellCollection
+
+    suspend fun createSpellCollection(parentHoard: Int, spCoParams: SpellCoRestrictions) : SpellCollection
+
+    fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder
+
 
     /** Gets a random spell from allowed sources of the level, discipline, and restriction provided. */
     suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,

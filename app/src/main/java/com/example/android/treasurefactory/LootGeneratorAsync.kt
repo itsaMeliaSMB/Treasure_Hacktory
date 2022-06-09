@@ -12,7 +12,6 @@ import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -24,11 +23,11 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
         "A17","A18","A21","A24")
 
-    override val SAMPLE_ARCANE_SPELL = SpellTemplate(744,"Wildshield",1,"Spellslinger's Guide to Wurld Domination",125,0,6,"Con","Wild_Mage/Guardian","","Wild","")
+    val SAMPLE_ARCANE_SPELL = SpellTemplate(744,"Wildshield",1, "Spellslinger's Guide to Wurld Domination",125,0,6,"Con","Wild_Mage/Guardian","","Wild","")
 
-    override val SAMPLE_DIVINE_SPELL = SpellTemplate(1146,"Exaction",0,"Player’s Handbook",273,1,7,"Evo/Alt","","Charm/Summoning","","")
+    val SAMPLE_DIVINE_SPELL = SpellTemplate(1146,"Exaction",0,"Player’s Handbook",273,1,7,"Evo/Alt","","Charm/Summoning","","")
 
-    val DUMMY_SPELL = SpellTemplate(0,"\"Push\"",0,"\"Player's Handbook\"",184,0,1,"Con","","","","Invalid spell.")
+    override val DUMMY_SPELL = SpellTemplate(0,"\"Push\"",0,"\"Player's Handbook\"",184,0,1,"Con","","","","Invalid spell.")
 
     override val SAMPLE_GEM_TEMPLATE = GemTemplate(57,10,"ruby",5, 0,"clear red to deep crimson (Corundum)","gem_jewel_ruby")
 
@@ -49,19 +48,22 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     // region [ Order processing functions ]
     // TODO still needs concurrency rework
     @WorkerThread
-    suspend fun createHoardFromOrder(hoardOrder: HoardOrder): Int {
+    override suspend fun createHoardFromOrder(hoardOrder: HoardOrder): Int {
 
         val maxRerolls = 20
+
+        val newHoardID: Int
+
         coroutineScope {
 
-            val newHoardID : Int
-            val gemPile = ArrayList<Gem>()
-            val artPile = ArrayList<ArtObject>()
-            val itemPile = ArrayList<MagicItem>()
-            val spellPile = ArrayList<SpellCollection>()
+            val gemPile:    List<Gem>
+            val artPile:    List<ArtObject>
+            val itemPile:   List<MagicItem>
+            val spellPile:  List<SpellCollection>
 
             // region [ Generate parent hoard entity ]
             fun createParentHoard() : Hoard {
+
                 val newName = hoardOrder.hoardName.takeUnless{ it.isBlank()} ?: "Untitled Hoard"
                 val iconId = "container_chest"
                 val effortValue = 5.0
@@ -81,42 +83,11 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             newHoardID = repository.getHoardIdByRowId(repository.addHoard(createParentHoard()))
             // endregion
 
-            suspend fun NewMagicItemTuple.parseNewMagicItemTuple() {
+            // region [ Generate piles of unique items ]
 
-                when {
-                    (this.gemOrder != null)    ->
+            val deferredGemPile = async {
 
-                        createGemsFromGemOrder(newHoardID, this.gemOrder).also {gemPile.addAll(it)}
-
-                    (this.specialItemOrder != null)    ->
-
-                        when (this.specialItemOrder.itemType) {
-
-                            SpItType.SPELL_SCROLL ->
-                                convertOrderToSpellScroll(
-                                    newHoardID, this.specialItemOrder.spellParams!!
-                                ).also {spellPile.add(it)}
-
-                            SpItType.RING_OF_SPELL_STORING ->
-                                createRingOfSpellStoring(
-                                    newHoardID,this.specialItemOrder.spellParams!!
-                                ).also {spellPile.add(it)}
-
-                            SpItType.IOUN_STONES ->
-                                createIounStones(newHoardID,this.specialItemOrder.quantity)
-                                    .also {itemPile.addAll(it)}
-
-                            SpItType.TREASURE_MAP -> createTreasureMap(
-                                newHoardID,"scroll item (Table A3)",
-                                hoardOrder.genParams.magicParams.allowCursedItems
-                            ).also {itemPile.add(it)}
-                        }
-
-                    else -> itemPile.add(this.magicItem)
-                }
-            }
-
-            val gemJob = launch{
+                val innerGemPile = arrayListOf<Gem>()
 
                 // Generate gems
                 repeat(hoardOrder.gems){
@@ -132,11 +103,16 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         ((newGem.type + newGem.size + newGem.quality + newGem.variation)
                             .coerceIn(0..17) !in hoardOrder.genParams.gemParams.levelRange))
 
-                    gemPile.add(newGem)
+                    innerGemPile.add(newGem)
                 }
+
+              return@async innerGemPile.toList()
             }
 
-            val artJob = async {
+            val deferredArtPile = async {
+
+                val innerArtPile = arrayListOf<ArtObject>()
+                val innerItemPile = arrayListOf<MagicItem>()
 
                 // Generate art objects
                 repeat(hoardOrder.artObjects){
@@ -153,14 +129,59 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     // Add map over art object, if present.
                     if (newArtPair.second != null) {
-                        itemPile.add(newArtPair.second!!)
+                        innerItemPile.add(newArtPair.second!!)
                     } else {
-                        artPile.add(newArtPair.first)
+                        innerArtPile.add(newArtPair.first)
                     }
                 }
+
+                return@async innerArtPile.toList() to innerItemPile.toList()
             }
 
-            val itemJob = async {
+            val deferredItemPile = async {
+
+                val innerGemPile = arrayListOf<Gem>()
+                val innerItemPile = arrayListOf<MagicItem>()
+                val innerSpellPile = arrayListOf<SpellCollection>()
+
+                suspend fun NewMagicItemTuple.parseNewMagicItemTuple() {
+
+                    when {
+
+                        (this.gemOrder != null)    ->
+
+                            createGemsFromGemOrder(newHoardID, this.gemOrder)
+                                .also { innerGemPile.addAll(it) }
+
+                        (this.specialItemOrder != null)    ->
+
+                            when (this.specialItemOrder.itemType) {
+
+                                SpItType.SPELL_SCROLL ->
+                                    convertOrderToSpellScroll(
+                                        newHoardID, this.specialItemOrder.spellParams!!
+                                    ).also { innerSpellPile.add(it) }
+
+                                SpItType.RING_OF_SPELL_STORING ->
+                                    createRingOfSpellStoring(
+                                        newHoardID,this.specialItemOrder.spellParams!!
+                                    ).also { innerSpellPile.add(it) }
+
+                                SpItType.IOUN_STONES ->
+                                    createIounStones(
+                                        newHoardID,this.specialItemOrder.quantity
+                                    ).also { innerItemPile.addAll(it) }
+
+                                SpItType.TREASURE_MAP ->
+                                    createTreasureMap(
+                                        newHoardID,"scroll item (Table A3)",
+                                        hoardOrder.genParams.magicParams.allowCursedItems
+                                    ).also { innerItemPile.add(it) }
+                            }
+
+                        else -> innerItemPile.add(this.magicItem)
+                    }
+                }
 
                 // Generate magic items
                 repeat(hoardOrder.potions){
@@ -170,7 +191,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     val newPotion = createMagicItemTuple(newHoardID, -1, rollableTables,
                         hoardOrder.genParams.magicParams).magicItem
 
-                    itemPile.add(newPotion)
+                    innerItemPile.add(newPotion)
                 }
 
                 repeat(hoardOrder.scrolls){
@@ -188,9 +209,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             newScrollTuple.specialItemOrder.spellParams
                         )
 
-                        spellPile.add(newSpellScroll)
+                        innerSpellPile.add(newSpellScroll)
 
-                    } else itemPile.add(newScrollTuple.magicItem)
+                    } else innerItemPile.add(newScrollTuple.magicItem)
                 }
 
                 repeat(hoardOrder.armorOrWeapons){
@@ -218,432 +239,258 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     createMagicItemTuple(newHoardID,-1,
                         rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
                 }
+
+                return@async Triple(innerGemPile.toList(),innerItemPile.toList(),innerSpellPile.toList())
             }
 
-            val spellJob = async {
+            val deferredSpellPile = async {
+
+                val innerSpellPile = arrayListOf<SpellCollection>()
 
                 // Generate spell collections
                 repeat(hoardOrder.extraSpellCols) {
 
-                    createSpellCollection(newHoardID,hoardOrder.genParams.magicParams.spellCoRestrictions)
+                    innerSpellPile.add(
+                        createSpellCollection(
+                            newHoardID,hoardOrder.genParams.magicParams.spellCoRestrictions
+                        )
+                    )
                 }
+
+                return@async innerSpellPile.toList()
             }
+            // endregion
 
-            val addToDbJob = launch {
+            // region [ Flatten deferred piles into lists ]
 
-                gemPile.forEach { newGem ->
+            gemPile = listOf(
+                deferredGemPile.await() + deferredItemPile.await().first).flatten()
+
+            artPile = deferredArtPile.await().first
+
+            itemPile = listOf(
+                deferredArtPile.await().second + deferredItemPile.await().second).flatten()
+
+            spellPile = listOf(
+                deferredItemPile.await().third + deferredSpellPile.await()).flatten()
+            // endregion
+
+            // region [ Add lists to database under parent hoard ]
+            suspend {
+
+                gemPile.forEachIndexed { index, newGem ->
 
                     repository.addGem(newGem)
                     Log.d("createHoardFromOrder() | gemPile",
-                        "Added ${newGem.name} under ${newGem.hoardID}.")
+                        "(#${index + 1}) Added ${newGem.name} under ${newGem.hoardID}.")
                 }
 
-                artPile.forEach { newArt ->
+                artPile.forEachIndexed { index, newArt ->
 
                     repository.addArtObject(newArt)
                     Log.d("createHoardFromOrder() | artPile",
-                        "Added ${newArt.name} under ${newArt.hoardID}.")
+                        "(#${index + 1}) Added ${newArt.name} under ${newArt.hoardID}.")
                 }
 
-                itemPile.forEach { newItem ->
+                itemPile.forEachIndexed { index, newItem ->
 
                     repository.addMagicItem(newItem)
                     Log.d("createHoardFromOrder() | itemPile",
-                        "Added ${newItem.name} under ${newItem.hoardID}.")
+                        "(#${index + 1}) Added ${newItem.name} under ${newItem.hoardID}.")
                 }
 
-                spellPile.forEach { newCollection ->
+                spellPile.forEachIndexed { index, newCollection ->
 
                     repository.addSpellCollection(newCollection)
                     Log.d("createHoardFromOrder() | spellPile",
-                        "Added ${newCollection.name} under ${newCollection.hoardID}.")
+                        "(#${index + 1}) Added ${newCollection.name} under ${newCollection.hoardID}.")
                 }
             }
-
-            val logJob = async {}
-
-            //TODO resume from here
-        }
-
-        val newHoardID : Int
-        val gemPile = ArrayList<Gem>()
-        val artPile = ArrayList<ArtObject>()
-        val itemPile = ArrayList<MagicItem>()
-        val spellPile = ArrayList<SpellCollection>()
-
-        // region [ Generate parent hoard entity ]
-        fun createParentHoard() : Hoard {
-            val newName = hoardOrder.hoardName.takeUnless{ it.isBlank()} ?: "Untitled Hoard"
-            val iconId = "container_chest"
-            val effortValue = 5.0
-            val gpTotal = (hoardOrder.copperPieces * 0.01) + (hoardOrder.silverPieces * 0.1) +
-                    (hoardOrder.electrumPieces * 0.5) + (hoardOrder.goldPieces * 1.0) +
-                    (hoardOrder.hardSilverPieces * 2.0) + (hoardOrder.platinumPieces * 5.0)
-            val xpTotal = (gpTotal / effortValue).roundToInt()
-
-            return Hoard(0,newName,Date(System.currentTimeMillis()),
-                hoardOrder.creationDescription, iconId, gpTotal, effortValue,
-                hoardOrder.copperPieces, hoardOrder.silverPieces, hoardOrder.electrumPieces,
-                hoardOrder.goldPieces, hoardOrder.hardSilverPieces, hoardOrder.platinumPieces,
-                appVersion = BuildConfig.VERSION_CODE
-            )
-        }
-
-        newHoardID = repository.getHoardIdByRowId(repository.addHoard(createParentHoard()))
-        // endregion
-
-        // region [ Generate hoard unique objects ]
-        suspend fun NewMagicItemTuple.parseNewMagicItemTuple() {
-
-            when {
-                (this.gemOrder != null)    ->
-
-                    createGemsFromGemOrder(newHoardID, this.gemOrder).also {gemPile.addAll(it)}
-
-                (this.specialItemOrder != null)    ->
-
-                    when (this.specialItemOrder.itemType) {
-
-                        SpItType.SPELL_SCROLL ->
-                            convertOrderToSpellScroll(
-                                newHoardID, this.specialItemOrder.spellParams!!
-                            ).also {spellPile.add(it)}
-
-                        SpItType.RING_OF_SPELL_STORING ->
-                            createRingOfSpellStoring(
-                                newHoardID,this.specialItemOrder.spellParams!!
-                            ).also {spellPile.add(it)}
-
-                        SpItType.IOUN_STONES ->
-                            createIounStones(newHoardID,this.specialItemOrder.quantity)
-                                .also {itemPile.addAll(it)}
-
-                        SpItType.TREASURE_MAP -> createTreasureMap(
-                            newHoardID,"scroll item (Table A3)",
-                            hoardOrder.genParams.magicParams.allowCursedItems
-                        ).also {itemPile.add(it)}
-                    }
-
-                else -> itemPile.add(this.magicItem)
-            }
-        }
-
-        // Generate gems
-        repeat(hoardOrder.gems){
-
-            var newGem : Gem
-            var rollsMade = 0
-
-            // TODO go back and fix values in strings.xml for gem values, OrderParams
-            do {
-                newGem = createGem(newHoardID) //TODO add
-                rollsMade ++
-            } while ((rollsMade < maxRerolls) &&
-                ((newGem.type + newGem.size + newGem.quality + newGem.variation)
-                    .coerceIn(0..17) !in hoardOrder.genParams.gemParams.levelRange))
-
-            gemPile.add(newGem)
-        }
-
-        // Generate art objects
-        repeat(hoardOrder.artObjects){
-
-            var newArtPair : Pair<ArtObject,MagicItem?>
-            var rollsMade = 0
-
-            do {
-                newArtPair = createArtObject(newHoardID,hoardOrder.genParams.artParams)
-                rollsMade ++
-            } while ((rollsMade < maxRerolls) &&
-                (newArtPair.second != null) &&
-                (newArtPair.first.valueLevel !in hoardOrder.genParams.artParams.levelRange))
-
-            // Add map over art object, if present.
-            if (newArtPair.second != null) {
-                itemPile.add(newArtPair.second!!)
-            } else {
-                artPile.add(newArtPair.first)
-            }
-        }
-
-        // Generate magic items
-        repeat(hoardOrder.potions){
-
-            val rollableTables = listOf("A2")
-
-            val newPotion = createMagicItemTuple(newHoardID, -1, rollableTables,
-                hoardOrder.genParams.magicParams).magicItem
-
-            itemPile.add(newPotion)
-        }
-
-        repeat(hoardOrder.scrolls){
-
-            val rollableTables = listOf("A3")
-
-            val newScrollTuple = createMagicItemTuple(newHoardID, -1, rollableTables,
-                hoardOrder.genParams.magicParams)
-
-            if ((newScrollTuple.specialItemOrder != null) &&
-                (newScrollTuple.specialItemOrder.itemType == SpItType.SPELL_SCROLL) &&
-                (newScrollTuple.specialItemOrder.spellParams != null)) {
-
-                val newSpellScroll = convertOrderToSpellScroll(newHoardID,
-                    newScrollTuple.specialItemOrder.spellParams
-                )
-
-                spellPile.add(newSpellScroll)
-
-            } else itemPile.add(newScrollTuple.magicItem)
-        }
-
-        repeat(hoardOrder.armorOrWeapons){
-
-            val rollableTables = listOf("A18","A21")
-
-            createMagicItemTuple(newHoardID,-1,
-                rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
-        }
-
-        repeat(hoardOrder.anyButWeapons){
-
-            val rollableTables = listOf("A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12",
-                "A13","A14","A15","A16","A17","A18")
-
-            createMagicItemTuple(newHoardID,-1,
-                rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
-        }
-
-        repeat(hoardOrder.anyMagicItems){
-
-            val rollableTables = listOf("A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12",
-                "A13","A14","A15","A16","A17","A18","A21","A24")
-
-            createMagicItemTuple(newHoardID,-1,
-                rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
-        }
-
-        // Generate spell collections
-        repeat(hoardOrder.extraSpellCols) {
-
-            createSpellCollection(newHoardID,hoardOrder.genParams.magicParams.spellCoRestrictions)
-        }
-        // endregion
-
-        // region [ Add lists to database ]
-
-        gemPile.forEach { newGem ->
-
-            repository.addGem(newGem)
-            Log.d("createHoardFromOrder() | gemPile",
-                "Added ${newGem.name} under ${newGem.hoardID}.")
-        }
-
-        artPile.forEach { newArt ->
-
-            repository.addArtObject(newArt)
-            Log.d("createHoardFromOrder() | artPile",
-                "Added ${newArt.name} under ${newArt.hoardID}.")
-        }
-
-        itemPile.forEach { newItem ->
-
-            repository.addMagicItem(newItem)
-            Log.d("createHoardFromOrder() | itemPile",
-                "Added ${newItem.name} under ${newItem.hoardID}.")
-        }
-
-        spellPile.forEach { newCollection ->
-
-            repository.addSpellCollection(newCollection)
-            Log.d("createHoardFromOrder() | spellPile",
-                "Added ${newCollection.name} under ${newCollection.hoardID}.")
-        }
-        // endregion
-
-        // TODO add this to coroutineScope and continue refactor
-        // Update count on parent hoard
-        try {
-
-            val initialGemCount = repository.getGemCount(newHoardID).value ?: 0
-            val initialArtCount = repository.getArtCount(newHoardID).value ?: 0
-            val initialItemCount = repository.getMagicItemCount(newHoardID).value ?: 0
-            val initialSpellCount = repository.getSpellCollectionCount(newHoardID).value ?: 0
-
-            val initialGPTotal = (hoardOrder.let {
-                ((it.copperPieces * 0.01) + (it.silverPieces * 0.1) + (it.electrumPieces * 0.5) +
-                (it.goldPieces * 1.0) + (it.hardSilverPieces * 2.0) + (it.platinumPieces * 5.0)) *
-                        100.00.roundToInt() / 100.00 }) +
-                    (repository.getGemValueTotal(newHoardID).value ?: 0.0) +
-                    (repository.getArtValueTotal(newHoardID).value ?: 0.0) +
-                    (repository.getMagicItemValueTotal(newHoardID).value ?: 0.0) +
-                    (repository.getSpellCollectionValueTotal(newHoardID).value ?: 0.0)
-
-            val newHoard = repository.getHoard(newHoardID).value?.copy(
-                gpTotal = initialGPTotal,
-                gemCount = initialGemCount,
-                artCount = initialArtCount,
-                magicCount = initialItemCount,
-                spellsCount = initialSpellCount,
-                successful = true)
-
-            if (newHoard != null) {
-                repository.updateHoard(newHoard)
-            }
-
-            // region ( HoardEvents )
-            val creationHoardEvent = HoardEvent(
-                hoardID = newHoardID,
-                timestamp = System.currentTimeMillis(),
-                description = "Hoard \"${newHoard?.name}\" created.", tag = "creation")
-
-            val gemHoardEvent = HoardEvent(
-                hoardID = newHoardID,
-                timestamp = System.currentTimeMillis(),
-                description = "Order Gemstone Parameters:\n" +
-                        "\tQuantity: ${hoardOrder.gems} (generated ${gemPile.size})\n" +
-                        "\tValue bias range: ${
-                            String.format("%.2f",LootMutator.convertGemValueToGP(
-                                hoardOrder.genParams.gemParams.levelRange.first))
-                        } gp to ${
-                            String.format("%.2f",LootMutator.convertGemValueToGP(
-                                hoardOrder.genParams.gemParams.levelRange.last))
-                        } gp", tag = "creation|gemstone|verbose")
-
-            val artHoardEvent = HoardEvent(
-                hoardID = newHoardID,
-                timestamp = System.currentTimeMillis(),
-                description = "Order Art Object Parameters:\n" +
-                        "\tQuantity: ${hoardOrder.artObjects} (generated ${artPile.size})\n" +
-                        "\tValue bias range: ${
-                            String.format("%.2f",LootMutator.convertArtValueToGP(
-                                hoardOrder.genParams.artParams.levelRange.first))
-                        } gp to ${
-                            String.format("%.2f",LootMutator.convertGemValueToGP(
-                                hoardOrder.genParams.artParams.levelRange.last))
-                        } gp\n" +
-                        "\tPaper art map replacement chance: ${
-                            hoardOrder.genParams.artParams.paperMapChance
-                        }%", tag = "creation|artwork|verbose")
-
-            val itemHoardEvent = HoardEvent(
-                hoardID = newHoardID,
-                timestamp = System.currentTimeMillis(),
-                description = "Order Magic Item Parameters:\n" +
-                        "\tQuantities: " +
-                        "\t\t${hoardOrder.potions} potions\n" +
-                        "\t\t${hoardOrder.scrolls} scrolls\n" +
-                        "\t\t${hoardOrder.armorOrWeapons} weapons or armor\n" +
-                        "\t\t${hoardOrder.potions} non-weapon items\n" +
-                        "\t\t${hoardOrder.potions} magic items of any type\n" +
-                        "\t\t(${itemPile.size} generated total, excluding spell collections)\n" +
-                        "\tScroll results enabled:\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellScrollEnabled) "✓" else " "
-                        }] Spell scrolls\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.nonScrollEnabled) "✓" else " "
-                        }] Non-spell scrolls\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.scrollMapChance != 0) "✓" else " "
-                        }] Treasure map (${
-                            hoardOrder.genParams.magicParams.scrollMapChance
-                        }% chance)\n" +
-                        "\tAllow:\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.allowIntWeapons) "✓" else " "
-                        }] Intelligent weapon generation\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.allowCursedItems) "✓" else " "
-                        }] Cursed magic items/spell collections\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.allowIntWeapons) "✓" else " "
-                        }] Artifacts/relics\n", tag = "creation|magic-item|verbose")
-
-            val spellHoardEvent = HoardEvent(
-                hoardID = newHoardID,
-                timestamp = System.currentTimeMillis(),
-                description = "Order Spell Collection Parameters:\n" +
-                        "\tQuantity: ${hoardOrder.extraSpellCols} (generated ${spellPile.size} total)\n" +
-                        "\tSpell level range: ${ 
-                            hoardOrder.genParams.magicParams.spellCoRestrictions.levelRange.first
-                        } to ${
-                            hoardOrder.genParams.magicParams.spellCoRestrictions.levelRange.last
-                        }\n" +
-                        "\tMaximum spells per collection: ${
-                            hoardOrder.genParams.magicParams.spellCoRestrictions.spellCountMax
-                        }\n" +
-                        "\tDisciplines:\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                allowedDisciplines.arcane) "✓" else " "
-                        }] Magic-user spells\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                allowedDisciplines.divine) "✓" else " "
-                        }] Cleric/Zealot spells\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                allowedDisciplines.natural) "✓" else " "
-                        }] Druid spells\n" +
-                        "\tSources (besides PHB):\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                spellSources.splatbooksOK) "✓" else " "
-                        }] Splatbooks\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                spellSources.hackJournalsOK) "✓" else " "
-                        }] HackJournals\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                spellSources.modulesOK) "✓" else " "
-                        }] Other published material\n" +
-                        "\tAllow:\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                allowRestricted) "✓" else " "
-                        }] Specialist-restricted spells\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                rerollChoice) "✓" else " "
-                        }] Re-rolling \"Choice\" results\n" +
-                        "\t\t[${
-                            if (hoardOrder.genParams.magicParams.spellCoRestrictions.
-                                allowedDisciplines.divine) "✓" else " "
-                        }] Cursed spell scrolls\n" +
-                        "\t\t\t- ${
-                            when (hoardOrder.genParams.magicParams.spellCoRestrictions.allowedCurses){
-                                SpCoCurses.STRICT_GMG -> "Only use example GMG curses"
-                                SpCoCurses.OFFICIAL_ONLY -> "Only use officially-sourced curses"
-                                SpCoCurses.ANY_CURSE -> "Anything goes, even unofficial curses"
-                                SpCoCurses.NONE -> "But disregard curses, even if indicated"
-                            }}.\n" +
-                        "\tPick spells: ${
-                            when (hoardOrder.genParams.magicParams.spellCoRestrictions.genMethod){
-                                SpCoGenMethod.TRUE_RANDOM -> "Randomly from all qualified spells"
-                                SpCoGenMethod.BY_THE_BOOK -> "Following book-described methodology"
-                                SpCoGenMethod.SPELL_BOOK  -> "As if creating a new magic-user"
-                                SpCoGenMethod.CHOSEN_ONE  -> "As if rolling a chosen one's allotment"
-                                SpCoGenMethod.ANY_PHYSICAL-> "Using any method resulting in item"
-                            }}", tag = "creation|spell-collection|verbose")
             // endregion
 
-            repository.apply{
-                addHoardEvent(creationHoardEvent)
-                addHoardEvent(gemHoardEvent)
-                addHoardEvent(artHoardEvent)
-                addHoardEvent(itemHoardEvent)
-                addHoardEvent(spellHoardEvent)
-            }
+            // region [ Update counts on new hoard ]
+            suspend {
 
-        } catch(e: Exception) {
-            Log.e("createHoardFromOrder() | Update values",
-            "Unable to update totals hoard matching ID $newHoardID.")
+                val initialGemCount = repository.getGemCount(newHoardID).value ?: 0
+                val initialArtCount = repository.getArtCount(newHoardID).value ?: 0
+                val initialItemCount = repository.getMagicItemCount(newHoardID).value ?: 0
+                val initialSpellCount = repository.getSpellCollectionCount(newHoardID).value ?: 0
+
+                val initialGPTotal = (hoardOrder.let {
+                    ((it.copperPieces * 0.01) + (it.silverPieces * 0.1) + (it.electrumPieces * 0.5) +
+                            (it.goldPieces * 1.0) + (it.hardSilverPieces * 2.0) + (it.platinumPieces * 5.0)) *
+                            100.00.roundToInt() / 100.00 }) +
+                        (repository.getGemValueTotal(newHoardID).value ?: 0.0) +
+                        (repository.getArtValueTotal(newHoardID).value ?: 0.0) +
+                        (repository.getMagicItemValueTotal(newHoardID).value ?: 0.0) +
+                        (repository.getSpellCollectionValueTotal(newHoardID).value ?: 0.0)
+
+                val newHoard = repository.getHoard(newHoardID).value?.copy(
+                    gpTotal = initialGPTotal,
+                    gemCount = initialGemCount,
+                    artCount = initialArtCount,
+                    magicCount = initialItemCount,
+                    spellsCount = initialSpellCount,
+                    successful = true)
+
+                if (newHoard != null) {
+                    repository.updateHoard(newHoard)
+                }
+            }
+            // endregion
+
+            // region [ Log HoardEvents for creation ]
+            suspend {
+
+                val creationHoardEvent = HoardEvent(
+                    hoardID = newHoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "Hoard \"${hoardOrder.hoardName}\" created.", tag = "creation")
+
+                val gemHoardEvent = HoardEvent(
+                    hoardID = newHoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "Order Gemstone Parameters:\n" +
+                            "\tQuantity: ${hoardOrder.gems} (generated ${gemPile.size})\n" +
+                            "\tValue bias range: ${
+                                String.format("%.2f",LootMutator.convertGemValueToGP(
+                                    hoardOrder.genParams.gemParams.levelRange.first))
+                            } gp to ${
+                                String.format("%.2f",LootMutator.convertGemValueToGP(
+                                    hoardOrder.genParams.gemParams.levelRange.last))
+                            } gp", tag = "creation|gemstone|verbose")
+
+                val artHoardEvent = HoardEvent(
+                    hoardID = newHoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "Order Art Object Parameters:\n" +
+                            "\tQuantity: ${hoardOrder.artObjects} (generated ${artPile.size})\n" +
+                            "\tValue bias range: ${
+                                String.format("%.2f",LootMutator.convertArtValueToGP(
+                                    hoardOrder.genParams.artParams.levelRange.first))
+                            } gp to ${
+                                String.format("%.2f",LootMutator.convertGemValueToGP(
+                                    hoardOrder.genParams.artParams.levelRange.last))
+                            } gp\n" +
+                            "\tPaper art map replacement chance: ${
+                                hoardOrder.genParams.artParams.paperMapChance
+                            }%", tag = "creation|artwork|verbose")
+
+                val itemHoardEvent = HoardEvent(
+                    hoardID = newHoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "Order Magic Item Parameters:\n" +
+                            "\tQuantities: " +
+                            "\t\t${hoardOrder.potions} potions\n" +
+                            "\t\t${hoardOrder.scrolls} scrolls\n" +
+                            "\t\t${hoardOrder.armorOrWeapons} weapons or armor\n" +
+                            "\t\t${hoardOrder.potions} non-weapon items\n" +
+                            "\t\t${hoardOrder.potions} magic items of any type\n" +
+                            "\t\t(${itemPile.size} generated total, excluding spell collections)\n" +
+                            "\tScroll results enabled:\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellScrollEnabled) "✓" else " "
+                            }] Spell scrolls\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.nonScrollEnabled) "✓" else " "
+                            }] Non-spell scrolls\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.scrollMapChance != 0) "✓" else " "
+                            }] Treasure map (${
+                                hoardOrder.genParams.magicParams.scrollMapChance
+                            }% chance)\n" +
+                            "\tAllow:\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.allowIntWeapons) "✓" else " "
+                            }] Intelligent weapon generation\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.allowCursedItems) "✓" else " "
+                            }] Cursed magic items/spell collections\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.allowIntWeapons) "✓" else " "
+                            }] Artifacts/relics\n", tag = "creation|magic-item|verbose")
+
+                val spellHoardEvent = HoardEvent(
+                    hoardID = newHoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "Order Spell Collection Parameters:\n" +
+                            "\tQuantity: ${hoardOrder.extraSpellCols} (generated ${spellPile.size} total)\n" +
+                            "\tSpell level range: ${
+                                hoardOrder.genParams.magicParams.spellCoRestrictions.levelRange.first
+                            } to ${
+                                hoardOrder.genParams.magicParams.spellCoRestrictions.levelRange.last
+                            }\n" +
+                            "\tMaximum spells per collection: ${
+                                hoardOrder.genParams.magicParams.spellCoRestrictions.spellCountMax
+                            }\n" +
+                            "\tDisciplines:\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    allowedDisciplines.arcane) "✓" else " "
+                            }] Magic-user spells\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    allowedDisciplines.divine) "✓" else " "
+                            }] Cleric/Zealot spells\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    allowedDisciplines.natural) "✓" else " "
+                            }] Druid spells\n" +
+                            "\tSources (besides PHB):\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    spellSources.splatbooksOK) "✓" else " "
+                            }] Splatbooks\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    spellSources.hackJournalsOK) "✓" else " "
+                            }] HackJournals\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    spellSources.modulesOK) "✓" else " "
+                            }] Other published material\n" +
+                            "\tAllow:\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    allowRestricted) "✓" else " "
+                            }] Specialist-restricted spells\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    rerollChoice) "✓" else " "
+                            }] Re-rolling \"Choice\" results\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.spellCoRestrictions.
+                                    allowedDisciplines.divine) "✓" else " "
+                            }] Cursed spell scrolls\n" +
+                            "\t\t\t- ${
+                                when (hoardOrder.genParams.magicParams.spellCoRestrictions.allowedCurses){
+                                    SpCoCurses.STRICT_GMG -> "Only use example GMG curses"
+                                    SpCoCurses.OFFICIAL_ONLY -> "Only use officially-sourced curses"
+                                    SpCoCurses.ANY_CURSE -> "Anything goes, even unofficial curses"
+                                    SpCoCurses.NONE -> "But disregard curses, even if indicated"
+                                }}.\n" +
+                            "\tPick spells: ${
+                                when (hoardOrder.genParams.magicParams.spellCoRestrictions.genMethod){
+                                    SpCoGenMethod.TRUE_RANDOM -> "Randomly from all qualified spells"
+                                    SpCoGenMethod.BY_THE_BOOK -> "Following book-described methodology"
+                                    SpCoGenMethod.SPELL_BOOK  -> "As if creating a new magic-user"
+                                    SpCoGenMethod.CHOSEN_ONE  -> "As if rolling a chosen one's allotment"
+                                    SpCoGenMethod.ANY_PHYSICAL-> "Using any method resulting in item"
+                                }}", tag = "creation|spell-collection|verbose")
+
+                repository.apply{
+                    addHoardEvent(creationHoardEvent)
+                    addHoardEvent(gemHoardEvent)
+                    addHoardEvent(artHoardEvent)
+                    addHoardEvent(itemHoardEvent)
+                    addHoardEvent(spellHoardEvent)
+                }
+            }
+            // endregion
+
         }
 
-        // TODO When finished, be sure to go back and add proper calls and callbacks to viewmodel
-        //  and fragment for Generator.
+        //TODO left off here. get to unit testing.
 
         return newHoardID
     }
@@ -4387,7 +4234,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     private suspend fun SpellCollectionOrder.convertToScroll(parentHoard: Int): SpellCollection =
         convertOrderToSpellScroll(parentHoard,this)
 
-    suspend fun createSpellCollection(parentHoard: Int, spCoParams: SpellCoRestrictions) : SpellCollection {
+    override suspend fun createSpellCollection(parentHoard: Int, spCoParams: SpellCoRestrictions) : SpellCollection {
 
         return when (spCoParams.genMethod) {
 
@@ -4407,7 +4254,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         }
     }
 
-    fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
+    override fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
 
         val scrollDiscipline: SpCoDiscipline
         val effectiveLvlRange: IntRange

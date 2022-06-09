@@ -41,7 +41,7 @@
                 android:id="@+id/hoard_list_whenempty_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                app:tint="?attr/colorOnBackground"
+                android:layout_marginBottom="8dp"
                 android:alpha="0.5"
                 android:src="@drawable/clipart_treasure_add_vector_icon"
                 app:layout_constraintBottom_toTopOf="@+id/hoard_list_whenempty_text"
@@ -49,7 +49,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
-                android:layout_marginBottom="8dp"/>
+                app:tint="?attr/colorOnBackground" />
 
             <TextView
                 android:id="@+id/hoard_list_whenempty_text"
@@ -63,7 +63,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hoard_list_whenempty_image"/>
+                app:layout_constraintTop_toBottomOf="@id/hoard_list_whenempty_image" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -71,9 +71,9 @@
             android:id="@+id/hoard_list_progress_indicator"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:indeterminateOnly="true"
             android:layout_gravity="center"
-            android:visibility="gone"/>
+            android:indeterminateOnly="true"
+            android:visibility="gone" />
 
     </FrameLayout>
 

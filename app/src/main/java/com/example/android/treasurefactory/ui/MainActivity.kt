@@ -32,7 +32,10 @@ class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
     }
 
     override fun onHoardSelected(view: View, hoardID: Int) {
-        val action = HoardListFragmentDirections.actionHoardListFragmentToHoardViewerFragment(hoardID)
+        val action = HoardListFragmentDirections.actionHoardListFragmentToHoardViewerFragment().apply{
+            selectedHoardID = hoardID
+        }
+
         Log.d("MainActivity","$hoardID passed via " + resources.getResourceName(view.id) +
             " for fragment navigation.")
         Toast.makeText(this,"Hoard [id: $hoardID] selected.",Toast.LENGTH_SHORT).show()

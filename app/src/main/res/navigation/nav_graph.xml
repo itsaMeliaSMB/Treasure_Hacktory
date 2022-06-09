@@ -38,9 +38,9 @@
             android:defaultValue="0" />
     </fragment>
     <fragment android:id="@+id/placeholder_uniqueItemList" >
-        <action
+        <!--dummied out <action
             android:id="@+id/action_placeholder_uniqueItemList_to_placeholder_uniqueItemDetails"
-            app:destination="@id/placeholder_uniqueItemDetails" />
+            app:destination="@id/placeholder_uniqueItemDetails" /> -->
     </fragment>
     <fragment android:id="@+id/placeholder_uniqueItemDetails" />
     <fragment android:id="@+id/placeholder_settings" />

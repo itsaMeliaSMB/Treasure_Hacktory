@@ -80,6 +80,13 @@ class HoardListFragment : Fragment() {
                 true
             }
 
+            R.id.action_wait_three_seconds -> {
+
+
+
+                true
+            }
+
             R.id.action_delete_all_hoards -> {
 
                 val confirmDialog = MaterialAlertDialogBuilder(requireContext())

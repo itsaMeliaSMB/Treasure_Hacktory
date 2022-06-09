@@ -211,7 +211,7 @@ abstract class TreasureDatabase : RoomDatabase() {
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_spell_v02","raw",context.packageName))
+                context.resources.getIdentifier("seed_spell_v01","raw",context.packageName))
 
             // Seed spell templates
             inputStream

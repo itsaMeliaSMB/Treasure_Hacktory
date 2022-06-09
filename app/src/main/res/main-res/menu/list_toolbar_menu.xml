@@ -10,6 +10,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/action_wait_three_seconds"
+        android:title="@string/action_wait_three_seconds_label"
+        app:showAsAction="never"
+        />
+
+    <item
         android:id="@+id/action_delete_all_hoards"
         android:title="@string/action_delete_all_hoards_label"
         app:showAsAction="never"

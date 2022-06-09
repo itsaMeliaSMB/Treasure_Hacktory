@@ -275,6 +275,7 @@ data class ArtObject(
 
                 0 -> listOf( // Paper artwork types
                     "calligraphy",
+                    "charcoal sketch",
                     "illuminated manuscript",
                     "illustration",
                     "napkin sketch",
@@ -298,7 +299,8 @@ data class ArtObject(
                     "tablecloth",
                     "tapestry",
                     "textile",
-                    "vestments"
+                    "vestments",
+                    "vintage clothing"
                 ).random()
 
                 2 -> listOf( // Furnishing types
@@ -309,6 +311,7 @@ data class ArtObject(
                     "candle snuffer",
                     "chair",
                     "lectern",
+                    "ottoman",
                     "partition",
                     "table",
                     "table",
@@ -334,7 +337,6 @@ data class ArtObject(
                     "carved walking staff",
                     "carving",
                     "comb",
-                    "engraving",
                     "game board",
                     "intarsia",
                     "jewelry box",
@@ -343,18 +345,20 @@ data class ArtObject(
                     "soap carving",
                     "woodburning",
                     "wooden mantelpiece",
+                    "wooden engraving",
                     "wooden statue"
                 ).random()
 
                 5 -> listOf( // Ceramic types
                     "ceramic idol",
                     "ceramic statue",
+                    "clay pot",
                     "offectory container",
                     "ornate crucible",
                     "porcelain dishware",
+                    "porcelain tea set",
                     "pottery",
                     "slipware",
-                    "tea set",
                     "terra sigillata",
                     "terracotta",
                     "urn",
@@ -379,11 +383,11 @@ data class ArtObject(
                     "dias",
                     "marble bookend",
                     "marble statue",
-                    "relief",
                     "sarcophagus",
                     "stone carving",
                     "stone column",
                     "stone pedestal",
+                    "stone relief",
                     "stone statue",
                     "stucco"
                 ).random()
@@ -401,24 +405,28 @@ data class ArtObject(
                     "medallion",
                     "metallic ornament",
                     "ornate doorknob",
-                    "silver tea set"
+                    "silver tea set",
+                    "tin inkwell"
                 ).random()
 
                 9 -> listOf( // Magical artwork types
                     "animated statue",
+                    "animation",
                     "arcane circle",
                     "audio recording",
+                    "divinity-infused reliquary",
                     "drinking bird statue",
                     "enchanted manuscript",
                     "enchanted music box",
                     "ethereal sculpture",
+                    "Glassteel artwork",
+                    "glowing doohickey",
                     "holographic jewelry",
                     "magical curio",
                     "moving painting",
                     "mystical artwork",
                     "non-Euclidian sculpture",
                     "permanent glamour",
-                    "divinity-infused reliquary",
                     "talking bust",
                     "Two D'lusionary screen"
                 ).random()
@@ -434,22 +442,31 @@ data class ArtObject(
 
                     val abstractQuality = listOf(
                         "aesthetics",
+                        "beauty",
                         "concept",
                         "cost",
+                        "dark side",
                         "divinity",
                         "essence",
                         "explosion",
                         "feeling",
                         "flow",
+                        "frivolity",
                         "glory",
+                        "hope",
                         "incomprehensibility",
                         "insatiability",
                         "inspiration",
                         "intensity",
+                        "inversion",
+                        "isolation",
                         "joy",
                         "magic",
+                        "mendacity",
+                        "mundanity",
                         "nothingness",
                         "opposite",
+                        "reality",
                         "resonance",
                         "scent",
                         "shadow",
@@ -458,6 +475,7 @@ data class ArtObject(
                         "synesthesia",
                         "taste",
                         "tears",
+                        "truth",
                         "totality",
                         "vortex",
                         "weight"
@@ -465,10 +483,12 @@ data class ArtObject(
 
                     val abstractTopic = listOf(
                         "air",
+                        "ambition",
                         "art",
                         "capitalism",
                         "charity",
                         "colors",
+                        "community",
                         "concepts",
                         "divinity",
                         "duty",
@@ -484,6 +504,7 @@ data class ArtObject(
                         "ignorance",
                         "kitsch",
                         "knowledge",
+                        "loss",
                         "love",
                         "love, laugh, live",
                         "magic",
@@ -505,7 +526,8 @@ data class ArtObject(
                         "tragedy",
                         "war",
                         "water",
-                        "wealth"
+                        "wealth",
+                        "zjierb"
                     ).random()
 
                     nameBuilder.append("the $abstractQuality of $abstractTopic")
@@ -721,6 +743,7 @@ data class ArtObject(
                     ).random()
 
                     val humanProfession = listOf(
+                        "acrobat",
                         "adventurer",
                         "animal handler",
                         "alchemist",
@@ -736,6 +759,8 @@ data class ArtObject(
                         "blacksmith",
                         "bowyer",
                         "brewer",
+                        "butcher",
+                        "candlestick-maker",
                         "carpenter",
                         "cartographer",
                         "chef",
@@ -747,10 +772,12 @@ data class ArtObject(
                         "dancer",
                         "doctor",
                         "druid",
+                        "engineer",
                         "entertainer",
                         "fighter",
                         "fishmonger",
                         "fortune teller",
+                        "gamer",
                         "grifter",
                         "guide",
                         "hunter",
@@ -768,6 +795,7 @@ data class ArtObject(
                         "messenger",
                         "miner",
                         "minstrel",
+                        "patron",
                         "philosopher",
                         "plumber",
                         "ranger",
@@ -788,6 +816,7 @@ data class ArtObject(
                         "student",
                         "tailor",
                         "tattoo artist",
+                        "trendsetter",
                         "troublemaker",
                         "warrior",
                         "wastrel",
@@ -845,7 +874,8 @@ data class ArtObject(
                         "studying",
                         "trying something new",
                         "up to no good",
-                        "victorious"
+                        "victorious",
+                        "waking up"
                     ).random()
 
                     val humanCount = Random.nextInt(1,13) - 6
@@ -881,6 +911,7 @@ data class ArtObject(
                                 "arcane",
                                 "blood",
                                 "boneless",
+                                "bored",
                                 "carrion",
                                 "celestial",
                                 "civilized",
@@ -925,6 +956,7 @@ data class ArtObject(
                                 "subterranean",
                                 "tiny",
                                 "tundra",
+                                "ugly",
                                 "urban",
                                 "were -",
                                 "winged",
@@ -939,6 +971,7 @@ data class ArtObject(
                                 "bear" to "bears",
                                 "beaver" to "beavers",
                                 "beetle" to "beetles",
+                                "bird" to "birds",
                                 "boar" to "boars",
                                 "butterfly" to "butterflies",
                                 "cat" to "cats",
@@ -1013,7 +1046,9 @@ data class ArtObject(
                                 "playing cards",
                                 "resting",
                                 "sleeping",
+                                "staring blankly",
                                 "up to no good",
+                                "waking up",
                                 "with a druid",
                                 "with big ol' eyes"
                             ).random()
@@ -1224,13 +1259,13 @@ data class ArtObject(
                     nameBuilder.append(listOf(
                         "a major battle",
                         "a new technology discovered",
+                        "accomplishment of a great person",
                         "ancient elven war",
                         "apotheosis of folk hero",
                         "army marching to battle",
                         "ascension of a HackMaster",
                         "ascension of a protege",
                         "battle against a great wyrm",
-                        "birth of a great person",
                         "birth of a hero",
                         "brave last stand",
                         "canal opening",
@@ -1427,6 +1462,7 @@ data class ArtObject(
                                 "Enlightened",
                                 "Generous",
                                 "HacKleric",
+                                "Healer",
                                 "Heretic",
                                 "Historian",
                                 "Hypocrite",
@@ -1573,7 +1609,7 @@ data class ArtObject(
                                 "Yiders, Gawd of Strength",
                                 "Yi'Gor, Gawd of Treachery",
                                 "Athena, Gawdess of Wisdom and Combat",
-                                "Laerme Gawdess of Fire, Art, and Love",
+                                "Laerme, Gawdess of Fire, Art, and Love",
                                 "Laduguer, Gawd of Gray Dwarves and Skilled Artisans",
                                 "Hanili Celanil, Gawdess of Love, Romance, Beauty, & Fine Arts",
                                 "Coyote, Gawd of Arts, Crafts, Fire, and Thieves",
@@ -1623,15 +1659,16 @@ data class ArtObject(
                             "Guildmaster",
                             "Justice",
                             "Lord",
+                            "Lord President",
                             "Marquis",
                             "Mayor",
                             "Minister",
-                            "President",
                             "Professor",
                             "Sir",
                             "Spymaster",
                             "Treasure Hunter",
-                            "Treasurer"
+                            "Treasurer",
+                            "Vice President"
                         ).random()
                     } else {
                         listOf(
@@ -1650,17 +1687,18 @@ data class ArtObject(
                             "Emissary",
                             "General",
                             "Grandmaster",
-                            "Guildmaster",
+                            "Guildmistress",
                             "Justice",
                             "Lady",
+                            "Madame President",
                             "Marquise",
                             "Master Bard",
                             "Preceptress",
-                            "President",
                             "Professor",
                             "Spymaster",
                             "Stewardess",
-                            "Treasure Huntress"
+                            "Treasure Huntress",
+                            "Vice President"
                         ).random()
                     }
 
