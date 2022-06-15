@@ -50,16 +50,18 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     @WorkerThread
     override suspend fun createHoardFromOrder(hoardOrder: HoardOrder): Int {
 
+        Log.d("createHoardFromOrder()","Starting hoard generation")
+
         val maxRerolls = 20
 
         val newHoardID: Int
 
         coroutineScope {
 
-            val gemPile:    List<Gem>
-            val artPile:    List<ArtObject>
-            val itemPile:   List<MagicItem>
-            val spellPile:  List<SpellCollection>
+            var gemPile =   emptyList<Gem>()
+            var artPile =   emptyList<ArtObject>()
+            var itemPile =  emptyList<MagicItem>()
+            var spellPile = emptyList<SpellCollection>()
 
             // region [ Generate parent hoard entity ]
             fun createParentHoard() : Hoard {
@@ -85,8 +87,11 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             // region [ Generate piles of unique items ]
 
+            Log.d("createHoardFromOrder()","[ Generate piles of unique items ]")
+
             val deferredGemPile = async {
 
+                Log.d("createHoardFromOrder()","[[Start Deferred Gems]]")
                 val innerGemPile = arrayListOf<Gem>()
 
                 // Generate gems
@@ -111,6 +116,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             val deferredArtPile = async {
 
+                Log.d("createHoardFromOrder()","[[Start Deferred Art]]")
                 val innerArtPile = arrayListOf<ArtObject>()
                 val innerItemPile = arrayListOf<MagicItem>()
 
@@ -139,6 +145,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             }
 
             val deferredItemPile = async {
+
+                Log.d("createHoardFromOrder()","[[Start Deferred Items]]")
 
                 val innerGemPile = arrayListOf<Gem>()
                 val innerItemPile = arrayListOf<MagicItem>()
@@ -245,6 +253,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             val deferredSpellPile = async {
 
+                Log.d("createHoardFromOrder()","[[Start Deferred Spells]]")
+
                 val innerSpellPile = arrayListOf<SpellCollection>()
 
                 // Generate spell collections
@@ -262,54 +272,77 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             // endregion
 
             // region [ Flatten deferred piles into lists ]
+            Log.d("createHoardFromOrder()","[ Flatten deferred piles into lists ]")
 
-            gemPile = listOf(
-                deferredGemPile.await() + deferredItemPile.await().first).flatten()
+            fun sortDeferredPiles(unsortedGems: List<Gem>,
+                                  unsortedArt: Pair<List<ArtObject>, List<MagicItem>>,
+                                  unsortedItems: Triple<List<Gem>, List<MagicItem>, List<SpellCollection>>,
+                                  unsortedSpells: List<SpellCollection>) {
 
-            artPile = deferredArtPile.await().first
+                gemPile = listOf(
+                    unsortedGems, unsortedItems.first).flatten()
 
-            itemPile = listOf(
-                deferredArtPile.await().second + deferredItemPile.await().second).flatten()
+                artPile = unsortedArt.first
 
-            spellPile = listOf(
-                deferredItemPile.await().third + deferredSpellPile.await()).flatten()
+                itemPile = listOf(
+                    unsortedItems.second, unsortedArt.second).flatten()
+
+                spellPile = listOf(
+                    unsortedItems.third, unsortedSpells).flatten()
+            }
+
+            sortDeferredPiles(deferredGemPile.await(),deferredArtPile.await(),
+                deferredItemPile.await(),deferredSpellPile.await())
+
+            Log.d("createHoardFromOrder()","gemPile (${gemPile.size}) | " +
+                    "artPile (${artPile.size}) | itemPile (${itemPile.size}) | " +
+                    "spellPile (${spellPile.size})")
             // endregion
 
             // region [ Add lists to database under parent hoard ]
-            suspend {
+            Log.d("createHoardFromOrder()","[ Add lists to database under parent hoard ]")
 
-                gemPile.forEachIndexed { index, newGem ->
+            gemPile.forEachIndexed { index, newGem ->
 
-                    repository.addGem(newGem)
-                    Log.d("createHoardFromOrder() | gemPile",
-                        "(#${index + 1}) Added ${newGem.name} under ${newGem.hoardID}.")
-                }
+                repository.addGem(newGem)
+                Log.d("createHoardFromOrder() | gemPile",
+                    "(#${index + 1}) Added ${newGem.name} under ${newGem.hoardID}.")
+            }
 
-                artPile.forEachIndexed { index, newArt ->
+            artPile.forEachIndexed { index, newArt ->
 
                     repository.addArtObject(newArt)
-                    Log.d("createHoardFromOrder() | artPile",
-                        "(#${index + 1}) Added ${newArt.name} under ${newArt.hoardID}.")
+                    Log.d(
+                        "createHoardFromOrder() | artPile",
+                        "(#${index + 1}) Added ${newArt.name} under ${newArt.hoardID}."
+                    )
                 }
 
-                itemPile.forEachIndexed { index, newItem ->
+            itemPile.forEachIndexed { index, newItem ->
 
-                    repository.addMagicItem(newItem)
-                    Log.d("createHoardFromOrder() | itemPile",
-                        "(#${index + 1}) Added ${newItem.name} under ${newItem.hoardID}.")
-                }
-
-                spellPile.forEachIndexed { index, newCollection ->
-
-                    repository.addSpellCollection(newCollection)
-                    Log.d("createHoardFromOrder() | spellPile",
-                        "(#${index + 1}) Added ${newCollection.name} under ${newCollection.hoardID}.")
-                }
+                repository.addMagicItem(newItem)
+                Log.d("createHoardFromOrder() | itemPile",
+                    "(#${index + 1}) Added ${newItem.name} under ${newItem.hoardID}.")
             }
+
+            spellPile.forEachIndexed { index, newCollection ->
+
+                repository.addSpellCollection(newCollection)
+                Log.d("createHoardFromOrder() | spellPile",
+                    "(#${index + 1}) Added ${newCollection.name} under ${newCollection.hoardID}.")
+            }
+
+            //TODO block into launched Jobs once this is sequentially confirmed to work
+            // then, also add a joinAll to actually call them
+
             // endregion
 
             // region [ Update counts on new hoard ]
-            suspend {
+            Log.d("createHoardFromOrder()","[ Update counts on new hoard ]")
+
+            suspend fun updateItemCounts() {
+
+                Log.d("createHoardFromOrder()","updateItemCounts() called.")
 
                 val initialGemCount = repository.getGemCount(newHoardID).value ?: 0
                 val initialArtCount = repository.getArtCount(newHoardID).value ?: 0
@@ -337,10 +370,16 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     repository.updateHoard(newHoard)
                 }
             }
+
+            updateItemCounts()
             // endregion
 
             // region [ Log HoardEvents for creation ]
-            suspend {
+            Log.d("createHoardFromOrder()","[ Log HoardEvents for creation ]")
+
+            suspend fun logCreationEvents() {
+
+                Log.d("createHoardFromOrder()","logCreationEvents() called.")
 
                 val creationHoardEvent = HoardEvent(
                     hoardID = newHoardID,
@@ -486,11 +525,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     addHoardEvent(spellHoardEvent)
                 }
             }
+
+            logCreationEvents()
             // endregion
-
         }
-
-        //TODO left off here. get to unit testing.
 
         return newHoardID
     }

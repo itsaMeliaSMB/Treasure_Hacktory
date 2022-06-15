@@ -6,6 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
+    <!-- TODO: add toolbar -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -154,8 +156,7 @@
         android:layout_height="1dp"
         android:background="?attr/colorOnSurface"
         android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="96dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginHorizontal="96dp"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -174,7 +175,7 @@
         <ImageButton
             android:id="@+id/hoard_overview_coinage_edit_button"
             android:layout_width="48dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
@@ -216,16 +217,6 @@
             android:text="Unique Object Overview"
             android:textAllCaps="true"
             android:textStyle="bold" />
-
-        <ImageView
-            android:id="@+id/hoard_overview_leftover_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/clipart_treasure_vector_icon"
-            app:tint="?attr/colorPrimary" />
 
     </RelativeLayout>
 

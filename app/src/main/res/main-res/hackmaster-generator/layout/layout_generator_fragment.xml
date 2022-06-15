@@ -6,24 +6,25 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/generator_toolbar"
+        android:id="@+id/hoard_generator_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title="@string/hoard_generator_fragment_title"
         app:navigationIcon="@drawable/clipart_back_vector_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Widget.Design.AppBarLayout"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_margin="16dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/hoard_generator_toolbar">
 
         <TextView
             android:id="@+id/generator_name_label"

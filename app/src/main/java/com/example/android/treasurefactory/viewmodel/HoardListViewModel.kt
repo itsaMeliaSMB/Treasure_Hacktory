@@ -1,5 +1,6 @@
 package com.example.android.treasurefactory.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -24,19 +25,27 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
 
             repository.deleteAllHoards()
 
+            delay(1000L)
+
             setRunningAsync(false)
         }
     }
 
     fun waitThreeSeconds() {
 
+        Log.d("HoardListViewModel","waitThreeSeconds() called.")
+
         viewModelScope.launch {
+
+            Log.d("HoardListViewModel","viewModelScope launched.")
 
             setRunningAsync(true)
 
             delay(3000L)
 
             setRunningAsync(false)
+
+            Log.d("HoardListViewModel","viewModelScope ending...")
         }
     }
 

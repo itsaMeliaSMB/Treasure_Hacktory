@@ -881,7 +881,7 @@ interface HoardDao {
     suspend fun deleteAllHoards()
 
     @Query("SELECT hoardID FROM hackmaster_hoard_table WHERE ROWID=(:hoardRowID)")
-    fun getIdByRowId(hoardRowID: Long) : Int
+    suspend fun getIdByRowId(hoardRowID: Long) : Int
     // endregion
 
     // region ( HoardEvent )

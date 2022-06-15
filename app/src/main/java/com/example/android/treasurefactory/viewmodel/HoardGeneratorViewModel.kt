@@ -516,6 +516,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
     // region ( Public getters )
 
+    fun getHoardName() = hoardName
     fun getGenerationMethodPos() = generationMethodPos
     fun getCoinMin() = coinMin
     fun getCoinMax() = coinMax
@@ -555,6 +556,8 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
     // endregion
 
     // region [ Setter functions ]
+    fun setHoardName(newHoardName: String){ hoardName = newHoardName }
+
     fun setGeneratorMethodPos(newViewGroupIndex: Int){
         if (newViewGroupIndex in 0..1) {
             generationMethodPos = newViewGroupIndex
@@ -584,7 +587,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
         val newValue: Int
 
         if (targetLairList){
-            if (!(lairList.isNullOrEmpty())&&(position in 0 until lairList.size)) {
+            if (!(lairList.isEmpty())&&(position in 0 until lairList.size)) {
 
                 val oldValue = lairList[position].quantity
                 newValue = (oldValue + addend).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
@@ -596,7 +599,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
                     "$oldValue to $newValue (instructed to add $addend)")
             }
         } else {
-            if (!(smallList.isNullOrEmpty())&&(position in 0 until smallList.size)) {
+            if (!(smallList.isEmpty())&&(position in 0 until smallList.size)) {
 
                 val oldValue = smallList[position].quantity
                 newValue = (oldValue + addend).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
@@ -1007,7 +1010,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
         val newOrder = HoardOrder()
 
-        newOrder.hoardName = hoardName
+        newOrder.hoardName = this.hoardName
 
         // Roll for each non-empty entry TODO: move to non-UI thread
         letterMap.forEach { (key, value) ->
@@ -1053,6 +1056,8 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
     fun compileSpecificQtyHoardOrder() : HoardOrder {
 
         val newOrder : HoardOrder
+
+        val newHoardName = hoardName
 
         // Roll coinage values
         val coinDenomsAsSet = mutableSetOf<Pair<Double,String>>()
@@ -1111,7 +1116,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
         )
 
         newOrder = HoardOrder(
-            this@HoardGeneratorViewModel.hoardName,
+            hoardName = newHoardName,
             creationDescription = "User-specified loot quantity",
             copperPieces = coinPileMap.getOrDefault("cp",0),
             silverPieces = coinPileMap.getOrDefault("sp",0),
@@ -1139,7 +1144,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
     // region [ Hoard generation functions ]
 
-    fun generateHoard() {
+    fun generateHoard(order: HoardOrder) {
 
         //https://developer.android.com/kotlin/coroutines
 
@@ -1149,19 +1154,13 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
             val lootGenerator = LootGeneratorAsync(hmRepository)
 
-            val hoardOrder = if (generationMethodPos == 1) {
+            val newHoardId = lootGenerator.createHoardFromOrder(order)
 
-                compileSpecificQtyHoardOrder()
-
-            } else {
-                compileLetterCodeHoardOrder()
-            }
-
-            val newHoardId = lootGenerator.createHoardFromOrder(hoardOrder)
+            Log.d("generateHoard()","newHoardId = $newHoardId")
 
             setRunningAsync(false)
 
-            //TODO left off here. Set calls from Fragment and make dialog fragment for successful generation.
+            //TODO DialogFragment displaying hoard and offering navigation.
         }
     }
     // endregion

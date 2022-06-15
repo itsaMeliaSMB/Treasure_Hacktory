@@ -13,6 +13,7 @@ private const val TAG = "MainActivity"
 // Note the Callbacks implementation in MainActivity class
 
 class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,74 +7,91 @@
     tools:context=".ui.MainActivity">
 
     <!--https://developer.android.com/guide/fragments/appbar#fragment-->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/hoard_list_toolbar"
+    <!--https://developer.android.com/guide/navigation/navigation-ui-->
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title="@string/hoard_list_fragment_title"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/hoard_list_recycler"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/hoard_list_toolbar"
+                style="@style/Widget.Design.AppBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/appbar_height"
+                android:minHeight="4dp"
+                app:buttonGravity="center_vertical"
+                app:layout_scrollFlags="noScroll"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"
-        tools:listitem="@layout/hoard_list_item" />
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <FrameLayout
-        android:id="@+id/hoard_list_empty_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/hoard_list_whenempty_group"
+        <FrameLayout
+            android:id="@+id/hoard_list_content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/hoard_list_whenempty_image"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_marginBottom="8dp"
-                android:alpha="0.5"
-                android:src="@drawable/clipart_treasure_add_vector_icon"
-                app:layout_constraintBottom_toTopOf="@+id/hoard_list_whenempty_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:tint="?attr/colorOnBackground" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/hoard_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/hoard_list_item"
+                tools:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/hoard_list_whenempty_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="64dp"
-                android:text="@string/empty_hoard_list_text"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/hoard_list_whenempty_image" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/hoard_list_whenempty_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/hoard_list_whenempty_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0.5"
+                    android:src="@drawable/clipart_treasure_add_vector_icon"
+                    app:layout_constraintBottom_toTopOf="@+id/hoard_list_whenempty_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:tint="?attr/colorOnBackground" />
 
-        <ProgressBar
-            android:id="@+id/hoard_list_progress_indicator"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_gravity="center"
-            android:indeterminateOnly="true"
-            android:visibility="gone" />
+                <TextView
+                    android:id="@+id/hoard_list_whenempty_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="64dp"
+                    android:text="@string/empty_hoard_list_text"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/hoard_list_whenempty_image" />
 
-    </FrameLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-</RelativeLayout>
+        </FrameLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/hoard_list_progress_indicator"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:indeterminateOnly="true"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

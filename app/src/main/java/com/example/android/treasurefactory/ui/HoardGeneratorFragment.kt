@@ -40,6 +40,8 @@ class HoardGeneratorFragment : Fragment() {
 
     private var shortAnimationDuration: Int = 0
 
+    private var isButtonGroupAnimating = false
+
     private var _binding: LayoutGeneratorFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -174,6 +176,7 @@ class HoardGeneratorFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         generatorViewModel.apply {
+
             lairListLiveData.observe(viewLifecycleOwner) { newLairList ->
                 lairAdapter.submitList(newLairList)
                 Log.d("HoardGeneratorFragment","lairListLiveData on ViewModel observed.")
@@ -182,9 +185,48 @@ class HoardGeneratorFragment : Fragment() {
                 smallAdapter.submitList(newSmallList)
                 Log.d("HoardGeneratorFragment","smallListLiveData on ViewModel observed.")
             }
+            isRunningAsyncLiveData.observe(viewLifecycleOwner) { isRunningAsync ->
+
+                if (isRunningAsync) {
+
+                    binding.generatorResetButton.isEnabled = false
+                    binding.generatorGenerateButton.isEnabled = false
+
+                    if (binding.generatorBottomButtonGroup.visibility == View.VISIBLE &&
+                        !isButtonGroupAnimating) {
+
+                        hideButtonsCrossfade()
+
+                    } else {
+
+                        // Set properties without animation
+                        binding.generatorBottomButtonGroup.visibility = View.GONE
+                        binding.generatorBottomWaitingGroup.visibility = View.VISIBLE
+                        isButtonGroupAnimating = false
+                    }
+
+                } else {
+
+                    binding.generatorResetButton.isEnabled = true
+                    binding.generatorGenerateButton.isEnabled = true
+
+                    if (binding.generatorBottomWaitingGroup.visibility == View.VISIBLE &&
+                            !isButtonGroupAnimating) {
+
+                        showButtonsCrossfade()
+
+                    } else {
+
+                        // Set properties without animation
+                        binding.generatorBottomButtonGroup.visibility = View.VISIBLE
+                        binding.generatorBottomWaitingGroup.visibility = View.GONE
+                        isButtonGroupAnimating = false
+                    }
+                }
+            }
         }
 
-        binding.generatorToolbar.apply {
+        binding.hoardGeneratorToolbar.apply {
 
             navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
 
@@ -200,6 +242,8 @@ class HoardGeneratorFragment : Fragment() {
                         Toast.LENGTH_SHORT).show()
                 }
             }
+
+            title = getString(R.string.hoard_generator_fragment_title)
         }
     }
 
@@ -211,6 +255,11 @@ class HoardGeneratorFragment : Fragment() {
         setCheckGenRadioCheckedFromVM()
 
         // Apply widget properties TODO animate between two LinearLayouts
+        binding.generatorNameEdit.addTextChangedListener { input ->
+
+            generatorViewModel.setHoardName(input.toString())
+        }
+
         binding.generatorMethodGroup.setOnCheckedChangeListener { _, _ ->
 
             when (binding.generatorMethodGroup.checkedRadioButtonId){
@@ -1236,39 +1285,6 @@ class HoardGeneratorFragment : Fragment() {
         // endregion
 
         // region [ Buttons ]
-        generatorViewModel.isRunningAsyncLiveData.observe(viewLifecycleOwner) { isRunningAsync ->
-
-            if (isRunningAsync) {
-
-                if (binding.generatorBottomButtonGroup.visibility == View.VISIBLE) {
-
-                    hideButtonsCrossfade()
-
-                } else {
-
-                    // Set properties without animation
-                    binding.generatorBottomButtonGroup.visibility = View.GONE
-                    binding.generatorBottomWaitingGroup.visibility = View.VISIBLE
-                    binding.generatorResetButton.isEnabled = false
-                    binding.generatorGenerateButton.isEnabled = false
-                }
-            } else {
-
-                if (binding.generatorBottomButtonGroup.visibility == View.GONE) {
-
-                    showButtonsCrossfade()
-
-                } else {
-
-                    // Set properties without animation
-                    binding.generatorBottomButtonGroup.visibility = View.VISIBLE
-                    binding.generatorBottomWaitingGroup.visibility = View.GONE
-                    binding.generatorResetButton.isEnabled = true
-                    binding.generatorGenerateButton.isEnabled = true
-                }
-            }
-        }
-
         binding.generatorResetButton.setOnClickListener {
 
                 if (binding.generatorMethodLettercode.isChecked){
@@ -1300,6 +1316,8 @@ class HoardGeneratorFragment : Fragment() {
                         // TEMPORARILY house letter code order here TODO
                         val letterOrder = generatorViewModel.compileLetterCodeHoardOrder()
 
+                        generatorViewModel.generateHoard(letterOrder)
+
                     } else {
 
                         Toast.makeText(context,"Please indicate at least one treasure type to generate.",Toast.LENGTH_SHORT).show()
@@ -1316,6 +1334,8 @@ class HoardGeneratorFragment : Fragment() {
                         // TEMPORARILY house specific quantity order here TODO
                         val specQtyOrder = generatorViewModel.compileSpecificQtyHoardOrder()
 
+                        generatorViewModel.generateHoard(specQtyOrder)
+
                     } else {
 
                         Toast.makeText(context,"Specific quantity validation unsuccessful",Toast.LENGTH_SHORT).show()
@@ -1327,10 +1347,9 @@ class HoardGeneratorFragment : Fragment() {
                 }
             }
 
-            // Toast in main app UI
-            Toast.makeText(context,"Order generated. Check debug logs.",Toast.LENGTH_SHORT).show()
+            // TODO add Dialog for completion
 
-            }
+        }
         // endregion
     }
 
@@ -1664,6 +1683,8 @@ class HoardGeneratorFragment : Fragment() {
 
     private fun showButtonsCrossfade() {
 
+        isButtonGroupAnimating = true
+
         binding.generatorBottomButtonGroup.apply {
 
             alpha = 0f
@@ -1691,12 +1712,15 @@ class HoardGeneratorFragment : Fragment() {
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         binding.generatorBottomWaitingGroup.visibility = View.GONE
+                        isButtonGroupAnimating = false
                     }
                 })
         }
     }
 
     private fun hideButtonsCrossfade() {
+
+        isButtonGroupAnimating = true
 
         binding.generatorBottomWaitingGroup.apply {
             alpha = 0f
@@ -1720,6 +1744,7 @@ class HoardGeneratorFragment : Fragment() {
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
                         binding.generatorBottomButtonGroup.visibility = View.GONE
+                        isButtonGroupAnimating = false
                     }
                 })
         }
