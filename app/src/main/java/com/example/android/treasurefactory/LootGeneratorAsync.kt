@@ -302,6 +302,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             // region [ Add lists to database under parent hoard ]
             Log.d("createHoardFromOrder()","[ Add lists to database under parent hoard ]")
 
+            //TODO https://stackoverflow.com/questions/72489240/foreign-key-constraint-failed-using-room
+            // In short, you'll fix this by nixing foreign keys and manually handling casades yourself.
+
             gemPile.forEachIndexed { index, newGem ->
 
                 repository.addGem(newGem)

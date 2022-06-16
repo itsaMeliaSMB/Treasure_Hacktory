@@ -12,8 +12,8 @@ import kotlin.math.roundToInt
  *
  * @param effortRating GP/XP value ratio of items without specific XP values based on difficulty of acquisition (average difficulty is considered 5.0 gp : 1 xp)
  */
-@Entity (tableName = "hackmaster_hoard_table")
-data class Hoard(@PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
+@Entity (tableName = "hackmaster_hoard_table", indices = [Index(value = ["hoardID"])])
+data class Hoard(@PrimaryKey(autoGenerate = true) @NotNull val hoardID: Int = 0,
                  var name: String = "",
                  var creationDate: Date = Date(),
                  var creationDesc: String = "",
@@ -69,7 +69,8 @@ data class HoardLeftover(val gems: Int = 0,
         entity = Hoard::class,
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("eventID"),
-        onDelete = ForeignKey.CASCADE ) ])
+        onDelete = ForeignKey.CASCADE ) ],
+    indices = [Index(value= ["eventID"])])
 data class HoardEvent(
     @PrimaryKey(autoGenerate = true) @NotNull val eventID: Int = 0,
     val hoardID: Int = 0,

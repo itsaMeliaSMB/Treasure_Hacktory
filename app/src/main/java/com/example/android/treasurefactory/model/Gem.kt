@@ -1,9 +1,6 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
 
@@ -12,7 +9,8 @@ import org.jetbrains.annotations.NotNull
         entity = Hoard::class,
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("gemID"),
-        onDelete = ForeignKey.CASCADE ) ])
+        onDelete = ForeignKey.CASCADE ) ],
+        indices = [Index(value = ["gemID"])])
 data class Gem(
     @PrimaryKey(autoGenerate = true) @NotNull val gemID: Int = 0,
     val hoardID: Int = 0,

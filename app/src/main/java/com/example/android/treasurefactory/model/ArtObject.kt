@@ -1,9 +1,6 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
 import kotlin.random.Random
@@ -13,8 +10,8 @@ import kotlin.random.Random
         entity = Hoard::class,
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("artID"),
-        onDelete = ForeignKey.CASCADE
-    ) ] )
+        onDelete = ForeignKey.CASCADE) ],
+    indices =  [Index(value = ["artID"])])
 data class ArtObject(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
     val hoardID: Int, // NOTE: removed iconID; TODO refactor accordingly

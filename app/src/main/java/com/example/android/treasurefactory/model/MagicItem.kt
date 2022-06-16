@@ -2,6 +2,7 @@ package com.example.android.treasurefactory.model
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
@@ -43,7 +44,8 @@ enum class MagicItemType(tableLabel: String) {
         entity = Hoard::class,
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("mItemID"),
-        onDelete = ForeignKey.CASCADE) ] )
+        onDelete = ForeignKey.CASCADE) ],
+    indices = [Index(value = ["mItemID"])])
 data class MagicItem(
     @PrimaryKey(autoGenerate = true) @NotNull val mItemID: Int,
     val templateID: Int,

@@ -1,9 +1,6 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import androidx.room.*
 import org.jetbrains.annotations.NotNull
 
 @Entity(tableName = "hackmaster_spell_collection_table",
@@ -11,7 +8,8 @@ import org.jetbrains.annotations.NotNull
         entity = Hoard::class,
         parentColumns = arrayOf ("hoardID"),
         childColumns = arrayOf("sCollectID"),
-        onDelete = ForeignKey.CASCADE ) ])
+        onDelete = ForeignKey.CASCADE ) ],
+    indices = [Index(value = ["sCollectID"])])
 data class SpellCollection(
     @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
     val hoardID: Int,
