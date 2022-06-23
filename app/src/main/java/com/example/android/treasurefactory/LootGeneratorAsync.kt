@@ -303,7 +303,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             Log.d("createHoardFromOrder()","[ Add lists to database under parent hoard ]")
 
             //TODO https://stackoverflow.com/questions/72489240/foreign-key-constraint-failed-using-room
-            // In short, you'll fix this by nixing foreign keys and manually handling casades yourself.
+            // In short, you'll fix this by nixing foreign keys and manually handling cascades yourself.
 
             gemPile.forEachIndexed { index, newGem ->
 
@@ -635,8 +635,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             parentHoardID,
             System.currentTimeMillis(),
             gemTemplate.iconID,
-            gemSize,
             gemType,
+            gemSize,
             gemQuality,
             0,
             gemTemplate.name,
@@ -1585,7 +1585,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                         } else {
 
-                            Log.e("createMagicItemTuple | Child table","Empty childTemplateList.")
+                            Log.e("createMagicItemTuple | Child table","Empty childTemplateList for template ${template.refId} (${template.name}).")
                             template = template.copy(hasChild = 0)
                         }
                     }

@@ -38,7 +38,7 @@ class HMRepository (
 
     suspend fun deleteHoard(hoardToDelete: Hoard) = hoardDao.deleteHoard(hoardToDelete)
 
-    suspend fun deleteAllHoards() = hoardDao.deleteAllHoards()
+    suspend fun deleteAllHoardsAndItems() = hoardDao.deleteAllHoardsAndItems()
 
     suspend fun getHoardIdByRowId(rowID: Long) : Int = hoardDao.getIdByRowId(rowID)
     // endregion

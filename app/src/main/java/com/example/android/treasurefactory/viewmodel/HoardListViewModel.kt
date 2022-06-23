@@ -23,7 +23,7 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
 
             setRunningAsync(true)
 
-            repository.deleteAllHoards()
+            repository.deleteAllHoardsAndItems()
 
             delay(1000L)
 

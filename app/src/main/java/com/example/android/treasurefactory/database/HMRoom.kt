@@ -877,19 +877,75 @@ interface HoardDao {
     @Delete
     suspend fun deleteHoard(hoardToDelete: Hoard)
 
-    @Query("DELETE FROM hackmaster_hoard_table")
-    suspend fun deleteAllHoards()
+    //TODO add vararg version of delete hoard for handling lists of hoards
 
     @Query("SELECT hoardID FROM hackmaster_hoard_table WHERE ROWID=(:hoardRowID)")
     suspend fun getIdByRowId(hoardRowID: Long) : Int
+
+    @Transaction
+    suspend fun deleteHoardAndChildren(hoardToDelete: Hoard) {
+        val parentHoardID = hoardToDelete.hoardID
+        deleteHoard(hoardToDelete)
+        deleteHoardGems(parentHoardID)
+        deleteHoardArtObjects(parentHoardID)
+        deleteHoardMagicItems(parentHoardID)
+        deleteHoardSpellCollections(parentHoardID)
+        deleteHoardEvents(parentHoardID)
+    }
+
+    @Transaction
+    suspend fun deleteAllHoardsAndItems() {
+        deleteAllHoards()
+        deleteAllGems()
+        deleteAllArtObjects()
+        deleteAllMagicItems()
+        deleteAllSpellCollections()
+        deleteAllEvents()
+    }
     // endregion
 
     // region ( HoardEvent )
-    @Query("SELECT * FROM hoard_events_log WHERE hoardID=(:parentHoardId)")
-    fun getHoardEvents(parentHoardId: Int) : LiveData<List<HoardEvent>>
+    @Query("SELECT * FROM hoard_events_log WHERE hoardID=(:parentHoardID)")
+    fun getHoardEvents(parentHoardID: Int) : LiveData<List<HoardEvent>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addHoardEvent(newEvent: HoardEvent)
+    // endregion
+
+    // region [ Child deletion ]
+
+    @Query("DELETE FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
+    suspend fun deleteHoardGems(hoardID: Int)
+
+    @Query("DELETE FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    suspend fun deleteHoardArtObjects(hoardID: Int)
+
+    @Query("DELETE FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
+    suspend fun deleteHoardMagicItems(hoardID: Int)
+
+    @Query("DELETE FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    suspend fun deleteHoardSpellCollections(hoardID: Int)
+
+    @Query("DELETE FROM hoard_events_log WHERE hoardID=(:hoardID)")
+    suspend fun deleteHoardEvents(hoardID: Int)
+
+    @Query("DELETE FROM hackmaster_hoard_table")
+    suspend fun deleteAllHoards()
+
+    @Query("DELETE FROM hackmaster_gem_table")
+    suspend fun deleteAllGems()
+
+    @Query("DELETE FROM hackmaster_art_table")
+    suspend fun deleteAllArtObjects()
+
+    @Query("DELETE FROM hackmaster_magic_item_table")
+    suspend fun deleteAllMagicItems()
+
+    @Query("DELETE FROM hackmaster_spell_collection_table")
+    suspend fun deleteAllSpellCollections()
+
+    @Query("DELETE FROM hoard_events_log")
+    suspend fun deleteAllEvents()
     // endregion
 }
 
