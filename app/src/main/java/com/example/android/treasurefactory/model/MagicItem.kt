@@ -1,8 +1,6 @@
 package com.example.android.treasurefactory.model
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
@@ -39,13 +37,7 @@ enum class MagicItemType(tableLabel: String) {
  * @param classUsability Map of class type (fighter/thief/cleric/magic-user/druid) to its ability to use this item (true/false). Use lowercase for strings.
  * @param notes List of generated special notes for the object. First list should be a list of names for all the other lists.
  */
-@Entity(tableName = "hackmaster_magic_item_table",
-    foreignKeys = [ForeignKey(
-        entity = Hoard::class,
-        parentColumns = arrayOf ("hoardID"),
-        childColumns = arrayOf("mItemID"),
-        onDelete = ForeignKey.CASCADE) ],
-    indices = [Index(value = ["mItemID"])])
+@Entity(tableName = "hackmaster_magic_item_table")
 data class MagicItem(
     @PrimaryKey(autoGenerate = true) @NotNull val mItemID: Int,
     val templateID: Int,

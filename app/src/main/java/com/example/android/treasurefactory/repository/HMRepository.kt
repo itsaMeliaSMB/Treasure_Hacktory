@@ -30,6 +30,8 @@ class HMRepository (
 
     fun getHoard(hoardID: Int): LiveData<Hoard?> = hoardDao.getHoard(hoardID)
 
+    suspend fun getHoardOnce(hoardID: Int): Hoard? = hoardDao.getHoardOnce(hoardID)
+
     suspend fun addHoard(hoard: Hoard) : Long {
         return hoardDao.addHoard(hoard)
     }
@@ -69,7 +71,11 @@ class HMRepository (
 
     fun getGemCount(hoardID: Int): LiveData<Int> = gemDao.getGemCount(hoardID)
 
+    suspend fun getGemCountOnce(hoardID: Int): Int = gemDao.getGemCountOnce(hoardID)
+
     fun getGemValueTotal(hoardID: Int): LiveData<Double> = gemDao.getGemValueTotal(hoardID)
+
+    suspend fun getGemValueTotalOnce(hoardID: Int): Double = gemDao.getGemValueTotalOnce(hoardID)
 
     fun getGems(hoardId: Int): LiveData<List<Gem>> = gemDao.getGems(hoardId)
 
@@ -95,7 +101,11 @@ class HMRepository (
 
     fun getArtCount(hoardID: Int): LiveData<Int> = artDao.getArtCount(hoardID)
 
+    suspend fun getArtCountOnce(hoardID: Int): Int = artDao.getArtCountOnce(hoardID)
+
     fun getArtValueTotal(hoardID: Int): LiveData<Double> = artDao.getArtValueTotal(hoardID)
+
+    suspend fun getArtValueTotalOnce(hoardID: Int): Double = artDao.getArtValueTotalOnce(hoardID)
 
     fun getArtObjects(hoardId: Int): LiveData<List<ArtObject>> = artDao.getArtObjects(hoardId)
 
@@ -162,8 +172,13 @@ class HMRepository (
 
     fun getMagicItemCount(hoardID: Int): LiveData<Int> = magicItemDao.getMagicItemCount(hoardID)
 
+    suspend fun getMagicItemCountOnce(hoardID: Int): Int = magicItemDao.getMagicItemCountOnce(hoardID)
+
     fun getMagicItemValueTotal(hoardID: Int): LiveData<Double> =
         magicItemDao.getMagicItemValueTotal(hoardID)
+
+    suspend fun getMagicItemValueTotalOnce(hoardID: Int): Double =
+        magicItemDao.getMagicItemValueTotalOnce(hoardID)
 
     fun getMagicItems(hoardId: Int): LiveData<List<MagicItem>> = magicItemDao.getMagicItems(hoardId)
 
@@ -207,8 +222,14 @@ class HMRepository (
     fun getSpellCollectionCount(hoardID: Int): LiveData<Int> =
         spellCollectionDao.getSpellCollectionCount(hoardID)
 
+    suspend fun getSpellCollectionCountOnce(hoardID: Int): Int =
+        spellCollectionDao.getSpellCollectionCountOnce(hoardID)
+
     fun getSpellCollectionValueTotal(hoardID: Int) : LiveData<Double> =
         spellCollectionDao.getSpellCollectionValueTotal(hoardID)
+
+    suspend fun getSpellCollectionValueTotalOnce(hoardID: Int): Double =
+        spellCollectionDao.getSpellCollectionValueTotalOnce(hoardID)
 
     fun getSpellCollections(hoardId: Int): LiveData<List<SpellCollection>> =
         spellCollectionDao.getSpellCollections(hoardId)

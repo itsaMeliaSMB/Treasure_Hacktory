@@ -12,6 +12,8 @@ import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.random.Random
@@ -197,7 +199,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     val rollableTables = listOf("A2")
 
                     val newPotion = createMagicItemTuple(newHoardID, -1, rollableTables,
-                        hoardOrder.genParams.magicParams).magicItem
+                            hoardOrder.genParams.magicParams).magicItem
 
                     innerItemPile.add(newPotion)
                 }
@@ -305,38 +307,12 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             //TODO https://stackoverflow.com/questions/72489240/foreign-key-constraint-failed-using-room
             // In short, you'll fix this by nixing foreign keys and manually handling cascades yourself.
 
-            gemPile.forEachIndexed { index, newGem ->
+            val addGemsJob = launch { gemPile.forEach { repository.addGem(it) } }
+            val addArtJob = launch { artPile.forEach { repository.addArtObject(it) } }
+            val addItemsJob = launch { itemPile.forEach { repository.addMagicItem(it) } }
+            val addSpellsJob = launch { spellPile.forEach { repository.addSpellCollection(it) } }
 
-                repository.addGem(newGem)
-                Log.d("createHoardFromOrder() | gemPile",
-                    "(#${index + 1}) Added ${newGem.name} under ${newGem.hoardID}.")
-            }
-
-            artPile.forEachIndexed { index, newArt ->
-
-                    repository.addArtObject(newArt)
-                    Log.d(
-                        "createHoardFromOrder() | artPile",
-                        "(#${index + 1}) Added ${newArt.name} under ${newArt.hoardID}."
-                    )
-                }
-
-            itemPile.forEachIndexed { index, newItem ->
-
-                repository.addMagicItem(newItem)
-                Log.d("createHoardFromOrder() | itemPile",
-                    "(#${index + 1}) Added ${newItem.name} under ${newItem.hoardID}.")
-            }
-
-            spellPile.forEachIndexed { index, newCollection ->
-
-                repository.addSpellCollection(newCollection)
-                Log.d("createHoardFromOrder() | spellPile",
-                    "(#${index + 1}) Added ${newCollection.name} under ${newCollection.hoardID}.")
-            }
-
-            //TODO block into launched Jobs once this is sequentially confirmed to work
-            // then, also add a joinAll to actually call them
+            joinAll(addGemsJob, addArtJob, addItemsJob, addSpellsJob)
 
             // endregion
 
@@ -347,21 +323,28 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 Log.d("createHoardFromOrder()","updateItemCounts() called.")
 
-                val initialGemCount = repository.getGemCount(newHoardID).value ?: 0
-                val initialArtCount = repository.getArtCount(newHoardID).value ?: 0
-                val initialItemCount = repository.getMagicItemCount(newHoardID).value ?: 0
-                val initialSpellCount = repository.getSpellCollectionCount(newHoardID).value ?: 0
+                val initialGemCount = repository.getGemCountOnce(newHoardID)
+                val initialArtCount = repository.getArtCountOnce(newHoardID)
+                val initialItemCount = repository.getMagicItemCountOnce(newHoardID)
+                val initialSpellCount = repository.getSpellCollectionCountOnce(newHoardID)
+
+                Log.d("updateItemCounts()","initialGemCount = $initialGemCount")
+                Log.d("updateItemCounts()","initialArtCount = $initialArtCount")
+                Log.d("updateItemCounts()","initialItemCount = $initialItemCount")
+                Log.d("updateItemCounts()","initialSpellCount = $initialSpellCount")
 
                 val initialGPTotal = (hoardOrder.let {
                     ((it.copperPieces * 0.01) + (it.silverPieces * 0.1) + (it.electrumPieces * 0.5) +
                             (it.goldPieces * 1.0) + (it.hardSilverPieces * 2.0) + (it.platinumPieces * 5.0)) *
                             100.00.roundToInt() / 100.00 }) +
-                        (repository.getGemValueTotal(newHoardID).value ?: 0.0) +
-                        (repository.getArtValueTotal(newHoardID).value ?: 0.0) +
-                        (repository.getMagicItemValueTotal(newHoardID).value ?: 0.0) +
-                        (repository.getSpellCollectionValueTotal(newHoardID).value ?: 0.0)
+                        (repository.getGemValueTotalOnce(newHoardID)) +
+                        (repository.getArtValueTotalOnce(newHoardID)) +
+                        (repository.getMagicItemValueTotalOnce(newHoardID)) +
+                        (repository.getSpellCollectionValueTotalOnce(newHoardID))
 
-                val newHoard = repository.getHoard(newHoardID).value?.copy(
+                Log.d("updateItemCounts()","initialGPTotal = $initialGPTotal")
+
+                val newHoard = repository.getHoardOnce(newHoardID).takeIf { it != null }?.copy(
                     gpTotal = initialGPTotal,
                     gemCount = initialGemCount,
                     artCount = initialArtCount,
@@ -371,6 +354,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 if (newHoard != null) {
                     repository.updateHoard(newHoard)
+                } else {
+                    Log.e("updateItemCounts()","newHoard is null.")
                 }
             }
 
@@ -1210,7 +1195,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         var mIsCursed       = false
         var mAlignment      = ""
 
-        val notesLists      = LinkedHashMap<String,ArrayList<String>>()
+        /** Flat notes container. First in pair is table name, second is actual note. */
+        val flatNotesList   = ArrayList<Pair<String,String>>()
         var specialItemType : SpItType? = null
         var spellListOrder  : SpellCollectionOrder? = null
         var gemOrder        : GemOrder? = null
@@ -1435,7 +1421,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                         itemRestrictions.allowCursedItems
                                     )
                                 baseTemplateID = -1
-                                mIsCursed = true
+                                mIsCursed = itemRestrictions.allowCursedItems
 
                             }
 
@@ -1699,9 +1685,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     val useAn : Boolean = setOf("a","e","i","o","u")
                         .contains(imitationName.substring(0,endIndex = 1))
 
-                    notesLists["Additional notes"]?.plusAssign(
-                        "Appears to be ${if (useAn) "an" else "a"} $imitationName"
-                    )
+                    flatNotesList.add("Additional notes" to
+                            "Appears to be ${if (useAn) "an" else "a"} $imitationName")
                 }
             }
             // endregion
@@ -1711,7 +1696,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 val splitNotes = template.notes.split("¶")
 
-                splitNotes.forEach { notesLists["Additional notes"]?.plusAssign(it) }
+                splitNotes.forEach { flatNotesList.add("Additional notes" to it) }
             }
             // endregion
 
@@ -1720,21 +1705,21 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 if (template.multiType != 3) {
 
-                    notesLists["Additional notes"]?.plusAssign("Found with $itemCharges charges/uses remaining")
+                    flatNotesList.add("Additional notes" to
+                            "Found with $itemCharges charges/uses remaining")
                 }
 
             } else {
 
                 if (itemType == "A2") {
-
-                    notesLists["Additional notes"]?.plusAssign("Check \"Potion " +
-                            "flavor text\" for remaining doses.")
+                    flatNotesList.add("Additional notes" to
+                            "Check \"Potion flavor text\" for remaining doses.")
                 }
             }
             // endregion
 
             // region ( Add command word, if applicable )
-            if (template.commandWord.isNotBlank()){
+            if (template.commandWord.isNotBlank()) {
 
                 val keywords = if (template.commandWord == "THREE"){
                     listOf("ANY","ANY","ANY")
@@ -1745,7 +1730,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     append("Has ${keywords.size} command word" +
                         if (keywords.size > 1) {
                             "s. Here are some randomly-generated suggestions: "
-                        } else "Here is a randomly-generated suggestion: ")
+                        } else ". Here is a randomly-generated suggestion: ")
                 }
 
                 keywords.forEach { currentKeyword ->
@@ -1766,13 +1751,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     textBuilder.append( if (index > 0) " / $entry" else entry )
                 }
 
-                textBuilder.append("Has ${keywords.size} command word" +
-                        if (keywords.size > 1) {
-                            "s. Here are some randomly-generated suggestions: "
-                        } else "Here is a randomly-generated suggestion: ")
-
-                notesLists["Additional notes"]?.plusAssign(textBuilder.toString())
-
+                flatNotesList.add("Additional notes" to textBuilder.toString())
             }
             // endregion
 
@@ -1926,128 +1905,124 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 when (Random.nextInt(1,101)) {
 
                     in 1..2     -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: Porcelain Jar")
+
+                        flatNotesList.add("Potion flavor text" to "Container: Porcelain Jar")
                         if (mIconID == "potion_empty") mIconID = "potion_alabaster"
                     }
 
                     in 3..4     -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: Alabaster")
+                        flatNotesList.add("Potion flavor text" to "Container: Alabaster")
                         if (mIconID == "potion_empty") mIconID = "potion_alabaster"
                     }
 
                     in 5..12    -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Round, long container")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Round, long container")
                         if (mIconID == "potion_empty") mIconID = "potion_round_long"
                     }
 
                     in 13..14   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Square, long container")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Square, long container")
                         if (mIconID == "potion_empty") mIconID = "potion_square_long"
                     }
 
                     in 15..19   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Conical bulb")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Conical bulb")
                         if (mIconID == "potion_empty") mIconID = "potion_erlenmeyer"
 
                         isRoundBulb = true
                     }
 
                     in 20..48   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Spherical bulb")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Spherical bulb")
                         if (mIconID == "potion_empty") mIconID = "potion_round_short"
 
                         isRoundBulb = true
                     }
 
                     in 49..56   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Oval, 'squashed' bulb")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Oval, 'squashed' bulb")
                         if (mIconID == "potion_empty") mIconID = "potion_squashed"
 
                         isRoundBulb = true
                     }
 
                     in 57..60   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Tapering neck, Conical flask")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Tapering neck, Conical flask")
                         if (mIconID == "potion_empty") mIconID = "potion_fancy"
                     }
 
                     in 61..65   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Triangular bulb")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Triangular bulb")
                         if (mIconID == "potion_empty") mIconID = "potion_pointy"
                     }
 
                     in 66..69 -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("$material - Triangular, long container")
+                        flatNotesList.add("Potion flavor text" to
+                                "$material - Triangular, long container")
                         if (mIconID == "potion_empty") mIconID = "potion_hexagonal"
                     }
 
                     in 70..73   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("$material - Twisted, almost misshapen neck, small diamond bulb")
+                        flatNotesList.add("Potion flavor text" to
+                                "$material - Twisted, almost misshapen neck, small diamond bulb")
                         if (mIconID == "potion_empty") mIconID = "potion_pointy"
                     }
 
                     in 74..76   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Test-tube style")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Test-tube style")
                         if (mIconID == "potion_empty") mIconID = "potion_tube"
                     }
 
                     in 77..78   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Lone wine bottle (Green glass):")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Lone wine bottle (Green glass):")
                         if (mIconID == "potion_empty") mIconID = "potion_winebottle"
                         itemCharges = Random.nextInt(1,4)
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign(
-                                "This container holds $itemCharges dose(s) of " +
-                                        "potion - all of the same type. Liquid color is " +
-                                        "not immediately discernible. [1]")
+                        flatNotesList.add("Potion flavor text" to
+                                "This container holds $itemCharges dose(s) of potion - all of " +
+                                "the same type. Liquid color is not immediately discernible. [1]")
                     }
 
                     in 79..80   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Rectangular bulb")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Rectangular bulb")
                         if (mIconID == "potion_empty") mIconID = "potion_square_long"
                     }
 
                     in 81..84   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Hexagonal, long container")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Hexagonal, long container")
                         if (mIconID == "potion_empty") mIconID = "potion_hexagonal"
                     }
 
-                    in 85..86 -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Curved, swirl bulb")
+                    in 85..86   -> {
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Curved, swirl bulb")
                         if (mIconID == "potion_empty") mIconID = "potion_fancy"
 
                         isRoundBulb = true
                     }
 
                     in 87..88   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Rectangular, long container")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Rectangular, long container")
                         if (mIconID == "potion_empty") mIconID = "potion_square_long"
                     }
 
                     89          -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: $material - Long necked bottle " +
-                                    "with ${Random.nextInt(2,5)} round bulbs, " +
-                                    "decreasing in size as they go up the bottle, all " +
-                                    "totalling one dose of potion.")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: $material - Long necked bottle with " +
+                                "${Random.nextInt(2,5)} round bulbs, decreasing in " +
+                                "size as they go up the bottle, all totalling one dose of potion.")
                         if (mIconID == "potion_empty") mIconID = "potion_other"
 
                         itemCharges = 1
@@ -2056,69 +2031,65 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     }
 
                     90          -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: Metal - Sealed tankard")
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Unless opened, these containers " +
-                                    "prevent the potion from being viewed. [2]")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: Metal - Sealed tankard")
+                        flatNotesList.add("Potion flavor text" to
+                                "Unless opened, these containers prevent the potion from " +
+                                "being viewed. [2]")
                         if (mIconID == "potion_empty") mIconID = "potion_tankard"
                     }
 
                     in 91..92   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: Metal - Flask")
+                        flatNotesList.add("Potion flavor text" to "Container: Metal - Flask")
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Unless opened, these containers " +
-                                    "prevent the potion from being viewed. [2]")
+                        flatNotesList.add("Potion flavor text" to
+                                "Unless opened, these containers prevent the potion from being " +
+                                "viewed. [2]")
 
                         if (mIconID == "potion_empty") mIconID = "potion_metal_flask"
                     }
 
                     in 93..95   -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Special - Unusually shaped ${material.lowercase()} " +
-                                    "(heart, skull, Apple, Standing Nymph, etc.)")
+                        flatNotesList.add("Potion flavor text" to
+                                "Special - Unusually shaped ${material.lowercase()} (heart, " +
+                                "skull, Apple, Standing Nymph, etc.)")
                         if (mIconID == "potion_empty") mIconID = "potion_unusual"
                     }
 
                     96          -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: Special - Berry Form:")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: Special - Berry Form:")
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Imported from the desert Wurld of " +
-                                    "Hackthas, these sparkling preserved berries are " +
-                                    "often found preserved within glass bottles, and " +
-                                    "must be fully consumed in order for their magic to " +
-                                    "take effect. For some reason, these forms are " +
-                                    "mainly prunes or dusty-tasting peach-like fruits. [3]")
+                        flatNotesList.add("Potion flavor text" to
+                                "Imported from the desert Wurld of Hackthas, these sparkling " +
+                                "preserved berries are often found preserved within glass " +
+                                "bottles, and must be fully consumed in order for their magic to " +
+                                "take effect. For some reason, these forms are mainly prunes or " +
+                                "dusty-tasting peach-like fruits. [3]")
 
                         if (mIconID == "potion_empty") mIconID = "potion_berry"
                     }
 
                     97          -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: Special - Wooden or ${material.lowercase()} " +
-                                    "charm hanging from a chain:")
+                        flatNotesList.add("Potion flavor text" to
+                                "Container: Special - Wooden or ${material.lowercase()} charm " +
+                                "hanging from a chain:")
 
                         if (mIconID == "potion_empty") mIconID = "potion_charm"
 
                         isSealed = true
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Aside from the liquid within, these " +
-                                    "necklaces are non-magical, but must be snapped in " +
-                                    "order to access the potion within. Any number of " +
-                                    "these may be worn around the neck without " +
-                                    "interference with either each other or any other " +
-                                    "magical pendants. These types of containers are " +
-                                    "designed to be worn around a character’s neck. [4]")
+                        flatNotesList.add("Potion flavor text" to
+                                "Aside from the liquid within, these necklaces are non-magical, " +
+                                "but must be snapped in order to access the potion within. Any " +
+                                "number of these may be worn around the neck without " +
+                                "interference with either each other or any other magical " +
+                                "pendants. These types of containers are designed to be worn " +
+                                "around a character’s neck. [4]")
                     }
 
                     else        -> {
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Container: GM's option")
+                        flatNotesList.add("Potion flavor text" to "Container: GM's option")
                         if (mIconID == "potion_empty") mIconID = "potion_other"
                     }
                 }
@@ -2128,11 +2099,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 if (Random.nextInt(1,101) <= 30) {
 
-                    notesLists["Potion flavor text"]
-                        ?.plusAssign("Has ${Random.nextInt(1,7)} ridge(s) " +
-                                "incorporated into their shape – either ribbed as vertical " +
-                                "ridges running parallel with one another, or small, fancy " +
-                                "decorative layers on top of the bulb")
+                    flatNotesList.add("Potion flavor text" to "Has " +
+                            "${Random.nextInt(1,7)} ridge(s) incorporated into their " +
+                            "shape – either ribbed as vertical ridges running parallel with one " +
+                            "another, or small, fancy decorative layers on top of the bulb.")
                 }
                 // endregion
 
@@ -2142,65 +2112,56 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     1           -> {
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Sealant: No seal:")
+                        flatNotesList.add("Potion flavor text" to "Sealant: No seal:")
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Potions liquid has dried up – the residue " +
-                                    "can be re-hydrated, but only for half strength; 30% " +
-                                    "chance all magic is nullified. (This one " +
-                                    "${checkIfNullified(30)} its check)")
+                        flatNotesList.add("Potion flavor text" to
+                                "Potions liquid has dried up – the residue can be re-hydrated, " +
+                                "but only for half strength; 30% chance all magic is nullified. " +
+                                "(This one ${checkIfNullified(30)} its check)")
                     }
 
                     in 2..11    -> {
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Sealant: Seal broken:")
+                        flatNotesList.add("Potion flavor text" to "Sealant: Seal broken:")
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("70% chance 1-3 doses of the potion (if the " +
-                                    "container holds more than one) have already been " +
-                                    "quaffed (Result: ${checkAlreadyQuaffedDoses()} already " +
-                                    "used). 5% chance all magic is nullified. (This one " +
-                                    "${checkIfNullified(5)} its check)")
+                        flatNotesList.add("Potion flavor text" to
+                                "70% chance 1-3 doses of the potion (if the container holds more " +
+                                "than one) have already been quaffed (Result: " +
+                                "${checkAlreadyQuaffedDoses()} already used). 5% chance all " +
+                                "magic is nullified. (This one ${checkIfNullified(5)} its check)")
                     }
 
                     in 12..62   -> {
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Sealant: Corked")
+                        flatNotesList.add("Potion flavor text" to "Sealant: Corked")
                     }
 
                     in 63..82   -> {
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Sealant: Corked and waxed")
+                        flatNotesList.add("Potion flavor text" to "Sealant: Corked and waxed")
                     }
 
                     in 83..88   -> {
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Sealant: Glass stopper")
+                        flatNotesList.add("Potion flavor text" to "Sealant: Glass stopper")
                     }
 
                     in 87..93   -> {
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Sealant: Corked with a chain that is attached to the bottle")
+                        flatNotesList.add("Potion flavor text" to
+                                "Sealant: Corked with a chain that is attached to the bottle")
                     }
 
                     else        -> {
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Sealant: Sealed $material neck:")
+                        flatNotesList.add("Potion flavor text" to "Sealant: Sealed $material neck:")
 
-                        notesLists["Potion flavor text"]
-                            ?.plusAssign("Neck must be broken before use, one-chance " +
-                                    "only before becoming useless. Characters drinking " +
-                                    "straight from a roughly shattered neck suffer 1d3-1 hit " +
-                                    "points of damage. Speed Penalty - an extra 2 segments " +
-                                    "in combat must be spent opening a bottle like this. " +
-                                    "(See footnote for Table HJ21-B)")
+                        flatNotesList.add("Potion flavor text" to "Neck must be broken before " +
+                                "use, one-chance only before becoming useless. Characters " +
+                                "drinking straight from a roughly shattered neck suffer 1d3-1 " +
+                                "hit points of damage. Speed Penalty - an extra 2 segments in " +
+                                "combat must be spent opening a bottle like this. (See footnote " +
+                                "for Table HJ21-B)")
                     }
 
                 }
@@ -2221,96 +2182,87 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     when (currentRoll) {
 
                         1       -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: A minute but detailed " +
-                                        "etching of a grand battle runs around the base of " +
-                                        "the bottle")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: A minute but detailed etching of a grand " +
+                                    "battle runs around the base of the bottle")
                         }
 
                         2       -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: Potion bottle constructed of " +
-                                        "four parallel, differently colored glasses")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: Potion bottle constructed of four parallel, " +
+                                    "differently colored glasses")
                         }
 
                         3       -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: All of the bulb/neck, " +
-                                        "except the base, is sheathed in fine/once-fine silk " +
-                                        "held in place with tiny silver studs")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: All of the bulb/neck, except the base, is " +
+                                    "sheathed in fine/once-fine silk held in place with tiny " +
+                                    "silver studs")
                         }
 
                         4       -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: " +
-                                        "${Random.nextInt(1,9)} fancy beads hang " +
-                                        "down an inch from the bottleneck base on golden " +
-                                        "threads")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: ${Random.nextInt(1,9)} fancy " +
+                                    "beads hang down an inch from the bottleneck base on golden " +
+                                    "threads")
                         }
 
                         5       -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: The " +
-                                        "${material.lowercase()} for the bottle appears " +
-                                        "spider-webbed with cracks, but is as strong as a " +
-                                        "normal ${material.lowercase()} bottle")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: The ${material.lowercase()} for the bottle " +
+                                    "appears spider-webbed with cracks, but is as strong as a " +
+                                    "normal ${material.lowercase()} bottle")
                         }
 
                         6       -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: A name and ‘title’ " +
-                                        "(e.g. Magnuson the Flamehard) are found etched in " +
-                                        "the glass in fine cursive script")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: A name and ‘title’ (e.g. Magnuson the " +
+                                    "Flamehard) are found etched in the glass in fine cursive " +
+                                    "script")
                         }
 
                         7       -> {
 
                             val addlGems = Random.nextInt(1,5)
 
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: $addlGems 20gp gems are " +
-                                        "studded into the bottle in a symmetrical style " +
-                                        "around it")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: $addlGems 20gp gems are studded into the " +
+                                    "bottle in a symmetrical style around it")
 
                             mGpValue += (addlGems * 20.0)
                         }
 
                         8       -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: Arcane looking " +
-                                        "(but harmless) runes encircle the top of the bulb – " +
-                                        "actually spells out a domestic, household item in a " +
-                                        "long-extinct language")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: Arcane looking (but harmless) runes " +
+                                    "encircle the top of the bulb – actually spells out a " +
+                                    "domestic, household item in a long-extinct language")
                         }
 
                         9       -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: A series of metallic " +
-                                        "carved runes strung together on a silver wire run " +
-                                        "down 3 parts of the bottle")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: A series of metallic carved runes strung " +
+                                    "together on a silver wire run down 3 parts of the bottle")
                         }
 
                         10      -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: Potion bottle has a " +
-                                        "small handle in the shape of a swan between the top " +
-                                        "of bulb and neck")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: Potion bottle has a small handle in the " +
+                                    "shape of a swan between the top of bulb and neck")
                         }
 
                         11      -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: Small wisps of smoke " +
-                                        "can be constantly seen emanating from the bottle, " +
-                                        "which itself is always cold to the touch with a " +
-                                        "thin layer of ice on its surface")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: Small wisps of smoke can be constantly seen " +
+                                    "emanating from the bottle, which itself is always cold to " +
+                                    "the touch with a thin layer of ice on its surface")
                         }
 
                         12      -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: Bottle constructed of " +
-                                        "extremely bright and vastly differently " +
-                                        "psychedelically colored glasses in swirls, stars " +
-                                        "and odd patches")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: Bottle constructed of extremely bright and " +
+                                    "vastly differently psychedelically colored glasses in " +
+                                    "swirls, stars and odd patches")
                         }
 
                         13      -> {
@@ -2324,65 +2276,58 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 return alphabet[Random.nextInt(0,alphabet.size)]
                             }
 
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: 3 prominent initials " +
-                                        "molded into the bottle glass during creation: " +
-                                        "\"${getInitial()}.${getInitial()}.${getInitial()}.\"")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: 3 prominent initials molded into the bottle " +
+                                    "glass during creation: " +
+                                    "\"${getInitial()}.${getInitial()}.${getInitial()}.\"")
                         }
 
                         14      -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: Bottle held within 2 " +
-                                        "thing bands of gold, along with small legs at base " +
-                                        "of bulb")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: Bottle held within 2 thin bands of gold, " +
+                                    "along with small legs at base of bulb")
                         }
 
                         15      -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: A Gawd’s symbol is " +
-                                        "inscribed within the glass or pulled out of the " +
-                                        "glass during creation (most commonly a key, the " +
-                                        "symbol of Hokalas)")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: A Gawd’s symbol is inscribed within the " +
+                                    "glass or pulled out of the glass during creation (most " +
+                                    "commonly a key, the symbol of Hokalas)")
                         }
 
                         16      -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: An outline of the " +
-                                        "continent is etched around the bulb, with a tiny X " +
-                                        "somewhere on it.")
-                            // Consider making this have map properties TODO
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: An outline of the continent is etched " +
+                                    "around the bulb, with a tiny X somewhere on it.")
                         }
 
                         17      -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: Top of the bottle neck " +
-                                        "and cork are coated in a patterned silver metal")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: Top of the bottle neck and cork are coated " +
+                                    "in a patterned silver metal")
                         }
 
                         18      -> {
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: The potion bottle is " +
-                                        "actually a test-tube style one inside the result " +
-                                        "rolled, the outer one filled with a liquid of a " +
-                                        "[potentially] very different color " +
-                                        "(${getSubstanceColor()}) to the potion within")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: The potion bottle is actually a test-tube " +
+                                    "style one inside the result rolled, the outer one filled " +
+                                    "with a liquid of a [potentially] very different color " +
+                                    "(${getSubstanceColor()}) to the potion within")
                         }
 
                         19      ->{
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: Bottle has a stopper in " +
-                                        "the shape of a butterfly in flight, dragonfly, or " +
-                                        "similar unusual design")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: Bottle has a stopper in the shape of a " +
+                                    "butterfly in flight, dragonfly, or similar unusual design")
                         }
 
                         else    -> {
 
                             val addlGems = 4 + Random.nextInt(1,9)
 
-                            notesLists["Potion flavor text"]
-                                ?.plusAssign("Embellishment: $addlGems small gems " +
-                                        "(10gp ea.) adorn the bottle on one side in a " +
-                                        "geometric pattern")
+                            flatNotesList.add("Potion flavor text" to
+                                    "Embellishment: $addlGems small gems (10gp ea.) adorn the " +
+                                    "bottle on one side in a geometric pattern")
 
                             mGpValue += (addlGems * 10.0)
                         }
@@ -2392,8 +2337,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 // region ( Roll potion consistency )
 
-                notesLists["Potion flavor text"]
-                    ?.plusAssign("Substance consistency: " +
+                flatNotesList.add("Potion flavor text" to "Substance consistency: " +
                             when (Random.nextInt(1,101)) {
                                 in 1..19    -> "Bubbling"
                                 in 20..29   -> "Cloudy"
@@ -2411,8 +2355,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 // region ( Roll potion appearance/color(s) )
 
-                notesLists["Potion flavor text"]
-                    ?.plusAssign("Appearance (unless entry says otherwise): " +
+                flatNotesList.add("Potion flavor text" to
+                        "Appearance (unless entry says otherwise): " +
                             when (Random.nextInt(1,101)) {
 
                                 in 1..29    -> "Clear (transparent)"
@@ -2435,8 +2379,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 // region ( Roll potion taste/odor )
 
-                notesLists["Potion flavor text"]
-                    ?.plusAssign( "Taste and/or Odor (unless entry says otherwise): " +
+                flatNotesList.add("Potion flavor text" to
+                        "Taste and/or Odor (unless entry says otherwise): " +
                             when (Random.nextInt(1,101)) {
 
                                 in 1..3     -> "Acidic"
@@ -2477,8 +2421,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 // region ( Add dosages remaining  )
 
-                notesLists["Potion flavor text"]
-                    ?.plusAssign("Found with $itemCharges dose(s) remaining")
+                flatNotesList.add("Potion flavor text" to
+                        "Found with $itemCharges dose(s) remaining")
                 //endregion
             }
             // endregion
@@ -2801,74 +2745,60 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 // endregion
 
                 // region [ Record info on table ]
+                flatNotesList.add("Intelligent weapon info" to "Ego rating: $weaponEgo")
 
-                notesLists["Intelligent weapon info"]
-                    ?.plusAssign("Ego rating: $weaponEgo")
+                flatNotesList.add("Intelligent weapon info" to "Intelligence: $wIntelligence")
 
-                notesLists["Intelligent weapon info"]
-                    ?.plusAssign("Intelligence: $wIntelligence")
+                flatNotesList.add("Intelligent weapon info" to "Alignment: $wAlignment")
 
-                notesLists["Intelligent weapon info"]
-                    ?.plusAssign("Alignment: $wAlignment")
+                flatNotesList.add("Intelligent weapon info" to "Languages known: $wLanguagesKnown")
 
-                notesLists["Intelligent weapon info"]
-                    ?.plusAssign("Languages known: $wLanguagesKnown")
-
-                notesLists["Intelligent weapon info"]
-                    ?.plusAssign("Communication mode: ${COMM_LEVEL_LIST[wCommLevel]}")
+                flatNotesList.add("Intelligent weapon info" to "Communication mode: ${COMM_LEVEL_LIST[wCommLevel]}")
 
                 if (wSpecialReadingPower.isNotEmpty()) {
-
-                    notesLists["Intelligent weapon info"]
-                        ?.plusAssign(wSpecialReadingPower)
+                    flatNotesList.add("Intelligent weapon info" to wSpecialReadingPower)
                 }
 
-                notesLists["Intelligent weapon info"]
-                    ?.plusAssign("Please refer to GMG pgs. 275-276 for more details.")
+                flatNotesList.add("Intelligent weapon info" to "Please refer to GMG pgs. 275-276 for more details.")
 
                 if (primaryAbilityList.isNotEmpty()) {
 
-                    notesLists["Intelligent weapon info"]
-                        ?.plusAssign("[ PRIMARY ABILIT" +
+                    flatNotesList.add("Intelligent weapon info" to "[ PRIMARY ABILIT" +
                                 "${if (primaryAbilityList.size == 1) "Y" else "IES"} ]")
 
                     primaryAbilityList.forEachIndexed { index, entry ->
 
-                        notesLists["Intelligent weapon info"]
-                            ?.plusAssign("${index + 1}) $entry")
+                        flatNotesList.add("Intelligent weapon info" to "${index + 1}) $entry")
                     }
                 }
 
                 if (extraordinaryPowerList.isNotEmpty()) {
 
-                    notesLists["Intelligent weapon info"]
-                        ?.plusAssign("[ EXTRAORDINARY POWER" +
+                    flatNotesList.add("Intelligent weapon info" to "[ EXTRAORDINARY POWER" +
                                 "${if (extraordinaryPowerList.size == 1) "" else "S"} ]")
 
                     extraordinaryPowerList.forEachIndexed { index, entry ->
 
-                        notesLists["Intelligent weapon info"]
-                            ?.plusAssign("${index + 1}) $entry")
+                        flatNotesList.add("Intelligent weapon info" to "${index + 1}) $entry")
                     }
                 }
 
                 if (wSpecialPurpose.isNotEmpty()) {
 
-                    notesLists["Intelligent weapon info"]
-                        ?.plusAssign("[ SPECIAL PURPOSE INFO ]")
-                    notesLists["Intelligent weapon info"]
-                        ?.plusAssign("Special purpose: $wSpecialPurpose")
-                    notesLists["Intelligent weapon info"]
-                        ?.plusAssign("Special purpose power: $wSpecialPurposePower")
+                    flatNotesList.add("Intelligent weapon info" to "[ SPECIAL PURPOSE INFO ]")
+                    flatNotesList.add("Intelligent weapon info" to
+                            "Special purpose: $wSpecialPurpose")
+                    flatNotesList.add("Intelligent weapon info" to
+                            "Special purpose power: $wSpecialPurposePower")
                 }
                 // endregion
 
             } else if ( template.intelChance == -1 ) {
 
-                notesLists["Intelligent weapon info"]
-                    ?.plusAssign("This weapon has a specific profile outlined in the " +
-                            "source text. As such, please refer to this item's entry for" +
-                            " specifics.")
+                flatNotesList.add("Intelligent weapon info" to
+                        "This weapon has a specific profile outlined in the source text. As " +
+                        "such, please refer to this item's entry on page $mSourcePage for " +
+                        "specifics.")
             }
             // endregion
 
@@ -2876,8 +2806,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             if (itemType == "A24") {
 
-                if (template.multiType == 4) notesLists["Artifact particulars"]?.plusAssign(
-                    "THIS IS A HACKMASTER-CLASS ITEM!")
+                flatNotesList.add("Artifact particulars" to "THIS IS A HACKMASTER-CLASS ITEM!")
 
                 // region ( Roll minor benign effects )
                 if (template.iPower in 1..46){
@@ -2932,8 +2861,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     )
                     val typeIList = arrayListOf<Int>()
 
-                    notesLists["Artifact particulars"]
-                        ?.plusAssign("[ I. MINOR BENIGN EFFECTS" +
+                    flatNotesList.add("Artifact particulars" to "[ I. MINOR BENIGN EFFECTS" +
                                 "${if (template.iPower > 1)"S" else ""} ]")
 
                     repeat (template.iPower) {
@@ -2953,8 +2881,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     // Add effects once all are generated
                     typeIList.forEachIndexed {index, entry ->
-                        notesLists["Artifact particulars"]
-                            ?.plusAssign("${index + 1}) ${minorBenignEffects[entry]}")
+                        flatNotesList.add("Artifact particulars" to
+                                "${index + 1}) ${minorBenignEffects[entry]}")
                     }
                 }
                 // endregion
@@ -3016,8 +2944,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     )
                     val typeIIList = arrayListOf<Int>()
 
-                    notesLists["Artifact particulars"]
-                        ?.plusAssign("[ II. MAJOR BENIGN EFFECT" +
+                    flatNotesList.add("Artifact particulars" to "[ II. MAJOR BENIGN EFFECT" +
                                 "${if (template.iiPower > 1)"S" else ""} ]")
 
                     repeat (template.iiPower) {
@@ -3035,11 +2962,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         typeIIList.add(newEffect)
                     }
 
-
                     // Add effects once all are generated
                     typeIIList.forEachIndexed {index, entry ->
-                        notesLists["Artifact particulars"]
-                            ?.plusAssign("${index + 1}) ${majorBenignEffects[entry]}")
+                        flatNotesList.add("Artifact particulars" to
+                                "${index + 1}) ${majorBenignEffects[entry]}")
                     }
                 }
                 //endregion
@@ -3076,8 +3002,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     )
                     val typeIIIList = arrayListOf<Int>()
 
-                    notesLists["Artifact particulars"]
-                        ?.plusAssign("[ III. MINOR MALEVOLENT EFFECT" +
+                    flatNotesList.add("Artifact particulars" to "[ III. MINOR MALEVOLENT EFFECT" +
                                 "${if (template.iiiPower > 1)"S" else ""} ]")
 
                     repeat (template.iiiPower) {
@@ -3097,8 +3022,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     // Add effects once all are generated
                     typeIIIList.forEachIndexed {index, entry ->
-                        notesLists["Artifact particulars"]
-                            ?.plusAssign("${index + 1}) ${minorMalevolentEffects[entry]}")
+                        flatNotesList.add("Artifact particulars" to
+                                "${index + 1}) ${minorMalevolentEffects[entry]}")
                     }
                 }
                 // endregion
@@ -3144,8 +3069,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     )
                     val typeIVList = arrayListOf<Int>()
 
-                    notesLists["Artifact particulars"]
-                        ?.plusAssign("[ IV. MAJOR MALEVOLENT EFFECT" +
+                    flatNotesList.add("Artifact particulars" to "[ IV. MAJOR MALEVOLENT EFFECT" +
                                 "${if (template.ivPower > 1)"S" else ""} ]")
 
                     repeat (template.ivPower) {
@@ -3202,8 +3126,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     // Add effects once all are generated
                     typeIVList.forEachIndexed {index, entry ->
-                        notesLists["Artifact particulars"]
-                            ?.plusAssign("${index + 1}) ${majorMalevolentEffects[entry]}")
+                        flatNotesList.add("Artifact particulars" to
+                                "${index + 1}) ${majorMalevolentEffects[entry]}")
                     }
                 }
                 // endregion
@@ -3260,8 +3184,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     )
                     val typeVList = arrayListOf<Int>()
 
-                    notesLists["Artifact particulars"]
-                        ?.plusAssign("[ V. PRIME POWER " +
+                    flatNotesList.add("Artifact particulars" to "[ V. PRIME POWER " +
                                 "${if (template.vPower > 1)"S" else ""} ]")
 
                     repeat (template.vPower) {
@@ -3330,8 +3253,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     // Add effects once all are generated
                     typeVList.forEachIndexed {index, entry ->
-                        notesLists["Artifact particulars"]
-                            ?.plusAssign("${index + 1}) ${primePowers[entry]}")
+                        flatNotesList.add("Artifact particulars" to
+                                "${index + 1}) ${primePowers[entry]}")
                     }
                 }
                 //endregion
@@ -3361,8 +3284,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     )
                     val typeVIList = arrayListOf<Int>()
 
-                    notesLists["Artifact particulars"]
-                        ?.plusAssign("[ VI. SIDE EFFECT " +
+                    flatNotesList.add("Artifact particulars" to "[ VI. SIDE EFFECT " +
                                 "${if (template.vPower > 1)"S" else ""} ]")
 
                     repeat (template.vPower) {
@@ -3403,8 +3325,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     // Add effects once all are generated
                     typeVIList.forEachIndexed {index, entry ->
-                        notesLists["Artifact particulars"]
-                            ?.plusAssign("${index + 1}) ${sideEffects[entry]}")
+                        flatNotesList.add("Artifact particulars" to
+                                "${index + 1}) ${sideEffects[entry]}")
                     }
                 }
                 // endregion
@@ -3412,10 +3334,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 // Add footnote if artifact has any additional effects whatsoever
                 if ((template.iPower > 0)||(template.iiPower > 0)||(template.iiiPower > 0)||
                     (template.ivPower > 0)||(template.vPower > 0)||(template.viPower > 0)) {
-                    notesLists["Artifact particulars"]?.plusAssign(
-                        "For more information, see GMG pages 284-286")
-                }
 
+                    flatNotesList.add("Artifact particulars" to
+                            "For more information, see GMG pages 284-286")
+                }
             }
             // endregion
 
@@ -3430,7 +3352,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     mXpValue =      0
                     mGpValue =      0.0
                     mClassUsability = USABLE_BY_ALL
-                    mIconID = "scroll_map"
+                    mIconID =       "scroll_map"
+                    specialItemType = SpItType.TREASURE_MAP
                 }
 
                 "Spell Scroll"  -> {
@@ -3439,7 +3362,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     mXpValue =      0
                     mGpValue =      0.0
                     mClassUsability = USABLE_BY_ALL
-                    mIconID = "scroll_base"
+                    mIconID =       "scroll_base"
+                    specialItemType = SpItType.SPELL_SCROLL
                 }
 
                 "GM's Choice"   -> {
@@ -3495,15 +3419,23 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         //endregion
 
         // region [ Convert mapped lists to nested list ]
+        fun convertNotes(): List<Pair<String,List<String>>> {
 
-        fun convertMapToNestedLists(
-            input: LinkedHashMap<String,ArrayList<String>>): List<Pair<String,List<String>>> {
+            val nestedList = ArrayList<Pair<String,List<String>>>()
+            val tableNames = flatNotesList.distinctBy { it.first }.map { it.first }
 
-            return if (input.isEmpty()) {
-                emptyList()
-            } else {
-                input.map { entry -> entry.key to entry.value.toList() }
+            tableNames.forEach { tableName ->
+                val noteList = flatNotesList.filter { it.first == tableName }.map{ it.second }
+
+                nestedList.add(tableName to noteList)
             }
+
+            nestedList.forEach {
+                Log.d("convertNotes()","[${it.first}] has ${it.second.size}" +
+                    if (it.second.size == 1) "entry." else "entries.")
+            }
+
+            return nestedList.toList()
         }
         // endregion
 
@@ -3577,7 +3509,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 mClassUsability,
                 mIsCursed,
                 mAlignment,
-                convertMapToNestedLists(notesLists)
+                convertNotes()
             ),
             specialItemOrder, gemOrder)
     }
@@ -4142,7 +4074,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         // region [ Add recommended curse (if applicable) ]
 
         // Roll to determine if erroneous scroll
-        if ((Random.nextInt(1,101) in 1..Random.nextInt(5,11))||(order.allowedCurses != SpCoCurses.NONE)) {
+        if ((Random.nextInt(1,101) <= Random.nextInt(5,11))
+            &&(order.allowedCurses != SpCoCurses.NONE)) {
             curse = "(GMG) Casting from this scroll will result in spell mishap (see GMG pg 212)."
         }
 

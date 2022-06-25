@@ -64,13 +64,7 @@ data class HoardLeftover(val gems: Int = 0,
  * @param description User-readable description of event.
  * @param tag Identifier for source/type of event.
  */
-@Entity(tableName = "hoard_events_log",
-    foreignKeys = [ForeignKey(
-        entity = Hoard::class,
-        parentColumns = arrayOf ("hoardID"),
-        childColumns = arrayOf("eventID"),
-        onDelete = ForeignKey.CASCADE ) ],
-    indices = [Index(value= ["eventID"])])
+@Entity(tableName = "hoard_events_log")
 data class HoardEvent(
     @PrimaryKey(autoGenerate = true) @NotNull val eventID: Int = 0,
     val hoardID: Int = 0,

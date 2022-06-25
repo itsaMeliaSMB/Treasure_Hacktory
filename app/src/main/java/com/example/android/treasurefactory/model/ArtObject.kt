@@ -5,13 +5,7 @@ import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
 import kotlin.random.Random
 
-@Entity(tableName = "hackmaster_art_table",
-    foreignKeys = [ForeignKey(
-        entity = Hoard::class,
-        parentColumns = arrayOf ("hoardID"),
-        childColumns = arrayOf("artID"),
-        onDelete = ForeignKey.CASCADE) ],
-    indices =  [Index(value = ["artID"])])
+@Entity(tableName = "hackmaster_art_table")
 data class ArtObject(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
     val hoardID: Int, // NOTE: removed iconID; TODO refactor accordingly

@@ -1302,6 +1302,9 @@ class HoardGeneratorFragment : Fragment() {
 
         binding.generatorGenerateButton.setOnClickListener {
 
+            //TODO find out why soft keyboard botches order processing.
+            //https://rmirabelle.medium.com/close-hide-the-soft-keyboard-in-android-db1da22b09d2
+
             // Generate hoard order
             when (binding.generatorMethodGroup.checkedRadioButtonId) {
 

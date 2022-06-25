@@ -868,6 +868,9 @@ interface HoardDao {
     @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
     fun getHoard(id: Int): LiveData<Hoard?>
 
+    @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
+    suspend fun getHoardOnce(id: Int): Hoard?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addHoard(hoard: Hoard) : Long
 
@@ -967,8 +970,14 @@ interface GemDao {
     @Query("SELECT COUNT(*) FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     fun getGemCount(hoardID: Int): LiveData<Int>
 
-    @Query("SELECT SUM(currentGPValue) FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
+    @Query("SELECT COUNT(*) FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
+    suspend fun getGemCountOnce(hoardID: Int): Int
+
+    @Query("SELECT IFNULL(SUM(currentGPValue), 0.0) FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     fun getGemValueTotal(hoardID: Int): LiveData<Double>
+
+    @Query("SELECT IFNULL(SUM(currentGPValue), 0.0) FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
+    suspend fun getGemValueTotalOnce(hoardID: Int): Double
 
     @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     fun getGems(hoardID: Int): LiveData<List<Gem>>
@@ -994,8 +1003,14 @@ interface ArtDao {
     @Query("SELECT COUNT(*) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
     fun getArtCount(hoardID: Int): LiveData<Int>
 
-    @Query("SELECT SUM(gpValue) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    @Query("SELECT COUNT(*) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    suspend fun getArtCountOnce(hoardID: Int): Int
+
+    @Query("SELECT IFNULL(SUM(gpValue), 0.0) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
     fun getArtValueTotal(hoardID: Int): LiveData<Double>
+
+    @Query("SELECT IFNULL(SUM(gpValue), 0.0) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    suspend fun getArtValueTotalOnce(hoardID: Int): Double
 
     @Query("SELECT * FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
     fun getArtObjects(hoardID: Int): LiveData<List<ArtObject>>
@@ -1031,7 +1046,7 @@ interface MagicItemDao {
      *
      * @param parentID Integer primary key id number of parent entry.
      */
-    @Query("SELECT ref_id, wt, is_cursed FROM hackmaster_magic_item_reference WHERE table_type=(:parentID)")
+    @Query("SELECT ref_id, wt, is_cursed FROM hackmaster_magic_item_reference WHERE parent_id=(:parentID)")
     suspend fun getChildLimItemTempsByParent(parentID: Int): List<LimitedItemTemplate>
 
     /**
@@ -1053,8 +1068,14 @@ interface MagicItemDao {
     @Query("SELECT COUNT(*) FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     fun getMagicItemCount(hoardID: Int): LiveData<Int>
 
-    @Query("SELECT SUM(gpValue) FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    @Query("SELECT COUNT(*) FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
+    suspend fun getMagicItemCountOnce(hoardID: Int): Int
+
+    @Query("SELECT IFNULL(SUM(gpValue), 0.0) FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     fun getMagicItemValueTotal(hoardID: Int): LiveData<Double>
+
+    @Query("SELECT IFNULL(SUM(gpValue), 0.0) FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
+    suspend fun getMagicItemValueTotalOnce(hoardID: Int): Double
 
     @Query("SELECT * FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     fun getMagicItems(hoardID: Int): LiveData<List<MagicItem>>
@@ -1095,8 +1116,14 @@ interface SpellCollectionDao{
     @Query("SELECT COUNT(*) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
     fun getSpellCollectionCount(hoardID: Int): LiveData<Int>
 
-    @Query("SELECT SUM(gpValue) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    @Query("SELECT COUNT(*) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    suspend fun getSpellCollectionCountOnce(hoardID: Int): Int
+
+    @Query("SELECT IFNULL(SUM(gpValue), 0.0) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
     fun getSpellCollectionValueTotal(hoardID: Int): LiveData<Double>
+
+    @Query("SELECT IFNULL(SUM(gpValue), 0.0) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    suspend fun getSpellCollectionValueTotalOnce(hoardID: Int): Double
 
     @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
     fun getSpellCollections(hoardID: Int): LiveData<List<SpellCollection>>
