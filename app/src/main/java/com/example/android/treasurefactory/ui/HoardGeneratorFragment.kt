@@ -1314,8 +1314,6 @@ class HoardGeneratorFragment : Fragment() {
 
                     if (generatorViewModel.validateLetterCodeValues()){
 
-                        Toast.makeText(context,"Letter code validation successful",Toast.LENGTH_SHORT).show()
-
                         // TEMPORARILY house letter code order here TODO
                         val letterOrder = generatorViewModel.compileLetterCodeHoardOrder()
 
@@ -1331,9 +1329,7 @@ class HoardGeneratorFragment : Fragment() {
                     Log.d("generatorGenerateButton","Procedure for generating hoard order by specific method called.")
 
                     if (validateSpecificQtyValues()){
-
-                        Toast.makeText(context,"Specific quantity validation successful",Toast.LENGTH_SHORT).show()
-
+                        
                         // TEMPORARILY house specific quantity order here TODO
                         val specQtyOrder = generatorViewModel.compileSpecificQtyHoardOrder()
 

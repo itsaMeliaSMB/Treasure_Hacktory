@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-//TODO revisit this and consider seperating entities from data class: https://jacquessmuts.github.io/post/modularization_room/
+//TODO revisit this and consider separating entities from data class: https://jacquessmuts.github.io/post/modularization_room/
 
 private const val DATABASE_NAME = "treasure-database"
 

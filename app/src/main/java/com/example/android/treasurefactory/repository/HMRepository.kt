@@ -17,12 +17,6 @@ class HMRepository (
     private val spellCollectionDao: SpellCollectionDao,
 ) {
 
-    /*
-    private val executor        = Executors.newSingleThreadExecutor()
-    executor.execute {
-        hoardDao.updateHoard(hoard)
-    }*/
-
     // region [ Hoard Functions ]
 
     // region ( Hoard )

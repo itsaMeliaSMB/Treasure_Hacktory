@@ -13,9 +13,9 @@ data class SpellCollection(
     var iconID: String,
     var name: String = "<Spell Collection>",
     var type: SpCoType,
-    var properties: List<Pair<String,Double>> = emptyList(), //TODO refactor existing scroll generation to return list
-    var gpValue: Double = 0.0, //TODO add as field to db entities
-    var xpValue: Int = 0, //TODO add as field to db entities
+    var properties: List<Pair<String,Double>> = emptyList(),
+    var gpValue: Double = 0.0,
+    var xpValue: Int = 0,
     var spells: List<Spell> = emptyList(),
     var curse: String = "") {
 

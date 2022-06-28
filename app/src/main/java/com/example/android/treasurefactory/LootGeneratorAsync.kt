@@ -211,17 +211,35 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     val newScrollTuple = createMagicItemTuple(newHoardID, -1, rollableTables,
                         hoardOrder.genParams.magicParams)
 
-                    if ((newScrollTuple.specialItemOrder != null) &&
-                        (newScrollTuple.specialItemOrder.itemType == SpItType.SPELL_SCROLL) &&
-                        (newScrollTuple.specialItemOrder.spellParams != null)) {
+                    when (newScrollTuple.specialItemOrder?.itemType) {
 
-                        val newSpellScroll = convertOrderToSpellScroll(newHoardID,
-                            newScrollTuple.specialItemOrder.spellParams
-                        )
+                        SpItType.SPELL_SCROLL   -> {
 
-                        innerSpellPile.add(newSpellScroll)
+                            if (newScrollTuple.specialItemOrder.spellParams != null) {
 
-                    } else innerItemPile.add(newScrollTuple.magicItem)
+                                val newSpellScroll = convertOrderToSpellScroll(newHoardID,
+                                    newScrollTuple.specialItemOrder.spellParams
+                                )
+
+                                innerSpellPile.add(newSpellScroll)
+
+                            } else {
+
+                                innerItemPile.add(newScrollTuple.magicItem
+                                    .copy(name = "Spell-less Scroll"))
+                            }
+                        }
+
+                        SpItType.TREASURE_MAP   -> {
+
+                            createTreasureMap(
+                                newHoardID,"scroll item (Table A3)",
+                                hoardOrder.genParams.magicParams.allowCursedItems
+                            ).also { innerItemPile.add(it) }
+                        }
+
+                        else    -> { innerItemPile.add(newScrollTuple.magicItem) }
+                    }
                 }
 
                 repeat(hoardOrder.armorOrWeapons){
@@ -1216,7 +1234,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     itemRestrictions.scrollMapChance != 0) ->
                 VALID_TABLE_TYPES.intersect(providedTypes.minusElement("A3").toSet()).sorted()
 
-            else -> VALID_TABLE_TYPES.intersect(providedTypes).sorted()
+            else -> VALID_TABLE_TYPES.intersect(providedTypes.toSet()).sorted()
         }
 
         fun getItemTypesAsWeightPairs() : List<Pair<Int,Int>> {
@@ -1384,7 +1402,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     specialItemType = SpItType.TREASURE_MAP
                     itemType = "A3 (Map)"
                     mName = "Treasure Map"
-                    baseTemplateID = -1
 
                 } else {
 
@@ -1408,7 +1425,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 itemType = "A3 (Spell)"
                                 mName = "Spell Scroll"
                                 spellListOrder = generateSpellScrollOrder(currentRoll, false)
-                                baseTemplateID = -1
                             }
 
                             currentRoll in 85..91 -> {
@@ -1420,7 +1436,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                     generateSpellScrollOrder(Random.nextInt(1,34),
                                         itemRestrictions.allowCursedItems
                                     )
-                                baseTemplateID = -1
                                 mIsCursed = itemRestrictions.allowCursedItems
 
                             }
@@ -1428,7 +1443,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             currentRoll >= 96 -> gmChoice = true
                         }
 
-                    } else { if (Random.nextInt(1, 101) >= 96) gmChoice = true }
+                    } else {
+
+                        if (Random.nextInt(1, 101) >= 96) gmChoice = true
+                    }
                 }
             }
 
@@ -1505,7 +1523,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 val noteString = "Failed item request¶tagSuffix: $tagSuffix¶msgStr: $msgStr"
 
-                Log.d("createMagicItemTuple | $tagSuffix",msgStr)
+                Log.e("createMagicItemTuple | $tagSuffix",msgStr)
 
                 return MagicItemTemplate(
                     0,0,"Null item","???",0,
@@ -1584,6 +1602,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     template = null.nullCheck("No given template",
                         "Empty base table returned for type entered ($itemType).")
                 }
+
             } else { // otherwise, pull proper presets for magic items without templates
 
                 baseTemplateID = -1
@@ -2802,7 +2821,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             }
             // endregion
 
-            // region [ "Roll Artifact Powers/Effects" ]
+            // region [ Roll "Artifact particulars" ]
 
             if (itemType == "A24") {
 
@@ -3346,7 +3365,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             // Generate magic item details for exceptional items
             when (mName) {
 
-                "Treasure map"  -> {
+                "Treasure Map"  -> {
                     mSourceText =   "GameMaster's Guide"
                     mSourcePage =   182
                     mXpValue =      0
@@ -3516,7 +3535,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
     override fun createTreasureMap(parentHoard: Int, sourceDesc: String, allowFalseMaps: Boolean): MagicItem {
 
-        val notesLists=     LinkedHashMap<String,ArrayList<String>>()
+        val flatNotesList=  ArrayList<Pair<String,String>>()
 
         val nameBuilder=    StringBuilder("Treasure Map")
 
@@ -3528,57 +3547,57 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             1       -> {
                 isRealMap = false
-                notesLists["Map details"]?.plusAssign("False map " +
-                        "(No treasure or already looted")
+                flatNotesList.add("Map details" to
+                        "False map " + "(No treasure or already looted)")
                 nameBuilder.append(" (False)")
             }
 
             in 2..7 -> {
                 isRealMap = true
-                notesLists["Map details"]?.plusAssign("Map to monetary treasure " +
-                        "(0% chance of art objects or magic items")
+                flatNotesList.add("Map details" to "Map to monetary treasure " +
+                        "(0% chance of art objects or magic items)")
                 nameBuilder.append(" (Monetary)")
             }
 
             in 8..9 -> {
                 isRealMap = true
-                notesLists["Map details"]?.plusAssign("Map to magical treasure " +
-                        "(0% chance of coin)")
+                flatNotesList.add("Map details" to
+                        "Map to magical treasure (0% chance of coin)")
                 nameBuilder.append(" (Magical)")
             }
 
             else    -> {
                 isRealMap = true
-                notesLists["Map details"]?.plusAssign("Map to combined treasure")
+                flatNotesList.add("Map details" to "Map to combined treasure")
                 nameBuilder.append(" (Combined)")
             }
         }
 
         // Roll direction of treasure location
         when (Random.nextInt(1,9)){
-            1 -> notesLists["Map details"]?.plusAssign("Located north")
-            2 -> notesLists["Map details"]?.plusAssign("Located northeast")
-            3 -> notesLists["Map details"]?.plusAssign("Located east")
-            4 -> notesLists["Map details"]?.plusAssign("Located southeast")
-            5 -> notesLists["Map details"]?.plusAssign("Located south")
-            6 -> notesLists["Map details"]?.plusAssign("Located southwest")
-            7 -> notesLists["Map details"]?.plusAssign("Located west")
-            8 -> notesLists["Map details"]?.plusAssign("Located northwest")
+            1 -> flatNotesList.add("Map details" to "Located north")
+            2 -> flatNotesList.add("Map details" to "Located northeast")
+            3 -> flatNotesList.add("Map details" to "Located east")
+            4 -> flatNotesList.add("Map details" to "Located southeast")
+            5 -> flatNotesList.add("Map details" to "Located south")
+            6 -> flatNotesList.add("Map details" to "Located southwest")
+            7 -> flatNotesList.add("Map details" to "Located west")
+            8 -> flatNotesList.add("Map details" to "Located northwest")
         }
 
         // Roll distance of treasure
         when (distanceRoll) {
 
-            in 1..2 -> notesLists["Map details"]?.plusAssign("Hoard located in " +
+            in 1..2 -> flatNotesList.add("Map details" to "Hoard located in " +
                     "labyrinth of caves found in lair")
 
-            in 3..6 -> notesLists["Map details"]?.plusAssign("Hoard located " +
+            in 3..6 -> flatNotesList.add("Map details" to "Hoard located " +
                     "outdoors, 5-8 miles distant")
 
-            in 7..9 -> notesLists["Map details"]?.plusAssign("Hoard located " +
+            in 7..9 -> flatNotesList.add("Map details" to "Hoard located " +
                     "outdoors, 10-40 miles distant")
 
-            else    -> notesLists["Map details"]?.plusAssign("Hoard located " +
+            else    -> flatNotesList.add("Map details" to "Hoard located " +
                     "outdoors, 50-500 miles distant")
         }
 
@@ -3586,39 +3605,43 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             when (Random.nextInt(1,11)) {
 
-                1       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                1       -> flatNotesList.add("Map details" to "Treasure shown " +
                         "buried and unguarded")
-                2       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                2       -> flatNotesList.add("Map details" to "Treasure shown " +
                         "hidden in water")
-                in 3..7 -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                in 3..7 -> flatNotesList.add("Map details" to "Treasure shown " +
                         "guarded in a lair")
-                8       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                8       -> flatNotesList.add("Map details" to "Treasure shown " +
                         "somewhere in ruins")
-                9       -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                9       -> flatNotesList.add("Map details" to "Treasure shown " +
                         "in a burial crypt")
-                else    -> notesLists["Map details"]?.plusAssign("Treasure shown " +
+                else    -> flatNotesList.add("Map details" to "Treasure shown " +
                         "secreted in a town")
             }
         }
 
         // Roll type of treasure
         if (isRealMap)
-            notesLists["Map details"]?.plusAssign("Treasure present: " +
+            flatNotesList.add("Map details" to "Treasure present: " +
                     listOf("I","G","H","F","A","B","C","D","E","Z","A and Z","A and H").random())
 
         // Note item map replaced
         if (sourceDesc.isNotBlank()){
-            notesLists["Map details"]?.plusAssign("This map replaced $sourceDesc")
+            flatNotesList.add("Map details" to "This map replaced $sourceDesc")
         }
 
-        fun convertMapToNestedLists(
-            input: LinkedHashMap<String,ArrayList<String>>): List<Pair<String,List<String>>> {
+        fun convertNotes(): List<Pair<String,List<String>>> {
 
-            return if (input.isEmpty()) {
-                emptyList()
-            } else {
-                input.map { entry -> entry.key to entry.value.toList() }
+            val nestedList = ArrayList<Pair<String,List<String>>>()
+            val tableNames = flatNotesList.distinctBy { it.first }.map { it.first }
+
+            tableNames.forEach { tableName ->
+                val noteList = flatNotesList.filter { it.first == tableName }.map{ it.second }
+
+                nestedList.add(tableName to noteList)
             }
+
+            return nestedList.toList()
         }
 
         return MagicItem(
@@ -3641,7 +3664,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 "druid" to true),
             !isRealMap,
             "",
-            convertMapToNestedLists(notesLists))
+            convertNotes())
     }
 
     override suspend fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
@@ -4074,13 +4097,13 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         // region [ Add recommended curse (if applicable) ]
 
         // Roll to determine if erroneous scroll
-        if ((Random.nextInt(1,101) <= Random.nextInt(5,11))
-            &&(order.allowedCurses != SpCoCurses.NONE)) {
+        if ( Random.nextInt(1,101) <= Random.nextInt(5,11)
+            && order.allowedCurses != SpCoCurses.NONE ) {
             curse = "(GMG) Casting from this scroll will result in spell mishap (see GMG pg 212)."
         }
 
         // Add cursed effect from indicated sources.
-        if ((order.isCursed)&&(curse.isNotBlank())) {
+        if (order.isCursed && curse.isBlank()) {
 
             /** Example curse list on GMG pgs 225-226 */
             val cursesExample = listOf(
@@ -4186,7 +4209,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         if (spellList.isNotEmpty()) { spellList.forEach {
             gpTotal += if (it.spellLevel == 0) 75.0 else (300.0 * it.spellLevel)
-            if (!(order.isCursed)) xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel)
+            if (curse.isBlank()) xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel)
         }}
 
         // endregion
