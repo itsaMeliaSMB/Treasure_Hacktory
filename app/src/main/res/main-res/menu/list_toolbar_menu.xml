@@ -9,15 +9,35 @@
         android:title="@string/action_new_hoard_label"
         app:showAsAction="ifRoom"/>
 
-    <item
-        android:id="@+id/action_wait_three_seconds"
-        android:title="@string/action_wait_three_seconds_label"
-        app:showAsAction="never"
-        />
+    <!--unimplemented-->
+    <group
+        android:id="@+id/group_hoard_multiselect_options"
+        android:visible="false">
+        <item
+            android:id="@+id/action_delete"
+            android:title="@string/action_delete"
+            android:icon="@drawable/clipart_delete_vector_icon"
+            android:iconTint="?attr/colorOnPrimary"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/action_duplicate"
+            android:title="@string/action_duplicate"
+            android:icon="@drawable/clipart_copy_vector_icon"
+            android:iconTint="?attr/colorOnPrimary"
+            app:showAsAction="ifRoom"/>
+        <item
+            android:id="@+id/action_merge"
+            android:title="@string/action_merge"
+            android:icon="@drawable/clipart_merge_vector_icon"
+            android:iconTint="?attr/colorOnPrimary"
+            app:showAsAction="ifRoom"/>
 
+        </group>
+
+    <!--unimplemented-->
     <item
-        android:id="@+id/action_delete_all_hoards"
-        android:title="@string/action_delete_all_hoards_label"
+        android:id="@+id/action_select_all_hoards"
+        android:title="@string/action_select_all"
         app:showAsAction="never"
         />
 

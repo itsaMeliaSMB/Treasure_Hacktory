@@ -3,19 +3,20 @@ package com.example.android.treasurefactory.ui
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.treasurefactory.MultiselectRecyclerAdapter
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.databinding.HoardListItemBinding
@@ -23,7 +24,6 @@ import com.example.android.treasurefactory.databinding.LayoutHoardListBinding
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.viewmodel.HoardListViewModel
 import com.example.android.treasurefactory.viewmodel.HoardListViewModelFactory
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -53,6 +53,8 @@ class HoardListFragment : Fragment() {
     private val hoardListViewModel: HoardListViewModel by viewModels {
         HoardListViewModelFactory((this.requireActivity().application as TreasureHacktoryApplication).repository)
     }
+
+    private var selectionMode = false
     // endregion
 
     // region [ Overridden functions ]
@@ -91,6 +93,7 @@ class HoardListFragment : Fragment() {
             hoards?.let {
 
                 Log.i(TAG, "Got ${hoards.size} treasure hoards")
+                //TODO Set new container for selected item positions in ViewModel
                 updateUI(hoards)
 
                 if (hoards.isEmpty()) {
@@ -115,7 +118,7 @@ class HoardListFragment : Fragment() {
                 if (binding.hoardListContentFrame.visibility == View.VISIBLE &&
                         !isContentFrameAnimating) {
 
-                    fadeInProgressBar()
+                    hideContentFrameCrossfade()
 
                 } else {
 
@@ -151,6 +154,7 @@ class HoardListFragment : Fragment() {
                 // https://developer.android.com/guide/fragments/appbar#fragment-click
                 when (item.itemId){
 
+                    // No-selection options
                     R.id.action_new_hoard   -> {
 
                         if (hoardListViewModel.isRunningAsyncLiveData.value != true) {
@@ -162,33 +166,9 @@ class HoardListFragment : Fragment() {
                         true
                     }
 
-                    R.id.action_wait_three_seconds -> {
+                    R.id.action_select_all_hoards -> {
 
-                        Toast.makeText(context,"Waiting 3 seconds...",Toast.LENGTH_SHORT).show()
-
-                        hoardListViewModel.waitThreeSeconds()
-
-                        true
-                    }
-
-                    R.id.action_delete_all_hoards -> {
-
-                        // Confirm via Alert Dialog
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle("Delete all hoards?")
-                            .setMessage("This action cannot be undone.")
-                            .setPositiveButton("Delete", DialogInterface.OnClickListener { _, _ ->
-
-                                Log.d("onOptionsItemSelected","Delete option selected.")
-
-                                fadeInProgressBar()
-
-                                hoardListViewModel.deleteAllHoards()
-                            })
-                            .setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ ->
-                                Log.d("onOptionsItemSelected","Cancel option selected.")
-                            }).show()
-
+                        //TODO implement
                         true
                     }
 
@@ -197,6 +177,31 @@ class HoardListFragment : Fragment() {
                         true
                     }
 
+                    // Multiselect options
+
+                    R.id.action_delete  -> {
+
+                        //TODO implement
+
+
+                        true
+                    }
+
+                    R.id.action_duplicate -> {
+
+                        //TODO implement
+
+                        true
+                    }
+
+                    R.id.action_merge -> {
+
+                        //TODO implement
+
+                        true
+                    }
+
+                    // Default case
                     else    -> false
                 }
             }
@@ -216,17 +221,21 @@ class HoardListFragment : Fragment() {
     // https://developer.android.com/guide/topics/ui/layout/recyclerview-custom#select
 
     private inner class HoardViewHolder(val binding: HoardListItemBinding)
-        : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+        : RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
 
         private lateinit var hoard: Hoard
 
         init {
             itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
         }
 
-        fun bind(newHoard: Hoard) {
+        fun bind(newHoard: Hoard, selected: Boolean) {
 
             hoard = newHoard
+
+            // Toggle background color of list item if selected
+            binding.layoutHoardListItem.isSelected = selected
 
             // Set hoard name and [ NEW ] visibility
             binding.hoardListItemName.apply {
@@ -277,13 +286,34 @@ class HoardListFragment : Fragment() {
 
         override fun onClick(v: View) {
 
-            callbacks?.onHoardSelected(v,hoard.hoardID)
-            Log.d(TAG,"callback on hoard.hoardID (${hoard.hoardID})")
+            if (selectionMode) {
+
+                // Toggle HoardViewHolder's selection status
+                (this@HoardListFragment.binding.hoardListRecycler.adapter
+                        as MultiselectRecyclerAdapter).toggleSelection(adapterPosition)
+            } else {
+
+                callbacks?.onHoardSelected(v,hoard.hoardID)
+                Log.d(TAG,"callback on hoard.hoardID (${hoard.hoardID})")
+            }
+        }
+
+        override fun onLongClick(v: View?): Boolean {
+
+            if (!selectionMode) {
+
+                (this@HoardListFragment.binding.hoardListRecycler.adapter
+                        as MultiselectRecyclerAdapter).toggleSelection(adapterPosition)
+
+                return true
+            }
+
+            return false // Run onClick() instead
         }
     }
 
     private inner class HoardAdapter(var hoards: List<Hoard>)
-        : RecyclerView.Adapter<HoardViewHolder>() {
+        : MultiselectRecyclerAdapter<HoardViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : HoardViewHolder {
 
@@ -299,7 +329,43 @@ class HoardListFragment : Fragment() {
 
             val hoard = hoards[position]
 
-            viewHolder.bind(hoard)
+            viewHolder.bind(hoard, isSelected(position))
+        }
+
+        // functions affecting selectedItems
+        override fun toggleSelection(position: Int) {
+            super.toggleSelection(position)
+            checkForSelectionMode()
+        }
+
+        override fun setPositions(positions: List<Int>, isNowSelected: Boolean) {
+            super.setPositions(positions, isNowSelected)
+            checkForSelectionMode()
+        }
+
+        override fun clearAllSelections() {
+            super.clearAllSelections()
+            endSelectionMode()
+        }
+
+        fun selectAllHoards() {
+            if (hoards.isNotEmpty()) {
+                val allHoardIndices = hoards.indices.toList()
+                setPositions(allHoardIndices,true)
+            }
+            checkForSelectionMode()
+        }
+
+        private fun checkForSelectionMode() {
+
+            if (selectedCount > 0) {
+                // Start selection mode only if it hasn't already been started.
+                if (!selectionMode) { startSelectionMode() }
+                updateSelectionToolbar(selectedCount)
+            } else {
+                // End selection mode if it's active.
+                if (selectionMode) endSelectionMode()
+            }
         }
     }
     // endregion
@@ -341,7 +407,7 @@ class HoardListFragment : Fragment() {
         }
     }
 
-    private fun fadeInProgressBar() {
+    private fun hideContentFrameCrossfade() {
 
         isContentFrameAnimating = true
 
@@ -369,6 +435,69 @@ class HoardListFragment : Fragment() {
                     }
                 })
         }
+    }
+
+    private fun startSelectionMode() {
+
+        selectionMode = true
+
+        // Toggle visibility/enabled-state of menu items
+        binding.hoardListToolbar.menu.apply {
+
+            findItem(R.id.action_new_hoard).apply {
+                isVisible = false
+                isEnabled = false
+            }
+            findItem(R.id.action_select_all_hoards).apply {
+                isVisible = false
+                isEnabled = false
+            }
+
+            findItem(R.id.action_settings).apply {
+                isVisible = false
+                isEnabled = false
+            }
+
+            val multiselectGroupID = R.id.group_hoard_multiselect_options
+            setGroupVisible(multiselectGroupID,true)
+            setGroupEnabled(multiselectGroupID, true)
+        }
+
+        // Update UI elements of Toolbar
+        binding.hoardListToolbar.apply {
+            // Change Status bar color, TODO is there a way to handle this in Activity with callback?
+            // Change Toolbar color TODO
+                //TODO Left off here. Adapter code, in theory, should be able to handle all possible
+                // triggers in multiselect state. What remains is being able to programmatically
+                // change StatusBar and Toolbar background colors and adding a utility for hoard
+                // manipulation (cloning, merging) and adding selection mode action item
+                // functionality to DAO and ViewModel. Also need to test, of course.
+
+                //TODO After that, remove unused elements from spell generation and decide on how to
+                // handle asterisks in getSpellByTheBook(). Viewer functionality afterward.
+            // Add Navigation icon
+            navigationIcon = ResourcesCompat
+                .getDrawable(resources,R.drawable.clipart_close_vector_icon,null)
+            setNavigationOnClickListener {
+                (this@HoardListFragment.binding.hoardListRecycler.adapter
+                    as MultiselectRecyclerAdapter).clearAllSelections() }
+        }
+    }
+
+    private fun updateSelectionToolbar(newCount: Int){
+        val newTitle = "$newCount Selected"
+
+        binding.hoardListToolbar.title = newTitle
+    }
+
+    private fun endSelectionMode() {
+
+        selectionMode = false
+        //do the opposite of startSelectionMode, once the code is typed up.
+
+        //change toolbar title back to "Your hoards"
+
+        //be sure to call this before navigating away from this fragment.
     }
     // endregion
 

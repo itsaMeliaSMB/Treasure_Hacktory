@@ -1,6 +1,5 @@
 package com.example.android.treasurefactory.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -31,30 +30,17 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
         }
     }
 
-    fun waitThreeSeconds() {
-
-        Log.d("HoardListViewModel","waitThreeSeconds() called.")
-
-        viewModelScope.launch {
-
-            Log.d("HoardListViewModel","viewModelScope launched.")
-
-            setRunningAsync(true)
-
-            delay(3000L)
-
-            setRunningAsync(false)
-
-            Log.d("HoardListViewModel","viewModelScope ending...")
-        }
-    }
-
     // region [ Helper functions ]
 
     private fun setRunningAsync(newValue: Boolean) {
 
         isRunningAsync = newValue
         isRunningAsyncLiveData.postValue(isRunningAsync)
+    }
+
+    fun setSelectedPos(adapterPos: Int, newValue: Boolean) {
+
+        if (adapterPos in 0..hoardListLiveData.value!!.size) {}
     }
     // endregion
 }
