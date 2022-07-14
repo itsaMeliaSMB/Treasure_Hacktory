@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/action_delete"
+        android:title="@string/action_delete"
+        android:icon="@drawable/clipart_delete_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_duplicate"
+        android:title="@string/action_duplicate"
+        android:icon="@drawable/clipart_copy_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_merge"
+        android:title="@string/action_merge"
+        android:icon="@drawable/clipart_merge_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_select_all"
+        android:title="@string/action_select_all"
+        app:showAsAction="never"/>
+
+</menu>

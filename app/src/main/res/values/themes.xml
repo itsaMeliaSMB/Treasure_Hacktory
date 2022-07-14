@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.TreasureFactory" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
+        <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/fuchsia</item>
         <item name="colorPrimaryVariant">@color/fuchsia</item>
         <item name="colorOnPrimary">@color/white</item>
@@ -12,5 +13,36 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" >?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="actionModeStyle">@style/MainActionBarStyle</item>
     </style>
+
+    <style name="MainActionBarStyle" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <!--TODO pick out the 8 or so colors-->
+        <!--TODO extend with a night/dark theme-->
+    </style>
+
+    <style name="GemSubStyle">
+        <!--TODO pick out the 12 colors-->
+        <!--TODO extend with a night/dark theme-->
+    </style>
+
+    <style name="ArtObjectSubStyle">
+        <!--TODO pick out the 12 colors-->
+        <!--TODO extend with a night/dark theme-->
+    </style>
+
+    <style name="MagicItemSubStyle">
+        <!--TODO pick out the 12 colors-->
+        <!--TODO extend with a night/dark theme-->
+    </style>
+
+    <style name="SpellCollectionSubStyle">
+        <!--TODO pick out the 12 colors-->
+        <!--TODO extend with a night/dark theme-->
+    </style>
+
+    <!--
+    <item name="colorPrimary"></item>
+    <item name="colorPrimaryDark"></item>
+    <item name="colorPrimarySurface"></item>-->
 </resources>

@@ -5,9 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -54,7 +52,10 @@ class HoardListFragment : Fragment() {
         HoardListViewModelFactory((this.requireActivity().application as TreasureHacktoryApplication).repository)
     }
 
-    private var selectionMode = false
+    private var actionMode : ActionMode? = null
+    private val actionModeCallback = ActionModeCallback()
+
+    private var selectionMode = false //TODO remove
     // endregion
 
     // region [ Overridden functions ]
@@ -166,38 +167,16 @@ class HoardListFragment : Fragment() {
                         true
                     }
 
-                    R.id.action_select_all_hoards -> {
+                    R.id.action_select_all_main  -> {
 
                         //TODO implement
+
+
                         true
                     }
 
                     R.id.action_settings    -> {
                         Toast.makeText(context, "Settings option selected.", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-
-                    // Multiselect options
-
-                    R.id.action_delete  -> {
-
-                        //TODO implement
-
-
-                        true
-                    }
-
-                    R.id.action_duplicate -> {
-
-                        //TODO implement
-
-                        true
-                    }
-
-                    R.id.action_merge -> {
-
-                        //TODO implement
-
                         true
                     }
 
@@ -332,15 +311,17 @@ class HoardListFragment : Fragment() {
             viewHolder.bind(hoard, isSelected(position))
         }
 
+        //TODO fix overrides to work with ActionMode
+
         // functions affecting selectedItems
         override fun toggleSelection(position: Int) {
             super.toggleSelection(position)
-            checkForSelectionMode()
+            setActionModeFromCount()
         }
 
         override fun setPositions(positions: List<Int>, isNowSelected: Boolean) {
             super.setPositions(positions, isNowSelected)
-            checkForSelectionMode()
+            setActionModeFromCount()
         }
 
         override fun clearAllSelections() {
@@ -353,20 +334,82 @@ class HoardListFragment : Fragment() {
                 val allHoardIndices = hoards.indices.toList()
                 setPositions(allHoardIndices,true)
             }
-            checkForSelectionMode()
+            setActionModeFromCount()
         }
 
-        private fun checkForSelectionMode() {
+        private fun setActionModeFromCount() {
 
-            if (selectedCount > 0) {
-                // Start selection mode only if it hasn't already been started.
-                if (!selectionMode) { startSelectionMode() }
-                updateSelectionToolbar(selectedCount)
+            if (selectedCount == 0) {
+
+                actionMode?.finish()
+
             } else {
-                // End selection mode if it's active.
-                if (selectionMode) endSelectionMode()
+
+                actionMode?.title = "$selectedCount selected"
+
+                // Disable merge if only one item is selected
+                actionMode?.menu?.findItem(R.id.action_merge)?.isEnabled = ( selectedCount != 1 )
+
+                // Refresh the action bar
+                actionMode?.invalidate()
             }
         }
+    }
+
+    private inner class ActionModeCallback() : ActionMode.Callback {
+
+        // TODO Left off here. Started cycling out custom implementation of "Selection Mode" and
+        //  instead implementing ActionMode through host Activity. Need to pick colors for and
+        //  implement styles/themes for light/dark mode, ActionMode, and the item type themes.
+        //  Finish converting over to actionMode schema, add multi-hoard copy/delete functions,
+        //  merge function if time, and test. List considered fully implemented for release if all
+        //  these are met.
+
+        // https://stackoverflow.com/questions/30814558/problems-with-implementing-contextual-action-mode-in-recyclerview-fragment TODO
+        // https://enoent.fr/posts/recyclerview-basics/ TODO
+
+        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+            mode.menuInflater.inflate(R.menu.master_list_action_menu,menu)
+
+            return true
+        }
+
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            TODO("Not yet implemented")
+            //if there's only one selected item, disable merge
+        }
+
+        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+
+            return when (item.itemId) {
+
+                R.id.action_delete -> {
+                    //TODO implement
+                    mode.finish()
+                    true
+                }
+
+                R.id.action_duplicate -> {
+                    //TODO implement
+                    mode.finish()
+                    true
+                }
+
+                R.id.action_merge -> {
+                    //TODO implement
+                    mode.finish()
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        override fun onDestroyActionMode(mode: ActionMode?) {
+            (binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter).clearAllSelections()
+            actionMode = null
+        }
+
     }
     // endregion
 
@@ -437,7 +480,7 @@ class HoardListFragment : Fragment() {
         }
     }
 
-    private fun startSelectionMode() {
+    private fun startSelectionMode() { //TODO factor out once ActionMode is implemented
 
         selectionMode = true
 
@@ -448,7 +491,7 @@ class HoardListFragment : Fragment() {
                 isVisible = false
                 isEnabled = false
             }
-            findItem(R.id.action_select_all_hoards).apply {
+            findItem(R.id.action_select_all_main).apply {
                 isVisible = false
                 isEnabled = false
             }
@@ -458,9 +501,9 @@ class HoardListFragment : Fragment() {
                 isEnabled = false
             }
 
-            val multiselectGroupID = R.id.group_hoard_multiselect_options
-            setGroupVisible(multiselectGroupID,true)
-            setGroupEnabled(multiselectGroupID, true)
+            //val multiselectGroupID = R.id.group_hoard_multiselect_options
+            //setGroupVisible(multiselectGroupID,true)
+            //setGroupEnabled(multiselectGroupID, true)
         }
 
         // Update UI elements of Toolbar

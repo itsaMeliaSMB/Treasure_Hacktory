@@ -15,7 +15,7 @@
             app:destination="@id/hoardGeneratorFragment" />
         <action
             android:id="@+id/action_hoardListFragment_to_hoardViewerFragment"
-            app:destination="@id/hoardViewerFragment" />
+            app:destination="@id/viewer_nav_graph" />
     </fragment>
 
     <fragment
@@ -24,24 +24,29 @@
         android:label="HoardGeneratorFragment"
         tools:layout="@layout/layout_generator_fragment"/>
 
-    <fragment
-        android:id="@+id/hoardViewerFragment"
-        android:name="com.example.android.treasurefactory.ui.HoardViewerFragment"
-        android:label="HoardViewerFragment"
-        tools:layout="@layout/layout_hoard_overview">
-        <action
-            android:id="@+id/action_hoardViewerFragment_to_placeholder"
-            app:destination="@id/placeholder_uniqueItemList" />
-        <argument
-            android:name="selectedHoardID"
-            app:argType="integer"
-            android:defaultValue="0" />
-    </fragment>
-    <fragment android:id="@+id/placeholder_uniqueItemList" >
-        <!--dummied out <action
-            android:id="@+id/action_placeholder_uniqueItemList_to_placeholder_uniqueItemDetails"
-            app:destination="@id/placeholder_uniqueItemDetails" /> -->
-    </fragment>
-    <fragment android:id="@+id/placeholder_uniqueItemDetails" />
     <fragment android:id="@+id/placeholder_settings" />
+    <navigation
+        android:id="@+id/viewer_nav_graph"
+        android:label="Viewer Navigation Graph"
+        app:startDestination="@id/hoardViewerFragment">
+        <fragment android:id="@+id/placeholder_uniqueItemList">
+            <!--dummied out <action
+                android:id="@+id/action_placeholder_uniqueItemList_to_placeholder_uniqueItemDetails"
+                app:destination="@id/placeholder_uniqueItemDetails" /> -->
+        </fragment>
+        <fragment android:id="@+id/placeholder_uniqueItemDetails" />
+        <fragment
+            android:id="@+id/hoardViewerFragment"
+            android:name="com.example.android.treasurefactory.ui.HoardViewerFragment"
+            android:label="HoardViewerFragment"
+            tools:layout="@layout/layout_hoard_overview">
+            <action
+                android:id="@+id/action_hoardViewerFragment_to_placeholder"
+                app:destination="@id/placeholder_uniqueItemList" />
+            <argument
+                android:name="selectedHoardID"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </fragment>
+    </navigation>
 </navigation>

@@ -7,36 +7,11 @@
         android:icon="@drawable/clipart_treasure_add_vector_icon"
         android:iconTint="?attr/colorOnPrimary"
         android:title="@string/action_new_hoard_label"
-        app:showAsAction="ifRoom"/>
-
-    <!--unimplemented-->
-    <group
-        android:id="@+id/group_hoard_multiselect_options"
-        android:visible="false">
-        <item
-            android:id="@+id/action_delete"
-            android:title="@string/action_delete"
-            android:icon="@drawable/clipart_delete_vector_icon"
-            android:iconTint="?attr/colorOnPrimary"
-            app:showAsAction="ifRoom"/>
-        <item
-            android:id="@+id/action_duplicate"
-            android:title="@string/action_duplicate"
-            android:icon="@drawable/clipart_copy_vector_icon"
-            android:iconTint="?attr/colorOnPrimary"
-            app:showAsAction="ifRoom"/>
-        <item
-            android:id="@+id/action_merge"
-            android:title="@string/action_merge"
-            android:icon="@drawable/clipart_merge_vector_icon"
-            android:iconTint="?attr/colorOnPrimary"
-            app:showAsAction="ifRoom"/>
-
-        </group>
+        app:showAsAction="always"/>
 
     <!--unimplemented-->
     <item
-        android:id="@+id/action_select_all_hoards"
+        android:id="@+id/action_select_all_main"
         android:title="@string/action_select_all"
         app:showAsAction="never"
         />
