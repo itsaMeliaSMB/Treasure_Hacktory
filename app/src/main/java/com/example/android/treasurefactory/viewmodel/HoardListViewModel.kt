@@ -45,6 +45,11 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
     // endregion
 }
 
+//TODO left off "here". Still need to pick palette for main app and selection mode. If I can't add
+// a dark theme easily tomorrow, we're skipping it for launch build. Finish adding color, theme,
+// and menu values tomorrow and complete the implementation of actionmode menu on HoardListFragment.
+// Skip checking spell gen for Spec.Quant. for now as well; just comment out unimplemented options.
+
 class HoardListViewModelFactory(private val repository: HMRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HoardListViewModel::class.java)) {

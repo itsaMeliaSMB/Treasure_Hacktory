@@ -4,15 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:nestedScrollingEnabled="true">
 
-    <!-- TODO: add toolbar -->
+    <!-- TODO Implement AppBarLayout, CoordinatorLayout, NestedScrollView, and scrollFlags -->
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/hoard_overview_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title="@string/hoard_overview_fragment_title"
+        app:navigationIcon="@drawable/clipart_back_vector_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/Widget.Design.AppBarLayout"
+        tools:menu="@menu/hoard_overview_toolbar_menu"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="16dp">
+
+        <!--TODO add item frame to hoard icon-->
 
         <ImageView
             android:id="@+id/hoard_overview_icon"
@@ -22,6 +37,8 @@
             android:scaleType="fitCenter"
             android:layout_gravity="center"/>
 
+        <!--TODO manage hoard name length variation-->
+
         <TextView
             android:id="@+id/hoard_overview_name_label"
             android:layout_width="match_parent"
@@ -29,6 +46,7 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="8dp"
             android:layout_gravity="center_vertical"
+            android:autoSizeTextType="uniform"
             android:textSize="24sp"
             android:textStyle="bold"
             android:background="#00FFFFFF"
@@ -37,23 +55,13 @@
 
         <CheckBox
             android:id="@+id/hoard_overview_fav_checkbox"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center_vertical"
-            android:buttonTint="?attr/colorOnSurface"
-            android:button="@drawable/toggleable_clipart_star_vector" />
-        <!--TODO Convert to imageview and remove logic in View layer-->
-
-        <ImageButton
-            android:id="@+id/hoard_overview_header_edit_button"
             android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
-            android:backgroundTint="?attr/colorPrimary"
-            android:src="@drawable/clipart_edit_vector_icon"
-            app:tint="?attr/colorOnPrimary"/>
-        <!-- TODO: add data binding to fav icon and hoard name -->
+            android:gravity="center"
+            android:button="@drawable/toggleable_clipart_star_vector"
+            app:tint="@color/fav_star_colorlist" />
+        <!--TODO Convert to imageview and remove logic in View layer-->
 
     </LinearLayout>
 
@@ -154,36 +162,21 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginVertical="4dp"
         android:background="?attr/colorOnSurface"
-        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="96dp"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="Coinage Overview"
-            android:textAllCaps="true"
-            android:textStyle="bold" />
-
-        <ImageButton
-            android:id="@+id/hoard_overview_coinage_edit_button"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:src="@drawable/clipart_edit_vector_icon"
-            app:tint="?attr/colorOnPrimary" />
-
-    </RelativeLayout>
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:text="Coinage Overview"
+        android:textAllCaps="true"
+        android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/hoard_overview_coinage_list"
@@ -203,25 +196,21 @@
         android:layout_marginHorizontal="96dp"
         android:layout_marginBottom="4dp"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:paddingVertical="8dp"
-        android:layout_marginHorizontal="16dp">
+        android:layout_marginHorizontal="16dp"
+        android:layout_gravity="center"
+        android:text="Unique Object Overview"
+        android:textAllCaps="true"
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="Unique Object Overview"
-            android:textAllCaps="true"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
+    <!--TODO Change to a fixed height-->
 
     <LinearLayout
-        android:layout_height="match_parent"
+        android:layout_height="176dp"
         android:layout_width="match_parent"
         android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="4dp"
@@ -243,7 +232,7 @@
                 android:paddingHorizontal="4dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="?attr/colorPrimary">
+                android:background="@color/gemPrimary">
 
                 <ImageView
                     android:id="@+id/hoard_overview_gem_icon"
@@ -292,7 +281,7 @@
                 android:paddingHorizontal="4dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="?attr/colorPrimary">
+                android:background="@color/artPrimary">
 
                 <ImageView
                     android:id="@+id/hoard_overview_art_icon"
@@ -342,7 +331,7 @@
                 android:paddingHorizontal="4dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="?attr/colorPrimary">
+                android:background="@color/magicPrimary">
 
                 <ImageView
                     android:id="@+id/hoard_overview_magic_icon"
@@ -390,7 +379,7 @@
                 android:paddingHorizontal="4dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="?attr/colorPrimary">
+                android:background="@color/spellPrimary">
 
                 <ImageView
                     android:id="@+id/hoard_overview_spells_icon"
