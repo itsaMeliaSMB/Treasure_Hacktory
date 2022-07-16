@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -326,7 +325,7 @@ class HoardListFragment : Fragment() {
 
         override fun clearAllSelections() {
             super.clearAllSelections()
-            endSelectionMode()
+            actionMode?.finish()
         }
 
         fun selectAllHoards() {
@@ -374,9 +373,23 @@ class HoardListFragment : Fragment() {
             return true
         }
 
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            TODO("Not yet implemented")
+        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
             //if there's only one selected item, disable merge
+            return if ((binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter).selectedCount < 2){
+                if (menu.findItem(R.id.action_merge).isEnabled) {
+                    menu.findItem(R.id.action_merge).isEnabled = false
+                    true
+                } else {
+                    false
+                }
+            } else {
+                if (!(menu.findItem(R.id.action_merge).isEnabled)) {
+                    menu.findItem(R.id.action_merge).isEnabled = true
+                    true
+                } else {
+                    false
+                }
+            }
         }
 
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
@@ -384,22 +397,48 @@ class HoardListFragment : Fragment() {
             return when (item.itemId) {
 
                 R.id.action_delete -> {
-                    //TODO implement
+                    // TODO do as much of these planned commented steps on ViewModel as possible
+
+                    // dialog confirming user wants to delete hoards
+                    // grab target hoards using getSelectedHoards()
+                    // delete using a vararg DAO function DeleteHoardsWithChildren
+                    // call update
                     mode.finish()
                     true
                 }
 
                 R.id.action_duplicate -> {
-                    //TODO implement
+                    // TODO do as much of these planned commented steps on ViewModel as possible
+
+                    // dialog confirming user wants to duplicate hoards
+                    // grab target hoards using getSelectedHoards()
+                    // create renamed duplicates of hoards using HoardManipulator controller
+                        // add copies to DB
+                    // call update
                     mode.finish()
                     true
                 }
 
                 R.id.action_merge -> {
-                    //TODO implement
+                    // TODO do as much of these planned commented steps on ViewModel as possible
+
+                    // grab target hoards using getSelectedHoards()
+                    // check if merger is legal
+                    // dialog confirming user wants to merge hoards, (displaying projected result?)
+                    // merge using a HoardManipulator controller
+                        // insert result into db
+                        // delete old hoards
+                    // all update
                     mode.finish()
                     true
                 }
+
+                R.id.action_select_all_main -> {
+                    (binding.hoardListRecycler.adapter as HoardAdapter).selectAllHoards()
+                    true
+                }
+
+                // TODO add Cancel item if icon cannot be added to ActionBar.
 
                 else -> false
             }
@@ -480,68 +519,22 @@ class HoardListFragment : Fragment() {
         }
     }
 
-    private fun startSelectionMode() { //TODO factor out once ActionMode is implemented
+    private fun getSelectedHoards() : List<Hoard> {
 
-        selectionMode = true
+        val targetHoards = arrayListOf<Hoard>()
 
-        // Toggle visibility/enabled-state of menu items
-        binding.hoardListToolbar.menu.apply {
+        val indices = (binding.hoardListRecycler.adapter as HoardAdapter).getSelectedPositions()
 
-            findItem(R.id.action_new_hoard).apply {
-                isVisible = false
-                isEnabled = false
+        indices.forEach { index ->
+
+            (binding.hoardListRecycler.adapter as HoardAdapter).hoards.getOrNull(index).let{
+                if (it != null) targetHoards.add(it)
             }
-            findItem(R.id.action_select_all_main).apply {
-                isVisible = false
-                isEnabled = false
-            }
-
-            findItem(R.id.action_settings).apply {
-                isVisible = false
-                isEnabled = false
-            }
-
-            //val multiselectGroupID = R.id.group_hoard_multiselect_options
-            //setGroupVisible(multiselectGroupID,true)
-            //setGroupEnabled(multiselectGroupID, true)
         }
 
-        // Update UI elements of Toolbar
-        binding.hoardListToolbar.apply {
-            // Change Status bar color, TODO is there a way to handle this in Activity with callback?
-            // Change Toolbar color TODO
-                //TODO Left off here. Adapter code, in theory, should be able to handle all possible
-                // triggers in multiselect state. What remains is being able to programmatically
-                // change StatusBar and Toolbar background colors and adding a utility for hoard
-                // manipulation (cloning, merging) and adding selection mode action item
-                // functionality to DAO and ViewModel. Also need to test, of course.
-
-                //TODO After that, remove unused elements from spell generation and decide on how to
-                // handle asterisks in getSpellByTheBook(). Viewer functionality afterward.
-            // Add Navigation icon
-            navigationIcon = ResourcesCompat
-                .getDrawable(resources,R.drawable.clipart_close_vector_icon,null)
-            setNavigationOnClickListener {
-                (this@HoardListFragment.binding.hoardListRecycler.adapter
-                    as MultiselectRecyclerAdapter).clearAllSelections() }
-        }
+        return targetHoards.toList()
     }
 
-    private fun updateSelectionToolbar(newCount: Int){
-        val newTitle = "$newCount Selected"
-
-        binding.hoardListToolbar.title = newTitle
-    }
-
-    private fun endSelectionMode() {
-
-        selectionMode = false
-        //do the opposite of startSelectionMode, once the code is typed up.
-
-        //change toolbar title back to "Your hoards"
-
-        //be sure to call this before navigating away from this fragment.
-    }
     // endregion
 
     companion object{

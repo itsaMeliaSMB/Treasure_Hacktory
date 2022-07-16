@@ -30,6 +30,22 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
         }
     }
 
+    fun deleteSelectedHoards() {
+
+        viewModelScope.launch {
+
+            setRunningAsync(true)
+
+
+
+            repository.deleteAllHoardsAndItems()
+
+            delay(1000L)
+
+            setRunningAsync(false)
+        }
+    }
+
     // region [ Helper functions ]
 
     private fun setRunningAsync(newValue: Boolean) {
@@ -38,10 +54,6 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
         isRunningAsyncLiveData.postValue(isRunningAsync)
     }
 
-    fun setSelectedPos(adapterPos: Int, newValue: Boolean) {
-
-        if (adapterPos in 0..hoardListLiveData.value!!.size) {}
-    }
     // endregion
 }
 
@@ -49,6 +61,11 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
 // a dark theme easily tomorrow, we're skipping it for launch build. Finish adding color, theme,
 // and menu values tomorrow and complete the implementation of actionmode menu on HoardListFragment.
 // Skip checking spell gen for Spec.Quant. for now as well; just comment out unimplemented options.
+// http://debuggingisfun.blogspot.com/2014/11/android-fragment-specific-theme.html
+// https://developer.android.com/reference/kotlin/android/view/ContextThemeWrapper
+
+//TODO Actually, themes really aren't that necessary right now. Get the functionality of ActionMode
+// in place and worry about themes at the end.
 
 class HoardListViewModelFactory(private val repository: HMRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

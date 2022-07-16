@@ -1,17 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.TreasureFactory" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand colors -->
+        <!-- Primary colors -->
         <item name="windowActionModeOverlay">true</item>
-        <item name="colorPrimary">@color/fuchsia</item>
-        <item name="colorPrimaryDark">@color/fuchsia</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand colors -->
-        <item name="colorSecondary">@color/jade</item>
-        <item name="colorSecondaryVariant">@color/jade</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-
+        <item name="colorPrimary">@color/defaultPrimary</item>
+        <item name="colorPrimaryDark">@color/defaultPrimaryDark</item>
+        <item name="colorPrimaryContainer">@color/defaultPrimaryLight</item>
+        <item name="colorOnPrimary">@color/defaultOnPrimary</item>
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/defaultSecondary</item>
+        <item name="colorSecondaryVariant">@color/defaultSecondaryDark</item>
+        <item name="colorSecondaryContainer">@color/defaultSecondaryLight</item>
+        <item name="colorOnSecondary">@color/defaultOnSecondary</item>
+        <!--Tertiary colors-->
+        <item name="colorAccent">@color/defaultAccent</item>
+        <item name="colorTertiary">@color/defaultTertiary</item>
+        <item name="colorTertiaryContainer">@color/defaultTertiaryLight</item>
+        <item name="colorOnTertiary">@color/defaultOnTertiary</item>
         <!-- Customizations -->
         <item name="actionModeStyle">@style/MainActionBarStyle</item>
     </style>

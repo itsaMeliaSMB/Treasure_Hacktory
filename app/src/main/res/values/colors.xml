@@ -102,7 +102,19 @@
     <color name="yellow">#ffff00</color>
 
     <!--Main theme colors-->
-
+    <color name="defaultPrimary">#c4443b</color>
+    <color name="defaultPrimaryDark">#8d0914</color>
+    <color name="defaultPrimaryLight">#fc7566</color>
+    <color name="defaultOnPrimary">@color/white</color>
+    <color name="defaultSecondary">#d9b646</color>
+    <color name="defaultSecondaryDark">#a4870f</color>
+    <color name="defaultSecondaryLight">#ffe876</color>
+    <color name="defaultOnSecondary">@color/pitch_black</color>
+    <color name="defaultTertiary">#a5b1a5</color>
+    <color name="defaultTertiaryDark">#768276</color>
+    <color name="defaultTertiaryLight">#d6e3d6</color>
+    <color name="defaultOnTertiary">@color/pitch_black</color>
+    <color name="defaultAccent">#3bbbc4</color>
     <!--Gem theme colors-->
     <color name="gemPrimary">#e91e63</color>
     <color name="gemPrimaryDark">#b4004e</color>
