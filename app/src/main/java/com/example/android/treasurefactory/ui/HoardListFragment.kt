@@ -29,7 +29,7 @@ private const val TAG = "HoardListFragment"
 class HoardListFragment : Fragment() {
 
     /**
-    * Required interface for hosting activities, allows callbacks to hosting activity.
+    * Required interface for the hosting activities, allows callbacks to hosting activity.
     */
     interface Callbacks{
         fun onHoardSelected(view: View, hoardID: Int)

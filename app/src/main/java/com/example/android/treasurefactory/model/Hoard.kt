@@ -58,6 +58,10 @@ data class HoardLeftover(val gems: Int = 0,
     fun isNotEmpty(): Boolean = !((gems == 0)||(artObjects==0)||((potions==0)||(scrolls==0)||(armorOrWeapons == 0)||(anyButWeapons==0)||(anyMagicItems==0)))
 }*/
 
+data class HoardUniqueItemBundle(val hoardGems: List<Gem>,
+                                 val hoardArt: List<ArtObject>, val hoardItems: List<MagicItem>,
+                                 val hoardSpellCollections: List<SpellCollection>)
+
 /**
  * Record of an event that occurred in a [Hoard]'s history.
  * @param timestamp Milliseconds since Unix epoch that the event occurred on.

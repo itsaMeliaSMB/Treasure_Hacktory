@@ -32,15 +32,22 @@ class HMRepository (
 
     suspend fun updateHoard(hoardToUpdate: Hoard) = hoardDao.updateHoard(hoardToUpdate)
 
-    suspend fun deleteHoard(hoardToDelete: Hoard) = hoardDao.deleteHoard(hoardToDelete)
+    suspend fun deleteHoardAndChildren(hoardToDelete: Hoard) = hoardDao.deleteHoardAndChildren(hoardToDelete)
 
     suspend fun deleteAllHoardsAndItems() = hoardDao.deleteAllHoardsAndItems()
+
+    suspend fun deleteHoardsAndChildren(hoardsToDelete: List<Hoard>) {
+
+        hoardsToDelete.forEach { hoardDao.deleteHoardAndChildren(it) }
+    }
 
     suspend fun getHoardIdByRowId(rowID: Long) : Int = hoardDao.getIdByRowId(rowID)
     // endregion
 
     // region ( HoardEvent )
     fun getHoardEvents(parentHoardId: Int) : LiveData<List<HoardEvent>> = hoardDao.getHoardEvents(parentHoardId)
+
+    suspend fun getHoardEventsOnce(parentHoardId: Int) : List<HoardEvent> = hoardDao.getHoardEventsOnce(parentHoardId)
 
     suspend fun addHoardEvent(newEvent: HoardEvent) = hoardDao.addHoardEvent(newEvent)
     // endregion
@@ -73,6 +80,8 @@ class HMRepository (
 
     fun getGems(hoardId: Int): LiveData<List<Gem>> = gemDao.getGems(hoardId)
 
+    suspend fun getGemsOnce(hoardID: Int): List<Gem> = gemDao.getGemsOnce(hoardID)
+
     fun getGem(gemId: Int): LiveData<Gem?> = gemDao.getGem(gemId)
 
     suspend fun addGem(newGem: Gem) {
@@ -104,6 +113,8 @@ class HMRepository (
     fun getArtObjects(hoardId: Int): LiveData<List<ArtObject>> = artDao.getArtObjects(hoardId)
 
     fun getArtObject(artId: Int): LiveData<ArtObject?> = artDao.getArtObject(artId)
+
+    suspend fun getArtObjectsOnce(hoardId: Int): List<ArtObject> = artDao.getArtObjectsOnce(hoardId)
 
     suspend fun addArtObject(newArt: ArtObject) {
         artDao.addArtObject(newArt)
@@ -178,6 +189,9 @@ class HMRepository (
 
     fun getMagicItem(itemId: Int): LiveData<MagicItem?> = magicItemDao.getMagicItem(itemId)
 
+    suspend fun getMagicItemsOnce(hoardId: Int): List<MagicItem> =
+        magicItemDao.getMagicItemsOnce(hoardId)
+
     suspend fun addMagicItem(newItem: MagicItem) {
         magicItemDao.addMagicItem(newItem)
     }
@@ -230,6 +244,9 @@ class HMRepository (
 
     fun getSpellCollection(spCoId: Int): LiveData<SpellCollection?> =
         spellCollectionDao.getSpellCollection(spCoId)
+
+    suspend fun getSpellCollectionsOnce(hoardId: Int): List<SpellCollection> =
+        spellCollectionDao.getSpellCollectionsOnce(hoardId)
 
     suspend fun addSpellCollection(newSpellCollection: SpellCollection) {
         spellCollectionDao.addSpellCollection(newSpellCollection)

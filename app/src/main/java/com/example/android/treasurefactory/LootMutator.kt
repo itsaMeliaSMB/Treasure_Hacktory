@@ -8,6 +8,8 @@ class LootMutator {
 
     // TODO fun restoreOriginalValue(inputGem: Gem): Gem {}
 
+
+
     fun rollGemVariation(inputGem: Gem) : Gem {
 
         val timestamp = Calendar.getInstance().timeInMillis

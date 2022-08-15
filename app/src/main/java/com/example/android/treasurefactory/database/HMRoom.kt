@@ -911,6 +911,9 @@ interface HoardDao {
     @Query("SELECT * FROM hoard_events_log WHERE hoardID=(:parentHoardID)")
     fun getHoardEvents(parentHoardID: Int) : LiveData<List<HoardEvent>>
 
+    @Query("SELECT * FROM hoard_events_log WHERE hoardID=(:parentHoardID)")
+    suspend fun getHoardEventsOnce(parentHoardID: Int) : List<HoardEvent>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addHoardEvent(newEvent: HoardEvent)
     // endregion
@@ -982,6 +985,9 @@ interface GemDao {
     @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     fun getGems(hoardID: Int): LiveData<List<Gem>>
 
+    @Query("SELECT * FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
+    suspend fun getGemsOnce(hoardID: Int): List<Gem>
+
     @Query("SELECT * FROM hackmaster_gem_table WHERE gemID=(:id)")
     fun getGem(id: Int): LiveData<Gem?>
 
@@ -1017,6 +1023,9 @@ interface ArtDao {
 
     @Query("SELECT * FROM hackmaster_art_table WHERE artID=(:artId)")
     fun getArtObject(artId: Int): LiveData<ArtObject?>
+
+    @Query("SELECT * FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
+    suspend fun getArtObjectsOnce(hoardID: Int): List<ArtObject>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addArtObject(newArt: ArtObject)
@@ -1083,6 +1092,9 @@ interface MagicItemDao {
     @Query("SELECT * FROM hackmaster_magic_item_table WHERE mItemID=(:itemID)")
     fun getMagicItem(itemID: Int): LiveData<MagicItem?>
 
+    @Query("SELECT * FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
+    suspend fun getMagicItemsOnce(hoardID: Int): List<MagicItem>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMagicItem(newItem: MagicItem)
 
@@ -1130,6 +1142,9 @@ interface SpellCollectionDao{
 
     @Query("SELECT * FROM hackmaster_spell_collection_table WHERE sCollectID=(:spCoId)")
     fun getSpellCollection(spCoId: Int): LiveData<SpellCollection?>
+
+    @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    fun getSpellCollectionsOnce(hoardID: Int): List<SpellCollection>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addSpellCollection(newSpellCollection: SpellCollection)
