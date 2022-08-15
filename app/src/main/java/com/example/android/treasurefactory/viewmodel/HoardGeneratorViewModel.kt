@@ -25,10 +25,12 @@ const val FIRST_SMALL_TREASURE_TYPE = "J"
 const val MINIMUM_LETTER_QTY = 0
 const val MAXIMUM_LETTER_QTY = 20
 
-const val MAXIMUM_UNIQUE_QTY = 100
+const val MAXIMUM_UNIQUE_QTY = 150
 const val MAXIMUM_SPELLS_PER_SCROLL = 7
+const val MAXIMUM_SPELL_COLLECTION_QTY = 75
 
-const val MAXIMUM_COINAGE_AMOUNT = 10000000.0
+const val MAXIMUM_HOARD_VALUE = 9999999999.99
+const val MAXIMUM_COINAGE_AMOUNT = 999999999.99
 
 const val ART_MAP_CHANCE = 5
 const val SCROLL_MAP_CHANCE = 10
@@ -819,11 +821,11 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
             GenEditTextTag.GEM_QTY          -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
             GenEditTextTag.ART_QTY          -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
             GenEditTextTag.POTION_QTY       -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
-            GenEditTextTag.SCROLL_QTY       -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.SCROLL_QTY       -> validateAsInt(0, MAXIMUM_SPELL_COLLECTION_QTY)
             GenEditTextTag.WEAPON_ARMOR_QTY -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
             GenEditTextTag.ANY_BUT_WEAP_QTY -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
             GenEditTextTag.ANY_MAGIC_QTY    -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
-            GenEditTextTag.SPELL_CO_QTY     -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
+            GenEditTextTag.SPELL_CO_QTY     -> validateAsInt(0, MAXIMUM_SPELL_COLLECTION_QTY)
             GenEditTextTag.MAX_SPELL_PER    -> validateAsInt(1, MAXIMUM_SPELLS_PER_SCROLL)
         }
 

@@ -10,6 +10,7 @@ import kotlin.math.roundToInt
 /**
  * Parent class for distinct treasure hoard with it's own items.
  *
+ * @param gpTotal Total value of treasure hoard, including current market value of items.
  * @param effortRating GP/XP value ratio of items without specific XP values based on difficulty of acquisition (average difficulty is considered 5.0 gp : 1 xp)
  */
 @Entity (tableName = "hackmaster_hoard_table", indices = [Index(value = ["hoardID"])])
