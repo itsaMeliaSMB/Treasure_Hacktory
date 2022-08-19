@@ -8,7 +8,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/hoard_generator_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/appbar_height"
         app:title="@string/hoard_generator_fragment_title"
         app:navigationIcon="@drawable/clipart_back_vector_icon"
         app:layout_constraintEnd_toEndOf="parent"

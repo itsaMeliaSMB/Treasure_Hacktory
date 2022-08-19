@@ -1,9 +1,12 @@
 package com.example.android.treasurefactory.viewmodel
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.android.treasurefactory.MultihoardProcessor
+import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -15,6 +18,8 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
     val isRunningAsyncLiveData = MutableLiveData(isRunningAsync)
 
     val hoardListLiveData = repository.getHoards()
+
+    val textToastHolderLiveData = MutableLiveData<Pair<String,Int>?>(null)
 
     fun deleteAllHoards() {
 
@@ -30,15 +35,80 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
         }
     }
 
-    fun deleteSelectedHoards() {
+    fun deleteSelectedHoards(hoardsToDelete: List<Hoard>) {
 
         viewModelScope.launch {
 
             setRunningAsync(true)
 
+            if (hoardsToDelete.isNotEmpty()) {
 
+                repository.deleteHoardsAndChildren(hoardsToDelete)
+                textToastHolderLiveData.postValue(
+                    Pair("${hoardsToDelete.size} hoard" + if (hoardsToDelete.size != 1) "s deleted."
+                    else " deleted.", Toast.LENGTH_SHORT))
+            }
 
-            repository.deleteAllHoardsAndItems()
+            delay(1000L)
+
+            setRunningAsync(false)
+        }
+    }
+
+    fun mergeSelectedHoards(hoardsToMerge: List<Hoard>, newHoardName: String? = null,
+                            keepOriginal: Boolean = false) {
+
+        viewModelScope.launch {
+
+            setRunningAsync(true)
+
+            val hoardProcessor = MultihoardProcessor(repository)
+
+            val isMergeable : Boolean
+            val mergeReason : String
+
+            hoardProcessor.checkHoardMergeability(hoardsToMerge).also { result ->
+                isMergeable = result.first
+                mergeReason = result.second
+            }
+
+            if (isMergeable) {
+
+                hoardProcessor.mergeHoards(hoardsToMerge,newHoardName,keepOriginal)
+
+                textToastHolderLiveData.postValue(
+                    Pair("${hoardsToMerge.size} hoards merged. Original hoards have been " +
+                            if (keepOriginal) "retained." else "discarded.", Toast.LENGTH_SHORT))
+
+            } else {
+
+                textToastHolderLiveData.postValue(
+                    Pair("Merge not allowed. $mergeReason", Toast.LENGTH_SHORT))
+            }
+
+            delay(1000L)
+
+            setRunningAsync(false)
+        }
+
+    }
+
+    fun duplicateSelectedHoards(hoardsToCopy: List<Hoard>) {
+
+        viewModelScope.launch {
+
+            setRunningAsync(true)
+
+            if (hoardsToCopy.isNotEmpty()) {
+
+                val hoardProcessor = MultihoardProcessor(repository)
+
+                hoardProcessor.copyHoards(hoardsToCopy).also {
+                    textToastHolderLiveData.postValue(
+                        Pair("$it hoard" + if (hoardsToCopy.size != 1) "s duplicated."
+                        else " duplicated.", Toast.LENGTH_SHORT))
+                }
+            }
 
             delay(1000L)
 
@@ -56,16 +126,6 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
 
     // endregion
 }
-
-//TODO left off "here". Still need to pick palette for main app and selection mode. If I can't add
-// a dark theme easily tomorrow, we're skipping it for launch build. Finish adding color, theme,
-// and menu values tomorrow and complete the implementation of actionmode menu on HoardListFragment.
-// Skip checking spell gen for Spec.Quant. for now as well; just comment out unimplemented options.
-// http://debuggingisfun.blogspot.com/2014/11/android-fragment-specific-theme.html
-// https://developer.android.com/reference/kotlin/android/view/ContextThemeWrapper
-
-//TODO Actually, themes really aren't that necessary right now. Get the functionality of ActionMode
-// in place and worry about themes at the end.
 
 class HoardListViewModelFactory(private val repository: HMRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

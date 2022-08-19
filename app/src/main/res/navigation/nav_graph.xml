@@ -15,7 +15,12 @@
             app:destination="@id/hoardGeneratorFragment" />
         <action
             android:id="@+id/action_hoardListFragment_to_hoardViewerFragment"
-            app:destination="@id/viewer_nav_graph" />
+            app:destination="@id/viewer_nav_graph">
+            <argument
+                android:name="selectedHoardID"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </action>
     </fragment>
 
     <fragment

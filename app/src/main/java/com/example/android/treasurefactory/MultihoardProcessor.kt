@@ -13,175 +13,166 @@ import kotlin.math.roundToInt
 
 class MultihoardProcessor(private val repository: HMRepository) {
 
-
     /**
-     * Creates a new hoard combining the coinage and unique items of the original hoard.
+     * Creates a new hoard combining the coinage and unique items of the original hoard, adding it
+     * to the database and discarding originals, unless directed otherwise.
      * @param providedName If not null, the name of the new super-hoard.
      * @param keepOriginal If true, original hoards are not consumed.
      */
     suspend fun mergeHoards(hoardsToMerge: List<Hoard>, providedName : String?, keepOriginal: Boolean) {
-        
-        // Check if hoards targeted can be merged
-        val canMerge = checkHoardMergeability(hoardsToMerge)
 
-        // TODO If permitted, create new combined hoard
-        if (canMerge.first) {
+        coroutineScope {
 
-            coroutineScope {
+            val mergedHoardID: Int
+            val mergedHoardName = providedName ?: "Merged Hoards (${hoardsToMerge.size})"
 
-                val mergedHoardID: Int
-                val mergedHoardName = providedName ?: "Merged Hoards (${hoardsToMerge.size})"
+            val mergedCoinPile = IntArray(6) { 0 }
+            val mergedGemPile = ArrayList<Gem>()
+            val mergedArtPile = ArrayList<ArtObject>()
+            val mergedItemPile = ArrayList<MagicItem>()
+            val mergedSpellPile= ArrayList<SpellCollection>()
 
-                val mergedCoinPile = IntArray(6) { 0 }
-                val mergedGemPile = ArrayList<Gem>()
-                val mergedArtPile = ArrayList<ArtObject>()
-                val mergedItemPile = ArrayList<MagicItem>()
-                val mergedSpellPile= ArrayList<SpellCollection>()
+            // Get coinage values first
+            hoardsToMerge.forEach { subHoard ->
 
-                // Get coinage values first
-                hoardsToMerge.forEach { subHoard ->
+                mergedCoinPile[0].plus(subHoard.cp)
+                mergedCoinPile[1].plus(subHoard.sp)
+                mergedCoinPile[2].plus(subHoard.ep)
+                mergedCoinPile[3].plus(subHoard.gp)
+                mergedCoinPile[4].plus(subHoard.hsp)
+                mergedCoinPile[5].plus(subHoard.pp)
+            }
 
-                    mergedCoinPile[0].plus(subHoard.cp)
-                    mergedCoinPile[1].plus(subHoard.sp)
-                    mergedCoinPile[2].plus(subHoard.ep)
-                    mergedCoinPile[3].plus(subHoard.gp)
-                    mergedCoinPile[4].plus(subHoard.hsp)
-                    mergedCoinPile[5].plus(subHoard.pp)
+            // Add base hoard to database
+            mergedHoardID = repository.getHoardIdByRowId(
+                repository.addHoard(
+                    Hoard(
+                        name = mergedHoardName, cp =  mergedCoinPile[0], sp = mergedCoinPile[1],
+                        ep =  mergedCoinPile[2], gp = mergedCoinPile[3],
+                        hsp =  mergedCoinPile[4], pp = mergedCoinPile[5]))) // TODO get app version when making new hoard
+
+            // Compile all unique objects within all targeted hoards
+            hoardsToMerge.forEach { subHoard ->
+
+                val uniqueItems = getHoardUniqueItemBundle(subHoard.hoardID)
+                    .scrub(mergedHoardID)
+
+                mergedGemPile.addAll(uniqueItems.hoardGems)
+                mergedArtPile.addAll(uniqueItems.hoardArt)
+                mergedItemPile.addAll(uniqueItems.hoardItems)
+                mergedSpellPile.addAll(uniqueItems.hoardSpellCollections)
+            }
+
+            // Add compiled items
+            val addGemsJob = launch { mergedGemPile.forEach {
+                repository.addGem(it) } }
+            val addArtJob = launch { mergedArtPile.forEach {
+                repository.addArtObject(it) } }
+            val addItemsJob = launch { mergedItemPile.forEach {
+                repository.addMagicItem(it) } }
+            val addSpellsJob = launch { mergedSpellPile.forEach {
+                repository.addSpellCollection(it) } }
+
+            joinAll(addGemsJob, addArtJob, addItemsJob, addSpellsJob)
+
+            // Update counts
+
+            suspend fun updateItemCounts() {
+
+                val gemCount = repository.getGemCountOnce(mergedHoardID)
+                val artCount = repository.getArtCountOnce(mergedHoardID)
+                val itemCount = repository.getMagicItemCountOnce(mergedHoardID)
+                val spellCount = repository.getSpellCollectionCountOnce(mergedHoardID)
+
+                val gpTotal = (((mergedCoinPile[0] * 0.01) + (mergedCoinPile[1] * 0.1) +
+                        (mergedCoinPile[2] * 0.5) + (mergedCoinPile[3] * 1.0) +
+                        (mergedCoinPile[4] * 2.0) + (mergedCoinPile[5] * 5.0))
+                        * 100.00.roundToInt() / 100.00 ) +
+                        (repository.getGemValueTotalOnce(mergedHoardID)) +
+                        (repository.getArtValueTotalOnce(mergedHoardID)) +
+                        (repository.getMagicItemValueTotalOnce(mergedHoardID)) +
+                        (repository.getSpellCollectionValueTotalOnce(mergedHoardID))
+
+                val updatedHoard = repository.getHoardOnce(mergedHoardID).takeIf { it != null }?.copy(
+                    gpTotal = gpTotal,
+                    gemCount = gemCount,
+                    artCount = artCount,
+                    magicCount = itemCount,
+                    spellsCount = spellCount,
+                    successful = true)
+
+                if (updatedHoard != null) {
+                    repository.updateHoard(updatedHoard)
+                } else {
+                    Log.e("updateItemCounts()","updatedHoard is null.")
                 }
+            }
 
-                // Add base hoard to database
-                mergedHoardID = repository.getHoardIdByRowId(
-                    repository.addHoard(
-                        Hoard(
-                            name = mergedHoardName, cp =  mergedCoinPile[0], sp = mergedCoinPile[1],
-                            ep =  mergedCoinPile[2], gp = mergedCoinPile[3],
-                            hsp =  mergedCoinPile[4], pp = mergedCoinPile[5]))) // TODO get app version when making new hoard
+            updateItemCounts()
 
-                // Compile all unique objects within all targeted hoards
-                hoardsToMerge.forEach { subHoard ->
+            // Record events related to initial merging
+            val newHoardEvents = ArrayList<HoardEvent>()
 
-                    val uniqueItems = getHoardUniqueItemBundle(subHoard.hoardID)
-                        .scrub(mergedHoardID)
+            newHoardEvents.add(
+                // Record time and date of hoard merger
+                HoardEvent(
+                    hoardID = mergedHoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "Hoard \"${mergedHoardName}\" created by merging " +
+                            hoardsToMerge.size + " hoards. Originals were " +
+                            if (keepOriginal) "retained." else "discarded.",
+                    tag = "creation|merge" + if (keepOriginal) "|duplication" else "")
+            )
 
-                    mergedGemPile.addAll(uniqueItems.hoardGems)
-                    mergedArtPile.addAll(uniqueItems.hoardArt)
-                    mergedItemPile.addAll(uniqueItems.hoardItems)
-                    mergedSpellPile.addAll(uniqueItems.hoardSpellCollections)
-                }
-
-                // Add compiled items
-                val addGemsJob = launch { mergedGemPile.forEach {
-                    repository.addGem(it) } }
-                val addArtJob = launch { mergedArtPile.forEach {
-                    repository.addArtObject(it) } }
-                val addItemsJob = launch { mergedItemPile.forEach {
-                    repository.addMagicItem(it) } }
-                val addSpellsJob = launch { mergedSpellPile.forEach {
-                    repository.addSpellCollection(it) } }
-
-                joinAll(addGemsJob, addArtJob, addItemsJob, addSpellsJob)
-
-                // Update counts
-
-                suspend fun updateItemCounts() {
-
-                    val gemCount = repository.getGemCountOnce(mergedHoardID)
-                    val artCount = repository.getArtCountOnce(mergedHoardID)
-                    val itemCount = repository.getMagicItemCountOnce(mergedHoardID)
-                    val spellCount = repository.getSpellCollectionCountOnce(mergedHoardID)
-
-                    val gpTotal = (((mergedCoinPile[0] * 0.01) + (mergedCoinPile[1] * 0.1) +
-                            (mergedCoinPile[2] * 0.5) + (mergedCoinPile[3] * 1.0) +
-                            (mergedCoinPile[4] * 2.0) + (mergedCoinPile[5] * 5.0))
-                            * 100.00.roundToInt() / 100.00 ) +
-                            (repository.getGemValueTotalOnce(mergedHoardID)) +
-                            (repository.getArtValueTotalOnce(mergedHoardID)) +
-                            (repository.getMagicItemValueTotalOnce(mergedHoardID)) +
-                            (repository.getSpellCollectionValueTotalOnce(mergedHoardID))
-
-                    val updatedHoard = repository.getHoardOnce(mergedHoardID).takeIf { it != null }?.copy(
-                        gpTotal = gpTotal,
-                        gemCount = gemCount,
-                        artCount = artCount,
-                        magicCount = itemCount,
-                        spellsCount = spellCount,
-                        successful = true)
-
-                    if (updatedHoard != null) {
-                        repository.updateHoard(updatedHoard)
-                    } else {
-                        Log.e("updateItemCounts()","updatedHoard is null.")
-                    }
-                }
-
-                updateItemCounts()
-
-                // Record events related to initial merging
-                val newHoardEvents = ArrayList<HoardEvent>()
-
+            hoardsToMerge.forEachIndexed { index, subHoard ->
+                // Record original compositions of hoards
                 newHoardEvents.add(
-                    // Record time and date of hoard merger
                     HoardEvent(
                         hoardID = mergedHoardID,
                         timestamp = System.currentTimeMillis(),
-                        description = "Hoard \"${mergedHoardName}\" created by merging " +
-                                hoardsToMerge.size + " hoards. Originals were " +
-                                if (keepOriginal) "retained." else "discarded.",
-                        tag = "creation|merge" + if (keepOriginal) "|duplication" else "")
+                        description = "Original hoard #${index + 1}: ${subHoard.name}\n" +
+                                "\tCreated on ${subHoard.creationDate}\n" +
+                                "\tTotal monetary value: ${subHoard.gpTotal} gp\n" +
+                                "\tCoinage: (${subHoard.cp} cp)||(${subHoard.sp} sp)||" +
+                                "(${subHoard.ep} ep)||(${subHoard.gp} gp)||" +
+                                "(${subHoard.hsp} hsp)||(${subHoard.pp} pp)\n" +
+                                "\tUnique items: [${subHoard.gemCount} gem(s)]||" +
+                                "[${subHoard.artCount} art objects(s)]" +
+                                "[${subHoard.magicCount} magic item(s)]" +
+                                "[${subHoard.spellsCount} spell collection(s)]\n" +
+                                "\tApp version: ${subHoard.appVersion}",
+                        tag = "creation|merge|verbose" +
+                                (if (subHoard.gemCount > 0) "|gemstone" else "") +
+                                (if (subHoard.artCount > 0) "|artwork" else "") +
+                                (if (subHoard.magicCount > 0) "|magic-item" else "") +
+                                (if (subHoard.spellsCount > 0) "|spell-collection" else ""))
                 )
+            }
 
-                hoardsToMerge.forEachIndexed { index, subHoard ->
-                    // Record original compositions of hoards
+            if (keepOriginal) {
+
+                hoardsToMerge.forEach { subHoard ->
+                    // Record use in merger, if retained.
                     newHoardEvents.add(
                         HoardEvent(
-                            hoardID = mergedHoardID,
+                            hoardID = subHoard.hoardID,
                             timestamp = System.currentTimeMillis(),
-                            description = "Original hoard #${index + 1}: ${subHoard.name}\n" +
-                                    "\tCreated on ${subHoard.creationDate}\n" +
-                                    "\tTotal monetary value: ${subHoard.gpTotal} gp\n" +
-                                    "\tCoinage: (${subHoard.cp} cp)||(${subHoard.sp} sp)||" +
-                                    "(${subHoard.ep} ep)||(${subHoard.gp} gp)||" +
-                                    "(${subHoard.hsp} hsp)||(${subHoard.pp} pp)\n" +
-                                    "\tUnique items: [${subHoard.gemCount} gem(s)]||" +
-                                    "[${subHoard.artCount} art objects(s)]" +
-                                    "[${subHoard.magicCount} magic item(s)]" +
-                                    "[${subHoard.spellsCount} spell collection(s)]\n" +
-                                    "\tApp version: ${subHoard.appVersion}",
-                            tag = "creation|merge|verbose" +
-                                    (if (subHoard.gemCount > 0) "|gemstone" else "") +
-                                    (if (subHoard.artCount > 0) "|artwork" else "") +
-                                    (if (subHoard.magicCount > 0) "|magic-item" else "") +
-                                    (if (subHoard.spellsCount > 0) "|spell-collection" else ""))
+                            description = "Hoard was used in creation of $mergedHoardName.",
+                            tag = "merge|duplication"
+                        )
                     )
                 }
 
-                if (keepOriginal) {
+            } else {
+                // Otherwise, discard original hoards and all child unique items.
+                repository.deleteHoardsAndChildren(hoardsToMerge)
+            }
 
-                    hoardsToMerge.forEach { subHoard ->
-                        // Record use in merger, if retained.
-                        newHoardEvents.add(
-                            HoardEvent(
-                                hoardID = subHoard.hoardID,
-                                timestamp = System.currentTimeMillis(),
-                                description = "Hoard was used in creation of $mergedHoardName.",
-                                tag = "merge|duplication"
-                            )
-                        )
-                    }
-
-                } else {
-                    // Otherwise, discard original hoards and all child unique items.
-                    repository.deleteHoardsAndChildren(hoardsToMerge)
-                }
-
-                // Add recorded events to database
-                newHoardEvents.forEach { hoardEvent ->
-                    repository.addHoardEvent(hoardEvent)
-                }
+            // Add recorded events to database
+            newHoardEvents.forEach { hoardEvent ->
+                repository.addHoardEvent(hoardEvent)
             }
         }
-
-
     }
 
     /**

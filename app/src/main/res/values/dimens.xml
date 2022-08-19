@@ -4,5 +4,5 @@
     <dimen name="list_item_icon_size">64dp</dimen>
     <dimen name="list_item_element_margin">8dp</dimen>
     <dimen name="hoard_icon_size">64dp</dimen>
-    <dimen name="appbar_height">64dp</dimen>
+    <dimen name="appbar_height">56dp</dimen>
 </resources>

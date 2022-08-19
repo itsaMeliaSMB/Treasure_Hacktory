@@ -11,6 +11,7 @@
     </style>
 
     <style name="toolbar_style" parent="Widget.Design.AppBarLayout">
+        <item name="height">@dimen/appbar_height</item>
         <item name="titleTextColor">?attr/colorOnPrimary</item>
         <item name="subtitleTextColor">?attr/colorOnPrimary</item>
         <item name="iconTint">?attr/colorOnPrimary</item>

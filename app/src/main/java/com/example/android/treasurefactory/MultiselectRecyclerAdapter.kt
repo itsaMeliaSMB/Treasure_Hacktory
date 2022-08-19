@@ -1,5 +1,6 @@
 package com.example.android.treasurefactory
 
+import android.util.Log
 import android.util.SparseBooleanArray
 import androidx.core.util.forEach
 import androidx.core.util.size
@@ -41,6 +42,7 @@ abstract class MultiselectRecyclerAdapter<VH: RecyclerView.ViewHolder> :
     open fun setPositions(positions: List<Int>, isNowSelected: Boolean) {
         val newIndices = positions.distinct().filter { it > -1 }
 
+        Log.d("setPositions() | Indices", newIndices.joinToString())
         if (newIndices.isNotEmpty()) {
             if (isNowSelected) {
                 newIndices.forEach { index -> selectedItems.put(index, true) }

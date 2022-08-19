@@ -2,11 +2,15 @@ package com.example.android.treasurefactory.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.*
 import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -145,6 +149,19 @@ class HoardListFragment : Fragment() {
             }
         }
 
+        hoardListViewModel.textToastHolderLiveData.observe(viewLifecycleOwner) { pendingAlert ->
+
+            //TODO Test that there's no weird infinite feedback loops. Remove this when done.
+            if (pendingAlert != null) {
+
+                // Show the pending toast
+                Toast.makeText(context,pendingAlert.first,pendingAlert.second).show()
+
+                // Clear the livedata for pending toasts
+                hoardListViewModel.textToastHolderLiveData.value = null
+            }
+        }
+
         // Set up toolbar
         binding.hoardListToolbar.apply {
             inflateMenu(R.menu.list_toolbar_menu)
@@ -169,7 +186,7 @@ class HoardListFragment : Fragment() {
                     R.id.action_select_all_main  -> {
 
                         //TODO implement
-
+                        (binding.hoardListRecycler.adapter as HoardAdapter).selectAllHoards()
 
                         true
                     }
@@ -264,21 +281,21 @@ class HoardListFragment : Fragment() {
 
         override fun onClick(v: View) {
 
-            if (selectionMode) {
+            if (actionMode != null) {
 
                 // Toggle HoardViewHolder's selection status
                 (this@HoardListFragment.binding.hoardListRecycler.adapter
                         as MultiselectRecyclerAdapter).toggleSelection(adapterPosition)
+
             } else {
 
                 callbacks?.onHoardSelected(v,hoard.hoardID)
-                Log.d(TAG,"callback on hoard.hoardID (${hoard.hoardID})")
             }
         }
 
         override fun onLongClick(v: View?): Boolean {
 
-            if (!selectionMode) {
+            if (actionMode == null) {
 
                 (this@HoardListFragment.binding.hoardListRecycler.adapter
                         as MultiselectRecyclerAdapter).toggleSelection(adapterPosition)
@@ -329,11 +346,26 @@ class HoardListFragment : Fragment() {
         }
 
         fun selectAllHoards() {
+            Log.d("selectAllHoards()","Called")
             if (hoards.isNotEmpty()) {
                 val allHoardIndices = hoards.indices.toList()
+                Log.d("selectAllHoards() | Indices", allHoardIndices.joinToString())
                 setPositions(allHoardIndices,true)
             }
             setActionModeFromCount()
+        }
+
+        /**
+         * Returns a list of all Hoards currently selected in the adapter.
+         */
+        fun getSelectedAsHoards(): List<Hoard> {
+            // May be more resource-intensive to grab from adapter, but this ensures intended
+            // items are affected.
+            return hoards.filterIndexed { index, _ -> getSelectedPositions().contains(index) }
+        }
+
+        fun selectedContainsFavorites(): Boolean {
+            return getSelectedAsHoards().any { it.isFavorite }
         }
 
         private fun setActionModeFromCount() {
@@ -343,6 +375,11 @@ class HoardListFragment : Fragment() {
                 actionMode?.finish()
 
             } else {
+
+                // Start action mode if not already active
+                if (actionMode == null) {
+                    actionMode = requireActivity().startActionMode(actionModeCallback)
+                }
 
                 actionMode?.title = "$selectedCount selected"
 
@@ -368,12 +405,27 @@ class HoardListFragment : Fragment() {
         // https://enoent.fr/posts/recyclerview-basics/ TODO
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+            // Inflate menu
             mode.menuInflater.inflate(R.menu.master_list_action_menu,menu)
+
+            // Get the color to change the status bar background to
+            val typedValue = TypedValue()
+            val thisTheme = context!!.theme
+            thisTheme.resolveAttribute(R.attr.colorSecondaryVariant,TypedValue(),true)
+            @ColorInt
+            val newStatusBarColor = typedValue.data
+
+            // Change the status bar's color
+            requireActivity().window.run {
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = newStatusBarColor
+            }
 
             return true
         }
 
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+
             //if there's only one selected item, disable merge
             return if ((binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter).selectedCount < 2){
                 if (menu.findItem(R.id.action_merge).isEnabled) {
@@ -397,30 +449,115 @@ class HoardListFragment : Fragment() {
             return when (item.itemId) {
 
                 R.id.action_delete -> {
-                    // TODO do as much of these planned commented steps on ViewModel as possible
 
-                    // dialog confirming user wants to delete hoards
-                    // grab target hoards using getSelectedHoards()
-                    // delete using a vararg DAO function DeleteHoardsWithChildren
-                    // call update
-                    mode.finish()
+                    val selectedCount =
+                        (binding.hoardListRecycler.adapter as HoardAdapter).selectedCount
+
+                    val cancelToast = Toast
+                        .makeText(context,"Deletion cancelled.", Toast.LENGTH_SHORT)
+
+                    // TODO dialog confirming user wants to delete hoards
+                    val deleteConfirmBuilder = AlertDialog.Builder(context)
+
+                    var shouldContinue = false // flag for process not being cancelled (via negative button or normal cancellation) TODO add OnCancelListener
+
+                    deleteConfirmBuilder
+                        .setTitle("Confirm Deletion")
+                        .setIcon(R.drawable.clipart_warning_vector_icon)
+                        .setMessage("Are you sure you want to delete " +
+                                (if (selectedCount != 1) "all $selectedCount hoards" else
+                                    "this hoard") +
+                            "? This cannot be undone!")
+                        .setPositiveButton(R.string.action_delete,
+                            DialogInterface.OnClickListener { _, _ ->
+
+                                // Check if selection contains favorites
+                                val selectedHasFavorites =
+                                    (binding.hoardListRecycler.adapter as HoardAdapter)
+                                        .selectedContainsFavorites()
+
+                                if (selectedHasFavorites) {
+
+                                    // Warn user and offer a second chance to back out.
+                                    val hasFavoritesBuilder = AlertDialog.Builder(context)
+
+                                    hasFavoritesBuilder
+                                        .setTitle("Confirm Deletion")
+                                        .setIcon(R.drawable.clipart_warning_vector_icon)
+                                        .setMessage(
+                                            "At least one of the selected hoards is " +
+                                                    "marked as a favorite. Are you absolutely sure you " +
+                                                    "want to delete?"
+                                        )
+                                        .setPositiveButton("Yes, delete even marked favorites.",
+                                            DialogInterface.OnClickListener { _, _ ->
+                                                shouldContinue = true
+                                            })
+                                        .setNegativeButton("Cancel",
+                                            DialogInterface.OnClickListener { _, _ ->
+                                                shouldContinue = false
+                                                cancelToast.show()
+                                            })
+                                        .setCancelable(true)
+                                        .setOnCancelListener {
+                                            DialogInterface.OnCancelListener { shouldContinue = false }
+                                            }
+                                        .show()
+
+                                } else { shouldContinue = true }
+
+                                Log.v("onActionItemClicked | action_delete",
+                                    "Checking if shouldContinue is true.")
+
+                                if (shouldContinue) {
+
+                                    // grab target hoards using getSelectedAsHoards()
+                                    val targetHoards =
+                                        (binding.hoardListRecycler.adapter as HoardAdapter)
+                                            .getSelectedAsHoards()
+
+                                    // delete using a vararg DAO function DeleteHoardsWithChildren
+                                    hoardListViewModel.deleteSelectedHoards(targetHoards)
+
+                                    // call update
+                                    mode.finish()
+                                }
+                        })
+                        .setNegativeButton(R.string.action_cancel, DialogInterface.OnClickListener { _, _ ->
+                            cancelToast.show()
+                        })
+                        .show()
+
                     true
                 }
 
                 R.id.action_duplicate -> {
                     // TODO do as much of these planned commented steps on ViewModel as possible
 
+                    // TODO Left off here. ActionMode works as intended and deletion/selection
+                    //  functions appear to work as intended as well. Duplicate and Merge remain
+                    //  untested and Merge needs custom layout for dialog. Should everything work as
+                    //  intended and minor stylistic elements like status bar text and icon colors
+                    //  be taken care of, main list will be considered feature complete for launch
+                    //  and it will finally be time to tackle the hoard viewer.
+
+                    // TODO Therefore, start with fully implementing the rest of the ActionMode and
+                    //  then test everything.
+
+                    Toast.makeText(context,"functionality disabled for testing",Toast.LENGTH_SHORT)
                     // dialog confirming user wants to duplicate hoards
                     // grab target hoards using getSelectedHoards()
                     // create renamed duplicates of hoards using HoardManipulator controller
                         // add copies to DB
                     // call update
-                    mode.finish()
+                    //TODO mode.finish()
                     true
                 }
 
                 R.id.action_merge -> {
                     // TODO do as much of these planned commented steps on ViewModel as possible
+
+                    Toast.makeText(context,"functionality disabled for testing",Toast.LENGTH_SHORT)
 
                     // grab target hoards using getSelectedHoards()
                     // check if merger is legal
@@ -429,12 +566,14 @@ class HoardListFragment : Fragment() {
                         // insert result into db
                         // delete old hoards
                     // all update
-                    mode.finish()
+                    //TODO mode.finish()
                     true
                 }
 
-                R.id.action_select_all_main -> {
+                R.id.action_select_all -> {
+
                     (binding.hoardListRecycler.adapter as HoardAdapter).selectAllHoards()
+
                     true
                 }
 
@@ -445,7 +584,24 @@ class HoardListFragment : Fragment() {
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
+            // Clear all selections first
             (binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter).clearAllSelections()
+
+            // Get the color to change the status bar background to
+            // https://stackoverflow.com/questions/17277618/get-color-value-programmatically-when-its-a-reference-theme TODO
+            val typedValue = TypedValue()
+            val thisTheme = context!!.theme
+            thisTheme.resolveAttribute(R.attr.colorPrimaryDark,TypedValue(),true)
+            @ColorInt
+            val newStatusBarColor = typedValue.data
+
+            // Change the status bar's color
+            requireActivity().window.run {
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = newStatusBarColor
+            }
+
+            // Fully close actionMode
             actionMode = null
         }
 
