@@ -84,7 +84,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/hoard_overview_coinage_footer.xml" value="0.25" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/hoard_overview_coinage_list_item.xml" value="0.16576086956521738" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/layout_hoard_overview.xml" value="0.165" />
-        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/layout_spell_dialog.xml" value="0.25" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/layout_spell_dialog.xml" value="0.165" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/layout_unique_details.xml" value="0.165" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/layout_unique_list.xml" value="0.13601823708206687" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/unique_details_item_artgem.xml" value="0.13601823708206687" />
@@ -94,6 +94,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/unique_list_item.xml" value="0.25" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/menu/hoard_overview_toolbar_menu.xml" value="0.1" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/activity_main.xml" value="0.13601823708206687" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/dialog_merge_action.xml" value="0.209765625" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/hoard_list_item.xml" value="0.165" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/layout_hoard_list.xml" value="0.165" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/main_menu_fragment.xml" value="0.13601823708206687" />

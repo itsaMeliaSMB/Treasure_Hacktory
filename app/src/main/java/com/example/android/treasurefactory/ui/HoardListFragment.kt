@@ -410,13 +410,12 @@ class HoardListFragment : Fragment() {
 
             // Get the color to change the status bar background to
             val typedValue = TypedValue()
-            val thisTheme = context!!.theme
-            thisTheme.resolveAttribute(R.attr.colorSecondaryVariant,TypedValue(),true)
+            requireActivity().theme.resolveAttribute(R.attr.colorSecondaryVariant,typedValue,true)
             @ColorInt
             val newStatusBarColor = typedValue.data
 
             // Change the status bar's color
-            requireActivity().window.run {
+            requireActivity().window.apply {
                 addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 statusBarColor = newStatusBarColor
             }
@@ -456,7 +455,7 @@ class HoardListFragment : Fragment() {
                     val cancelToast = Toast
                         .makeText(context,"Deletion cancelled.", Toast.LENGTH_SHORT)
 
-                    // TODO dialog confirming user wants to delete hoards
+                    // Show dialog confirming user wants to delete hoards
                     val deleteConfirmBuilder = AlertDialog.Builder(context)
 
                     var shouldContinue = false // flag for process not being cancelled (via negative button or normal cancellation) TODO add OnCancelListener
@@ -542,9 +541,10 @@ class HoardListFragment : Fragment() {
                     //  and it will finally be time to tackle the hoard viewer.
 
                     // TODO Therefore, start with fully implementing the rest of the ActionMode and
-                    //  then test everything.
+                    //  then test everything. Also, remember to add dark/light versions of menu item
+                    //  icons. (Also, status bar color changes are broken. Either look into a fix
+                    //  that allows for dynamic changes of theme or implement ActionBar theme.)
 
-                    Toast.makeText(context,"functionality disabled for testing",Toast.LENGTH_SHORT)
                     // dialog confirming user wants to duplicate hoards
                     // grab target hoards using getSelectedHoards()
                     // create renamed duplicates of hoards using HoardManipulator controller
@@ -560,6 +560,16 @@ class HoardListFragment : Fragment() {
                     Toast.makeText(context,"functionality disabled for testing",Toast.LENGTH_SHORT)
 
                     // grab target hoards using getSelectedHoards()
+                    val selectedHoards =
+                        (binding.hoardListRecycler.adapter as HoardAdapter).getSelectedAsHoards()
+
+                    val mergeInputBuilder = AlertDialog.Builder(context)
+
+                    val mergeInputInflater = layoutInflater
+
+                    mergeInputBuilder.setTitle("Confirm merger")
+                        .setView(R.layout.dialog_merge_action)
+
                     // check if merger is legal
                     // dialog confirming user wants to merge hoards, (displaying projected result?)
                     // merge using a HoardManipulator controller
@@ -588,15 +598,13 @@ class HoardListFragment : Fragment() {
             (binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter).clearAllSelections()
 
             // Get the color to change the status bar background to
-            // https://stackoverflow.com/questions/17277618/get-color-value-programmatically-when-its-a-reference-theme TODO
             val typedValue = TypedValue()
-            val thisTheme = context!!.theme
-            thisTheme.resolveAttribute(R.attr.colorPrimaryDark,TypedValue(),true)
+            requireActivity().theme.resolveAttribute(R.attr.colorPrimaryDark,typedValue,true)
             @ColorInt
             val newStatusBarColor = typedValue.data
 
             // Change the status bar's color
-            requireActivity().window.run {
+            requireActivity().window.apply{
                 addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 statusBarColor = newStatusBarColor
             }

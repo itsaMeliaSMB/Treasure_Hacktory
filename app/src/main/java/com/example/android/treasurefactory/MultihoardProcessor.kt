@@ -5,6 +5,7 @@ import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
 import com.example.android.treasurefactory.viewmodel.MAXIMUM_COINAGE_AMOUNT
 import com.example.android.treasurefactory.viewmodel.MAXIMUM_HOARD_VALUE
+import com.example.android.treasurefactory.viewmodel.MAXIMUM_SPELL_COLLECTION_QTY
 import com.example.android.treasurefactory.viewmodel.MAXIMUM_UNIQUE_QTY
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.joinAll
@@ -213,37 +214,57 @@ class MultihoardProcessor(private val repository: HMRepository) {
         return when {
 
             combinedHoardValue > MAXIMUM_HOARD_VALUE ->
-                false to "Combined hoard cannot exceed maximum single-hoard value of $MAXIMUM_HOARD_VALUE gp."
+                false to "Total value of combined hoard (" +
+                        ((combinedHoardValue * 100.00).roundToInt() / 100.00).toString() +
+                        " gp) cannot exceed maximum single-hoard value of $MAXIMUM_HOARD_VALUE gp."
 
             (combinedCoinageTotals[0] * 0.01 * 100.00).roundToInt() / 100.00 > MAXIMUM_COINAGE_AMOUNT ->
-                false to "Combined hoard would have more than $MAXIMUM_COINAGE_AMOUNT gp worth of copper pieces."
+                false to "Combined hoard would have " +
+                        ((combinedCoinageTotals[0] * 0.01* 100.00).roundToInt()/100.00).toString() +
+                        " gp worth of copper pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
 
             (combinedCoinageTotals[1] * 0.1 * 100.00).roundToInt() / 100.00 > MAXIMUM_COINAGE_AMOUNT ->
-                false to "Combined hoard would have more than $MAXIMUM_COINAGE_AMOUNT gp worth of silver pieces."
+                false to "Combined hoard would have " +
+                        ((combinedCoinageTotals[1] * 0.1 * 100.00).roundToInt()/100.00).toString() +
+                        " gp worth of silver pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
 
             (combinedCoinageTotals[2] * 0.5 * 100.00).roundToInt() / 100.00 > MAXIMUM_COINAGE_AMOUNT ->
-                false to "Combined hoard would have more than $MAXIMUM_COINAGE_AMOUNT gp worth of electrum pieces."
+                false to "Combined hoard would have " +
+                        ((combinedCoinageTotals[2] * 0.5 * 100.00).roundToInt()/100.00).toString() +
+                        " gp worth of electrum pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
 
             (combinedCoinageTotals[3] * 1.0 * 100.00).roundToInt() / 100.00 > MAXIMUM_COINAGE_AMOUNT ->
-                false to "Combined hoard would have more than $MAXIMUM_COINAGE_AMOUNT gp worth of gold pieces."
+                false to "Combined hoard would have " +
+                        ((combinedCoinageTotals[3] * 1.0 * 100.00).roundToInt()/100.00).toString() +
+                        " gp worth of gold pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
 
             (combinedCoinageTotals[4] * 2.0 * 100.00).roundToInt() / 100.00 > MAXIMUM_COINAGE_AMOUNT ->
-                false to "Combined hoard would have more than $MAXIMUM_COINAGE_AMOUNT gp worth of hard silver pieces."
+                false to "Combined hoard would have " +
+                        ((combinedCoinageTotals[4] * 2.0 * 100.00).roundToInt()/100.00).toString() +
+                        " gp worth of hard silver pieces. " +
+                        "Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
 
             (combinedCoinageTotals[5] * 5.0 * 100.00).roundToInt() / 100.00 > MAXIMUM_COINAGE_AMOUNT ->
-                false to "Combined hoard would have more than $MAXIMUM_COINAGE_AMOUNT gp worth of platinum pieces."
+                false to "Combined hoard would have " +
+                        ((combinedCoinageTotals[5] * 5.0 * 100.00).roundToInt()/100.00).toString() +
+                        " gp worth of platinum pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
 
             combinedGemCount > MAXIMUM_UNIQUE_QTY ->
-                false to "Combined hoard would have more than the maximum quantity of $MAXIMUM_UNIQUE_QTY gems."
+                false to "Combined hoard would have $combinedGemCount gems. " +
+                        "Maximum allowed is $MAXIMUM_UNIQUE_QTY gems."
 
             combinedArtCount > MAXIMUM_UNIQUE_QTY ->
-                false to "Combined hoard would have more than the maximum quantity of $MAXIMUM_UNIQUE_QTY art objects."
+                false to "Combined hoard would have $combinedArtCount art objects. " +
+                        "Maximum allowed is $MAXIMUM_UNIQUE_QTY gems."
 
             combinedItemCount > MAXIMUM_UNIQUE_QTY ->
-                false to "Combined hoard would have more than the maximum quantity of $MAXIMUM_UNIQUE_QTY magic items."
+                false to "Combined hoard would have $combinedArtCount magic items. " +
+                        "Maximum allowed is $MAXIMUM_UNIQUE_QTY gems."
 
-            combinedGemCount > MAXIMUM_UNIQUE_QTY ->
-                false to "Combined hoard would have more than the maximum quantity of $MAXIMUM_UNIQUE_QTY gems."
+            combinedSpellCount > MAXIMUM_SPELL_COLLECTION_QTY ->
+                false to "Combined hoard would have $combinedSpellCount spell collections. " +
+                        "Maximum allowed is $MAXIMUM_SPELL_COLLECTION_QTY regardless of number " +
+                        "of spells contained."
 
             else ->
                 true to "Merge permitted."

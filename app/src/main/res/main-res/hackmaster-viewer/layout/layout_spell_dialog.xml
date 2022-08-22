@@ -258,5 +258,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spell_dialog_note_value" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -114,4 +114,5 @@
     <string name="action_delete">Delete</string>
     <string name="action_duplicate">Duplicate</string>
     <string name="action_cancel">Cancel</string>
+    <string name="merged_hoard_name_label">Merged hoard name</string>
 </resources>

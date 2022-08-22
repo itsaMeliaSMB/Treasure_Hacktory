@@ -27,7 +27,8 @@
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/defaultSecondaryDark</item>
-        <item name="actionModeCloseDrawable">@drawable/clipart_close_vector_icon</item>
+        <item name="android:textAppearance">@style/TextAppearance.Material3.TitleLarge</item>
+        <item name="android:icon">@drawable/clipart_close_vector_icon</item>
         <item name="actionMenuTextColor">@color/defaultOnSecondary</item>
         <item name="height">?attr/actionBarSize</item>
         <item name="background">@color/defaultSecondary</item>
