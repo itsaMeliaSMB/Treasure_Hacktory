@@ -1,6 +1,8 @@
 package com.example.android.treasurefactory
 
-import com.example.android.treasurefactory.model.Gem
+import com.example.android.treasurefactory.model.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import java.util.*
 import kotlin.random.Random
 
@@ -232,6 +234,141 @@ class LootMutator {
                 else            -> valueLevelToGPValue.getOrDefault(input, 1000.0)
             }
         }
+    }
+
+    fun selectHoardIconByValue(hoard: Hoard, hoardItems: HoardUniqueItemBundle): String {
+
+        var hoardIconString = "container_chest"
+
+        // Get most valuable icon for each item category
+
+        fun getItemIconMap() : Map<Any?,Pair<Double,Int>> = runBlocking {
+
+            val deferredGemInfo = async { getMostValuableGemInfo(hoardItems.hoardGems) }
+            val deferredArtInfo = async { getMostValuableArtObjectInfo(hoardItems.hoardArt) }
+            val deferredItemInfo = async { getMostValuableMagicItemInfo(hoardItems.hoardItems) }
+            val deferredSpellInfo = async {
+                getMostValuableSpellCollectionInfo(hoardItems.hoardSpellCollections) }
+
+            return@runBlocking mapOf(
+                deferredGemInfo.await(),
+                deferredArtInfo.await(),
+                deferredItemInfo.await(),
+                deferredSpellInfo.await()
+            )
+        }
+
+        // TODO left off here. Determine the actual necessary info and criteria for selecting an
+        //  icon and modify getItemIconMap() and return type accordingly. Decide what cutoffs are
+        //  necessary for coinage and assorted hoard icons and implement. After that, add this
+        //  functionality to hoard Generator and merge functions.
+
+        // If no category is valuable enough,
+
+        return hoardIconString
+    }
+
+    fun getCoinPileIcon(hoard: Hoard) {
+        //TODO implement
+    }
+
+    /**
+     * Takes a list of Gems and returns relevant information for setting a hoard icon from
+     * it.
+     *
+     * @return filename string of most valuable gem, paired with the total gp value of the entire
+     * pile paired with item count.
+     */
+    fun getMostValuableGemInfo(gemPile: List<Gem>): Pair<Gem?,Pair<Double,Int>> {
+
+        var bestGem : Gem? = null
+        val totalGemCount = gemPile.size
+        val totalGemValue = gemPile.sumOf { it.currentGPValue }
+
+        // Determine most valuable gem
+        if (gemPile.isNotEmpty()) {
+            bestGem = gemPile.sortedWith( compareByDescending<Gem> { it.currentGPValue }
+                .thenByDescending { it.type }
+                .thenBy {it.gemID})
+                .first()
+        }
+
+        return bestGem to (totalGemValue to totalGemCount)
+    }
+
+    /**
+     * Takes a list of Art Objects and returns relevant information for setting a hoard icon from
+     * it.
+     *
+     * @return most valuable art object in list (null if empty), paired with the total gp value of
+     * the entire pile paired with total item count.
+     */
+    fun getMostValuableArtObjectInfo(artPile: List<ArtObject>): Pair<ArtObject?,Pair<Double,Int>> {
+
+        var bestArt : ArtObject? = null
+        val totalArtCount = artPile.size
+        val totalArtValue = artPile.sumOf { it.gpValue }
+
+        // Determine most valuable art object
+        if (artPile.isNotEmpty()) {
+            bestArt = artPile.sortedWith( compareByDescending<ArtObject> { it.valueLevel }
+                .thenByDescending { it.artType }
+                .thenBy { it.artID })
+                .first()
+        }
+
+        return bestArt to (totalArtValue to totalArtCount)
+    }
+
+    /**
+     * Takes a list of Magic Items and returns relevant information for setting a hoard icon from
+     * it.
+     *
+     * @return most valuable magic item in list (null if empty), paired with the total gp value of
+     * the entire pile paired with total item count.
+     */
+    fun getMostValuableMagicItemInfo(itemPile: List<MagicItem>): Pair<MagicItem?,Pair<Double,Int>> {
+
+        var bestItem : MagicItem? = null
+        val totalItemCount = itemPile.size
+        val totalItemValue = itemPile.sumOf { it.gpValue }
+
+        // Determine most valuable art object
+        if (itemPile.isNotEmpty()) {
+            bestItem = itemPile.sortedWith( compareByDescending<MagicItem> { it.gpValue }
+                .thenByDescending { it.xpValue }
+                .thenByDescending { it.typeOfItem.ordinal.takeUnless { it > 20 } ?: -1}
+                .thenBy { it.mItemID })
+                .first()
+        }
+
+        return bestItem to (totalItemValue to totalItemCount)
+    }
+
+    /**
+     * Takes a list of Spell Collections and returns relevant information for setting a hoard icon
+     * from it.
+     *
+     * @return Most valuable spell collection in list (null if empty), paired with the total gp
+     * value of the entire pile paired with total item count.
+     */
+    fun getMostValuableSpellCollectionInfo(spellPile: List<SpellCollection>):
+            Pair<SpellCollection?,Pair<Double,Int>> {
+
+        var bestSpellCollection : SpellCollection? = null
+        val totalSpellCount = spellPile.size
+        val totalSpellValue = spellPile.sumOf { it.gpValue }
+
+        // Determine most valuable art object
+        if (spellPile.isNotEmpty()) {
+            bestSpellCollection = spellPile
+                .sortedWith( compareByDescending<SpellCollection> { it.gpValue }
+                .thenByDescending { it.spells.size }
+                .thenBy { it.sCollectID })
+                .first()
+        }
+
+        return bestSpellCollection to (totalSpellValue to totalSpellCount)
     }
 }
 

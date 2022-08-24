@@ -21,20 +21,6 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
 
     val textToastHolderLiveData = MutableLiveData<Pair<String,Int>?>(null)
 
-    fun deleteAllHoards() {
-
-        viewModelScope.launch {
-
-            setRunningAsync(true)
-
-            repository.deleteAllHoardsAndItems()
-
-            delay(1000L)
-
-            setRunningAsync(false)
-        }
-    }
-
     fun deleteSelectedHoards(hoardsToDelete: List<Hoard>) {
 
         viewModelScope.launch {
@@ -55,8 +41,15 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
         }
     }
 
+    /**
+     * Checks hoards to see if they are mergeable and compiles them into a new hoard if so.
+     *
+     * @return true if ActionMode should be exited.
+     */
     fun mergeSelectedHoards(hoardsToMerge: List<Hoard>, newHoardName: String? = null,
-                            keepOriginal: Boolean = false) {
+                            keepOriginal: Boolean = false) : Boolean {
+
+        var exitActionMode = false
 
         viewModelScope.launch {
 
@@ -80,10 +73,12 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
                     Pair("${hoardsToMerge.size} hoards merged. Original hoards have been " +
                             if (keepOriginal) "retained." else "discarded.", Toast.LENGTH_SHORT))
 
+                exitActionMode = !keepOriginal
+
             } else {
 
                 textToastHolderLiveData.postValue(
-                    Pair("Merge not allowed. $mergeReason", Toast.LENGTH_SHORT))
+                    Pair("Merge not allowed.\n\tReason:\n$mergeReason", Toast.LENGTH_SHORT))
             }
 
             delay(1000L)
@@ -91,8 +86,14 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
             setRunningAsync(false)
         }
 
+        return exitActionMode
     }
 
+    /**
+     * Creates copies of all provided hoards and added them to the database.
+     *
+     * @return Count of hoards duplicated.
+     */
     fun duplicateSelectedHoards(hoardsToCopy: List<Hoard>) {
 
         viewModelScope.launch {

@@ -1,6 +1,8 @@
 package com.example.android.treasurefactory.model
 
-import androidx.room.*
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
 import kotlin.random.Random
@@ -39,6 +41,25 @@ data class ArtObject(
             7 to "stonework",
             8 to "metalwork",
             9 to "magical artwork"
+        )
+
+        return typeIntToString.getOrDefault(artType,"artwork")
+    }
+
+    @Ignore
+    fun getArtTypeAsIconString() : String {
+
+        val typeIntToString = mapOf(
+            0 to "artwork_paper",
+            1 to "artwork_fabric",
+            2 to "artwork_furnishing",
+            3 to "artwork_painting",
+            4 to "artwork_wood",
+            5 to "artwork_ceramic",
+            6 to "artwork_glass",
+            7 to "artwork_stone",
+            8 to "artwork_metal",
+            9 to "artwork_magical"
         )
 
         return typeIntToString.getOrDefault(artType,"artwork")

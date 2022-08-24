@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.*
+import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
@@ -522,8 +524,8 @@ class HoardListFragment : Fragment() {
                                     mode.finish()
                                 }
                         })
-                        .setNegativeButton(R.string.action_cancel, DialogInterface.OnClickListener { _, _ ->
-                            cancelToast.show()
+                        .setNegativeButton(R.string.action_cancel, DialogInterface.OnClickListener { dialog, _ ->
+                            dialog.cancel()
                         })
                         .show()
 
@@ -531,52 +533,82 @@ class HoardListFragment : Fragment() {
                 }
 
                 R.id.action_duplicate -> {
-                    // TODO do as much of these planned commented steps on ViewModel as possible
 
-                    // TODO Left off here. ActionMode works as intended and deletion/selection
-                    //  functions appear to work as intended as well. Duplicate and Merge remain
-                    //  untested and Merge needs custom layout for dialog. Should everything work as
-                    //  intended and minor stylistic elements like status bar text and icon colors
-                    //  be taken care of, main list will be considered feature complete for launch
-                    //  and it will finally be time to tackle the hoard viewer.
+                    // TODO Left off here. All HoardList functions should be working correctly, but
+                    //  project no longer compiles due to an issue with populateCommandWords(),
+                    //  commented below. Before, duplicateHoards was not functioning correctly due
+                    //  to a main thread database reference. Clean/Rebuild/Invalidate Caches for
+                    //  project, resolve compilation issue, confirm duplicate and merge work as
+                    //  intended, and then MOVE ON TO IMPLEMENTING THE VIEWER. Also, apply for a
+                    //  dev account on the Play Store already.
 
-                    // TODO Therefore, start with fully implementing the rest of the ActionMode and
-                    //  then test everything. Also, remember to add dark/light versions of menu item
-                    //  icons. (Also, status bar color changes are broken. Either look into a fix
-                    //  that allows for dynamic changes of theme or implement ActionBar theme.)
+                    // TODO quick rebuild seemed to work. Duplicate works correctly but Merge seems
+                    //  to work correctly; it lacks a hoard icon and needs further testing on 3+
+                    //  hoard merges.
 
-                    // dialog confirming user wants to duplicate hoards
-                    // grab target hoards using getSelectedHoards()
-                    // create renamed duplicates of hoards using HoardManipulator controller
-                        // add copies to DB
-                    // call update
-                    //TODO mode.finish()
+                    /*
+    e: org.jetbrains.kotlin.codegen.CompilationException: Back-end (JVM) Internal error: Couldn't transform method node:
+    populateCommandWords (Lcom/example/android/treasurefactory/database/SpellCollectionDao;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;:
+    @Lorg/jetbrains/annotations/Nullable;() // invisible
+    // annotable parameter count: 2 (visible)
+    // annotable parameter count: 2 (invisible)
+    @Lorg/jetbrains/annotations/NotNull;() // invisible, parameter 0
+    @Lorg/jetbrains/annotations/NotNull;() // invisible, parameter 1
+    ALOAD 2
+    INSTANCEOF com/example/android/treasurefactory/database/TreasureDatabase$InitialPopulationCallback$populateCommandWords$1
+    IFEQ L0
+    ALOAD 2
+    CHECKCAST com/example/android/treasurefactory/database/TreasureDatabase$InitialPopulationCallback$populateCommandWords$1
+    ASTORE 19
+    ALOAD 19
+    GETFIELD com/example/android/treasurefactory/database
+                     */
+
+                    val selectedHoards =
+                        (binding.hoardListRecycler.adapter as HoardAdapter)
+                            .getSelectedAsHoards()
+
+                    hoardListViewModel.duplicateSelectedHoards(selectedHoards)
+
                     true
                 }
 
                 R.id.action_merge -> {
-                    // TODO do as much of these planned commented steps on ViewModel as possible
 
                     Toast.makeText(context,"functionality disabled for testing",Toast.LENGTH_SHORT)
 
-                    // grab target hoards using getSelectedHoards()
-                    val selectedHoards =
-                        (binding.hoardListRecycler.adapter as HoardAdapter).getSelectedAsHoards()
+                    val mergeInputView = layoutInflater.inflate(R.layout.dialog_merge_action,null)
 
-                    val mergeInputBuilder = AlertDialog.Builder(context)
+                    val mergeInputBuilder = AlertDialog.Builder(context).setView(mergeInputView)
 
-                    val mergeInputInflater = layoutInflater
+                    val keepOriginalCheckbox =
+                        mergeInputView.findViewById<CheckBox>(R.id.merge_dialog_checkbox)
+                    val newHoardNameEdittext =
+                        mergeInputView.findViewById<EditText>(R.id.merge_dialog_name_edit)
 
-                    mergeInputBuilder.setTitle("Confirm merger")
-                        .setView(R.layout.dialog_merge_action)
+                    mergeInputBuilder.setTitle("Enter merger details")
+                        .setIcon(R.drawable.clipart_merge_vector_icon)
+                        .setPositiveButton(R.string.action_merge,
+                            DialogInterface.OnClickListener { _, _ ->
 
-                    // check if merger is legal
-                    // dialog confirming user wants to merge hoards, (displaying projected result?)
-                    // merge using a HoardManipulator controller
-                        // insert result into db
-                        // delete old hoards
-                    // all update
-                    //TODO mode.finish()
+                                val selectedHoards =
+                                    (binding.hoardListRecycler.adapter as HoardAdapter)
+                                        .getSelectedAsHoards()
+
+                                hoardListViewModel.mergeSelectedHoards(selectedHoards,
+                                    newHoardNameEdittext.text.toString().takeUnless {it.isBlank()},
+                                    keepOriginalCheckbox.isChecked).also { exitActionMode ->
+                                        if (exitActionMode) {
+                                            mode.finish()
+                                        }
+                                }
+                            })
+                        .setNegativeButton(R.string.action_cancel,
+                            DialogInterface.OnClickListener { dialog, _ ->
+                                dialog.cancel()
+                            })
+                        .show()
+
                     true
                 }
 
@@ -587,13 +619,12 @@ class HoardListFragment : Fragment() {
                     true
                 }
 
-                // TODO add Cancel item if icon cannot be added to ActionBar.
-
                 else -> false
             }
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
+
             // Clear all selections first
             (binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter).clearAllSelections()
 

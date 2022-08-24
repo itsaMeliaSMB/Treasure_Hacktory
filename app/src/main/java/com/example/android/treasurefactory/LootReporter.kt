@@ -624,5 +624,4 @@ class LootReporter(context: Context, private val repository: HMRepository){
         return "lol" // TODO fix/remove return type
     }
 
-
 }

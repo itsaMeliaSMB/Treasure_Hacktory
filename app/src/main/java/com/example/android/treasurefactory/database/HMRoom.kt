@@ -1144,7 +1144,7 @@ interface SpellCollectionDao{
     fun getSpellCollection(spCoId: Int): LiveData<SpellCollection?>
 
     @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
-    fun getSpellCollectionsOnce(hoardID: Int): List<SpellCollection>
+    suspend fun getSpellCollectionsOnce(hoardID: Int): List<SpellCollection>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addSpellCollection(newSpellCollection: SpellCollection)
