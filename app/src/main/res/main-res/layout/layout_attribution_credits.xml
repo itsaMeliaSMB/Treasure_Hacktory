@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/credits_attribution_header_icon"
+        android:layout_width="40dp"
+        android:layout_height="32dp"
+        android:paddingEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginVertical="8dp"
+        android:src="@drawable/clipart_legal_vector_icon"/>
+
+    <TextView
+        android:id="@+id/credits_attribution_header_text"
+        style="@style/credits_header_style"
+        android:textColor="?attr/colorOnBackground"
+        android:text="@string/attributions"
+        app:layout_constraintStart_toEndOf="@id/credits_attribution_header_icon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/credits_headers_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="credits_attribution_header_icon" />
+
+    <!-- HackMaster copyright attribution -->
+
+    <ImageView
+        android:id="@+id/credits_attribution_kenzerco_bullet"
+        android:layout_height="12dp"
+        android:layout_width="12dp"
+        android:src="@drawable/clipart_circle_vector_icon"
+        app:layout_constraintEnd_toStartOf="@id/credits_headers_barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="6dp"
+        app:layout_constraintTop_toTopOf="@id/credits_attribution_kenzerco"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/credits_attribution_kenzerco"
+        android:layout_marginVertical="8dp"
+        android:text="@string/credits_attribution_kenzerco"
+        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/credits_attribution_header_text"
+        style="@style/credits_attribution_style" />
+
+    <ImageView
+        android:id="@+id/credits_kenzerco_link_icon"
+        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
+        app:layout_constraintTop_toBottomOf="@id/credits_attribution_kenzerco"
+        android:src="@drawable/clipart_link_vector_icon"
+        style="@style/credits_link_icon_style" />
+
+    <TextView
+        android:id="@+id/credits_kenzerco_link_text"
+        android:text="@string/kenzerco_main_link"
+        app:layout_constraintBottom_toBottomOf="@+id/credits_kenzerco_link_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/credits_kenzerco_link_icon"
+        app:layout_constraintTop_toTopOf="@id/credits_kenzerco_link_icon"
+        style="@style/credits_link_text_style" />
+
+    <ImageView
+        android:id="@+id/credits_hackmaster_link_icon"
+        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
+        app:layout_constraintTop_toBottomOf="@id/credits_kenzerco_link_icon"
+        android:src="@drawable/clipart_link_vector_icon"
+        style="@style/credits_link_icon_style" />
+
+    <TextView
+        android:id="@+id/credits_hackmaster_link_text"
+        android:text="@string/kenzerco_hackmaster_link"
+        app:layout_constraintBottom_toBottomOf="@+id/credits_hackmaster_link_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/credits_hackmaster_link_icon"
+        app:layout_constraintTop_toTopOf="@id/credits_hackmaster_link_icon"
+        style="@style/credits_link_text_style" />
+
+    <!--Icon attributions-->
+
+    <TextView
+        android:id="@+id/credits_attribution_iconscout"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/iconscout_attribution"
+        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/credits_hackmaster_link_icon"
+        style="@style/credits_attribution_style" />
+
+    <ImageView
+        android:id="@+id/credits_chest_link_icon"
+        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
+        app:layout_constraintTop_toBottomOf="@id/credits_attribution_iconscout"
+        android:src="@drawable/clipart_link_vector_icon"
+        style="@style/credits_link_icon_style" />
+
+    <TextView
+        android:id="@+id/credits_chest_link_text"
+        android:text="@string/credits_chest_link"
+        app:layout_constraintBottom_toBottomOf="@+id/credits_chest_link_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/credits_chest_link_icon"
+        app:layout_constraintTop_toTopOf="@id/credits_chest_link_icon"
+        style="@style/credits_link_text_style" />
+
+    <ImageView
+        android:id="@+id/credits_iconscout_link_icon"
+        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
+        app:layout_constraintTop_toBottomOf="@id/credits_chest_link_icon"
+        android:src="@drawable/clipart_link_vector_icon"
+        style="@style/credits_link_icon_style" />
+
+    <TextView
+        android:id="@+id/credits_iconscout_link_text"
+        android:text="@string/credits_iconscout_link"
+        app:layout_constraintBottom_toBottomOf="@+id/credits_iconscout_link_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/credits_iconscout_link_icon"
+        app:layout_constraintTop_toTopOf="@id/credits_iconscout_link_icon"
+        style="@style/credits_link_text_style" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
