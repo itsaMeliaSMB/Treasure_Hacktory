@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/list_item_height">
+    android:layout_height="72dp"
+    android:paddingVertical="4dp">
 
     <TextView
         android:id="@+id/unique_list_item_number"
@@ -64,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/list_item_element_margin"
         android:textSize="16sp"
+        android:ellipsize="end"
         app:layout_constraintBottom_toTopOf="@id/unique_list_item_gp"
         app:layout_constraintStart_toEndOf="@id/unique_list_item_thumbnail"
         app:layout_constraintTop_toTopOf="parent"

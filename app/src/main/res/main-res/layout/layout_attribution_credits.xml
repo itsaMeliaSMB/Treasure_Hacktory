@@ -128,6 +128,10 @@
         app:layout_constraintTop_toTopOf="@id/credits_iconscout_link_icon"
         style="@style/credits_link_text_style" />
 
+    <!--TODO "Left off" here. Still compiling attributions and gathering licenses to make sure About
+        TODO page is legally water-tight. Check running txt file and redo layout for credits
+        TODO (attributions and credits as cards?). Also update coin bag icon. Once done,
+        TODO finish icon selector, and then IMPLEMENT VIEWER OVERVIEW.-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

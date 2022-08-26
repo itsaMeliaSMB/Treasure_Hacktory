@@ -11,6 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="14sp"
-        tools:text="Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"/>
+        tools:text="Dragon Slayer \n(affects Red-Crested Amber-Bellied dragons)"/>
 
 </LinearLayout>

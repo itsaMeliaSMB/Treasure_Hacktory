@@ -122,4 +122,5 @@
     <string name="iconscout_attribution">\"Treasure Chest Icon in Glyph Style\" by Flaticons is licensed and modified under IconScout Digital License.</string>
     <string name="credits_chest_link"><a href="https://iconscout.com/icon/treasure-chest-10">Original icon</a> by Flaticons</string>
     <string name="credits_iconscout_link"><a href="https://iconscout.com/licenses#iconscout">IconScout Digital License</a></string>
+    <string name="usable_by">Usable by:</string>
 </resources>
