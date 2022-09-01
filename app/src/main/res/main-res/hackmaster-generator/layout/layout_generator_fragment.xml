@@ -800,7 +800,7 @@
 
                                 <ImageView
                                     style="@style/generator_cardview_letter_header_icon"
-                                    android:src="@drawable/clipart_wand_vector_icon"
+                                    android:src="@drawable/clipart_magicwand_vector_icon"
                                     app:tint="?attr/colorOnPrimary" />
 
                             </RelativeLayout>

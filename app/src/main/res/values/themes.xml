@@ -17,6 +17,8 @@
         <item name="colorTertiary">@color/defaultTertiary</item>
         <item name="colorTertiaryContainer">@color/defaultTertiaryLight</item>
         <item name="colorOnTertiary">@color/defaultOnTertiary</item>
+        <!--Other colors-->
+        <item name="backgroundColor">@color/lightModeBackground</item>
         <!-- Customizations -->
         <item name="actionModeStyle">@style/MainActionBarStyle</item>
         <item name="actionBarSize">@dimen/appbar_height</item>

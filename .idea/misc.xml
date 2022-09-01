@@ -7,13 +7,17 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.29583333333333334" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_add_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_back_vector_icon.xml" value="0.1" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_close_vector_icon.xml" value="0.1" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_default_image.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_delete_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_edit_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_extranotes_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_filledstar_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_heart_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_indicator_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_info_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_paintingnew_vector_icon.xml" value="0.1415" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_palette_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_refresh_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_treasure_add_vector_icon.xml" value="0.24814814814814815" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/drawable-vectors/clipart_add_vector_icon.xml" value="0.2537037037037037" />
@@ -26,6 +30,8 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/drawable-vectors/clipart_info_vector_icon.xml" value="0.2537037037037037" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/drawable-vectors/clipart_refresh_vector_icon.xml" value="0.2537037037037037" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/drawable-vectors/clipart_treasure_add_vector_icon.xml" value="0.2537037037037037" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/ic_clipart_cash_vector_icon.xml" value="0.1315" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1415" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/shape_rounded_rectangle.xml" value="0.114" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/layouts/hackmaster-generator/drawable/clipart_fortress_vector_icon.xml" value="0.29583333333333334" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/layouts/hackmaster-generator/drawable/clipart_orc_vector_icon.xml" value="0.24814814814814815" />
@@ -103,7 +109,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/activity_main.xml" value="0.13601823708206687" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/dialog_merge_action.xml" value="0.209765625" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/hoard_list_item.xml" value="0.165" />
-        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/layout_attribution_credits.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/layout_attribution_credits.xml" value="0.25" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/layout_hoard_list.xml" value="0.165" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/main_menu_fragment.xml" value="0.13601823708206687" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/treasure_viewer_list.xml" value="0.165" />
@@ -112,31 +118,73 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/menu/list_toolbar_menu.xml" value="0.27314814814814814" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/menu/master_list_action_menu.xml" value="0.22667792317433516" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_add_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_amphora_vector_icon.xml" value="0.1315" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_anvil_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_armor_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_artifact_crown_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_axe_sword_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_bag_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_bed_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_belt_hat_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_book_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_boot_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_cape_armor_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_chisel_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_coinbag_vector_icon.xml" value="0.129" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_crate_vctor_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_crystal_ball_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_default_image.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_delete_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_dust_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_edit_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_empowered_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_experience_vector_icon.xml" value="0.129" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_extranotes_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_fabric_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_fairy_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_favorite_star_vector_icon.xml" value="0.157" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_filledstar_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_fortress_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_gem1_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_gem2_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_gem3_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_gem4_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_gem5_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_gem_vector_icon.xml" value="0.2361111111111111" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_gem_vector_icon_new.xml" value="0.1315" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_glass_ball_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_indicator_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_info_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_jewelry_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_lyre_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_magicwand_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_map_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_new_vector_icon.xml" value="0.176" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_orc_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_origami_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_painting_specific_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_painting_vector_icon.xml" value="0.2361111111111111" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_potion_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_refresh_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_ring_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_robe_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_rod_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_scroll_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_spellbook_vector_icon.xml" value="0.2361111111111111" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_staff_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_stone_tools_vector_art.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_tablet_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_toolbox_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_treasure_add_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_treasure_vector_icon.xml" value="0.176" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_unfilledstar_vector_icon.xml" value="0.23148148148148148" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_wand_vector_icon.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_winged_sword_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/favorite_star_drawable.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/toggleable_clipart_star_vector.xml" value="0.23148148148148148" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/menu/treasure_list_menu.xml" value="0.2753846153846154" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/menu/treasure_viewer_list.xml" value="0.2753846153846154" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1415" />
       </map>
     </option>
   </component>

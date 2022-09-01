@@ -322,9 +322,11 @@ data class ArtObject(
                     "candelabra",
                     "candle snuffer",
                     "chair",
+                    "desk",
                     "lectern",
                     "ottoman",
                     "partition",
+                    "side table",
                     "table",
                     "table",
                     "throne"
@@ -345,6 +347,7 @@ data class ArtObject(
 
                 4 -> listOf( // Scrimshaw/woodwork types
                     "butt (large barrel)",
+                    "canoe",
                     "carved ivory",
                     "carved walking staff",
                     "carving",
@@ -356,6 +359,7 @@ data class ArtObject(
                     "scroll tube",
                     "soap carving",
                     "woodburning",
+                    "wooden bucket",
                     "wooden mantelpiece",
                     "wooden engraving",
                     "wooden statue"
@@ -385,6 +389,7 @@ data class ArtObject(
                     "glass bottle",
                     "glass bowl",
                     "goblet",
+                    "hourglass",
                     "sculpture-in-a-bottle",
                     "shattered glass pile",
                     "stained glass"
@@ -418,7 +423,8 @@ data class ArtObject(
                     "metallic ornament",
                     "ornate doorknob",
                     "silver tea set",
-                    "tin inkwell"
+                    "tin inkwell",
+                    "wall mirror"
                 ).random()
 
                 9 -> listOf( // Magical artwork types

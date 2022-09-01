@@ -1,137 +1,1087 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/backgroundColor">
 
-    <ImageView
-        android:id="@+id/credits_attribution_header_icon"
-        android:layout_width="40dp"
-        android:layout_height="32dp"
-        android:paddingEnd="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginVertical="8dp"
-        android:src="@drawable/clipart_legal_vector_icon"/>
-
-    <TextView
-        android:id="@+id/credits_attribution_header_text"
-        style="@style/credits_header_style"
-        android:textColor="?attr/colorOnBackground"
-        android:text="@string/attributions"
-        app:layout_constraintStart_toEndOf="@id/credits_attribution_header_icon"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/credits_headers_barrier"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:barrierDirection="end"
-        app:constraint_referenced_ids="credits_attribution_header_icon" />
+        android:orientation="vertical">
 
-    <!-- HackMaster copyright attribution -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/credits_app_icon_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            app:cardElevation="16dp"
+            app:cardCornerRadius="8dp">
 
-    <ImageView
-        android:id="@+id/credits_attribution_kenzerco_bullet"
-        android:layout_height="12dp"
-        android:layout_width="12dp"
-        android:src="@drawable/clipart_circle_vector_icon"
-        app:layout_constraintEnd_toStartOf="@id/credits_headers_barrier"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="6dp"
-        app:layout_constraintTop_toTopOf="@id/credits_attribution_kenzerco"
-        android:visibility="gone"/>
+            <!--TODO Add an easter egg penetrating dice roller by long-clicking icon-->
 
-    <TextView
-        android:id="@+id/credits_attribution_kenzerco"
-        android:layout_marginVertical="8dp"
-        android:text="@string/credits_attribution_kenzerco"
-        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/credits_attribution_header_text"
-        style="@style/credits_attribution_style" />
+            <ImageView
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:src="@mipmap/ic_launcher"/>
 
-    <ImageView
-        android:id="@+id/credits_kenzerco_link_icon"
-        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
-        app:layout_constraintTop_toBottomOf="@id/credits_attribution_kenzerco"
-        android:src="@drawable/clipart_link_vector_icon"
-        style="@style/credits_link_icon_style" />
+        </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/credits_kenzerco_link_text"
-        android:text="@string/kenzerco_main_link"
-        app:layout_constraintBottom_toBottomOf="@+id/credits_kenzerco_link_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/credits_kenzerco_link_icon"
-        app:layout_constraintTop_toTopOf="@id/credits_kenzerco_link_icon"
-        style="@style/credits_link_text_style" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:textSize="36sp"
+            android:text="@string/app_title_text"
+            android:textColor="?attr/colorOnBackground"
+            android:alpha="0.7"
+            android:fontFeatureSettings="smcp"/>
 
-    <ImageView
-        android:id="@+id/credits_hackmaster_link_icon"
-        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
-        app:layout_constraintTop_toBottomOf="@id/credits_kenzerco_link_icon"
-        android:src="@drawable/clipart_link_vector_icon"
-        style="@style/credits_link_icon_style" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="32dp"
+            android:layout_gravity="center"
+            android:text="A fan-made HackMaster 4th edition companion app for treasure generation and management"
+            android:textAlignment="center"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/credits_hackmaster_link_text"
-        android:text="@string/kenzerco_hackmaster_link"
-        app:layout_constraintBottom_toBottomOf="@+id/credits_hackmaster_link_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/credits_hackmaster_link_icon"
-        app:layout_constraintTop_toTopOf="@id/credits_hackmaster_link_icon"
-        style="@style/credits_link_text_style" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="32dp"
+            android:layout_gravity="center"
+            android:textStyle="italic"
+            android:text="@string/app_version_string"
+            android:textAlignment="center"
+            android:textSize="14sp" />
 
-    <!--Icon attributions-->
+        <!--TODO Find out EXACTLY what you can and need to do for copyright-->
 
-    <TextView
-        android:id="@+id/credits_attribution_iconscout"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/iconscout_attribution"
-        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/credits_hackmaster_link_icon"
-        style="@style/credits_attribution_style" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="32dp"
+            android:layout_gravity="center"
+            android:text="Created by Amelia K."
+            android:layout_marginBottom="16dp"
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/credits_chest_link_icon"
-        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
-        app:layout_constraintTop_toBottomOf="@id/credits_attribution_iconscout"
-        android:src="@drawable/clipart_link_vector_icon"
-        style="@style/credits_link_icon_style" />
+        <!-- Attributions group -->
 
-    <TextView
-        android:id="@+id/credits_chest_link_text"
-        android:text="@string/credits_chest_link"
-        app:layout_constraintBottom_toBottomOf="@+id/credits_chest_link_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/credits_chest_link_icon"
-        app:layout_constraintTop_toTopOf="@id/credits_chest_link_icon"
-        style="@style/credits_link_text_style" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="12dp"
+            android:layout_marginBottom="16dp">
 
-    <ImageView
-        android:id="@+id/credits_iconscout_link_icon"
-        app:layout_constraintStart_toStartOf="@id/credits_headers_barrier"
-        app:layout_constraintTop_toBottomOf="@id/credits_chest_link_icon"
-        android:src="@drawable/clipart_link_vector_icon"
-        style="@style/credits_link_icon_style" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:gravity="center_vertical"
+                android:background="?attr/colorPrimary">
 
-    <TextView
-        android:id="@+id/credits_iconscout_link_text"
-        android:text="@string/credits_iconscout_link"
-        app:layout_constraintBottom_toBottomOf="@+id/credits_iconscout_link_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/credits_iconscout_link_icon"
-        app:layout_constraintTop_toTopOf="@id/credits_iconscout_link_icon"
-        style="@style/credits_link_text_style" />
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_legal_vector_icon"
+                    app:tint="?attr/colorOnPrimary" />
 
-    <!--TODO "Left off" here. Still compiling attributions and gathering licenses to make sure About
-        TODO page is legally water-tight. Check running txt file and redo layout for credits
-        TODO (attributions and credits as cards?). Also update coin bag icon. Once done,
-        TODO finish icon selector, and then IMPLEMENT VIEWER OVERVIEW.-->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="8dp"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:fontFeatureSettings="smcp"
+                    android:text="Attributions and Acknowlegements"/>
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_legal_vector_icon"
+                    app:tint="?attr/colorOnPrimary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/attribution_card_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/kenzerco_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/credits_attribution_kenzerco"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/kenzerco_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/kenzerco_main_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/kenzerco_main_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/kenzerco_hackmaster_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/kenzerco_hackmaster_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/kenzerco_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorOnSurface"
+                            android:alpha="0.25"
+                            android:layout_alignParentTop="true"/>
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"
+                            tools:rotation="-90"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!--TODO contact Wizards of the Coast and similarly seek permission-->
+            <!--https://company.wizards.com/en/legal/fancontentpolicy-->
+
+        </LinearLayout>
+
+        <!-- Artwork and Assets -->
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="12dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:gravity="center_vertical"
+                android:background="?attr/colorPrimary">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_palette_vector_icon"
+                    app:tint="?attr/colorOnPrimary"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="8dp"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:fontFeatureSettings="smcp"
+                    android:text="Artwork and Icons"/>
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_palette_vector_icon"
+                    app:tint="?attr/colorOnPrimary" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/artwork_card_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/fraim_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Play Store / App Icon"
+                        android:fontFeatureSettings="smcp"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="textEnd"
+                        android:text="Brendon and Brian Fraim"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/fraim_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/fraim_main_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/fraim_main_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/fraim_instagram_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/fraim_instagram"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/fraim_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentTop="true"
+                            android:alpha="0.25"
+                            android:background="?attr/colorOnSurface" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/poneti_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="4000 Fantasy Icons\nFlat Icons Megapack"
+                        android:fontFeatureSettings="smcp"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="textEnd"
+                        android:text="PONETI\n(Kristian Bakalov)"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/poneti_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/poneti_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/poneti_artstation"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/poneti_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorOnSurface"
+                            android:alpha="0.25"
+                            android:layout_alignParentTop="true"/>
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/akiza_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="Gems Pack Icons"
+                        android:fontFeatureSettings="smcp"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="textEnd"
+                        android:text="AKiZA\n(Aleksandra Zabielska)"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/akiza_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/akiza_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/akiza_artstation"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/akiza_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorOnSurface"
+                            android:alpha="0.25"
+                            android:layout_alignParentTop="true"/>
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/game_icons_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="@string/item_vector_icons"
+                        android:fontFeatureSettings="smcp"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="textEnd"
+                        android:text="@string/game_icons_contributors"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/game_icons_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/game_icons_cc_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/game_icons_cc_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/game_icons_site_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/game_icons_site_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/game_icons_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorOnSurface"
+                            android:alpha="0.25"
+                            android:layout_alignParentTop="true"/>
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/iconscout_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="Treasure Chest Icon in Glyph Style"
+                        android:fontFeatureSettings="smcp"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="textEnd"
+                        android:text="Flaticons"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/iconscout_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/iconscout_license_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/credits_iconscout_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/iconscout_original_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/credits_chest_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/iconscout_creator_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/credits_creator_flaticons"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/material_icons_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentTop="true"
+                            android:alpha="0.25"
+                            android:background="?attr/colorOnSurface" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/material_icons_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="@string/material_icons"
+                        android:fontFeatureSettings="smcp"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="textEnd"
+                        android:text="@string/material_design_author"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/material_icons_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/material_icons_apache_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/material_icons_apache_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/material_icons_site_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/material_icons_library_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/material_icons_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentTop="true"
+                            android:alpha="0.25"
+                            android:background="?attr/colorOnSurface" />
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <!-- Special Thanks -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="12dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:gravity="center_vertical"
+            android:background="?attr/colorPrimary">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/clipart_heart_vector_icon"
+                app:tint="?attr/colorOnPrimary"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="8dp"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnPrimary"
+                android:fontFeatureSettings="smcp"
+                android:text="Special Thanks"/>
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/clipart_heart_vector_icon"
+                app:tint="?attr/colorOnPrimary"/>
+
+        </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/special_card_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/mitch_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/mitch_thanks"
+                    android:textSize="16sp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/puzwed_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/puzwed_thanks"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/puzwed_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/puzwed_discord_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/puzwed_challonge"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/puzwed_challonge_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/puzwed_discord"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+                        <TextView
+                            android:id="@+id/puzwed_youtube_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/puzwed_youtube"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/puzwed_twitter_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/puzwed_twitter"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:autoLink="web"
+                            android:linksClickable="true"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/puzwed_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorOnSurface"
+                            android:alpha="0.25"
+                            android:layout_alignParentTop="true"/>
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

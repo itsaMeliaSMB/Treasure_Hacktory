@@ -338,7 +338,7 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_marginBottom="16dp"
-                    android:src="@drawable/clipart_wand_vector_icon"
+                    android:src="@drawable/clipart_magicwand_vector_icon"
                     app:tint="?attr/colorOnPrimary"/>
 
                 <TextView

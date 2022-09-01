@@ -100,7 +100,9 @@
     <color name="white">#ffffff</color>
     <color name="woolen">#e6ddd4</color>
     <color name="yellow">#ffff00</color>
-
+    <!--UI colors-->
+    <color name="lightModeBackground">#f0f0f0</color>
+    <color name="darkModeBackground">#0f0f0f</color>
     <!--Main theme colors-->
     <color name="defaultPrimary">#c4443b</color>
     <color name="defaultPrimaryDark">#8d0914</color>

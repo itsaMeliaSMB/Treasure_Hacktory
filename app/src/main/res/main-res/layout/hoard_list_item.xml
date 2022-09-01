@@ -114,7 +114,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="4dp"
-        app:drawableStartCompat="@drawable/clipart_wand_vector_icon"
+        app:drawableStartCompat="@drawable/clipart_magicwand_vector_icon"
         app:drawableTint="?colorOnSurface"
         app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
         app:layout_constraintEnd_toStartOf="@+id/hoard_list_item_spell_count"

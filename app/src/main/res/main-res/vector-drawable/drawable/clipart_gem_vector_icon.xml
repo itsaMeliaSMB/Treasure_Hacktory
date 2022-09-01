@@ -1,5 +1,9 @@
-<!--TODO : Attribute https://www.svgrepo.com/svg/352070/gem-->
-<vector android:height="16dp" android:viewportHeight="576"
-    android:viewportWidth="576" android:width="16dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#FF000000" android:pathData="M485.5,32L576,192L474.9,192L405.7,32h79.8zM357.5,32l69.2,160L149.3,192L218.5,32h139zM90.5,32h79.8l-69.2,160L0,192L90.5,32zM0,224h100.7l123,251.7c1.5,3.1 -2.7,5.9 -5,3.3L0,224zM148.2,224h279.6l-137,318.2c-1,2.4 -4.5,2.4 -5.5,0L148.2,224zM352.3,475.7l123,-251.7L576,224L357.3,478.9c-2.3,2.7 -6.5,-0.1 -5,-3.2z"/>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+    <path
+        android:pathData="M92.91,94.81l60.44,79.75 78.13,-79.75L92.9,94.81zM282.16,94.81L359.25,173.5l58.69,-78.69L282.15,94.81zM256.81,95.66l-84.72,86.47L341.53,182.13l-84.72,-86.47zM434.72,103.56l-58.63,78.56L494.53,182.13l-59.81,-78.56zM76.65,104.31l-57.78,77.81h116.78l-59,-77.81zM18.15,200.81L226.56,429.22 143.34,200.81L18.16,200.81zM163.22,200.81l93.59,256.84 93.59,-256.84L163.22,200.81zM370.28,200.81L287.06,429.22 495.47,200.81L370.28,200.81z"
+        android:fillColor="#000000"/>
 </vector>

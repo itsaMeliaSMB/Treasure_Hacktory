@@ -7,7 +7,7 @@
         android:icon="@drawable/clipart_treasure_add_vector_icon"
         android:iconTint="?attr/colorOnPrimary"
         android:title="@string/action_new_hoard_label"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
     <!--unimplemented-->
     <item
@@ -15,6 +15,12 @@
         android:title="@string/action_select_all"
         app:showAsAction="never"
         />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="About / Credits"
+        android:titleCondensed="About"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/action_settings"
