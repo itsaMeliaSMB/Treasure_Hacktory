@@ -5,5 +5,4 @@
         android:state_checked="true"/>
     <item android:drawable="@drawable/clipart_unfilledstar_vector_icon"
         android:state_checked="false"/>
-    <!--TODO: Add color of favorite star to reflect theme-->
 </selector>

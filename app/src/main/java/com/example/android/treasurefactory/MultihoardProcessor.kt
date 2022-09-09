@@ -76,9 +76,9 @@ class MultihoardProcessor(private val repository: HMRepository) {
 
             joinAll(addGemsJob, addArtJob, addItemsJob, addSpellsJob)
 
-            // Update counts
+            // Update hoard icon and counts
 
-            suspend fun updateItemCounts() {
+            suspend fun updateItemDetails() {
 
                 val gemCount = repository.getGemCountOnce(mergedHoardID)
                 val artCount = repository.getArtCountOnce(mergedHoardID)
@@ -103,13 +103,18 @@ class MultihoardProcessor(private val repository: HMRepository) {
                     successful = true)
 
                 if (updatedHoard != null) {
-                    repository.updateHoard(updatedHoard)
+
+                    val updatedIconString = LootMutator().selectHoardIconByValue(updatedHoard,
+                        HoardUniqueItemBundle(mergedGemPile, mergedArtPile,
+                            mergedItemPile, mergedSpellPile)
+                    )
+                    repository.updateHoard(updatedHoard.copy(iconID = updatedIconString))
                 } else {
-                    Log.e("updateItemCounts()","updatedHoard is null.")
+                    Log.e("updateItemDetails()","updatedHoard is null.")
                 }
             }
 
-            updateItemCounts()
+            updateItemDetails()
 
             // Record events related to initial merging
             val newHoardEvents = ArrayList<HoardEvent>()

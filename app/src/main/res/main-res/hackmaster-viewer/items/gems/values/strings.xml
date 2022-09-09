@@ -115,10 +115,9 @@
     <string name="action_duplicate">Duplicate</string>
     <string name="action_cancel">Cancel</string>
     <string name="merged_hoard_name_label">Merged hoard name</string>
-    <string name="kenzerco_hackmaster_link"><a href ="https://kenzerco.com/hackmaster/">Official HackMaster section</a></string>
+    <string name="kenzerco_hackmaster_link"><html><a href="https://kenzerco.com/hackmaster/">Official HackMaster section</a></html></string>
     <string name="credits_attribution_kenzerco">HackMaster is © copyright 2001–2022 Kenzer and Company and the HackMaster name, logo and all names and references associated therewith are Trademarks of Kenzer and Company, used here without license.</string>
-    <string name="kenzerco_main_link"><a href="https://kenzerco.com/">Kenzer and Company website</a></string>
-    <string name="attributions">Attributions</string>
+    <string name="kenzerco_main_link"><html><a href="https://kenzerco.com/">Kenzer and Company website</a></html></string>
     <string name="credits_chest_link"><a href="https://iconscout.com/icon/treasure-chest-10">Original icon</a> by Flaticons</string>
     <string name="credits_iconscout_link"><a href="https://iconscout.com/licenses#iconscout">IconScout Digital License</a></string>
     <string name="usable_by">Usable by:</string>
@@ -143,4 +142,13 @@
     <string name="material_icons">Material Icons</string>
     <string name="material_design_author">Material Design by Google</string>
     <string name="credits_creator_flaticons"><a href="https://flaticons.co/">Creator\'s website</a></string>
+    <string name="wotc_fan_content_policy"><a href="https://company.wizards.com/en/legal/fancontentpolicy">Fan Content Policy</a></string>
+    <string name="wotc_dnd_link"><a href="https://dnd.wizards.com/">Official D&amp;D website</a></string>
+    <string name="attributions_header">Attributions and Acknowlegements</string>
+    <string name="artwork_header">Artwork and Icons</string>
+    <string name="special_thanks_header">Special Thanks</string>
+    <string name="about_page_description">A fan-made HackMaster 4th edition companion app for treasure generation and management</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_about">About / Credits</string>
 </resources>

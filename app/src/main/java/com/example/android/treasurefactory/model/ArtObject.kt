@@ -1730,8 +1730,10 @@ data class ArtObject(
                             "Boris",
                             "Charles",
                             "Cyrus",
+                            "David",
                             "Edmund",
                             "Edward",
+                            "Eric",
                             "Franklin",
                             "Frederick",
                             "George",
@@ -1784,10 +1786,12 @@ data class ArtObject(
                             "Odelia",
                             "Olga",
                             "Persephone",
+                            "Robyn",
                             "Sophia",
                             "Tiffany",
                             "Victoria",
-                            "Wilhelmina"
+                            "Wilhelmina",
+                            "Yvette"
                         ).random()
                     }
 
@@ -2060,6 +2064,8 @@ data class ArtObject(
                         "Theologian",
                         "Torturer",
                         "Truthseeker",
+                        "Uniter",
+                        "Unready",
                         "Valiant",
                         "Vengeful",
                         "Whisperer",

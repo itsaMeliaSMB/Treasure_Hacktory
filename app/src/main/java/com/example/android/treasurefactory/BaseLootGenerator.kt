@@ -31,7 +31,7 @@ interface BaseLootGenerator {
     val SAMPLE_MAGIC_ITEM_TEMPLATE: MagicItemTemplate
     val DUMMY_SPELL : SpellTemplate
 
-    suspend fun createHoardFromOrder(hoardOrder: HoardOrder): Int
+    suspend fun createHoardFromOrder(hoardOrder: HoardOrder, appVersion: Int): Int
 
     /**
      * Returns a gem based on the method laid out on page 178 of the GameMaster's Guide.

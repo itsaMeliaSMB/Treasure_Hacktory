@@ -40,13 +40,13 @@ class HoardViewerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        hoardDetailsViewModel.hoardLiveData.observe(viewLifecycleOwner, { hoard ->
+        hoardDetailsViewModel.hoardLiveData.observe(viewLifecycleOwner) { hoard ->
 
-                hoard?.let { //TODO Confirm, based on BNR pg 254, that this is correct
-                    this.activeHoard = hoard
-                    updateUI()
-                }
-            })
+            hoard?.let { //TODO Confirm, based on BNR pg 254, that this is correct
+                this.activeHoard = hoard
+                updateUI()
+            }
+        }
     }
 
     // NOTE TO SELF: Runs when back button is pressed or app is removed from active view

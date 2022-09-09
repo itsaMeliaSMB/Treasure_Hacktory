@@ -1146,7 +1146,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
     // region [ Hoard generation functions ]
 
-    fun generateHoard(order: HoardOrder) {
+    fun generateHoard(order: HoardOrder, appVersion: Int) {
 
         //https://developer.android.com/kotlin/coroutines
 
@@ -1156,7 +1156,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
             val lootGenerator = LootGeneratorAsync(hmRepository)
 
-            val newHoardId = lootGenerator.createHoardFromOrder(order)
+            val newHoardId = lootGenerator.createHoardFromOrder(order, appVersion)
 
             Log.d("generateHoard()","newHoardId = $newHoardId")
 

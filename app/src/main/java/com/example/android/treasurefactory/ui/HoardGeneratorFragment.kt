@@ -37,6 +37,7 @@ import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModelFact
 class HoardGeneratorFragment : Fragment() {
 
     //region [ Property declarations ]
+    private var appVersion = 0
 
     private var shortAnimationDuration: Int = 0
 
@@ -254,6 +255,10 @@ class HoardGeneratorFragment : Fragment() {
 
         setCheckGenRadioCheckedFromVM()
 
+        // Get version code from context
+            appVersion = requireContext().packageManager
+            .getPackageInfo(requireContext().packageName,0).versionCode
+        
         // Apply widget properties TODO animate between two LinearLayouts
         binding.generatorNameEdit.addTextChangedListener { input ->
 
@@ -1317,7 +1322,7 @@ class HoardGeneratorFragment : Fragment() {
                         // TEMPORARILY house letter code order here TODO
                         val letterOrder = generatorViewModel.compileLetterCodeHoardOrder()
 
-                        generatorViewModel.generateHoard(letterOrder)
+                        generatorViewModel.generateHoard(letterOrder,appVersion)
 
                     } else {
 
@@ -1333,7 +1338,7 @@ class HoardGeneratorFragment : Fragment() {
                         // TEMPORARILY house specific quantity order here TODO
                         val specQtyOrder = generatorViewModel.compileSpecificQtyHoardOrder()
 
-                        generatorViewModel.generateHoard(specQtyOrder)
+                        generatorViewModel.generateHoard(specQtyOrder,appVersion)
 
                     } else {
 
@@ -1921,25 +1926,6 @@ class HoardGeneratorFragment : Fragment() {
             }
         })
     }
-
-    private fun getSpecificCoinageParams(): Triple<Double,Double,Set<Pair<Double,String>>> {
-
-        val minimumInput = binding.generatorCoinageMinimumEdit.text.toString()
-            .toDoubleOrNull() ?: 0.0
-        val maximumInput = binding.generatorCoinageMaximumEdit.text.toString()
-            .toDoubleOrNull() ?: 0.0
-        val allowedCoins = mutableSetOf<Pair<Double,String>>()
-
-        if (binding.generatorCoinageAllowedCp.isChecked) allowedCoins.plusAssign(0.01 to "cp")
-        if (binding.generatorCoinageAllowedSp.isChecked) allowedCoins.plusAssign(0.1 to "sp")
-        if (binding.generatorCoinageAllowedEp.isChecked) allowedCoins.plusAssign(0.5 to "ep")
-        if (binding.generatorCoinageAllowedGp.isChecked) allowedCoins.plusAssign(1.0 to "gp")
-        if (binding.generatorCoinageAllowedHsp.isChecked) allowedCoins.plusAssign(2.0 to "hsp")
-        if (binding.generatorCoinageAllowedPp.isChecked) allowedCoins.plusAssign(5.0 to "pp")
-
-        return Triple(minimumInput,maximumInput,allowedCoins.toSet())
-    }
-    //private fun getSpecificSpellCoParams():
 
     //endregion
 

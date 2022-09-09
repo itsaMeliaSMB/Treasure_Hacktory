@@ -60,7 +60,6 @@ class HoardListFragment : Fragment() {
     private var actionMode : ActionMode? = null
     private val actionModeCallback = ActionModeCallback()
 
-    private var selectionMode = false //TODO remove
     // endregion
 
     // region [ Overridden functions ]
@@ -187,8 +186,18 @@ class HoardListFragment : Fragment() {
 
                     R.id.action_select_all_main  -> {
 
-                        //TODO implement
                         (binding.hoardListRecycler.adapter as HoardAdapter).selectAllHoards()
+
+                        true
+                    }
+
+                    R.id.action_about -> {
+
+                        if (hoardListViewModel.isRunningAsyncLiveData.value != true) {
+
+                            val actionID = R.id.action_hoardListFragment_to_aboutFragment
+                            findNavController().navigate(actionID)
+                        }
 
                         true
                     }
@@ -395,13 +404,6 @@ class HoardListFragment : Fragment() {
     }
 
     private inner class ActionModeCallback() : ActionMode.Callback {
-
-        // TODO Left off here. Started cycling out custom implementation of "Selection Mode" and
-        //  instead implementing ActionMode through host Activity. Need to pick colors for and
-        //  implement styles/themes for light/dark mode, ActionMode, and the item type themes.
-        //  Finish converting over to actionMode schema, add multi-hoard copy/delete functions,
-        //  merge function if time, and test. List considered fully implemented for release if all
-        //  these are met.
 
         // https://stackoverflow.com/questions/30814558/problems-with-implementing-contextual-action-mode-in-recyclerview-fragment TODO
         // https://enoent.fr/posts/recyclerview-basics/ TODO

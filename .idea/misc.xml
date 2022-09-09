@@ -85,6 +85,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/drawable/class_thief_outline.xml" value="0.1565" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/drawable/two_spell_gradient.xml" value="0.1255" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/items/gems/layout/activity_viewer.xml" value="0.16032608695652173" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/items/gems/layout/fragment_about.xml" value="0.1701388888888889" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/hackmaster_treasure_viewer_coinage.xml" value="0.335" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/hackmaster_treasure_viewer_coinage_footer.xml" value="0.335" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/hackmaster_treasure_viewer_coinage_list_item.xml" value="0.335" />
@@ -109,7 +110,8 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/activity_main.xml" value="0.13601823708206687" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/dialog_merge_action.xml" value="0.209765625" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/hoard_list_item.xml" value="0.165" />
-        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/layout_attribution_credits.xml" value="0.25" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/layout_about_page.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/layout_attribution_credits.xml" value="0.14166666666666666" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/layout_hoard_list.xml" value="0.165" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/main_menu_fragment.xml" value="0.13601823708206687" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/layout/treasure_viewer_list.xml" value="0.165" />
@@ -163,7 +165,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_orc_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_origami_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_painting_specific_vector_icon.xml" value="0.125" />
-        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_painting_vector_icon.xml" value="0.2361111111111111" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_painting_vector_icon.xml" value="0.11" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_potion_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_refresh_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_ring_vector_icon.xml" value="0.125" />

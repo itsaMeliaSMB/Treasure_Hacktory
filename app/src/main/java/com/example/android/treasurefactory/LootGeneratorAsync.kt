@@ -50,7 +50,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     // region [ Order processing functions ]
     // TODO still needs concurrency rework
     @WorkerThread
-    override suspend fun createHoardFromOrder(hoardOrder: HoardOrder): Int {
+    override suspend fun createHoardFromOrder(hoardOrder: HoardOrder, appVersion: Int): Int {
 
         Log.d("createHoardFromOrder()","Starting hoard generation")
 
@@ -80,7 +80,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     hoardOrder.creationDescription, iconId, gpTotal, effortValue,
                     hoardOrder.copperPieces, hoardOrder.silverPieces, hoardOrder.electrumPieces,
                     hoardOrder.goldPieces, hoardOrder.hardSilverPieces, hoardOrder.platinumPieces,
-                    appVersion = BuildConfig.VERSION_CODE
+                    appVersion = appVersion
                 )
             }
 
@@ -322,9 +322,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             // region [ Add lists to database under parent hoard ]
             Log.d("createHoardFromOrder()","[ Add lists to database under parent hoard ]")
 
-            //TODO https://stackoverflow.com/questions/72489240/foreign-key-constraint-failed-using-room
-            // In short, you'll fix this by nixing foreign keys and manually handling cascades yourself.
-
             val addGemsJob = launch { gemPile.forEach { repository.addGem(it) } }
             val addArtJob = launch { artPile.forEach { repository.addArtObject(it) } }
             val addItemsJob = launch { itemPile.forEach { repository.addMagicItem(it) } }
@@ -337,7 +334,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             // region [ Update counts on new hoard ]
             Log.d("createHoardFromOrder()","[ Update counts on new hoard ]")
 
-            suspend fun updateItemCounts() {
+            suspend fun updateItemDetails() {
 
                 Log.d("createHoardFromOrder()","updateItemCounts() called.")
 
@@ -371,13 +368,16 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     successful = true)
 
                 if (newHoard != null) {
-                    repository.updateHoard(newHoard)
+                    val updatedIconString = LootMutator().selectHoardIconByValue(newHoard,
+                        HoardUniqueItemBundle(gemPile, artPile, itemPile, spellPile)
+                    )
+                    repository.updateHoard(newHoard.copy(iconID = updatedIconString))
                 } else {
-                    Log.e("updateItemCounts()","newHoard is null.")
+                    Log.e("updateItemDetails()","newHoard is null.")
                 }
             }
 
-            updateItemCounts()
+            updateItemDetails()
             // endregion
 
             // region [ Log HoardEvents for creation ]

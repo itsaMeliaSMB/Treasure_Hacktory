@@ -4,13 +4,12 @@ import com.example.android.treasurefactory.model.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import java.util.*
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class LootMutator {
 
     // TODO fun restoreOriginalValue(inputGem: Gem): Gem {}
-
-
 
     fun rollGemVariation(inputGem: Gem) : Gem {
 
@@ -239,10 +238,12 @@ class LootMutator {
     fun selectHoardIconByValue(hoard: Hoard, hoardItems: HoardUniqueItemBundle): String {
 
         var hoardIconString = "container_chest"
+        var bestItemValue = 0.0
+        val hoardCoinTotal = hoard.getTotalCoinageValue()
 
         // Get most valuable icon for each item category
 
-        fun getItemIconMap() : Map<Any?,Pair<Double,Int>> = runBlocking {
+        val uniqueItemList = runBlocking {
 
             val deferredGemInfo = async { getMostValuableGemInfo(hoardItems.hoardGems) }
             val deferredArtInfo = async { getMostValuableArtObjectInfo(hoardItems.hoardArt) }
@@ -250,7 +251,7 @@ class LootMutator {
             val deferredSpellInfo = async {
                 getMostValuableSpellCollectionInfo(hoardItems.hoardSpellCollections) }
 
-            return@runBlocking mapOf(
+            return@runBlocking listOf(
                 deferredGemInfo.await(),
                 deferredArtInfo.await(),
                 deferredItemInfo.await(),
@@ -258,18 +259,95 @@ class LootMutator {
             )
         }
 
-        // TODO left off here. Determine the actual necessary info and criteria for selecting an
-        //  icon and modify getItemIconMap() and return type accordingly. Decide what cutoffs are
-        //  necessary for coinage and assorted hoard icons and implement. After that, add this
-        //  functionality to hoard Generator and merge functions.
+        // Check if there are any unique items
+        if ((hoardItems.hoardGems.size + hoardItems.hoardArt.size + hoardItems.hoardItems.size +
+                    hoardItems.hoardSpellCollections.size) > 0) {
 
-        // If no category is valuable enough,
+            // If combined coinage is more valuable than all other treasures combined,
+            if (hoardCoinTotal > uniqueItemList.sumOf { it.second.first }) {
 
+                val totalCPValue = ((hoardCoinTotal + uniqueItemList.sumOf { it.second.first })
+                        * 100.00).roundToInt()
+
+                // Set icon as a mixed hoard
+                hoardIconString = when (totalCPValue) {
+
+                    in 1..100000 -> "loot_handful"
+                    in 100001..1000000 -> "loot_small_pile"
+                    in 1000001..5000000 -> "loot_large_pile"
+                    else -> "loot_treasure_barrels"
+                }
+
+            } else {
+
+                // Check for most valuable unique item to set as icon string
+                uniqueItemList.forEach { bestItemPair ->
+
+                    if (bestItemPair.first != null) {
+
+                        when (bestItemPair.first) {
+
+                            is Gem  -> {
+                                if ((bestItemPair.first as Gem).currentGPValue > bestItemValue) {
+
+                                    bestItemValue = (bestItemPair.first as Gem).currentGPValue
+                                    hoardIconString = (bestItemPair.first as Gem).iconID
+                                }
+                            }
+
+                            is ArtObject -> {
+                                if ((bestItemPair.first as ArtObject).gpValue > bestItemValue) {
+
+                                    bestItemValue = (bestItemPair.first as ArtObject).gpValue
+                                    hoardIconString = (bestItemPair.first as ArtObject)
+                                        .getArtTypeAsIconString()
+                                }
+                            }
+
+                            is MagicItem  -> {
+                                if ((bestItemPair.first as MagicItem).gpValue > bestItemValue) {
+
+                                    bestItemValue = (bestItemPair.first as MagicItem).gpValue
+                                    hoardIconString = (bestItemPair.first as MagicItem).iconID
+                                }
+                            }
+
+                            is SpellCollection  -> {
+                                if ((bestItemPair.first as SpellCollection).gpValue > bestItemValue) {
+
+                                    bestItemValue = (bestItemPair.first as MagicItem).gpValue
+                                    hoardIconString = (bestItemPair.first as MagicItem).iconID
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        } else {
+
+            if (hoardCoinTotal > 0.00) {
+
+                //Set coinage-only icon
+                hoardIconString = when {
+
+                    hoard.cp > 0 && (hoard.sp + hoard.hsp + hoard.pp == 0)
+                            && (hoard.ep + hoard.gp == 0) -> "loot_copper"
+
+                    hoard.cp == 0 && (hoard.sp + hoard.hsp + hoard.pp > 0)
+                            && (hoard.ep + hoard.gp == 0) -> "loot_silver"
+
+                    hoard.cp == 0 && (hoard.sp + hoard.hsp + hoard.pp == 0)
+                            && (hoard.ep + hoard.gp > 0) -> "loot_gold"
+
+                    else -> "loot_mixed"
+                }
+            } else hoardIconString = "loot_lint"
+
+        }
+
+        // Return string for hoard icon
         return hoardIconString
-    }
-
-    fun getCoinPileIcon(hoard: Hoard) {
-        //TODO implement
     }
 
     /**

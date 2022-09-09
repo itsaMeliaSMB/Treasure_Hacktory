@@ -24,9 +24,10 @@
             <!--TODO Add an easter egg penetrating dice roller by long-clicking icon-->
 
             <ImageView
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:src="@mipmap/ic_launcher"/>
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/treasure_hacktory_icon_drawable"/>
 
         </androidx.cardview.widget.CardView>
 
@@ -49,7 +50,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="32dp"
             android:layout_gravity="center"
-            android:text="A fan-made HackMaster 4th edition companion app for treasure generation and management"
+            android:text="@string/about_page_description"
             android:textAlignment="center"
             android:textSize="16sp" />
 
@@ -64,13 +65,11 @@
             android:textAlignment="center"
             android:textSize="14sp" />
 
-        <!--TODO Find out EXACTLY what you can and need to do for copyright-->
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:layout_marginHorizontal="32dp"
+            android:layout_marginHorizontal="64dp"
             android:layout_gravity="center"
             android:text="Created by Amelia K."
             android:layout_marginBottom="16dp"
@@ -110,7 +109,7 @@
                     android:textStyle="bold"
                     android:textColor="?attr/colorOnPrimary"
                     android:fontFeatureSettings="smcp"
-                    android:text="Attributions and Acknowlegements"/>
+                    android:text="@string/attributions_header"/>
 
                 <ImageView
                     android:layout_width="48dp"
@@ -175,8 +174,6 @@
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
                             android:layout_marginBottom="8dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                         <TextView
@@ -188,8 +185,6 @@
                             android:text="@string/kenzerco_hackmaster_link"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                     </LinearLayout>
@@ -210,14 +205,106 @@
                             android:layout_alignParentTop="true"/>
 
                         <ImageView
+                            android:id="@+id/kenzerco_card_indicator"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerInParent="true"
                             android:alpha="0.5"
                             android:rotation="90"
                             android:src="@drawable/clipart_indicator_vector_icon"
-                            app:tint="?attr/colorOnSurface"
-                            tools:rotation="-90"/>
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/wotc_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true"
+                android:visibility="gone">
+
+                <!--TODO Made invisible due to ambiguity of wotc mention. Left in for now since coding in in place anyway.-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!--TODO Edit attribution after hearing back from WotC-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:text="HackMaster 4th edition is based on the original Dungeons and Dragons® rules created by E. Gary Gygax and David Arneson.\n\nAdvanced Dungeons &amp; Dragons, AD&amp;D, and Dungeons and Dragons are all trademarks owned by Wizards of the Coast, Inc., a subsidiary of Hasbro, Inc. and was used by Kenzer and Company under license, used here without license.\n\nTreasure Hacktory is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. © Wizards of the Coast LLC."
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/wotc_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/wotc_policy_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/wotc_fan_content_policy"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            android:layout_marginBottom="8dp"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                        <TextView
+                            android:id="@+id/wotc_dnd_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/wotc_dnd_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/wotc_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorOnSurface"
+                            android:alpha="0.25"
+                            android:layout_alignParentTop="true"/>
+
+                        <ImageView
+                            android:id="@+id/wotc_card_indicator"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
 
                     </RelativeLayout>
 
@@ -230,7 +317,7 @@
 
         </LinearLayout>
 
-        <!-- Artwork and Assets -->
+        <!-- Artwork and Icons -->
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -263,7 +350,7 @@
                     android:textStyle="bold"
                     android:textColor="?attr/colorOnPrimary"
                     android:fontFeatureSettings="smcp"
-                    android:text="Artwork and Icons"/>
+                    android:text="@string/artwork_header"/>
 
                 <ImageView
                     android:layout_width="48dp"
@@ -338,8 +425,6 @@
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
                             android:layout_marginBottom="8dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                         <TextView
@@ -351,8 +436,6 @@
                             android:text="@string/fraim_instagram"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                     </LinearLayout>
@@ -373,6 +456,7 @@
                             android:background="?attr/colorOnSurface" />
 
                         <ImageView
+                            android:id="@+id/fraim_card_indicator"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerInParent="true"
@@ -386,8 +470,6 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-
-
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/poneti_card"
@@ -442,8 +524,6 @@
                             android:text="@string/poneti_artstation"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
                     </LinearLayout>
 
@@ -463,6 +543,7 @@
                             android:layout_alignParentTop="true"/>
 
                         <ImageView
+                            android:id="@+id/poneti_card_indicator"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerInParent="true"
@@ -530,8 +611,6 @@
                             android:text="@string/akiza_artstation"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
                     </LinearLayout>
 
@@ -551,6 +630,7 @@
                             android:layout_alignParentTop="true"/>
 
                         <ImageView
+                            android:id="@+id/akiza_card_indicator"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerInParent="true"
@@ -619,8 +699,6 @@
                             android:text="@string/game_icons_cc_link"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                         <TextView
@@ -632,8 +710,6 @@
                             android:text="@string/game_icons_site_link"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                     </LinearLayout>
@@ -654,6 +730,7 @@
                             android:layout_alignParentTop="true"/>
 
                         <ImageView
+                            android:id="@+id/game_icons_card_indicator"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerInParent="true"
@@ -722,8 +799,6 @@
                             android:text="@string/credits_iconscout_link"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                         <TextView
@@ -731,12 +806,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:minHeight="32dp"
+                            android:layout_marginBottom="8dp"
                             android:gravity="center_vertical"
                             android:text="@string/credits_chest_link"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                         <TextView
@@ -744,20 +818,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:minHeight="32dp"
-                            android:layout_marginBottom="8dp"
                             android:gravity="center_vertical"
                             android:text="@string/credits_creator_flaticons"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                     </LinearLayout>
 
                     <!-- Always-visible footer -->
                     <RelativeLayout
-                        android:id="@+id/material_icons_card_footer"
+                        android:id="@+id/iconscout_card_footer"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:layout_marginTop="16dp"
@@ -771,6 +842,7 @@
                             android:background="?attr/colorOnSurface" />
 
                         <ImageView
+                            android:id="@+id/iconscout_card_indicator"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerInParent="true"
@@ -839,8 +911,6 @@
                             android:text="@string/material_icons_apache_link"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                         <TextView
@@ -852,8 +922,6 @@
                             android:text="@string/material_icons_library_link"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                     </LinearLayout>
@@ -874,13 +942,14 @@
                             android:background="?attr/colorOnSurface" />
 
                         <ImageView
+                            android:id="@+id/material_icons_card_indicator"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerInParent="true"
                             android:alpha="0.5"
                             android:rotation="90"
                             android:src="@drawable/clipart_indicator_vector_icon"
-                            app:tint="?attr/colorOnSurface"/>
+                            app:tint="?attr/colorOnSurface" />
 
                     </RelativeLayout>
 
@@ -922,7 +991,7 @@
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnPrimary"
                 android:fontFeatureSettings="smcp"
-                android:text="Special Thanks"/>
+                android:text="@string/special_thanks_header"/>
 
             <ImageView
                 android:layout_width="48dp"
@@ -1004,8 +1073,6 @@
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
                             android:layout_marginBottom="8dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                         <TextView
@@ -1018,8 +1085,6 @@
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
                             android:layout_marginBottom="8dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
                         <TextView
                             android:id="@+id/puzwed_youtube_link"
@@ -1031,8 +1096,6 @@
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
                             android:layout_marginBottom="8dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                         <TextView
@@ -1044,8 +1107,6 @@
                             android:text="@string/puzwed_twitter"
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
-                            android:autoLink="web"
-                            android:linksClickable="true"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                     </LinearLayout>
@@ -1066,6 +1127,7 @@
                             android:layout_alignParentTop="true"/>
 
                         <ImageView
+                            android:id="@+id/puzwed_card_indicator"
                             android:layout_width="32dp"
                             android:layout_height="32dp"
                             android:layout_centerInParent="true"

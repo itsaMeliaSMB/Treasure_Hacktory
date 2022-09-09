@@ -21,6 +21,9 @@
                 android:defaultValue="0"
                 app:argType="integer" />
         </action>
+        <action
+            android:id="@+id/action_hoardListFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
 
     <fragment
@@ -54,4 +57,9 @@
                 app:argType="integer" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.android.treasurefactory.ui.AboutFragment"
+        android:label="AboutFragment"
+        tools:layout="@layout/layout_about_page"/>
 </navigation>
