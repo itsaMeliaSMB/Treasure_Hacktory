@@ -43,6 +43,9 @@ class HoardGeneratorFragment : Fragment() {
 
     private var isButtonGroupAnimating = false
 
+    private var _binding: LayoutGeneratorFragmentBinding? = null
+    private val binding get() = _binding!!
+
     //https://www.rockandnull.com/jetpack-viewmodel-initialization/
     //https://developer.android.com/codelabs/android-room-with-a-view-kotlin#9
 
