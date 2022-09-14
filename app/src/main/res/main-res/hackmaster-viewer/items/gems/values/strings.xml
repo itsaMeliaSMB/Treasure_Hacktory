@@ -133,7 +133,7 @@
     <string name="akiza_artstation"><a href="https://www.artstation.com/paminori">ArtStation</a></string>
     <string name="game_icons_cc_link">Provided under <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons 3.0 BY license</a></string>
     <string name="game_icons_site_link">Available on https://Game-icons.net</string>
-    <string name="game_icons_contributors">Caro Asercion\nDelapouite\nLorc\nSkoll\nWilldabeast</string>
+    <string name="game_icons_contributors">Caro Asercion\nDarkZaitzev\nDelapouite\nLorc\nSkoll\nViscious Speed\nWilldabeast</string>
     <string name="item_vector_icons">Item Vector Icons (Game-icons.net)</string>
     <string name="app_version_string">version 1.0</string>
     <string name="app_title_text">Treasure Hacktory</string>
@@ -151,4 +151,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_about">About / Credits</string>
+    <string name="unique_object_overview">Unique Object Overview</string>
+    <string name="coinage_overview">Coinage Overview</string>
 </resources>

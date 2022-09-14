@@ -267,7 +267,7 @@ class HoardListFragment : Fragment() {
             binding.hoardListItemMagicCount.text = String.format("%03d",hoard.magicCount)
             binding.hoardListItemSpellCount.text = String.format("%03d",hoard.spellsCount)
 
-            // Set icon for hoard TODO set icon as most valuable item (by gp value) in hoard
+            // Set icon for hoard
             try {
 
                 binding.hoardListItemListIcon
@@ -536,36 +536,6 @@ class HoardListFragment : Fragment() {
 
                 R.id.action_duplicate -> {
 
-                    // TODO Left off here. All HoardList functions should be working correctly, but
-                    //  project no longer compiles due to an issue with populateCommandWords(),
-                    //  commented below. Before, duplicateHoards was not functioning correctly due
-                    //  to a main thread database reference. Clean/Rebuild/Invalidate Caches for
-                    //  project, resolve compilation issue, confirm duplicate and merge work as
-                    //  intended, and then MOVE ON TO IMPLEMENTING THE VIEWER. Also, apply for a
-                    //  dev account on the Play Store already.
-
-                    // TODO quick rebuild seemed to work. Duplicate works correctly but Merge seems
-                    //  to work correctly; it lacks a hoard icon and needs further testing on 3+
-                    //  hoard merges.
-
-                    /*
-    e: org.jetbrains.kotlin.codegen.CompilationException: Back-end (JVM) Internal error: Couldn't transform method node:
-    populateCommandWords (Lcom/example/android/treasurefactory/database/SpellCollectionDao;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;:
-    @Lorg/jetbrains/annotations/Nullable;() // invisible
-    // annotable parameter count: 2 (visible)
-    // annotable parameter count: 2 (invisible)
-    @Lorg/jetbrains/annotations/NotNull;() // invisible, parameter 0
-    @Lorg/jetbrains/annotations/NotNull;() // invisible, parameter 1
-    ALOAD 2
-    INSTANCEOF com/example/android/treasurefactory/database/TreasureDatabase$InitialPopulationCallback$populateCommandWords$1
-    IFEQ L0
-    ALOAD 2
-    CHECKCAST com/example/android/treasurefactory/database/TreasureDatabase$InitialPopulationCallback$populateCommandWords$1
-    ASTORE 19
-    ALOAD 19
-    GETFIELD com/example/android/treasurefactory/database
-                     */
-
                     val selectedHoards =
                         (binding.hoardListRecycler.adapter as HoardAdapter)
                             .getSelectedAsHoards()
@@ -599,11 +569,9 @@ class HoardListFragment : Fragment() {
 
                                 hoardListViewModel.mergeSelectedHoards(selectedHoards,
                                     newHoardNameEdittext.text.toString().takeUnless {it.isBlank()},
-                                    keepOriginalCheckbox.isChecked).also { exitActionMode ->
-                                        if (exitActionMode) {
-                                            mode.finish()
-                                        }
-                                }
+                                    keepOriginalCheckbox.isChecked) //TODO remove boolean return; action mode should always be exited due to updateUI() implementation.
+
+                                mode.finish()
                             })
                         .setNegativeButton(R.string.action_cancel,
                             DialogInterface.OnClickListener { dialog, _ ->

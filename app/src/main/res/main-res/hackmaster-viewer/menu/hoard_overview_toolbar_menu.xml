@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!--TODO re-enable menu items as implemented-->
     <item
         android:title="Edit"
         android:id="@+id/action_edit_hoard"
@@ -10,15 +11,18 @@
         android:iconTint="?attr/colorOnPrimary"/>
     <item
         android:title="View history"
-        android:id="@+id/action_view_history"/>
+        android:id="@+id/action_view_history"
+        android:enabled="false"/>
     <item
         android:title="Edit coinage"
         android:id="@+id/action_edit_coinage"
-        app:showAsAction="never"/>
+        app:showAsAction="never"
+        android:enabled="false"/>
     <item
         android:title="Save report to text file"
         android:titleCondensed="Save report"
-        android:id="@+id/action_save_report"/>
+        android:id="@+id/action_save_report"
+        android:enabled="false"/>
     <item
         android:title="@string/action_delete"
         android:id="@+id/action_delete_hoard"/>

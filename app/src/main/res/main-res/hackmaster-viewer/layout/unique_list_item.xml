@@ -58,6 +58,19 @@
         app:layout_constraintTop_toTopOf="@id/unique_list_item_thumbnail"
         tools:src="@drawable/itemframe_background_gray" />
 
+    <ImageView
+        android:id="@+id/unique_list_itemframe_badge"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="3dp"
+        app:layout_constraintBottom_toBottomOf="@id/unique_list_item_thumbnail"
+        app:layout_constraintEnd_toEndOf="@id/unique_list_item_thumbnail"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:elevation="3dp"
+        tools:visibility="visible"
+        tools:src="@drawable/badge_art_nobility"/>
+
     <!-- Might need to add marquee -->
     <TextView
         android:id="@+id/unique_list_item_name"
