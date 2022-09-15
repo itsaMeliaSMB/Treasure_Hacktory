@@ -55,31 +55,25 @@
             android:id="@+id/hoard_event_tag_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+            android:layout_marginTop="4dp"
+            android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
             android:paddingEnd="8dp"
             android:text="Tags:"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hoard_event_description"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/hoard_event_tag_barrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="end"
-            app:constraint_referenced_ids="hoard_event_tag_label"/>
+            app:layout_constraintTop_toBottomOf="@id/hoard_event_description" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hoard_event_tag_recycler_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintStart_toEndOf="@id/hoard_event_tag_barrier"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/hoard_event_description"
+            app:layout_constraintTop_toBottomOf="@id/hoard_event_tag_label"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+            tools:itemCount="3"
             tools:listitem="@layout/hoard_event_tag_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

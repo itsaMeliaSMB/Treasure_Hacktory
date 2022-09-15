@@ -24,6 +24,8 @@ class HMRepository (
 
     fun getHoard(hoardID: Int): LiveData<Hoard?> = hoardDao.getHoard(hoardID)
 
+    fun getHoardName(hoardID: Int): LiveData<String?> = hoardDao.getHoardName(hoardID)
+
     suspend fun getHoardOnce(hoardID: Int): Hoard? = hoardDao.getHoardOnce(hoardID)
 
     suspend fun addHoard(hoard: Hoard) : Long {

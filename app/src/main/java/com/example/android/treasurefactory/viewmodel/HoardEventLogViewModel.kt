@@ -12,6 +12,10 @@ class HoardEventLogViewModel(private val repository: HMRepository) : ViewModel()
         repository.getHoardEvents(hoardID)
     }
 
+    var hoardNameLiveData: LiveData<String> = Transformations.switchMap(hoardIDLiveData) { hoardID ->
+        repository.getHoardName(hoardID)
+    }
+
     // region [ Helper functions ]
 
     fun updateHoardID(hoardID: Int) {

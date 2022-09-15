@@ -868,6 +868,9 @@ interface HoardDao {
     @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
     fun getHoard(id: Int): LiveData<Hoard?>
 
+    @Query("SELECT name FROM hackmaster_hoard_table WHERE hoardID=(:id)")
+    fun getHoardName(id: Int): LiveData<String?>
+
     @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
     suspend fun getHoardOnce(id: Int): Hoard?
 

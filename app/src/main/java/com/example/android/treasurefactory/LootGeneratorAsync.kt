@@ -419,7 +419,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             } gp\n" +
                             "\tPaper art map replacement chance: ${
                                 hoardOrder.genParams.artParams.paperMapChance
-                            }%", tag = "creation|artwork|verbose")
+                            }%", tag = "creation|art-object|verbose")
 
                 val itemHoardEvent = HoardEvent(
                     hoardID = newHoardID,

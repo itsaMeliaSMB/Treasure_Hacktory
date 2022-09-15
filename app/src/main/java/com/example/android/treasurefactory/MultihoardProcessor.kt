@@ -149,7 +149,7 @@ class MultihoardProcessor(private val repository: HMRepository) {
                                 "\tApp version: ${subHoard.appVersion}",
                         tag = "creation|merge|verbose" +
                                 (if (subHoard.gemCount > 0) "|gemstone" else "") +
-                                (if (subHoard.artCount > 0) "|artwork" else "") +
+                                (if (subHoard.artCount > 0) "|art-object" else "") +
                                 (if (subHoard.magicCount > 0) "|magic-item" else "") +
                                 (if (subHoard.spellsCount > 0) "|spell-collection" else ""))
                 )

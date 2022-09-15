@@ -166,6 +166,10 @@ class HoardOverviewFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     fun updateUI() {
 
+        //TODO left off here. Base, untested implementation of HoardEventLogFragment finished. Now,
+        // finish HoardOverviewFragment implementation. Update nav graph, implement dummied-out
+        // menu on toolbar, and test before moving onto written refactor checklist.
+
         //TODO Update header information
 
         // Set icon for hoard

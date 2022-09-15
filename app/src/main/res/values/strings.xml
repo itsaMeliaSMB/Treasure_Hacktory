@@ -17,4 +17,5 @@
     <string name="hoard_generator_fragment_title">Create new hoard</string>
     <string name="hoard_overview_fragment_title">Hoard overview</string>
     <string name="unique_details_fragment_title">Item details</string>
+    <string name="hoard_event_log_fragment_title">Event Log</string>
 </resources>
