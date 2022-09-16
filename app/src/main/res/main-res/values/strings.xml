@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="copper_pieces">Copper pieces</string>
+    <string name="silver_pieces">Silver pieces</string>
+    <string name="electrum_pieces">Electrum pieces</string>
+    <string name="gold_pieces">Gold pieces</string>
+    <string name="hard_silver_pieces">Hard silver pieces</string>
+    <string name="platinum_pieces">Platinum pieces</string>
+</resources>

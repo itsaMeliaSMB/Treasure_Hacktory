@@ -5,7 +5,8 @@
     android:orientation="horizontal"
     android:gravity="center_vertical"
     android:layout_width="match_parent"
-    android:layout_height="28dp">
+    android:layout_height="28dp"
+    android:background="?attr/colorSurface">
 
     <ImageView
         android:id="@+id/hoard_overview_coinage_item_icon"

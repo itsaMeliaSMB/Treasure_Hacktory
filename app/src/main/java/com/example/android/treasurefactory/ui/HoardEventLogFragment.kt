@@ -10,6 +10,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
@@ -29,6 +30,8 @@ private const val ARG_HOARD_ID = "hoard_id"
 
 class HoardEventLogFragment : Fragment() {
 
+    val safeArgs : HoardEventLogFragmentArgs by navArgs()
+
     private var _binding: LayoutHoardEventLogBinding? = null
     private val binding get() = _binding!!
 
@@ -43,7 +46,7 @@ class HoardEventLogFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val activeHoardID: Int = arguments?.getSerializable(ARG_HOARD_ID) as Int
+        val activeHoardID: Int = safeArgs.activeHoardID
 
         hoardEventLogViewModel.updateHoardID(activeHoardID)
     }
@@ -52,7 +55,7 @@ class HoardEventLogFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // Inflate the layout for this fragment
         _binding = LayoutHoardEventLogBinding.inflate(inflater, container, false)
@@ -132,7 +135,7 @@ class HoardEventLogFragment : Fragment() {
 
                 return when (this){
                     "art-object" ->         R.drawable.clipart_painting_vector_icon
-                    "coinage" ->            R.drawable.clipart_coin_vector_icon
+                    "coinage" ->            R.drawable.clipart_coinbag_vector_icon
                     "creation" ->           R.drawable.clipart_new_vector_icon
                     "deletion" ->           R.drawable.clipart_delete_vector_icon
                     "duplication" ->        R.drawable.clipart_copy_vector_icon
@@ -147,7 +150,7 @@ class HoardEventLogFragment : Fragment() {
                     "system" ->             R.drawable.clipart_android_vector_icon
                     "user" ->               R.drawable.clipart_user_vector_icon
                     "verbose" ->            R.drawable.clipart_info_vector_icon
-                    else ->R.drawable.clipart_circle_vector_icon
+                    else ->                 R.drawable.clipart_circle_vector_icon
                 }
             }
 

@@ -14,30 +14,25 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
     var hoardLiveData: LiveData<Hoard?> = Transformations.switchMap(hoardIDLiveData) { hoardID ->
         repository.getHoard(hoardID)
     }
+
+    var gemValueLiveData = Transformations.switchMap(hoardIDLiveData) { hoardID ->
+        repository.getGemValueTotal(hoardID)
+    }
+    var artValueLiveData = Transformations.switchMap(hoardIDLiveData) { hoardID ->
+        repository.getArtValueTotal(hoardID)
+    }
+    var magicValueLiveData = Transformations.switchMap(hoardIDLiveData) { hoardID ->
+        repository.getMagicItemValueTotal(hoardID)
+    }
+    var spellValueLiveData = Transformations.switchMap(hoardIDLiveData) { hoardID ->
+        repository.getSpellCollectionValueTotal(hoardID)
+    }
     // endregion
 
     // region [ Functions ]
 
     fun loadHoard(hoardID: Int) {
         hoardIDLiveData.value = hoardID
-    }
-
-    /**
-     * Returns the total gp value of the Gems, Art Objects, Magic Items, and Spell Collections of
-     * the matching the provided hoardID.
-     */
-    fun getTotalItemValues(hoardID: Int) : DoubleArray {
-
-        val totalsArray = DoubleArray(4)
-
-        viewModelScope.launch {
-            totalsArray[0] = repository.getGemValueTotalOnce(hoardID)
-            totalsArray[1] = repository.getArtValueTotalOnce(hoardID)
-            totalsArray[2] = repository.getMagicItemValueTotalOnce(hoardID)
-            totalsArray[3] = repository.getSpellCollectionValueTotalOnce(hoardID)
-        }
-
-        return totalsArray
     }
 
     fun saveHoard(hoard: Hoard) {

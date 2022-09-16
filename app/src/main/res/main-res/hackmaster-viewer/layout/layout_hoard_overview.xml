@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -35,15 +34,14 @@
         <LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="?attr/backgroundColor">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_margin="16dp">
-
-                <!--TODO add item frame to hoard icon-->
 
                 <RelativeLayout
                     android:layout_width="@dimen/list_item_icon_size"
@@ -56,7 +54,7 @@
                         android:layout_gravity="center_vertical"
                         android:elevation="2dp"
                         android:scaleType="fitCenter"
-                        tools:src="@drawable/itemframe_foreground" />
+                        android:src="@drawable/itemframe_foreground" />
 
                     <ImageView
                         android:id="@+id/hoard_overview_itemframe_icon"
@@ -74,7 +72,7 @@
                         android:layout_gravity="center_vertical"
                         android:elevation="0dp"
                         android:scaleType="fitCenter"
-                        tools:src="@drawable/itemframe_background_gray" />
+                        android:src="@drawable/itemframe_background_gray" />
 
 
                 </RelativeLayout>
@@ -205,8 +203,7 @@
                 android:id="@+id/hoard_overview_coinage_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                tools:visibility="gone">
+                android:orientation="vertical">
 
                 <View
                     android:layout_width="match_parent"
@@ -238,7 +235,6 @@
 
                 <include layout="@layout/hoard_overview_coinage_footer"
                     android:id="@+id/hoard_overview_coinage_footer"/>
-
 
             </LinearLayout>
 

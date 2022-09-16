@@ -1,10 +1,9 @@
 package com.example.android.treasurefactory.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android.treasurefactory.R
 
@@ -33,20 +32,10 @@ class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
     }
 
     override fun onHoardSelected(view: View, hoardID: Int) {
-        val action = HoardListFragmentDirections.actionHoardListFragmentToHoardViewerFragment().apply{
-            selectedHoardID = hoardID
-        }
+        val action =
+            HoardListFragmentDirections.hoardListToOverviewAction(hoardID)
 
-        Log.d("MainActivity","$hoardID passed via " + resources.getResourceName(view.id) +
-            " for fragment navigation.")
-        Toast.makeText(this,"Hoard [id: $hoardID] selected.",Toast.LENGTH_SHORT).show()
-        // TODO view.findNavController().navigate(action)
-        /* Dummied out until new implementation confirmed to work.
-        val fragment = HoardViewerFragment.newInstance(hoardID)
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container,fragment)
-            .addToBackStack(null)                   // See page 248 of BNR
-            .commit() */
+        view.findNavController().navigate(action)
     }
+
 }

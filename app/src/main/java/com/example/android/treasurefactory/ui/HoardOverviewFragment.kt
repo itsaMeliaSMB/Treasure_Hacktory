@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +29,8 @@ class HoardOverviewFragment : Fragment() {
 
     // region [ Property declarations ]
     private lateinit var activeHoard: Hoard
+
+    val safeArgs : HoardOverviewFragmentArgs by navArgs()
 
     private var totalGemValue = 0.0
     private var totalArtValue = 0.0
@@ -48,12 +53,12 @@ class HoardOverviewFragment : Fragment() {
 
         activeHoard = Hoard()
 
-        val activeHoardID: Int = arguments?.getSerializable(ARG_HOARD_ID) as Int
+        val activeHoardID: Int = safeArgs.selectedHoardID
 
         hoardOverviewViewModel.loadHoard(activeHoardID)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         // Inflate the layout for this fragment
         _binding = LayoutHoardOverviewBinding.inflate(inflater, container, false)
@@ -76,14 +81,64 @@ class HoardOverviewFragment : Fragment() {
 
             hoard?.let {
                 activeHoard = hoard
-                hoardOverviewViewModel.getTotalItemValues(hoard.hoardID).let{
-                    totalGemValue = it[0]
-                    totalArtValue = it[1]
-                    totalMagicValue = it[2]
-                    totalSpellValue = it[3]
+                hoardOverviewViewModel.let{
+                    //TODO left off here. Overview and log works mostly as intended; just having
+                    // issues with getting unique item totals from repository (functions works, it's
+                    // just an async thing). Get that much working, implement all Hoard Overview
+                    // menu items besides the txt report, make it so when accessed, a hoard loses
+                    // it's NEW tag, remove the initial hoard composition as a hoard field and log
+                    // it instead as an event, and then do your final refactor before moving on to
+                    // implementing unique item views.
+                    totalGemValue = it.gemValueLiveData.value ?: 0.0
+                    totalArtValue = it.artValueLiveData.value ?: 0.0
+                    totalMagicValue = it.magicValueLiveData.value ?: 0.0
+                    totalSpellValue = it.spellValueLiveData.value ?: 0.0
                 }
                 updateUI()
             }
+        }
+
+        // Set up toolbar
+        binding.hoardOverviewToolbar.apply {
+            inflateMenu(R.menu.hoard_overview_toolbar_menu)
+            title = getString(R.string.hoard_overview_fragment_title)
+            setNavigationIcon(R.drawable.clipart_back_vector_icon)
+            setOnMenuItemClickListener { item ->
+
+                when (item.itemId) {
+
+                    R.id.action_view_history    -> {
+
+                        val action = HoardOverviewFragmentDirections
+                            .hoardOverviewToEventLogAction(activeHoard.hoardID)
+                        findNavController().navigate(action)
+
+                        true
+                    }
+
+                    else    -> false
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        binding.hoardOverviewGemCard.setOnClickListener {
+            Toast.makeText(context, "Gem card clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.hoardOverviewArtCard.setOnClickListener {
+            Toast.makeText(context, "Art card clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.hoardOverviewMagicCard.setOnClickListener {
+            Toast.makeText(context, "Item card clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.hoardOverviewSpellsCard.setOnClickListener {
+            Toast.makeText(context, "Spells card clicked", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -109,15 +164,33 @@ class HoardOverviewFragment : Fragment() {
 
         fun bind(coinType: CoinType, coinCount: Int){
 
-            // Set coin icon
-            binding.hoardOverviewCoinageItemIcon.apply{
+            // Set coin icon and label
+            binding.apply{
                 when (coinType) {
-                    CoinType.CP ->  this.setImageResource(R.drawable.item_coin_copper)
-                    CoinType.SP ->  this.setImageResource(R.drawable.item_coin_silver)
-                    CoinType.EP ->  this.setImageResource(R.drawable.item_coin_electrum)
-                    CoinType.GP ->  this.setImageResource(R.drawable.item_coin_gold)
-                    CoinType.HSP -> this.setImageResource(R.drawable.item_coin_hardsilver)
-                    CoinType.PP ->  this.setImageResource(R.drawable.item_coin_platinum)
+                    CoinType.CP -> {
+                        hoardOverviewCoinageItemIcon.setImageResource(R.drawable.item_coin_copper)
+                        hoardOverviewCoinageItemLabel.text = getString(R.string.copper_pieces)
+                    }
+                    CoinType.SP -> {
+                        hoardOverviewCoinageItemIcon.setImageResource(R.drawable.item_coin_silver)
+                        hoardOverviewCoinageItemLabel.text = getString(R.string.silver_pieces)
+                    }
+                    CoinType.EP -> {
+                        hoardOverviewCoinageItemIcon.setImageResource(R.drawable.item_coin_electrum)
+                        hoardOverviewCoinageItemLabel.text = getString(R.string.electrum_pieces)
+                    }
+                    CoinType.GP -> {
+                        hoardOverviewCoinageItemIcon.setImageResource(R.drawable.item_coin_gold)
+                        hoardOverviewCoinageItemLabel.text = getString(R.string.gold_pieces)
+                    }
+                    CoinType.HSP -> {
+                        hoardOverviewCoinageItemIcon.setImageResource(R.drawable.item_coin_hardsilver)
+                        hoardOverviewCoinageItemLabel.text = getString(R.string.hard_silver_pieces)
+                    }
+                    CoinType.PP -> {
+                        hoardOverviewCoinageItemIcon.setImageResource(R.drawable.item_coin_platinum)
+                        hoardOverviewCoinageItemLabel.text = getString(R.string.platinum_pieces)
+                    }
                 }
             }
 
@@ -140,7 +213,6 @@ class HoardOverviewFragment : Fragment() {
                     .removeSuffix(".0")} gp")
                 .also { binding.hoardOverviewCoinageItemColumnGp.text = it }
         }
-
     }
 
     private inner class CoinAdapter(var coinList: List<Pair<CoinType,Int>>):
@@ -243,7 +315,7 @@ class HoardOverviewFragment : Fragment() {
             if (activeHoard.artCount == 0) {
                 //TODO update the color of the card of the background if there's an empty list
             }
-            hoardOverviewGemQty.text = activeHoard.magicCount.toString()
+            hoardOverviewMagicQty.text = activeHoard.magicCount.toString()
             ("Total Value: ${DecimalFormat("#,##0.0#")
                 .format(totalMagicValue)
                 .removeSuffix(".0")} gp").also{ hoardOverviewMagicValue.text = it }
@@ -258,8 +330,6 @@ class HoardOverviewFragment : Fragment() {
                 //TODO update the color of the card of the background if there's an empty list
             }
         }
-
-        //TODO left off here. Continue building Overview fragment, and don't forget to update navigation accordingly.
     }
 
     private fun getCoinList(): List<Pair<CoinType,Int>> {
@@ -277,18 +347,5 @@ class HoardOverviewFragment : Fragment() {
     }
     // endregion
 
-    companion object {
 
-        // Call this instead of calling the constructor directly
-        fun newInstance(hoardID: Int): HoardViewerFragment {
-
-            val args = Bundle().apply{
-                putSerializable(ARG_HOARD_ID, hoardID)
-            }
-
-            return HoardViewerFragment().apply{
-                arguments = args
-            }
-        }
-    }
 }

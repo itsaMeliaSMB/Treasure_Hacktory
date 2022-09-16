@@ -7,7 +7,8 @@
     android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp">
+    android:layout_marginHorizontal="16dp"
+    android:background="?attr/colorSurface">
 
     <View
         android:id="@+id/hoard_overview_coinage_footer_div"
@@ -27,7 +28,7 @@
             android:layout_height="24dp"
             android:layout_marginStart="4dp"
             android:scaleType="fitCenter"
-            tools:src="@drawable/item_coin_pile"/>
+            android:src="@drawable/item_coin_pile"/>
 
         <TextView
             android:id="@+id/hoard_overview_coinage_footer_icon"
@@ -40,7 +41,7 @@
             android:textSize="12sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-condensed"
-            tools:text="Coinage Totals"/>
+            android:text="@string/coinage_totals_label"/>
 
         <View
             android:layout_width="1dp"

@@ -153,4 +153,9 @@
     <string name="action_about">About / Credits</string>
     <string name="unique_object_overview">Unique Object Overview</string>
     <string name="coinage_overview">Coinage Overview</string>
+    <string name="action_overview_edit">Edit</string>
+    <string name="view_event_log_hoard">View event log</string>
+    <string name="edit_coinage">Edit coinage</string>
+    <string name="report_as_txt">Save report to txt file</string>
+    <string name="coinage_totals_label">Coinage Totals</string>
 </resources>

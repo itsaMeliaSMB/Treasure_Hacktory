@@ -4,27 +4,23 @@
 
     <!--TODO re-enable menu items as implemented-->
     <item
-        android:title="Edit"
+        android:title="@string/action_overview_edit"
         android:id="@+id/action_edit_hoard"
         android:icon="@drawable/clipart_edit_vector_icon"
         app:showAsAction="ifRoom"
         android:iconTint="?attr/colorOnPrimary"/>
     <item
-        android:title="View history"
-        android:id="@+id/action_view_history"
-        android:enabled="false"/>
+        android:title="@string/view_event_log_hoard"
+        android:id="@+id/action_view_history"/>
     <item
-        android:title="Edit coinage"
+        android:title="@string/edit_coinage"
         android:id="@+id/action_edit_coinage"
         app:showAsAction="never"
         android:enabled="false"/>
     <item
-        android:title="Save report to text file"
+        android:title="@string/report_as_txt"
         android:titleCondensed="Save report"
         android:id="@+id/action_save_report"
         android:enabled="false"/>
-    <item
-        android:title="@string/action_delete"
-        android:id="@+id/action_delete_hoard"/>
 
 </menu>

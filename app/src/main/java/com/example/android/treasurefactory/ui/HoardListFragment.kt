@@ -172,7 +172,6 @@ class HoardListFragment : Fragment() {
                 // https://developer.android.com/guide/fragments/appbar#fragment-click
                 when (item.itemId){
 
-                    // No-selection options
                     R.id.action_new_hoard   -> {
 
                         if (hoardListViewModel.isRunningAsyncLiveData.value != true) {
