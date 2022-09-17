@@ -34,7 +34,8 @@
         <FrameLayout
             android:id="@+id/hoard_list_content_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/backgroundColor">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/hoard_list_recycler"

@@ -42,6 +42,19 @@
         app:layout_constraintStart_toStartOf="@+id/hoard_list_item_list_icon"
         app:layout_constraintTop_toTopOf="@+id/hoard_list_item_list_icon" />
 
+    <ImageView
+        android:id="@+id/hoard_list_item_list_badge"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_margin="3dp"
+        app:layout_constraintBottom_toBottomOf="@id/hoard_list_item_list_frame_background"
+        app:layout_constraintEnd_toEndOf="@id/hoard_list_item_list_frame_background"
+        android:scaleType="fitCenter"
+        android:visibility="gone"
+        android:elevation="3dp"
+        tools:visibility="visible"
+        tools:src="@drawable/hoard_coinage_badge"/>
+
     <TextView
         android:id="@+id/hoard_list_item_name"
         android:layout_width="0dp"

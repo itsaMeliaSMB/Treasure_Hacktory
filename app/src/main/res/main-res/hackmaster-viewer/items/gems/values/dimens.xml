@@ -3,4 +3,6 @@
     <dimen name="unique_detail_thumbnail_side_length">64dp</dimen>
     <dimen name="unique_details_standard_margin">16dp</dimen>
     <dimen name="unique_details_short_margin">8dp</dimen>
+    <dimen name="horizontal_coint_edit_field_margin">24dp</dimen>
+    <dimen name="coinage_edit_text_input_width">112dp</dimen>
 </resources>

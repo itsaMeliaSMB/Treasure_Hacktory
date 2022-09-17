@@ -30,6 +30,8 @@ class HoardOverviewFragment : Fragment() {
     // region [ Property declarations ]
     private lateinit var activeHoard: Hoard
 
+    private var isNowFavorite = false
+
     val safeArgs : HoardOverviewFragmentArgs by navArgs()
 
     private var totalGemValue = 0.0
@@ -77,32 +79,74 @@ class HoardOverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // region [ Listeners ]
         hoardOverviewViewModel.hoardLiveData.observe(viewLifecycleOwner) { hoard ->
 
             hoard?.let {
-                activeHoard = hoard
-                hoardOverviewViewModel.let{
-                    //TODO left off here. Overview and log works mostly as intended; just having
-                    // issues with getting unique item totals from repository (functions works, it's
-                    // just an async thing). Get that much working, implement all Hoard Overview
-                    // menu items besides the txt report, make it so when accessed, a hoard loses
-                    // it's NEW tag, remove the initial hoard composition as a hoard field and log
-                    // it instead as an event, and then do your final refactor before moving on to
-                    // implementing unique item views.
-                    totalGemValue = it.gemValueLiveData.value ?: 0.0
-                    totalArtValue = it.artValueLiveData.value ?: 0.0
-                    totalMagicValue = it.magicValueLiveData.value ?: 0.0
-                    totalSpellValue = it.spellValueLiveData.value ?: 0.0
-                }
+
+                // Remove "New" status on load
+                activeHoard = hoard.copy(isNew = false)
+
+                isNowFavorite = activeHoard.isFavorite
+
                 updateUI()
             }
         }
 
-        // Set up toolbar
+        hoardOverviewViewModel.gemValueLiveData.observe(viewLifecycleOwner) { liveGemValue ->
+
+            totalGemValue = liveGemValue
+
+            // Update label on card
+            ("Total Value: ${DecimalFormat("#,##0.0#")
+                .format(totalGemValue)
+                .removeSuffix(".0")} gp")
+                .also{ binding.hoardOverviewGemValue.text = it }
+        }
+
+        hoardOverviewViewModel.artValueLiveData.observe(viewLifecycleOwner) { liveArtValue ->
+
+            totalArtValue = liveArtValue
+
+            // Update label on card
+            ("Total Value: ${DecimalFormat("#,##0.0#")
+                .format(totalArtValue)
+                .removeSuffix(".0")} gp")
+                .also{ binding.hoardOverviewArtValue.text = it }
+        }
+
+        hoardOverviewViewModel.magicValueLiveData.observe(viewLifecycleOwner) { liveMagicValue ->
+
+            totalMagicValue = liveMagicValue
+
+            // Update label on card
+            ("Total Value: ${DecimalFormat("#,##0.0#")
+                .format(totalMagicValue)
+                .removeSuffix(".0")} gp")
+                .also{ binding.hoardOverviewMagicValue.text = it }
+        }
+
+        hoardOverviewViewModel.spellValueLiveData.observe(viewLifecycleOwner) { liveSpellValue ->
+
+            totalSpellValue = liveSpellValue
+
+            // Update label on card
+            ("Total Value: ${DecimalFormat("#,##0.0#")
+                .format(totalSpellValue)
+                .removeSuffix(".0")} gp")
+                .also{ binding.hoardOverviewSpellsValue.text = it }
+        }
+        // endregion
+
+        // region [ Toolbar ]
         binding.hoardOverviewToolbar.apply {
             inflateMenu(R.menu.hoard_overview_toolbar_menu)
             title = getString(R.string.hoard_overview_fragment_title)
+            setTitleTextColor(R.attr.colorOnPrimary)
             setNavigationIcon(R.drawable.clipart_back_vector_icon)
+            setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
             setOnMenuItemClickListener { item ->
 
                 when (item.itemId) {
@@ -116,14 +160,31 @@ class HoardOverviewFragment : Fragment() {
                         true
                     }
 
+                    R.id.action_edit_coinage    -> {
+
+                        //TODO left off here. Wrote the layout for the dialog for coin edits.
+                        // Implement the actual dialog and functionality tomorrow, along with the
+                        // dialogs for hoard header edits and creating a new HoardEvent. Don't
+                        // forget to factor out the creationDesc from Hoard after functionality is
+                        // added and tested.
+
+                        true
+                    }
+
                     else    -> false
                 }
             }
         }
+        // endregion
     }
 
     override fun onStart() {
         super.onStart()
+
+        binding.hoardOverviewFavCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            isNowFavorite = isChecked
+        }
 
         binding.hoardOverviewGemCard.setOnClickListener {
             Toast.makeText(context, "Gem card clicked", Toast.LENGTH_SHORT).show()
@@ -145,7 +206,7 @@ class HoardOverviewFragment : Fragment() {
     // NOTE TO SELF: Runs when back button is pressed or app is removed from active view
     override fun onStop() {
         super.onStop()
-        hoardOverviewViewModel.saveHoard(activeHoard)
+        hoardOverviewViewModel.saveHoard(activeHoard.copy(isFavorite = isNowFavorite))
     }
     // endregion
 
@@ -238,12 +299,7 @@ class HoardOverviewFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     fun updateUI() {
 
-        //TODO left off here. Base, untested implementation of HoardEventLogFragment finished. Now,
-        // finish HoardOverviewFragment implementation. Update nav graph, implement dummied-out
-        // menu on toolbar, and test before moving onto written refactor checklist.
-
-        //TODO Update header information
-
+        // Update header information
         // Set icon for hoard
         try {
 
@@ -265,8 +321,8 @@ class HoardOverviewFragment : Fragment() {
             hoardOverviewTypeInfo.text = activeHoard.creationDesc
             ("Worth ${DecimalFormat("#,##0.0#")
                 .format(activeHoard.gpTotal)
-                .removeSuffix(".0")} gp").also { binding.hoardOverviewTypeInfo.text = it }
-            //TODO update favorite status when checkbox changes
+                .removeSuffix(".0")} gp").also { binding.hoardOverviewValueInfo.text = it }
+            hoardOverviewFavCheckbox.isChecked = activeHoard.isFavorite
         }
 
         // Generate coinList for coinAdapter
@@ -302,9 +358,6 @@ class HoardOverviewFragment : Fragment() {
         // Update unique item counts
         binding.apply{
             hoardOverviewGemQty.text = activeHoard.gemCount.toString()
-            ("Total Value: ${DecimalFormat("#,##0.0#")
-                .format(totalGemValue)
-                .removeSuffix(".0")} gp").also{ hoardOverviewGemValue.text = it }
             if (activeHoard.gemCount == 0) {
                 //TODO update the color of the card of the background if there's an empty list
             }

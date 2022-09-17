@@ -66,7 +66,7 @@
                         tools:src="@drawable/loot_treasure_barrels" />
 
                     <ImageView
-                        android:id="@+id/hoard_overview_itemframe__background"
+                        android:id="@+id/hoard_overview_itemframe_background"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
@@ -74,6 +74,20 @@
                         android:scaleType="fitCenter"
                         android:src="@drawable/itemframe_background_gray" />
 
+                    <ImageView
+                        android:id="@+id/hoard_overview_itemframe_badge"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:elevation="3dp"
+                        android:visibility="invisible"
+                        tools:src="@drawable/hoard_large_lair_badge"
+                        tools:visibility="visible" />
 
                 </RelativeLayout>
 
@@ -203,7 +217,8 @@
                 android:id="@+id/hoard_overview_coinage_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="4dp">
 
                 <View
                     android:layout_width="match_parent"
@@ -225,16 +240,33 @@
                     android:textAllCaps="true"
                     android:textStyle="bold" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/hoard_overview_coinage_list"
-                    android:layout_width="match_parent"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/hoard_overview_coinage_card"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:cardElevation="4dp"
                     android:layout_marginHorizontal="16dp"
-                    tools:itemCount="7"
-                    tools:listitem="@layout/hoard_overview_coinage_list_item" />
+                    android:layout_marginBottom="8dp">
 
-                <include layout="@layout/hoard_overview_coinage_footer"
-                    android:id="@+id/hoard_overview_coinage_footer"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/hoard_overview_coinage_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:itemCount="7"
+                            tools:listitem="@layout/hoard_overview_coinage_list_item" />
+
+                        <include layout="@layout/hoard_overview_coinage_footer"
+                            android:id="@+id/hoard_overview_coinage_footer"/>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
 
             </LinearLayout>
 

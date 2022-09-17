@@ -158,4 +158,11 @@
     <string name="edit_coinage">Edit coinage</string>
     <string name="report_as_txt">Save report to txt file</string>
     <string name="coinage_totals_label">Coinage Totals</string>
+    <string name="cp_in_gp_value">Worth\n1/100 gp</string>
+    <string name="sp_in_gp_value">Worth\n1/10 gp</string>
+    <string name="ep_in_gp_value">Worth\n1/2 gp</string>
+    <string name="gp_in_gp_value">Monetary\nunit</string>
+    <string name="hsp_in_gp_value">Worth\n2 gp</string>
+    <string name="pp_in_gp_value">Worth\n5 gp</string>
+    <string name="edit_coinage_values">Edit coinage values</string>
 </resources>

@@ -13,10 +13,9 @@
         android:title="@string/view_event_log_hoard"
         android:id="@+id/action_view_history"/>
     <item
-        android:title="@string/edit_coinage"
-        android:id="@+id/action_edit_coinage"
-        app:showAsAction="never"
-        android:enabled="false"/>
+        android:title="@string/edit_coinage_values"
+        android:titleCondensed="Edit coins"
+        android:id="@+id/action_edit_coinage"/>
     <item
         android:title="@string/report_as_txt"
         android:titleCondensed="Save report"
