@@ -46,18 +46,14 @@ data class Hoard(@PrimaryKey(autoGenerate = true) @NotNull val hoardID: Int = 0,
     }
 }
 
-/*
-TODO Dummied out HoardLeftover in favor of recording leftovers as a HoardEvent. Refactor layouts accordingly.
-data class HoardLeftover(val gems: Int = 0,
-                         val artObjects: Int = 0,
-                         val potions: Int = 0,
-                         val scrolls: Int = 0,
-                         val armorOrWeapons: Int = 0,
-                         val anyButWeapons: Int = 0,
-                         val anyMagicItems: Int = 0) {
-    @Ignore
-    fun isNotEmpty(): Boolean = !((gems == 0)||(artObjects==0)||((potions==0)||(scrolls==0)||(armorOrWeapons == 0)||(anyButWeapons==0)||(anyMagicItems==0)))
-}*/
+enum class CoinType(val longName: String, val gpValue: Double) {
+    CP("Copper pieces",0.01),
+    SP("Silver pieces", 0.1),
+    EP("Electrum pieces",0.5),
+    GP("Gold pieces",1.0),
+    HSP("Hard silver pieces",2.0),
+    PP("Platinum pieces", 5.0)
+}
 
 data class HoardUniqueItemBundle(val hoardGems: List<Gem>,
                                  val hoardArt: List<ArtObject>, val hoardItems: List<MagicItem>,

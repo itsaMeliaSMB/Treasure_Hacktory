@@ -17,6 +17,7 @@ import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.databinding.HoardOverviewCoinageListItemBinding
 import com.example.android.treasurefactory.databinding.LayoutHoardOverviewBinding
+import com.example.android.treasurefactory.model.CoinType
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModel
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModelFactory
@@ -162,11 +163,9 @@ class HoardOverviewFragment : Fragment() {
 
                     R.id.action_edit_coinage    -> {
 
-                        //TODO left off here. Wrote the layout for the dialog for coin edits.
-                        // Implement the actual dialog and functionality tomorrow, along with the
-                        // dialogs for hoard header edits and creating a new HoardEvent. Don't
-                        // forget to factor out the creationDesc from Hoard after functionality is
-                        // added and tested.
+                        val action = HoardOverviewFragmentDirections
+                            .hoardOverviewToCoinageDialogAction(activeHoard.hoardID)
+                        findNavController().navigate(action)
 
                         true
                     }
@@ -211,15 +210,6 @@ class HoardOverviewFragment : Fragment() {
     // endregion
 
     // region [ Inner classes ]
-    private enum class CoinType(val longName: String, val gpValue: Double) {
-        CP("Copper pieces",0.01),
-        SP("Silver pieces", 0.1),
-        EP("Electrum pieces",0.5),
-        GP("Gold pieces",1.0),
-        HSP("Hard silver pieces",2.0),
-        PP("Platinum pieces", 5.0)
-    }
-
     private inner class CoinViewHolder(val binding: HoardOverviewCoinageListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
 

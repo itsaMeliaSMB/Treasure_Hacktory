@@ -48,6 +48,13 @@
                 android:name="activeHoardID"
                 app:argType="integer"/>
         </action>
+        <action
+            android:id="@+id/hoard_overview_to_coinage_dialog_action"
+            app:destination="@id/coinageEditDialog" >
+            <argument
+                android:name="activeHoardID"
+                app:argType="integer"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/hoardEventLogFragment"
@@ -56,8 +63,7 @@
         tools:layout="@layout/layout_hoard_event_log">
         <argument
             android:name="activeHoardID"
-            app:argType="integer"
-            android:defaultValue="0" />
+            app:argType="integer"/>
     </fragment>
 
     <fragment android:id="@+id/placeholder_settings" />
@@ -67,5 +73,15 @@
         android:name="com.example.android.treasurefactory.ui.AboutFragment"
         android:label="AboutFragment"
         tools:layout="@layout/layout_about_page"/>
+
+    <fragment
+        android:id="@+id/coinageEditDialog"
+        android:name="com.example.android.treasurefactory.ui.CoinageEditDialog"
+        android:label="CoinageEditDialog"
+        tools:layout="@layout/dialog_coinage_edit">
+        <argument
+            android:name="activeHoardID"
+            app:argType="integer"/>
+    </fragment>
 
 </navigation>

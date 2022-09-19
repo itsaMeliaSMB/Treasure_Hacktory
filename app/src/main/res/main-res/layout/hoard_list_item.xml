@@ -53,7 +53,7 @@
         android:visibility="gone"
         android:elevation="3dp"
         tools:visibility="visible"
-        tools:src="@drawable/hoard_coinage_badge"/>
+        tools:src="@drawable/badge_hoard_coinage"/>
 
     <TextView
         android:id="@+id/hoard_list_item_name"

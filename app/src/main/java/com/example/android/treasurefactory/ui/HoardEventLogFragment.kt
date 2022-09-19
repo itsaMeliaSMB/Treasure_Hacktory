@@ -10,6 +10,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -81,10 +82,25 @@ class HoardEventLogFragment : Fragment() {
 
         // Set up toolbar
         binding.hoardEventLogToolbar.apply{
+            inflateMenu(R.menu.event_log_toolbar_menu)
             title = getString(R.string.hoard_event_log_fragment_title)
             subtitle = hoardEventLogViewModel.hoardNameLiveData.value
             navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
-            //TODO add menu and means of adding notes to toolbar
+            setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
+            setOnMenuItemClickListener { item ->
+                when (item.itemId){
+
+                    R.id.action_add_user_event -> {
+                        // TODO add implementation
+                        // https://medium.com/androiddevelopers/navigation-component-dialog-destinations-bfeb8b022759
+                        true
+                    }
+
+                    else -> false
+                }
+            }
         }
     }
     // endregion
@@ -117,7 +133,7 @@ class HoardEventLogFragment : Fragment() {
 
                 rawTag = newTag
                 @ColorInt
-                val tintOnTag = R.attr.colorOnSecondary
+                val tintOnTag = R.attr.colorOnSecondary //TODO change to be themed resource
 
                 binding.hoardEventTagIcon.apply {
                     setImageResource(rawTag.toDrawableResID())

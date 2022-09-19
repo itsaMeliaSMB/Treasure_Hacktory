@@ -6,4 +6,9 @@
     <string name="gold_pieces">Gold pieces</string>
     <string name="hard_silver_pieces">Hard silver pieces</string>
     <string name="platinum_pieces">Platinum pieces</string>
+    <string name="coins">coins</string>
+    <plurals name="coinString">
+        <item quantity="one">coin</item>
+        <item quantity="other">coins</item>
+    </plurals>
 </resources>

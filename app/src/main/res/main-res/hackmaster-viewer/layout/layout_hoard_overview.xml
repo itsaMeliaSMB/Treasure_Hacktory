@@ -86,7 +86,7 @@
                         android:layout_marginBottom="3dp"
                         android:elevation="3dp"
                         android:visibility="invisible"
-                        tools:src="@drawable/hoard_large_lair_badge"
+                        tools:src="@drawable/badge_hoard_large_lair"
                         tools:visibility="visible" />
 
                 </RelativeLayout>

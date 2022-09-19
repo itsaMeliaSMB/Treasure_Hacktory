@@ -165,4 +165,13 @@
     <string name="hsp_in_gp_value">Worth\n2 gp</string>
     <string name="pp_in_gp_value">Worth\n5 gp</string>
     <string name="edit_coinage_values">Edit coinage values</string>
+    <string name="coinage_total_max_exceeded_error">Total coinage\nis too high!</string>
+    <string name="coinage_hoard_too_valuable_error">New total exceeds\n maximum hoard value!</string>
+    <string name="save">Save</string>
+    <string name="current_value">Current value</string>
+    <string name="new_value">New value</string>
+    <string name="cannot_change_coinage_error">Invalid input, please check errors and try again.</string>
+    <string name="coinage_updated">Coinage values updated.</string>
+    <string name="memo_optional">Memo (optional)</string>
+    <string name="action_add_user_event">Add user event</string>
 </resources>
