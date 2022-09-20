@@ -176,7 +176,7 @@ class HoardListFragment : Fragment() {
 
                         if (hoardListViewModel.isRunningAsyncLiveData.value != true) {
 
-                            val actionID = R.id.action_hoardListFragment_to_hoardGeneratorFragment
+                            val actionID = R.id.hoard_list_to_generator_action
                             findNavController().navigate(actionID)
                         }
 
@@ -194,7 +194,7 @@ class HoardListFragment : Fragment() {
 
                         if (hoardListViewModel.isRunningAsyncLiveData.value != true) {
 
-                            val actionID = R.id.action_hoardListFragment_to_aboutFragment
+                            val actionID = R.id.hoard_list_to_about_page_action
                             findNavController().navigate(actionID)
                         }
 
