@@ -174,4 +174,6 @@
     <string name="coinage_updated">Coinage values updated.</string>
     <string name="memo_optional">Memo (optional)</string>
     <string name="action_add_user_event">Add user event</string>
+    <string name="keep_current">Keep current</string>
+    <string name="description">Description</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.android.treasurefactory.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +30,7 @@ class CoinageEditDialog(): DialogFragment() {
 
     private lateinit var activeHoard: Hoard
 
-    val safeArgs : CoinageEditDialogArgs by navArgs()
+    private val safeArgs : CoinageEditDialogArgs by navArgs()
 
     private val coinageEditViewModel: CoinageEditViewModel by viewModels {
         CoinageEditViewModelFactory((activity?.application as TreasureHacktoryApplication).repository)
@@ -77,25 +78,22 @@ class CoinageEditDialog(): DialogFragment() {
             }
 
             newCpLiveData.observe(viewLifecycleOwner) {
-                updateDenomUI(CoinType.CP)
+                updateUI(CoinType.CP)
             }
             newSpLiveData.observe(viewLifecycleOwner) {
-                updateDenomUI(CoinType.SP)
+                updateUI(CoinType.SP)
             }
             newEpLiveData.observe(viewLifecycleOwner) {
-                updateDenomUI(CoinType.EP)
+                updateUI(CoinType.EP)
             }
             newGpLiveData.observe(viewLifecycleOwner) {
-                updateDenomUI(CoinType.GP)
+                updateUI(CoinType.GP)
             }
             newHspLiveData.observe(viewLifecycleOwner) {
-                updateDenomUI(CoinType.HSP)
+                updateUI(CoinType.HSP)
             }
-            newSpLiveData.observe(viewLifecycleOwner) {
-                updateDenomUI(CoinType.PP)
-            }
-            coinTotalMediator.observe(viewLifecycleOwner) {
-                updateTotalsUI()
+            newPpLiveData.observe(viewLifecycleOwner) {
+                updateUI(CoinType.PP)
             }
         }
 
@@ -152,13 +150,13 @@ class CoinageEditDialog(): DialogFragment() {
 
                             val newHoardGPTotal = activeHoard.gpTotal -
                                     activeHoard.getTotalCoinageValue() +
-                                    coinageEditViewModel.coinTotalMediator.value!!.second
+                                    coinageEditViewModel.getCoinTotalValue()
 
                             coinageEditViewModel.updateHoard(
                                 activeHoard.copy(
                                     gpTotal = newHoardGPTotal,
                                     cp = coinageEditViewModel.newCpLiveData.value!!,
-                                    sp = coinageEditViewModel.newCpLiveData.value!!,
+                                    sp = coinageEditViewModel.newSpLiveData.value!!,
                                     ep = coinageEditViewModel.newEpLiveData.value!!,
                                     gp = coinageEditViewModel.newGpLiveData.value!!,
                                     hsp = coinageEditViewModel.newHspLiveData.value!!,
@@ -193,17 +191,23 @@ class CoinageEditDialog(): DialogFragment() {
 
     private fun setInitialUI() {
 
+        Log.d("setInitialUI()", "Initializing UI elements.")
         binding.apply{
 
+
+            val totalCoinQty = activeHoard.cp + activeHoard.sp + activeHoard.ep +
+                    activeHoard.gp + activeHoard.hsp + activeHoard.pp
+
+            Log.d("setInitialUI()", "Setting current coinage quantities")
             coinageEditCpLabel.text = activeHoard.cp.formatWithCommas()
             coinageEditSpLabel.text = activeHoard.sp.formatWithCommas()
             coinageEditEpLabel.text = activeHoard.ep.formatWithCommas()
             coinageEditGpLabel.text = activeHoard.gp.formatWithCommas()
             coinageEditHspLabel.text = activeHoard.hsp.formatWithCommas()
             coinageEditPpLabel.text = activeHoard.pp.formatWithCommas()
-            coinageEditTotalLabel.text = (activeHoard.cp + activeHoard.sp + activeHoard.ep +
-                    activeHoard.gp + activeHoard.hsp + activeHoard.pp).formatWithCommas()
+            coinageEditTotalLabel.text = totalCoinQty.formatWithCommas()
 
+            Log.d("setInitialUI()", "Setting current/new coinage value totals")
             ((activeHoard.cp * 0.01 * 100.00).roundToInt() / 100.00).formatAsGp()
                 .also {
                     coinageEditCpCurrentGpValue.text = it
@@ -240,6 +244,7 @@ class CoinageEditDialog(): DialogFragment() {
                     coinageEditTotalCurrentTotalValue.text = it
                 }
 
+            Log.d("setInitialUI()", "Setting new coinage quantities in text inputs")
             coinageEditCpQtyEdit.setText(activeHoard.cp.toString())
             coinageEditSpQtyEdit.setText(activeHoard.sp.toString())
             coinageEditEpQtyEdit.setText(activeHoard.ep.toString())
@@ -281,9 +286,10 @@ class CoinageEditDialog(): DialogFragment() {
                 setTextColor(diffTint)
             }
         }
+        Log.d("setInitialUI()", "Initial UI elements set.")
     }
 
-    private fun updateDenomUI(coinType: CoinType) {
+    private fun updateUI(coinType: CoinType) {
 
         val coinQty : Int
         val coinValue : Double
@@ -293,6 +299,8 @@ class CoinageEditDialog(): DialogFragment() {
         val coinsString : String
         @ColorInt
         val diffTint : Int
+
+        Log.d("updateUI(CoinType.${coinType.name})","Updating UI for ${coinType.longName}")
 
         when (coinType){
 
@@ -397,6 +405,7 @@ class CoinageEditDialog(): DialogFragment() {
                     }
                 }
             }
+
             CoinType.GP -> {
 
                 coinQty = coinageEditViewModel.newGpLiveData.value!!
@@ -430,6 +439,7 @@ class CoinageEditDialog(): DialogFragment() {
                     }
                 }
             }
+
             CoinType.HSP -> {
 
                 coinQty = coinageEditViewModel.newHspLiveData.value!!
@@ -463,6 +473,7 @@ class CoinageEditDialog(): DialogFragment() {
                     }
                 }
             }
+
             CoinType.PP -> {
 
                 coinQty = coinageEditViewModel.newPpLiveData.value!!
@@ -497,16 +508,19 @@ class CoinageEditDialog(): DialogFragment() {
                 }
             }
         }
+
+        updateTotals()
     }
 
-    private fun updateTotalsUI() {
+    private fun updateTotals() {
 
         // TODO Left off here. Coinage value functionality almost fully implemented.
         //  Totals add up incorrectly, however. Go over math again, test the hoard event addition,
         //  and add "add user event" functionality. This should be doable in one day, if you stay
         //  on it.
 
-        val (coinTotalQty, coinTotalValue) = coinageEditViewModel.coinTotalMediator.value!!
+        val coinTotalQty = coinageEditViewModel.getCoinTotalQty()
+        val coinTotalValue = coinageEditViewModel.getCoinTotalValue()
         val qtyDiff = coinTotalQty - (activeHoard.cp + activeHoard.sp + activeHoard.ep + activeHoard.gp +
                 activeHoard.hsp + activeHoard.pp)
         val valueDiff = coinTotalValue - activeHoard.getTotalCoinageValue()
@@ -532,6 +546,17 @@ class CoinageEditDialog(): DialogFragment() {
             }
         }
 
+        Log.d("updateTotals()","coinTotalQty = $coinTotalQty; coinTotalValue = " +
+                "$coinTotalValue;\nqtyDiff = coinTotalQty($coinTotalQty) - ( " +
+                "activeHoard.cp(${activeHoard.cp}) + activeHoard.sp(${activeHoard.sp}) + " +
+                "activeHoard.ep(${activeHoard.ep}) + activeHoard.gp(${activeHoard.gp}) + " +
+                "activeHoard.hsp(${activeHoard.hsp}) + activeHoard.pp(${activeHoard.pp}) [${
+                    activeHoard.cp + activeHoard.sp + activeHoard.ep + activeHoard.gp +
+                            activeHoard.hsp + activeHoard.pp
+                }]) = $qtyDiff;\nvalueDiff = coinTotalValue($coinTotalValue) - " +
+                "activeHoard.getTotalCoinageValue()(${activeHoard.getTotalCoinageValue()}) = " +
+                "$valueDiff;\ndiffString = {\n$diffString\n}")
+
         binding.apply{
             coinageEditTotalNewQty.text = coinTotalQty.formatWithCommas()
             coinageEditTotalNewTotalValue.text = coinTotalValue.formatAsGp()
@@ -556,12 +581,12 @@ class CoinageEditDialog(): DialogFragment() {
 
     private fun validateNewValues() : Boolean {
 
-        return (binding.coinageEditCpQtyEdit.error != null &&
-                binding.coinageEditSpQtyEdit.error != null &&
-                binding.coinageEditEpQtyEdit.error != null &&
-                binding.coinageEditGpQtyEdit.error != null &&
-                binding.coinageEditHspQtyEdit.error != null &&
-                binding.coinageEditPpQtyEdit.error != null &&
+        return (binding.coinageEditCpQtyEdit.error == null &&
+                binding.coinageEditSpQtyEdit.error == null &&
+                binding.coinageEditEpQtyEdit.error == null &&
+                binding.coinageEditGpQtyEdit.error == null &&
+                binding.coinageEditHspQtyEdit.error == null &&
+                binding.coinageEditPpQtyEdit.error == null &&
                 binding.coinageEditTotalError.visibility != View.VISIBLE)
     }
 

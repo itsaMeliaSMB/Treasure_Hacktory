@@ -5,4 +5,5 @@
     <dimen name="unique_details_short_margin">8dp</dimen>
     <dimen name="horizontal_coin_edit_field_margin">24dp</dimen>
     <dimen name="coinage_edit_text_input_width">112dp</dimen>
+    <dimen name="hoard_edit_item_preview_dimen">124dp</dimen>
 </resources>

@@ -55,15 +55,6 @@ class AboutFragment : Fragment() {
 
             kenzercoCardFooter.setOnClickListener {
 
-                //TODO Left off here. collapse animations still need fixing (need to find a way to
-                // fade and "shorten" the view smoothly as it collapses). On all other headers but
-                // the Kenzer & Co one, also fix the direction of the indication rotation. Update
-                // link strings to have html tabs and remove link elements from the XML. Once that
-                // is done, finish the hoard icon determination function and correct the font size
-                // on the ActionBar in HoardListFragment. Send out emails to artists re:
-                // modification of purchased assets and watch inbox closely. Next major checkpoint
-                // is a completed and able-to-be-navigated-to Hoard Overview fragment.
-
                 if (binding.kenzercoCardExpandedGroup.visibility == View.VISIBLE) {
 
                     val collapseAnimator = ObjectAnimator.ofFloat(binding.kenzercoCardIndicator, View.ROTATION, -90f, 90f)
@@ -353,7 +344,6 @@ class AboutFragment : Fragment() {
             //endregion
 
             // region ( Make links clickable )
-            // https://stackoverflow.com/a/20647011 TODO
             kenzercoMainLink.movementMethod = LinkMovementMethod.getInstance()
             kenzercoHackmasterLink.movementMethod = LinkMovementMethod.getInstance()
             wotcPolicyLink.movementMethod = LinkMovementMethod.getInstance()
@@ -412,8 +402,6 @@ class AboutFragment : Fragment() {
             }
         })
     }
-
-
 
     //endregion
 

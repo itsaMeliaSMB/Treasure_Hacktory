@@ -1331,7 +1331,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:inputType="textShortMessage"
-                    android:textAlignment="center"
+                    android:maxLength="50"
+                    android:textAlignment="textEnd"
                     android:textSize="18sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

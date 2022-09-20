@@ -21,16 +21,6 @@ class CoinageEditViewModel(private val repository: HMRepository): ViewModel() {
     val newHspLiveData = MutableLiveData(0)
     val newPpLiveData = MutableLiveData(0)
 
-    val coinTotalMediator = MediatorLiveData<Pair<Int,Double>>().apply{
-        value = 0 to 0.0
-        addSource(newCpLiveData) { value = combineCoinTotals() }
-        addSource(newSpLiveData) { value = combineCoinTotals() }
-        addSource(newEpLiveData) { value = combineCoinTotals() }
-        addSource(newGpLiveData) { value = combineCoinTotals() }
-        addSource(newHspLiveData) { value = combineCoinTotals() }
-        addSource(newPpLiveData) { value = combineCoinTotals() }
-    }
-
     var hoardLiveData: LiveData<Hoard?> = Transformations.switchMap(hoardIDLiveData) { hoardID ->
         repository.getHoard(hoardID)
     }
@@ -49,43 +39,46 @@ class CoinageEditViewModel(private val repository: HMRepository): ViewModel() {
                 builder.append("\n\t${oldHoard.cp.formatWithCommas()} cp -> " +
                         "${newHoard.cp.formatWithCommas()} cp " +
                         "(${(newHoard.cp - oldHoard.cp).formatWithCommas()} cp / " +
-                        "${(newHoard.cp - oldHoard.cp).asGpValue(CoinType.CP)} change)")
+                        "${(newHoard.cp - oldHoard.cp).asGpValue(CoinType.CP)} gp change)")
             }
             if (newHoard.sp != oldHoard.sp) {
                 builder.append("\n\t${oldHoard.sp.formatWithCommas()} sp -> " +
                         "${newHoard.sp.formatWithCommas()} sp " +
                         "(${(newHoard.sp - oldHoard.sp).formatWithCommas()} sp / " +
-                        "${(newHoard.sp - oldHoard.sp).asGpValue(CoinType.SP)} change)")
+                        "${(newHoard.sp - oldHoard.sp).asGpValue(CoinType.SP)} gp change)")
             }
-            if (newHoard.ep != oldHoard.sp) {
+            if (newHoard.ep != oldHoard.ep) {
                 builder.append("\n\t${oldHoard.ep.formatWithCommas()} ep -> " +
                         "${newHoard.ep.formatWithCommas()} ep " +
                         "(${(newHoard.ep - oldHoard.ep).formatWithCommas()} ep / " +
-                        "${(newHoard.ep - oldHoard.ep).asGpValue(CoinType.EP)} change)")
+                        "${(newHoard.ep - oldHoard.ep).asGpValue(CoinType.EP)} gp change)")
             }
             if (newHoard.gp != oldHoard.gp) {
                 builder.append("\n\t${oldHoard.gp.formatWithCommas()} gp -> " +
                         "${newHoard.gp.formatWithCommas()} gp " +
-                        "(${(newHoard.gp - oldHoard.gp).asGpValue(CoinType.GP)} change)")
+                        "(${(newHoard.gp - oldHoard.gp).asGpValue(CoinType.GP)} gp change)")
             }
             if (newHoard.hsp != oldHoard.hsp) {
                 builder.append("\n\t${oldHoard.hsp.formatWithCommas()} hsp -> " +
                         "${newHoard.hsp.formatWithCommas()} hsp " +
                         "(${(newHoard.hsp - oldHoard.hsp).formatWithCommas()} hsp / " +
-                        "${(newHoard.hsp - oldHoard.hsp).asGpValue(CoinType.HSP)} change)")
+                        "${(newHoard.hsp - oldHoard.hsp).asGpValue(CoinType.HSP)} gp change)")
             }
             if (newHoard.pp != oldHoard.pp) {
-                builder.append("\n\t${oldHoard.pp.formatWithCommas()} ep -> " +
-                        "${newHoard.pp.formatWithCommas()} ep " +
-                        "(${(newHoard.pp - oldHoard.pp).formatWithCommas()} ep / " +
-                        "${(newHoard.pp - oldHoard.pp).asGpValue(CoinType.PP)} change)")
+                builder.append("\n\t${oldHoard.pp.formatWithCommas()} pp -> " +
+                        "${newHoard.pp.formatWithCommas()} pp " +
+                        "(${(newHoard.pp - oldHoard.pp).formatWithCommas()} pp / " +
+                        "${(newHoard.pp - oldHoard.pp).asGpValue(CoinType.PP)} gp change)")
             }
 
             return if (builder.isNotEmpty()) {
 
-                builder.append("\nMEMO:\n\t$memo")
+                if (memo.isNotBlank()) {
+                    builder.append("\nMEMO:\n\t$memo")
+                }
 
                 "Coinage values updated: $builder"
+
             } else {
                 null
             }
@@ -98,34 +91,51 @@ class CoinageEditViewModel(private val repository: HMRepository): ViewModel() {
             if (coinageChangeString != null) {
 
                 val coinageChangeEvent = HoardEvent(
-                    eventID = 0,
-                    hoardID = newHoard.hoardID,
+                    hoardID = hoardIDLiveData.value!!,
                     timestamp = System.currentTimeMillis(),
                     description = coinageChangeString,
                     tag = "modification|coinage" + if (memo.isNotBlank()) "|note" else ""
                 )
 
-                repository.updateHoard(newHoard)
                 repository.addHoardEvent(coinageChangeEvent)
+                repository.updateHoard(newHoard)
             }
         }
     }
 
     // region [ Helper functions ]
-    fun combineCoinTotals() : Pair<Int,Double>{
+    fun getCoinTotalQty(): Int {
 
         val cpQty = newCpLiveData.value!!
         val spQty = newSpLiveData.value!!
-        val epQty = newSpLiveData.value!!
+        val epQty = newEpLiveData.value!!
         val gpQty = newGpLiveData.value!!
         val hspQty = newHspLiveData.value!!
         val ppQty = newPpLiveData.value!!
 
-        val qtyTotal = cpQty + spQty + epQty + gpQty + hspQty + ppQty
-        val valueTotal = ( (cpQty * 0.01) + (spQty * 0.1) + (epQty * 0.5) + (gpQty * 1.0) +
-                (hspQty * 2.0) + (ppQty * 5.0) * 100.00).roundToInt() / 100.00
+        Log.d("getCoinTotalQty()","[ $cpQty cp ] [ $spQty sp ] [ $epQty ep] " +
+                "[ $gpQty gp ] [ $hspQty hsp ] [ $ppQty pp ] " +
+                "{ ${cpQty + spQty + epQty + gpQty + hspQty + ppQty} coins total }")
 
-        return qtyTotal to valueTotal
+        return cpQty + spQty + epQty + gpQty + hspQty + ppQty
+    }
+
+    fun getCoinTotalValue() : Double{
+
+        val cpValue = newCpLiveData.value!!.asGpValue(CoinType.CP)
+        val spValue = newSpLiveData.value!!.asGpValue(CoinType.SP)
+        val epValue = newEpLiveData.value!!.asGpValue(CoinType.EP)
+        val gpValue = newGpLiveData.value!!.asGpValue(CoinType.GP)
+        val hspValue = newHspLiveData.value!!.asGpValue(CoinType.HSP)
+        val ppValue = newPpLiveData.value!!.asGpValue(CoinType.PP)
+
+        val valueTotal = cpValue + spValue + epValue + gpValue + hspValue + ppValue
+
+        Log.d("getCoinTotalQty()","(cp: $cpValue) (sp: $spValue) (ep: $epValue) " +
+                "(gp: $gpValue) (hsp: $hspValue) (pp: $ppValue) " +
+                "{ $valueTotal in gp, total }")
+
+        return valueTotal
     }
 
     fun setValueFromEditText(coinType: CoinType, capturedString: String) : String? {

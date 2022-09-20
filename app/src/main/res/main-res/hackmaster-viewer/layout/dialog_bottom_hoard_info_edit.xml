@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
+
+    <TextView
+        android:id="@+id/hoard_edit_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFeatureSettings="smcp"
+        android:text="@string/hoard_name_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/hoard_edit_name_input"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="50"
+        app:hintEnabled="false"
+        app:layout_constraintTop_toBottomOf="@id/hoard_edit_name_label">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/hoard_edit_name_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hoard_name_entry_hint"
+            android:inputType="text"
+            android:maxLength="50"
+            android:maxLines="1"
+            tools:text="Blorkby's Stash" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/hoard_edit_preview_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Preview"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="@+id/hoard_edit_preview_icon"
+        app:layout_constraintStart_toStartOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintTop_toBottomOf="@id/hoard_edit_preview_icon" />
+
+    <ImageView
+        android:id="@+id/hoard_edit_preview_foreground"
+        android:layout_width="@dimen/hoard_edit_item_preview_dimen"
+        android:layout_height="@dimen/hoard_edit_item_preview_dimen"
+        android:elevation="2dp"
+        android:src="@drawable/itemframe_foreground"
+        app:layout_constraintBottom_toBottomOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintEnd_toEndOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintStart_toStartOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintTop_toTopOf="@id/hoard_edit_preview_icon" />
+
+    <ImageView
+        android:id="@+id/hoard_edit_preview_icon"
+        android:layout_width="@dimen/hoard_edit_item_preview_dimen"
+        android:layout_height="@dimen/hoard_edit_item_preview_dimen"
+        android:elevation="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hoard_edit_name_input"
+        tools:src="@drawable/item_coin_pile" />
+
+    <ImageView
+        android:id="@+id/hoard_edit_preview_background"
+        android:layout_width="@dimen/hoard_edit_item_preview_dimen"
+        android:layout_height="@dimen/hoard_edit_item_preview_dimen"
+        android:elevation="0dp"
+        android:src="@drawable/itemframe_background_gray"
+        app:layout_constraintBottom_toBottomOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintEnd_toEndOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintStart_toStartOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintTop_toTopOf="@id/hoard_edit_preview_icon" />
+
+
+    <ImageView
+        android:id="@+id/hoard_edit_preview_badge"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_margin="6dp"
+        android:elevation="3dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toBottomOf="@id/hoard_edit_preview_background"
+        app:layout_constraintEnd_toEndOf="@id/hoard_edit_preview_background"
+        tools:src="@drawable/badge_hoard_coinage"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/hoard_edit_icon_input"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:hint="Item Thumbnail"
+        android:minWidth="88dp"
+        app:layout_constraintBottom_toTopOf="@id/hoard_edit_badge_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/preview_barrier"
+        app:layout_constraintTop_toBottomOf="@id/hoard_edit_name_input"
+        app:layout_constraintVertical_chainStyle="spread">
+
+        <!--https://material.io/components/menus/android#dropdown-menus-->
+        <AutoCompleteTextView
+            android:id="@+id/hoard_edit_icon_auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="none"
+            android:text="@string/keep_current" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/hoard_edit_badge_input"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:hint="Badge"
+        android:minWidth="88dp"
+        app:layout_constraintBottom_toBottomOf="@id/hoard_edit_preview_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/preview_barrier"
+        app:layout_constraintTop_toBottomOf="@+id/hoard_edit_icon_input">
+
+        <AutoCompleteTextView
+            android:id="@+id/hoard_edit_badge_auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="none"
+            tools:text="None" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/preview_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="hoard_edit_preview_icon" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/hoard_edit_save_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
+        android:text="@string/save"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="6dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/button_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/hoard_edit_preview_label" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/hoard_edit_cancel_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="56dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="6dp"
+        android:text="@string/action_cancel"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/button_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hoard_edit_preview_label" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/button_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
