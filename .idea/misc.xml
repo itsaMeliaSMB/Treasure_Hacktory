@@ -5,7 +5,14 @@
       <map>
         <entry key="..\:/Users/Jacob/.gradle/caches/transforms-3/037f1e8a14ab1cee64b98758b8678026/transformed/appcompat-1.3.1/res/layout/support_simple_spinner_dropdown_item.xml" value="0.17798913043478262" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.29583333333333334" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/badge_hoard_archived.xml" value="0.1" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/badge_hoard_artwork.xml" value="0.191" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/badge_hoard_cleric.xml" value="0.191" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/badge_hoard_extraplanar.xml" value="0.1" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/badge_hoard_map.xml" value="0.191" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/badge_hoard_merged.xml" value="0.1945" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/badge_hoard_mimic.xml" value="0.1945" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/badge_hoard_notice.xml" value="0.1945" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_add_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_back_vector_icon.xml" value="0.1" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_close_vector_icon.xml" value="0.1" />
@@ -16,6 +23,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_extranotes_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_filledstar_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_heart_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_house_vector_icon.xml" value="0.2805" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_indicator_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_info_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_paintingnew_vector_icon.xml" value="0.1415" />
@@ -74,6 +82,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/layouts/layout/treasure_viewer_list_item.xml" value="0.25" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/drawable/favorite_star_drawable.xml" value="0.15729166666666666" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout-land/layout_generator_fragment.xml" value="0.165" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout/dialog_new_hoard_generated.xml" value="0.22583368509919796" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout/dropdown_menu_item.xml" value="0.13601823708206687" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout/dropdown_menu_item_with_icon.xml" value="0.25" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-generator/layout/hackmaster_treasure_gen_coinage_list_item.xml" value="0.165" />

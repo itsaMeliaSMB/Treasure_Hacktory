@@ -326,28 +326,45 @@ class LootMutator {
 
         } else {
 
-            if (hoardCoinTotal > 0.00) {
-
-                //Set coinage-only icon
-                hoardIconString = when {
-
-                    hoard.cp > 0 && (hoard.sp + hoard.hsp + hoard.pp == 0)
-                            && (hoard.ep + hoard.gp == 0) -> "loot_copper"
-
-                    hoard.cp == 0 && (hoard.sp + hoard.hsp + hoard.pp > 0)
-                            && (hoard.ep + hoard.gp == 0) -> "loot_silver"
-
-                    hoard.cp == 0 && (hoard.sp + hoard.hsp + hoard.pp == 0)
-                            && (hoard.ep + hoard.gp > 0) -> "loot_gold"
-
-                    else -> "loot_mixed"
-                }
-            } else hoardIconString = "loot_lint"
-
+            hoardIconString = getPureCoinageIcon(hoard)
         }
 
         // Return string for hoard icon
         return hoardIconString
+    }
+
+    fun getPureCoinageIcon(hoard: Hoard) : String {
+
+        val hasCopper   = hoard.cp > 0
+        val hasSilver   = hoard.sp > 0 || hoard.hsp > 0 || hoard.pp > 0
+        val hasGold     = hoard.ep > 0 || hoard.gp > 0
+
+        return if (hasCopper) {
+
+            if (hasSilver){
+                if (hasGold) {
+                    "loot_coins_mixed"
+                } else "loot_coins_no_gold"
+
+            } else {
+                if (hasGold) {
+                    "loot_coins_no_silver"
+                } else "loot_coins_copper"
+            }
+
+        } else {
+
+            if (hasSilver){
+                if (hasGold) {
+                    "loot_coins_no_copper"
+                } else "loot_coins_silver"
+
+            } else {
+                if (hasGold) {
+                    "loot_coins_gold"
+                } else "loot_lint"
+            }
+        }
     }
 
     /**

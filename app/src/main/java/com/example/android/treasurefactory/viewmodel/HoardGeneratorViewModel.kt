@@ -469,6 +469,8 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
     val lairListLiveData = MutableLiveData(lairList.toList())
     val smallListLiveData = MutableLiveData(smallList.toList())
+
+    val generatedHoardLiveData = MutableLiveData<Hoard?>(null)
     // endregion
 
     // region ( Specific Quantity value containers )
@@ -1162,7 +1164,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
             setRunningAsync(false)
 
-            //TODO DialogFragment displaying hoard and offering navigation.
+            generatedHoardLiveData.postValue(hmRepository.getHoardOnce(newHoardId))
         }
     }
     // endregion

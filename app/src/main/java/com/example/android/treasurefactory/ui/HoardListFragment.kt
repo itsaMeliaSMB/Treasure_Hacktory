@@ -152,7 +152,6 @@ class HoardListFragment : Fragment() {
 
         hoardListViewModel.textToastHolderLiveData.observe(viewLifecycleOwner) { pendingAlert ->
 
-            //TODO Test that there's no weird infinite feedback loops. Remove this when done.
             if (pendingAlert != null) {
 
                 // Show the pending toast
@@ -216,6 +215,11 @@ class HoardListFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callbacks = null
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null //TODO copied from Generator fragment. remove if causes issues with dialogs
     }
 
     // endregion
@@ -545,8 +549,6 @@ class HoardListFragment : Fragment() {
                 }
 
                 R.id.action_merge -> {
-
-                    Toast.makeText(context,"functionality disabled for testing",Toast.LENGTH_SHORT)
 
                     val mergeInputView = layoutInflater.inflate(R.layout.dialog_merge_action,null)
 

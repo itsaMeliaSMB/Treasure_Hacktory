@@ -112,6 +112,10 @@
             android:id="@+id/hoard_edit_icon_auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="sans-serif-condensed"
+            tools:drawableStart="@drawable/clipart_house_vector_icon"
+            android:drawablePadding="4dp"
+            tools:text="Best spell collection"
             android:inputType="none"
             android:text="@string/keep_current" />
 
@@ -136,6 +140,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
+            tools:drawableStart="@drawable/clipart_house_vector_icon"
+            android:drawablePadding="4dp"
             tools:text="None" />
 
     </com.google.android.material.textfield.TextInputLayout>

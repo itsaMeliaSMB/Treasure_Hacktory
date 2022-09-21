@@ -4,7 +4,9 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -12,10 +14,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Filter
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.addTextChangedListener
@@ -33,6 +32,8 @@ import com.example.android.treasurefactory.databinding.LettercodeItemBinding
 import com.example.android.treasurefactory.model.LetterEntry
 import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModel
 import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModelFactory
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 class HoardGeneratorFragment : Fragment() {
 
@@ -172,6 +173,7 @@ class HoardGeneratorFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
@@ -182,10 +184,12 @@ class HoardGeneratorFragment : Fragment() {
                 lairAdapter.submitList(newLairList)
                 Log.d("HoardGeneratorFragment","lairListLiveData on ViewModel observed.")
             }
+
             smallListLiveData.observe(viewLifecycleOwner) { newSmallList ->
                 smallAdapter.submitList(newSmallList)
                 Log.d("HoardGeneratorFragment","smallListLiveData on ViewModel observed.")
             }
+
             isRunningAsyncLiveData.observe(viewLifecycleOwner) { isRunningAsync ->
 
                 if (isRunningAsync) {
@@ -223,6 +227,99 @@ class HoardGeneratorFragment : Fragment() {
                         binding.generatorBottomWaitingGroup.visibility = View.GONE
                         isButtonGroupAnimating = false
                     }
+                }
+            }
+
+            generatedHoardLiveData.observe(viewLifecycleOwner) { newHoard ->
+
+                if (newHoard != null) {
+
+                    // Show the dialog
+                    val dialogView = layoutInflater
+                        .inflate(R.layout.dialog_new_hoard_generated,null).apply {
+
+                            val hoardIcon = findViewById<ImageView>(R.id.hoard_list_item_list_icon)
+                                .apply{
+                                    try {
+                                        setImageResource(resources.getIdentifier(
+                                            newHoard.iconID,"drawable",
+                                            view.context?.packageName))
+                                    } catch (e: Exception) {
+                                        setImageResource(R.drawable.clipart_default_image)
+                                    }
+                                }
+                            val hoardBadge = findViewById<ImageView>(R.id.hoard_list_item_list_badge)
+                                .apply{
+                                    //TODO implement when badges are a property of hoards
+                                    visibility = View.INVISIBLE
+                                }
+                            val hoardTitle = findViewById<TextView>(R.id.hoard_list_item_name)
+                                .apply {
+                                    text = newHoard.name
+                                    setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                        R.drawable.clipart_new_vector_icon,0,0,0)
+                                }
+                            val hoardDate = findViewById<TextView>(R.id.hoard_list_item_date)
+                                .apply {
+                                    text = SimpleDateFormat("MM/dd/yyyy")
+                                        .format(newHoard.creationDate)
+                                }
+                            val hoardGPValue = findViewById<TextView>(R.id.hoard_list_item_gp_value)
+                                .apply{
+                                    ("Worth ${
+                                        DecimalFormat("#,##0.0#")
+                                        .format(newHoard.gpTotal)
+                                        .removeSuffix(".0")} gp").also { this.text = it }
+                                }
+                            val hoardGems = findViewById<TextView>(R.id.hoard_list_item_gem_count)
+                                .apply{
+                                    String.format("%03d",newHoard.gemCount)
+                                }
+                            val hoardArt = findViewById<TextView>(R.id.hoard_list_item_art_count)
+                                .apply{
+                                    String.format("%03d",newHoard.artCount)
+                                }
+                            val hoardItems = findViewById<TextView>(R.id.hoard_list_item_magic_count)
+                                .apply{
+                                    String.format("%03d",newHoard.magicCount)
+                                }
+                            val hoardSpells = findViewById<TextView>(R.id.hoard_list_item_spell_count)
+                                .apply{
+                                    String.format("%03d",newHoard.spellsCount)
+                                }
+                            val favStar = findViewById<ImageView>(R.id.hoard_list_item_favorited)
+                                .apply{
+                                    setImageResource(
+                                        if (newHoard.isFavorite) {
+                                            R.drawable.clipart_filledstar_vector_icon
+                                        } else {
+                                            R.drawable.clipart_unfilledstar_vector_icon
+                                        }
+                                    )
+                                }
+
+                        }
+
+                    val dialogBuilder = AlertDialog.Builder(context).setView(dialogView)
+
+                    val gotoDialog = dialogBuilder
+                        .setPositiveButton(R.string.action_view_new_hoard,
+                            DialogInterface.OnClickListener { _, _ ->
+
+                                val action = HoardGeneratorFragmentDirections
+                                    .hoardGeneratorToOverviewAction(newHoard.hoardID)
+
+                                findNavController().navigate(action)
+
+                            })
+                        .setNegativeButton(R.string.action_cancel,
+                            DialogInterface.OnClickListener { dialog, _ ->
+                                dialog.cancel()
+                            })
+                        .show()
+
+                    // Clear the livedata
+                    this.generatedHoardLiveData.value = null
                 }
             }
         }

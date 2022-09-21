@@ -176,4 +176,5 @@
     <string name="action_add_user_event">Add user event</string>
     <string name="keep_current">Keep current</string>
     <string name="description">Description</string>
+    <string name="action_view_new_hoard">View new hoard</string>
 </resources>

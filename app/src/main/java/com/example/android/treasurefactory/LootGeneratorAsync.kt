@@ -390,7 +390,11 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 val creationHoardEvent = HoardEvent(
                     hoardID = newHoardID,
                     timestamp = System.currentTimeMillis(),
-                    description = "Hoard \"${hoardOrder.hoardName}\" created.", tag = "creation")
+                    description = "Hoard \"${hoardOrder.hoardName}\" created." +
+                        if (hoardOrder.creationDescription.isNotBlank()) {
+                                "\n\n${hoardOrder.creationDescription}"
+                        } else "",
+                    tag = "creation")
 
                 val gemHoardEvent = HoardEvent(
                     hoardID = newHoardID,
@@ -529,6 +533,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     addHoardEvent(artHoardEvent)
                     addHoardEvent(itemHoardEvent)
                     addHoardEvent(spellHoardEvent)
+                    //TODO add verbose initial composition report event, but only call for it if
+                    // the user requests it.
                 }
             }
 

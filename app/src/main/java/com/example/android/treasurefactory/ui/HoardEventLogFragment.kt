@@ -103,6 +103,11 @@ class HoardEventLogFragment : Fragment() {
             }
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     // endregion
 
     // region [ Inner classes ]

@@ -185,6 +185,11 @@ class CoinageEditDialog(): DialogFragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     // endregion
 
     // region [ Helper functions ]

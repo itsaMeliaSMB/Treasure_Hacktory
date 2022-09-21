@@ -46,6 +46,43 @@ data class Hoard(@PrimaryKey(autoGenerate = true) @NotNull val hoardID: Int = 0,
     }
 }
 
+enum class HoardBadge(val iconString: String?) {
+    NONE(null),
+    // Functionary
+    ARCHIVED("badge_hoard_archived"),
+    EDITED("badge_hoard_edited"),
+    COPIED("badge_hoard_copied"),
+    MERGED("badge_hoard_merged"),
+    NOTICE("badge_hoard_notice"),
+    // Treasure
+    COINAGE("badge_hoard_coinage"),
+    GEMSTONE("badge_hoard_gem"),
+    ARTWORK("badge_hoard_artwork"),
+    MAGIC("badge_hoard_magic"),
+    // Type
+    LARGE_LAIR("badge_hoard_large_lair"),
+    SMALL_LAIR("badge_hoard_small_lair"),
+    CHEST("badge_hoard_chest"),
+    SACK("badge_hoard_sack"),
+    MIMIC("badge_hoard_mimic"),
+    MAP("badge_hoard_map"),
+    STORAGE("badge_hoard_storage"),
+    SECRET("badge_hoard_secret"),
+    // Class
+    FIGHTER("badge_hoard_fighter"),
+    THIEF("badge_hoard_thief"),
+    MAGIC_USER("badge_hoard_mage"),
+    CLERIC("badge_hoard_cleric"),
+    // Owner
+    CONSTRUCT("badge_hoard_construct"),
+    DRAGON("badge_hoard_dragon"),
+    DWARF("badge_hoard_dwarf"),
+    ELF("badge_hoard_elf"),
+    EXTRAPLANAR("badge_hoard_extraplanar"),
+    ORC("badge_hoard_orc"),
+    UNDEAD("badge_hoard_undead")
+}
+
 enum class CoinType(val longName: String, val gpValue: Double) {
     CP("Copper pieces",0.01),
     SP("Silver pieces", 0.1),

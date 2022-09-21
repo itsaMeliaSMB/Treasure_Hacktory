@@ -207,6 +207,11 @@ class HoardOverviewFragment : Fragment() {
         super.onStop()
         hoardOverviewViewModel.saveHoard(activeHoard.copy(isFavorite = isNowFavorite))
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
     // endregion
 
     // region [ Inner classes ]
