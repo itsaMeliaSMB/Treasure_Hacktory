@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/hoard_edit_name_label"
@@ -69,6 +69,18 @@
         app:layout_constraintTop_toBottomOf="@id/hoard_edit_name_input"
         tools:src="@drawable/item_coin_pile" />
 
+    <ProgressBar
+        android:id="@+id/hoard_edit_progress_indicator"
+        android:layout_width="@dimen/hoard_edit_item_preview_dimen"
+        android:layout_height="@dimen/hoard_edit_item_preview_dimen"
+        android:padding="16dp"
+        android:elevation="2dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintEnd_toEndOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintStart_toStartOf="@id/hoard_edit_preview_icon"
+        app:layout_constraintTop_toTopOf="@id/hoard_edit_preview_icon" />
+
     <ImageView
         android:id="@+id/hoard_edit_preview_background"
         android:layout_width="@dimen/hoard_edit_item_preview_dimen"
@@ -112,12 +124,10 @@
             android:id="@+id/hoard_edit_icon_auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="sans-serif-condensed"
-            tools:drawableStart="@drawable/clipart_house_vector_icon"
             android:drawablePadding="4dp"
-            tools:text="Best spell collection"
             android:inputType="none"
-            android:text="@string/keep_current" />
+            android:text="@string/dropdown_loading"
+            android:enabled="false"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -140,9 +150,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
-            tools:drawableStart="@drawable/clipart_house_vector_icon"
             android:drawablePadding="4dp"
-            tools:text="None" />
+            android:text="@string/dropdown_loading"
+            android:enabled="false"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 

@@ -1,6 +1,7 @@
 package com.example.android.treasurefactory.ui
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -11,13 +12,14 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Filter
-import androidx.annotation.DrawableRes
-import androidx.core.content.res.ResourcesCompat.getDrawable
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.databinding.DialogBottomHoardInfoEditBinding
 import com.example.android.treasurefactory.model.Hoard
+import com.example.android.treasurefactory.model.HoardBadge
 import com.example.android.treasurefactory.viewmodel.HoardEditViewModel
 import com.example.android.treasurefactory.viewmodel.HoardEditViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -44,9 +46,16 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
     private var _binding: DialogBottomHoardInfoEditBinding? = null
     private val binding get() = _binding!!
 
-    private val IconDropdownArraysPair by lazy { getIconItemArrays() }
+    private var iconDropdownArray = Array<SelectableItemData>(1) {
+        SelectableItemData("Loading...",false,
+            null,"clipart_default_vector_icon")
+    }
+    private var badgeDropdownArray = Array<SelectableItemData>(1) {
+        SelectableItemData("Loading",false,
+            null,"clipart_default_vector_icon")
+    }
 
-    //TODO make holders for drawable resources for most valuable items' icons
+    //region [ Overriden functions ]
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,9 +85,7 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
         // Observers
         hoardEditViewModel.apply {
 
-            hoardLiveData.observe(viewLifecycleOwner) { hoard ->
-
-                //TODO Also consider, instead of using a listener, getting this information one-time.
+            hoardLiveData.observe(this@HoardEditBottomDialog) { hoard ->
 
                 hoard?.let {
 
@@ -88,35 +95,113 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                 }
             }
 
-            iconsReadyLiveData.observe(viewLifecycleOwner) { iconsAreReady ->
+            iconsReadyLiveData.observe(this@HoardEditBottomDialog) { iconsAreReady ->
 
                 if (iconsAreReady){
 
+                    iconDropdownArray = getIconDropdownAdapterArray()
+                    badgeDropdownArray = getBadgeDropdownAdapterArray()
+
+                    val iconEnabledList = iconDropdownArray.map { it.enabled }
+                    val badgeEnabledList = badgeDropdownArray.map { it.enabled }
+
+                    val iconAdapter = DropdownAdapter(
+                        requireContext(), R.layout.dropdown_menu_item,
+                        iconDropdownArray.map { it.menuLabel }.toTypedArray(),
+                        iconEnabledList.toBooleanArray())
+                    val badgeAdapter = DropdownAdapter(
+                        requireContext(), R.layout.dropdown_menu_item,
+                        badgeDropdownArray.map { it.menuLabel }.toTypedArray(),
+                        badgeEnabledList.toBooleanArray())
+
                     // Update dropdown options
+                    binding.hoardEditIconAuto.apply{
+                        initializeAsDropdown(iconAdapter,0,iconEnabledList.toTypedArray())
+                        isEnabled = true
+                    }
+                    binding.hoardEditBadgeAuto.apply {
+                        initializeAsDropdown(badgeAdapter, 0, badgeEnabledList.toTypedArray())
+                        isEnabled = true
+                    }
+                    //TODO instead set the default position for badge dropdown to hoard's badge value's ordinal
+
+                    // Hide progress indicator
+                    binding.hoardEditProgressIndicator.visibility = View.GONE
+
+                    // Set preview
+                    setPreviewIcon(iconDropdownArray[0].cachedDrawable)
+                    setPreviewBadge(badgeDropdownArray[0].cachedDrawable) //TODO when badges are implemented, set from hoard accordingly.
                 }
             }
         }
     }
 
-    // region [ Inner classes ]
+    override fun onStart() {
+        super.onStart()
 
-    private data class IconDropdownItem(@DrawableRes val drawableID: Int, val iconIDString: String,
-                                    val label: String = "Option"){
+        // Listeners
+        binding.apply {
 
-        override fun toString(): String {
-            return label
+            hoardEditIconAuto.setOnItemClickListener { _, _, position, _ ->
+
+                if (position in (hoardEditIconAuto.adapter as DropdownAdapter<*>).values.indices &&
+                    position in iconDropdownArray.indices &&
+                    (hoardEditIconAuto.adapter as DropdownAdapter<*>).isEnabled(position)) {
+
+                    (hoardEditIconAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
+                    hoardEditViewModel.iconDropdownPos = position
+
+                    setPreviewIcon(iconDropdownArray[position].cachedDrawable)
+                }
+            }
+
+            hoardEditBadgeAuto.setOnItemClickListener { _, _, position, _ ->
+
+                if (position in (hoardEditBadgeAuto.adapter as DropdownAdapter<*>).values.indices &&
+                    position in badgeDropdownArray.indices &&
+                    (hoardEditBadgeAuto.adapter as DropdownAdapter<*>).isEnabled(position)) {
+
+                    (hoardEditBadgeAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
+                    hoardEditViewModel.badgeDropdownPos = position
+
+                    setPreviewBadge(badgeDropdownArray[position].cachedDrawable)
+                }
+            }
+
+            hoardEditCancelButton.setOnClickListener {
+                dialog?.cancel()
+            }
+
+            hoardEditSaveButton.setOnClickListener {
+
+                if (hoardEditViewModel.iconsReadyLiveData.value == true) {
+
+                    val newHoardName = hoardEditNameEdit.text.toString()
+                        .takeIf{ it.isNotBlank() } ?: activeHoard.name
+
+                    val newHoardIconString = iconDropdownArray[hoardEditViewModel.iconDropdownPos]
+                        .imageString
+
+                    //TODO update hoard badge when badges are implemented.
+
+                    hoardEditViewModel.saveHoard(activeHoard.copy(name = newHoardName,
+                        iconID = newHoardIconString))
+
+                    //TODO record hoard event of an edit if any field changed.
+
+                    dialog?.dismiss()
+                }
+            }
         }
     }
 
-    /**
-     * Extended [ArrayAdapter]<[IconDropdownItem]> that disables filtering, keeps track of last selected item, and has holder array for enabled items.
-     *
-     * @param _enabledItemsArray [BooleanArray] that should be the same size as [values]. If it is not or is null, all items will be initially enabled.
-     */
-    private inner class IconDropdownAdapter<IconDropdownItem>(context: Context, layout: Int,
-                                                var values: Array<IconDropdownItem>,
+    // endregion
+
+    // region [ Inner classes ]
+    private inner class DropdownAdapter<String>(context: Context, layout: Int,
+                                                var values: Array<String>,
                                                 _enabledItemsArray: BooleanArray?) :
-        ArrayAdapter<IconDropdownItem>(context, layout, values) {
+        ArrayAdapter<String>(context, layout, values) {
 
         //https://rmirabelle.medium.com/there-is-no-material-design-spinner-for-android-3261b7c77da8
 
@@ -189,124 +274,182 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
         }
     }
 
+    private data class SelectableItemData(val menuLabel : String, val enabled : Boolean,
+        val cachedDrawable : Drawable?, val imageString : String)
+
     // endregion
 
     // region [ Helper functions ]
 
-    private fun getIconItemArrays() : Pair<Array<IconDropdownItem>,Array<Boolean>> {
+    private fun getIconDropdownAdapterArray() : Array<SelectableItemData> {
 
-        val valuesArrayList = ArrayList<IconDropdownItem>()
+        val itemArrayList = ArrayList<SelectableItemData>()
+        val activeHoardNotWorthless = (activeHoard.gpTotal > 0.0)
 
-        valuesArrayList.add(IconDropdownItem(
-                resources.getIdentifier(
-                    activeHoard.iconID,"drawable",view?.context?.packageName),
-                activeHoard.iconID, "Keep current icon"))
+        // "Keep Current Icon" option
+        itemArrayList.add(
+            SelectableItemData(getString(R.string.dropdown_keep_current_icon),
+                true,
+                getNullableDrawable(activeHoard.iconID),
+                activeHoard.iconID
+            )
+        )
 
-        val enabledArrayList = ArrayList<Boolean>().apply { add(true) }
-
+        // "Best of" options
         hoardEditViewModel.let{ vm ->
 
-            vm.preferredIconStr.let{ iconStr ->
-
-                valuesArrayList.add(IconDropdownItem(
-                    resources.getIdentifier(
-                        iconStr,"drawable",view?.context?.packageName),
-                    iconStr, "Recommended icon"))
-                enabledArrayList.add(true)
-            }
+            // Recommended thumbnail
+            itemArrayList.add(
+                SelectableItemData(getString(R.string.dropdown_recommended_icon),
+                    true,
+                    getNullableDrawable(vm.preferredIconStr),
+                    vm.preferredIconStr
+                )
+            )
 
             vm.coinMixStr.let{ iconStr ->
 
-                if (iconStr.isNotBlank()) {
+                val isEnabled = (iconStr.isNotBlank() && iconStr != "loot_lint")
 
-                    valuesArrayList.add(IconDropdownItem(
-                        resources.getIdentifier(
-                            iconStr,"drawable",view?.context?.packageName),
-                        iconStr, "Best spell collection"))
-
-                    enabledArrayList.add(iconStr == "loot_lint")
-                }
+                itemArrayList.add(SelectableItemData(
+                    (if (isEnabled) "" else "   \u20E0 ") + getString(R.string.dropdown_coins),
+                    isEnabled,
+                    getNullableDrawable(iconStr),
+                    iconStr))
             }
 
             vm.mostValuableGemStr.let{ iconStr ->
 
-                if (iconStr.isNotBlank()) {
+                val isEnabled = (iconStr.isNotBlank() && iconStr != "loot_lint")
 
-                    valuesArrayList.add(IconDropdownItem(
-                        resources.getIdentifier(
-                            iconStr,"drawable",view?.context?.packageName),
-                        iconStr, "Best gemstone"))
-
-                    enabledArrayList.add(iconStr == "loot_lint")
-                }
+                itemArrayList.add(SelectableItemData(
+                    (if (isEnabled) "" else "   \u20E0 ") + getString(R.string.dropdown_best_gem),
+                    isEnabled,
+                    getNullableDrawable(iconStr),
+                    iconStr
+                ))
             }
 
             vm.mostValuableArtStr.let{ iconStr ->
 
-                if (iconStr.isNotBlank()) {
+                val isEnabled = (iconStr.isNotBlank() && iconStr != "loot_lint")
 
-                    valuesArrayList.add(IconDropdownItem(
-                        resources.getIdentifier(
-                            iconStr,"drawable",view?.context?.packageName),
-                        iconStr, "Best art object"))
-
-                    enabledArrayList.add(iconStr == "loot_lint")
-                }
+                itemArrayList.add(SelectableItemData(
+                    (if (isEnabled) "" else "   \u20E0 ") + getString(R.string.dropdown_best_art_object),
+                    isEnabled,
+                    getNullableDrawable(iconStr),
+                    iconStr
+                ))
             }
 
             vm.mostValuableMagicStr.let{ iconStr ->
 
-                if (iconStr.isNotBlank()) {
+                val isEnabled = (iconStr.isNotBlank() && iconStr != "loot_lint")
 
-                    valuesArrayList.add(IconDropdownItem(
-                        resources.getIdentifier(
-                            iconStr,"drawable",view?.context?.packageName),
-                        iconStr, "Best magic item"))
-
-                    enabledArrayList.add(iconStr == "loot_lint")
-                }
+                itemArrayList.add(SelectableItemData(
+                    (if (isEnabled) "" else "   \u20E0 ") + getString(R.string.dropdown_best_magic_item),
+                    isEnabled,
+                    getNullableDrawable(iconStr),
+                    iconStr
+                ))
             }
 
             vm.mostValuableSpellStr.let{ iconStr ->
 
-                if (iconStr.isNotBlank()) {
+                val isEnabled = (iconStr.isNotBlank() && iconStr != "loot_lint")
 
-                    valuesArrayList.add(IconDropdownItem(
-                        resources.getIdentifier(
-                            iconStr,"drawable",view?.context?.packageName),
-                        iconStr, "Best spell collection"))
-
-                    enabledArrayList.add(iconStr == "loot_lint")
-                }
+                itemArrayList.add(SelectableItemData(
+                    (if (isEnabled) "" else "   \u20E0 ") + getString(R.string.dropdown_best_spell_collection),
+                    isEnabled,
+                    getNullableDrawable(iconStr),
+                    iconStr
+                ))
             }
         }
 
-        if (activeHoard.gpTotal > 0.0) {
-            valuesArrayList.apply{
-                add(IconDropdownItem(resources.getIdentifier(
-                    "container_chest","drawable",view?.context?.packageName),
-                "container_chest", "Treasure chest")
+        // Generic options
+        itemArrayList.addAll(
+            arrayOf(
+                SelectableItemData(
+                    (if (activeHoardNotWorthless) "" else "   \u20E0 ") + getString(R.string.dropdown_treasure_chest),
+                    activeHoardNotWorthless,
+                    getNullableDrawable("container_chest"),
+                    "container_chest"),
+                SelectableItemData(
+                    (if (activeHoardNotWorthless) "" else "   \u20E0 ") + getString(R.string.dropdown_strongbox),
+                    activeHoardNotWorthless,
+                    getNullableDrawable("container_strongbox"),
+                    "container_strongbox"),
+                SelectableItemData(
+                    (if (activeHoardNotWorthless) "" else "   \u20E0 ") + getString(R.string.dropdown_backpack),
+                    activeHoardNotWorthless,
+                    getNullableDrawable("container_full"),
+                    "container_full"),
+                SelectableItemData(
+                    (if (activeHoardNotWorthless) "" else "   \u20E0 ") + getString(R.string.dropdown_beltpouch),
+                    activeHoardNotWorthless,
+                    getNullableDrawable("container_beltpouch"),
+                    "container_beltpouch")
+            )
+        )
+
+        return itemArrayList.toTypedArray()
+    }
+
+    private fun getBadgeDropdownAdapterArray() : Array<SelectableItemData> {
+
+        val itemArrayList = ArrayList<SelectableItemData>()
+
+        HoardBadge.values().forEach {
+
+            if (it.resString != null) {
+
+                itemArrayList.add(
+                    SelectableItemData(
+                        resources.getString(
+                                resources.getIdentifier(it.resString,"string",view?.context?.packageName)),
+                        true,
+                        getNullableDrawable(it.resString),
+                        it.resString
+                    )
                 )
 
-                add(IconDropdownItem(resources.getIdentifier(
-                    "container_strongbox","drawable",view?.context?.packageName),
-                    "container_strongbox", "Strongbox")
-                )
+            } else {
 
-                add(IconDropdownItem(resources.getIdentifier(
-                    "container_full","drawable",view?.context?.packageName),
-                    "container_chest", "Adventurer's Backpack")
-                )
-
-                add(IconDropdownItem(resources.getIdentifier(
-                    "container_beltpouch","drawable",view?.context?.packageName),
-                    "container_beltpouch", "Belt pouch")
+                itemArrayList.add(
+                    SelectableItemData("None", true, null,
+                        "clipart_default_vector_icon"
+                    )
                 )
             }
-            enabledArrayList.addAll(arrayOf(true,true,true,true))
         }
 
-        return valuesArrayList.toTypedArray() to enabledArrayList.toTypedArray()
+        return itemArrayList.toTypedArray()
+    }
+
+    private fun setPreviewIcon(newDrawable: Drawable?) {
+
+        binding.hoardEditPreviewIcon.setImageDrawable(newDrawable)
+    }
+
+    private fun setPreviewBadge(newDrawable: Drawable?) {
+
+        binding.hoardEditPreviewBadge.setImageDrawable(newDrawable)
+    }
+
+    private fun getNullableDrawable(resString: String) : Drawable? {
+
+        return try {
+
+            ResourcesCompat.getDrawable(resources,
+                resources.getIdentifier(resString,"drawable",
+                    view?.context?.packageName), context?.theme)
+
+        } catch (e: Resources.NotFoundException) {
+
+            null
+        }
+
     }
 
     fun updateUI() {
@@ -321,18 +464,14 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
     }
 
     private fun AutoCompleteTextView.initializeAsDropdown(
-        dropdownAdapter:IconDropdownAdapter<IconDropdownItem>, defaultPos: Int,
+        dropdownAdapter:DropdownAdapter<*>, defaultPos: Int,
         enabledArray : Array<Boolean>?
     ) {
-        val defaultItem = (adapter as IconDropdownAdapter<IconDropdownItem>).values[defaultPos]
-        val defaultIcon = getDrawable(resources,defaultItem.drawableID,context?.theme)
-            .boundForLabel()
         this.setAdapter(dropdownAdapter)
-        this.setText(defaultItem.label,false)
-        (adapter as IconDropdownAdapter<*>).setSelectedPosition(defaultPos)
-        this.setCompoundDrawablesRelative(defaultIcon,null,null,null)
+        this.setText((adapter as DropdownAdapter<*>).values[defaultPos].toString(),false)
+        (adapter as DropdownAdapter<*>).setSelectedPosition(defaultPos)
         if (enabledArray != null ) {
-            (adapter as IconDropdownAdapter<*>).setEnabledByArray(enabledArray.toBooleanArray())
+            (adapter as DropdownAdapter<*>).setEnabledByArray(enabledArray.toBooleanArray())
         }
     }
 

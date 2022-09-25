@@ -11,11 +11,13 @@ import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.ColorInt
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -326,8 +328,12 @@ class HoardGeneratorFragment : Fragment() {
 
         binding.hoardGeneratorToolbar.apply {
 
-            navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
+            val typedValue = TypedValue()
+            context.theme.resolveAttribute(R.attr.colorOnPrimary,typedValue,true)
+            @ColorInt
+            val titleTextColor = typedValue.data
 
+            navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
             setNavigationOnClickListener {
 
                 if (generatorViewModel.isRunningAsyncLiveData.value != true) {
@@ -340,8 +346,8 @@ class HoardGeneratorFragment : Fragment() {
                         Toast.LENGTH_SHORT).show()
                 }
             }
-
             title = getString(R.string.hoard_generator_fragment_title)
+            setTitleTextColor(titleTextColor)
         }
     }
 

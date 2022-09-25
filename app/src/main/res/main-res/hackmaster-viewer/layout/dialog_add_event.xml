@@ -13,7 +13,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/hoard_overview_toolbar"
+            android:id="@+id/add_hoard_event_toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/appbar_height"
             android:minHeight="4dp"
@@ -21,7 +21,8 @@
             app:title="@string/action_add_user_event"
             app:navigationIcon="@drawable/clipart_close_vector_icon"
             app:buttonGravity="center_vertical"
-            android:background="?attr/colorSurface"/>
+            android:background="?attr/colorSurface"
+            tools:menu="@menu/add_hoard_event_menu"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -34,12 +35,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:paddingHorizontal="16dp"
             android:orientation="vertical"
             android:background="?attr/colorSurface">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/hoard_edit_name_input"
+                android:id="@+id/add_event_desc_input"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,14 +50,16 @@
                 app:layout_constraintTop_toBottomOf="@id/hoard_edit_name_label">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/hoard_edit_name_edit"
+                    android:id="@+id/add_event_desc_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="textStart"
+                    android:gravity="start"
+                    android:breakStrategy="balanced"
                     android:minHeight="160dp"
                     android:hint="@string/description"
-                    android:inputType="text"
-                    android:maxLength="280"/>
+                    android:inputType="textMultiLine"
+                    android:maxLength="280" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,11 +71,12 @@
                 android:text="Tags:"/>
 
             <GridLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:rowOrderPreserved="false"
                 android:rowCount="7"
+                android:layout_gravity="center_horizontal"
                 >
 
                 <LinearLayout
@@ -443,7 +447,7 @@
                     android:gravity="center_vertical">
 
                     <CheckBox
-                        android:id="@+id/user_tag_"
+                        android:id="@+id/user_tag_sale"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:minWidth="0dp"/>
@@ -454,7 +458,7 @@
                         android:layout_marginStart="4dp"
                         android:scaleType="fitCenter"
                         app:tint="?attr/colorOnBackground"
-                        android:src="@drawable/clipart_bag_vector_icon"
+                        android:src="@drawable/clipart_sale_vector_icon"
                         android:alpha="0.65"/>
 
                     <TextView
@@ -536,15 +540,6 @@
                 </LinearLayout>
 
             </GridLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="192dp"
-                android:layout_height="64dp"
-                android:layout_marginTop="24dp"
-                android:layout_gravity="center"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:text="@string/save"/>
 
 
         </LinearLayout>

@@ -7,8 +7,7 @@
         android:title="@string/action_overview_edit"
         android:id="@+id/action_edit_hoard"
         android:icon="@drawable/clipart_edit_vector_icon"
-        app:showAsAction="ifRoom"
-        android:iconTint="?attr/colorOnPrimary"/>
+        app:showAsAction="ifRoom" />
     <item
         android:title="@string/view_event_log_hoard"
         android:id="@+id/action_view_history"/>

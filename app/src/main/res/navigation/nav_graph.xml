@@ -64,6 +64,7 @@
                 android:name="activeHoardID"
                 app:argType="integer"/>
         </action>
+
         <action
             android:id="@+id/hoard_overview_edit_bottom_dialog_action"
             app:destination="@id/hoardEditBottomDialog">
@@ -71,6 +72,7 @@
                 android:name="activeHoardID"
                 app:argType="integer"/>
         </action>
+
         <action
             android:id="@+id/hoard_overview_to_gem_list_action"
             app:destination="@id/gemList_placeholder" >
@@ -134,7 +136,8 @@
             android:name="activeHoardID"
             app:argType="integer"/>
     </fragment>
-    <fragment
+
+    <dialog
         android:id="@+id/hoardEditBottomDialog"
         android:name="com.example.android.treasurefactory.ui.HoardEditBottomDialog"
         android:label="HoardEditBottomDialog"
@@ -142,7 +145,8 @@
         <argument
             android:name="activeHoardID"
             app:argType="integer"/>
-    </fragment>
+    </dialog>
+
     <fragment
         android:id="@+id/addHoardEventDialog"
         android:name="com.example.android.treasurefactory.ui.AddHoardEventDialog"

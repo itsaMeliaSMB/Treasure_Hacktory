@@ -46,7 +46,7 @@ data class Hoard(@PrimaryKey(autoGenerate = true) @NotNull val hoardID: Int = 0,
     }
 }
 
-enum class HoardBadge(val iconString: String?) {
+enum class HoardBadge(val resString: String?) {
     NONE(null),
     // Functionary
     ARCHIVED("badge_hoard_archived"),
@@ -70,8 +70,8 @@ enum class HoardBadge(val iconString: String?) {
     SECRET("badge_hoard_secret"),
     // Class
     FIGHTER("badge_hoard_fighter"),
-    THIEF("badge_hoard_thief"),
     MAGIC_USER("badge_hoard_mage"),
+    THIEF("badge_hoard_thief"),
     CLERIC("badge_hoard_cleric"),
     // Owner
     CONSTRUCT("badge_hoard_construct"),

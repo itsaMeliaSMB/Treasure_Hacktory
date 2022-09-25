@@ -31,13 +31,19 @@ class HoardEditViewModel(private val repository: HMRepository): ViewModel() {
     var coinMixStr = "loot_lint"
         private set
 
+    var iconDropdownPos = 0
+    var badgeDropdownPos = 0
+
     fun loadHoard(hoardID: Int) {
         hoardIDLiveData.value = hoardID
     }
 
     fun saveHoard(hoard: Hoard) {
 
-        viewModelScope.launch { repository.updateHoard(hoard) }
+        viewModelScope.launch {
+            repository.updateHoard(hoard)
+            //TODO add hoard event if anything changed
+        }
     }
 
     // region [ Icon lookup functions ]

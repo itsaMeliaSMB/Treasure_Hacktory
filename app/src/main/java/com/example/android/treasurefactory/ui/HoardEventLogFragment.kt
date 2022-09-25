@@ -93,8 +93,12 @@ class HoardEventLogFragment : Fragment() {
                 when (item.itemId){
 
                     R.id.action_add_user_event -> {
-                        // TODO add implementation
-                        // https://medium.com/androiddevelopers/navigation-component-dialog-destinations-bfeb8b022759
+
+                        val action = HoardEventLogFragmentDirections
+                            .eventLogToAddHoardEventDialogAction(safeArgs.activeHoardID)
+
+                        findNavController().navigate(action)
+
                         true
                     }
 
@@ -166,12 +170,12 @@ class HoardEventLogFragment : Fragment() {
                     "merge" ->              R.drawable.clipart_merge_vector_icon
                     "modification" ->       R.drawable.clipart_edit_vector_icon
                     "note" ->               R.drawable.clipart_extranotes_vector_icon
-                    "sale" ->               R.drawable.clipart_bag_vector_icon
+                    "sale" ->               R.drawable.clipart_sale_vector_icon
                     "spell-collection"->    R.drawable.clipart_spellbook_vector_icon
                     "system" ->             R.drawable.clipart_android_vector_icon
                     "user" ->               R.drawable.clipart_user_vector_icon
                     "verbose" ->            R.drawable.clipart_info_vector_icon
-                    else ->                 R.drawable.clipart_circle_vector_icon
+                    else ->                 R.drawable.clipart_tag_vector_icon
                 }
             }
 

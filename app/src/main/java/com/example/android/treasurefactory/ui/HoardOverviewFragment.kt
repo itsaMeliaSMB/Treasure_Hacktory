@@ -2,10 +2,12 @@ package com.example.android.treasurefactory.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -141,9 +143,16 @@ class HoardOverviewFragment : Fragment() {
 
         // region [ Toolbar ]
         binding.hoardOverviewToolbar.apply {
+
+            // Get themed color attribute for Toolbar's title
+            val typedValue = TypedValue()
+            context.theme.resolveAttribute(R.attr.colorOnPrimary,typedValue,true)
+            @ColorInt
+            val titleTextColor = typedValue.data
+
             inflateMenu(R.menu.hoard_overview_toolbar_menu)
             title = getString(R.string.hoard_overview_fragment_title)
-            setTitleTextColor(R.attr.colorOnPrimary)
+            setTitleTextColor(titleTextColor)
             setNavigationIcon(R.drawable.clipart_back_vector_icon)
             setNavigationOnClickListener {
                 findNavController().popBackStack()
@@ -151,6 +160,15 @@ class HoardOverviewFragment : Fragment() {
             setOnMenuItemClickListener { item ->
 
                 when (item.itemId) {
+
+                    R.id.action_edit_hoard      -> {
+
+                        val action = HoardOverviewFragmentDirections
+                            .hoardOverviewEditBottomDialogAction(activeHoard.hoardID)
+                        findNavController().navigate(action)
+
+                        true
+                    }
 
                     R.id.action_view_history    -> {
 
@@ -394,6 +412,4 @@ class HoardOverviewFragment : Fragment() {
         return coinArrayList.toList()
     }
     // endregion
-
-
 }

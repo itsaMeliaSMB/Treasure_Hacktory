@@ -7,6 +7,7 @@
     <string name="hard_silver_pieces">Hard silver pieces</string>
     <string name="platinum_pieces">Platinum pieces</string>
     <string name="coins">coins</string>
+    <string name="dropdown_keep_current_icon">Keep current icon</string>
     <plurals name="coinString">
         <item quantity="one">coin</item>
         <item quantity="other">coins</item>
