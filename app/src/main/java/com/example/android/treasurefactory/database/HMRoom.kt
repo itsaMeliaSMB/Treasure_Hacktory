@@ -26,7 +26,8 @@ private const val DATABASE_NAME = "treasure-database"
         ArtObject::class,
         MagicItem::class,
         SpellCollection::class,
-        CommandWord::class],
+        CommandWord::class,
+        LetterCode::class],
     version = 1)
 @TypeConverters(HoardTypeConverters::class)
 abstract class TreasureDatabase : RoomDatabase() {
@@ -48,13 +49,8 @@ abstract class TreasureDatabase : RoomDatabase() {
             super.onCreate(db)
             INSTANCE?.let { database ->
                 scope.launch(Dispatchers.IO) {
-
-                    // Get app version
-                    val appVersionCode : Long = context.packageManager
-                        .getPackageInfo(context.packageName,0)
-                        .longVersionCode
-
                     // Populate Template db tables
+                    populateLetterCodesByCSV(database.hoardDao())
                     populateGemsByCSV(database.gemDao())
                     populateItemsByCSV(database.magicItemDao())
                     populateSpellsByCSV(database.spellCollectionDao())
@@ -64,6 +60,88 @@ abstract class TreasureDatabase : RoomDatabase() {
         }
 
         // Since it was so hard to find, https://discuss.kotlinlang.org/t/why-would-using-coroutines-be-slower-than-sequential-for-a-big-file/7698/7
+
+        /** Populates letter code table using hardcoded CSV file. */
+        suspend fun populateLetterCodesByCSV(hoardDao: HoardDao) {
+
+            // val csvFilePath = "src/main/res/raw/seed_lettercode_v01.csv"
+            var iterationCount = 0
+
+            val inputStream = context.resources.openRawResource(
+                context.resources.getIdentifier("seed_lettercode_v01","raw",context.packageName))
+
+            inputStream
+                .bufferedReader()
+                .lineSequence()
+                .forEach { csvLine ->
+
+                    val lineData = csvLine.split(',')
+
+                    val _letterID: String = lineData[0].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _cpChance: Int = lineData[1].toIntOrNull() ?: 0
+                    val _cpMin: Int = lineData[2].toIntOrNull() ?: 0
+                    val _cpMax: Int = lineData[3].toIntOrNull() ?: 0
+                    val _spChance: Int = lineData[4].toIntOrNull() ?: 0
+                    val _spMin: Int = lineData[5].toIntOrNull() ?: 0
+                    val _spMax: Int = lineData[6].toIntOrNull() ?: 0
+                    val _epChance: Int = lineData[7].toIntOrNull() ?: 0
+                    val _epMin: Int = lineData[8].toIntOrNull() ?: 0
+                    val _epMax: Int = lineData[9].toIntOrNull() ?: 0
+                    val _gpChance: Int = lineData[10].toIntOrNull() ?: 0
+                    val _gpMin: Int = lineData[11].toIntOrNull() ?: 0
+                    val _gpMax: Int = lineData[12].toIntOrNull() ?: 0
+                    val _hspChance: Int = lineData[13].toIntOrNull() ?: 0
+                    val _hspMin: Int = lineData[14].toIntOrNull() ?: 0
+                    val _hspMax: Int = lineData[15].toIntOrNull() ?: 0
+                    val _ppChance: Int = lineData[16].toIntOrNull() ?: 0
+                    val _ppMin: Int = lineData[17].toIntOrNull() ?: 0
+                    val _ppMax: Int = lineData[18].toIntOrNull() ?: 0
+                    val _gemChance: Int = lineData[19].toIntOrNull() ?: 0
+                    val _gemMin: Int = lineData[20].toIntOrNull() ?: 0
+                    val _gemMax: Int = lineData[21].toIntOrNull() ?: 0
+                    val _artChance: Int = lineData[22].toIntOrNull() ?: 0
+                    val _artMin: Int = lineData[23].toIntOrNull() ?: 0
+                    val _artMax: Int = lineData[24].toIntOrNull() ?: 0
+                    val _potionChance: Int = lineData[25].toIntOrNull() ?: 0
+                    val _potionMin: Int = lineData[26].toIntOrNull() ?: 0
+                    val _potionMax: Int = lineData[27].toIntOrNull() ?: 0
+                    val _scrollChance: Int = lineData[28].toIntOrNull() ?: 0
+                    val _scrollMin: Int = lineData[29].toIntOrNull() ?: 0
+                    val _scrollMax: Int = lineData[30].toIntOrNull() ?: 0
+                    val _weaponChance: Int = lineData[31].toIntOrNull() ?: 0
+                    val _weaponMin: Int = lineData[32].toIntOrNull() ?: 0
+                    val _weaponMax: Int = lineData[33].toIntOrNull() ?: 0
+                    val _noWeaponChance: Int = lineData[34].toIntOrNull() ?: 0
+                    val _noWeaponMin: Int = lineData[35].toIntOrNull() ?: 0
+                    val _noWeaponMax: Int = lineData[36].toIntOrNull() ?: 0
+                    val _anyChance: Int = lineData[37].toIntOrNull() ?: 0
+                    val _anyMin: Int = lineData[38].toIntOrNull() ?: 0
+                    val _anyMax: Int = lineData[39].toIntOrNull() ?: 0
+
+                    hoardDao.addLetterCode(
+                        LetterCode(
+                            _letterID,
+                            _cpChance, _cpMin, _cpMax,
+                            _spChance, _spMin, _spMax,
+                            _epChance, _epMin, _epMax,
+                            _gpChance, _gpMin, _gpMax,
+                            _hspChance, _hspMin, _hspMax,
+                            _ppChance, _ppMin, _ppMax,
+                            _gemChance, _gemMin, _gemMax,
+                            _artChance, _artMin, _artMax,
+                            _potionChance, _potionMin, _potionMax,
+                            _scrollChance, _scrollMin, _scrollMax,
+                            _weaponChance, _weaponMin, _weaponMax,
+                            _noWeaponChance, _noWeaponMin, _noWeaponMax,
+                            _anyChance, _anyMin, _anyMax,
+                        )
+                    )
+                    iterationCount ++
+                }
+
+            Log.d("InitialPopulationCallback","Letter code addition by CSV ran. " +
+                    "[ Iteration count = $iterationCount ]")
+        }
 
         /** Populates gem template table using hardcoded CSV file. */
         suspend fun populateGemsByCSV(gemDao: GemDao) {
@@ -919,6 +997,17 @@ interface HoardDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addHoardEvent(newEvent: HoardEvent)
+    // endregion
+
+    // region ( LetterCode )
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addLetterCode(entry: LetterCode)
+
+    @Query("SELECT * FROM hackmaster_letter_codes WHERE letterID=(:letterID)")
+    suspend fun getLetterCodeOnce(letterID: String) : LetterCode?
+
+    @Query("SELECT * FROM hackmaster_letter_codes")
+    suspend fun getLetterCodesOnce() : List<LetterCode>
     // endregion
 
     // region [ Child deletion ]

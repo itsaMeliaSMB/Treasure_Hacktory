@@ -871,7 +871,7 @@
                                         android:layout_alignTop="@id/generator_magic_indicator"
                                         android:layout_alignBottom="@id/generator_magic_indicator"
                                         android:layout_toEndOf="@id/generator_magic_indicator"
-                                        android:text="@string/specific_magic_cardview_heade" />
+                                        android:text="@string/specific_magic_cardview_header" />
 
                                     <ImageView
                                         style="@style/generator_cardview_letter_header_icon"

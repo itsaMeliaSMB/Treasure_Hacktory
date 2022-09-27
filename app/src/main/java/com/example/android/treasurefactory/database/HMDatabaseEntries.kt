@@ -77,4 +77,22 @@ data class SpellTemplate(
 data class CommandWord(
     @PrimaryKey @NotNull val commandWord: String,
     val themeWord: String )
+
+@Entity(tableName = "hackmaster_letter_codes")
+data class LetterCode(
+    @PrimaryKey @NotNull val letterID: String,
+    val cpChance: Int = 0, val cpMin : Int = 0, val cpMax : Int = 0,
+    val spChance: Int = 0, val spMin : Int = 0, val spMax : Int = 0,
+    val epChance: Int = 0, val epMin : Int = 0, val epMax : Int = 0,
+    val gpChance: Int = 0, val gpMin : Int = 0, val gpMax : Int = 0,
+    val hspChance:Int = 0, val hspMin: Int = 0, val hspMax: Int = 0,
+    val ppChance: Int = 0, val ppMin : Int = 0, val ppMax : Int = 0,
+    val gemChance:Int = 0, val gemMin: Int = 0, val gemMax: Int = 0,
+    val artChance:Int = 0, val artMin: Int = 0, val artMax: Int = 0,
+    val potionChance: Int = 0, val potionMin : Int = 0, val potionMax : Int = 0,
+    val scrollChance: Int = 0, val scrollMin : Int = 0, val scrollMax : Int = 0,
+    val weaponChance: Int = 0, val weaponMin : Int = 0, val weaponMax : Int = 0,
+    val noWeaponChance: Int = 0, val noWeaponMin : Int = 0, val noWeaponMax : Int = 0,
+    val anyChance:Int = 0, val anyMin:Int = 0, val anyMax: Int = 0
+)
 // endregion

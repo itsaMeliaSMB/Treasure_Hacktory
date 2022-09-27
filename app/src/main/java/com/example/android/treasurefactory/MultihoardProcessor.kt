@@ -50,7 +50,8 @@ class MultihoardProcessor(private val repository: HMRepository) {
                     Hoard(
                         name = mergedHoardName, cp =  mergedCoinPile[0], sp = mergedCoinPile[1],
                         ep =  mergedCoinPile[2], gp = mergedCoinPile[3],
-                        hsp =  mergedCoinPile[4], pp = mergedCoinPile[5]))) // TODO get app version when making new hoard
+                        hsp =  mergedCoinPile[4], pp = mergedCoinPile[5]
+                    ))) // TODO get app version when making new hoard
 
             // Compile all unique objects within all targeted hoards
             hoardsToMerge.forEach { subHoard ->
@@ -96,6 +97,7 @@ class MultihoardProcessor(private val repository: HMRepository) {
 
                 val updatedHoard = repository.getHoardOnce(mergedHoardID).takeIf { it != null }?.copy(
                     gpTotal = gpTotal,
+                    badge = HoardBadge.MERGED,
                     gemCount = gemCount,
                     artCount = artCount,
                     magicCount = itemCount,
@@ -308,7 +310,8 @@ class MultihoardProcessor(private val repository: HMRepository) {
                     originalHoard.name
                 } else { originalHoard.name + " [Copy]" }
 
-                val newClonedHoard = originalHoard.copy(hoardID = 0, name = cloneHoardName, isNew = true)
+                val newClonedHoard = originalHoard.copy(hoardID = 0, badge = HoardBadge.COPIED,
+                    name = cloneHoardName, isNew = true)
 
                 // Add hoard to database and get its ID
                 newHoardID = repository.getHoardIdByRowId(repository.addHoard(newClonedHoard))

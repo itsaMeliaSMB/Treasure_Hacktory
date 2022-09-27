@@ -14,27 +14,28 @@ import kotlin.math.roundToInt
  * @param effortRating GP/XP value ratio of items without specific XP values based on difficulty of acquisition (average difficulty is considered 5.0 gp : 1 xp)
  */
 @Entity (tableName = "hackmaster_hoard_table", indices = [Index(value = ["hoardID"])])
-data class Hoard(@PrimaryKey(autoGenerate = true) @NotNull val hoardID: Int = 0,
-                 var name: String = "",
-                 var creationDate: Date = Date(),
-                 var creationDesc: String = "",
-                 @ColumnInfo(name="icon_id") var iconID: String = "",
-                 var gpTotal: Double = 0.0,
-                 var effortRating: Double = 5.0,
-                 var cp: Int = 0,
-                 var sp: Int = 0,
-                 var ep: Int = 0,
-                 var gp: Int = 0,
-                 var hsp: Int = 0,
-                 var pp: Int = 0,
-                 var gemCount: Int = 0,
-                 var artCount: Int = 0,
-                 var magicCount: Int = 0,
-                 var spellsCount: Int = 0,
-                 var isFavorite: Boolean = false,
-                 var isNew: Boolean = true,
-                 var successful : Boolean = false,
-                 var appVersion: Int = 0           // Version code of app hoard was generated on
+data class Hoard(
+    @PrimaryKey(autoGenerate = true) @NotNull val hoardID: Int = 0,
+    var name: String = "",
+    var creationDate: Date = Date(),
+    var badge: HoardBadge = HoardBadge.NONE,
+    @ColumnInfo(name = "icon_id") var iconID: String = "",
+    var gpTotal: Double = 0.0,
+    var effortRating: Double = 5.0,
+    var cp: Int = 0,
+    var sp: Int = 0,
+    var ep: Int = 0,
+    var gp: Int = 0,
+    var hsp: Int = 0,
+    var pp: Int = 0,
+    var gemCount: Int = 0,
+    var artCount: Int = 0,
+    var magicCount: Int = 0,
+    var spellsCount: Int = 0,
+    var isFavorite: Boolean = false,
+    var isNew: Boolean = true,
+    var successful: Boolean = false,
+    var appVersion: Int = 0           // Version code of app hoard was generated on){}
     ) {
 
     @Ignore

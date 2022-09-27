@@ -76,10 +76,19 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         (hoardOrder.hardSilverPieces * 2.0) + (hoardOrder.platinumPieces * 5.0)
                 val xpTotal = (gpTotal / effortValue).roundToInt()
 
-                return Hoard(0,newName,Date(System.currentTimeMillis()),
-                    hoardOrder.creationDescription, iconId, gpTotal, effortValue,
-                    hoardOrder.copperPieces, hoardOrder.silverPieces, hoardOrder.electrumPieces,
-                    hoardOrder.goldPieces, hoardOrder.hardSilverPieces, hoardOrder.platinumPieces,
+                return Hoard(
+                    0,
+                    newName,
+                    Date(System.currentTimeMillis()),
+                    iconID = iconId,
+                    gpTotal = gpTotal,
+                    effortRating = effortValue,
+                    cp = hoardOrder.copperPieces,
+                    sp = hoardOrder.silverPieces,
+                    ep = hoardOrder.electrumPieces,
+                    gp = hoardOrder.goldPieces,
+                    hsp = hoardOrder.hardSilverPieces,
+                    pp = hoardOrder.platinumPieces,
                     appVersion = appVersion
                 )
             }

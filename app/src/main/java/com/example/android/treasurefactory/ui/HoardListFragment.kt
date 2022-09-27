@@ -25,6 +25,7 @@ import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.databinding.HoardListItemBinding
 import com.example.android.treasurefactory.databinding.LayoutHoardListBinding
 import com.example.android.treasurefactory.model.Hoard
+import com.example.android.treasurefactory.model.HoardBadge
 import com.example.android.treasurefactory.viewmodel.HoardListViewModel
 import com.example.android.treasurefactory.viewmodel.HoardListViewModelFactory
 import java.text.DecimalFormat
@@ -242,6 +243,24 @@ class HoardListFragment : Fragment() {
         fun bind(newHoard: Hoard, selected: Boolean) {
 
             hoard = newHoard
+
+            if (hoard.badge != HoardBadge.NONE) {
+                try{
+                    binding.hoardListItemListBadge.apply{
+                        setImageResource(resources
+                            .getIdentifier(hoard.badge.resString,
+                                "drawable",view?.context?.packageName))
+                        visibility = View.VISIBLE
+                    }
+                } catch (e: Exception){
+                    binding.hoardListItemListBadge.apply{
+                        setImageResource(R.drawable.badge_hoard_broken)
+                        visibility = View.VISIBLE
+                    }
+                }
+            } else {
+                binding.hoardListItemListBadge.visibility = View.INVISIBLE
+            }
 
             // Toggle background color of list item if selected
             binding.layoutHoardListItem.isSelected = selected

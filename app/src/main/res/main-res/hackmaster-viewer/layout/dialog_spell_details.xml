@@ -3,43 +3,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
 
-    <ImageView
-        android:id="@+id/spell_dialog_school_1"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/spell_dialog_school_card_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@id/spell_dialog_school_2"
+        app:cardElevation="6dp"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintEnd_toStartOf="@id/spell_dialog_school_card_2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/spell_school_evocation" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/spell_dialog_school_2"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        <ImageView
+            android:id="@+id/spell_dialog_school_1"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            tools:src="@drawable/spell_school_evocation" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/spell_dialog_school_card_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toStartOf="@id/spell_dialog_school_3"
+        app:cardElevation="6dp"
+        app:cardCornerRadius="4dp"
+        app:layout_constraintEnd_toStartOf="@id/spell_dialog_school_card_3"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/spell_dialog_school_1"
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_school_card_1"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/spell_school_illusion" />
+        tools:src="@drawable/spell_school_illusion">
 
-    <ImageView
-        android:id="@+id/spell_dialog_school_3"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        <ImageView
+            android:id="@+id/spell_dialog_school_2"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            tools:src="@drawable/spell_school_illusion" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/spell_dialog_school_card_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        app:cardElevation="6dp"
+        app:cardCornerRadius="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/spell_dialog_school_2"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/spell_school_enchantment" />
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_school_card_2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/spell_dialog_school_3"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            tools:src="@drawable/spell_school_enchantment" />
+
+    </com.google.android.material.card.MaterialCardView>
+
 
     <TextView
         android:id="@+id/spell_dialog_name"
@@ -51,7 +81,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spell_dialog_school_1"
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_school_card_1"
         tools:text="Gargezone’s Sphere of Chromatic Fever" />
 
     <View
@@ -83,7 +113,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/source"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spell_dialog_leveltype" />
@@ -93,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_source_label"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +135,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spell_dialog_source_value"
@@ -116,9 +146,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Subclass:"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spell_dialog_source_page" />
@@ -128,7 +158,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_subclass_label"
         app:layout_constraintEnd_toEndOf="parent"
@@ -139,69 +169,99 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-condensed"
         android:text="@string/clerical_spell_spheres"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spell_dialog_subclass_label" />
 
-    <ImageView
-        android:id="@+id/spell_dialog_sphere_1"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/spell_dialog_sphere_card_1"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/spell_dialog_sphere_2"
+        app:layout_constraintEnd_toStartOf="@+id/spell_dialog_sphere_card_2"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/spell_dialog_spheres_label"
         app:layout_constraintTop_toTopOf="@id/spell_dialog_spheres_label"
-        tools:srcCompat="@drawable/spell_sphere_fire" />
+        tools:srcCompat="@drawable/spell_sphere_fire">
 
-    <ImageView
-        android:id="@+id/spell_dialog_sphere_2"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        <ImageView
+            android:id="@+id/spell_dialog_sphere_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:srcCompat="@drawable/spell_sphere_fire" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/spell_dialog_sphere_card_2"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@id/spell_dialog_sphere_3"
+        app:layout_constraintEnd_toStartOf="@id/spell_dialog_sphere_card_3"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/spell_dialog_sphere_1"
-        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_1"
-        tools:srcCompat="@drawable/spell_sphere_air" />
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_sphere_card_1"
+        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_card_1">
 
-    <ImageView
-        android:id="@+id/spell_dialog_sphere_3"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        <ImageView
+            android:id="@+id/spell_dialog_sphere_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:srcCompat="@drawable/spell_sphere_air" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/spell_dialog_sphere_card_3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@id/spell_dialog_sphere_4"
+        app:layout_constraintEnd_toStartOf="@id/spell_dialog_sphere_card_4"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/spell_dialog_sphere_2"
-        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_1"
-        tools:srcCompat="@drawable/spell_sphere_water" />
+        app:layout_constraintStart_toEndOf="@+id/spell_dialog_sphere_card_2"
+        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_card_1">
 
-    <ImageView
-        android:id="@+id/spell_dialog_sphere_4"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        <ImageView
+            android:id="@+id/spell_dialog_sphere_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:srcCompat="@drawable/spell_sphere_water" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/spell_dialog_sphere_card_4"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/spell_dialog_sphere_3"
-        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_1"
-        tools:srcCompat="@drawable/spell_sphere_earth" />
+        app:layout_constraintStart_toEndOf="@id/spell_dialog_sphere_card_3"
+        app:layout_constraintTop_toTopOf="@id/spell_dialog_sphere_card_1">
+
+        <ImageView
+            android:id="@+id/spell_dialog_sphere_4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:srcCompat="@drawable/spell_sphere_earth" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/spell_dialog_restrictions_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Restricted to:"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spell_dialog_sphere_1" />
+        app:layout_constraintTop_toBottomOf="@id/spell_dialog_sphere_card_1" />
 
     <TextView
         android:id="@+id/spell_dialog_restrictions_value"
@@ -210,7 +270,7 @@
         android:layout_marginEnd="8dp"
         android:lineSpacingExtra="5sp"
         android:textAlignment="viewEnd"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_restrictions_label"
         app:layout_constraintEnd_toEndOf="parent"
@@ -221,9 +281,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Please note:"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/spell_dialog_restrictions_value" />
@@ -234,7 +294,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:textAlignment="viewEnd"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:textStyle="italic"
         app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_note_label"
         app:layout_constraintEnd_toEndOf="parent"

@@ -86,7 +86,7 @@
                         android:layout_marginBottom="3dp"
                         android:elevation="3dp"
                         android:visibility="invisible"
-                        tools:src="@drawable/badge_hoard_large_lair"
+                        tools:src="@drawable/badge_hoard_chest"
                         tools:visibility="visible" />
 
                 </RelativeLayout>
@@ -145,37 +145,6 @@
                     android:gravity="end"
                     android:textStyle="italic"
                     tools:text="XX/XX/XXXX at XX:XX:XX PM CST"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginBottom="8dp">
-
-                <TextView
-                    android:id="@+id/hoard_overview_type_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="top"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:marqueeRepeatLimit="marquee_forever"
-                    android:text="@string/hoard_type_label"/>
-
-                <TextView
-                    android:id="@+id/hoard_overview_type_info"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:textSize="12sp"
-                    android:textAlignment="textEnd"
-                    android:gravity="end"
-                    android:textStyle="italic"
-                    tools:text="[A x1 , B x1, J x2, N x1]"/>
 
             </LinearLayout>
 

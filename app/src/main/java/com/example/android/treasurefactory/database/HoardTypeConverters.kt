@@ -1,6 +1,7 @@
 package com.example.android.treasurefactory.database
 
 import androidx.room.TypeConverter
+import com.example.android.treasurefactory.model.HoardBadge
 import com.example.android.treasurefactory.model.MagicItemType
 import com.example.android.treasurefactory.model.SpCoType
 import com.example.android.treasurefactory.model.Spell
@@ -90,6 +91,13 @@ class HoardTypeConverters {
 
     @TypeConverter
     fun toMagicItemType(ordinal: Int) : MagicItemType = enumValues<MagicItemType>()[ordinal]
+
+    @TypeConverter
+    fun fromHoardBadge(hoardBadge: HoardBadge) : Int = hoardBadge.ordinal
+
+    @TypeConverter
+    fun toHoardBadge(ordinal: Int) : HoardBadge = enumValues<HoardBadge>()[ordinal]
+
 
     @TypeConverter
     fun fromBoolean(bool: Boolean) : String? = Gson().toJson(bool)

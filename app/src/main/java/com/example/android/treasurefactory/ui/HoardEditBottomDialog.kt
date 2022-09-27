@@ -20,6 +20,7 @@ import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.databinding.DialogBottomHoardInfoEditBinding
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.model.HoardBadge
+import com.example.android.treasurefactory.model.HoardEvent
 import com.example.android.treasurefactory.viewmodel.HoardEditViewModel
 import com.example.android.treasurefactory.viewmodel.HoardEditViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -51,7 +52,7 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
             null,"clipart_default_vector_icon")
     }
     private var badgeDropdownArray = Array<SelectableItemData>(1) {
-        SelectableItemData("Loading",false,
+        SelectableItemData("Loading...",false,
             null,"clipart_default_vector_icon")
     }
 
@@ -178,17 +179,41 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
 
                     val newHoardName = hoardEditNameEdit.text.toString()
                         .takeIf{ it.isNotBlank() } ?: activeHoard.name
-
                     val newHoardIconString = iconDropdownArray[hoardEditViewModel.iconDropdownPos]
                         .imageString
+                    val newHoardBadge = HoardBadge.values()[hoardEditViewModel.badgeDropdownPos]
 
-                    //TODO update hoard badge when badges are implemented.
+                    if (newHoardName != activeHoard.name ||
+                        newHoardIconString != activeHoard.iconID ||
+                            newHoardBadge != activeHoard.badge) {
 
-                    hoardEditViewModel.saveHoard(activeHoard.copy(name = newHoardName,
-                        iconID = newHoardIconString))
+                        val eventStringBuilder = StringBuilder()
 
-                    //TODO record hoard event of an edit if any field changed.
+                        eventStringBuilder.append("Hoard modified by user.")
 
+                        if (newHoardName != activeHoard.name) {
+                            eventStringBuilder.append("\n\t- Name changed from " +
+                                    "\"${activeHoard.name}\" to \"$newHoardName\"")
+                        }
+                        if (newHoardIconString != activeHoard.iconID) {
+                            eventStringBuilder.append("\n\t- Thumbnail changed: ${
+                                iconDropdownArray[hoardEditViewModel.iconDropdownPos].menuLabel}")
+                        }
+                        if (newHoardBadge != activeHoard.badge) {
+                            eventStringBuilder.append("\n\t- Badge changed: ${
+                                badgeDropdownArray[hoardEditViewModel.badgeDropdownPos].menuLabel}")
+                        }
+
+                        val editEvent = HoardEvent(
+                            hoardID = activeHoard.hoardID,
+                            timestamp = System.currentTimeMillis(),
+                            description = eventStringBuilder.toString(),
+                            tag = "modification"
+                        )
+
+                        hoardEditViewModel.saveHoard(activeHoard.copy(name = newHoardName,
+                            iconID = newHoardIconString, badge = newHoardBadge), editEvent)
+                    }
                     dialog?.dismiss()
                 }
             }

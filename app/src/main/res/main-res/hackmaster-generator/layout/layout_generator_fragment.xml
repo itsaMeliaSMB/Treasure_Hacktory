@@ -165,7 +165,10 @@
                                 android:id="@+id/generator_lair_recyclerview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                tools:visibility="visible"
+                                tools:itemCount="5"
+                                tools:listitem="@layout/lettercode_item"/>
 
                         </LinearLayout>
 
@@ -799,7 +802,7 @@
                                     android:layout_alignTop="@id/generator_magic_indicator"
                                     android:layout_alignBottom="@id/generator_magic_indicator"
                                     android:layout_toEndOf="@id/generator_magic_indicator"
-                                    android:text="@string/specific_magic_cardview_heade" />
+                                    android:text="@string/specific_magic_cardview_header" />
 
                                 <ImageView
                                     style="@style/generator_cardview_letter_header_icon"
@@ -821,7 +824,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Potions, Oils, Etc."
+                                    android:text="@string/generator_label_potions"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_potion_qty_input"
@@ -853,7 +856,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Scrolls"
+                                    android:text="@string/generator_label_scrolls"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_scroll_qty_input"
@@ -929,7 +932,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Armor/Weapons"
+                                    android:text="@string/generator_label_armor_weapons"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_weapon_qty_input"
@@ -972,7 +975,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Any (Except weapons)"
+                                    android:text="@string/generator_label_except_weapons"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_nonweapon_qty_input"
@@ -1003,7 +1006,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
-                                    android:text="Any Magic Items"
+                                    android:text="@string/generator_label_any_magic"
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_any_qty_input"

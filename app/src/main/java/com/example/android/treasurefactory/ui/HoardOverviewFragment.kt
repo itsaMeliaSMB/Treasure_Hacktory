@@ -21,6 +21,7 @@ import com.example.android.treasurefactory.databinding.HoardOverviewCoinageListI
 import com.example.android.treasurefactory.databinding.LayoutHoardOverviewBinding
 import com.example.android.treasurefactory.model.CoinType
 import com.example.android.treasurefactory.model.Hoard
+import com.example.android.treasurefactory.model.HoardBadge
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModel
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModelFactory
 import java.text.DecimalFormat
@@ -326,12 +327,29 @@ class HoardOverviewFragment : Fragment() {
                 .setImageResource(R.drawable.clipart_default_image)
         }
 
+        if (activeHoard.badge != HoardBadge.NONE) {
+            try{
+                binding.hoardOverviewItemframeBadge.apply{
+                    setImageResource(resources
+                        .getIdentifier(activeHoard.badge.resString,
+                            "drawable",view?.context?.packageName))
+                    visibility = View.VISIBLE
+                }
+            } catch (e: Exception){
+                binding.hoardOverviewItemframeBadge.apply{
+                    setImageResource(R.drawable.badge_hoard_broken)
+                    visibility = View.VISIBLE
+                }
+            }
+        } else {
+            binding.hoardOverviewItemframeBadge.visibility = View.INVISIBLE
+        }
+
         binding.apply{
 
             hoardOverviewNameLabel.text = activeHoard.name
             hoardOverviewDateInfo.text = SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
                 .format(activeHoard.creationDate)
-            hoardOverviewTypeInfo.text = activeHoard.creationDesc
             ("Worth ${DecimalFormat("#,##0.0#")
                 .format(activeHoard.gpTotal)
                 .removeSuffix(".0")} gp").also { binding.hoardOverviewValueInfo.text = it }

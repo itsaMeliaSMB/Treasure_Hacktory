@@ -1,0 +1,1118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="8dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/odds_ref_treasure_type_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/odds_ref_treasure_type_letter"
+            app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_treasure_type_letter"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="@string/odds_ref_treasure_type"/>
+
+        <TextView
+            android:id="@+id/odds_ref_treasure_type_letter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/odds_ref_treasure_type_label"
+            android:textSize="28sp"
+            android:textAllCaps="true"
+            android:textStyle="bold"
+            tools:text="A"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:justifyContent="center"
+        app:flexDirection="row"
+        app:flexWrap="wrap">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_cp_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="@dimen/odds_ref_layout_width"
+                android:layout_height="@dimen/odds_ref_layout_height"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/odds_ref_cp_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <ImageView
+                    android:id="@+id/odds_ref_cp_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.18"
+                    android:elevation="-1dp"
+                    android:src="@drawable/item_coin_copper"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/odds_ref_cp_odds_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_cp_guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/odds_ref_cp_odds_label"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="25" />
+
+                <TextView
+                    android:id="@+id/odds_ref_cp_odds_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/percent_chance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textAllCaps="true"
+                    app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_cp_odds_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/odds_ref_cp_odds_info" />
+
+                <TextView
+                    android:id="@+id/odds_ref_cp_of"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odds_ref_of_divider"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/odds_ref_cp_odds_info"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_cp_amount_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/odds_ref_cp_amount_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_cp_noun"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/odds_ref_cp_guideline"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    tools:text="1,000 - 3,000" />
+
+                <TextView
+                    android:id="@+id/odds_ref_cp_noun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/copper_pieces"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:textAllCaps="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/odds_ref_cp_amount_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_sp_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="@dimen/odds_ref_layout_width"
+                android:layout_height="@dimen/odds_ref_layout_height"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/odds_ref_sp_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <ImageView
+                    android:id="@+id/odds_ref_sp_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.18"
+                    android:elevation="-1dp"
+                    android:src="@drawable/item_coin_silver"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/odds_ref_sp_odds_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_sp_guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/odds_ref_sp_odds_label"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="30" />
+
+                <TextView
+                    android:id="@+id/odds_ref_sp_odds_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/percent_chance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textAllCaps="true"
+                    app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_sp_odds_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/odds_ref_sp_odds_info" />
+
+                <TextView
+                    android:id="@+id/odds_ref_sp_of"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odds_ref_of_divider"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/odds_ref_sp_odds_info"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_sp_amount_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/odds_ref_sp_amount_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_sp_noun"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/odds_ref_sp_guideline"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    tools:text="200 - 2,000" />
+
+                <TextView
+                    android:id="@+id/odds_ref_sp_noun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/silver_pieces"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:textAllCaps="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/odds_ref_sp_amount_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_ep_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="@dimen/odds_ref_layout_width"
+                android:layout_height="@dimen/odds_ref_layout_height"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/odds_ref_ep_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <ImageView
+                    android:id="@+id/odds_ref_ep_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.18"
+                    android:elevation="-1dp"
+                    android:src="@drawable/item_coin_electrum"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/odds_ref_ep_odds_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_ep_guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/odds_ref_ep_odds_label"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="35" />
+
+                <TextView
+                    android:id="@+id/odds_ref_ep_odds_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/percent_chance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textAllCaps="true"
+                    app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_ep_odds_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/odds_ref_ep_odds_info" />
+
+                <TextView
+                    android:id="@+id/odds_ref_ep_of"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odds_ref_of_divider"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/odds_ref_ep_odds_info"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_ep_amount_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/odds_ref_ep_amount_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_ep_noun"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/odds_ref_ep_guideline"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    tools:text="500 - 3,000" />
+
+                <TextView
+                    android:id="@+id/odds_ref_ep_noun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/electrum_pieces"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:textAllCaps="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/odds_ref_ep_amount_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_gp_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="@dimen/odds_ref_layout_width"
+                android:layout_height="@dimen/odds_ref_layout_height"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/odds_ref_gp_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <ImageView
+                    android:id="@+id/odds_ref_gp_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.18"
+                    android:elevation="-1dp"
+                    android:src="@drawable/item_coin_gold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/odds_ref_gp_odds_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_gp_guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/odds_ref_gp_odds_label"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="40" />
+
+                <TextView
+                    android:id="@+id/odds_ref_gp_odds_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/percent_chance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textAllCaps="true"
+                    app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_gp_odds_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/odds_ref_gp_odds_info" />
+
+                <TextView
+                    android:id="@+id/odds_ref_gp_of"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odds_ref_of_divider"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/odds_ref_gp_odds_info"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_gp_amount_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/odds_ref_gp_amount_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_gp_noun"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/odds_ref_gp_guideline"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    tools:text="1,000 - 6,000" />
+
+                <TextView
+                    android:id="@+id/odds_ref_gp_noun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gold_pieces"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:textAllCaps="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/odds_ref_gp_amount_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_hsp_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="@dimen/odds_ref_layout_width"
+                android:layout_height="@dimen/odds_ref_layout_height"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/odds_ref_hsp_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <ImageView
+                    android:id="@+id/odds_ref_hsp_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.18"
+                    android:elevation="-1dp"
+                    android:src="@drawable/item_coin_hardsilver"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/odds_ref_hsp_odds_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_hsp_guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/odds_ref_hsp_odds_label"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="35" />
+
+                <TextView
+                    android:id="@+id/odds_ref_hsp_odds_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/percent_chance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textAllCaps="true"
+                    app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_hsp_odds_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/odds_ref_hsp_odds_info" />
+
+                <TextView
+                    android:id="@+id/odds_ref_hsp_of"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odds_ref_of_divider"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/odds_ref_hsp_odds_info"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_hsp_amount_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/odds_ref_hsp_amount_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_hsp_noun"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/odds_ref_hsp_guideline"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    tools:text="500 - 3,000" />
+
+                <TextView
+                    android:id="@+id/odds_ref_hsp_noun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hard_silver_pieces"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:fontFamily="sans-serif-condensed-light"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/odds_ref_hsp_amount_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_pp_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="@dimen/odds_ref_layout_width"
+                android:layout_height="@dimen/odds_ref_layout_height"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/odds_ref_pp_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <ImageView
+                    android:id="@+id/odds_ref_pp_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.18"
+                    android:elevation="-1dp"
+                    android:src="@drawable/item_coin_platinum"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/odds_ref_pp_odds_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_pp_guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/odds_ref_pp_odds_label"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="35" />
+
+                <TextView
+                    android:id="@+id/odds_ref_pp_odds_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/percent_chance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textAllCaps="true"
+                    app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_pp_odds_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/odds_ref_pp_odds_info" />
+
+                <TextView
+                    android:id="@+id/odds_ref_pp_of"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odds_ref_of_divider"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/odds_ref_pp_odds_info"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_pp_amount_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/odds_ref_pp_amount_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_pp_noun"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/odds_ref_pp_guideline"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    tools:text="300 - 1,800" />
+
+                <TextView
+                    android:id="@+id/odds_ref_pp_noun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/platinum_pieces"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:textAllCaps="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/odds_ref_pp_amount_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_gems_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="@dimen/odds_ref_layout_width"
+                android:layout_height="@dimen/odds_ref_layout_height"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/odds_ref_gems_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <ImageView
+                    android:id="@+id/odds_ref_gems_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.18"
+                    android:elevation="-1dp"
+                    android:src="@drawable/gem_jewel_orientalemerald"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/odds_ref_gems_odds_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_gems_guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/odds_ref_gems_odds_label"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="60" />
+
+                <TextView
+                    android:id="@+id/odds_ref_gems_odds_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/percent_chance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textAllCaps="true"
+                    app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_gems_odds_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/odds_ref_gems_odds_info" />
+
+                <TextView
+                    android:id="@+id/odds_ref_gems_of"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odds_ref_of_divider"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/odds_ref_gems_odds_info"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_gems_amount_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/odds_ref_gems_amount_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_gems_noun"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/odds_ref_gems_guideline"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    tools:text="10 - 40" />
+
+                <TextView
+                    android:id="@+id/odds_ref_gems_noun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/badge_hoard_gem"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:fontFamily="sans-serif-condensed-light"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/odds_ref_gems_amount_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_art_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="@dimen/odds_ref_layout_width"
+                android:layout_height="@dimen/odds_ref_layout_height"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/odds_ref_art_guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.50" />
+
+                <ImageView
+                    android:id="@+id/odds_ref_art_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.18"
+                    android:elevation="-1dp"
+                    android:src="@drawable/artwork_fabric"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/odds_ref_art_odds_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_art_guideline"
+                    app:layout_constraintEnd_toStartOf="@+id/odds_ref_art_odds_label"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="50" />
+
+                <TextView
+                    android:id="@+id/odds_ref_art_odds_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="2dp"
+                    android:text="@string/percent_chance"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    android:textAllCaps="true"
+                    app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_art_odds_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/odds_ref_art_odds_info" />
+
+                <TextView
+                    android:id="@+id/odds_ref_art_of"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/odds_ref_of_divider"
+                    android:textSize="11sp"
+                    app:layout_constraintTop_toBottomOf="@id/odds_ref_art_odds_info"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_art_amount_info"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/odds_ref_art_amount_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@id/odds_ref_art_noun"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/odds_ref_art_guideline"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    android:textColor="?attr/colorOnSurface"
+                    android:alpha="0.7"
+                    tools:text="2 - 12" />
+
+                <TextView
+                    android:id="@+id/odds_ref_art_noun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/specific_art_cardview_header"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-light"
+                    android:textAllCaps="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/odds_ref_art_amount_info" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/odds_ref_magic_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="6dp"
+            app:cardCornerRadius="4dp"
+            android:layout_margin="4dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="@dimen/odds_ref_layout_width"
+                    android:layout_height="@dimen/odds_ref_layout_height"
+                    android:orientation="vertical"
+                    android:padding="4dp">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/odds_ref_magic_guideline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.50" />
+
+                    <ImageView
+                        android:id="@+id/odds_ref_magic_backdrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:alpha="0.18"
+                        android:elevation="-1dp"
+                        android:src="@drawable/book_runes"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_odds_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:alpha="0.7"
+                        app:layout_constraintBottom_toTopOf="@id/odds_ref_magic_guideline"
+                        app:layout_constraintEnd_toStartOf="@+id/odds_ref_magic_odds_label"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed"
+                        tools:text="30" />
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_odds_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:text="@string/percent_chance"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:alpha="0.7"
+                        android:textAllCaps="true"
+                        app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_magic_odds_info"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/odds_ref_magic_odds_info" />
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_of"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/odds_ref_of_divider"
+                        android:textSize="11sp"
+                        app:layout_constraintTop_toBottomOf="@id/odds_ref_magic_odds_info"
+                        app:layout_constraintBottom_toTopOf="@id/odds_ref_magic_amount_info"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_amount_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@id/odds_ref_magic_noun"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/odds_ref_magic_guideline"
+                        app:layout_constraintVertical_chainStyle="packed"
+                        android:textColor="?attr/colorOnSurface"
+                        android:alpha="0.7"
+                        tools:text="3" />
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_noun"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-3dp"
+                        android:text="@string/odds_ref_magic_noun"
+                        android:textSize="11sp"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-light"
+                        android:textAllCaps="true"
+                        app:layout_constraintBottom_toTopOf="@id/odds_ref_magic_qualifier"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/odds_ref_magic_amount_info" />
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_qualifier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-3dp"
+                        android:paddingHorizontal="3sp"
+                        android:textStyle="italic"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="@string/generator_label_any_magic"
+                        android:textSize="11sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/odds_ref_magic_noun" />
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_qualifier_start"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="@string/odds_ref_magic_qualifier_start"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toStartOf="@id/odds_ref_magic_qualifier"
+                        app:layout_constraintBaseline_toBaselineOf="@id/odds_ref_magic_qualifier" />
+
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_qualifier_end"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="@string/odds_ref_magic_qualifier_end"
+                        android:textSize="11sp"
+                        app:layout_constraintStart_toEndOf="@id/odds_ref_magic_qualifier"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/odds_ref_magic_qualifier" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/odds_ref_magic_add_on_divider"
+                    android:layout_width="@dimen/odds_ref_layout_width"
+                    android:layout_height="0.5dp"
+                    android:background="?attr/colorOnSurface"
+                    android:alpha="0.5"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+                <LinearLayout
+                    android:layout_width="@dimen/odds_ref_layout_width"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="2dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/odds_ref_magic_add_on_icon"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/clipart_scroll_vector_icon"
+                        app:tint="?attr/colorOnSurface"
+                        android:alpha="0.7"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+
+                    <TextView
+                        android:id="@+id/odds_ref_magic_add_on_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:textSize="11sp"
+                        android:fontFeatureSettings="smcp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:text="@string/extra_scroll_label"
+                        android:alpha="0.7"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </com.google.android.flexbox.FlexboxLayout>
+
+</LinearLayout>

@@ -3,6 +3,7 @@ package com.example.android.treasurefactory.viewmodel
 import androidx.lifecycle.*
 import com.example.android.treasurefactory.LootMutator
 import com.example.android.treasurefactory.model.Hoard
+import com.example.android.treasurefactory.model.HoardEvent
 import com.example.android.treasurefactory.model.HoardUniqueItemBundle
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.async
@@ -38,11 +39,11 @@ class HoardEditViewModel(private val repository: HMRepository): ViewModel() {
         hoardIDLiveData.value = hoardID
     }
 
-    fun saveHoard(hoard: Hoard) {
+    fun saveHoard(hoard: Hoard, editEvent: HoardEvent) {
 
         viewModelScope.launch {
             repository.updateHoard(hoard)
-            //TODO add hoard event if anything changed
+            repository.addHoardEvent(editEvent)
         }
     }
 

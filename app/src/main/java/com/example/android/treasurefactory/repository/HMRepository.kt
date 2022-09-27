@@ -54,6 +54,12 @@ class HMRepository (
     suspend fun addHoardEvent(newEvent: HoardEvent) = hoardDao.addHoardEvent(newEvent)
     // endregion
 
+    // region ( LetterCode )
+    suspend fun getLetterCodeOnce(letterID: String): LetterCode? = hoardDao.getLetterCodeOnce(letterID)
+
+    suspend fun getLetterCodesOnce(): List<LetterCode> = hoardDao.getLetterCodesOnce()
+    // endregion
+
     // endregion
 
     // region [ Gem functions ]
