@@ -17,4 +17,9 @@
         <item name="iconTint">?attr/colorOnPrimary</item>
         <item name="navigationIconTint">?attr/colorOnPrimary</item>
     </style>
+
+    <style name="NumberPicker">
+        <item name="android:textSize">22sp</item>
+    </style>
+
 </resources>

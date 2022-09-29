@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!--TODO Convert to CoordinatorLayout with NestedScrollView-->
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/hoard_generator_toolbar"
         android:layout_width="match_parent"
@@ -168,7 +170,7 @@
                                 android:visibility="gone"
                                 tools:visibility="visible"
                                 tools:itemCount="5"
-                                tools:listitem="@layout/lettercode_item"/>
+                                tools:listitem="@layout/letter_recycler_item"/>
 
                         </LinearLayout>
 

@@ -24,7 +24,7 @@
         <item name="actionBarSize">@dimen/appbar_height</item>
     </style>
 
-    <style name="MainActionBarStyle" parent="ThemeOverlay.MaterialComponents.ActionBar">
+    <style name="MainActionBarStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!--TODO extend with a night/dark theme-->
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -32,6 +32,7 @@
         <item name="android:titleTextStyle">@style/Widget.MaterialComponents.Toolbar</item>
         <item name="android:icon">@drawable/clipart_close_vector_icon</item>
         <item name="actionMenuTextColor">@color/defaultOnSecondary</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleMedium</item>
         <item name="height">?attr/actionBarSize</item>
         <item name="background">@color/defaultSecondary</item>
     </style>

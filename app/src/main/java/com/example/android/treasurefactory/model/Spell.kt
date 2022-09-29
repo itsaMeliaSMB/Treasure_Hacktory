@@ -3,11 +3,95 @@ package com.example.android.treasurefactory.model
 import androidx.room.Ignore
 import com.example.android.treasurefactory.capitalized
 
+enum class SpellSchool(val longResName: String, val shortResName: String){
+    ABJURATION("school_abj_l","school_abj_s"),
+    ALTERATION("school_alt_l","school_alt_s"),
+    CONJURATION("school_con_l","school_con_s"),
+    DIVINATION("school_div_l","school_div_s"),
+    ENCHANTMENT("school_enc_l","school_enc_s"),
+    EVOCATION("school_evo_l","school_evo_s"),
+    ILLUSION("school_ill_l","school_ill_s"),
+    NECROMANCY("school_nec_l","school_nec_s")
+}
+
+enum class ClericalSphere(val resName: String){
+    AIR("sphere_air"),
+    ANIMAL("sphere_animal"),
+    CHARM("sphere_charm"),
+    COMBAT("sphere_combat"),
+    CREATION("sphere_creation"),
+    DEVOTIONAL("sphere_devotional"),
+    DIVINATION("sphere_divination"),
+    EARTH("sphere_earth"),
+    FIRE("sphere_fire"),
+    HEALING("sphere_healing"),
+    HURTING("sphere_hurting"),
+    NECROMANTIC("sphere_necromantic"),
+    PLANT("sphere_plant"),
+    SUMMONING("sphere_summoning"),
+    SUN("sphere_sun"),
+    TRAVELLER("sphere_traveller"),
+    WARDING("sphere_warding"),
+    WATER("sphere_water"),
+    WEATHER("sphere_weather")
+}
+
+enum class ArcaneSpecialist(val resString: String){
+    ABJURER("specialist_abjurer"),
+    ABJURER_DS("specialist_ds_abjurer"),
+    BATTLE_MAGE("specialist_battle_mage"),
+    BLOOD_MAGE("specialist_blood_mage"),
+    CONJURER("specialist_conjurer"),
+    CONJURER_DS("specialist_ds_conjurer"),
+    DIVINER("specialist_diviner"),
+    DIVIDER_DS("specialist_ds_diviner"),
+    ELEMENTALIST_FIRE("specialist_fire_elementalist"),
+    ELEMENTALIST_WATER("specialist_water_elementalist"),
+    ELEMENTALIST_AIR("specialist_air_elementalist"),
+    ELEMENTALIST_EARTH("specialist_earth_elementalist"),
+    ENCHANTER("specialist_enchanter"),
+    ENCHANTER_DS("specialist_ds_enchanter"),
+    ILLUSIONIST("specialist_illusionist"),
+    ILLUSIONIST_DS("specialist_ds_illusionist"),
+    INVOKER("specialist_invoker"),
+    INVOKER_DS("specialist_ds_invoker"),
+    NECROMANCER("specialist_necromancer"),
+    NECROMANCER_DS("specialist_ds_necromancer"),
+    PAINTED_MAGE("specialist_painter_mage"),
+    TRANSMUTER("specialist_transmuter"),
+    TRANSMUTER_DS("specialist_ds_transmuter"),
+    WILD_MAGE("specialist_wild_mage"),
+    ANTI_MAGE("specialist_anti_mage"),
+    GUARDIAN("specialist_guardian"),
+    CONSTRUCTOR("specialist_constructor"),
+    METAMORPHER("specialist_metamorpher"),
+    TRANSPORTER("specialist_transporter"),
+    CONJURER_SP("specialist_sp_conjurer"),
+    POWER_SPEAKER("specialist_power_speaker"),
+    SUMMONER("specialist_summoner"),
+    DETECTIVE("specialist_detective"),
+    SEER("specialist_seer"),
+    ITEMIST("specialist_itemist"),
+    PUPPETEER("specialist_puppeteer"),
+    HYPNOTIST("specialist_hypnotist"),
+    SHADOW_WEAVER("specialist_shadow_weaver"),
+    DEMOLITIONIST("specialist_demolitionist"),
+    ICER("specialist_icer"),
+    PYROTECHNICIAN("specialist_pyrotechnician"),
+    SNIPER("specialist_sniper"),
+    ANIMATOR("specialist_animator"),
+    EXTERMINATOR("specialist_exterminator")
+}
+
+
+
 data class Spell(val templateID: Int = 0, val name: String = "<undefined spell>", val type: SpCoDiscipline,
                  val spellLevel: Int= 0,
                  val sourceText: String = "<undefined source>", val sourcePage: Int = 0,
-                 val schools: List<String>, val spheres: List<String>, val subclass: String,
-                 val restrictions : List<String>, val notes: List<String>, var extraPages: Int = 0) {
+                 val schools: List<SpellSchool>, val spheres: List<ClericalSphere>, val subclass: String,
+                 val restrictions : List<ArcaneSpecialist>, val notes: List<String>,
+                 var extraPages: Int = 0 //TODO remove from signiture
+) {
 
     @Ignore
     fun getRestrictionsString():String {
@@ -70,7 +154,9 @@ data class Spell(val templateID: Int = 0, val name: String = "<undefined spell>"
 
             val input = _input.trim().lowercase()
 
+
             val tagMap = mapOf(
+
                 "abjurer" to "Abjurer",
                 "ds_abjurer" to "Double specialist; Abjurer",
                 "battle_mage" to "Battle Mage",

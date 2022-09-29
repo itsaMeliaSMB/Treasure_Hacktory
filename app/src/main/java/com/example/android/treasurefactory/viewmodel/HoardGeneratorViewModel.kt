@@ -982,6 +982,22 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
     }
     // endregion
 
+    suspend fun newCompileLetterHoardOrder(): HoardOrder{
+
+        // Compile iterable key-value pairs of what codes to query
+
+        // Iterate through each key
+
+            // Pull entry
+
+            // If valid, roll and and add results for entry
+
+        // Compile results of rolls and hoard identifiers as hoard order
+
+        return HoardOrder()
+
+    }
+
     // region [ Order compilation functions ]
     fun compileLetterCodeHoardOrder() : HoardOrder {
 
@@ -1155,6 +1171,8 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
         viewModelScope.launch {
 
             setRunningAsync(true)
+
+            //TODO prepare hoard order asynchronously
 
             val lootGenerator = LootGeneratorAsync(hmRepository)
 

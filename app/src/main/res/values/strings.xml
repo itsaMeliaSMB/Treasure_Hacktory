@@ -18,4 +18,20 @@
     <string name="hoard_overview_fragment_title">Hoard overview</string>
     <string name="unique_details_fragment_title">Item details</string>
     <string name="hoard_event_log_fragment_title">Event Log</string>
+    <string name="school_abj_l">Abjuration</string>
+    <string name="school_abj_s">Abj</string>
+    <string name="school_alt_l">Alteration</string>
+    <string name="school_alt_s">Alt</string>
+    <string name="school_con_l">Conjuration / Summoning</string>
+    <string name="school_con_s">Con</string>
+    <string name="school_div_l">Divination</string>
+    <string name="school_div_s">Div</string>
+    <string name="school_enc_l">Enchantment / Charm</string>
+    <string name="school_enc_s">Enc</string>
+    <string name="school_evo_l">Evocation / Invocation</string>
+    <string name="school_evo_s">Evo</string>
+    <string name="school_ill_l">Illusion / Phantasm</string>
+    <string name="school_ill_s">Ill</string>
+    <string name="school_nec_l">Necromancy</string>
+    <string name="school_nec_s">Nec</string>
 </resources>

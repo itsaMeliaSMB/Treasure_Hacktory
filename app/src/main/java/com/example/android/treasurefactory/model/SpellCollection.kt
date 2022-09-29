@@ -5,6 +5,8 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
+data class SpellEntry(val spellID: Int, val spellLevel: Int = 1, val extraPages: Int = 0)
+
 @Entity(tableName = "hackmaster_spell_collection_table")
 data class SpellCollection(
     @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
@@ -16,7 +18,7 @@ data class SpellCollection(
     var properties: List<Pair<String,Double>> = emptyList(),
     var gpValue: Double = 0.0,
     var xpValue: Int = 0,
-    var spells: List<Spell> = emptyList(),
+    var spells: List<SpellEntry> = emptyList(),
     var curse: String = "") {
 
     @Ignore
