@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/hoard_generator_toolbar"
+        <!--TODO Update to reflect CoordinatorLayout in portrait orientation -->
+
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/appbar_height"
-        app:title="@string/hoard_generator_fragment_title"
-        app:navigationIcon="@drawable/clipart_back_vector_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/Widget.Design.AppBarLayout"/>
+        android:layout_height="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/hoard_generator_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbar_height"
+            app:title="@string/hoard_generator_fragment_title"
+            app:navigationIcon="@drawable/clipart_back_vector_icon"
+            app:layout_scrollFlags="noScroll" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="4dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hoard_generator_toolbar">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_width="256dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
             android:orientation="vertical">
 
             <TextView
@@ -58,7 +61,7 @@
                     android:maxLines="1"
                     android:maxLength="50"
                     android:hint="@string/hoard_name_entry_hint"
-                    tools:text="Blorkby's Stash"/>
+                    tools:text="Blorkby's Stash" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,30 +70,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hoard_gen_label"
-                android:fontFeatureSettings="smcp"/>
+                android:fontFeatureSettings="smcp" />
 
             <RadioGroup
                 android:id="@+id/generator_method_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="2">
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/generator_method_lettercode"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:layout_weight="1"
                     android:checked="true"
                     android:paddingStart="8dp"
+                    android:layout_marginBottom="4dp"
                     android:text="@string/gen_method_letter_label"
                     android:textAllCaps="true" />
 
                 <RadioButton
                     android:id="@+id/generator_method_specific"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:layout_weight="1"
                     android:checked="false"
                     android:paddingStart="8dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/gen_method_specific_label"
                     android:textAllCaps="true" />
 
@@ -98,7 +104,8 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp">
 
                 <LinearLayout
                     android:id="@+id/generator_bottom_button_group"
@@ -109,19 +116,19 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/generator_reset_button"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/reset"
                         android:textAllCaps="true"
                         android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:backgroundTint="?attr/colorPrimaryDark"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/generator_generate_button"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="16dp"
                         android:gravity="center"
                         android:text="@string/generate"
                         android:textAllCaps="true"
@@ -150,7 +157,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/generator_waiting_text_string"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                 </LinearLayout>
 
@@ -158,23 +165,17 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="match_parent"/>
-
-        <ScrollView
-                android:id="@+id/generator_scrollview"
-                android:layout_width="0dp"
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/generator_nested_scroll"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:scrollbars="vertical">
+                android:fillViewport="true">
 
                 <ViewAnimator
                     android:id="@+id/generator_animator_frame"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="8dp"
-                    android:fillViewport="true"
                     android:inAnimation="@anim/nav_default_enter_anim"
                     android:outAnimation="@anim/nav_default_exit_anim">
 
@@ -182,6 +183,7 @@
                         android:id="@+id/generator_lettercode_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
@@ -236,7 +238,9 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:visibility="gone"
-                                    tools:listitem="@layout/lettercode_item"/>
+                                    tools:visibility="visible"
+                                    tools:itemCount="10"
+                                    tools:listitem="@layout/letter_recycler_item" />
 
                             </LinearLayout>
 
@@ -370,7 +374,7 @@
                                         android:textSize="16sp"
                                         android:textStyle="bold"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintBaseline_toBaselineOf="@id/generator_coinage_minimum_input"/>
+                                        app:layout_constraintBaseline_toBaselineOf="@id/generator_coinage_minimum_input" />
 
                                     <androidx.constraintlayout.widget.Barrier
                                         android:id="@+id/generator_coinage_barrier"
@@ -397,7 +401,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:textAlignment="viewEnd"
-                                            android:text="0.00"/>
+                                            android:text="0.00" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -419,7 +423,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
                                             android:textAlignment="viewEnd"
-                                            android:text="0.00"/>
+                                            android:text="0.00" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -593,7 +597,7 @@
                                             android:inputType="number"
                                             android:textSize="18sp"
                                             android:textAlignment="center"
-                                            android:text="0"/>
+                                            android:text="0" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -636,7 +640,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:inputType="none"
-                                            tools:text="Don't Care"/>
+                                            tools:text="Don't Care" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -660,7 +664,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:inputType="none"
-                                            tools:text="Don't Care"/>
+                                            tools:text="Don't Care" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -750,7 +754,7 @@
                                             android:inputType="number"
                                             android:textSize="18sp"
                                             android:textAlignment="center"
-                                            android:text="0"/>
+                                            android:text="0" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -791,7 +795,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:inputType="none"
-                                            tools:text="Don't Care"/>
+                                            tools:text="Don't Care" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -814,7 +818,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:inputType="none"
-                                            tools:text="Don't Care"/>
+                                            tools:text="Don't Care" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -827,7 +831,7 @@
                                         android:layout_marginTop="8dp"
                                         android:paddingBottom="8dp"
                                         android:text="@string/maps_can_replace_paper_art"
-                                        android:textStyle="italic"/>
+                                        android:textStyle="italic" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -915,7 +919,7 @@
                                             android:inputType="number"
                                             android:textSize="18sp"
                                             android:textAlignment="center"
-                                            android:text="0"/>
+                                            android:text="0" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -947,7 +951,7 @@
                                             android:inputType="number"
                                             android:textSize="18sp"
                                             android:textAlignment="center"
-                                            android:text="0"/>
+                                            android:text="0" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -969,7 +973,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         app:barrierDirection="end"
-                                        app:constraint_referenced_ids="generator_magic_scroll_allowed_label"/>
+                                        app:constraint_referenced_ids="generator_magic_scroll_allowed_label" />
 
                                     <CheckBox
                                         android:id="@+id/generator_scroll_spell_checkbox"
@@ -1022,7 +1026,7 @@
                                             android:inputType="number"
                                             android:textSize="18sp"
                                             android:textAlignment="center"
-                                            android:text="0"/>
+                                            android:text="0" />
 
                                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -1386,8 +1390,7 @@
                                         android:textSize="14sp"
                                         android:textStyle="italic"
                                         app:layout_constraintBaseline_toBaselineOf="@id/generator_spell_source_splat_checkbox"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        />
+                                        app:layout_constraintStart_toStartOf="parent" />
 
                                     <androidx.constraintlayout.widget.Barrier
                                         android:id="@+id/generator_spell_source_barrier"
@@ -1495,8 +1498,8 @@
 
                 </ViewAnimator>
 
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
 
-    </LinearLayout>
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>

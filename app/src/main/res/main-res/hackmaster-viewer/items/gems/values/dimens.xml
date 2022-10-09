@@ -9,4 +9,5 @@
     <dimen name="odds_table_item_column_width">72dp</dimen>
     <dimen name="odds_ref_layout_width">112dp</dimen>
     <dimen name="odds_ref_layout_height">108dp</dimen>
+    <dimen name="spell_item_height">64dp</dimen>
 </resources>

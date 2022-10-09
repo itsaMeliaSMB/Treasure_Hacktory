@@ -54,7 +54,9 @@ enum class SpCoType{
 }
 
 /** Sources to pull spells from in addition to the Player's Handbook. */
-data class SpCoSources(val splatbooksOK: Boolean, val hackJournalsOK: Boolean, val modulesOK: Boolean)
+data class SpCoSources(val splatbooksOK: Boolean, val hackJournalsOK: Boolean,
+                       val modulesOK: Boolean, val beyondFourthOK: Boolean = false,
+                       val researchOK: Boolean = false, val homebrewOK: Boolean = false)
 
 /** Which curses may be applied to this spell collection. */
 enum class SpCoCurses{

@@ -947,9 +947,10 @@
                         android:layout_height="match_parent"
                         android:alpha="0.18"
                         android:elevation="-1dp"
+                        android:scaleType="fitXY"
                         android:src="@drawable/book_runes"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
                         android:id="@+id/odds_ref_magic_odds_info"
@@ -1074,6 +1075,7 @@
                     tools:visibility="visible"/>
 
                 <LinearLayout
+                    android:id="@+id/odds_ref_magic_add_on_layout"
                     android:layout_width="@dimen/odds_ref_layout_width"
                     android:layout_height="wrap_content"
                     android:paddingVertical="2dp"
@@ -1086,11 +1088,9 @@
                         android:id="@+id/odds_ref_magic_add_on_icon"
                         android:layout_width="12dp"
                         android:layout_height="12dp"
-                        android:src="@drawable/clipart_scroll_vector_icon"
+                        tools:src="@drawable/clipart_scroll_vector_icon"
                         app:tint="?attr/colorOnSurface"
-                        android:alpha="0.7"
-                        android:visibility="gone"
-                        tools:visibility="visible"/>
+                        android:alpha="0.7"/>
 
                     <TextView
                         android:id="@+id/odds_ref_magic_add_on_label"
@@ -1101,10 +1101,8 @@
                         android:fontFeatureSettings="smcp"
                         android:textStyle="bold"
                         android:textColor="?attr/colorOnSurface"
-                        android:text="@string/extra_scroll_label"
-                        android:alpha="0.7"
-                        android:visibility="gone"
-                        tools:visibility="visible"/>
+                        tools:text="@string/extra_scroll_label"
+                        android:alpha="0.7"/>
 
 
                 </LinearLayout>

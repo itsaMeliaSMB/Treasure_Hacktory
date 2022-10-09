@@ -233,6 +233,22 @@ class HMRepository (
     }
     // endregion
 
+    // region ( Spell )
+
+    suspend fun getSpell(spellId: Int): Spell? =
+        spellCollectionDao.getSpell(spellId)
+
+    suspend fun getSpellByName(spellName: String, discipline: Int, level: Int): Spell? =
+        spellCollectionDao.getSpellByNmDsLv(spellName, discipline, level)
+
+    suspend fun getSpellIDs(discipline: Int, level: Int): List<Int> =
+        spellCollectionDao.getSpellIDs(discipline, level)
+
+    suspend fun addSpell(entry: Spell) {
+        spellCollectionDao.addSpell(entry)
+    }
+    // endregion
+
     // region ( SpellCollection )
 
     fun getSpellCollectionCount(hoardID: Int): LiveData<Int> =

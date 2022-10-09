@@ -2,9 +2,6 @@ package com.example.android.treasurefactory
 
 import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.core.graphics.component1
-import androidx.core.graphics.component2
-import androidx.core.graphics.component3
 import com.example.android.treasurefactory.database.GemTemplate
 import com.example.android.treasurefactory.database.MagicItemTemplate
 import com.example.android.treasurefactory.database.SpellTemplate
@@ -31,15 +28,13 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
     override val DUMMY_SPELL = SpellTemplate(0,"\"Push\"",0,"\"Player's Handbook\"",184,0,1,"Con","","","","Invalid spell.")
 
-    override val SAMPLE_GEM_TEMPLATE = GemTemplate(57,10,"ruby",5, 0,"clear red to deep crimson (Corundum)","gem_jewel_ruby")
-
-    override val SAMPLE_MAGIC_ITEM_TEMPLATE = MagicItemTemplate(
-        588,5,"Robe of Scintillating Colors","GameMaster's Guide",263,
-        1250, 1500, 0, "",0,0,0,
-        "A10","",0,0,1,1,0,0,
-        0,"",0,"",0,"",
-        0,0,0,0,0,0
+    val FALLBACK_GEM_TEMPLATE =
+        GemTemplate(
+        0, 5, "Stone of Error Handling", 0, 2,
+            "dull and indicates an error in gemstone generation", "stone_hard"
     )
+
+    val FALLBACK_SPELL = Spell(517, name = "Push", spellLevel = 1, refType = ReferenceType.CORE, type= SpCoDiscipline.ARCANE, schools = listOf(SpellSchool.CONJURATION), spheres = emptyList(), subclass= "", note= "")
     // endregion
 
     init {
@@ -71,9 +66,13 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 val newName = hoardOrder.hoardName.takeUnless{ it.isBlank()} ?: "Untitled Hoard"
                 val iconId = "container_chest"
                 val effortValue = 5.0
-                val gpTotal = (hoardOrder.copperPieces * 0.01) + (hoardOrder.silverPieces * 0.1) +
-                        (hoardOrder.electrumPieces * 0.5) + (hoardOrder.goldPieces * 1.0) +
-                        (hoardOrder.hardSilverPieces * 2.0) + (hoardOrder.platinumPieces * 5.0)
+                val gpTotal =
+                    (hoardOrder.copperPieces * 0.01) +
+                            (hoardOrder.silverPieces * 0.1) +
+                            (hoardOrder.electrumPieces * 0.5) +
+                            (hoardOrder.goldPieces * 1.0) +
+                            (hoardOrder.hardSilverPieces * 2.0) +
+                            (hoardOrder.platinumPieces * 5.0)
                 val xpTotal = (gpTotal / effortValue).roundToInt()
 
                 return Hoard(
@@ -111,12 +110,11 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     var newGem : Gem
                     var rollsMade = 0
 
-                    // TODO go back and fix values in strings.xml for gem values, OrderParams
                     do {
-                        newGem = createGem(newHoardID) //TODO add
+                        newGem = createGem(newHoardID)
                         rollsMade ++
                     } while ((rollsMade < maxRerolls) &&
-                        ((newGem.type + newGem.size + newGem.quality + newGem.variation)
+                        ((newGem.type + newGem.size + newGem.quality)
                             .coerceIn(0..17) !in hoardOrder.genParams.gemParams.levelRange))
 
                     innerGemPile.add(newGem)
@@ -590,16 +588,16 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         // region [ Pull gem template ]
 
-        val gemTemplate = if (givenTemplate in 1..58){
+        val gemTemplate : GemTemplate = if (givenTemplate in 1..58){
 
-            repository.getGemTemplate(givenTemplate) ?: SAMPLE_GEM_TEMPLATE //TODO refactor default return
+            repository.getGemTemplate(givenTemplate)
 
         } else {
 
             repository.getGemTemplatesByType(gemType).let{
-                if (it.isNotEmpty()) { it.random() } else { SAMPLE_GEM_TEMPLATE }
+                if (it.isNotEmpty()) { it.random() } else null
             }
-        }
+        } ?: FALLBACK_GEM_TEMPLATE
         // endregion
 
         // region [ Roll size ]
@@ -641,14 +639,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         // endregion
 
-        // region [ Start value history list ]
-
-        val valueHistory = listOf(
-            Pair(Calendar.getInstance().timeInMillis,"Initial market value: $initialGPValue gp.")
-        )
-
-        // endregion
-
         return Gem(0,
             parentHoardID,
             System.currentTimeMillis(),
@@ -656,12 +646,10 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             gemType,
             gemSize,
             gemQuality,
-            0,
             gemTemplate.name,
             gemTemplate.opacity,
             gemTemplate.description,
-            initialGPValue,
-            valueHistory
+            initialGPValue
         )
     }
 
@@ -1207,7 +1195,13 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             return listBuilder.toList()
         }
 
-        var template:       MagicItemTemplate = SAMPLE_MAGIC_ITEM_TEMPLATE //TODO REPLACE REPLACE REPLACE REPLACE REPLACE
+        var template= MagicItemTemplate(0, 1, "Template of Error Handling",
+            1, "Treasure Hacktory", 0, 0, 1, 0,
+            "Something went wrong when generating this magical item.",
+            dieCount = 0, dieSides = 0, dieMod = 0, "A17", "container_chest",
+            0, 0, 0, 0, 0, 0, 0,
+            "", 1, "", 0, "", 0, 0,
+            0, 0, 0, 0) // Start as dummy template for error handling
 
         // region < Magic item detail holders >
 
@@ -1541,11 +1535,39 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 Log.e("createMagicItemTuple | $tagSuffix",msgStr)
 
                 return MagicItemTemplate(
-                    0,0,"Null item","???",0,
-                    0, 0, 0, noteString,0,0,0,
-                    "Mundane","",0,0,0,0,0,0,
-                    0,"",0,"",0,"",
-                    0,0,0,0,0,0
+                    0,
+                    0,
+                    "Null item",
+                    1,
+                    source = "???",
+                    page = 0,
+                    xpValue = 0,
+                    gpValue = 0,
+                    multiType = 0,
+                    notes = noteString,
+                    dieCount = 0,
+                    dieSides = 0,
+                    dieMod = 0,
+                    tableType = "Mundane",
+                    iconRef = "",
+                    fUsable = 0,
+                    tUsable = 0,
+                    cUsable = 0,
+                    mUsable = 0,
+                    dUsable = 0,
+                    hasChild = 0,
+                    parentID = 0,
+                    imitationKeyword = "",
+                    isCursed = 0,
+                    commandWord = "",
+                    intelChance = 0,
+                    alignment = "",
+                    iPower = 0,
+                    iiPower = 0,
+                    iiiPower = 0,
+                    ivPower = 0,
+                    vPower = 0,
+                    viPower = 0
                 )
             }
         }
@@ -3756,7 +3778,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                     spellList.add(
                         getSpellByLevelUp(
-                            spellLevel, "",
+                            spellLevel, null,
                             order.rerollChoices, order.allowedSources.splatbooksOK
                         )
                     )
@@ -3785,7 +3807,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 repeat(order.spellCount) {
                     spellList.add(getRandomSpell(spellLevel,SpCoDiscipline.ARCANE,
-                        order.allowedSources,order.allowRestricted
+                        order.allowedSources,order.rerollChoices,order.allowRestricted
                     ))
                 }
 
@@ -3796,7 +3818,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 repeat(order.spellCount) {
                     spellList.add(getRandomSpell(spellLevel,SpCoDiscipline.DIVINE,
-                        order.allowedSources,order.allowRestricted
+                        order.allowedSources,order.rerollChoices,order.allowRestricted
                     ))
                 }
             }
@@ -3805,7 +3827,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         return SpellCollection(0, parentHoard,
             System.currentTimeMillis(),"ring_runes",ringName,SpCoType.RING,
             gpValue = 7000.00, xpValue = 2500,
-            spells = spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name })))
+            spells = spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name }))
+                .map { it.toSpellEntry() })
     }
 
     /* TODO finish implementing after first shipped build
@@ -3941,7 +3964,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     } else {
                         this
                     }
-
                 }
 
                 else                  -> SpCoGenMethod.TRUE_RANDOM
@@ -3989,6 +4011,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         fun SpCoDiscipline.asClassString() : String = when (this) {
 
+            //TODO change to getString() for localization if translations are implemented
             SpCoDiscipline.ARCANE   -> "Magic-User"
             SpCoDiscipline.DIVINE   -> "Cleric"
             SpCoDiscipline.NATURAL  -> "Druid"
@@ -4026,7 +4049,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     val spellLevel = spellRange.random()
 
                     spellList.add(getRandomSpell(spellLevel,spellType,
-                        order.allowedSources,order.allowRestricted
+                        order.allowedSources, order.rerollChoices, order.allowRestricted
                     ))
                 }
             }
@@ -4041,7 +4064,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                             val spellLevel = spellRange.random()
 
-                            spellList.add(getSpellByLevelUp(spellLevel,"",
+                            spellList.add(getSpellByLevelUp(spellLevel,null,
                                 order.rerollChoices,order.allowedSources.splatbooksOK))
                         }
                     }
@@ -4123,19 +4146,19 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             /** Example curse list on GMG pgs 225-226 */
             val cursesExample = listOf(
                 "(GMG) Bad luck (-1 on attacks and saving throws).",
-                "(GMG) he character's beard grows one inch per minute.",
+                "(GMG) The character's beard grows one inch per minute.",
                 "(GMG) The character is teleported away from the rest of the party.",
                 "(GMG) Random monster appears and attacks (See GMG pg 319).",
                 "(GMG) The character is polymorphed into a mouse.",
-                "(GMG) The character shrinks to half his normal size.",
-                "(GMG) This character is stricken with weakness, halving his Strength score.",
-                "(GMG) The character falls into a deep sleep from which he cannot be roused.",
+                "(GMG) The character shrinks to half [their] normal size.",
+                "(GMG) This character is stricken with weakness, halving [their] Strength score.",
+                "(GMG) The character falls into a deep sleep from which [they] cannot be roused.",
                 "(GMG) The character develops an uncontrollable appetite.",
                 "(GMG) The character must always talk in rhyme (preventing spell casting).",
                 "(GMG) The character is stricken with cowardice and must make a morale check every time a monster is encountered.",
                 "(GMG) The character's alignment is changed.",
                 "(GMG) The character suffers amnesia.",
-                "(GMG) The character feels compelled to give away all his belongings.",
+                "(GMG) The character feels compelled to give away all [their] belongings.",
                 "(GMG) The character must save vs. paralyzation or suffer petrification.",
             )
 
@@ -4152,21 +4175,31 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
             /** Homebrew curses thought up by app developer */
             val cursesHomebrew = listOf(
-                "[TrH] All reversible spells are reversed. Otherwise, minimum 50% chance of spell failure.",
-                "[TrH] All spells inscribed on the scroll go off at once, as if a spell-jacked caster mis-casted.",
-                "[TrH] The character loses access to one of their talents, determined at random.",
-                "[TrH] Loud, embarrassing sound is produced on casting. User must save vs. apology or lose 5 honor.",
-                "[TrH] The target of any beneficial spell (or, fail that, the caster) will suffer a Fumble on their next attack (see GMG pg 124, Table 8KK).",
-                "[TrH] All magic items in character's possessions rendered unusable for 10 turns.",
-                "[TrH] Spell effect is subject to potion miscibility effect as if imbibed (see GMG pg 221, Table B1).",
-                "[TrH] Scroll explodes into a puff of gas (see GMG pg 335, Table F20) when used.",
-                "[TrH] Trap materializes and activates, targeting user (see GMG pg 335, Table F19). Re-roll if nonsensical.",
-                "[TrH] All active magical enhancements are dispelled on all friendly creatures within 10 ft of caster.",
-                "[TrH] All active magical detriments are doubled (GM chooses if duration, magnitude, etc) on all friendly creatures within 10 ft of caster.",
-                "[TrH] Effects of any spells cast from this scroll are purely illusory.",
-                "[TrH] All ink on items in character's possession disappears for 24 hours.",
-                "[TrH] The character immediately becomes one step more intoxicated (see GMG pgs 170-172).",
-                "[TrH] The GM may use a single GM coupon, provided they do so immediately and target the caster."
+                "<TrH> All reversible spells are reversed. Otherwise, minimum 50% chance of spell failure.",
+                "<TrH> All spells inscribed on the scroll go off at once, as if a spell-jacked caster mis-casted.",
+                "<TrH> The character loses access to one of their talents, determined at random.",
+                "<TrH> Loud, embarrassing sound is produced on casting. User must save vs. apology or lose 5 honor.",
+                "<TrH> The target of any beneficial spell (or, fail that, the caster) will suffer a Fumble on their next attack (see GMG pg 124, Table 8KK).",
+                "<TrH> All magic items in character's possessions rendered unusable for 10 turns.",
+                "<TrH> Spell effect is subject to potion miscibility effect as if imbibed (see GMG pg 221, Table B1).",
+                "<TrH> Scroll explodes into a puff of gas (see GMG pg 335, Table F20) when used.",
+                "<TrH> Trap materializes and activates, targeting user (see GMG pg 335, Table F19). Re-roll if nonsensical.",
+                "<TrH> All active magical enhancements are dispelled on all friendly creatures within 10 ft of caster.",
+                "<TrH> All active magical detriments are doubled (GM chooses if duration, magnitude, etc) on all friendly creatures within 10 ft of caster.",
+                "<TrH> Effects of any spells cast from this scroll are purely illusory.",
+                "<TrH> All ink on items in character's possession disappears for 24 hours.",
+                "<TrH> The character immediately becomes one step more intoxicated (see GMG pgs 170-172).",
+                "<TrH> The GM may use a single GM coupon, provided they do so immediately and target the caster.",
+                "<TrH> Any spells the user cast after casting a spell from this scroll (including that spell) for 24 hours are treated as if the caster is spell-jacked.",
+                "<TrH> The caster must save vs. Apology or be compelled to blurt out their darkest or most embarrassing secret.",
+                "<TrH> The caster must save vs. Poison or contract a disease from HackJournal #17, page 9.",
+                "<TrH> All un-cast scribed spells in the caster's possession must save vs. Spell or be turned into hostile Explosive Runes.",
+                "<TrH> The caster is considered the prime suspect in a recent crime in the nearest settlement, regardless of their actual guilt.",
+                "<TrH> The caster must save vs. Polymorph or have two of their attribute scores swapped (Roll a d8, re-rolling 8).",
+                "<TrH> Any spell cast from this spell inflicts 3 points of damage per spell level on the caster (cantrips inflict 1).",
+                "<TrH> All containers on the caster's person becomes transparent for 24 hours.",
+                "<TrH> A 30'-radius spherical version of Hiamohr's Unfortunate Incident immediately takes effect, centered on (and including) the caster.",
+                "<TrH> The caster immediately sheds all hair on their head and body."
             )
 
             val curseList = when (order.allowedCurses) {
@@ -4180,7 +4213,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 SpCoCurses.NONE             -> listOf("")
             }
 
-            val curseIndex = Random.nextInt(0,curseList.size)
+            val curseIndex = Random.nextInt(0, curseList.size)
 
             curse = curseList[curseIndex] + if (curseList[curseIndex].isNotBlank()) " {#${curseIndex}}" else ""
         }
@@ -4189,12 +4222,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         // region [ Get item name ]
 
-        itemName = "${if (curse.isNotBlank()) "Cursed " else ""}${
-            when(spellType){
-                SpCoDiscipline.ARCANE -> "Magic-user"
-                SpCoDiscipline.DIVINE -> "Cleric"
-                else -> "Non-standard"
-            }} Spell Scroll " +
+        itemName = (if (curse.isNotBlank()) "Cursed " else "") +
+                "${order.spellType.asClassString()} Spell Scroll " +
                 "(${spellCount}x Lvl ${spellRange.first}-${spellRange.last})"
 
         // endregion
@@ -4238,7 +4267,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             propertiesList.toList(),
             gpTotal,
             xpTotal,
-            spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name })),
+            spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name })).map { it.toSpellEntry() },
             curse
         )
     }
@@ -4344,7 +4373,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     }
 
     override suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
-                                        sources: SpCoSources, allowRestricted: Boolean): Spell {
+                                        sources: SpCoSources, rerollChoices: Boolean,
+                                        allowRestricted: Boolean): Spell {
 
         val discipline = if (_discipline == SpCoDiscipline.ALL_MAGIC) {
                 listOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE,SpCoDiscipline.NATURAL).random()
@@ -4352,304 +4382,304 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         val inputLevel = if (discipline == SpCoDiscipline.ARCANE) {
             _inputLevel.coerceIn(0..9) } else { _inputLevel.coerceIn(1..7) }
         val spellIDs = when (discipline) {
-            SpCoDiscipline.ARCANE   -> repository.getSpellTemplateIDs(0,inputLevel).toMutableSet()
-            SpCoDiscipline.DIVINE   -> repository.getSpellTemplateIDs(1,inputLevel).toMutableSet()
-            else                    -> repository.getSpellTemplateIDs(2,inputLevel).toMutableSet()
+            SpCoDiscipline.ARCANE   -> repository.getSpellIDs(0,inputLevel).toMutableSet()
+            SpCoDiscipline.DIVINE   -> repository.getSpellIDs(1,inputLevel).toMutableSet()
+            else                    -> repository.getSpellIDs(2,inputLevel).toMutableSet()
         }
-        val validSources = mutableListOf(0).apply {
-            if (sources.splatbooksOK) add(1)
-            if (sources.hackJournalsOK) add(2)
-            if (sources.splatbooksOK) add(3)
+        val validSources = mutableListOf(ReferenceType.CORE).apply {
+            if (sources.splatbooksOK) add(ReferenceType.SPLATBOOK)
+            if (sources.hackJournalsOK) add(ReferenceType.HACKJOURNAL)
+            if (sources.modulesOK) add(ReferenceType.PUBLISHED_MODULE)
+            if (sources.beyondFourthOK) add(ReferenceType.BEYOND_HM4E)
+            if (sources.researchOK) add(ReferenceType.RESEARCHED)
+            if (sources.homebrewOK) add(ReferenceType.OTHER_HOMEBREW)
         }.toList()
 
-        var tempHolder : SpellTemplate? = null
+        var spellHolder : Spell? = null
 
-        fun SpellTemplate?.isNotValid() : Boolean {
+        fun Spell?.isNotValid() : Boolean {
 
             return ( this == null ) ||
                     !( validSources.contains(this.refType) &&
-                            (this.restrictions.isBlank() || allowRestricted) )
+                            (this.restrictions.isEmpty() || allowRestricted)) ||
+                    (rerollChoices && this.name.contains(" Choice")
+                            && this.refType.ordinal > 3)
         }
 
-        while(spellIDs.isNotEmpty() && tempHolder == null) {
+        while(spellIDs.isNotEmpty() && spellHolder == null) {
 
             val pulledID = spellIDs.random()
 
             spellIDs.remove(pulledID)
 
-            tempHolder = repository.getSpellTemplate(pulledID)
+            spellHolder = repository.getSpell(pulledID)
 
-            if (tempHolder.isNotValid()) tempHolder = null
+            if (spellHolder.isNotValid()) spellHolder = null
         }
 
-        return convertTemplateToSpell(tempHolder ?: DUMMY_SPELL)
+        return spellHolder ?: FALLBACK_SPELL
     }
 
-    override suspend fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: String, rerollChoices: Boolean,
-                                           useSSG: Boolean): Spell {
+    override suspend fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: SpellSchool?,
+                                           rerollChoices: Boolean, useSSG: Boolean): Spell {
 
         val gmgSpellTablePgs = mapOf(
-            "Div" to 77,
-            "Ill" to 77,
-            "Abj" to 78,
-            "Enc" to 78,
-            "Con" to 78,
-            "Nec" to 78,
-            "Alt" to 79,
-            "Evo" to 79
+            SpellSchool.DIVINATION to 77,
+            SpellSchool.ILLUSION to 77,
+            SpellSchool.ABJURATION to 78,
+            SpellSchool.ENCHANTMENT to 78,
+            SpellSchool.CONJURATION to 78,
+            SpellSchool.NECROMANCY to 78,
+            SpellSchool.ALTERATION to 79,
+            SpellSchool.EVOCATION to 79
         )
+
         val ssgSpellTablePgs = mapOf(
-            "Div" to 13,
-            "Ill" to 15,
-            "Abj" to 8,
-            "Enc" to 14,
-            "Con" to 12,
-            "Nec" to 18,
-            "Alt" to 10,
-            "Evo" to 17
+            SpellSchool.DIVINATION to 13,
+            SpellSchool.ILLUSION to 15,
+            SpellSchool.ABJURATION to 8,
+            SpellSchool.ENCHANTMENT to 14,
+            SpellSchool.CONJURATION to 12,
+            SpellSchool.NECROMANCY to 18,
+            SpellSchool.ALTERATION to 10,
+            SpellSchool.EVOCATION to 17
         )
 
         val inputLevel = _inputLevel.coerceIn(1..9)
         var spellName: String
-        var tempHolder : SpellTemplate? = null
+        var spellHolder : Spell? = null
 
         // Determine school of spell to roll
-        val school = if (Spell.checkIfValidSchool(enforcedSchool)) {
-
-            enforcedSchool.lowercase().capitalized()
-
-        } else {
-
-            if (useSSG) { //Spellslinger's guide Table 1B, pg 7
+        val school = enforcedSchool
+            ?: if (useSSG) { //Spellslinger's guide Table 1B, pg 7
                 when (inputLevel) {
                     1   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..11    -> "Div"
-                            in 12..22   -> "Ill"
-                            in 23..27   -> "Abj"
-                            in 28..37   -> "Enc"
-                            in 38..44   -> "Con"
-                            in 45..52   -> "Nec"
-                            in 53..84   -> "Alt"
-                            else        -> "Evo"
+                            in 1..11    -> SpellSchool.DIVINATION
+                            in 12..22   -> SpellSchool.ILLUSION
+                            in 23..27   -> SpellSchool.ABJURATION
+                            in 28..37   -> SpellSchool.ENCHANTMENT
+                            in 38..44   -> SpellSchool.CONJURATION
+                            in 45..52   -> SpellSchool.NECROMANCY
+                            in 53..84   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     2   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..11    -> "Div"
-                            in 12..23   -> "Ill"
-                            in 24..30   -> "Abj"
-                            in 31..39   -> "Enc"
-                            in 40..49   -> "Con"
-                            in 50..61   -> "Nec"
-                            in 62..84   -> "Alt"
-                            else        -> "Evo"
+                            in 1..11    -> SpellSchool.DIVINATION
+                            in 12..23   -> SpellSchool.ILLUSION
+                            in 24..30   -> SpellSchool.ABJURATION
+                            in 31..39   -> SpellSchool.ENCHANTMENT
+                            in 40..49   -> SpellSchool.CONJURATION
+                            in 50..61   -> SpellSchool.NECROMANCY
+                            in 62..84   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     3   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..3     -> "Div"
-                            in 4..15    -> "Ill"
-                            in 16..26   -> "Abj"
-                            in 27..33   -> "Enc"
-                            in 34..42   -> "Con"
-                            in 43..52   -> "Nec"
-                            in 53..84   -> "Alt"
-                            else        -> "Evo"
+                            in 1..3     -> SpellSchool.DIVINATION
+                            in 4..15    -> SpellSchool.ILLUSION
+                            in 16..26   -> SpellSchool.ABJURATION
+                            in 27..33   -> SpellSchool.ENCHANTMENT
+                            in 34..42   -> SpellSchool.CONJURATION
+                            in 43..52   -> SpellSchool.NECROMANCY
+                            in 53..84   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     4   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..8     -> "Div"
-                            in 9..16    -> "Ill"
-                            in 17..23   -> "Abj"
-                            in 24..31   -> "Enc"
-                            in 32..40   -> "Con"
-                            in 41..48   -> "Nec"
-                            in 49..78   -> "Alt"
-                            else        -> "Evo"
+                            in 1..8     -> SpellSchool.DIVINATION
+                            in 9..16    -> SpellSchool.ILLUSION
+                            in 17..23   -> SpellSchool.ABJURATION
+                            in 24..31   -> SpellSchool.ENCHANTMENT
+                            in 32..40   -> SpellSchool.CONJURATION
+                            in 41..48   -> SpellSchool.NECROMANCY
+                            in 49..78   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     5   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..9     -> "Div"
-                            in 10..19   -> "Ill"
-                            in 20..26   -> "Abj"
-                            in 27..34   -> "Enc"
-                            in 35..44   -> "Con"
-                            in 45..55   -> "Nec"
-                            in 56..81   -> "Alt"
-                            else        -> "Evo"
+                            in 1..9     -> SpellSchool.DIVINATION
+                            in 10..19   -> SpellSchool.ILLUSION
+                            in 20..26   -> SpellSchool.ABJURATION
+                            in 27..34   -> SpellSchool.ENCHANTMENT
+                            in 35..44   -> SpellSchool.CONJURATION
+                            in 45..55   -> SpellSchool.NECROMANCY
+                            in 56..81   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     6   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..7     -> "Div"
-                            in 8..18    -> "Ill"
-                            in 19..27   -> "Abj"
-                            in 28..35   -> "Enc"
-                            in 36..46   -> "Con"
-                            in 47..55   -> "Nec"
-                            in 56..80   -> "Alt"
-                            else        -> "Evo"
+                            in 1..7     -> SpellSchool.DIVINATION
+                            in 8..18    -> SpellSchool.ILLUSION
+                            in 19..27   -> SpellSchool.ABJURATION
+                            in 28..35   -> SpellSchool.ENCHANTMENT
+                            in 36..46   -> SpellSchool.CONJURATION
+                            in 47..55   -> SpellSchool.NECROMANCY
+                            in 56..80   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     7   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..8     -> "Div"
-                            in 9..18    -> "Ill"
-                            in 19..25   -> "Abj"
-                            in 26..36   -> "Enc"
-                            in 37..53   -> "Con"
-                            in 54..62   -> "Nec"
-                            in 63..85   -> "Alt"
-                            else        -> "Evo"
+                            in 1..8     -> SpellSchool.DIVINATION
+                            in 9..18    -> SpellSchool.ILLUSION
+                            in 19..25   -> SpellSchool.ABJURATION
+                            in 26..36   -> SpellSchool.ENCHANTMENT
+                            in 37..53   -> SpellSchool.CONJURATION
+                            in 54..62   -> SpellSchool.NECROMANCY
+                            in 63..85   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     8   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..7     -> "Div"
-                            in 8..14    -> "Ill"
-                            in 15..21   -> "Abj"
-                            in 22..32   -> "Enc"
-                            in 33..49   -> "Con"
-                            in 50..60   -> "Nec"
-                            in 61..78   -> "Alt"
-                            else        -> "Evo"
+                            in 1..7     -> SpellSchool.DIVINATION
+                            in 8..14    -> SpellSchool.ILLUSION
+                            in 15..21   -> SpellSchool.ABJURATION
+                            in 22..32   -> SpellSchool.ENCHANTMENT
+                            in 33..49   -> SpellSchool.CONJURATION
+                            in 50..60   -> SpellSchool.NECROMANCY
+                            in 61..78   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     9   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..11    -> "Div"
-                            in 12..19   -> "Ill"
-                            in 20..27   -> "Abj"
-                            in 28..36   -> "Enc"
-                            in 37..51   -> "Con"
-                            in 52..63   -> "Nec"
-                            in 64..80   -> "Alt"
-                            else        -> "Evo"
+                            in 1..11    -> SpellSchool.DIVINATION
+                            in 12..19   -> SpellSchool.ILLUSION
+                            in 20..27   -> SpellSchool.ABJURATION
+                            in 28..36   -> SpellSchool.ENCHANTMENT
+                            in 37..51   -> SpellSchool.CONJURATION
+                            in 52..63   -> SpellSchool.NECROMANCY
+                            in 64..80   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
-                    else-> Spell.validSchools.random()
+                    else-> enumValues<SpellSchool>().random()
                 }
             } else { // GMG Table 7D pg 77
                 when (inputLevel) {
                     1   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..6    -> "Div"
-                            in 7..22   -> "Ill"
-                            in 23..25   -> "Abj"
-                            in 26..35   -> "Enc"
-                            in 36..45   -> "Con"
-                            46          -> "Nec"
-                            in 47..88   -> "Alt"
-                            else        -> "Evo"
+                            in 1..6    -> SpellSchool.DIVINATION
+                            in 7..22   -> SpellSchool.ILLUSION
+                            in 23..25   -> SpellSchool.ABJURATION
+                            in 26..35   -> SpellSchool.ENCHANTMENT
+                            in 36..45   -> SpellSchool.CONJURATION
+                            46          -> SpellSchool.NECROMANCY
+                            in 47..88   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     2   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..12    -> "Div"
-                            in 13..31   -> "Ill"
-                            in 32..34   -> "Abj"
-                            in 35..46   -> "Enc"
-                            in 47..51   -> "Con"
-                            52          -> "Nec"
-                            in 53..85   -> "Alt"
-                            else        -> "Evo"
+                            in 1..12    -> SpellSchool.DIVINATION
+                            in 13..31   -> SpellSchool.ILLUSION
+                            in 32..34   -> SpellSchool.ABJURATION
+                            in 35..46   -> SpellSchool.ENCHANTMENT
+                            in 47..51   -> SpellSchool.CONJURATION
+                            52          -> SpellSchool.NECROMANCY
+                            in 53..85   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     3   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..3     -> "Div"
-                            in 4..16    -> "Ill"
-                            in 17..22   -> "Abj"
-                            in 23..29   -> "Enc"
-                            in 30..38   -> "Con"
-                            in 39..47   -> "Nec"
-                            in 48..84   -> "Alt"
-                            else        -> "Evo"
+                            in 1..3     -> SpellSchool.DIVINATION
+                            in 4..16    -> SpellSchool.ILLUSION
+                            in 17..22   -> SpellSchool.ABJURATION
+                            in 23..29   -> SpellSchool.ENCHANTMENT
+                            in 30..38   -> SpellSchool.CONJURATION
+                            in 39..47   -> SpellSchool.NECROMANCY
+                            in 48..84   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     4   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..3     -> "Div"
-                            in 4..18    -> "Ill"
-                            in 19..27   -> "Abj"
-                            in 28..43   -> "Enc"
-                            in 44..46   -> "Con"
-                            in 47..51   -> "Nec"
-                            in 52..82   -> "Alt"
-                            else        -> "Evo"
+                            in 1..3     -> SpellSchool.DIVINATION
+                            in 4..18    -> SpellSchool.ILLUSION
+                            in 19..27   -> SpellSchool.ABJURATION
+                            in 28..43   -> SpellSchool.ENCHANTMENT
+                            in 44..46   -> SpellSchool.CONJURATION
+                            in 47..51   -> SpellSchool.NECROMANCY
+                            in 52..82   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     5   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..4     -> "Div"
-                            in 5..18    -> "Ill"
-                            in 19..29   -> "Abj"
-                            in 30..41   -> "Enc"
-                            in 42..50   -> "Con"
-                            in 51..57   -> "Nec"
-                            in 58..79   -> "Alt"
-                            else        -> "Evo"
+                            in 1..4     -> SpellSchool.DIVINATION
+                            in 5..18    -> SpellSchool.ILLUSION
+                            in 19..29   -> SpellSchool.ABJURATION
+                            in 30..41   -> SpellSchool.ENCHANTMENT
+                            in 42..50   -> SpellSchool.CONJURATION
+                            in 51..57   -> SpellSchool.NECROMANCY
+                            in 58..79   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     6   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..4     -> "Div"
-                            in 5..21    -> "Ill"
-                            in 22..30   -> "Abj"
-                            in 31..40   -> "Enc"
-                            in 41..47   -> "Con"
-                            in 48..51   -> "Nec"
-                            in 52..81   -> "Alt"
-                            else        -> "Evo"
+                            in 1..4     -> SpellSchool.DIVINATION
+                            in 5..21    -> SpellSchool.ILLUSION
+                            in 22..30   -> SpellSchool.ABJURATION
+                            in 31..40   -> SpellSchool.ENCHANTMENT
+                            in 41..47   -> SpellSchool.CONJURATION
+                            in 48..51   -> SpellSchool.NECROMANCY
+                            in 52..81   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     7   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..3     -> "Div"
-                            in 4..13    -> "Ill"
-                            in 14..24   -> "Abj"
-                            in 25..37   -> "Enc"
-                            in 38..53   -> "Con"
-                            in 54..58   -> "Nec"
-                            in 59..84   -> "Alt"
-                            else        -> "Evo"
+                            in 1..3     -> SpellSchool.DIVINATION
+                            in 4..13    -> SpellSchool.ILLUSION
+                            in 14..24   -> SpellSchool.ABJURATION
+                            in 25..37   -> SpellSchool.ENCHANTMENT
+                            in 38..53   -> SpellSchool.CONJURATION
+                            in 54..58   -> SpellSchool.NECROMANCY
+                            in 59..84   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     8   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..3     -> "Div"
-                            in 4..6     -> "Ill"
-                            in 7..13    -> "Abj"
-                            in 14..35   -> "Enc"
-                            in 36..55   -> "Con"
-                            in 56..58   -> "Nec"
-                            in 59..77   -> "Alt"
-                            else        -> "Evo"
+                            in 1..3     -> SpellSchool.DIVINATION
+                            in 4..6     -> SpellSchool.ILLUSION
+                            in 7..13    -> SpellSchool.ABJURATION
+                            in 14..35   -> SpellSchool.ENCHANTMENT
+                            in 36..55   -> SpellSchool.CONJURATION
+                            in 56..58   -> SpellSchool.NECROMANCY
+                            in 59..77   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
                     9   -> {
                         when(Random.nextInt(1,101)){
-                            in 1..4     -> "Div"
-                            in 5..7     -> "Ill"
-                            in 8..14    -> "Abj"
-                            in 15..21   -> "Enc"
-                            in 22..43   -> "Con"
-                            in 44..54   -> "Nec"
-                            in 55..82   -> "Alt"
-                            else        -> "Evo"
+                            in 1..4     -> SpellSchool.DIVINATION
+                            in 5..7     -> SpellSchool.ILLUSION
+                            in 8..14    -> SpellSchool.ABJURATION
+                            in 15..21   -> SpellSchool.ENCHANTMENT
+                            in 22..43   -> SpellSchool.CONJURATION
+                            in 44..54   -> SpellSchool.NECROMANCY
+                            in 55..82   -> SpellSchool.ALTERATION
+                            else        -> SpellSchool.EVOCATION
                         }
                     }
-                    else-> Spell.validSchools.random()
+                    else-> enumValues<SpellSchool>().random()
                 }
             }
-        }
 
         fun getSpellName(): String = when (school){
 
-            "Abj"   -> {
+            SpellSchool.ABJURATION   -> {
                 when (inputLevel){
 
                     1   -> {
@@ -4841,7 +4871,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 }
             }
 
-            "Alt"   -> {
+            SpellSchool.ALTERATION   -> {
 
                 when (inputLevel){
 
@@ -5319,7 +5349,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 }
             }
 
-            "Con"   -> {
+            SpellSchool.CONJURATION   -> {
                 when (inputLevel){
 
                     1   -> {
@@ -5566,7 +5596,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 }
             }
 
-            "Div"   -> {
+            SpellSchool.DIVINATION   -> {
                 when (inputLevel){
 
                     1   -> {
@@ -5753,7 +5783,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 }
             }
 
-            "Enc"   -> {
+            SpellSchool.ENCHANTMENT   -> {
 
                 when (inputLevel){
 
@@ -5979,7 +6009,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 }
             }
 
-            "Ill"   -> {
+            SpellSchool.ILLUSION   -> {
                 when (inputLevel){
 
                     1   -> {
@@ -6227,7 +6257,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 }
             }
 
-            "Evo"   -> {
+            SpellSchool.EVOCATION   -> {
                 when (inputLevel){
 
                     1   -> {
@@ -6568,7 +6598,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 }
             }
 
-            "Nec"   -> {
+            SpellSchool.NECROMANCY   -> {
                 when (inputLevel){
 
                     1   -> {
@@ -6766,44 +6796,66 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             else    -> "GM Choice"
         }
 
-        fun SpellTemplate?.isNotValid(): Boolean {
+        fun Spell?.isNotValid(): Boolean {
 
             return ( this == null ) ||
-                    !((this.refType == 0 || useSSG) &&
+                    !((this.refType == ReferenceType.CORE || useSSG) &&
                             (this.name.endsWith(" Choice") || rerollChoices))
         }
 
         //minor to-do: Add spell lists for specialists/unorthodox practitioners
 
         // Attempt to roll a valid spell
-        while (tempHolder == null) {
+        while (spellHolder == null) {
 
             // Get spell name from copied tables
             spellName = getSpellName()
 
-            // Fetch first valid entry from database
-            tempHolder = if ((spellName == "GM Choice")||(spellName == "Player Choice")){
+            if ((spellName == "GM Choice")||(spellName == "Player Choice")){
 
-                // Return a custom "Choice" SpellTemplate
-                SpellTemplate(0,spellName,0,
-                    if (useSSG) {
-                        "Spellslinger's Guide to Wurld Domination"
-                    } else {"Gamemaster's Guide"},
-                    if (useSSG) {
-                        ssgSpellTablePgs.getOrDefault(school,7)
-                    } else {
-                        gmgSpellTablePgs.getOrDefault(school,77) },
-                    0, inputLevel, school, "", "", "", "")
-            } else {
-                 repository.getSpellTemplateByName(spellName,0,inputLevel)
+                if (useSSG) {
+
+                    spellName += when (school) {
+                        SpellSchool.ABJURATION  -> " – SSG (Abjuration)"
+                        SpellSchool.ALTERATION  -> " – SSG (Alteration)"
+                        SpellSchool.CONJURATION -> " – SSG (Conjuration/Summoning)"
+                        SpellSchool.DIVINATION  -> " – SSG (Divination)"
+                        SpellSchool.ENCHANTMENT -> " – SSG (Enchantment/Charm)"
+                        SpellSchool.EVOCATION   -> " – SSG (Evocation/Invocation)"
+                        SpellSchool.ILLUSION    -> " – SSG (Illusion/Phantasm)"
+                        SpellSchool.NECROMANCY  -> " – SSG (Necromancy)"
+                    }
+
+                } else {
+
+                    spellName += when (school) {
+                        SpellSchool.ABJURATION  -> " – GMG (Abjuration)"
+                        SpellSchool.ALTERATION  -> " – GMG (Alteration)"
+                        SpellSchool.CONJURATION -> " – GMG (Conjuration/Summoning)"
+                        SpellSchool.DIVINATION  -> " – GMG (Divination)"
+                        SpellSchool.ENCHANTMENT -> " – GMG (Enchantment/Charm)"
+                        SpellSchool.EVOCATION   -> " – GMG (Evocation/Invocation)"
+                        SpellSchool.ILLUSION    -> " – GMG (Illusion/Phantasm)"
+                        SpellSchool.NECROMANCY  -> " – GMG (Necromancy)"
+                    }
+
+                }
+
             }
 
-            if (tempHolder.isNotValid()) tempHolder = null
+            // Fetch first valid entry from database
+            spellHolder = repository.getSpellByName(spellName,0,inputLevel)
+
+            if (spellHolder.isNotValid()) spellHolder = null
         }
 
-        return convertTemplateToSpell(tempHolder)
+        return spellHolder
     }
 
+    //TODO make function for getting flat list of spells for By-the-book GM/Player Choice selection
+    // either with repo or as hardcoded string list
+
+    /* TODO Comment out until spellbooks are being implemented
     override fun getInitialSpellbookSpells(_specialistType: String, useSSG: Boolean): List<Spell> {
         val NESTED_OFFENSIVE_REROLL = 0
         val NESTED_DEFENSIVE_REROLL = 1
@@ -7267,6 +7319,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         return spellList
     }
+     */
 
     override suspend fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int) : Spell {
 
@@ -7275,7 +7328,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         var spellName: String?
         var isDruidic: Boolean
         var isFromZG: Boolean
-        var tempHolder : SpellTemplate? = null
+        var spellHolder : Spell? = null
 
         fun checkIndulgence(): String? {
 
@@ -7284,7 +7337,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             } else null
         }
 
-        while (tempHolder == null) {
+        while (spellHolder == null) {
 
             isDruidic = false
             isFromZG = false
@@ -7294,7 +7347,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 // TODO Optimize by grouping like-weighted entries into a list and pulling random
                 //  entry from sublist similar to how M-U level advancement method works.
 
-                    1 -> when (Random.nextInt(1,101)) {
+                1 -> when (Random.nextInt(1,101)) {
 
                     in 1..2     -> { isDruidic = true
                         isFromZG = true
@@ -7373,7 +7426,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 2 -> when (Random.nextInt(1,101)) {
 
-                    1           -> spellName = "Adjustable Light*"
+                    1           -> spellName = "Adjustable Light"
                     in 2..3     -> spellName = "Aid"
                     in 4..5     -> spellName = "Animate Corpse"
                     in 6..7     -> spellName = "Augury"
@@ -7619,7 +7672,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                         spellName = "Reflecting Pool" }
                     in 71..72   -> { isDruidic = true
                         spellName = "Repel Insects" }
-                    in 73..74   -> spellName = "Rigor Mortis, 10' Radius*"
+                    in 73..74   -> spellName = "Rigor Mortis, 10' Radius"
                     75          -> spellName = "Shrink Insect"
                     in 76..77   -> spellName = "Snakes to Sticks"
                     in 78..79   -> { isDruidic = true
@@ -7801,7 +7854,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     in 59..61   -> { isDruidic = true
                         spellName = "Reincarnation" } // was "Reincarnate"
                     in 62..64   -> { isDruidic = true
-                        spellName = "Repel Living Creatures and Plants" }
+                        spellName = "Repel Living Creatures & Plants" }
                     in 65..67   -> spellName = "Restoration"
                     in 68..70   -> spellName = "Restorative Cure-All"
                     in 71..73   -> spellName = "Resurrection"
@@ -7826,9 +7879,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 else -> spellName = null
             }
 
-            tempHolder = if (!(spellName == null || (isDruidic && !allowDruid) || (isFromZG && !useZG))) {
+            spellHolder = if (!(spellName == null || (isDruidic && !allowDruid) || (isFromZG && !useZG))) {
 
-                repository.getSpellTemplateByName(
+                repository.getSpellByName(
                     spellName,
                     if (isDruidic) 2 else 1,
                     inputLevel)
@@ -7836,34 +7889,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             } else null
         }
 
-        return convertTemplateToSpell(tempHolder) //TODO Left off here. Finish up createHoardFromOrder()
-    }
-
-    override fun convertTemplateToSpell(template:SpellTemplate, appendedNotes: List<String>): Spell {
-
-        fun getDisciplineFromInt() : SpCoDiscipline {
-
-            return when (template.type) {
-                0   -> SpCoDiscipline.ARCANE
-                1   -> SpCoDiscipline.DIVINE
-                2   -> SpCoDiscipline.NATURAL
-                else-> SpCoDiscipline.ALL_MAGIC
-            }
-        }
-
-        return Spell(
-            template.refId,
-            template.name,
-            getDisciplineFromInt(),
-            template.level,
-            template.source,
-            template.page,
-            template.schools.split("/"),
-            template.spellSpheres.split("/"),
-            template.subclass,
-            template.restrictions.split("/"), //TODO - Maybe convert to readable strings with Spell companion object functions
-            listOf(listOf(template.note),appendedNotes).flatten()
-        )
+        return spellHolder
     }
     // endregion
 }

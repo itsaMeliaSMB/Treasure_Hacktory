@@ -15,15 +15,10 @@ data class Gem(
     val type: Int,
     val size: Int,
     val quality: Int,
-    var variation: Int,
     var name: String,
     val opacity: Int,
     var description: String = "",
-    var currentGPValue: Double = 0.0,
-    var valueHistory: List<Pair<Long,String>> = emptyList()
-    ) {
-
-    // TODO Refactor to include everything in new Gem schema
+    var currentGPValue: Double = 0.0) {
 
     @Ignore
     fun getTypeAsString() : String {
@@ -165,3 +160,12 @@ data class Gem(
         )
     }
 }
+
+@Entity(tableName = "gem_evaluations_log")
+data class GemEvaluation(
+    @PrimaryKey(autoGenerate = true) val evalID : Int = 0,
+    val parentID: Int = 0,
+    val timestamp: Long = System.currentTimeMillis(),
+    val description: String = "",
+    val newGpValue: Double
+)

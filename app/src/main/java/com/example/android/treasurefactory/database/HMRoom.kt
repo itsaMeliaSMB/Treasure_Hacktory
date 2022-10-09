@@ -23,8 +23,10 @@ private const val DATABASE_NAME = "treasure-database"
         MagicItemTemplate::class,
         SpellTemplate::class,
         Gem::class,
+        GemEvaluation::class,
         ArtObject::class,
         MagicItem::class,
+        Spell::class,
         SpellCollection::class,
         CommandWord::class,
         LetterCode::class],
@@ -192,11 +194,11 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates magic item template table using hardcoded CSV file. */
         suspend fun populateItemsByCSV(magicItemDao: MagicItemDao) {
 
-            //val csvFilePath = "src/main/res/raw/seed_magicitems_v01.csv"
+            //val csvFilePath = "src/main/res/raw/seed_magicitems_v03.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_magicitems_v02","raw",context.packageName))
+                context.resources.getIdentifier("seed_magicitems_v03","raw",context.packageName))
 
             inputStream
                 .bufferedReader()
@@ -208,70 +210,72 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val _refId: Int = lineData[0].toIntOrNull() ?: 0
                     val _wt: Int = lineData[1].toIntOrNull() ?: 0
                     val _name: String = lineData[2].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _source: String = lineData[3].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _page: Int = lineData[4].toIntOrNull() ?: 0
-                    val _xpValue: Int = lineData[5].toIntOrNull() ?: 0
-                    val _gpValue: Int  = lineData[6].toIntOrNull() ?: 0
-                    val _multiType: Int = lineData[7].toIntOrNull() ?: 0
-                    val _notes: String  = lineData[8].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _dieCount: Int = lineData[9].toIntOrNull() ?: 0
-                    val _dieSides: Int = lineData[10].toIntOrNull() ?: 0
-                    val _dieMod: Int = lineData[11].toIntOrNull() ?: 0
-                    val _tableType: String = lineData[12].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _iconRef: String = lineData[13].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _fUsable: Int =  lineData[14].toIntOrNull() ?: 0
-                    val _tUsable: Int = lineData[15].toIntOrNull() ?: 0
-                    val _cUsable: Int = lineData[16].toIntOrNull() ?: 0
-                    val _mUsable: Int = lineData[17].toIntOrNull() ?: 0
-                    val _dUsable: Int = lineData[18].toIntOrNull() ?: 0
-                    val _hasChild: Int = lineData[19].toIntOrNull() ?: 0
-                    val _parentID: Int = lineData[20].toIntOrNull() ?: 0
-                    val _imitationKeyword: String = lineData[21].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _isCursed: Int  = lineData[22].toIntOrNull() ?: 0
-                    val _commandWord: String = lineData[23].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _intelChance: Int = lineData[24].toIntOrNull() ?: 0
-                    val _alignment: String = lineData[25].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _iPower: Int = lineData[26].toIntOrNull() ?: 0
-                    val _iiPower: Int = lineData[27].toIntOrNull() ?: 0
-                    val _iiiPower: Int = lineData[28].toIntOrNull() ?: 0
-                    val _ivPower: Int = lineData[29].toIntOrNull() ?: 0
-                    val _vPower: Int = lineData[30].toIntOrNull() ?: 0
-                    val _viPower: Int = lineData[31].toIntOrNull() ?: 0
+                    val _homebrew: Int =  lineData[3].toIntOrNull() ?: 0
+                    val _source: String = lineData[4].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _page: Int = lineData[5].toIntOrNull() ?: 0
+                    val _xpValue: Int = lineData[6].toIntOrNull() ?: 0
+                    val _gpValue: Int  = lineData[7].toIntOrNull() ?: 0
+                    val _multiType: Int = lineData[8].toIntOrNull() ?: 0
+                    val _notes: String  = lineData[9].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _dieCount: Int = lineData[10].toIntOrNull() ?: 0
+                    val _dieSides: Int = lineData[11].toIntOrNull() ?: 0
+                    val _dieMod: Int = lineData[12].toIntOrNull() ?: 0
+                    val _tableType: String = lineData[13].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _iconRef: String = lineData[14].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _fUsable: Int =  lineData[15].toIntOrNull() ?: 0
+                    val _tUsable: Int = lineData[16].toIntOrNull() ?: 0
+                    val _cUsable: Int = lineData[17].toIntOrNull() ?: 0
+                    val _mUsable: Int = lineData[18].toIntOrNull() ?: 0
+                    val _dUsable: Int = lineData[19].toIntOrNull() ?: 0
+                    val _hasChild: Int = lineData[20].toIntOrNull() ?: 0
+                    val _parentID: Int = lineData[21].toIntOrNull() ?: 0
+                    val _imitationKeyword: String = lineData[22].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _isCursed: Int  = lineData[23].toIntOrNull() ?: 0
+                    val _commandWord: String = lineData[24].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _intelChance: Int = lineData[25].toIntOrNull() ?: 0
+                    val _alignment: String = lineData[26].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _iPower: Int = lineData[27].toIntOrNull() ?: 0
+                    val _iiPower: Int = lineData[28].toIntOrNull() ?: 0
+                    val _iiiPower: Int = lineData[29].toIntOrNull() ?: 0
+                    val _ivPower: Int = lineData[30].toIntOrNull() ?: 0
+                    val _vPower: Int = lineData[31].toIntOrNull() ?: 0
+                    val _viPower: Int = lineData[32].toIntOrNull() ?: 0
 
                     magicItemDao.addMagicItemTemplate(
                         MagicItemTemplate(
                             _refId,
                             _wt,
                             _name,
-                            _source,
-                            _page,
-                            _xpValue,
-                            _gpValue,
-                            _multiType,
-                            _notes,
-                            _dieCount,
-                            _dieSides,
-                            _dieMod,
-                            _tableType,
-                            _iconRef,
-                            _fUsable,
-                            _tUsable,
-                            _cUsable,
-                            _mUsable,
-                            _dUsable,
-                            _hasChild,
-                            _parentID,
-                            _imitationKeyword,
-                            _isCursed,
-                            _commandWord,
-                            _intelChance,
-                            _alignment,
-                            _iPower,
-                            _iiPower,
-                            _iiiPower,
-                            _ivPower,
-                            _vPower,
-                            _viPower
+                            _homebrew,
+                            source = _source,
+                            page = _page,
+                            xpValue = _xpValue,
+                            gpValue = _gpValue,
+                            multiType = _multiType,
+                            notes = _notes,
+                            dieCount = _dieCount,
+                            dieSides = _dieSides,
+                            dieMod = _dieMod,
+                            tableType = _tableType,
+                            iconRef = _iconRef,
+                            fUsable = _fUsable,
+                            tUsable = _tUsable,
+                            cUsable = _cUsable,
+                            mUsable = _mUsable,
+                            dUsable = _dUsable,
+                            hasChild = _hasChild,
+                            parentID = _parentID,
+                            imitationKeyword = _imitationKeyword,
+                            isCursed = _isCursed,
+                            commandWord = _commandWord,
+                            intelChance = _intelChance,
+                            alignment = _alignment,
+                            iPower = _iPower,
+                            iiPower = _iiPower,
+                            iiiPower = _iiiPower,
+                            ivPower = _ivPower,
+                            vPower = _vPower,
+                            viPower = _viPower
                         )
                     )
 
@@ -282,14 +286,110 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "[ Iteration count = $iterationCount ]")
         }
 
-        /** Populates spell template table using hardcoded CSV file. */
+        /** Populates spell table using hardcoded CSV file. */
         suspend fun populateSpellsByCSV(spellDao: SpellCollectionDao) {
 
-            //val csvFilePath = "src/main/res/raw/seed_spell_v01.csv"
+            //val csvFilePath = "src/main/res/raw/seed_spell_v03.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_spell_v01","raw",context.packageName))
+                context.resources.getIdentifier(
+                    "seed_spell_v03","raw",context.packageName))
+
+            fun String.toSchoolList() : List<SpellSchool> {
+                return this.lowercase().split("/").mapNotNull{ entry ->
+                    when (entry) {
+                        "abj"   -> SpellSchool.ABJURATION
+                        "alt"   -> SpellSchool.ALTERATION
+                        "con"   -> SpellSchool.CONJURATION
+                        "div"   -> SpellSchool.DIVINATION
+                        "enc"   -> SpellSchool.ENCHANTMENT
+                        "evo"   -> SpellSchool.EVOCATION
+                        "ill"   -> SpellSchool.ILLUSION
+                        "nec"   -> SpellSchool.NECROMANCY
+                        else    -> null
+                    }
+                }
+            }
+
+            fun String.toSphereList() : List<ClericalSphere> {
+                return this.lowercase().split("/").mapNotNull{ entry ->
+                    when (entry) {
+                        "air"           -> ClericalSphere.AIR
+                        "animal"        -> ClericalSphere.ANIMAL
+                        "charm"         -> ClericalSphere.CHARM
+                        "combat"        -> ClericalSphere.COMBAT
+                        "creation"      -> ClericalSphere.CREATION
+                        "devotional"    -> ClericalSphere.DEVOTIONAL
+                        "divination"    -> ClericalSphere.DIVINATION
+                        "earth"         -> ClericalSphere.EARTH
+                        "fire"          -> ClericalSphere.FIRE
+                        "healing"       -> ClericalSphere.HEALING
+                        "hurting"       -> ClericalSphere.HURTING
+                        "necromantic"   -> ClericalSphere.NECROMANTIC
+                        "plant"         -> ClericalSphere.PLANT
+                        "summoning"     -> ClericalSphere.SUMMONING
+                        "sun"           -> ClericalSphere.SUN
+                        "traveler"      -> ClericalSphere.TRAVELER
+                        "warding"       -> ClericalSphere.WARDING
+                        "water"         -> ClericalSphere.WATER
+                        "weather"       -> ClericalSphere.WEATHER
+                        else            -> null
+                    }
+                }
+            }
+
+            fun String.toSpecialistList() : List<ArcaneSpecialist> {
+                return this.lowercase().split("/").mapNotNull{ entry ->
+                    when (entry) {
+                        "abjurer"               -> ArcaneSpecialist.ABJURER
+                        "ds_abjurer"            -> ArcaneSpecialist.ABJURER_DS
+                        "battle_mage"           -> ArcaneSpecialist.BATTLE_MAGE
+                        "blood_mage"            -> ArcaneSpecialist.BLOOD_MAGE
+                        "conjurer"              -> ArcaneSpecialist.CONJURER
+                        "ds_conjurer"           -> ArcaneSpecialist.CONJURER_DS
+                        "diviner"               -> ArcaneSpecialist.DIVINER
+                        "ds_diviner"            -> ArcaneSpecialist.DIVIDER_DS
+                        "fire_elementalist"     -> ArcaneSpecialist.ELEMENTALIST_FIRE
+                        "water_elementalist"    -> ArcaneSpecialist.ELEMENTALIST_WATER
+                        "air_elementalist"      -> ArcaneSpecialist.ELEMENTALIST_AIR
+                        "earth_elementalist"    -> ArcaneSpecialist.ELEMENTALIST_EARTH
+                        "enchanter"             -> ArcaneSpecialist.ENCHANTER
+                        "ds_enchanter"          -> ArcaneSpecialist.ENCHANTER_DS
+                        "illusionist"           -> ArcaneSpecialist.ILLUSIONIST
+                        "ds_illusionist"        -> ArcaneSpecialist.ILLUSIONIST_DS
+                        "invoker"               -> ArcaneSpecialist.INVOKER
+                        "ds_invoker"            -> ArcaneSpecialist.INVOKER_DS
+                        "necromancer"           -> ArcaneSpecialist.NECROMANCER
+                        "ds_necromancer"        -> ArcaneSpecialist.NECROMANCER_DS
+                        "painted_mage"          -> ArcaneSpecialist.PAINTED_MAGE
+                        "transmuter"            -> ArcaneSpecialist.TRANSMUTER
+                        "ds_transmuter"         -> ArcaneSpecialist.TRANSMUTER_DS
+                        "wild_mage"             -> ArcaneSpecialist.WILD_MAGE
+                        "anti-mage"             -> ArcaneSpecialist.ANTI_MAGE
+                        "guardian"              -> ArcaneSpecialist.GUARDIAN
+                        "constructor"           -> ArcaneSpecialist.CONSTRUCTOR
+                        "metamorpher"           -> ArcaneSpecialist.METAMORPHER
+                        "transporter"           -> ArcaneSpecialist.TRANSPORTER
+                        "sp_conjurer"           -> ArcaneSpecialist.CONJURER_SP
+                        "power_speaker"         -> ArcaneSpecialist.POWER_SPEAKER
+                        "summoner"              -> ArcaneSpecialist.SUMMONER
+                        "detective"             -> ArcaneSpecialist.DETECTIVE
+                        "seer"                  -> ArcaneSpecialist.SEER
+                        "itemist"               -> ArcaneSpecialist.ITEMIST
+                        "puppeteer"             -> ArcaneSpecialist.PUPPETEER
+                        "hypnotist"             -> ArcaneSpecialist.HYPNOTIST
+                        "shadow_weaver"         -> ArcaneSpecialist.SHADOW_WEAVER
+                        "demolitionist"         -> ArcaneSpecialist.DEMOLITIONIST
+                        "icer"                  -> ArcaneSpecialist.ICER
+                        "pyrotechnician"        -> ArcaneSpecialist.PYROTECHNICIAN
+                        "sniper"                -> ArcaneSpecialist.SNIPER
+                        "animator"              -> ArcaneSpecialist.ANIMATOR
+                        "exterminator"          -> ArcaneSpecialist.EXTERMINATOR
+                        else                    -> null
+                    }
+                }
+            }
 
             // Seed spell templates
             inputStream
@@ -301,37 +401,45 @@ abstract class TreasureDatabase : RoomDatabase() {
 
                     val _refId: Int = lineData[0].toIntOrNull() ?: 0
                     val _name: String = lineData[1].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _refType: Int = lineData[2].toIntOrNull() ?: 3
-                    val _source: String = lineData[3].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _page: Int = lineData[4].toIntOrNull() ?: 0
-                    val _type: Int = lineData[5].toIntOrNull() ?: 0
-                    val _level: Int = lineData[6].toIntOrNull() ?: 0
-                    val _schools: String = lineData[7].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _restrictions: String = lineData[8].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _spellSpheres: String = lineData[9].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _subclass: String = lineData[10].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _note: String = lineData[11].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _reverse: Boolean = lineData[2].toIntOrNull() == 1
+                    val _refType: Int = lineData[3].toIntOrNull() ?: 3
+                    val _source: String = lineData[4].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _page: Int = lineData[5].toIntOrNull() ?: 0
+                    val _type: Int = lineData[6].toIntOrNull() ?: 0
+                    val _level: Int = lineData[7].toIntOrNull() ?: 0
+                    val _schools: String = lineData[8].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _restrictions: String = lineData[9].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _spellSpheres: String = lineData[10].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _subclass: String = lineData[11].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _note: String = lineData[12].trim('"').takeUnless { it.isBlank() } ?: ""
 
-                    spellDao.addSpellTemplate(
-                        SpellTemplate(
-                            _refId,
-                            _name,
-                            _refType,
-                            _source,
-                            _page,
-                            _type,
-                            _level,
-                            _schools,
-                            _restrictions,
-                            _spellSpheres,
-                            _subclass,
-                            _note
-                        )
+
+
+                    spellDao.addSpell(
+                        Spell(
+                            spellID = _refId,
+                            name = _name,
+                            reverse = _reverse,
+                            refType = try {
+                                enumValues<ReferenceType>()[_refType]
+                            } catch(e: Exception) { ReferenceType.OTHER_HOMEBREW },
+                            type = try {
+                                enumValues<SpCoDiscipline>()[_type]
+                            } catch(e: Exception) { SpCoDiscipline.ALL_MAGIC },
+                            spellLevel = _level,
+                            sourceText = _source,
+                            sourcePage = _page,
+                            schools = _schools.toSchoolList(),
+                            spheres = _spellSpheres.toSphereList(),
+                            subclass = _subclass,
+                            restrictions = _restrictions.toSpecialistList(),
+                            note = _note
+                            )
                     )
                     iterationCount ++
                 }
 
-            Log.d("InitialPopulationCallback","Spell template addition by CSV ran. " +
+            Log.d("InitialPopulationCallback","Spell addition by CSV ran. " +
                     "[ Iteration count = $iterationCount ]")
         }
 
@@ -362,7 +470,8 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "NEW-CHOICE",
                     "FAIRWEATHER",
                     "SWITCHAROO",
-                    "SUROGATA"),
+                    "SUROGATA",
+                    "HAHA-UNLESS"),
                 "animal" to listOf(
                     "CRIKEY",
                     "FURRY",
@@ -376,9 +485,10 @@ abstract class TreasureDatabase : RoomDatabase() {
                 "apology" to listOf(
                     "MEA-CULPA",
                     "GOMEN",
-                    "WHOOPSIE",
+                    "WHOOPSIE-DAISY",
                     "ACCIDENT",
-                    "PENTI-PRI"),
+                    "PENTI-PRI",
+                    "NEVER-THOUGHT-I-WOULD-HAVE-TO-MAKE-THIS"),
                 "blast" to listOf(
                     "KABLAM",
                     "KERPOW",
@@ -388,7 +498,7 @@ abstract class TreasureDatabase : RoomDatabase() {
                 "breach" to listOf(
                     "CHARGE",
                     "BANZAI",
-                    "OH-YEAH",
+                    "OH-YEAAAAAH",
                     "BOMBARD",
                     "ENROMPO"),
                 "break" to listOf(
@@ -410,18 +520,21 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "HAIRBALL",
                     "NYAA",
                     "FELISO",
+                    "MEOW-MEOW-MEOW-MEOW-MEOW",
                     "KATINO"),
                 "charm" to listOf(
                     "SWEETIE-PIE",
                     "HONEYDEW",
                     "CARMEGI",
                     "AMITIE",
-                    "INCANTARE"),
+                    "INCANTARE",
+                    "BUTTERLUMPS"),
                 "command" to listOf("WOULD-YOU-KINDLY",
-                        "KOMANDI",
-                        "BEFEHLEN",
-                        "ULTIMATUM",
-                        "CEDI"),
+                    "KOMANDI",
+                    "BEFEHLEN",
+                    "ULTIMATUM",
+                    "CEDI",
+                    "HONEYDEW"),
                 "cure" to listOf(
                     "HOWZER",
                     "QUE-QUE",
@@ -432,7 +545,8 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "MAYO",
                     "SANIGI",
                     "PANACEA",
-                    "PHYSICK"),
+                    "PHYSICK",
+                    "FAT-LOG"),
                 "demon" to listOf(
                     "DEMONIC",
                     "HELLSPAWN",
@@ -460,6 +574,7 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "GLASS-IT",
                     "RUINIGI"),
                 "dog" to listOf(
+                    "ARF-ARF-ARF-ARF-ARF-ARF",
                     "BARK-BARK",
                     "DOGGONE",
                     "GOODBOY",
@@ -494,7 +609,8 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "BOO",
                     "GOOSEBUMPS",
                     "TERURI",
-                    "MALKURAJI"),
+                    "MALKURAJI",
+                    "JINKIES"),
                 "fight" to listOf(
                     "SICCUM",
                     "MELEE",
@@ -537,13 +653,19 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "AMORSPEKTEMULO",
                     "BOOBA",
                     "DOBONHONKEROS",
-                    "PEEKING-TOM"),
+                    "PEEKING-TOM",
+                    "HUBBA-HUBBA"),
                 "genderbend" to listOf(
                     "EGGY",
                     "TIT-FOR-TAT",
                     "CISNT",
                     "PRONOUNS",
-                    "TRANSSEKSULO"),
+                    "TRANSSEKSULO",
+                    "BRISKET",
+                    "RANMA",
+                    "ECHARETEA",
+                    "MERMAIDS",
+                    "CLOWNFISH"),
                 "ghost" to listOf(
                     "FANTOMO",
                     "BOO-DIDDLY",
@@ -572,7 +694,8 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "SADDLE",
                     "CEVALO",
                     "SEABISCUIT",
-                    "CLIP-CLOP"),
+                    "CLIP-CLOP",
+                    "OSAGE"),
                 "ice" to listOf(
                     "CHILL",
                     "IGLOO",
@@ -589,7 +712,8 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "APHID",
                     "CHRYSALIS",
                     "KATYDID",
-                    "TSETSE"),
+                    "TSETSE",
+                    "BUGSBUGSBUGS"),
                 "jail" to listOf(
                     "GUANTANAMO",
                     "SING-SING",
@@ -626,7 +750,8 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "LAIRD",
                     "THE-RIGHT-HONOURABLE-THE-LORDS-SPIRITUAL-AND-TEMPORAL-ASSEMBLED",
                     "PATRICIUS",
-                    "FEUDESTRO"),
+                    "FEUDESTRO",
+                    "BIG-SHOT"),
                 "luxury" to listOf("GUCCI",
                         "ROYCE",
                         "CHANEL",
@@ -699,7 +824,7 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "ETZPE"),
                 "open" to listOf(
                     "SESAME",
-                    "FBI",
+                    "EF-BE-AYE",
                     "KNOCK-KNOCK",
                     "APERTI",
                     "AVATA"),
@@ -1014,6 +1139,7 @@ interface HoardDao {
 
     @Query("DELETE FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     suspend fun deleteHoardGems(hoardID: Int)
+    //TODO make into transaction for deleting GemEvaluations
 
     @Query("DELETE FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
     suspend fun deleteHoardArtObjects(hoardID: Int)
@@ -1214,6 +1340,21 @@ interface SpellCollectionDao{
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addSpellTemplate(entry: SpellTemplate)
+    // endregion
+
+    // region ( Spell )
+    @Query("SELECT * FROM hackmaster_spell_table WHERE spell_id=(:spellID)")
+    suspend fun getSpell(spellID: Int): Spell?
+
+    @Query("SELECT * FROM hackmaster_spell_table WHERE name=(:spellName) AND type=(:discipline) AND spellLevel=(:level)")
+    suspend fun getSpellByNmDsLv(spellName: String, discipline: Int, level: Int): Spell?
+
+    @Query("SELECT ref_id FROM hackmaster_spell_table WHERE type=(:discipline) " +
+            "AND spellLevel=(:level)")
+    suspend fun getSpellIDs(discipline: Int, level: Int): List<Int>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addSpell(entry: Spell)
     // endregion
 
     // region ( SpellCollection )

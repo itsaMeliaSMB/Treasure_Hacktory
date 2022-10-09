@@ -6,21 +6,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.android.treasurefactory.LootGeneratorAsync
+import com.example.android.treasurefactory.database.LetterCode
 import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
 import com.example.android.treasurefactory.ui.GenDropdownTag
 import com.example.android.treasurefactory.ui.GenEditTextTag
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.component3
 import kotlin.collections.set
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
-
-const val FIRST_SMALL_TREASURE_TYPE = "J"
 
 const val MINIMUM_LETTER_QTY = 0
 const val MAXIMUM_LETTER_QTY = 20
@@ -35,7 +31,7 @@ const val MAXIMUM_COINAGE_AMOUNT = 999999999.99
 const val ART_MAP_CHANCE = 5
 const val SCROLL_MAP_CHANCE = 10
 
-class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel() {
+class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel() {
 
     //region << Values, variables, and containers >>
 
@@ -53,422 +49,13 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
     val isRunningAsyncLiveData = MutableLiveData(isRunningAsync)
     // endregion
 
-    // region ( Letter Code value containers )
-    private val oddsTable = sortedMapOf(
-        // Lair treasure types
-        "A" to arrayOf(
-            intArrayOf(25, 1000, 3000),
-            intArrayOf(30, 200, 2000),
-            intArrayOf(35, 500, 3000),
-            intArrayOf(40, 1000, 6000),
-            intArrayOf(35, 500, 3000),
-            intArrayOf(35, 300, 1800),
-            intArrayOf(60, 10, 40),
-            intArrayOf(50, 2, 12),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(30, 3, 3)
-        ),
-        "B" to arrayOf(
-            intArrayOf(50, 1000, 6000),
-            intArrayOf(25, 1000, 3000),
-            intArrayOf(25, 300, 1800),
-            intArrayOf(25, 200, 2000),
-            intArrayOf(25, 150, 1500),
-            intArrayOf(25, 100, 1000),
-            intArrayOf(30, 1, 8),
-            intArrayOf(20, 1, 4),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(10, 1, 1),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "C" to arrayOf(
-            intArrayOf(20, 1000, 10000),
-            intArrayOf(30, 1000, 6000),
-            intArrayOf(40, 1000, 3000),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(10, 100, 600),
-            intArrayOf(25, 1, 6),
-            intArrayOf(20, 1, 3),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(10, 2, 2)
-        ),
-        "D" to arrayOf(
-            intArrayOf(10, 1000, 6000),
-            intArrayOf(15, 1000, 10000),
-            intArrayOf(25, 1000, 12000),
-            intArrayOf(50, 1000, 3000),
-            intArrayOf(0, 0, 0),
-            intArrayOf(15, 100, 600),
-            intArrayOf(30, 1, 10),
-            intArrayOf(25, 1, 6),
-            intArrayOf(15, 1, 1),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(15, 2, 2)
-        ),
-        "E" to arrayOf(
-            intArrayOf(5, 1000, 6000),
-            intArrayOf(25, 1000, 10000),
-            intArrayOf(45, 1000, 12000),
-            intArrayOf(25, 1000, 4000),
-            intArrayOf(15, 100, 1200),
-            intArrayOf(25, 300, 1800),
-            intArrayOf(15, 1, 12),
-            intArrayOf(10, 1, 6),
-            intArrayOf(0, 0, 0),
-            intArrayOf(25, 1, 1),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(25, 3, 3)
-        ),
-        "F" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(10, 3000, 18000),
-            intArrayOf(25, 2000, 12000),
-            intArrayOf(40, 1000, 6000),
-            intArrayOf(30, 500, 5000),
-            intArrayOf(15, 1000, 4000),
-            intArrayOf(20, 2, 20),
-            intArrayOf(10, 1, 8),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(30, 5, 5),
-            intArrayOf(0, 0, 0)
-        ),
-        "G" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(15, 3000, 24000),
-            intArrayOf(50, 2000, 20000),
-            intArrayOf(50, 1500, 15000),
-            intArrayOf(50, 1000, 10000),
-            intArrayOf(30, 3, 18),
-            intArrayOf(25, 1, 6),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(35, 5, 5)
-        ),
-        "H" to arrayOf(
-            intArrayOf(25, 3000, 18000),
-            intArrayOf(35, 2000, 20000),
-            intArrayOf(45, 2000, 20000),
-            intArrayOf(55, 2000, 20000),
-            intArrayOf(45, 2000, 20000),
-            intArrayOf(35, 1000, 8000),
-            intArrayOf(50, 3, 30),
-            intArrayOf(50, 2, 20),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(15, 6, 6)
-        ),
-        "I" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(15, 100, 400),
-            intArrayOf(30, 100, 600),
-            intArrayOf(55, 2, 12),
-            intArrayOf(50, 2, 8),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(15, 1, 1)
-        ),
-        // Individual and small lair treasure types
-        "J" to arrayOf(
-            intArrayOf(100, 3, 24),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "K" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 3, 18),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "L" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 3, 18),
-            intArrayOf(100, 2, 12),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "M" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 3, 12),
-            intArrayOf(100, 2, 8),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "N" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 1, 6),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "O" to arrayOf(
-            intArrayOf(100, 10, 40),
-            intArrayOf(100, 10, 30),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "P" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 10, 60),
-            intArrayOf(100, 3, 30),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 1, 20),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "Q" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 1, 4),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "R" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 2, 20),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 10, 60),
-            intArrayOf(100, 2, 8),
-            intArrayOf(100, 1, 3),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "S" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 1, 8),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "T" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 1, 4),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "U" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(90, 2, 16),
-            intArrayOf(80, 1, 6),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(70, 1, 1)
-        ),
-        "V" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 2, 2)
-        ),
-        "W" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 4, 24),
-            intArrayOf(100, 5, 30),
-            intArrayOf(100, 2, 16),
-            intArrayOf(100, 1, 8),
-            intArrayOf(60, 2, 16),
-            intArrayOf(50, 1, 8),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(60, 2, 2)
-        ),
-        "X" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 2, 2),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "Y" to arrayOf(
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(100, 200, 1200),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0)
-        ),
-        "Z" to arrayOf(
-            intArrayOf(100, 100, 300),
-            intArrayOf(100, 100, 400),
-            intArrayOf(100, 100, 500),
-            intArrayOf(100, 100, 600),
-            intArrayOf(100, 100, 500),
-            intArrayOf(100, 100, 500),
-            intArrayOf(55, 1, 6),
-            intArrayOf(50, 2, 12),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(0, 0, 0),
-            intArrayOf(50, 3, 3)
-        )
-    )
-
-    private val treasureLabels = listOf<String>(
-        "copper piece(s)",
-        "silver piece(s)",
-        "electrum piece(s)",
-        "gold piece(s)",
-        "hard silver piece(s)",
-        "platinum piece(s)",
-        "gem(s)",
-        "art object(s)",
-        "potion(s)/oil(s)",
-        "scroll(s)",
-        "magic weapon(s)/armor",
-        "non-weapon magic item(s)",
-        "magic item(s)")
-
-    private val lairList = getLetterArrayList(true)
-    private val smallList = getLetterArrayList(false)
+    private val lairList = getCleanLairList()
+    private val smallList = getCleanSmallList()
 
     val lairListLiveData = MutableLiveData(lairList.toList())
     val smallListLiveData = MutableLiveData(smallList.toList())
+
+    val letterCodeHolderLiveData = MutableLiveData<LetterCode?>(null)
 
     val generatedHoardLiveData = MutableLiveData<Hoard?>(null)
     // endregion
@@ -579,58 +166,42 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
     // region ( Letter update functions )
 
-    /**
-     * Updates the list of [LetterEntries][LetterEntry] and posts new value to LiveData.
-     *
-     * @param position adapterPosition of entry to update.
-     * @param addend Integer value to add to entry.
-     * @param targetLairList If true, the [lairList] will be modified. Otherwise, [smallList] will be modified.
-     */
-    private fun addToLetterListEntryQty(position: Int, addend: Int, targetLairList: Boolean) {
-
-        val newValue: Int
-
-        if (targetLairList){
-            if (!(lairList.isEmpty())&&(position in 0 until lairList.size)) {
-
-                val oldValue = lairList[position].quantity
-                newValue = (oldValue + addend).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
-
-                lairList[position].quantity = newValue
-                lairListLiveData.postValue(lairList.toList())
-
-                Log.d("updateLetterListEntry","Updated Qty of lairList[$position] from " +
-                    "$oldValue to $newValue (instructed to add $addend)")
-            }
-        } else {
-            if (!(smallList.isEmpty())&&(position in 0 until smallList.size)) {
-
-                val oldValue = smallList[position].quantity
-                newValue = (oldValue + addend).coerceIn(MINIMUM_LETTER_QTY, MAXIMUM_LETTER_QTY)
-
-                smallList[position].quantity = newValue
-                smallListLiveData.postValue(smallList.toList())
-
-                Log.d("updateLetterListEntry","Updated Qty of smallList[$position] from " +
-                        "$oldValue to $newValue (instructed to add $addend)")
-            }
+    // region TODO (new implementations)
+    fun updateLairEntry(position: Int, newValue : Int) {
+        if (position in lairList.indices) {
+            lairList[position] = lairList[position].first to newValue.coerceIn(MINIMUM_LETTER_QTY,
+                MAXIMUM_LETTER_QTY)
+            lairListLiveData.postValue(lairList.toList())
         }
     }
 
-    fun incrementLetterQty(position: Int, isPositive: Boolean, targetLairList: Boolean) {
-
-        addToLetterListEntryQty(position, if (isPositive) 1 else -1, targetLairList)
+    fun updateSmallEntry(position: Int, newValue : Int) {
+        if (position in smallList.indices) {
+            smallList[position] = smallList[position].first to newValue.coerceIn(MINIMUM_LETTER_QTY,
+                MAXIMUM_LETTER_QTY)
+            smallListLiveData.postValue(smallList.toList())
+        }
     }
 
     fun resetLairCount() {
-        lairList.forEach { entry -> entry.quantity = 0 }
+
+        lairList.apply {
+            clear()
+            addAll(getCleanLairList())
+        }
         lairListLiveData.postValue(lairList.toList())
     }
 
     fun resetSmallCount() {
-        smallList.forEach { entry -> entry.quantity = 0 }
+
+        smallList.apply{
+            clear()
+            addAll(getCleanSmallList())
+        }
         smallListLiveData.postValue(smallList.toList())
     }
+    // endregion
+
     // endregion
 
     // region ( Specific update functions )
@@ -978,100 +549,148 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
     fun validateLetterCodeValues() : Boolean {
 
-        return (listOf(lairList, smallList).flatten().indexOfFirst { entry -> entry.quantity > 0 }) != -1
+        return (listOf(lairList, smallList).flatten().indexOfFirst { entry -> entry.second > 0 }) != -1
     }
     // endregion
 
-    suspend fun newCompileLetterHoardOrder(): HoardOrder{
+    suspend fun compileLetterHoardOrder(): HoardOrder{
+
+        var generatedCp = 0
+        var generatedSp = 0
+        var generatedEp = 0
+        var generatedGp = 0
+        var generatedHsp = 0
+        var generatedPp = 0
+        var generatedGems = 0
+        var generatedArt = 0
+        var generatedPotions = 0
+        var generatedScrolls = 0
+        var generatedArmWeps = 0
+        var generatedNonWeps = 0
+        var generatedAnyMagic = 0
+
+        val compString = StringBuilder()
 
         // Compile iterable key-value pairs of what codes to query
 
+        val entriesToRoll = listOf(lairList,smallList).flatten().filter { it.second > 0 }
+
         // Iterate through each key
 
-            // Pull entry
+        entriesToRoll.forEach { (letterKey, orderQty) ->
 
-            // If valid, roll and and add results for entry
+            val letterCode = try {
+                repository.getLetterCodeOnce(letterKey)
+            } catch(e: Exception){
+                Log.e("compileLetterHoardOrder()","Could not find entry for \"$letterKey\".")
+                null
+            }
 
-        // Compile results of rolls and hoard identifiers as hoard order
+            if (letterCode != null) {
 
-        return HoardOrder()
+                repeat(orderQty) {
+                    if (letterCode.cpChance != 0 && Random.nextInt(101) <= letterCode.cpChance) {
+                        generatedCp += Random.nextInt(letterCode.cpMin, letterCode.cpMax + 1)
+                    }
+                    if (letterCode.spChance != 0 && Random.nextInt(101) <= letterCode.spChance) {
+                        generatedSp += Random.nextInt(letterCode.spMin, letterCode.spMax + 1)
+                    }
+                    if (letterCode.epChance != 0 && Random.nextInt(101) <= letterCode.epChance) {
+                        generatedEp += Random.nextInt(letterCode.epMin, letterCode.epMax + 1)
+                    }
+                    if (letterCode.gpChance != 0 && Random.nextInt(101) <= letterCode.gpChance) {
+                        generatedGp += Random.nextInt(letterCode.gpMin, letterCode.gpMax + 1)
+                    }
+                    if (letterCode.hspChance != 0 && Random.nextInt(101) <= letterCode.hspChance) {
+                        generatedHsp += Random.nextInt(letterCode.spMin, letterCode.spMax + 1)
+                    }
+                    if (letterCode.ppChance != 0 && Random.nextInt(101) <= letterCode.ppChance) {
+                        generatedPp += Random.nextInt(letterCode.ppMin, letterCode.ppMax + 1)
+                    }
+                    if (letterCode.gemChance != 0 && Random.nextInt(101) <= letterCode.gemChance) {
+                        generatedGems += Random.nextInt(letterCode.gemMin, letterCode.gemMax + 1)
+                    }
+                    if (letterCode.artChance != 0 && Random.nextInt(101) <= letterCode.artChance) {
+                        generatedArt += Random.nextInt(letterCode.artMin, letterCode.artMax + 1)
+                    }
 
-    }
+                    if (letterCode.anyChance > 0){
 
-    // region [ Order compilation functions ]
-    fun compileLetterCodeHoardOrder() : HoardOrder {
+                        when {
+                            letterCode.potionChance > 0 -> {
+                                if (Random.nextInt(101) <= letterCode.anyChance) {
+                                    generatedPotions += letterCode.potionMin
+                                    generatedAnyMagic += letterCode.anyMin
+                                }
+                            }
+                            letterCode.scrollChance > 0 -> {
+                                if (Random.nextInt(101) <= letterCode.anyChance) {
+                                    generatedScrolls += letterCode.scrollMin
+                                    generatedAnyMagic += letterCode.anyMin
+                                }
+                            }
+                            else    -> {
+                                if (Random.nextInt(101) <= letterCode.anyChance) {
+                                    generatedAnyMagic += letterCode.anyMin
+                                }
+                            }
+                        }
 
-        // TODO refactor to new schema
-        fun rollEntry(oddsArray: IntArray): Int {
+                    } else {
 
-            if (oddsArray[0] != 0) {
-
-                // If number rolled is below target odds number,
-                if (Random.nextInt(101) <= oddsArray[0]){
-
-                    // Return random amount within range
-                    return Random.nextInt(oddsArray[1],oddsArray[2] + 1)
-
-                    // Otherwise, add nothing for this entry.
-                } else return 0
-
-            } else return 0
-        }
-
-        // Put values for every letter key
-        val letterMap = mutableMapOf<String,Int>()
-
-        // Put values for every letter key
-        lairList.forEach{ letterMap[it.letterCode] = it.quantity }
-        smallList.forEach{ letterMap[it.letterCode] = it.quantity}
-
-        val initialDescription = "Initial composition: "
-        val lettersStringBuilder = StringBuilder(initialDescription)
-
-        val newOrder = HoardOrder()
-
-        newOrder.hoardName = this.hoardName
-
-        // Roll for each non-empty entry TODO: move to non-UI thread
-        letterMap.forEach { (key, value) ->
-            if ((oddsTable.containsKey(key))&&(value > 0)) {
-
-                // Roll for each type of treasure
-                repeat (value) {
-                    newOrder.copperPieces       += rollEntry(oddsTable[key]?.get(0)!!)
-                    newOrder.silverPieces       += rollEntry(oddsTable[key]?.get(1)!!)
-                    newOrder.electrumPieces     += rollEntry(oddsTable[key]?.get(2)!!)
-                    newOrder.goldPieces         += rollEntry(oddsTable[key]?.get(3)!!)
-                    newOrder.hardSilverPieces   += rollEntry(oddsTable[key]?.get(4)!!)
-                    newOrder.platinumPieces     += rollEntry(oddsTable[key]?.get(5)!!)
-                    newOrder.gems               += rollEntry(oddsTable[key]?.get(6)!!)
-                    newOrder.artObjects         += rollEntry(oddsTable[key]?.get(7)!!)
-                    newOrder.potions            += rollEntry(oddsTable[key]?.get(8)!!)
-                    newOrder.scrolls            += rollEntry(oddsTable[key]?.get(9)!!)
-                    newOrder.armorOrWeapons     += rollEntry(oddsTable[key]?.get(10)!!)
-                    newOrder.anyButWeapons      += rollEntry(oddsTable[key]?.get(11)!!)
-                    newOrder.anyMagicItems      += rollEntry(oddsTable[key]?.get(12)!!)
+                        when {
+                            letterCode.potionChance > 0 -> {
+                                if (Random.nextInt(101) <= letterCode.potionChance) {
+                                    generatedPotions += Random.nextInt(letterCode.potionMin,
+                                        letterCode.potionMax + 1)
+                                }
+                            }
+                            letterCode.scrollChance > 0 -> {
+                                if (Random.nextInt(101) <= letterCode.scrollChance) {
+                                    generatedPotions += Random.nextInt(letterCode.scrollMin,
+                                        letterCode.scrollMax + 1)
+                                }
+                            }
+                            letterCode.weaponChance > 0 -> {
+                                if (Random.nextInt(101) <= letterCode.weaponChance) {
+                                    generatedArmWeps += letterCode.weaponMin
+                                }
+                            }
+                            letterCode.noWeaponChance > 0 -> {
+                                if (Random.nextInt(101) <= letterCode.noWeaponChance) {
+                                    generatedNonWeps += letterCode.noWeaponMin
+                                }
+                            }
+                        }
+                    }
                 }
-
-                // Log letter type in the StringBuffer
-                if (!(lettersStringBuilder.equals(initialDescription))) {
-                    // Add a comma if not the first entry TODO fix this
-                    lettersStringBuilder.append(", ")
-                }
-                // Add letter times quantity
-                lettersStringBuilder.append("${key}x$value")
+                compString.append("$letterKey x$orderQty,")
             }
         }
 
-        // Update description log
-        newOrder.creationDescription = lettersStringBuilder.toString()
+        // Compile results of rolls and hoard identifiers as hoard order
 
-        // TODO DEBUG ONLY: Log results
-        reportHoardOrderToDebug(newOrder)
-
-        // Return result
-        return newOrder
+        return HoardOrder(
+            hoardName,
+            creationDescription = "Generated by letter code method.\n" +
+                    "Initial composition: " + compString.toString().removeSuffix(", "),
+            copperPieces = generatedCp,
+            silverPieces = generatedSp,
+            electrumPieces = generatedEp,
+            goldPieces = generatedGp,
+            hardSilverPieces = generatedHsp,
+            platinumPieces = generatedPp,
+            gems = generatedGems,
+            artObjects = generatedArt,
+            potions = generatedPotions,
+            scrolls = generatedScrolls,
+            armorOrWeapons = generatedArmWeps,
+            anyButWeapons = generatedNonWeps,
+            anyMagicItems = generatedAnyMagic
+        )
     }
+
+    // region [ Order compilation functions ]
 
     fun compileSpecificQtyHoardOrder() : HoardOrder {
 
@@ -1164,7 +783,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
 
     // region [ Hoard generation functions ]
 
-    fun generateHoard(order: HoardOrder, appVersion: Int) {
+    fun generateHoard(isLetterCodeMethod: Boolean, appVersion: Int) {
 
         //https://developer.android.com/kotlin/coroutines
 
@@ -1173,75 +792,53 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
             setRunningAsync(true)
 
             //TODO prepare hoard order asynchronously
+            val hoardOrder = if (isLetterCodeMethod) {
 
-            val lootGenerator = LootGeneratorAsync(hmRepository)
+                compileLetterHoardOrder()
 
-            val newHoardId = lootGenerator.createHoardFromOrder(order, appVersion)
+            } else {
+
+                compileSpecificQtyHoardOrder()
+            }
+
+            val lootGenerator = LootGeneratorAsync(repository)
+
+            val newHoardId = lootGenerator.createHoardFromOrder(hoardOrder, appVersion)
 
             Log.d("generateHoard()","newHoardId = $newHoardId")
 
             setRunningAsync(false)
 
-            generatedHoardLiveData.postValue(hmRepository.getHoardOnce(newHoardId))
+            generatedHoardLiveData.postValue(repository.getHoardOnce(newHoardId))
         }
     }
     // endregion
 
     // region [ Helper functions ]
-    /**
-     *  Returns a multi-line String for a given [oddsTable] value array.
-     *
-     *  @param rawLetterOdds Probability table of a given treasure's likelihood to appear. Decomposes into percentChance, minYield, and maxYield.
-     */
-    private fun returnOddsString(rawLetterOdds: Array<IntArray>) : String {
+    fun fetchLetterCode(letterKey: String) {
 
-        val oddsList = mutableListOf<String>()
+        viewModelScope.launch{
+            isRunningAsync = true
 
-        rawLetterOdds.forEachIndexed { index, (percentChance,minYield,maxYield) ->
+            letterCodeHolderLiveData.postValue(repository.getLetterCodeOnce(letterKey))
 
-            val oddsLineBuilder = StringBuilder()
-
-            if (percentChance != 0) {
-
-                oddsLineBuilder.append("${percentChance}% odds of: ")
-                    .append(if (minYield >= maxYield) {
-                        minYield.toString()
-                    } else {
-                        "$minYield-$maxYield" })
-                    .append(" ${treasureLabels[index]}")
-            }
-
-            if (oddsLineBuilder.isNotEmpty()) oddsList.add(oddsLineBuilder.toString())
+            isRunningAsync = false
         }
-
-        var result: String = oddsList[0]
-
-        if (oddsList.size > 1) {
-
-            for( index in 1 until oddsList.size) {
-                result += "\n${oddsList[index]}"
-            }
-        }
-
-        return result
     }
 
-    /** Returns an ArrayList of letter-coded treasure types. */
-    private fun getLetterArrayList(isHeadMap: Boolean): ArrayList<LetterEntry> {
+    private fun getCleanLairList() : MutableList<Pair<String,Int>> {
 
-        val list = ArrayList<LetterEntry>()
+        return mutableListOf(
+            "A" to 0, "B" to 0, "C" to 0, "D" to 0, "E" to 0, "F" to 0, "G" to 0, "H" to 0, "I" to 0
+        )
+    }
 
-        if (isHeadMap) {
-            oddsTable.headMap(FIRST_SMALL_TREASURE_TYPE).forEach { (letterCode, rawLetterOdds) ->
-                list.add(LetterEntry(letterCode, returnOddsString(rawLetterOdds), 0))
-            }
-        } else {
-            oddsTable.tailMap(FIRST_SMALL_TREASURE_TYPE).forEach { (letterCode, rawLetterOdds) ->
-                list.add(LetterEntry(letterCode, returnOddsString(rawLetterOdds), 0))
-            }
-        }
+    private fun getCleanSmallList() : MutableList<Pair<String,Int>> {
 
-        return list
+        return mutableListOf(
+            "J" to 0, "K" to 0, "L" to 0, "M" to 0, "N" to 0, "O" to 0, "P" to 0, "Q" to 0,
+            "R" to 0, "S" to 0, "T" to 0, "U" to 0, "V" to 0, "W" to 0, "X" to 0, "Y" to 0, "Z" to 0
+        )
     }
 
     fun getRandomCoinDistribution(_minimum: Double, _maximum: Double,
@@ -1394,6 +991,7 @@ class HoardGeneratorViewModel(private val hmRepository: HMRepository): ViewModel
     }
 
     fun Double.roundToTwoDecimal():Double = (this * 100.00).roundToInt() / 100.00
+
     // endregion
 }
 

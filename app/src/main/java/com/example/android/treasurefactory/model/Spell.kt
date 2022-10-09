@@ -1,42 +1,120 @@
 package com.example.android.treasurefactory.model
 
+import android.content.Context
+import android.content.res.Resources
+import androidx.annotation.DrawableRes
+import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.Ignore
-import com.example.android.treasurefactory.capitalized
+import androidx.room.PrimaryKey
+import com.example.android.treasurefactory.R
+import com.example.android.treasurefactory.repository.HMRepository
+import kotlin.random.Random
 
-enum class SpellSchool(val longResName: String, val shortResName: String){
-    ABJURATION("school_abj_l","school_abj_s"),
-    ALTERATION("school_alt_l","school_alt_s"),
-    CONJURATION("school_con_l","school_con_s"),
-    DIVINATION("school_div_l","school_div_s"),
-    ENCHANTMENT("school_enc_l","school_enc_s"),
-    EVOCATION("school_evo_l","school_evo_s"),
-    ILLUSION("school_ill_l","school_ill_s"),
-    NECROMANCY("school_nec_l","school_nec_s")
+enum class SpellSchool(val resName: String){
+    ABJURATION("spell_school_abjuration"),
+    ALTERATION("spell_school_alteration"),
+    CONJURATION("spell_school_conjuration"),
+    DIVINATION("spell_school_divination"),
+    ENCHANTMENT("spell_school_enchantment"),
+    EVOCATION("spell_school_evocation"),
+    ILLUSION("spell_school_illusion"),
+    NECROMANCY("spell_school_necromancy");
+
+    @Ignore
+    fun getShortName(context: Context): String {
+
+        return try {
+
+            context.getString(
+                context.resources.getIdentifier(
+                    "${resName}_s", "string", context.packageName
+                )
+            )
+        } catch (e: Resources.NotFoundException) {
+            "???"
+        }
+    }
+
+
+    @Ignore
+    fun getLongName(context: Context): String {
+
+        return try {
+
+            context.getString(
+                context.resources.getIdentifier(
+                    "${resName}_l", "string", context.packageName
+                )
+            )
+        } catch (e: Resources.NotFoundException) {
+            "<School not found>"
+        }
+    }
+
+    @Ignore
+    @DrawableRes
+    fun getDrawableResID(context: Context): Int {
+
+        return try {
+
+            context.resources.getIdentifier(resName,"drawable",context.packageName)
+        } catch (e: Resources.NotFoundException) {
+            R.drawable.rounded_rectangle_border_bg
+        }
+    }
 }
 
 enum class ClericalSphere(val resName: String){
-    AIR("sphere_air"),
-    ANIMAL("sphere_animal"),
-    CHARM("sphere_charm"),
-    COMBAT("sphere_combat"),
-    CREATION("sphere_creation"),
-    DEVOTIONAL("sphere_devotional"),
-    DIVINATION("sphere_divination"),
-    EARTH("sphere_earth"),
-    FIRE("sphere_fire"),
-    HEALING("sphere_healing"),
-    HURTING("sphere_hurting"),
-    NECROMANTIC("sphere_necromantic"),
-    PLANT("sphere_plant"),
-    SUMMONING("sphere_summoning"),
-    SUN("sphere_sun"),
-    TRAVELLER("sphere_traveller"),
-    WARDING("sphere_warding"),
-    WATER("sphere_water"),
-    WEATHER("sphere_weather")
+    AIR("spell_sphere_air"),
+    ANIMAL("spell_sphere_animal"),
+    CHARM("spell_sphere_charm"),
+    COMBAT("spell_sphere_combat"),
+    CREATION("spell_sphere_creation"),
+    DEVOTIONAL("spell_sphere_devotional"),
+    DIVINATION("spell_sphere_divination"),
+    EARTH("spell_sphere_earth"),
+    FIRE("spell_sphere_fire"),
+    HEALING("spell_sphere_healing"),
+    HURTING("spell_sphere_hurting"),
+    NECROMANTIC("spell_sphere_necromantic"),
+    PLANT("spell_sphere_plant"),
+    SUMMONING("spell_sphere_summoning"),
+    SUN("spell_sphere_sun"),
+    TRAVELER("spell_sphere_traveler"),
+    WARDING("spell_sphere_warding"),
+    WATER("spell_sphere_water"),
+    WEATHER("spell_sphere_weather");
+
+    @Ignore
+    fun getNameString(context: Context): String {
+
+        return try {
+
+            context.getString(
+                context.resources.getIdentifier(
+                    resName, "string", context.packageName
+                )
+            )
+        } catch (e: Resources.NotFoundException) {
+            "String not found."
+        }
+    }
+
+    @Ignore
+    @DrawableRes
+    fun getDrawableResID(context: Context): Int {
+
+        return try {
+
+            context.resources.getIdentifier(resName,"drawable",context.packageName)
+        } catch (e: Resources.NotFoundException) {
+            R.drawable.rounded_rectangle_border_bg
+        }
+    }
 }
 
-enum class ArcaneSpecialist(val resString: String){
+enum class ArcaneSpecialist(val resName: String){
     ABJURER("specialist_abjurer"),
     ABJURER_DS("specialist_ds_abjurer"),
     BATTLE_MAGE("specialist_battle_mage"),
@@ -80,17 +158,55 @@ enum class ArcaneSpecialist(val resString: String){
     PYROTECHNICIAN("specialist_pyrotechnician"),
     SNIPER("specialist_sniper"),
     ANIMATOR("specialist_animator"),
-    EXTERMINATOR("specialist_exterminator")
+    EXTERMINATOR("specialist_exterminator");
+
+    @Ignore
+    fun getFullName(context: Context): String {
+
+        return try {
+
+            context.getString(
+                context.resources.getIdentifier(
+                    resName, "string", context.packageName
+                )
+            )
+        } catch (e: Resources.NotFoundException) {
+            "String not found."
+        }
+    }
 }
 
+/** Category of sources for [magic items][MagicItem] and [spells][Spell].*/
+enum class ReferenceType {
+    CORE,               // Published within the PHB or GMG for HM4e
+    SPLATBOOK,          // Published in any official, non-adventure supplement for HM4e
+    HACKJOURNAL,        // Published in an official HackJournal article during HM4e support
+    PUBLISHED_MODULE,   // Published in an official adventure module for HM4e
+    BEYOND_HM4E,        // Intended for material published outside of official Kenzer & Co HM4e products
+    RESEARCHED,         // Intended for new spells researched/items created in-game by player characters
+    OTHER_HOMEBREW      // Intended as catch-all for any other spells
+}
 
-
-data class Spell(val templateID: Int = 0, val name: String = "<undefined spell>", val type: SpCoDiscipline,
-                 val spellLevel: Int= 0,
-                 val sourceText: String = "<undefined source>", val sourcePage: Int = 0,
-                 val schools: List<SpellSchool>, val spheres: List<ClericalSphere>, val subclass: String,
-                 val restrictions : List<ArcaneSpecialist>, val notes: List<String>,
-                 var extraPages: Int = 0 //TODO remove from signiture
+/**
+ * Full description of a magic spell referenced by a [SpellEntry] within a [SpellCollection].
+ *
+ * @param reverse If true on an [arcane][SpCoDiscipline.ARCANE] spell, marks that spell as "Reversible". Otherwise, marks this spell as the "Reversed" form of another spell.
+ */
+@Entity(tableName = "hackmaster_spell_table")
+data class Spell(
+    @PrimaryKey @ColumnInfo(name = "spell_id") val spellID: Int = 0,
+    val name: String = "<undefined spell>",
+    val reverse: Boolean = false,
+    val refType: ReferenceType,
+    val type: SpCoDiscipline,
+    val spellLevel: Int = 0,
+    val sourceText: String = "<undefined source>",
+    val sourcePage: Int = 0,
+    val schools: List<SpellSchool>,
+    val spheres: List<ClericalSphere>,
+    val subclass: String,
+    val restrictions: List<ArcaneSpecialist> = emptyList<ArcaneSpecialist>(),
+    val note: String,
 ) {
 
     @Ignore
@@ -110,30 +226,6 @@ data class Spell(val templateID: Int = 0, val name: String = "<undefined spell>"
 
     companion object {
 
-        @Ignore
-        val validSchools = listOf("Div","Ill","Abj","Enc","Con","Nec","Alt","Evo")
-
-        @Ignore
-        fun checkIfValidSchool(input: String): Boolean = validSchools.contains(input.lowercase().capitalized())
-
-        @Ignore
-        fun schoolAbbrevToFull(_input: String): String {
-
-            val input = _input.trim().lowercase().capitalized()
-
-            val abbreviationMap = mapOf(
-                "Div" to "Divination",
-                "Ill" to "Illusion/Phantasm",
-                "Abj" to "Abjuration",
-                "Enc" to "Enchantment/Charm",
-                "Con" to "Conjuration/Summoning",
-                "Nec" to "Necromancy",
-                "Alt" to "Alteration",
-                "Evo" to "Invocation/Evocation"
-            )
-
-            return abbreviationMap.getOrDefault(input,input)
-        }
 
         @Ignore
         val mageSpecialistTags = listOf("Abjurer","DS_Abjurer","Battle_Mage","Blood_Mage",
@@ -206,4 +298,37 @@ data class Spell(val templateID: Int = 0, val name: String = "<undefined spell>"
             return tagMap.getOrDefault(input,"[Undocumented specialist]")
         }
     }
+}
+
+/**
+ * Converts this [Spell] into a [SpellEntry] reference for storage in a [SpellCollection].
+ *
+ * @param rollPages If true, rolls for how many extra pages this copy of the spell would take up in
+ * a spell book. Otherwise, returns 0 for [extraPages][SpellEntry.extraPages].
+ * @param standardBook Whether or not the target SpellCollection is a standard spellbook. Affects
+ * how many extra pages this copy of the spell takes up.
+ */
+@Ignore
+fun Spell.toSpellEntry(rollPages: Boolean = false, standardBook: Boolean = true) : SpellEntry {
+
+    val pageRoll = if (rollPages) {
+            if (spellLevel == 0) {
+                Random.nextInt(1,7) - (if (standardBook) 1 else 0)
+            } else {
+                Random.nextInt(1,4)
+            }
+        } else 0
+
+    return SpellEntry(this.spellID, this.spellLevel, pageRoll)
+}
+
+/**
+ * Fetches the [Spell] referenced by this [SpellEntry], or returns null if spellID is invalid.
+ *
+ * @param repository Required instance of [HMRepository] to look up
+ */
+@Ignore
+suspend fun SpellEntry.toSpellOrNull(repository: HMRepository) : Spell? {
+
+    return repository.getSpell(this.spellID)
 }

@@ -1,7 +1,5 @@
 package com.example.android.treasurefactory
 
-import com.example.android.treasurefactory.database.GemTemplate
-import com.example.android.treasurefactory.database.MagicItemTemplate
 import com.example.android.treasurefactory.database.SpellTemplate
 import com.example.android.treasurefactory.model.*
 
@@ -27,8 +25,7 @@ const val GUT_STONE_KEY = 58
 
 interface BaseLootGenerator {
     val ANY_MAGIC_ITEM_LIST: List<String>
-    val SAMPLE_GEM_TEMPLATE: GemTemplate
-    val SAMPLE_MAGIC_ITEM_TEMPLATE: MagicItemTemplate
+
     val DUMMY_SPELL : SpellTemplate
 
     suspend fun createHoardFromOrder(hoardOrder: HoardOrder, appVersion: Int): Int
@@ -86,20 +83,22 @@ interface BaseLootGenerator {
 
     /** Gets a random spell from allowed sources of the level, discipline, and restriction provided. */
     suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
-                       sources: SpCoSources, allowRestricted: Boolean): Spell
+                       sources: SpCoSources, rerollChoices: Boolean = false, allowRestricted: Boolean): Spell
 
     /** Returns a magic-user spell as if acquired by leveling up, outlined in the GMG/SSG */
     suspend fun getSpellByLevelUp(
         _inputLevel: Int,
-        enforcedSchool: String = "",
+        enforcedSchool: SpellSchool? = null,
         rerollChoices: Boolean = false,
         useSSG: Boolean = true
     ): Spell
 
+    /* TODO implement when spellbooks are implemented
+
     fun getInitialSpellbookSpells(
         _specialistType: String = "",
         useSSG: Boolean = true
-    ): List<Spell>
+    ): List<Spell>*/
 
     /**
      * Returns a cleric or druid spell using Appendix E on pgs 132-133 of ZG
@@ -124,10 +123,4 @@ interface BaseLootGenerator {
                         useSSG: Boolean = true,
                         allowRestricted: Boolean): SpellCollection
      */
-
-    /** Converts a [SpellTemplate] into a [Spell], converting [type][SpellTemplate.type] to a [SpCoDiscipline]*/
-    fun convertTemplateToSpell(
-        template: SpellTemplate,
-        appendedNotes: List<String> = emptyList()
-    ): Spell
 }

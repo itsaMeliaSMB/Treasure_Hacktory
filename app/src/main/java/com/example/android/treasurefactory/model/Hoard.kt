@@ -35,7 +35,7 @@ data class Hoard(
     var isFavorite: Boolean = false,
     var isNew: Boolean = true,
     var successful: Boolean = false,
-    var appVersion: Int = 0           // Version code of app hoard was generated on){}
+    var appVersion: Int = 0           // Version code of app hoard was generated on
     ) {
 
     @Ignore

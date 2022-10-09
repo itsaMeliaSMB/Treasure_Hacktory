@@ -275,4 +275,10 @@
     <string name="specialist_animator">Animator [Necromancy]</string>
     <string name="specialist_exterminator">Exterminator [Necromancy]</string>
     <string name="letter_qty_picker_dialog_message">Select new quantity of treasure type</string>
+    <string name="action_submit_qty_update">Update</string>
+    <string name="new_qty_title">New quantity</string>
+    <string name="choose_spell_button">Choose spell</string>
+    <string name="copy_to_clipboard_button">Copy to clipboard</string>
+    <string name="flag_as_used_button">Flag as used</string>
+    <string name="unflag_as_used_button">Un-flag as used</string>
 </resources>

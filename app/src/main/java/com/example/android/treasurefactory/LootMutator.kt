@@ -3,28 +3,29 @@ package com.example.android.treasurefactory
 import com.example.android.treasurefactory.model.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class LootMutator {
+class LootMutator() {
 
     // TODO fun restoreOriginalValue(inputGem: Gem): Gem {}
 
-    fun rollGemVariation(inputGem: Gem) : Gem {
+    fun rollGemVariation(inputGem: Gem) : GemEvaluation {
 
         val timestamp = Calendar.getInstance().timeInMillis
         val gemModifierSum = inputGem.size + inputGem.quality
         val resultsBuilder = StringBuilder()
-        val valueHistoryList = inputGem.valueHistory.toMutableList()
-        val hasChanged : Boolean
 
-        var currentVariation = inputGem.variation
+        var currentVariation = 0
         val newGPValue: Double
         var continueRolling = false
         var roll: Int
+        // Permitted roll range
         var minAllowed = 1
         var maxAllowed = 12
+
         var multiplier = 1.0
 
         fun changeBaseValue(increment: Int) {
@@ -37,17 +38,14 @@ class LootMutator {
             if (increment > 0) maxAllowed = 8 else if (increment < 0) minAllowed = 2
 
             // Enforce variation limit
-            if ( currentVariation < -5 ) { currentVariation = -5 }
-            else if ( currentVariation > 7 ) { currentVariation = 7 }
+           currentVariation = currentVariation.coerceIn(-5,7)
         }
 
         // Roll for variation
         do {
             // Ensure sane values for allowed ranges
-            if (minAllowed < 1) minAllowed = 1
-            if (minAllowed > 12) minAllowed = 12
-            if (maxAllowed > 12) maxAllowed = 12
-            if (maxAllowed < minAllowed) maxAllowed = minAllowed
+            minAllowed = minAllowed.coerceIn(1,12)
+            maxAllowed = maxAllowed.coerceIn(minAllowed,12)
 
             // Roll d12
             roll = Random.nextInt(1,13)
@@ -95,7 +93,7 @@ class LootMutator {
 
         } while (continueRolling)
 
-        hasChanged = (inputGem.variation != currentVariation)||(multiplier != 1.0)
+        val hasChanged = (currentVariation != 0)||(multiplier != 1.0)
 
         // Evaluate new GP value
         newGPValue = if (hasChanged) {
@@ -107,14 +105,22 @@ class LootMutator {
         // Add variation note to history list
         if (hasChanged) {
 
-            if (inputGem.variation != currentVariation) {
+            if (currentVariation != 0) {
                 resultsBuilder.append("Base value level changed from " +
-                        "${inputGem.type + gemModifierSum + inputGem.variation} to " +
-                        "${inputGem.type + gemModifierSum + currentVariation}. ")
-            }
+                        DecimalFormat("#,##0.0#").format(convertGemValueToGP(
+                            inputGem.type + gemModifierSum))
+                            .removeSuffix(".0") +
+                        " gp to " +
+                        DecimalFormat("#,##0.0#").format(
+                            inputGem.type + gemModifierSum + currentVariation)
+                            .removeSuffix(".0") + " gp.")
+            } else {
 
-            resultsBuilder.append("Market value of this ${inputGem.name} is " +
-                    "now $newGPValue gp (${(multiplier*100.0).toInt()}% base value).")
+                resultsBuilder.append("\nMarket value of this ${inputGem.name} is now " +
+                        DecimalFormat("#,##0.0#").format(newGPValue)
+                            .removeSuffix(".0") +
+                        " gp (${(multiplier * 100.0).toInt()}% base value).")
+            }
 
         } else {
 
@@ -122,117 +128,13 @@ class LootMutator {
                     "$newGPValue gp was not changed.")
         }
 
-        valueHistoryList.add(Pair(timestamp,resultsBuilder.toString()))
-
-        // Return result as new Gem()
-        return inputGem.copy(
-            variation = currentVariation,
-            currentGPValue = newGPValue,
-            valueHistory = valueHistoryList.toList())
-    }
-
-    companion object {
-
-        fun convertGemValueToGP(input: Int): Double {
-
-            val valueLevelToGPValue = mapOf(
-
-                0 to 0.1,
-                1 to 0.5,
-                2 to 1.0,
-                3 to 1.0,
-                4 to 5.0,
-                5 to 10.0,          // start of initial base values
-                6 to 50.0,
-                7 to 100.0,
-                8 to 500.0,
-                9 to 1000.0,
-                10 to 5000.0,       // end of initial base values
-                11 to 10000.0,
-                12 to 25000.0,
-                13 to 50000.0,
-                14 to 100000.0,
-                15 to 250000.0,
-                16 to 500000.0,
-                17 to 1000000.0
-            )
-
-            return when {
-
-                (input < 0)     -> valueLevelToGPValue.getOrDefault(0,0.1)
-
-                (input > 17)    -> valueLevelToGPValue.getOrDefault(17,1000000.0)
-
-                else            -> valueLevelToGPValue.getOrDefault(input, 10.0)
-            }
-        }
-
-        fun convertArtValueToGP(input:Int) : Double {
-
-            val valueLevelToGPValue = mapOf(
-
-                -19 to 1.0,
-                -18 to 10.0,
-                -17 to 20.0,
-                -16 to 30.0,
-                -15 to 40.0,
-                -14 to 50.0,
-                -13 to 60.0,
-                -12 to 70.0,
-                -11 to 85.0,
-                -10 to 100.0,
-                -9 to 125.0,
-                -8 to 150.0,
-                -7 to 200.0,
-                -6 to 250.0,
-                -5 to 325.0,
-                -4 to 400.0,
-                -3 to 500.0,
-                -2 to 650.0,
-                -1 to 800.0,
-                0 to 1000.0,
-                1 to 1250.0,
-                2 to 1500.0,
-                3 to 2000.0,
-                4 to 2500.0,
-                5 to 3000.0,
-                6 to 4000.0,
-                7 to 5000.0,
-                8 to 6000.0,
-                9 to 7500.0,
-                10 to 10000.0,
-                11 to 12500.0,
-                12 to 15000.0,
-                13 to 20000.0,
-                14 to 25000.0,
-                15 to 30000.0,
-                16 to 40000.0,
-                17 to 50000.0,
-                18 to 60000.0,
-                19 to 70000.0,
-                20 to 85000.0,
-                21 to 100000.0,
-                22 to 125000.0,
-                23 to 150000.0,
-                24 to 200000.0,
-                25 to 250000.0,
-                26 to 300000.0,
-                27 to 400000.0,
-                28 to 500000.0,
-                29 to 650000.0,
-                30 to 800000.0,
-                31 to 1000000.0
-            )
-
-            return when {
-
-                (input < -19)     -> valueLevelToGPValue.getOrDefault(-19,1.0)
-
-                (input > 31)    -> valueLevelToGPValue.getOrDefault(31,1000000.0)
-
-                else            -> valueLevelToGPValue.getOrDefault(input, 1000.0)
-            }
-        }
+        // Return result as new GemEvaluation()
+        return GemEvaluation(
+            parentID = inputGem.gemID,
+            timestamp = timestamp,
+            description = resultsBuilder.toString(),
+            newGpValue = newGPValue
+        )
     }
 
     fun selectHoardIconByValue(hoard: Hoard, hoardItems: HoardUniqueItemBundle): String {
@@ -464,6 +366,96 @@ class LootMutator {
         }
 
         return bestSpellCollection to (totalSpellValue to totalSpellCount)
+    }
+
+    companion object{
+
+        fun convertGemValueToGP(input: Int): Double {
+
+            val valueLevelToGPValue = mapOf(
+
+                0 to 0.1,
+                1 to 0.5,
+                2 to 1.0,
+                3 to 1.0,
+                4 to 5.0,
+                5 to 10.0,          // start of initial base values
+                6 to 50.0,
+                7 to 100.0,
+                8 to 500.0,
+                9 to 1000.0,
+                10 to 5000.0,       // end of initial base values
+                11 to 10000.0,
+                12 to 25000.0,
+                13 to 50000.0,
+                14 to 100000.0,
+                15 to 250000.0,
+                16 to 500000.0,
+                17 to 1000000.0
+            )
+
+            return valueLevelToGPValue.getOrDefault(input.coerceIn(0,17), 10.0)
+        }
+
+        fun convertArtValueToGP(input:Int) : Double {
+
+            val valueLevelToGPValue = mapOf(
+
+                -19 to 1.0,
+                -18 to 10.0,
+                -17 to 20.0,
+                -16 to 30.0,
+                -15 to 40.0,
+                -14 to 50.0,
+                -13 to 60.0,
+                -12 to 70.0,
+                -11 to 85.0,
+                -10 to 100.0,
+                -9 to 125.0,
+                -8 to 150.0,
+                -7 to 200.0,
+                -6 to 250.0,
+                -5 to 325.0,
+                -4 to 400.0,
+                -3 to 500.0,
+                -2 to 650.0,
+                -1 to 800.0,
+                0 to 1000.0,
+                1 to 1250.0,
+                2 to 1500.0,
+                3 to 2000.0,
+                4 to 2500.0,
+                5 to 3000.0,
+                6 to 4000.0,
+                7 to 5000.0,
+                8 to 6000.0,
+                9 to 7500.0,
+                10 to 10000.0,
+                11 to 12500.0,
+                12 to 15000.0,
+                13 to 20000.0,
+                14 to 25000.0,
+                15 to 30000.0,
+                16 to 40000.0,
+                17 to 50000.0,
+                18 to 60000.0,
+                19 to 70000.0,
+                20 to 85000.0,
+                21 to 100000.0,
+                22 to 125000.0,
+                23 to 150000.0,
+                24 to 200000.0,
+                25 to 250000.0,
+                26 to 300000.0,
+                27 to 400000.0,
+                28 to 500000.0,
+                29 to 650000.0,
+                30 to 800000.0,
+                31 to 1000000.0
+            )
+
+            return valueLevelToGPValue.getOrDefault(input.coerceIn(-19,31), 1000.0)
+        }
     }
 }
 

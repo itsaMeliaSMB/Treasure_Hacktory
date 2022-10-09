@@ -5,7 +5,12 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
-data class SpellEntry(val spellID: Int, val spellLevel: Int = 1, val extraPages: Int = 0)
+data class SpellEntry(
+    val spellID: Int,
+    val spellLevel: Int = 1,
+    val extraPages: Int = 0,
+    val usedUp: Boolean = false
+)
 
 @Entity(tableName = "hackmaster_spell_collection_table")
 data class SpellCollection(

@@ -1,112 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--TODO Convert to CoordinatorLayout with NestedScrollView-->
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/hoard_generator_toolbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/appbar_height"
-        app:title="@string/hoard_generator_fragment_title"
-        app:navigationIcon="@drawable/clipart_back_vector_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        style="@style/toolbar_style"/>
+        android:layout_height="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/hoard_generator_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbar_height"
+            app:title="@string/hoard_generator_fragment_title"
+            app:navigationIcon="@drawable/clipart_back_vector_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_scrollFlags="noScroll"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/generator_nested_scroll"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hoard_generator_toolbar">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <TextView
-            android:id="@+id/generator_name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hoard_name_label"
-            android:fontFeatureSettings="smcp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/generator_name_input"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:counterEnabled="true"
-            app:counterMaxLength="50"
-            app:hintEnabled="false"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+            android:layout_margin="16dp"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/generator_name_edit"
+            <TextView
+                android:id="@+id/generator_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hoard_name_label"
+                android:fontFeatureSettings="smcp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/generator_name_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLength="50"
-                android:maxLines="1"
-                android:hint="@string/hoard_name_entry_hint"
-                tools:text="Blorkby's Stash"/>
+                android:layout_marginTop="4dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="50"
+                app:hintEnabled="false"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/generator_name_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="50"
+                    android:maxLines="1"
+                    android:hint="@string/hoard_name_entry_hint"
+                    tools:text="Blorkby's Stash" />
 
-        <TextView
-            android:id="@+id/generator_method_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            </com.google.android.material.textfield.TextInputLayout>
 
-            android:text="@string/hoard_gen_label"
-            android:fontFeatureSettings="smcp"/>
+            <TextView
+                android:id="@+id/generator_method_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <RadioGroup
-            android:id="@+id/generator_method_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
+                android:text="@string/hoard_gen_label"
+                android:fontFeatureSettings="smcp" />
 
-            <RadioButton
-                android:id="@+id/generator_method_lettercode"
+            <RadioGroup
+                android:id="@+id/generator_method_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="true"
-                android:paddingStart="8dp"
-                android:text="@string/gen_method_letter_label"
-                android:textAllCaps="true" />
+                android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/generator_method_specific"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:checked="false"
-                android:paddingStart="8dp"
-                android:text="@string/gen_method_specific_label"
-                android:textAllCaps="true" />
+                <RadioButton
+                    android:id="@+id/generator_method_lettercode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:paddingStart="8dp"
+                    android:text="@string/gen_method_letter_label"
+                    android:textAllCaps="true" />
 
-        </RadioGroup>
+                <RadioButton
+                    android:id="@+id/generator_method_specific"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:paddingStart="8dp"
+                    android:text="@string/gen_method_specific_label"
+                    android:textAllCaps="true" />
 
-        <ScrollView
-            android:id="@+id/generator_scrollview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:scrollbars="vertical">
+            </RadioGroup>
 
             <ViewAnimator
                 android:id="@+id/generator_animator_frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                android:fillViewport="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
                 android:inAnimation="@anim/nav_default_enter_anim"
                 android:outAnimation="@anim/nav_default_exit_anim">
 
@@ -114,7 +114,8 @@
                     android:id="@+id/generator_lettercode_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/generator_lair_card"
@@ -169,8 +170,8 @@
                                 android:layout_height="wrap_content"
                                 android:visibility="gone"
                                 tools:visibility="visible"
-                                tools:itemCount="5"
-                                tools:listitem="@layout/letter_recycler_item"/>
+                                tools:itemCount="8"
+                                tools:listitem="@layout/letter_recycler_item" />
 
                         </LinearLayout>
 
@@ -227,7 +228,9 @@
                                 android:id="@+id/generator_small_recyclerview"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone" />
+                                android:visibility="gone"
+                                tools:itemCount="10"
+                                tools:listitem="@layout/letter_recycler_item"/>
 
                         </LinearLayout>
 
@@ -240,7 +243,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/generator_coinage_card"
@@ -303,7 +307,7 @@
                                     android:textSize="16sp"
                                     android:textStyle="bold"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintBaseline_toBaselineOf="@id/generator_coinage_minimum_input"/>
+                                    app:layout_constraintBaseline_toBaselineOf="@id/generator_coinage_minimum_input" />
 
                                 <androidx.constraintlayout.widget.Barrier
                                     android:id="@+id/generator_coinage_barrier"
@@ -330,7 +334,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:textAlignment="viewEnd"
-                                        android:text="0.00"/>
+                                        android:text="0.00" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -352,7 +356,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:textAlignment="viewEnd"
-                                        android:text="0.00"/>
+                                        android:text="0.00" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -526,7 +530,7 @@
                                         android:inputType="number"
                                         android:textSize="18sp"
                                         android:textAlignment="center"
-                                        android:text="0"/>
+                                        android:text="0" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -569,7 +573,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="none"
-                                        tools:text="Don't Care"/>
+                                        tools:text="Don't Care" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -593,7 +597,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="none"
-                                        tools:text="Don't Care"/>
+                                        tools:text="Don't Care" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -683,7 +687,7 @@
                                         android:inputType="number"
                                         android:textSize="18sp"
                                         android:textAlignment="center"
-                                        android:text="0"/>
+                                        android:text="0" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -724,7 +728,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="none"
-                                        tools:text="Don't Care"/>
+                                        tools:text="Don't Care" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -747,7 +751,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="none"
-                                        tools:text="Don't Care"/>
+                                        tools:text="Don't Care" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -760,7 +764,7 @@
                                     android:layout_marginTop="8dp"
                                     android:paddingBottom="8dp"
                                     android:text="@string/maps_can_replace_paper_art"
-                                    android:textStyle="italic"/>
+                                    android:textStyle="italic" />
 
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -818,8 +822,7 @@
                                 android:id="@+id/generator_magic_layout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone"
-                                tools:visibility="visible">
+                                android:visibility="gone">
 
                                 <TextView
                                     android:id="@+id/generator_magic_potion_qty_label"
@@ -849,7 +852,7 @@
                                         android:inputType="number"
                                         android:textSize="18sp"
                                         android:textAlignment="center"
-                                        android:text="0"/>
+                                        android:text="0" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -881,7 +884,7 @@
                                         android:inputType="number"
                                         android:textSize="18sp"
                                         android:textAlignment="center"
-                                        android:text="0"/>
+                                        android:text="0" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -903,7 +906,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     app:barrierDirection="end"
-                                    app:constraint_referenced_ids="generator_magic_scroll_allowed_label"/>
+                                    app:constraint_referenced_ids="generator_magic_scroll_allowed_label" />
 
                                 <CheckBox
                                     android:id="@+id/generator_scroll_spell_checkbox"
@@ -956,7 +959,7 @@
                                         android:inputType="number"
                                         android:textSize="18sp"
                                         android:textAlignment="center"
-                                        android:text="0"/>
+                                        android:text="0" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -1319,8 +1322,7 @@
                                     android:textSize="14sp"
                                     android:textStyle="italic"
                                     app:layout_constraintBaseline_toBaselineOf="@id/generator_spell_source_splat_checkbox"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    />
+                                    app:layout_constraintStart_toStartOf="parent" />
 
                                 <androidx.constraintlayout.widget.Barrier
                                     android:id="@+id/generator_spell_source_barrier"
@@ -1428,76 +1430,78 @@
 
             </ViewAnimator>
 
-        </ScrollView>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="64dp">
-
-            <LinearLayout
-                android:id="@+id/generator_bottom_button_group"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:minHeight="64dp"
-                android:orientation="horizontal">
+                android:layout_gravity="bottom"
+                android:paddingBottom="16dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/generator_reset_button"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:id="@+id/generator_bottom_button_group"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="24dp"
-                    android:backgroundTint="?attr/colorPrimaryDark"
-                    android:textColor="?attr/colorOnPrimarySurface"
-                    android:padding="8dp"
-                    android:text="@string/reset"
-                    android:textAllCaps="true"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:minHeight="64dp"
+                    android:orientation="horizontal">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/generator_generate_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:padding="8dp"
-                    android:text="@string/generate"
-                    android:textAllCaps="true"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/generator_reset_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="24dp"
+                        android:backgroundTint="?attr/colorPrimaryDark"
+                        android:textColor="?attr/colorOnPrimarySurface"
+                        android:padding="8dp"
+                        android:text="@string/reset"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
-            </LinearLayout>
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/generator_generate_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:padding="8dp"
+                        android:text="@string/generate"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/generator_bottom_waiting_group"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal"
-                android:visibility="gone">
+                </LinearLayout>
 
-                <ProgressBar
-                    android:id="@+id/generator_waiting_progress"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:indeterminateOnly="true"
-                    android:layout_marginVertical="8dp"
-                    android:layout_marginEnd="16dp" />
+                <LinearLayout
+                    android:id="@+id/generator_bottom_waiting_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone">
 
-                <TextView
-                    android:id="@+id/generator_waiting_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/generator_waiting_text_string"
-                    android:textSize="20sp"
-                    android:layout_gravity="center_vertical"/>
+                    <ProgressBar
+                        android:id="@+id/generator_waiting_progress"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateOnly="true"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginEnd="16dp" />
 
-            </LinearLayout>
+                    <TextView
+                        android:id="@+id/generator_waiting_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/generator_waiting_text_string"
+                        android:textSize="20sp"
+                        android:layout_gravity="center_vertical" />
 
-        </FrameLayout>
+                </LinearLayout>
 
-    </LinearLayout>
+            </FrameLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

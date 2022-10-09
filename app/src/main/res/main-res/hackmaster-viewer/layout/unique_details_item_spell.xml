@@ -1,72 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
-    android:orientation="horizontal">
+    android:layout_height="@dimen/spell_item_height">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/spell_item_index_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15" />
 
     <TextView
-        android:id="@+id/spell_item_index"
-        android:layout_width="64dp"
-        android:layout_height="match_parent"
+        android:id="@+id/spell_item_index_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/spell_item_index_guideline"
+        app:layout_constraintBottom_toTopOf="@id/spell_item_subclass_card"
+        android:elevation="1dp"
         android:textStyle="bold"
-        android:gravity="center"
         android:textSize="24sp"
-        android:textColor="?attr/colorOnSecondary"
-        android:background="?attr/colorSecondary"
-        tools:text="100"/>
+        android:shadowRadius="9"
+        android:textColor="@color/white"
+        android:shadowColor="@color/pitch_black"
+        tools:text="# 1"/>
 
-    <View
+    <androidx.cardview.widget.CardView
+        android:id="@+id/spell_item_subclass_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/spell_item_index_guideline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="100dp"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/spell_item_subclass_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_gravity="center"
+            android:fontFeatureSettings="smcp"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="12sp"
+            tools:text="Vengeance" />
+
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/spell_item_type_backdrop"
+        android:layout_width="@dimen/spell_item_height"
+        android:layout_height="@dimen/spell_item_height"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/spell_item_arcane_backdrop_gradient" />
+
+    <TextView
+        android:id="@+id/spell_item_name"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        android:gravity="center_vertical"
+        android:autoSizeMaxTextSize="16sp"
+        android:autoSizeMinTextSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/spell_item_school_barrier"
+        app:layout_constraintStart_toEndOf="@id/spell_item_index_guideline"
+        app:layout_constraintBottom_toTopOf="@id/spell_item_level"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Sliggderlisp’s Particularly Noxious Depilatory Cloud" />
+
+    <TextView
+        android:id="@+id/spell_item_level"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:autoSizeMaxTextSize="14sp"
+        android:autoSizeMinTextSize="12sp"
+        android:textAlignment="textStart"
+        app:autoSizeText="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/spell_item_index_guideline"
+        tools:text="Level 7" />
+
+    <TextView
+        android:id="@+id/spell_item_source"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:autoSizeMaxTextSize="14sp"
+        android:autoSizeMinTextSize="12sp"
+        android:fontFamily="sans-serif-condensed"
+        android:textAlignment="textEnd"
+        android:textStyle="italic"
+        app:autoSizeText="uniform"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/spell_item_level"
+        tools:text="Spellslinger's Guide to Wurld Domination, pg 888" />
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/spell_item_school_card_1"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        app:cardElevation="6dp"
+        app:layout_constraintEnd_toStartOf="@id/spell_item_school_card_2"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/spell_item_school_image_1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            tools:src="@drawable/spell_school_evocation" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/spell_item_school_card_2"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        app:cardElevation="6dp"
+        app:layout_constraintEnd_toStartOf="@id/spell_item_school_card_3"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/spell_item_school_image_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            tools:src="@drawable/spell_school_alteration" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/spell_item_school_card_3"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardElevation="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/spell_item_school_image_3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            tools:src="@drawable/spell_school_illusion" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/spell_item_school_barrier"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="?attr/colorOnSecondary"/>
+        app:barrierDirection="start"
 
-    <RelativeLayout
-        android:id="@+id/spell_item_group"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start">
+        app:constraint_referenced_ids="spell_item_school_card_1"/>
 
-        <TextView
-            android:id="@+id/spell_item_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/spell_item_level"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:gravity="fill_vertical"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="Sliggderlisp’s Particularly Noxious Depilatory Cloud" />
-
-        <TextView
-            android:id="@+id/spell_item_level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-            android:textSize="12sp"
-            tools:text="M-U Lv. 7" />
-
-        <TextView
-            android:id="@+id/spell_item_source"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
-            android:textSize="12sp"
-            android:textStyle="italic"
-            tools:text="Spellslinger's Guide to Wurld Domination, pg 888" />
-
-    </RelativeLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

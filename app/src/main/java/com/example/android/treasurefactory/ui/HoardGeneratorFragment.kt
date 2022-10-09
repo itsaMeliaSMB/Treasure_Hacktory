@@ -29,12 +29,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
+import com.example.android.treasurefactory.database.LetterCode
 import com.example.android.treasurefactory.databinding.LayoutGeneratorFragmentBinding
-import com.example.android.treasurefactory.databinding.LettercodeItemBinding
-import com.example.android.treasurefactory.model.LetterEntry
+import com.example.android.treasurefactory.databinding.LetterRecyclerItemBinding
 import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModel
 import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModelFactory
+import com.google.android.material.card.MaterialCardView
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
 class HoardGeneratorFragment : Fragment() {
@@ -66,8 +68,8 @@ class HoardGeneratorFragment : Fragment() {
     private val dropdownSpellCurses by lazy { resources.getStringArray(R.array.dropdown_spell_curses) }
 
     // Adapters for letter code RecyclerViews
-    private val lairAdapter: LetterAdapter = LetterAdapter(true)
-    private val smallAdapter: LetterAdapter = LetterAdapter(false)
+    private var lairAdapter: LetterAdapter = LetterAdapter(true)
+    private var smallAdapter: LetterAdapter = LetterAdapter(false)
 
     // Adapters for dropdown AutoCompleteTextViews
     private val dropdownGemValuesAdapter by lazy { DropdownAdapter(requireContext(), R.layout.dropdown_menu_item, dropdownGemValues,null) }
@@ -322,6 +324,14 @@ class HoardGeneratorFragment : Fragment() {
 
                     // Clear the livedata
                     this.generatedHoardLiveData.value = null
+                }
+            }
+
+            letterCodeHolderLiveData.observe(viewLifecycleOwner) { pendingLetterCode ->
+
+                if (pendingLetterCode != null) {
+                    letterCodeHolderLiveData.value = null
+                    showLetterCodeOddsDialog(pendingLetterCode)
                 }
             }
         }
@@ -647,7 +657,7 @@ class HoardGeneratorFragment : Fragment() {
             }
 
             // Scroll to top of card
-            binding.generatorScrollview.scrollTo(0,binding.generatorCoinageCard.top)
+            binding.generatorNestedScroll.scrollTo(0,binding.generatorCoinageCard.top)
         }
 
         binding.generatorGemHeader.setOnClickListener {
@@ -767,7 +777,7 @@ class HoardGeneratorFragment : Fragment() {
             }
 
             // Scroll to top of card
-            binding.generatorScrollview.scrollTo(0,binding.generatorGemCard.top)
+            binding.generatorNestedScroll.scrollTo(0,binding.generatorGemCard.top)
         }
 
         binding.generatorArtHeader.setOnClickListener {
@@ -887,7 +897,7 @@ class HoardGeneratorFragment : Fragment() {
             }
 
             // Scroll to top of card
-            binding.generatorScrollview.scrollTo(0,binding.generatorArtCard.top)
+            binding.generatorNestedScroll.scrollTo(0,binding.generatorArtCard.top)
         }
 
         binding.generatorMagicHeader.setOnClickListener {
@@ -1007,7 +1017,7 @@ class HoardGeneratorFragment : Fragment() {
             }
 
             // Scroll to top of card
-            binding.generatorScrollview.scrollTo(0,binding.generatorMagicCard.top)
+            binding.generatorNestedScroll.scrollTo(0,binding.generatorMagicCard.top)
         }
 
         binding.generatorSpellHeader.setOnClickListener {
@@ -1127,7 +1137,7 @@ class HoardGeneratorFragment : Fragment() {
             }
 
             // Scroll to top of card
-            binding.generatorScrollview.scrollTo(0,binding.generatorSpellCard.top)
+            binding.generatorNestedScroll.scrollTo(0,binding.generatorSpellCard.top)
         }
         // endregion
 
@@ -1410,10 +1420,7 @@ class HoardGeneratorFragment : Fragment() {
 
         binding.generatorGenerateButton.setOnClickListener {
 
-            //TODO find out why soft keyboard botches order processing.
-            //https://rmirabelle.medium.com/close-hide-the-soft-keyboard-in-android-db1da22b09d2
-
-            // Generate hoard order
+            // Generate hoard
             when (binding.generatorMethodGroup.checkedRadioButtonId) {
 
                 R.id.generator_method_lettercode-> {
@@ -1422,10 +1429,7 @@ class HoardGeneratorFragment : Fragment() {
 
                     if (generatorViewModel.validateLetterCodeValues()){
 
-                        // TEMPORARILY house letter code order here TODO
-                        val letterOrder = generatorViewModel.compileLetterCodeHoardOrder()
-
-                        generatorViewModel.generateHoard(letterOrder,appVersion)
+                       generatorViewModel.generateHoard(true, appVersion)
 
                     } else {
 
@@ -1437,11 +1441,8 @@ class HoardGeneratorFragment : Fragment() {
                     Log.d("generatorGenerateButton","Procedure for generating hoard order by specific method called.")
 
                     if (validateSpecificQtyValues()){
-                        
-                        // TEMPORARILY house specific quantity order here TODO
-                        val specQtyOrder = generatorViewModel.compileSpecificQtyHoardOrder()
 
-                        generatorViewModel.generateHoard(specQtyOrder,appVersion)
+                        generatorViewModel.generateHoard(false, appVersion)
 
                     } else {
 
@@ -1453,8 +1454,6 @@ class HoardGeneratorFragment : Fragment() {
                     Log.d("generatorGenerateButton","No method specified.")
                 }
             }
-
-            // TODO add Dialog for completion
 
         }
         // endregion
@@ -1468,15 +1467,13 @@ class HoardGeneratorFragment : Fragment() {
 
     //region [ Inner classes ]
 
-    private inner class LetterAdapter(
-        //val letterEntries: ArrayList<LetterEntry>,
-        private val isLairAdapter: Boolean)
-        : ListAdapter<LetterEntry,LetterAdapter.LetterHolder>(LetterDiffCallback()) {
+    private inner class LetterAdapter(private val isLairAdapter: Boolean)
+        : ListAdapter<Pair<String,Int>,LetterAdapter.LetterHolder>(LetterDiffCallback()) {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LetterHolder {
-            val binding = LettercodeItemBinding
+            val binding = LetterRecyclerItemBinding
                 .inflate(LayoutInflater.from(parent.context),parent,false)
-            return LetterHolder(binding)
+            return LetterHolder(binding, isLairAdapter)
         }
 
         override fun onBindViewHolder(holder: LetterHolder, position: Int) { //TODO consider replacing position calls with holder.adapterPosition
@@ -1486,50 +1483,83 @@ class HoardGeneratorFragment : Fragment() {
             holder.bind(currentItem)
         }
 
-        private inner class LetterHolder (val binding: LettercodeItemBinding)
+        private inner class LetterHolder (val binding: LetterRecyclerItemBinding, val isLairHolder: Boolean)
             : RecyclerView.ViewHolder(binding.root) {
 
-            fun bind(letterEntry: LetterEntry){
+            fun bind(entry: Pair<String, Int>){
 
-                val typeString = "Type ${letterEntry.letterCode}"
-                val oddsToast = Toast.makeText(context,letterEntry.oddsDesc,Toast.LENGTH_LONG)
+                val typeString = "${getString(R.string.odds_ref_treasure_type)} ${entry.first}"
+                val qtyString = "x ${entry.second}"
 
                 //TODO move OnClickListeners back to OnBindViewHolder if new binding schema fails
                 binding.apply {
-                    lettercodeItemName.text = typeString
-                    lettercodeItemInfodot.setOnClickListener {
 
-                        oddsToast.show()
+                    letterItemInfodot.setOnClickListener {
+                        generatorViewModel.fetchLetterCode(entry.first)
                     }
-                    lettercodeItemDecrementButton.setOnClickListener {
 
-                        generatorViewModel.incrementLetterQty(adapterPosition,false, isLairAdapter)
-                        //updateLetterAdapter(isLairAdapter)
-                        notifyItemChanged(adapterPosition)
-                    }
-                    lettercodeItemIncrementButton.setOnClickListener {
+                    letterItemText.text = typeString
 
-                        generatorViewModel.incrementLetterQty(adapterPosition,true, isLairAdapter)
-                        //updateLetterAdapter(isLairAdapter)
-                        notifyItemChanged(adapterPosition)
+                    letterItemButton.apply {
+                        text = qtyString
+                        setOnClickListener {
+
+                        //TODO test that the views get set to the correct values without any
+                        // additional binding required. Otherwise, God help you in wrangling
+                        // intended behavior.
+
+                        val dialogString =
+                            "${getString(R.string.letter_qty_picker_dialog_message)} ${entry.first}:"
+
+                        val qtyDialogView = layoutInflater
+                            .inflate(R.layout.dialog_letter_number_picker, null)
+
+                        qtyDialogView.findViewById<TextView>(R.id.dialog_letter_message).text =
+                            dialogString
+                        val qtyPicker = qtyDialogView
+                            .findViewById<NumberPicker>(R.id.dialog_letter_qty_picker).apply{
+                                minValue = 0
+                                maxValue = 20
+                                value = entry.second
+                                wrapSelectorWheel = false
+                            }
+                        qtyDialogView.findViewById<TextView>(R.id.dialog_letter_qty_current).text =
+                            entry.second.toString()
+
+                        val qtyDialogBuilder = AlertDialog.Builder(context).setView(qtyDialogView)
+                            .setTitle(getString(R.string.new_qty_title))
+                            .setPositiveButton(R.string.action_submit_qty_update) { _, _ ->
+                                if (qtyPicker.value != entry.second) {
+                                    if (isLairHolder) {
+                                        generatorViewModel.updateLairEntry(adapterPosition,
+                                            qtyPicker.value)
+                                    } else {
+                                        generatorViewModel.updateSmallEntry(adapterPosition,
+                                            qtyPicker.value)
+                                    }
+                                } }
+                            .setNegativeButton(R.string.action_cancel) { dialog, which ->
+                                dialog.cancel() }
+                            .setCancelable(true)
+                            .show()
                     }
-                    lettercodeItemCounter.text  = letterEntry.quantity.toString()
+                    }
                 }
             }
         }
     }
 
-    private class LetterDiffCallback : DiffUtil.ItemCallback<LetterEntry>() {
+    private class LetterDiffCallback : DiffUtil.ItemCallback<Pair<String,Int>>() {
 
         override fun areItemsTheSame(
-            oldItem: LetterEntry,
-            newItem: LetterEntry
-        ) = oldItem.letterCode == newItem.letterCode
+            oldItem: Pair<String,Int>,
+            newItem: Pair<String,Int>
+        ) = oldItem.first == newItem.first
 
         override fun areContentsTheSame(
-            oldItem: LetterEntry,
-            newItem: LetterEntry
-        ) = oldItem.quantity == newItem.quantity
+            oldItem: Pair<String,Int>,
+            newItem: Pair<String,Int>
+        ) = oldItem.second == newItem.second
     }
 
     /**
@@ -1856,6 +1886,262 @@ class HoardGeneratorFragment : Fragment() {
                 })
         }
     }
+
+    private fun showLetterCodeOddsDialog(letterCode: LetterCode) {
+
+        val oddsView = layoutInflater.inflate(R.layout.dialog_odds_reference,null)
+
+        val dialogBuilder = AlertDialog.Builder(context).setView(oddsView)
+
+        oddsView.apply {
+            findViewById<TextView>(R.id.odds_ref_treasure_type_letter).text =
+                letterCode.letterID
+
+            // Copper pieces
+            if (letterCode.cpChance > 0) {
+                findViewById<MaterialCardView>(R.id.odds_ref_cp_card).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.odds_ref_cp_odds_info).text =
+                    letterCode.cpChance.toString()
+                (letterCode.cpMin.formatWithCommas() + " - " +
+                        letterCode.cpMax.formatWithCommas()).also {
+                    findViewById<TextView>(R.id.odds_ref_cp_amount_info).text = it }
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_cp_card).visibility = View.GONE
+            }
+
+            // Silver pieces
+            if (letterCode.spChance > 0) {
+                findViewById<MaterialCardView>(R.id.odds_ref_sp_card).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.odds_ref_sp_odds_info).text =
+                    letterCode.spChance.toString()
+                (letterCode.spMin.formatWithCommas() + " - " +
+                        letterCode.spMax.formatWithCommas()).also {
+                    findViewById<TextView>(R.id.odds_ref_sp_amount_info).text = it }
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_sp_card).visibility = View.GONE
+            }
+
+            // Electrum pieces
+            if (letterCode.epChance > 0) {
+                findViewById<MaterialCardView>(R.id.odds_ref_ep_card).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.odds_ref_ep_odds_info).text =
+                    letterCode.epChance.toString()
+                (letterCode.epMin.formatWithCommas() + " - " +
+                        letterCode.epMax.formatWithCommas()).also {
+                    findViewById<TextView>(R.id.odds_ref_ep_amount_info).text = it }
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_ep_card).visibility = View.GONE
+            }
+
+            // Gold pieces
+            if (letterCode.gpChance > 0) {
+                findViewById<MaterialCardView>(R.id.odds_ref_gp_card).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.odds_ref_gp_odds_info).text =
+                    letterCode.gpChance.toString()
+                (letterCode.gpMin.formatWithCommas() + " - " +
+                        letterCode.gpMax.formatWithCommas()).also {
+                    findViewById<TextView>(R.id.odds_ref_gp_amount_info).text = it }
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_gp_card).visibility = View.GONE
+            }
+
+            // Hard silver pieces
+            if (letterCode.hspChance > 0) {
+                findViewById<MaterialCardView>(R.id.odds_ref_hsp_card).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.odds_ref_hsp_odds_info).text =
+                    letterCode.hspChance.toString()
+                (letterCode.hspMin.formatWithCommas() + " - " +
+                        letterCode.hspMax.formatWithCommas()).also {
+                    findViewById<TextView>(R.id.odds_ref_hsp_amount_info).text = it }
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_hsp_card).visibility = View.GONE
+            }
+
+            // Platinum pieces
+            if (letterCode.ppChance > 0) {
+                findViewById<MaterialCardView>(R.id.odds_ref_pp_card).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.odds_ref_pp_odds_info).text =
+                    letterCode.ppChance.toString()
+                (letterCode.ppMin.formatWithCommas() + " - " +
+                        letterCode.ppMax.formatWithCommas()).also {
+                    findViewById<TextView>(R.id.odds_ref_pp_amount_info).text = it }
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_pp_card).visibility = View.GONE
+            }
+
+            // Gemstones / Jewels
+            if (letterCode.gemChance > 0) {
+                findViewById<MaterialCardView>(R.id.odds_ref_gems_card).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.odds_ref_gems_odds_info).text =
+                    letterCode.gemChance.toString()
+                (letterCode.gemMin.toString() + " - " + letterCode.gemMax.toString()).also {
+                    findViewById<TextView>(R.id.odds_ref_gems_amount_info).text = it }
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_gems_card).visibility = View.GONE
+            }
+
+            // Art objects
+            if (letterCode.artChance > 0) {
+                findViewById<MaterialCardView>(R.id.odds_ref_art_card).visibility = View.VISIBLE
+                findViewById<TextView>(R.id.odds_ref_art_odds_info).text =
+                    letterCode.artChance.toString()
+                (letterCode.artMin.toString() + " - " + letterCode.artMax.toString()).also {
+                    findViewById<TextView>(R.id.odds_ref_art_amount_info).text = it }
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_art_card).visibility = View.GONE
+            }
+
+            // Magic item(s)
+            if (letterCode.potionChance > 0 || letterCode.scrollChance > 0 ||
+                letterCode.weaponChance > 0 || letterCode.noWeaponChance > 0 ||
+                    letterCode.anyChance > 0) {
+
+                findViewById<MaterialCardView>(R.id.odds_ref_magic_card).visibility = View.VISIBLE
+
+                if (letterCode.anyChance > 0) {
+
+                    findViewById<TextView>(R.id.odds_ref_magic_odds_info).text =
+                        letterCode.anyChance.toString()
+
+                    findViewById<TextView>(R.id.odds_ref_magic_amount_info).text =
+                        letterCode.anyMin.toString()
+
+                    findViewById<TextView>(R.id.odds_ref_magic_qualifier).text =
+                        getString(R.string.generator_label_any_magic)
+
+                    findViewById<ImageView>(R.id.odds_ref_magic_backdrop)
+                        .setImageResource(R.drawable.book_runes)
+
+                    when {
+
+                        letterCode.potionChance > 0 -> {
+
+                            findViewById<View>(R.id.odds_ref_magic_add_on_divider).visibility =
+                                View.VISIBLE
+                            findViewById<LinearLayout>(R.id.odds_ref_magic_add_on_layout).visibility =
+                                View.VISIBLE
+                            findViewById<TextView>(R.id.odds_ref_magic_add_on_label).text =
+                                getString(R.string.extra_potion_label)
+                            findViewById<ImageView>(R.id.odds_ref_magic_add_on_icon)
+                                .setImageResource(R.drawable.clipart_potion_vector_icon)
+                        }
+
+                        letterCode.scrollChance > 0 -> {
+
+                            findViewById<View>(R.id.odds_ref_magic_add_on_divider).visibility =
+                                View.VISIBLE
+                            findViewById<LinearLayout>(R.id.odds_ref_magic_add_on_layout).visibility =
+                                View.VISIBLE
+                            findViewById<TextView>(R.id.odds_ref_magic_add_on_label).text =
+                                getString(R.string.extra_scroll_label)
+                            findViewById<ImageView>(R.id.odds_ref_magic_add_on_icon)
+                                .setImageResource(R.drawable.clipart_scroll_vector_icon)
+                        }
+
+                        else -> {
+                            findViewById<View>(R.id.odds_ref_magic_add_on_divider).visibility =
+                                View.GONE
+                            findViewById<LinearLayout>(R.id.odds_ref_magic_add_on_layout).visibility =
+                                View.GONE
+                        }
+                    }
+
+                } else {
+
+                    when {
+
+                        letterCode.potionChance > 0 ->  {
+
+                            findViewById<TextView>(R.id.odds_ref_magic_odds_info).text =
+                                letterCode.potionChance.toString()
+
+                            findViewById<ImageView>(R.id.odds_ref_magic_backdrop)
+                                .setImageResource(R.drawable.potion_treasure)
+
+                            findViewById<TextView>(R.id.odds_ref_magic_qualifier).text =
+                                getString(R.string.generator_label_potions)
+
+                            if (letterCode.potionMin == letterCode.potionMax) {
+
+                                findViewById<TextView>(R.id.odds_ref_magic_amount_info).text =
+                                    letterCode.potionMin.toString()
+
+                            } else {
+                                (letterCode.potionMin.toString() + " - " +
+                                        letterCode.potionMax.toString()).also {
+                                    findViewById<TextView>(R.id.odds_ref_magic_amount_info)
+                                        .text = it }
+                            }
+                        }
+
+                        letterCode.scrollChance > 0 ->  {
+
+                            findViewById<TextView>(R.id.odds_ref_magic_odds_info).text =
+                                letterCode.scrollChance.toString()
+
+                            findViewById<ImageView>(R.id.odds_ref_magic_backdrop)
+                                .setImageResource(R.drawable.scroll_base)
+
+                            findViewById<TextView>(R.id.odds_ref_magic_qualifier).text =
+                                getString(R.string.generator_label_scrolls)
+
+                            if (letterCode.scrollMin == letterCode.potionMax) {
+
+                                findViewById<TextView>(R.id.odds_ref_magic_amount_info).text =
+                                    letterCode.scrollMin.toString()
+
+                            } else {
+                                (letterCode.scrollMin.toString() + " - " +
+                                        letterCode.scrollMax.toString()).also {
+                                    findViewById<TextView>(R.id.odds_ref_magic_amount_info)
+                                        .text = it }
+                            }
+                        }
+
+                        letterCode.weaponChance > 0 ->  {
+
+                            findViewById<TextView>(R.id.odds_ref_magic_odds_info).text =
+                                letterCode.weaponChance.toString()
+
+                            findViewById<ImageView>(R.id.odds_ref_magic_backdrop)
+                                .setImageResource(R.drawable.weapon_sword_fire)
+
+                            findViewById<TextView>(R.id.odds_ref_magic_qualifier).text =
+                                getString(R.string.generator_label_armor_weapons)
+
+                            findViewById<TextView>(R.id.odds_ref_magic_amount_info).text =
+                                letterCode.weaponMin.toString()
+                        }
+
+                        letterCode.noWeaponChance > 0 ->  {
+
+                            findViewById<TextView>(R.id.odds_ref_magic_odds_info).text =
+                                letterCode.noWeaponChance.toString()
+
+                            findViewById<ImageView>(R.id.odds_ref_magic_backdrop)
+                                .setImageResource(R.drawable.shield_charged)
+
+                            findViewById<TextView>(R.id.odds_ref_magic_qualifier).text =
+                                getString(R.string.generator_label_except_weapons)
+
+                            findViewById<TextView>(R.id.odds_ref_magic_amount_info).text =
+                                letterCode.noWeaponMin.toString()
+                        }
+                    }
+                }
+
+            } else {
+                findViewById<MaterialCardView>(R.id.odds_ref_magic_card).visibility = View.GONE
+            }
+
+        }
+
+        dialogBuilder.setPositiveButton(R.string.ok_affirmative) { dialog, _ -> dialog.dismiss() }
+            .setCancelable(true)
+            .show()
+    }
+
+    private fun Int.formatWithCommas() : String = NumberFormat.getNumberInstance().format(this)
 
     private fun LayoutGeneratorFragmentBinding.setFieldsFromViewModel() {
 
