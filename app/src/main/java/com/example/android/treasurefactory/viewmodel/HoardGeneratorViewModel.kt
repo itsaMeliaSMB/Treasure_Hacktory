@@ -9,7 +9,6 @@ import com.example.android.treasurefactory.LootGeneratorAsync
 import com.example.android.treasurefactory.database.LetterCode
 import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
-import com.example.android.treasurefactory.ui.GenDropdownTag
 import com.example.android.treasurefactory.ui.GenEditTextTag
 import kotlinx.coroutines.launch
 import java.util.*
@@ -28,27 +27,26 @@ const val MAXIMUM_SPELL_COLLECTION_QTY = 75
 const val MAXIMUM_HOARD_VALUE = 9999999999.99
 const val MAXIMUM_COINAGE_AMOUNT = 999999999.99
 
-const val ART_MAP_CHANCE = 5
-const val SCROLL_MAP_CHANCE = 10
-
 class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel() {
 
     //region << Values, variables, and containers >>
 
     // region ( Method-agnostic variables )
-    private var hoardName = ""
+    var hoardName = ""
 
     /**
      * Index of displayed child view group and method to use for order generation.
      * 0 = Letter-code, 1 = Specific quantity.
      */
-    private var generationMethodPos = 0
+    var generationMethodPos = 0
+        private set
 
     private var isRunningAsync = false
 
     val isRunningAsyncLiveData = MutableLiveData(isRunningAsync)
     // endregion
 
+    // region ( Letter code value containers )
     private val lairList = getCleanLairList()
     private val smallList = getCleanSmallList()
 
@@ -61,8 +59,10 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
     // endregion
 
     // region ( Specific Quantity value containers )
-    private var coinMin = 0.0
-    private var coinMax = 0.0
+    var coinMin = 0.0
+        private set
+    var coinMax = 0.0
+        private set
     var cpChecked = false
     var spChecked = false
     var epChecked = false
@@ -70,85 +70,34 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
     var hspChecked = false
     var ppChecked = false
 
-    private var gemQty = 0
-    private var gemMinPos = 0
-    private var gemMaxPos = 0
+    var generatorOptions = GeneratorOptions()
 
-    private var artQty = 0
-    private var artMinPos = 0
-    private var artMaxPos = 0
-    var artMapChecked = false
+    var gemQty = 0
+        private set
 
-    private var potionQty = 0
-    private var scrollQty = 0
-    private var armWepQty = 0
-    private var anyButQty = 0
-    private var anyMgcQty = 0
-    var spellScrollChecked = false
-    var nonSpScrollChecked = false
-    var scrollMapChecked = false
-    var intWepChecked = false
-    var cursedChecked = true
-    var relicsChecked = true
+    var artQty = 0
+        private set
 
-    private var spCoQty = 0
-    private var maxSpellsPerSpCo = 1
-    private var splDisciplinePos = 0
-    private var genMethodPos = 0
-    private var enabledGenMetArray = BooleanArray(1)
-    private var spLvlMinPos = 1
-    private var spLvlMaxPos = 9
-    var splatChecked = false
-    var hackJChecked = false
-    var otherChecked = false
-    var restrictChecked = false
-    var rerollChecked = false
-    private var spCoCursesPos = 0
+    var potionQty = 0
+        private set
+    var scrollQty = 0
+        private set
+    var armWepQty = 0
+        private set
+    var anyButQty = 0
+        private set
+    var anyMgcQty = 0
+        private set
 
-    // region ( Public getters )
-
-    fun getHoardName() = hoardName
-    fun getGenerationMethodPos() = generationMethodPos
-    fun getCoinMin() = coinMin
-    fun getCoinMax() = coinMax
-
-    fun getGemQty() = gemQty
-    fun getGemMinPos() = gemMinPos
-    fun getGemMaxPos() = gemMaxPos
-
-    fun getArtQty() = artQty
-    fun getArtMinPos() = artMinPos
-    fun getArtMaxPos() = artMaxPos
-
-    fun getPotionQty() = potionQty
-    fun getScrollQty() = scrollQty
-    fun getArmWepQty() = armWepQty
-    fun getAnyButQty() = anyButQty
-    fun getAnyMgcQty() = anyMgcQty
-
-    fun getSpCoQty() = spCoQty
-    fun getMaxSpellsPerSpCo() = maxSpellsPerSpCo
-    fun getSplDisciplinePos() = splDisciplinePos
-    fun getGenMethodPos() = genMethodPos
-    fun getEnabledGenMetArray() = enabledGenMetArray
-    fun getSpLvlMinPos() = spLvlMinPos
-    fun getSpLvlMaxPos() = spLvlMaxPos
-    fun getSpCoCursesPos() = spCoCursesPos
-    // endregion
+    var spCoQty = 0
+        private set
+    var spellLevelRange = IntRange(0,9)
+    var spellsPerRange = IntRange(1,7)
     // endregion
 
-    /*
-    LiveData links TODO remove before shipped build
-    https://www.rockandnull.com/jetpack-viewmodel-initialization/
-    https://medium.com/@fluxtah/two-ways-to-keep-livedata-t-immutable-and-mutable-only-from-a-single-source-a4a1dcdc0ef
-    https://stackoverflow.com/questions/50629402/how-to-properly-update-androids-recyclerview-using-livedata
-    https://stackoverflow.com/questions/66595863/update-a-row-in-recyclerview-with-listadapter
-    */
     // endregion
 
     // region [ Setter functions ]
-    fun setHoardName(newHoardName: String){ hoardName = newHoardName }
-
     fun setGeneratorMethodPos(newViewGroupIndex: Int){
         if (newViewGroupIndex in 0..1) {
             generationMethodPos = newViewGroupIndex
@@ -165,8 +114,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
     }
 
     // region ( Letter update functions )
-
-    // region TODO (new implementations)
     fun updateLairEntry(position: Int, newValue : Int) {
         if (position in lairList.indices) {
             lairList[position] = lairList[position].first to newValue.coerceIn(MINIMUM_LETTER_QTY,
@@ -200,7 +147,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         }
         smallListLiveData.postValue(smallList.toList())
     }
-    // endregion
 
     // endregion
 
@@ -216,37 +162,17 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         ppChecked = false
 
         gemQty = 0
-        gemMinPos = 0
-        gemMaxPos = 0
 
         artQty = 0
-        artMinPos = 0
-        artMaxPos = 0
-        artMapChecked = false
         potionQty = 0
         scrollQty = 0
         armWepQty = 0
         anyButQty = 0
         anyMgcQty = 0
-        spellScrollChecked = false
-        nonSpScrollChecked = false
-        scrollMapChecked = false
-        intWepChecked = false
-        cursedChecked = true
-        relicsChecked = true
 
         spCoQty = 0
-        maxSpellsPerSpCo = 1
-        splDisciplinePos = 0
-        genMethodPos = 0
-        spLvlMinPos = 1
-        spLvlMaxPos = 9
-        splatChecked = false
-        hackJChecked = false
-        otherChecked = false
-        restrictChecked = false
-        rerollChecked = false
-        spCoCursesPos = 0
+        spellLevelRange = IntRange(0, 9)
+        spellsPerRange = IntRange(1, MAXIMUM_SPELLS_PER_SCROLL)
     }
 
     /**
@@ -310,11 +236,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                     GenEditTextTag.SPELL_CO_QTY -> if (parsedValue != spCoQty) {
 
                         spCoQty = parsedValue
-                    }
-
-                    GenEditTextTag.MAX_SPELL_PER -> if (parsedValue != maxSpellsPerSpCo) {
-
-                        maxSpellsPerSpCo = parsedValue
                     }
 
                     else -> Log.e("setValueFromEditText | validateAsInt",
@@ -399,145 +320,14 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
             GenEditTextTag.ANY_BUT_WEAP_QTY -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
             GenEditTextTag.ANY_MAGIC_QTY    -> validateAsInt(0, MAXIMUM_UNIQUE_QTY)
             GenEditTextTag.SPELL_CO_QTY     -> validateAsInt(0, MAXIMUM_SPELL_COLLECTION_QTY)
-            GenEditTextTag.MAX_SPELL_PER    -> validateAsInt(1, MAXIMUM_SPELLS_PER_SCROLL)
         }
 
         return errorString
-    }
-
-    /**
-     * Sets value of GeneratorViewModel field from data passed from an OnItemSelectedListener
-     * from GeneratorHoardFragment. Returns a string to be set as the calling view's error message
-     * if it fails validation.
-     */
-    fun setValueFromDropdown(sourceViewTag: GenDropdownTag, position: Int, childEnabled: Boolean) : String? {
-
-        var errorString : String? = null
-
-        fun validateEnabled(){
-            if (!childEnabled) errorString = "Invalid method for chosen discipline."
-        }
-
-        when (sourceViewTag) {
-
-            GenDropdownTag.GEM_MINIMUM -> {
-                Log.d("setValueFromDropdown($sourceViewTag,$position,$childEnabled)",
-                    "Before: gemMinPos = ${gemMinPos}, gemMaxPos = $gemMaxPos")
-
-                gemMinPos = position
-
-                Log.d("setValueFromDropdown($sourceViewTag,$position,$childEnabled)",
-                    "After: gemMinPos = ${gemMinPos}, gemMaxPos = $gemMaxPos")
-            }
-
-            GenDropdownTag.GEM_MAXIMUM -> {
-
-                errorString = validateDropdownMaximum(sourceViewTag,position).takeIf { it != null }
-                gemMaxPos = position
-            }
-
-            GenDropdownTag.ART_MINIMUM -> artMinPos = position
-
-            GenDropdownTag.ART_MAXIMUM -> {
-                errorString = validateDropdownMaximum(sourceViewTag,position).takeIf { it != null }
-                artMaxPos = position
-            }
-
-            GenDropdownTag.SPELL_DISCIPLINE -> {
-                splDisciplinePos = position
-            }
-
-            GenDropdownTag.SPELL_TYPE -> {
-                validateEnabled()
-                genMethodPos
-            }
-
-            GenDropdownTag.SPELL_MINIMUM -> spLvlMinPos = position
-
-            GenDropdownTag.SPELL_MAXIMUM -> {
-                errorString = validateDropdownMaximum(sourceViewTag,position).takeIf { it != null }
-                spLvlMaxPos = position
-            }
-
-            GenDropdownTag.SPELL_CURSES -> {
-                spCoCursesPos = position
-            }
-        }
-
-        Log.d("setValueFromDropdown($sourceViewTag,$position,$childEnabled)",
-            "Final errorString = " +
-            if (errorString != null) "\"$errorString\"" else "null")
-
-        return errorString
-    }
-
-    fun setEnabledItemsByDiscipline(splDisPos: Int, splTypeArraySize: Int) : BooleanArray {
-
-        val newArray = BooleanArray( splTypeArraySize.takeUnless { it < 1 } ?: 1 ) { false }
-
-        val templateArray = when (splDisPos) {
-            0   -> booleanArrayOf(true,true)
-            //1   -> booleanArrayOf(true,true,false,true) TODO spellbooks implemented
-            //2   -> booleanArrayOf(true,true,true) TODO Chosen One is implemented
-            else-> booleanArrayOf(true,true)
-        }
-
-        val templateArrayLastIndex = templateArray.lastIndex
-
-        // Apply template over properly-size array
-        newArray.forEachIndexed { index, _ ->
-
-            newArray[index] = if (index <= templateArrayLastIndex) {
-                templateArray[index]
-            } else {
-                false
-            }
-        }
-
-        enabledGenMetArray = newArray
-
-        return newArray
     }
     // endregion
     // endregion
 
     // region [ Validation functions ]
-    fun validateDropdownMaximum(sourceViewTag: GenDropdownTag, position: Int): String? {
-
-        var errorString : String? = null
-
-        Log.d("validateDropdownMaximum($sourceViewTag, $position)",
-            "Dropdown maximum validation process started.")
-
-        val minPosition = when (sourceViewTag) {
-            GenDropdownTag.GEM_MAXIMUM  -> gemMinPos
-            GenDropdownTag.ART_MAXIMUM  -> artMinPos
-            GenDropdownTag.SPELL_MAXIMUM-> spLvlMinPos
-            else    -> {
-                Log.e("setValueFromDropdown()","Invalid sourceViewTag $sourceViewTag " +
-                        "passed in validateMaximum()")
-                0
-            }
-        }
-
-        Log.d("validateDropdownMaximum($sourceViewTag, $position)",
-            "minPosition = $minPosition, position = $position")
-
-        if ( !( ( (position == 0) && (sourceViewTag != GenDropdownTag.SPELL_MAXIMUM) )
-                    || (position >= minPosition) ) ) {
-            errorString = "Maximum cannot be lower than Minimum."
-
-            Log.e("validateDropdownMaximum($sourceViewTag, $position)",
-                "Invalid maximum detected.")
-        }
-
-        Log.d("validateDropdownMaximum($sourceViewTag, $position)",
-            "Dropdown maximum validation process completed." +
-                    if (errorString != null) " (\"$errorString\")" else "(no errorString)")
-
-        return errorString
-    }
-
     fun validateCoinageMaximum() : String? {
 
         return when {
@@ -568,6 +358,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         var generatedArmWeps = 0
         var generatedNonWeps = 0
         var generatedAnyMagic = 0
+        var generatedMaps = 0
 
         val compString = StringBuilder()
 
@@ -663,6 +454,10 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                             }
                         }
                     }
+
+                    if (Random.nextInt(101) <=
+                        generatorOptions.mapBase.coerceIn(1..100)) generatedMaps ++
+
                 }
                 compString.append("$letterKey x$orderQty,")
             }
@@ -673,7 +468,9 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         return HoardOrder(
             hoardName,
             creationDescription = "Generated by letter code method.\n" +
-                    "Initial composition: " + compString.toString().removeSuffix(", "),
+                    "Initial composition: " + compString.toString().removeSuffix(", ") +
+                    if (generatorOptions.mapBase > 0)
+                        "\n(${generatorOptions.mapBase}% chance per entry of treasure map)" else "",
             copperPieces = generatedCp,
             silverPieces = generatedSp,
             electrumPieces = generatedEp,
@@ -686,7 +483,41 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
             scrolls = generatedScrolls,
             armorOrWeapons = generatedArmWeps,
             anyButWeapons = generatedNonWeps,
-            anyMagicItems = generatedAnyMagic
+            anyMagicItems = generatedAnyMagic,
+            baseMaps = generatedMaps,
+            allowFalseMaps = generatorOptions.falseMapsOK,
+            genParams = OrderParams(
+                GemRestrictions(
+                    generatorOptions.gemMin, generatorOptions.gemMax),
+                ArtRestrictions(
+                    _minLvl = generatorOptions.artMin - 19,
+                    _maxLvl = generatorOptions.artMax - 19,
+                    paperMapChance = generatorOptions.mapPaper),
+                MagicItemRestrictions(
+                    spellScrollEnabled = generatorOptions.spellOk,
+                    nonScrollEnabled = generatorOptions.utilityOk,
+                    scrollMapChance = generatorOptions.mapScroll,
+                    allowedTables = generatorOptions.allowedMagic,
+                    allowCursedItems = generatorOptions.cursedOk,
+                    allowIntWeapons = generatorOptions.intelOk,
+                    spellCoRestrictions = SpellCoRestrictions(
+                        spellLevelRange.first,
+                        spellLevelRange.last,
+                        when(generatorOptions.spellDisciplinePos){
+                            0   -> AllowedDisciplines(true,false,false)
+                            1   -> AllowedDisciplines(true,true,false)
+                            2   -> AllowedDisciplines(false,false,true)
+                            else-> AllowedDisciplines(true,true,false) },
+                        spellsPerRange,
+                        generatorOptions.allowedSources,
+                        generatorOptions.restrictedOk,
+                        generatorOptions.spellReroll,
+                        generatorOptions.cursedOk,
+                        generatorOptions.spellCurses,
+                        generatorOptions.spellMethod
+                    )
+                )
+            )
         )
     }
 
@@ -713,50 +544,42 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         // Compile order parameters
         val newParams = OrderParams(
             GemRestrictions(
-                if (gemMinPos == 0) 0 else gemMinPos,
-                if (gemMaxPos == 0) 16 else gemMaxPos),
+                generatorOptions.gemMin, generatorOptions.gemMax),
             ArtRestrictions(
-                if (artMinPos == 0) -19 else artMinPos - 20,
-                if (artMaxPos == 0) 31 else artMaxPos - 20,
-                if (artMapChecked) ART_MAP_CHANCE else 0),
+                _minLvl = generatorOptions.artMin - 19,
+                _maxLvl = generatorOptions.artMax - 19,
+                paperMapChance = generatorOptions.mapPaper),
             MagicItemRestrictions(
-                spellScrollEnabled = spellScrollChecked,
-                nonScrollEnabled = nonSpScrollChecked,
-                scrollMapChance = if (scrollMapChecked) SCROLL_MAP_CHANCE else 0,
-                allowCursedItems = cursedChecked,
-                allowIntWeapons = intWepChecked,
-                allowArtifacts = relicsChecked,
+                spellScrollEnabled = generatorOptions.spellOk,
+                nonScrollEnabled = generatorOptions.utilityOk,
+                scrollMapChance = generatorOptions.mapScroll,
+                allowedTables = generatorOptions.allowedMagic,
+                allowCursedItems = generatorOptions.cursedOk,
+                allowIntWeapons = generatorOptions.intelOk,
                 spellCoRestrictions = SpellCoRestrictions(
-                    spLvlMinPos,
-                    spLvlMaxPos,
-                    when(splDisciplinePos){
-                        0   -> AllowedDisciplines(true,true,false)
-                        1   -> AllowedDisciplines(true,false,false)
-                        2   -> AllowedDisciplines(false,true,false)
-                        else-> AllowedDisciplines(true,true,true) },
-                    maxSpellsPerSpCo,
-                    SpCoSources(splatChecked,hackJChecked,otherChecked),
-                    restrictChecked,
-                    rerollChecked,
-                    cursedChecked,
-                    when(spCoCursesPos){
-                        0   -> SpCoCurses.STRICT_GMG
-                        1   -> SpCoCurses.OFFICIAL_ONLY
-                        2   -> SpCoCurses.ANY_CURSE
-                        else-> SpCoCurses.NONE },
-                    when (genMethodPos) {
-                        0   -> SpCoGenMethod.TRUE_RANDOM
-                        1   -> SpCoGenMethod.BY_THE_BOOK
-                        2   -> SpCoGenMethod.CHOSEN_ONE
-                        3   -> SpCoGenMethod.SPELL_BOOK
-                        else-> SpCoGenMethod.ANY_PHYSICAL }
+                    spellLevelRange.first,
+                    spellLevelRange.last,
+                    when(generatorOptions.spellDisciplinePos){
+                        0   -> AllowedDisciplines(true,false,false)
+                        1   -> AllowedDisciplines(true,true,false)
+                        2   -> AllowedDisciplines(false,false,true)
+                        else-> AllowedDisciplines(true,true,false) },
+                    spellsPerRange,
+                    generatorOptions.allowedSources,
+                    generatorOptions.restrictedOk,
+                    generatorOptions.spellReroll,
+                    generatorOptions.cursedOk,
+                    generatorOptions.spellCurses,
+                    generatorOptions.spellMethod
                 )
             )
         )
 
         newOrder = HoardOrder(
             hoardName = newHoardName,
-            creationDescription = "User-specified loot quantity",
+            creationDescription = "User-specified loot quantity." +
+                    if (generatorOptions.mapBase > 0)
+                        "\n(${generatorOptions.mapBase}% chance per entry of treasure map)" else "",
             copperPieces = coinPileMap.getOrDefault("cp",0),
             silverPieces = coinPileMap.getOrDefault("sp",0),
             electrumPieces = coinPileMap.getOrDefault("ep",0),
@@ -771,11 +594,11 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
             anyButWeapons = anyButQty,
             anyMagicItems = anyMgcQty,
             extraSpellCols = spCoQty,
+            baseMaps = if ((Random.nextInt(101) <=
+                        generatorOptions.mapBase.coerceIn(1..100))) 1 else 0,
+            allowFalseMaps = generatorOptions.falseMapsOK,
             genParams = newParams
         )
-
-        // TODO DEBUG ONLY: Log results
-        reportHoardOrderToDebug(newOrder)
 
         return newOrder
     }
@@ -791,7 +614,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
 
             setRunningAsync(true)
 
-            //TODO prepare hoard order asynchronously
             val hoardOrder = if (isLetterCodeMethod) {
 
                 compileLetterHoardOrder()
@@ -981,7 +803,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                         "<divine>" else "<>"} ${
                     if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.natural)
                         "<natural>" else "<>"}, Max spell count: " +
-                order.genParams.magicParams.spellCoRestrictions.spellCountMax.toString() +
+                order.genParams.magicParams.spellCoRestrictions.spellCountRange.toString() +
                 ", sources: " + order.genParams.magicParams.spellCoRestrictions.spellSources.toString() +
                 ", Allow restricted [${order.genParams.magicParams.spellCoRestrictions.allowRestricted}]" +
                 ", Re-roll choices [${order.genParams.magicParams.spellCoRestrictions.rerollChoice}]" +

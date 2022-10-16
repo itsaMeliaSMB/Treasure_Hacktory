@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/spell_item_height">
+    android:layout_height="@dimen/spell_item_height"
+    android:background="?attr/colorSurface">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/spell_item_index_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.15" />
+        app:layout_constraintGuide_percent="0.13" />
 
     <TextView
         android:id="@+id/spell_item_index_label"
@@ -26,21 +27,24 @@
         android:shadowRadius="9"
         android:textColor="@color/white"
         android:shadowColor="@color/pitch_black"
-        tools:text="# 1"/>
+        tools:text="# 25"/>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/spell_item_subclass_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="2dp"
+        android:layout_marginHorizontal="1dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/spell_item_index_guideline"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:cardElevation="2dp"
-        app:cardCornerRadius="100dp"
-        app:cardBackgroundColor="?attr/colorPrimary"
-        android:visibility="gone">
+        app:cardElevation="1dp"
+        app:cardCornerRadius="4dp"
+        app:cardBackgroundColor="@color/sanguine"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <!-- TODO: Set background color of card based on arcane subclass -->
 
         <TextView
             android:id="@+id/spell_item_subclass_text"
@@ -49,8 +53,11 @@
             android:fontFamily="sans-serif-condensed"
             android:layout_gravity="center"
             android:fontFeatureSettings="smcp"
-            android:textColor="?attr/colorOnPrimary"
-            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            android:maxLength="10"
+            android:ellipsize="middle"
+            android:maxLines="1"
             tools:text="Vengeance" />
 
     </androidx.cardview.widget.CardView>
@@ -71,8 +78,10 @@
         android:layout_height="0dp"
         android:layout_margin="4dp"
         android:gravity="center_vertical"
-        android:autoSizeMaxTextSize="16sp"
-        android:autoSizeMinTextSize="12sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMaxTextSize="20sp"
+        android:autoSizeMinTextSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/spell_item_school_barrier"
         app:layout_constraintStart_toEndOf="@id/spell_item_index_guideline"
@@ -90,7 +99,8 @@
         android:autoSizeMaxTextSize="14sp"
         android:autoSizeMinTextSize="12sp"
         android:textAlignment="textStart"
-        app:autoSizeText="uniform"
+        android:fontFeatureSettings="smcp"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/spell_item_index_guideline"
         tools:text="Level 7" />
@@ -107,7 +117,6 @@
         android:fontFamily="sans-serif-condensed"
         android:textAlignment="textEnd"
         android:textStyle="italic"
-        app:autoSizeText="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/spell_item_level"
@@ -142,7 +151,8 @@
         app:cardElevation="6dp"
         app:layout_constraintEnd_toStartOf="@id/spell_item_school_card_3"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/spell_item_school_image_2"
@@ -162,7 +172,8 @@
         app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <ImageView
             android:id="@+id/spell_item_school_image_3"

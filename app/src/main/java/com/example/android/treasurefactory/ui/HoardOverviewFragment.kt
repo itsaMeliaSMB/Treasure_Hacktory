@@ -2,6 +2,7 @@ package com.example.android.treasurefactory.ui
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import com.example.android.treasurefactory.model.HoardBadge
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModel
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModelFactory
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
 private const val ARG_HOARD_ID = "hoard_id"
@@ -42,6 +44,7 @@ class HoardOverviewFragment : Fragment() {
     private var totalArtValue = 0.0
     private var totalMagicValue = 0.0
     private var totalSpellValue = 0.0
+    private var totalXPValue = 0
 
     private var _binding: LayoutHoardOverviewBinding? = null
     private val binding get() = _binding!!
@@ -93,6 +96,8 @@ class HoardOverviewFragment : Fragment() {
 
                 isNowFavorite = activeHoard.isFavorite
 
+                hoardOverviewViewModel.updateXPTotal(hoard.hoardID)
+
                 updateUI()
             }
         }
@@ -139,6 +144,21 @@ class HoardOverviewFragment : Fragment() {
                 .format(totalSpellValue)
                 .removeSuffix(".0")} gp")
                 .also{ binding.hoardOverviewSpellsValue.text = it }
+        }
+
+        hoardOverviewViewModel.hoardTotalXPLiveData.observe(viewLifecycleOwner) { liveXPTotal ->
+
+            val oldXPTotal = totalXPValue
+
+            totalXPValue = liveXPTotal
+
+            Log.d("HoardOverviewFragment | hoardTotalXPLiveData observer","totalXPValue " +
+                    "change observed from $oldXPTotal to $totalXPValue.")
+
+            // Update value in detail view
+            (NumberFormat.getNumberInstance().format(totalXPValue) +
+                    " xp").also { binding.hoardOverviewExperienceInfo.text = it }
+            updateDifficultyLabel()
         }
         // endregion
 
@@ -214,6 +234,9 @@ class HoardOverviewFragment : Fragment() {
 
         binding.hoardOverviewMagicCard.setOnClickListener {
             Toast.makeText(context, "Item card clicked", Toast.LENGTH_SHORT).show()
+            //TODO start with magic items, I think
+            // Sticky headers/collapsable nested recylcer views
+            // Detail fragment
         }
 
         binding.hoardOverviewSpellsCard.setOnClickListener {
@@ -354,6 +377,7 @@ class HoardOverviewFragment : Fragment() {
                 .format(activeHoard.gpTotal)
                 .removeSuffix(".0")} gp").also { binding.hoardOverviewValueInfo.text = it }
             hoardOverviewFavCheckbox.isChecked = activeHoard.isFavorite
+
         }
 
         // Generate coinList for coinAdapter
@@ -390,28 +414,152 @@ class HoardOverviewFragment : Fragment() {
         binding.apply{
             hoardOverviewGemQty.text = activeHoard.gemCount.toString()
             if (activeHoard.gemCount == 0) {
-                //TODO update the color of the card of the background if there's an empty list
+
+                @ColorInt
+                val cardBackgroundColor = resources.getColor(R.color.gemPrimaryDesaturated,
+                    requireContext().theme)
+
+                hoardOverviewGemLayout.setBackgroundColor(cardBackgroundColor)
+
+            } else {
+
+                @ColorInt
+                val cardBackgroundColor = resources.getColor(R.color.gemPrimary,
+                    requireContext().theme)
+
+                hoardOverviewGemLayout.setBackgroundColor(cardBackgroundColor)
             }
             hoardOverviewArtQty.text = activeHoard.artCount.toString()
             ("Total Value: ${DecimalFormat("#,##0.0#")
                 .format(totalArtValue)
                 .removeSuffix(".0")} gp").also{ hoardOverviewArtValue.text = it }
             if (activeHoard.artCount == 0) {
-                //TODO update the color of the card of the background if there's an empty list
+
+                @ColorInt
+                val cardBackgroundColor = resources.getColor(R.color.artPrimaryDesaturated,
+                    requireContext().theme)
+
+                hoardOverviewArtLayout.setBackgroundColor(cardBackgroundColor)
+
+            } else {
+
+                @ColorInt
+                val cardBackgroundColor = resources.getColor(R.color.artPrimary,
+                    requireContext().theme)
+
+                hoardOverviewArtLayout.setBackgroundColor(cardBackgroundColor)
             }
             hoardOverviewMagicQty.text = activeHoard.magicCount.toString()
             ("Total Value: ${DecimalFormat("#,##0.0#")
                 .format(totalMagicValue)
                 .removeSuffix(".0")} gp").also{ hoardOverviewMagicValue.text = it }
             if (activeHoard.magicCount == 0) {
-                //TODO update the color of the card of the background if there's an empty list
+
+                @ColorInt
+                val cardBackgroundColor = resources.getColor(R.color.magicPrimaryDesaturated,
+                    requireContext().theme)
+
+                hoardOverviewMagicLayout.setBackgroundColor(cardBackgroundColor)
+
+            } else {
+
+                @ColorInt
+                val cardBackgroundColor = resources.getColor(R.color.magicPrimary,
+                    requireContext().theme)
+
+                hoardOverviewMagicLayout.setBackgroundColor(cardBackgroundColor)
             }
             hoardOverviewSpellsQty.text = activeHoard.spellsCount.toString()
             ("Total Value: ${DecimalFormat("#,##0.0#")
                 .format(totalSpellValue)
                 .removeSuffix(".0")} gp").also{ hoardOverviewSpellsValue.text = it }
             if (activeHoard.spellsCount == 0) {
-                //TODO update the color of the card of the background if there's an empty list
+
+                @ColorInt
+                val cardBackgroundColor = resources.getColor(R.color.spellPrimaryDesaturated,
+                    requireContext().theme)
+
+                hoardOverviewSpellsLayout.setBackgroundColor(cardBackgroundColor)
+
+            } else {
+
+                @ColorInt
+                val cardBackgroundColor = resources.getColor(R.color.spellPrimary,
+                    requireContext().theme)
+
+                hoardOverviewSpellsLayout.setBackgroundColor(cardBackgroundColor)
+            }
+        }
+    }
+
+    fun updateDifficultyLabel() {
+
+        val effortRating = activeHoard.effortRating
+
+        ("${
+            DecimalFormat("#0.0#")
+                .format(effortRating)
+                .removeSuffix(".0")} gp = 1 xp").also {
+            binding.hoardOverviewExperienceRatio.text = it }
+
+        binding.hoardOverviewExperienceDifficulty.apply{
+            when {
+                effortRating < 0.10  -> {
+                    text= getString(R.string.difficulty_high_6)
+                    setTextColor(resources.getColor(R.color.sanguine,context.theme))
+                }
+                effortRating >= 0.10 && effortRating < 1.00  -> {
+                    text= getString(R.string.difficulty_high_5)
+                    setTextColor(resources.getColor(R.color.cherry,context.theme))
+                }
+                effortRating >= 1.00 && effortRating < 2.00  -> {
+                    text= getString(R.string.difficulty_high_4)
+                    setTextColor(resources.getColor(R.color.scarlet,context.theme))
+                }
+                effortRating >= 2.00 && effortRating < 3.00  -> {
+                    text= getString(R.string.difficulty_high_3)
+                    setTextColor(resources.getColor(R.color.orange,context.theme))
+                }
+                effortRating >= 3.00 && effortRating < 4.00  -> {
+                    text= getString(R.string.difficulty_high_2)
+                    setTextColor(resources.getColor(R.color.gold,context.theme))
+                }
+                effortRating >= 4.00 && effortRating < 5.00  -> {
+                    text= getString(R.string.difficulty_high_1)
+                    setTextColor(resources.getColor(R.color.green,context.theme))
+                }
+                effortRating == 5.00  -> {
+                    text= getString(R.string.difficulty_average)
+                    setTextColor(resources.getColor(R.color.emerald,context.theme))
+                }
+                effortRating > 5.00 && effortRating < 6.00  -> {
+                    text= getString(R.string.difficulty_low_1)
+                    setTextColor(resources.getColor(R.color.turquoise,context.theme))
+                }
+                effortRating >= 6.00 && effortRating < 7.00  -> {
+                    text= getString(R.string.difficulty_low_2)
+                    setTextColor(resources.getColor(R.color.azure_blue,context.theme))
+                }
+                effortRating >= 7.00 && effortRating < 8.00  -> {
+                    text= getString(R.string.difficulty_low_3)
+                    setTextColor(resources.getColor(R.color.ultramarine,context.theme))
+                }
+                effortRating >= 8.00 && effortRating < 10.00  -> {
+                    text= getString(R.string.difficulty_low_4)
+                    setTextColor(resources.getColor(R.color.purple,context.theme))
+                }
+                effortRating >= 10.00 && effortRating < 15.00  -> {
+                    text= getString(R.string.difficulty_low_5)
+                    setTextColor(resources.getColor(R.color.plum,context.theme))
+                }
+                effortRating >= 15.00 && effortRating < 20.00  -> {
+                    text= getString(R.string.difficulty_low_6)
+                    setTextColor(resources.getColor(R.color.pewter,context.theme))
+                }
+                effortRating >= 7.00 && effortRating < 8.00  -> {
+                    text= getString(R.string.difficulty_low_7)
+                    setTextColor(resources.getColor(R.color.gray,context.theme))
+                }
             }
         }
     }

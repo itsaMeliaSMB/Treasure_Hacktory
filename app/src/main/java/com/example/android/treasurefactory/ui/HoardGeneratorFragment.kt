@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.transition.AutoTransition
@@ -30,8 +29,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.database.LetterCode
+import com.example.android.treasurefactory.databinding.DialogGenerationOptionsBinding
 import com.example.android.treasurefactory.databinding.LayoutGeneratorFragmentBinding
 import com.example.android.treasurefactory.databinding.LetterRecyclerItemBinding
+import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModel
 import com.example.android.treasurefactory.viewmodel.HoardGeneratorViewModelFactory
 import com.google.android.material.card.MaterialCardView
@@ -58,27 +59,12 @@ class HoardGeneratorFragment : Fragment() {
         HoardGeneratorViewModelFactory((activity?.application as TreasureHacktoryApplication).repository)
     }
 
-    // String arrays for dropdown menus
-    private val dropdownGemValues by lazy { resources.getStringArray(R.array.dropdown_gem_values) }
-    private val dropdownArtValues by lazy { resources.getStringArray(R.array.dropdown_art_values) }
-    private val dropdownSpellDisciplines by lazy { resources.getStringArray(R.array.dropdown_spell_disciplines) }
-    private val dropdownSpellLevels by lazy { resources.getStringArray(R.array.dropdown_spell_levels) }
-    private val dropdownSpellTypes by lazy { resources.getStringArray(R.array.dropdown_spell_types) }
-    private val dropdownSpellTypesEnabled by lazy { BooleanArray(dropdownSpellTypes.size)  { index -> (index < 2) } }
-    private val dropdownSpellCurses by lazy { resources.getStringArray(R.array.dropdown_spell_curses) }
-
     // Adapters for letter code RecyclerViews
     private var lairAdapter: LetterAdapter = LetterAdapter(true)
     private var smallAdapter: LetterAdapter = LetterAdapter(false)
 
-    // Adapters for dropdown AutoCompleteTextViews
-    private val dropdownGemValuesAdapter by lazy { DropdownAdapter(requireContext(), R.layout.dropdown_menu_item, dropdownGemValues,null) }
-    private val dropdownArtValuesAdapter by lazy { DropdownAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownArtValues, null) }
-    private val dropdownSpellDisciplinesAdapter by lazy { DropdownAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownSpellDisciplines, null) }
-    private val dropdownSpellTypeAdapter by lazy { DropdownAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownSpellTypes, null) }
-    private val dropdownSpellLevelsAdapter by lazy { DropdownAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownSpellLevels, dropdownSpellTypesEnabled) }
-    private val dropdownSpellCursesAdapter by lazy { DropdownAdapter(requireContext(),R.layout.dropdown_menu_item,dropdownSpellCurses, null) }
-    //endregion
+    val spLvlRangeShortLabels by lazy { resources.getStringArray(R.array.spell_level_labels_condensed) }
+    val spLvlRangeLongLabels by lazy { resources.getStringArray(R.array.spell_level_labels) }
 
     // region [ Callbacks ]
 
@@ -130,23 +116,6 @@ class HoardGeneratorFragment : Fragment() {
             setHasFixedSize(true)
             visibility = View.GONE //Start off collapsed
         }
-        // endregion
-
-        // region [ Prepare Specific Quantity views ]
-
-        // Apply adapters for dropdowns
-
-        binding.generatorGemMinimumAuto.initializeAsDropdown(dropdownGemValuesAdapter,generatorViewModel.getGemMinPos())
-        binding.generatorGemMaximumAuto.initializeAsDropdown(dropdownGemValuesAdapter,generatorViewModel.getGemMaxPos())
-
-        binding.generatorArtMinimumAuto.initializeAsDropdown(dropdownArtValuesAdapter, generatorViewModel.getArtMinPos())
-        binding.generatorArtMaximumAuto.initializeAsDropdown(dropdownArtValuesAdapter, generatorViewModel.getArtMaxPos())
-
-        binding.generatorSpellDisciplineAuto.initializeAsDropdown(dropdownSpellDisciplinesAdapter, generatorViewModel.getSplDisciplinePos())
-        binding.generatorSpellTypeAuto.initializeAsDropdown(dropdownSpellTypeAdapter, generatorViewModel.getGenMethodPos(),true)
-        binding.generatorSpellMinimumAuto.initializeAsDropdown(dropdownSpellLevelsAdapter, generatorViewModel.getSpLvlMinPos())
-        binding.generatorSpellMaximumAuto.initializeAsDropdown(dropdownSpellLevelsAdapter, generatorViewModel.getSpLvlMaxPos())
-        binding.generatorSpellCursesAuto.initializeAsDropdown(dropdownSpellCursesAdapter, generatorViewModel.getSpCoCursesPos())
         // endregion
 
         // region [ Prepare button views ]
@@ -242,7 +211,13 @@ class HoardGeneratorFragment : Fragment() {
                     val dialogView = layoutInflater
                         .inflate(R.layout.dialog_new_hoard_generated,null).apply {
 
-                            val hoardIcon = findViewById<ImageView>(R.id.hoard_list_item_list_icon)
+                            findViewById<TextView>(R.id.hoard_generated_text)
+                                .apply{
+                                    val fullMessage = getString(R.string.new_hoard_generated_msg_template)
+                                        .replace("=",newHoard.name)
+                                    text = fullMessage
+                                }
+                            findViewById<ImageView>(R.id.hoard_list_item_list_icon)
                                 .apply{
                                     try {
                                         setImageResource(resources.getIdentifier(
@@ -252,61 +227,53 @@ class HoardGeneratorFragment : Fragment() {
                                         setImageResource(R.drawable.clipart_default_image)
                                     }
                                 }
-                            val hoardBadge = findViewById<ImageView>(R.id.hoard_list_item_list_badge)
+                            findViewById<ImageView>(R.id.hoard_list_item_list_badge)
                                 .apply{
                                     //TODO implement when badges are a property of hoards
                                     visibility = View.INVISIBLE
                                 }
-                            val hoardTitle = findViewById<TextView>(R.id.hoard_list_item_name)
+                            findViewById<TextView>(R.id.hoard_list_item_name)
                                 .apply {
                                     text = newHoard.name
                                     setCompoundDrawablesRelativeWithIntrinsicBounds(
                                         R.drawable.clipart_new_vector_icon,0,0,0)
                                 }
-                            val hoardDate = findViewById<TextView>(R.id.hoard_list_item_date)
+                            findViewById<TextView>(R.id.hoard_list_item_date)
                                 .apply {
                                     text = SimpleDateFormat("MM/dd/yyyy")
                                         .format(newHoard.creationDate)
                                 }
-                            val hoardGPValue = findViewById<TextView>(R.id.hoard_list_item_gp_value)
+                            findViewById<TextView>(R.id.hoard_list_item_gp_value)
                                 .apply{
                                     ("Worth ${
                                         DecimalFormat("#,##0.0#")
                                         .format(newHoard.gpTotal)
                                         .removeSuffix(".0")} gp").also { this.text = it }
                                 }
-                            val hoardGems = findViewById<TextView>(R.id.hoard_list_item_gem_count)
+                            findViewById<TextView>(R.id.hoard_list_item_gem_count)
                                 .apply{
-                                    String.format("%03d",newHoard.gemCount)
+                                    text = String.format("%03d",newHoard.gemCount)
                                 }
-                            val hoardArt = findViewById<TextView>(R.id.hoard_list_item_art_count)
+                            findViewById<TextView>(R.id.hoard_list_item_art_count)
                                 .apply{
-                                    String.format("%03d",newHoard.artCount)
+                                    text = String.format("%03d",newHoard.artCount)
                                 }
-                            val hoardItems = findViewById<TextView>(R.id.hoard_list_item_magic_count)
+                            findViewById<TextView>(R.id.hoard_list_item_magic_count)
                                 .apply{
-                                    String.format("%03d",newHoard.magicCount)
+                                    text = String.format("%03d",newHoard.magicCount)
                                 }
-                            val hoardSpells = findViewById<TextView>(R.id.hoard_list_item_spell_count)
+                            findViewById<TextView>(R.id.hoard_list_item_spell_count)
                                 .apply{
-                                    String.format("%03d",newHoard.spellsCount)
+                                    text = String.format("%03d",newHoard.spellsCount)
                                 }
-                            val favStar = findViewById<ImageView>(R.id.hoard_list_item_favorited)
+                            findViewById<ImageView>(R.id.hoard_list_item_favorited)
                                 .apply{
-                                    setImageResource(
-                                        if (newHoard.isFavorite) {
-                                            R.drawable.clipart_filledstar_vector_icon
-                                        } else {
-                                            R.drawable.clipart_unfilledstar_vector_icon
-                                        }
-                                    )
+                                    visibility = View.GONE
                                 }
 
                         }
 
                     val dialogBuilder = AlertDialog.Builder(context).setView(dialogView)
-
-                    val gotoDialog = dialogBuilder
                         .setPositiveButton(R.string.action_view_new_hoard,
                             DialogInterface.OnClickListener { _, _ ->
 
@@ -343,6 +310,7 @@ class HoardGeneratorFragment : Fragment() {
             @ColorInt
             val titleTextColor = typedValue.data
 
+            inflateMenu(R.menu.generator_options_toolbar_menu)
             navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
             setNavigationOnClickListener {
 
@@ -358,8 +326,487 @@ class HoardGeneratorFragment : Fragment() {
             }
             title = getString(R.string.hoard_generator_fragment_title)
             setTitleTextColor(titleTextColor)
+            setOnMenuItemClickListener { item ->
+
+                when (item.itemId) {
+
+                    R.id.action_generator_options   -> {
+
+                        // https://stackoverflow.com/questions/67136040/how-to-use-view-binding-in-custom-dialog-box-layout
+
+                        val gemSliderStringValues  = resources.getStringArray(R.array.range_slider_gem_label)
+                        val artSliderStringValues = resources.getStringArray(R.array.range_slider_gem_label)
+
+                        val options = generatorViewModel.generatorOptions
+
+                        val checkedItemTypes = options.allowedMagic.toMutableSet()
+
+                        val dialogBinding: DialogGenerationOptionsBinding =
+                            DialogGenerationOptionsBinding.inflate(layoutInflater)
+
+                        fun setMagicErrorVisibility() {
+                            dialogBinding.generatorOptionMagicError.visibility =
+                                if (checkedItemTypes.isEmpty()) View.VISIBLE
+                                else View.GONE
+                        }
+
+                        // Bind views
+                        dialogBinding.apply{
+
+                            generatorOptionGemMinValue.text =
+                                gemSliderStringValues.getOrNull(options.gemMin) ?: "??? gp"
+                            generatorOptionGemMaxValue.text =
+                                gemSliderStringValues.getOrNull(options.gemMax) ?: "??? gp"
+                            generatorOptionGemSlider.apply {
+                                stepSize = 1.0f
+                                valueFrom = 0.0f
+                                valueTo = 17.0f
+                                values = listOf(options.gemMin.toFloat(),options.gemMax.toFloat())
+                                stepSize = 1.0f
+                                minSeparation = 1.0f
+                                setLabelFormatter { value : Float ->
+                                    val intValue = value.toInt()
+                                    gemSliderStringValues.getOrNull(intValue) ?: "???"
+                                }
+                                addOnChangeListener { slider, _, _ ->
+                                    val newValues = slider.values.map { it.toInt() }
+                                    dialogBinding.generatorOptionGemMinValue.text =
+                                        gemSliderStringValues.getOrNull(newValues[0]) ?: "???"
+                                    dialogBinding.generatorOptionGemMaxValue.text =
+                                        gemSliderStringValues.getOrNull(newValues[1]) ?: "???"
+                                }
+                            }
+                            generatorOptionArtMinValue.text =
+                                artSliderStringValues.getOrNull(options.artMin) ?: "??? gp"
+                            generatorOptionArtMaxValue.text =
+                                artSliderStringValues.getOrNull(options.artMax) ?: "??? gp"
+                            generatorOptionArtSlider.apply {
+                                stepSize = 1.0f
+                                valueFrom = 0.0f
+                                valueTo = 49.0f
+                                values = listOf(options.artMin.toFloat(),options.artMax.toFloat())
+                                stepSize = 1.0f
+                                minSeparation = 1.0f
+                                setLabelFormatter { value : Float ->
+                                    val intValue = value.toInt()
+                                    artSliderStringValues.getOrNull(intValue) ?: "???"
+                                }
+                                addOnChangeListener { slider, _, _ ->
+                                    val newValues = slider.values.map { it.toInt() }
+                                    dialogBinding.generatorOptionArtMinValue.text =
+                                        gemSliderStringValues.getOrNull(newValues[0]) ?: "???"
+                                    dialogBinding.generatorOptionArtMaxValue.text =
+                                        gemSliderStringValues.getOrNull(newValues[1]) ?: "???"
+                                }
+                            }
+                            generatorOptionMapRawEdit.apply{
+                                setText(options.mapBase.toString())
+                                addTextChangedListener { input ->
+
+                                    val parsedValue = input.toString().toIntOrNull()
+
+                                    generatorOptionMapRawEdit.error =
+                                        when {
+                                            parsedValue == null -> "No value"
+                                            parsedValue < 0     -> "Too low"
+                                            parsedValue > 100   -> "Too high"
+                                            else                -> null
+                                        }
+                                }
+                            }
+                            generatorOptionMapPaperEdit.apply{
+                                setText(options.mapPaper.toString())
+                                addTextChangedListener { input ->
+
+                                    val parsedValue = input.toString().toIntOrNull()
+
+                                    generatorOptionMapPaperEdit.error =
+                                        when {
+                                            parsedValue == null -> "No value"
+                                            parsedValue < 0     -> "Too low"
+                                            parsedValue > 100   -> "Too high"
+                                            else                -> null
+                                        }
+                                }
+                            }
+                            generatorOptionMapScrollEdit.apply{
+                                setText(options.mapScroll.toString())
+                                addTextChangedListener { input ->
+
+                                    val parsedValue = input.toString().toIntOrNull()
+
+                                    generatorOptionMapScrollEdit.error =
+                                        when {
+                                            parsedValue == null -> "No value"
+                                            parsedValue < 0     -> "Too low"
+                                            parsedValue > 100   -> "Too high"
+                                            else                -> null
+                                        }
+
+                                    generatorOptionAllowedScrollError.visibility =
+                                        if (generatorOptionSpellScrollCheckbox.isChecked ||
+                                            generatorOptionUtilityScrollCheckbox.isChecked ||
+                                            ((generatorOptionMapScrollEdit.text.toString()
+                                                .toIntOrNull() ?: 0) > 0)
+                                        ) {
+                                            View.GONE
+                                        } else View.VISIBLE
+                                }
+                            }
+                            generatorOptionMapFalseSwitch.isChecked = options.falseMapsOK
+                            generatorOptionAllowedScrollError.visibility = View.GONE
+                            generatorOptionSpellScrollCheckbox.apply{
+                                isChecked = options.spellOk
+                                setOnCheckedChangeListener { _, _ ->
+                                    generatorOptionAllowedScrollError.visibility =
+                                        if (generatorOptionSpellScrollCheckbox.isChecked ||
+                                            generatorOptionUtilityScrollCheckbox.isChecked ||
+                                            ((generatorOptionMapScrollEdit.text.toString()
+                                                .toIntOrNull() ?: 0) > 0)
+                                        ) {
+                                            View.GONE
+                                        } else View.VISIBLE
+                                }
+                            }
+                            generatorOptionUtilityScrollCheckbox.apply{
+                                isChecked = options.spellOk
+                                setOnCheckedChangeListener { _, _ ->
+                                    generatorOptionAllowedScrollError.visibility =
+                                        if (generatorOptionSpellScrollCheckbox.isChecked ||
+                                            generatorOptionUtilityScrollCheckbox.isChecked ||
+                                            ((generatorOptionMapScrollEdit.text.toString()
+                                                .toIntOrNull() ?: 0) > 0)
+                                        ) {
+                                            View.GONE
+                                        } else View.VISIBLE
+                                }
+                            }
+                            generatorOptionMagicError.visibility = View.GONE
+                            generatorOptionPotionCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A2)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A2)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A2)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionScrollCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A3)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A3)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A3)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionRingCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A4)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A4)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A4)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionRodCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A5)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A5)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A5)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionStaffCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A6)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A6)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A6)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionWandCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A7)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A7)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A7)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionBookCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A8)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A8)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A8)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionJewelryCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A9)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A9)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A9)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionRobeCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A10)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A10)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A10)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionBootCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A11)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A11)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A11)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionBeltCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A12)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A12)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A12)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionContainerCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A13)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A13)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A13)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionDustCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A14)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A14)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A14)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionHouseholdCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A15)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A15)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A15)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionMusicCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A16)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A16)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A16)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionWeirdCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A17)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A17)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A17)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionArmorCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A18)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A18)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A18)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionWeaponCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A21)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A21)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A21)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionArtifactCheckbox.apply {
+                                isChecked = checkedItemTypes.contains(MagicItemType.A24)
+                                setOnCheckedChangeListener { _, isChecked ->
+                                    if (isChecked) {
+                                        checkedItemTypes.add(MagicItemType.A24)
+                                    } else {
+                                        checkedItemTypes.remove(MagicItemType.A24)
+                                    }
+                                    setMagicErrorVisibility()
+                                }
+                            }
+                            generatorOptionCursedSwitch.isChecked = options.cursedOk
+                            generatorOptionIntelligentSwitch.isChecked = options.intelOk
+                            generatorOptionSpellDisciplineGroup.check(
+                                when (options.spellDisciplinePos) {
+                                    0   -> R.id.generator_option_spell_discipline_arcane_radio
+                                    1   -> R.id.generator_option_spell_discipline_divine_radio
+                                    2   -> R.id.generator_option_spell_discipline_natural_radio
+                                    else-> R.id.generator_option_spell_discipline_all_radio
+                                }
+                            )
+                            generatorOptionSpellMethodGroup.check(
+                                if (options.spellMethod == SpCoGenMethod.BY_THE_BOOK) {
+                                    R.id.generator_option_book_checkbox
+                                } else R.id.generator_option_spell_method_random_radio
+                            )
+                            generatorOptionSpellCurseGroup.check(
+                                when (options.spellCurses) {
+                                    SpCoCurses.STRICT_GMG       -> R.id.generator_option_spell_curse_example_radio
+                                    SpCoCurses.OFFICIAL_ONLY    -> R.id.generator_option_spell_curse_official_radio
+                                    SpCoCurses.ANY_CURSE        -> R.id.generator_option_spell_curse_homebrew_radio
+                                    SpCoCurses.NONE             -> R.id.generator_option_spell_curse_none_radio
+                                }
+                            )
+                            generatorOptionRerollChoiceSwitch.isChecked = options.spellReroll
+                            generatorOptionSpecialistSwitch.isChecked = options.spellReroll
+                            generatorOptionReferenceSplatbookCheckbox.isChecked =
+                                options.allowedSources.splatbooksOK
+                            generatorOptionReferenceHackjournalCheckbox.isChecked =
+                                options.allowedSources.hackJournalsOK
+                            generatorOptionReferenceModulesCheckbox.isChecked =
+                                options.allowedSources.modulesOK
+                        }
+
+                        val dialog = AlertDialog.Builder(context).setView(dialogBinding.root)
+                            .setCancelable(true)
+                            .setPositiveButton(R.string.ok_affirmative, null)
+                            .setNeutralButton("Restore to default") { dialog, _ ->
+                                generatorViewModel.generatorOptions = GeneratorOptions()
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(R.string.action_cancel) {dialog, _ ->
+                                dialog.cancel()
+                            }
+                            .create().apply{
+                                setOnShowListener { dialog ->
+
+                                    getButton(AlertDialog.BUTTON_POSITIVE)
+                                        .setOnClickListener {
+
+                                            // Validate
+                                            if (
+                                                dialogBinding.generatorOptionMapRawEdit.error == null &&
+                                                dialogBinding.generatorOptionMapPaperEdit.error == null &&
+                                                dialogBinding.generatorOptionMapScrollEdit.error == null &&
+                                                dialogBinding.generatorOptionAllowedScrollError.visibility == View.GONE &&
+                                                dialogBinding.generatorOptionMagicError.visibility == View.GONE) {
+
+                                                // Update
+                                                generatorViewModel.generatorOptions = GeneratorOptions(
+                                                    gemMin = dialogBinding.generatorOptionGemSlider.values[0].toInt(),
+                                                    gemMax = dialogBinding.generatorOptionGemSlider.values[1].toInt(),
+                                                    artMin = dialogBinding.generatorOptionArtSlider.values[0].toInt(),
+                                                    artMax = dialogBinding.generatorOptionArtSlider.values[1].toInt(),
+                                                    mapBase = (dialogBinding.generatorOptionMapRawEdit.text.toString().toIntOrNull() ?: 0).coerceIn(0..100),
+                                                    mapPaper = (dialogBinding.generatorOptionMapPaperEdit.text.toString().toIntOrNull() ?: 0).coerceIn(0..100),
+                                                    mapScroll = (dialogBinding.generatorOptionMapScrollEdit.text.toString().toIntOrNull() ?: 0).coerceIn(0..100),
+                                                    falseMapsOK = dialogBinding.generatorOptionMapFalseSwitch.isChecked,
+                                                    allowedMagic = checkedItemTypes,
+                                                    spellOk = dialogBinding.generatorOptionSpellScrollCheckbox.isChecked,
+                                                    utilityOk = dialogBinding.generatorOptionUtilityScrollCheckbox.isChecked,
+                                                    cursedOk = dialogBinding.generatorOptionCursedSwitch.isChecked,
+                                                    intelOk = dialogBinding.generatorOptionIntelligentSwitch.isChecked,
+                                                    spellDisciplinePos = when {
+                                                        dialogBinding.generatorOptionSpellDisciplineArcaneRadio.isChecked -> 0
+                                                        dialogBinding.generatorOptionSpellDisciplineDivineRadio.isChecked -> 1
+                                                        dialogBinding.generatorOptionSpellDisciplineNaturalRadio.isChecked -> 2
+                                                        else -> 3
+                                                    },
+                                                    spellMethod = when (dialogBinding.generatorOptionSpellMethodGroup.checkedRadioButtonId) {
+                                                        R.id.generator_option_spell_method_book_radio -> SpCoGenMethod.BY_THE_BOOK
+                                                        else -> SpCoGenMethod.TRUE_RANDOM
+                                                    },
+                                                    spellCurses = when (dialogBinding.generatorOptionSpellCurseGroup.checkedRadioButtonId) {
+                                                        R.id.generator_option_spell_curse_official_radio-> SpCoCurses.OFFICIAL_ONLY
+                                                        R.id.generator_option_spell_curse_homebrew_radio-> SpCoCurses.ANY_CURSE
+                                                        R.id.generator_option_spell_curse_none_radio    -> SpCoCurses.NONE
+                                                        else -> SpCoCurses.STRICT_GMG
+                                                    },
+                                                    spellReroll = dialogBinding.generatorOptionRerollChoiceSwitch.isChecked,
+                                                    restrictedOk = dialogBinding.generatorOptionSpecialistSwitch.isChecked,
+                                                    allowedSources = SpCoSources(
+                                                        splatbooksOK = dialogBinding.generatorOptionReferenceSplatbookCheckbox.isChecked,
+                                                        hackJournalsOK = dialogBinding.generatorOptionReferenceHackjournalCheckbox.isChecked,
+                                                        modulesOK = dialogBinding.generatorOptionReferenceModulesCheckbox.isChecked
+                                                    )
+                                                )
+
+                                                //Dismiss
+                                                dialog.dismiss()
+
+                                            }
+                                        }
+                                }
+                            }
+
+                            dialog.show()
+                        //TODO left off here 10/14/2022
+
+                            true
+                        }
+                        
+                        else    -> false
+                    }
+                }
+            }
         }
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onStart() {
@@ -372,10 +819,10 @@ class HoardGeneratorFragment : Fragment() {
             appVersion = requireContext().packageManager
             .getPackageInfo(requireContext().packageName,0).versionCode
         
-        // Apply widget properties TODO animate between two LinearLayouts
+        // Apply widget properties
         binding.generatorNameEdit.addTextChangedListener { input ->
 
-            generatorViewModel.setHoardName(input.toString())
+            generatorViewModel.hoardName = input.toString()
         }
 
         binding.generatorMethodGroup.setOnCheckedChangeListener { _, _ ->
@@ -1195,28 +1642,6 @@ class HoardGeneratorFragment : Fragment() {
                     generatorViewModel.setValueFromEditText(GenEditTextTag.GEM_QTY,
                         input.toString())
             }
-            generatorGemMinimumAuto.setOnItemClickListener { parent, view, position, id ->
-
-                val _maxDropdownAdapterPos = (generatorGemMaximumAuto.adapter as DropdownAdapter<*>)
-                    .getSelectedPosition()
-
-                (generatorGemMinimumAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-                generatorGemMinimumAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.GEM_MINIMUM,position,true)
-
-                // Validate maximum
-                generatorGemMaximumAuto.error =
-                    generatorViewModel.validateDropdownMaximum(GenDropdownTag.GEM_MAXIMUM,
-                        _maxDropdownAdapterPos)
-            }
-            generatorGemMaximumAuto.setOnItemClickListener {  parent, view, position, id ->
-
-                (generatorGemMaximumAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-                generatorGemMaximumAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.GEM_MAXIMUM,position,true)
-            }
             // endregion
 
             // region ( Art object listeners )
@@ -1224,30 +1649,6 @@ class HoardGeneratorFragment : Fragment() {
                 generatorArtQtyEdit.error =
                     generatorViewModel.setValueFromEditText(GenEditTextTag.ART_QTY,
                         input.toString())
-            }
-            generatorArtMinimumAuto.setOnItemClickListener { parent, view, position, id ->
-
-                val _maxDropdownAdapterPos = (generatorArtMaximumAuto.adapter as DropdownAdapter<*>)
-                    .getSelectedPosition()
-
-                (generatorArtMaximumAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-                generatorArtMinimumAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.ART_MINIMUM,position,true)
-
-                // Validate maximum
-                generatorArtMaximumAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.ART_MAXIMUM,_maxDropdownAdapterPos,true)
-            }
-            generatorArtMaximumAuto.setOnItemClickListener {  parent, view, position, id ->
-
-                (generatorArtMaximumAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-                generatorArtMaximumAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.ART_MAXIMUM,position,true)
-            }
-            generatorArtSwitchMaps.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.artMapChecked = isChecked
             }
             // endregion
 
@@ -1262,27 +1663,12 @@ class HoardGeneratorFragment : Fragment() {
                     generatorViewModel.setValueFromEditText(GenEditTextTag.SCROLL_QTY,
                         input.toString())
 
-                if (generatorMagicScrollQtyEdit.error == null) validateScrollQtyAndCheckboxes()
-            }
-            generatorScrollSpellCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.spellScrollChecked = isChecked
-                validateScrollQtyAndCheckboxes()
-            }
-            generatorScrollNonspellCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.nonSpScrollChecked = isChecked
-                validateScrollQtyAndCheckboxes()
-            }
-            generatorScrollMapCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.scrollMapChecked = isChecked
-                validateScrollQtyAndCheckboxes()
+                if (generatorMagicScrollQtyEdit.error == null) validateScrollQtyAndOptions()
             }
             generatorMagicWeaponQtyEdit.addTextChangedListener { input ->
                 generatorMagicWeaponQtyEdit.error =
                     generatorViewModel.setValueFromEditText(GenEditTextTag.WEAPON_ARMOR_QTY,
                         input.toString())
-            }
-            generatorWeaponSwitch.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.intWepChecked = isChecked
             }
             generatorMagicNonweaponQtyEdit.addTextChangedListener { input ->
                 generatorMagicNonweaponQtyEdit.error =
@@ -1294,110 +1680,54 @@ class HoardGeneratorFragment : Fragment() {
                     generatorViewModel.setValueFromEditText(GenEditTextTag.ANY_MAGIC_QTY,
                         input.toString())
             }
-            generatorCursedSwitch.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.cursedChecked = isChecked
-            }
-            generatorArtifactSwitch.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.relicsChecked = isChecked
-            }
             // endregion
 
             // region ( Spell collection listeners )
-            generatorSpellDisciplineAuto.setOnItemClickListener { parent, view, position, id ->
-
-                val _typeDropdownAdapterPos = (generatorSpellTypeAuto.adapter as DropdownAdapter<*>)
-                    .getSelectedPosition()
-
-                (generatorSpellDisciplineAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-                generatorSpellDisciplineAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_DISCIPLINE,position,true)
-
-                Log.d("generatorSpellDisciplineAuto.setOnItemClickListener",
-                    "dropdownSpellTypes.size = ${dropdownSpellTypes.size}")
-
-                // Programmatically set enabled items based on allowed disciplines
-                val itemsToEnable =
-                    generatorViewModel.setEnabledItemsByDiscipline(position, dropdownSpellTypes.size)
-
-                Log.d("generatorSpellDisciplineAuto.setOnItemClickListener","itemsToEnable = " +
-                        itemsToEnable)
-
-                Log.d("generatorSpellDisciplineAuto.setOnItemClickListener",
-                    "generatorSpellTypeAuto.(adapter as DropdownAdapter<*>).getEnabledItemsArray() = " +
-                            (generatorSpellTypeAuto.adapter as DropdownAdapter<*>)
-                                .getEnabledItemsArray())
-
-                generatorSpellTypeAuto.apply{
-                    (adapter as DropdownAdapter<*>).setEnabledByArray(itemsToEnable)
-                    error = if (!(adapter.isEnabled(_typeDropdownAdapterPos))) {
-                        "Invalid method for chosen discipline."
-                    } else null
-                }
-            }
-            generatorSpellTypeAuto.setOnItemClickListener { parent, view, position, id ->
-                generatorSpellTypeAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_TYPE,position,
-                        generatorSpellTypeAuto.adapter.isEnabled(position))
-            }
             generatorSpellQtyEdit.addTextChangedListener { input ->
                 generatorSpellQtyEdit.error =
                     generatorViewModel.setValueFromEditText(GenEditTextTag.SPELL_CO_QTY,
                         input.toString())
             }
-            generatorSpellPerQtyEdit.addTextChangedListener { input ->
-                generatorSpellPerQtyEdit.error =
-                    generatorViewModel.setValueFromEditText(GenEditTextTag.MAX_SPELL_PER,
-                        input.toString())
-            }
-            generatorSpellMinimumAuto.setOnItemClickListener { parent, view, position, id ->
 
-                val _maxDropdownAdapterPos = (generatorSpellMaximumAuto.adapter as DropdownAdapter<*>)
-                    .getSelectedPosition()
-
-                (generatorSpellMinimumAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-                generatorSpellMinimumAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_MINIMUM,position,true)
-
-                // Validate maximum
-                generatorArtMaximumAuto.error =
-                    generatorViewModel.validateDropdownMaximum(GenDropdownTag.SPELL_MAXIMUM, _maxDropdownAdapterPos)
+            generatorSpellLevelSlider.apply{
+                valueFrom = 0.0f
+                valueTo = 9.0f
+                stepSize = 1.0f
+                setLabelFormatter { value ->
+                    val intValue = value.toInt()
+                    if (intValue in spLvlRangeShortLabels.indices) {
+                        spLvlRangeShortLabels[intValue]
+                    } else "???"
+                }
+                addOnChangeListener { slider, _, _ ->
+                    val intValues = slider.values.first().toInt() to slider.values.last().toInt()
+                    generatorViewModel.spellLevelRange = IntRange(intValues.first,intValues.second)
+                    binding.generatorSpellLevelMinValue.text =
+                        if (intValues.first in spLvlRangeLongLabels.indices) {
+                            spLvlRangeLongLabels[intValues.first]
+                        } else "???"
+                    binding.generatorSpellLevelMaxValue.text =
+                        if (intValues.second in spLvlRangeLongLabels.indices) {
+                            spLvlRangeLongLabels[intValues.second]
+                        } else "???"
+                }
             }
-            generatorSpellMaximumAuto.setOnItemClickListener {  parent, view, position, id ->
 
-                (generatorSpellMaximumAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-                generatorSpellMaximumAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_MAXIMUM,position,true)
+            generatorSpellPerQtySlider.apply{
+                valueFrom = 1.0f
+                valueTo = 20.0f
+                stepSize = 1.0f
+                setLabelFormatter { it.toInt().toString() }
+                addOnChangeListener { slider, _, _ ->
+                    val intValues = slider.values.first().toInt() to slider.values.last().toInt()
+                    generatorViewModel.spellLevelRange = IntRange(intValues.first,intValues.second)
+                    binding.generatorSpellLevelMinValue.text =
+                        intValues.first.toString()
+                    binding.generatorSpellLevelMaxValue.text =
+                        intValues.second.toString()
+                }
             }
-            generatorSpellSourceSplatCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.splatChecked = isChecked
-            }
-            generatorSpellSourceHjCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.hackJChecked = isChecked
-            }
-            generatorSpellSourceModulesCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.otherChecked = isChecked
-            }
-            generatorRestrictedSwitch.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.restrictChecked = isChecked
-            }
-            generatorChoiceRerollSwitch.setOnCheckedChangeListener { _, isChecked ->
-                generatorViewModel.rerollChecked = isChecked
-            }
-            generatorSpellCursesAuto.setOnItemClickListener {  parent, view, position, id ->
-
-                Log.d("generatorSpellCursesAuto.setOnItemClickListener",
-                    "Position = $position " +
-                            "(${generatorSpellCursesAuto.adapter.getItem(position)})")
-
-                (generatorSpellCursesAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-                generatorSpellCursesAuto.error =
-                    generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_CURSES,position,true)
-            }
-            // endregion
+         // endregion
         }
         // endregion
         // endregion
@@ -1561,109 +1891,6 @@ class HoardGeneratorFragment : Fragment() {
             newItem: Pair<String,Int>
         ) = oldItem.second == newItem.second
     }
-
-    /**
-     * Extended [ArrayAdapter]<[String]> that disables filtering, keeps track of last selected item, and has holder array for enabled items.
-     *
-     * @param _enabledItemsArray [BooleanArray] that should be the same size as [values]. If it is not or is null, all items will be initially enabled.
-     */
-    private inner class DropdownAdapter<String>(context: Context, layout: Int,
-                                                var values: Array<String>,
-                                                _enabledItemsArray: BooleanArray?) :
-        ArrayAdapter<String>(context, layout, values) {
-
-        //https://rmirabelle.medium.com/there-is-no-material-design-spinner-for-android-3261b7c77da8
-
-        private val emptyFilter = object : Filter() {
-
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val results = FilterResults()
-                results.values = values
-                results.count = values.size
-                return results
-            }
-
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                notifyDataSetChanged()
-            }
-        }
-
-        private var selectedPosition = 0
-
-        private var enabledItemsArray : BooleanArray =
-            if ((_enabledItemsArray != null) && (_enabledItemsArray.size == values.size)) {
-                _enabledItemsArray
-            } else {
-                BooleanArray(values.size) { true }
-            }
-
-        fun getSelectedPosition() = selectedPosition
-
-        fun setSelectedPosition(newPosition: Int) {
-
-            if ((newPosition in values.indices) && (selectedPosition != newPosition)) {
-
-                selectedPosition = newPosition
-                Log.d("DropdownAdapter.setSelectedPosition()","Set adapter position to " +
-                        selectedPosition + " (${values[selectedPosition]})")
-
-            } else {
-
-                Log.d("DropdownAdapter.setSelectedPosition()","Adapter position remains " +
-                        "unchanged at " + selectedPosition + " (${values[selectedPosition]})")
-            }
-        }
-
-        fun getEnabledItemsArray() = enabledItemsArray
-
-        override fun getFilter(): Filter = emptyFilter
-
-        override fun isEnabled(position: Int): Boolean {
-            return enabledItemsArray[position]
-        }
-
-        fun setEnabled(position: Int, newValue: Boolean) {
-
-            if (position in values.indices){
-
-                enabledItemsArray[position] = newValue
-                Log.d("DropdownAdapter","values[$position] \"${values[position]}\" is ${
-                    if (enabledItemsArray[position]) "ENABLED" else "DISABLED"}.")
-                notifyDataSetChanged()
-
-            } else {
-
-                Log.e("DropdownAdapter","Position $position is out of bounds, cannot set to $newValue.")
-            }
-        }
-
-        fun setEnabledByArray(newValueArray: BooleanArray?) {
-
-            if (newValueArray != null){
-
-                if ((newValueArray.size == values.size)){
-
-                    enabledItemsArray = newValueArray
-                    enabledItemsArray.forEachIndexed { index, b ->
-                        Log.d("DropdownAdapter","values[$index] \"${values[index]}\" is ${
-                            if (enabledItemsArray[index]) "ENABLED" else "DISABLED"}.")
-                    }
-                    notifyDataSetChanged()
-
-                } else {
-
-                    Log.e(
-                        "DropdownAdapter", "newValueArray $newValueArray is not the " +
-                                "same size as enabledItemsArray $enabledItemsArray. (" +
-                                newValueArray.size + " vs " + enabledItemsArray.size + ")")
-                }
-            } else {
-
-                Log.e("DropdownAdapter","newValueArray is null; enableItemsArray " +
-                        "remains as $enabledItemsArray.")
-            }
-        }
-    }
     //endregion
 
     //region [ Helper functions ]
@@ -1684,9 +1911,7 @@ class HoardGeneratorFragment : Fragment() {
         }
 
         // Check for errors on gem fields
-        if ((binding.generatorGemQtyAuto.error != null)||
-            (binding.generatorGemMinimumAuto.error != null)||
-            (binding.generatorGemMaximumAuto.error != null)) {
+        if (binding.generatorGemQtyAuto.error != null) {
 
             Log.d("validateSpecificQtyValues",
                 "Failed validation at gem check")
@@ -1695,9 +1920,7 @@ class HoardGeneratorFragment : Fragment() {
         }
 
         // Check for errors on art fields
-        if ((binding.generatorArtQtyEdit.error != null)||
-            (binding.generatorArtMinimumAuto.error != null)||
-            (binding.generatorArtMaximumAuto.error != null)) {
+        if (binding.generatorArtQtyEdit.error != null) {
 
             Log.d("validateSpecificQtyValues",
                 "Failed validation at art object check")
@@ -1706,7 +1929,7 @@ class HoardGeneratorFragment : Fragment() {
         }
 
         // Validate scroll checkboxes
-        validateScrollQtyAndCheckboxes()
+        validateScrollQtyAndOptions()
 
         // Check for errors on magic item fields
         if ((binding.generatorMagicPotionQtyEdit.error != null)||
@@ -1722,12 +1945,7 @@ class HoardGeneratorFragment : Fragment() {
         }
 
         // Check for errors on spell collection fields
-        if((binding.generatorSpellQtyEdit.error != null)||
-            (binding.generatorSpellPerQtyEdit.error != null)||
-            (binding.generatorSpellDisciplineAuto.error != null)||
-            (binding.generatorSpellTypeAuto.error != null)||
-            (binding.generatorSpellMinimumAuto.error != null)||
-            (binding.generatorSpellMaximumAuto.error != null)) {
+        if (binding.generatorSpellQtyEdit.error != null) {
 
             Log.d("validateSpecificQtyValues",
                 "Failed validation at spell collection check")
@@ -1781,21 +1999,21 @@ class HoardGeneratorFragment : Fragment() {
         }
     }
 
-    private fun validateScrollQtyAndCheckboxes() {
+    private fun validateScrollQtyAndOptions() {
+
         if (binding.generatorMagicScrollQtyEdit.text.toString().toIntOrNull() != null) {
 
             val scrollQty = binding.generatorMagicScrollQtyEdit.text.toString().toInt()
 
             binding.generatorMagicScrollQtyEdit.error = if ((scrollQty > 0) &&
-                (((binding.generatorScrollSpellCheckbox.isChecked) ||
-                        (binding.generatorScrollNonspellCheckbox.isChecked) ||
-                        (binding.generatorScrollMapCheckbox.isChecked)).not())
-            ) {
+                (!generatorViewModel.generatorOptions.spellOk &&
+                        !generatorViewModel.generatorOptions.utilityOk &&
+                        generatorViewModel.generatorOptions.mapScroll == 0)) {
                 Log.e(
-                    "validateSpecificQtyValues | generatorMagicScrollQtyEdit",
+                    "validateScrollQtyAndOptions | generatorMagicScrollQtyEdit",
                     "More than zero scrolls entered, but no types checked."
                 )
-                "No types checked"
+                "No scrolls enabled"
             } else null
 
         } else {
@@ -1806,7 +2024,7 @@ class HoardGeneratorFragment : Fragment() {
 
     private fun setCheckGenRadioCheckedFromVM() {
 
-        if (generatorViewModel.getGenerationMethodPos() == 0) {
+        if (generatorViewModel.generationMethodPos == 0) {
 
             binding.generatorMethodGroup.check(R.id.generator_method_lettercode)
             binding.generatorAnimatorFrame.displayedChild = 0
@@ -2152,151 +2370,42 @@ class HoardGeneratorFragment : Fragment() {
         generatorCoinageAllowedGp.isChecked = generatorViewModel.gpChecked
         generatorCoinageAllowedHsp.isChecked = generatorViewModel.hspChecked
         generatorCoinageAllowedPp.isChecked = generatorViewModel.ppChecked
-        generatorCoinageMinimumEdit.setText( generatorViewModel.getCoinMin().toString() )
-        generatorCoinageMaximumEdit.setText( generatorViewModel.getCoinMax().toString() )
 
         // Gems
-        generatorGemQtyAuto.setText( generatorViewModel.getGemQty().toString() )
-        generatorGemMinimumAuto.apply {
-
-            val position = generatorViewModel.getGemMinPos()
-
-            (adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.GEM_MINIMUM,position,true)
-        }
-        generatorGemMaximumAuto.apply {
-
-            val position = generatorViewModel.getGemMinPos()
-
-            (adapter as DropdownAdapter<*>).setSelectedPosition(generatorViewModel.getGemMaxPos())
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.GEM_MAXIMUM,position,true)
-        }
+        generatorGemQtyAuto.setText( generatorViewModel.gemQty.toString() )
 
         // Art objects
-        generatorArtQtyEdit.setText( generatorViewModel.getArtQty().toString() )
-        generatorArtMinimumAuto.apply {
-
-            val position = generatorViewModel.getArtMinPos()
-
-            (adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.ART_MINIMUM,position,true)
-        }
-        generatorArtMaximumAuto.apply {
-
-            val position = generatorViewModel.getArtMaxPos()
-
-            (adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.ART_MINIMUM,position,true)
-        }
-        generatorArtSwitchMaps.isChecked = generatorViewModel.artMapChecked
+        generatorArtQtyEdit.setText( generatorViewModel.artQty.toString() )
 
         // Magic items
-        generatorMagicPotionQtyEdit.setText( generatorViewModel.getPotionQty().toString() )
-        generatorMagicScrollQtyEdit.setText( generatorViewModel.getScrollQty().toString() )
-        generatorScrollSpellCheckbox.isChecked = generatorViewModel.spellScrollChecked
-        generatorScrollNonspellCheckbox.isChecked = generatorViewModel.nonSpScrollChecked
-        generatorScrollMapCheckbox.isChecked = generatorViewModel.scrollMapChecked
-        generatorMagicWeaponQtyEdit.setText( generatorViewModel.getArmWepQty().toString() )
-        generatorWeaponSwitch.isChecked = generatorViewModel.intWepChecked
-        generatorMagicNonweaponQtyEdit.setText( generatorViewModel.getAnyButQty().toString() )
-        generatorMagicAnyQtyEdit.setText( generatorViewModel.getAnyMgcQty().toString() )
-        generatorCursedSwitch.isChecked = generatorViewModel.cursedChecked
-        generatorArtifactSwitch.isChecked = generatorViewModel.relicsChecked
+        generatorMagicPotionQtyEdit.setText( generatorViewModel.potionQty.toString() )
+        generatorMagicScrollQtyEdit.setText( generatorViewModel.scrollQty.toString() )
+        generatorMagicWeaponQtyEdit.setText( generatorViewModel.armWepQty.toString() )
+        generatorMagicNonweaponQtyEdit.setText( generatorViewModel.anyButQty.toString() )
+        generatorMagicAnyQtyEdit.setText( generatorViewModel.anyMgcQty.toString() )
 
         // Spell collections
-        generatorSpellDisciplineAuto.apply {
-
-            val position = generatorViewModel.getSplDisciplinePos()
-
-            (generatorSpellDisciplineAuto.adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_DISCIPLINE,position,true)
+        generatorSpellQtyEdit.setText( generatorViewModel.spCoQty.toString() )
+        generatorSpellLevelMinValue.text = with(generatorViewModel.spellLevelRange.first) {
+            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "???"
         }
-        generatorSpellTypeAuto.apply{
-
-            val position = generatorViewModel.getGenMethodPos()
-
-            (generatorSpellTypeAuto.adapter as DropdownAdapter<*>).apply {
-                setSelectedPosition(position)
-                setEnabledByArray(generatorViewModel.getEnabledGenMetArray())
-            }
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_TYPE,position,
-                    generatorSpellTypeAuto.adapter.isEnabled(position))
+        generatorSpellLevelMaxValue.text = with(generatorViewModel.spellLevelRange.last) {
+            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "???"
         }
-        generatorSpellQtyEdit.setText( generatorViewModel.getSpCoQty().toString() )
-        generatorSpellPerQtyEdit.setText( generatorViewModel.getMaxSpellsPerSpCo().toString() )
-        generatorSpellMinimumAuto.apply {
-
-            val position = generatorViewModel.getSpLvlMinPos()
-
-            (adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_MINIMUM,position,true)
+        generatorSpellPerQtyMinValue.text = with(generatorViewModel.spellsPerRange.first) {
+            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "??"
         }
-        generatorSpellMaximumAuto.apply {
-
-            val position = generatorViewModel.getSpLvlMaxPos()
-
-            (adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_MAXIMUM,position,true)
+        generatorSpellPerQtyMaxValue.text = with(generatorViewModel.spellsPerRange.last) {
+            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "??"
         }
-        generatorSpellSourceSplatCheckbox.isChecked = generatorViewModel.splatChecked
-        generatorSpellSourceHjCheckbox.isChecked = generatorViewModel.hackJChecked
-        generatorSpellSourceModulesCheckbox.isChecked = generatorViewModel.otherChecked
-        generatorRestrictedSwitch.isChecked = generatorViewModel.restrictChecked
-        generatorChoiceRerollSwitch.isChecked = generatorViewModel.rerollChecked
-        generatorSpellCursesAuto.apply {
-
-            val position = generatorViewModel.getSpCoCursesPos()
-
-            (adapter as DropdownAdapter<*>).setSelectedPosition(position)
-
-            setText((adapter as DropdownAdapter<*>).getItem(position).toString())
-
-            error =
-                generatorViewModel.setValueFromDropdown(GenDropdownTag.SPELL_CURSES,position,true)
-        }
-    }
-
-    private fun AutoCompleteTextView.initializeAsDropdown(dropdownAdapter: DropdownAdapter<*>,
-                                                          defaultPos: Int,
-                                                          isSpellTypeDropdown: Boolean = false) {
-        this.setAdapter(dropdownAdapter)
-        this.setText((adapter as DropdownAdapter<*>).values[defaultPos].toString(),false)
-        (adapter as DropdownAdapter<*>).setSelectedPosition(defaultPos)
-        if (isSpellTypeDropdown) {
-            (adapter as DropdownAdapter<*>).setEnabledByArray(generatorViewModel.getEnabledGenMetArray())
-        }
+        generatorSpellLevelSlider.values = listOf(
+            generatorViewModel.spellLevelRange.first.toFloat(),
+            generatorViewModel.spellLevelRange.last.toFloat()
+        )
+        generatorSpellPerQtySlider.values = listOf(
+            generatorViewModel.spellsPerRange.first.toFloat(),
+            generatorViewModel.spellsPerRange.last.toFloat()
+        )
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
@@ -2326,18 +2435,6 @@ class HoardGeneratorFragment : Fragment() {
     }
 }
 
-enum class GenDropdownTag() {
-    GEM_MINIMUM,
-    GEM_MAXIMUM,
-    ART_MINIMUM,
-    ART_MAXIMUM,
-    SPELL_DISCIPLINE,
-    SPELL_TYPE,
-    SPELL_MINIMUM,
-    SPELL_MAXIMUM,
-    SPELL_CURSES
-}
-
 enum class GenEditTextTag() {
     HOARD_NAME,
     COIN_MINIMUM,
@@ -2349,6 +2446,5 @@ enum class GenEditTextTag() {
     WEAPON_ARMOR_QTY,
     ANY_BUT_WEAP_QTY,
     ANY_MAGIC_QTY,
-    SPELL_CO_QTY,
-    MAX_SPELL_PER
+    SPELL_CO_QTY
 }

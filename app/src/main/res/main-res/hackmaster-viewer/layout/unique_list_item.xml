@@ -3,21 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
-    android:paddingVertical="4dp">
-
-    <TextView
-        android:id="@+id/unique_list_item_number"
-        android:layout_width="32dp"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="4dp"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="100" />
+    android:layout_height="80dp"
+    android:padding="6dp">
 
     <ImageView
         android:id="@+id/unique_list_itemframe_foreground"
@@ -37,11 +24,11 @@
         android:layout_width="@dimen/list_item_icon_size"
         android:layout_height="@dimen/list_item_icon_size"
         android:layout_gravity="center_vertical"
-        android:layout_marginHorizontal="@dimen/list_item_element_margin"
+        android:layout_marginEnd="8dp"
         android:elevation="1dp"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/unique_list_item_number"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/artifact_dragon_orb" />
 
@@ -76,51 +63,88 @@
         android:id="@+id/unique_list_item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/list_item_element_margin"
-        android:textSize="16sp"
+        android:layout_marginStart="@dimen/list_item_element_margin"
+        android:textSize="18sp"
+        android:maxLines="1"
         android:ellipsize="end"
-        app:layout_constraintBottom_toTopOf="@id/unique_list_item_gp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/unique_list_item_subtitle"
         app:layout_constraintStart_toEndOf="@id/unique_list_item_thumbnail"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="@id/unique_list_item_end_barrier"
         tools:text="[object name]" />
 
     <TextView
+        android:id="@+id/unique_list_item_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_item_element_margin"
+        android:textSize="13sp"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toTopOf="@id/unique_list_item_gp"
+        app:layout_constraintStart_toEndOf="@id/unique_list_item_thumbnail"
+        app:layout_constraintTop_toBottomOf="@id/unique_list_item_name"
+        app:layout_constraintEnd_toEndOf="@id/unique_list_item_end_barrier"
+        tools:text="[item type and subtype]" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/unique_list_item_end_barrier"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="0dp"/>
+
+    <TextView
         android:id="@+id/unique_list_item_gp"
-        style="@style/style_unique_list_item_label"
         android:minWidth="128sp"
         android:textAlignment="viewEnd"
         app:drawableStartCompat="@drawable/clipart_coinbag_vector_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/unique_list_item_thumbnail"
-        app:layout_constraintTop_toBottomOf="@id/unique_list_item_name"
-        tools:text="1000000.00 gp" />
+        app:layout_constraintTop_toBottomOf="@id/unique_list_item_subtitle"
+        android:layout_marginStart="8dp"
+        tools:text="1,000,000.00 gp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="2dp"
+        app:drawableTint="?attr/colorOnSurface"
+        android:textSize="16sp"
+        android:textColor="?attr/colorOnSurface"
+        android:fontFamily="sans-serif-condensed"
+        android:alpha="0.6" />
 
     <TextView
         android:id="@+id/unique_list_item_xp"
-        style="@style/style_unique_list_item_label"
         android:minWidth="96sp"
         android:textAlignment="viewEnd"
         app:drawableStartCompat="@drawable/clipart_experience_vector_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/unique_list_item_gp"
-        app:layout_constraintTop_toBottomOf="@id/unique_list_item_name"
-        tools:text="250000 xp" />
+        app:layout_constraintTop_toBottomOf="@id/unique_list_item_subtitle"
+        android:layout_marginStart="8dp"
+        tools:text="250,000 xp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawablePadding="2dp"
+        app:drawableTint="?attr/colorOnSurface"
+        android:textSize="16sp"
+        android:textColor="?attr/colorOnSurface"
+        android:fontFamily="sans-serif-condensed"
+        android:alpha="0.6" />
 
     <TextView
         android:id="@+id/unique_list_item_notes"
-        style="@style/style_unique_list_item_label"
         app:drawableStartCompat="@drawable/clipart_extranotes_vector_icon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/unique_list_item_xp"
-        app:layout_constraintTop_toBottomOf="@id/unique_list_item_name"
-        tools:text="x2" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/unique_list_item_end_barrier"
+        app:layout_constraintEnd_toEndOf="@id/unique_list_item_end_barrier"
+        app:layout_constraintTop_toBottomOf="@id/unique_list_item_subtitle"
+        tools:text=" 2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:barrierDirection="start"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:drawablePadding="2dp"
+        app:drawableTint="?attr/colorOnSurface"
+        android:textSize="16sp"
+        android:textColor="?attr/colorOnSurface"
+        android:alpha="0.6"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

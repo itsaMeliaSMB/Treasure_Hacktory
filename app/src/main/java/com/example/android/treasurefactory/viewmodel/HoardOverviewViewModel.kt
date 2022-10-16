@@ -1,9 +1,12 @@
 package com.example.android.treasurefactory.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.repository.HMRepository
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() {
 
@@ -14,7 +17,6 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
     var hoardLiveData: LiveData<Hoard?> = Transformations.switchMap(hoardIDLiveData) { hoardID ->
         repository.getHoard(hoardID)
     }
-
     var gemValueLiveData = Transformations.switchMap(hoardIDLiveData) { hoardID ->
         repository.getGemValueTotal(hoardID)
     }
@@ -27,6 +29,8 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
     var spellValueLiveData = Transformations.switchMap(hoardIDLiveData) { hoardID ->
         repository.getSpellCollectionValueTotal(hoardID)
     }
+    var hoardTotalXPLiveData = MutableLiveData(0)
+        private set
     // endregion
 
     // region [ Functions ]
@@ -38,6 +42,34 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
     fun saveHoard(hoard: Hoard) {
 
         viewModelScope.launch { repository.updateHoard(hoard) }
+    }
+
+    fun updateXPTotal(hoardID: Int) {
+
+        viewModelScope.launch{
+
+            val dependentJob = async {
+                val effortRating = repository.getHoardEffortRatingOnce(hoardID)
+                val coinageTotal = (repository.getHoardOnce(hoardID)?.getTotalCoinageValue()) ?: 0.0
+                val gemTotal = repository.getGemValueTotalOnce(hoardID)
+                val artTotal = repository.getArtValueTotalOnce(hoardID)
+
+                return@async ((coinageTotal + gemTotal + artTotal) / effortRating).roundToInt()
+            }
+
+            val independentJob = async {
+                val magicItemTotal = repository.getMagicItemXPTotalOnce(hoardID)
+                val spellCollectionTotal = repository.getSpellCollectionXPTotalOnce(hoardID)
+
+                return@async magicItemTotal + spellCollectionTotal
+            }
+
+            (dependentJob.await() + independentJob.await()).let { xpTotal ->
+                Log.d("updateXPTotal($hoardID)","dependentJob.await() + " +
+                        "independentJob.await() = $xpTotal")
+                hoardTotalXPLiveData.postValue(xpTotal)
+            }
+        }
     }
     // endregion
 }

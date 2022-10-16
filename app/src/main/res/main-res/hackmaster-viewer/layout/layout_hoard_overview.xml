@@ -91,29 +91,49 @@
 
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/hoard_overview_name_label"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="12dp"
-                    android:layout_gravity="center_vertical"
-                    android:autoSizeTextType="uniform"
-                    android:textSize="21sp"
-                    android:textStyle="bold"
-                    android:background="#00FFFFFF"
-                    android:breakStrategy="balanced"
-                    tools:text="[Hoard Name]"/>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <CheckBox
-                    android:id="@+id/hoard_overview_fav_checkbox"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:button="@drawable/toggleable_clipart_star_vector"
-                    app:tint="@color/fav_star_colorlist"
-                    tools:checked="true"/>
+                    <TextView
+                        android:id="@+id/hoard_overview_name_label"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="center_vertical"
+                        android:layout_marginVertical="4dp"
+                        android:layout_marginHorizontal="12dp"
+                        android:autoSizeMaxTextSize="28sp"
+                        android:autoSizeMinTextSize="12sp"
+                        android:autoSizeStepGranularity="4sp"
+                        android:autoSizeTextType="uniform"
+                        android:breakStrategy="balanced"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/hoard_overview_fav_barrier"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="[Hoard Name]" />
+
+                    <CheckBox
+                        android:id="@+id/hoard_overview_fav_checkbox"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:button="@drawable/toggleable_clipart_star_vector"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/fav_star_colorlist"
+                        tools:checked="true" />
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/hoard_overview_fav_barrier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="start"
+                        app:constraint_referenced_ids="hoard_overview_fav_checkbox" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 
@@ -129,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:text="@string/time_date_gen_label"/>
@@ -140,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textAlignment="textEnd"
                     android:gravity="end"
                     android:textStyle="italic"
@@ -160,10 +180,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:marqueeRepeatLimit="marquee_forever"
-                    android:text="Total monetary value:"/>
+                    android:text="@string/gp_total_label"/>
 
                 <TextView
                     android:id="@+id/hoard_overview_value_info"
@@ -171,12 +191,96 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:textAlignment="textEnd"
                     android:gravity="end"
                     android:textStyle="italic"
                     android:marqueeRepeatLimit="marquee_forever"
                     tools:text="[ . . . ] gp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/hoard_overview_experience_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="@string/xp_total_label"/>
+
+                <TextView
+                    android:id="@+id/hoard_overview_experience_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:textAlignment="textEnd"
+                    android:gravity="end"
+                    android:textStyle="italic"
+                    tools:text="[ . . . ] xp"/>
+
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/hoard_overview_difficulty_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="@string/acquisition_difficulty_label"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/hoard_overview_experience_ratio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textSize="14sp"
+                        android:textAlignment="textEnd"
+                        android:gravity="end"
+                        android:textStyle="italic"
+                        tools:text="5.00 gp = 1 xp"/>
+
+                    <TextView
+                        android:id="@+id/hoard_overview_experience_difficulty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:paddingHorizontal="4dp"
+                        android:layout_marginStart="8dp"
+                        android:textSize="14sp"
+                        android:textAlignment="textEnd"
+                        android:fontFeatureSettings="smcp"
+                        android:gravity="end"
+                        android:textStyle="italic|bold"
+                        tools:text="@string/difficulty_average"
+                        android:textColor="@color/emerald"
+                        android:shadowColor="?attr/colorOnSurface"
+                        android:shadowRadius="0.5"
+                        android:alpha="0.8"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

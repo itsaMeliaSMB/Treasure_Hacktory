@@ -1,32 +1,11 @@
 package com.example.android.treasurefactory
 
-import com.example.android.treasurefactory.database.SpellTemplate
 import com.example.android.treasurefactory.model.*
 
-const val ORDER_LABEL_STRING = "order_details"
-
-const val MAX_SPELLS_PER_SCROLL = 50
-const val MAX_SPELLS_PER_BOOK = 120
-
-/**
- * Primary key of first single Ioun stone in database.
- *
- * @since 3/13/2022
- * */
-const val FIRST_IOUN_STONE_KEY = 855
-/**
- * Primary key of last (dead) single Ioun stone in database.
- *
- * @since 3/13/2022
- * */
-const val LAST_IOUN_STONE_KEY = 868
-/** Primary key for Gut Stone entry in gem database */
-const val GUT_STONE_KEY = 58
+//TODO safe delete after decoupling from LootGeneratorAsync
 
 interface BaseLootGenerator {
     val ANY_MAGIC_ITEM_LIST: List<String>
-
-    val DUMMY_SPELL : SpellTemplate
 
     suspend fun createHoardFromOrder(hoardOrder: HoardOrder, appVersion: Int): Int
 
@@ -55,7 +34,7 @@ interface BaseLootGenerator {
     suspend fun createMagicItemTuple(
         parentHoardID: Int, givenTemplate: Int = -1,
         providedTypes: List<String> = ANY_MAGIC_ITEM_LIST,
-        itemRestrictions: MagicItemRestrictions = MagicItemRestrictions()
+        itemRestrictions: MagicItemRestrictions = MagicItemRestrictions(allowedTables = enumValues<MagicItemType>().toSet())
     ): NewMagicItemTuple
 
     /** Generates a treasure map, following the rules outlined on GMG pgs 181 and 182 */

@@ -28,6 +28,9 @@ class HMRepository (
 
     suspend fun getHoardOnce(hoardID: Int): Hoard? = hoardDao.getHoardOnce(hoardID)
 
+    suspend fun getHoardEffortRatingOnce(hoardID: Int): Double =
+        hoardDao.getHoardEffortRatingOnce(hoardID) ?: 5.0
+
     suspend fun addHoard(hoard: Hoard) : Long {
         return hoardDao.addHoard(hoard)
     }
@@ -193,6 +196,9 @@ class HMRepository (
     suspend fun getMagicItemValueTotalOnce(hoardID: Int): Double =
         magicItemDao.getMagicItemValueTotalOnce(hoardID)
 
+    suspend fun getMagicItemXPTotalOnce(hoardID: Int): Int =
+        magicItemDao.getMagicItemXPTotalOnce(hoardID)
+
     fun getMagicItems(hoardId: Int): LiveData<List<MagicItem>> = magicItemDao.getMagicItems(hoardId)
 
     fun getMagicItem(itemId: Int): LiveData<MagicItem?> = magicItemDao.getMagicItem(itemId)
@@ -216,22 +222,6 @@ class HMRepository (
     // endregion
 
     //region [ Spell collection functions ]
-
-    // region ( SpellTemplate )
-
-    suspend fun getSpellTemplate(spellId: Int): SpellTemplate? =
-        spellCollectionDao.getSpellTemplate(spellId)
-
-    suspend fun getSpellTemplateByName(spellName: String, discipline: Int, level: Int): SpellTemplate? =
-        spellCollectionDao.getSpellTemplateByName(spellName, discipline, level)
-
-    suspend fun getSpellTemplateIDs(discipline: Int, level: Int): List<Int> =
-        spellCollectionDao.getSpellTemplateIDs(discipline, level)
-
-    suspend fun addSpellTemplate(entry: SpellTemplate) {
-        spellCollectionDao.addSpellTemplate(entry)
-    }
-    // endregion
 
     // region ( Spell )
 
@@ -262,6 +252,9 @@ class HMRepository (
 
     suspend fun getSpellCollectionValueTotalOnce(hoardID: Int): Double =
         spellCollectionDao.getSpellCollectionValueTotalOnce(hoardID)
+
+    suspend fun getSpellCollectionXPTotalOnce(hoardID: Int): Int =
+        spellCollectionDao.getSpellCollectionXPTotalOnce(hoardID)
 
     fun getSpellCollections(hoardId: Int): LiveData<List<SpellCollection>> =
         spellCollectionDao.getSpellCollections(hoardId)

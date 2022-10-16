@@ -1,5 +1,7 @@
 package com.example.android.treasurefactory.model
 
+import com.example.android.treasurefactory.viewmodel.MAXIMUM_SPELLS_PER_SCROLL
+
 const val DEFAULT_MAX_SPELLS_PER_SCROLL = 7
 
 data class HoardOrder(
@@ -19,6 +21,8 @@ data class HoardOrder(
     var anyButWeapons: Int = 0,
     var anyMagicItems: Int = 0,
     var extraSpellCols: Int = 0,
+    var baseMaps: Int = 0,
+    val allowFalseMaps: Boolean = true,
     var genParams: OrderParams = OrderParams()
 )
 
@@ -49,20 +53,21 @@ data class MagicItemRestrictions(
     val spellScrollEnabled: Boolean = true,
     val nonScrollEnabled: Boolean = true,
     val scrollMapChance: Int = 0,
+    val allowedTables: Set<MagicItemType> = enumValues<MagicItemType>().toSet(),
     val allowCursedItems: Boolean = true,
     val allowIntWeapons: Boolean = true,
-    val allowArtifacts: Boolean = true,
     val spellCoRestrictions: SpellCoRestrictions =
         SpellCoRestrictions(
             allowCurse = allowCursedItems
         )
+    //TODO Add val itemSources: SpCoSources when magic items beyond GMG are added
 )
 
 data class SpellCoRestrictions(
     val _minLvl: Int = 0,
     val _maxLvl: Int = 9,
     val allowedDisciplines: AllowedDisciplines = AllowedDisciplines(),
-    val spellCountMax: Int = DEFAULT_MAX_SPELLS_PER_SCROLL,
+    val spellCountRange: IntRange = IntRange(1, MAXIMUM_SPELLS_PER_SCROLL),
     val spellSources: SpCoSources = SpCoSources(true, false, false),
     val allowRestricted: Boolean = false,
     val rerollChoice: Boolean = false,
@@ -81,3 +86,24 @@ data class SpellCoRestrictions(
 }
 
 data class AllowedDisciplines(val arcane: Boolean = true, val divine: Boolean = true, val natural: Boolean = false)
+
+/**
+ * Data class for holding all user preferences captured from HoardGeneratorFragment's option dialog.
+ */
+data class GeneratorOptions(
+    val gemMin: Int = 0, val gemMax: Int = 17, val artMin : Int = -19, val artMax: Int = 31,
+    val mapBase: Int = 0, val mapPaper : Int = 0, val mapScroll : Int = 0,
+    val falseMapsOK : Boolean = true,
+    val allowedMagic: Set<MagicItemType> = setOf(
+        MagicItemType.A2,MagicItemType.A3,MagicItemType.A4,MagicItemType.A5,MagicItemType.A6,
+        MagicItemType.A7,MagicItemType.A8,MagicItemType.A9,MagicItemType.A10,MagicItemType.A11,
+        MagicItemType.A12,MagicItemType.A13,MagicItemType.A14,MagicItemType.A15,MagicItemType.A16,
+        MagicItemType.A17,MagicItemType.A18,MagicItemType.A21,MagicItemType.A24),
+    val spellOk : Boolean = true, val utilityOk : Boolean = true, val cursedOk : Boolean = true,
+    val intelOk : Boolean = true, val spellDisciplinePos: Int = 3,
+    val spellMethod : SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
+    val spellCurses : SpCoCurses = SpCoCurses.STRICT_GMG, val spellReroll : Boolean = true,
+    val restrictedOk : Boolean = false,
+    val allowedSources: SpCoSources = SpCoSources(
+        splatbooksOK = true, hackJournalsOK = false, modulesOK = false)
+)

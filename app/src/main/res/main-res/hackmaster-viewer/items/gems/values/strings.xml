@@ -281,4 +281,42 @@
     <string name="copy_to_clipboard_button">Copy to clipboard</string>
     <string name="flag_as_used_button">Flag as used</string>
     <string name="unflag_as_used_button">Un-flag as used</string>
+    <string name="equals_one_xp">= 1 xp</string>
+    <string name="acquisition_difficulty_label">Acquisition difficulty:</string>
+    <string name="xp_total_label">Maximum experience value:</string>
+    <string name="gp_total_label">Total monetary value:</string>
+    <string name="difficulty_ratio_label">Difficulty ratio:</string>
+    <string name="new_hoard_generated_msg_template">New hoard "=" successfully generated. Would you like to view this hoard?</string>
+    <string name="table_a2_title">Potions and Oils\n(Table A2)</string>
+    <string name="table_a3_label">Scrolls\n(Table A3)</string>
+    <string name="table_a4_label">Rings\n(Table A4)</string>
+    <string name="table_a5_label">Rods\n(Table A5)</string>
+    <string name="table_a6_title">Staves\n(Table A6)</string>
+    <string name="table_a7_title">Wands\n(Table A7)</string>
+    <string name="table_a8_title">Books, Librams, Manuals, Tomes\n(Table A8)</string>
+    <string name="table_a9_title">Jewels, Jewelry, Phylacteries\n(Table A9)</string>
+    <string name="table_a10_title">Cloaks and Robes\n(Table A10)</string>
+    <string name="table_a11_title">Boots, Bracers, Gloves\n(Table A11)</string>
+    <string name="table_a12_title">Belts, Girdles, Hats, Helms\n(Table A12)</string>
+    <string name="table_a13_title">Bags, Bottles, Pouches, Containers\n(Table A13)</string>
+    <string name="table_a14_title">Candles, Dusts, Ointments, Incense, and Stones (Table A14)</string>
+    <string name="table_a15_title">Household Items and Tools\n(Table A15)</string>
+    <string name="table_a16_title">Musical Instruments\n(Table A16)</string>
+    <string name="table_a17_title">The Weird Stuff\n(Table A17)</string>
+    <string name="tables_a18_a20_title"><![CDATA[Armor and Shields\n(Tables A18 & A20)]]></string>
+    <string name="tables_a21_a23_title"><![CDATA[Weapons and Ammunition\n(Tables A21 & A23)]]></string>
+    <string name="table_a24_title">Artifacts and Relics\n(Table A24)</string>
+    <string name="generator_option_magic_item_error">At least one type of magic item must be enabled.</string>
+    <string name="value_bias_range_tooltip">Generator will re-roll results outside this range, up to a point.</string>
+    <string name="allowed_scroll_tooltip">If a scroll is indicated on table A1, allow these scrolls.</string>
+    <string name="allow_magic_item_types_tooltip">Which types of magic items can be generated.\nIf no selected types overlap with a rolled treasure type (e.g. type F),\nthis preference is ignored.</string>
+    <string name="allowed_sources_tooltip">If checked, magic items and spells from these sources may also be picked.</string>
+    <string name="allowed_disciplines_tooltip">Only generate collections of the selected type.\nIf Arcane/Divine is indicated, both types can be separately generated.\nNOTE: Druid scrolls are officially disallowed.</string>
+    <string name="spell_curse_tooltip">What curses may be applied to any cursed spell collections generated.</string>
+    <string name="generation_options">Generation options</string>
+    <string name="spell_method_random_radio_label">Unweighted, random picks</string>
+    <string name="spell_method_book_radio_label">Book-defined methods</string>
+    <string name="reference_splatbook_label">Splatbooks (i.e. Spellslinger\'s Guide and Zealot\'s Guide)</string>
+    <string name="reference_hackjournal_label">HackJournals</string>
+    <string name="reference_modules_etc_label"><![CDATA[Other official Kenzer & Company-published material (i.e. modules)]]></string>
 </resources>

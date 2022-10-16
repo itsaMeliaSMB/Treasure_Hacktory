@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
-enum class MagicItemType(tableLabel: String) {
+enum class MagicItemType(val tableLabel: String) {
     A2 ("Potions and Oils"),
     A3 ("Scrolls"),
     A4 ("Rings"),

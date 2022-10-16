@@ -18,7 +18,7 @@ data class Gem(
     var name: String,
     val opacity: Int,
     var description: String = "",
-    var currentGPValue: Double = 0.0) {
+    var currentGPValue: Double = 0.0){
 
     @Ignore
     fun getTypeAsString() : String {

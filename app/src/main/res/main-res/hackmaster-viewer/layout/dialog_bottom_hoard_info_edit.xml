@@ -163,6 +163,49 @@
         app:barrierDirection="end"
         app:constraint_referenced_ids="hoard_edit_preview_icon" />
 
+    <TextView
+        android:id="@+id/hoard_edit_difficulty_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/difficulty_ratio_label"
+        app:layout_constraintBaseline_toBaselineOf="@+id/hoard_edit_gp_input"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/hoard_edit_gp_input"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toStartOf="@+id/hoard_edit_xp_text"
+        app:layout_constraintTop_toBottomOf="@id/hoard_edit_preview_label"
+        app:suffixText=" gp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/hoard_edit_gp_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="\?.?? gp"
+            android:inputType="numberDecimal"
+            android:maxLength="4"
+            android:maxLines="1"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"
+            tools:text="5.0"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/hoard_edit_xp_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/equals_one_xp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/hoard_edit_gp_input"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/hoard_edit_save_button"
         android:layout_width="0dp"
@@ -174,20 +217,20 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/button_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/hoard_edit_preview_label" />
+        app:layout_constraintTop_toBottomOf="@id/hoard_edit_gp_input" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/hoard_edit_cancel_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:minHeight="56dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="6dp"
+        android:minHeight="56dp"
         android:text="@string/action_cancel"
+        android:layout_marginTop="16dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/button_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/hoard_edit_preview_label" />
+        app:layout_constraintTop_toBottomOf="@+id/hoard_edit_gp_input" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/button_guideline"

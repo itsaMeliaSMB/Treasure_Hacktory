@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.annotation.WorkerThread
 import com.example.android.treasurefactory.database.GemTemplate
 import com.example.android.treasurefactory.database.MagicItemTemplate
-import com.example.android.treasurefactory.database.SpellTemplate
 import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.async
@@ -15,18 +14,32 @@ import java.util.*
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerator {
+const val ORDER_LABEL_STRING = "order_details"
+
+const val MAX_SPELLS_PER_SCROLL = 50
+const val MAX_SPELLS_PER_BOOK = 120
+
+/**
+ * Primary key of first single Ioun stone in database.
+ *
+ * @since 3/13/2022
+ * */
+const val FIRST_IOUN_STONE_KEY = 855
+/**
+ * Primary key of last (dead) single Ioun stone in database.
+ *
+ * @since 3/13/2022
+ * */
+const val LAST_IOUN_STONE_KEY = 868
+/** Primary key for Gut Stone entry in gem database */
+const val GUT_STONE_KEY = 58
+
+class LootGeneratorAsync(private val repository: HMRepository) {
 
     //region << Sample entries and constants >>
-    override val ANY_MAGIC_ITEM_LIST = listOf(
+    val ANY_MAGIC_ITEM_LIST = listOf(
         "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
         "A17","A18","A21","A24")
-
-    val SAMPLE_ARCANE_SPELL = SpellTemplate(744,"Wildshield",1, "Spellslinger's Guide to Wurld Domination",125,0,6,"Con","Wild_Mage/Guardian","","Wild","")
-
-    val SAMPLE_DIVINE_SPELL = SpellTemplate(1146,"Exaction",0,"Player’s Handbook",273,1,7,"Evo/Alt","","Charm/Summoning","","")
-
-    override val DUMMY_SPELL = SpellTemplate(0,"\"Push\"",0,"\"Player's Handbook\"",184,0,1,"Con","","","","Invalid spell.")
 
     val FALLBACK_GEM_TEMPLATE =
         GemTemplate(
@@ -43,9 +56,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     }
 
     // region [ Order processing functions ]
-    // TODO still needs concurrency rework
     @WorkerThread
-    override suspend fun createHoardFromOrder(hoardOrder: HoardOrder, appVersion: Int): Int {
+    suspend fun createHoardFromOrder(hoardOrder: HoardOrder, appVersion: Int): Int {
 
         Log.d("createHoardFromOrder()","Starting hoard generation")
 
@@ -73,7 +85,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             (hoardOrder.goldPieces * 1.0) +
                             (hoardOrder.hardSilverPieces * 2.0) +
                             (hoardOrder.platinumPieces * 5.0)
-                val xpTotal = (gpTotal / effortValue).roundToInt()
 
                 return Hoard(
                     0,
@@ -136,7 +147,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     var rollsMade = 0
 
                     do {
-                        newArtPair = createArtObject(newHoardID,hoardOrder.genParams.artParams)
+                        newArtPair = createArtObject(newHoardID, hoardOrder.genParams.artParams)
                         rollsMade ++
                     } while ((rollsMade < maxRerolls) &&
                         (newArtPair.second != null) &&
@@ -156,6 +167,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             val deferredItemPile = async {
 
                 Log.d("createHoardFromOrder()","[[Start Deferred Items]]")
+
+                val selectedAllowedTypes = hoardOrder.genParams.magicParams.allowedTables
+                    .map { it.name }.toSet()
 
                 val innerGemPile = arrayListOf<Gem>()
                 val innerItemPile = arrayListOf<MagicItem>()
@@ -192,7 +206,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 SpItType.TREASURE_MAP ->
                                     createTreasureMap(
                                         newHoardID,"scroll item (Table A3)",
-                                        hoardOrder.genParams.magicParams.allowCursedItems
+                                        hoardOrder.allowFalseMaps
                                     ).also { innerItemPile.add(it) }
                             }
 
@@ -203,20 +217,30 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                 // Generate magic items
                 repeat(hoardOrder.potions){
 
-                    val rollableTables = listOf("A2")
+                    val baseTables = listOf("A2")
 
-                    val newPotion = createMagicItemTuple(newHoardID, -1, rollableTables,
-                            hoardOrder.genParams.magicParams).magicItem
+                    val rollableTables = baseTables.intersect(selectedAllowedTypes).toList()
+                        .takeIf { it.isNotEmpty() } ?: baseTables
+
+                    val newPotion = createMagicItemTuple(
+                        newHoardID, -1, rollableTables,
+                        hoardOrder.genParams.magicParams
+                    ).magicItem
 
                     innerItemPile.add(newPotion)
                 }
 
                 repeat(hoardOrder.scrolls){
 
-                    val rollableTables = listOf("A3")
+                    val baseTables = listOf("A3")
 
-                    val newScrollTuple = createMagicItemTuple(newHoardID, -1, rollableTables,
-                        hoardOrder.genParams.magicParams)
+                    val rollableTables = baseTables.intersect(selectedAllowedTypes).toList()
+                        .takeIf { it.isNotEmpty() } ?: baseTables
+
+                    val newScrollTuple = createMagicItemTuple(
+                        newHoardID, -1, rollableTables,
+                        hoardOrder.genParams.magicParams
+                    )
 
                     when (newScrollTuple.specialItemOrder?.itemType) {
 
@@ -241,7 +265,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                             createTreasureMap(
                                 newHoardID,"scroll item (Table A3)",
-                                hoardOrder.genParams.magicParams.allowCursedItems
+                                hoardOrder.allowFalseMaps
                             ).also { innerItemPile.add(it) }
                         }
 
@@ -251,28 +275,51 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 repeat(hoardOrder.armorOrWeapons){
 
-                    val rollableTables = listOf("A18","A21")
+                    val baseTables = listOf("A18","A21")
 
-                    createMagicItemTuple(newHoardID,-1,
-                        rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
+                    val rollableTables = baseTables.intersect(selectedAllowedTypes).toList()
+                        .takeIf { it.isNotEmpty() } ?: baseTables
+
+                    createMagicItemTuple(
+                        newHoardID, -1,
+                        rollableTables, hoardOrder.genParams.magicParams
+                    ).parseNewMagicItemTuple()
                 }
 
                 repeat(hoardOrder.anyButWeapons){
 
-                    val rollableTables = listOf("A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12",
-                        "A13","A14","A15","A16","A17","A18")
+                    val baseTables = listOf(
+                        "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12", "A13","A14",
+                        "A15","A16","A17","A18")
 
-                    createMagicItemTuple(newHoardID,-1,
-                        rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
+                    val rollableTables = baseTables.intersect(selectedAllowedTypes).toList()
+                        .takeIf { it.isNotEmpty() } ?: baseTables
+
+                    createMagicItemTuple(
+                        newHoardID, -1,
+                        rollableTables, hoardOrder.genParams.magicParams
+                    ).parseNewMagicItemTuple()
                 }
 
                 repeat(hoardOrder.anyMagicItems){
 
-                    val rollableTables = listOf("A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12",
-                        "A13","A14","A15","A16","A17","A18","A21","A24")
+                    val baseTables = listOf(
+                        "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12", "A13","A14",
+                        "A15","A16","A17","A18","A21","A24")
 
-                    createMagicItemTuple(newHoardID,-1,
-                        rollableTables,hoardOrder.genParams.magicParams).parseNewMagicItemTuple()
+                    val rollableTables = baseTables.intersect(selectedAllowedTypes).toList()
+                        .takeIf { it.isNotEmpty() } ?: baseTables
+
+                    createMagicItemTuple(
+                        newHoardID, -1,
+                        rollableTables, hoardOrder.genParams.magicParams
+                    ).parseNewMagicItemTuple()
+                }
+
+                // Roll explicit treasure maps
+                repeat(hoardOrder.baseMaps) {
+                    createTreasureMap(newHoardID,"Didn't replace another item.",
+                        hoardOrder.allowFalseMaps)
                 }
 
                 return@async Triple(innerGemPile.toList(),innerItemPile.toList(),innerSpellPile.toList())
@@ -432,6 +479,21 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 hoardOrder.genParams.artParams.paperMapChance
                             }%", tag = "creation|art-object|verbose")
 
+                fun getAllowedMagicItemsForHoardEvent() : String {
+
+                    val result = StringBuilder()
+
+                    enumValues<MagicItemType>().dropLast(2).forEach {
+
+                        result.append("\t\t[${
+                            if (hoardOrder.genParams.magicParams.allowedTables.contains(it))
+                                "✓" else " "
+                        }] ${it.tableLabel}\n")
+                    }
+
+                    return result.toString()
+                }
+
                 val itemHoardEvent = HoardEvent(
                     hoardID = newHoardID,
                     timestamp = System.currentTimeMillis(),
@@ -449,22 +511,20 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                             }] Spell scrolls\n" +
                             "\t\t[${
                                 if (hoardOrder.genParams.magicParams.nonScrollEnabled) "✓" else " "
-                            }] Non-spell scrolls\n" +
+                            }] Non-spell / utility scrolls\n" +
                             "\t\t[${
                                 if (hoardOrder.genParams.magicParams.scrollMapChance != 0) "✓" else " "
                             }] Treasure map (${
                                 hoardOrder.genParams.magicParams.scrollMapChance
                             }% chance)\n" +
-                            "\tAllow:\n" +
-                            "\t\t[${
+                            "\n\tAllow:\n" +
+                            getAllowedMagicItemsForHoardEvent() +
+                            "\n\t\t[${
                                 if (hoardOrder.genParams.magicParams.allowIntWeapons) "✓" else " "
                             }] Intelligent weapon generation\n" +
                             "\t\t[${
                                 if (hoardOrder.genParams.magicParams.allowCursedItems) "✓" else " "
-                            }] Cursed magic items/spell collections\n" +
-                            "\t\t[${
-                                if (hoardOrder.genParams.magicParams.allowIntWeapons) "✓" else " "
-                            }] Artifacts/relics\n", tag = "creation|magic-item|verbose")
+                            }] Cursed magic items/spell collections\n", tag = "creation|magic-item|verbose")
 
                 val spellHoardEvent = HoardEvent(
                     hoardID = newHoardID,
@@ -477,7 +537,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                 hoardOrder.genParams.magicParams.spellCoRestrictions.levelRange.last
                             }\n" +
                             "\tMaximum spells per collection: ${
-                                hoardOrder.genParams.magicParams.spellCoRestrictions.spellCountMax
+                                hoardOrder.genParams.magicParams.spellCoRestrictions.spellCountRange
                             }\n" +
                             "\tDisciplines:\n" +
                             "\t\t[${
@@ -534,12 +594,31 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                                     SpCoGenMethod.ANY_PHYSICAL-> "Using any method resulting in item"
                                 }}", tag = "creation|spell-collection|verbose")
 
+                val mapHoardEvent = HoardEvent(
+                    hoardID = newHoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "Order Treasure Map Parameters:\n" +
+                            "\tBase map quantity rolled: ${hoardOrder.baseMaps} (generated ${
+                                itemPile.filter { it.typeOfItem == MagicItemType.Map }.size
+                            } total)\n" +
+                            "\t${
+                                hoardOrder.genParams.artParams.paperMapChance
+                            }% chance of replacing a paper art object\n" +
+                            "\t${
+                                hoardOrder.genParams.magicParams.scrollMapChance
+                            }% chance of replacing a scroll magic item\n" +
+                            "\t[${
+                                if (hoardOrder.allowFalseMaps) "✓" else " "
+                            }] Allow false treasure maps",
+                    tag = "creation|map|verbose")
+
                 repository.apply{
                     addHoardEvent(creationHoardEvent)
                     addHoardEvent(gemHoardEvent)
                     addHoardEvent(artHoardEvent)
                     addHoardEvent(itemHoardEvent)
                     addHoardEvent(spellHoardEvent)
+                    addHoardEvent(mapHoardEvent)
                     //TODO add verbose initial composition report event, but only call for it if
                     // the user requests it.
                 }
@@ -554,7 +633,12 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     // endregion
 
     //region [ Item generation functions ]
-    override suspend fun createGem(parentHoardID: Int, givenTemplate: Int) : Gem {
+    /**
+     * Returns a [gem][Gem] based on the method laid out on page 178 of the GameMaster's Guide.
+     *
+     * @param givenTemplate Primary key to query for a specific gem. Negative values are ignored.
+     */
+    suspend fun createGem(parentHoardID: Int, givenTemplate: Int = -1) : Gem {
 
         // region [ Roll gem type ]
 
@@ -653,8 +737,14 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         )
     }
 
-    override fun createArtObject(parentHoardID: Int,
-                        itemRestrictions: ArtRestrictions) : Pair<ArtObject,MagicItem?> {
+    /**
+     * Returns an [art object][ArtObject] / treasure map pair based on the method laid out in HackJournal #6
+     */
+    fun createArtObject(
+        parentHoardID: Int,
+        itemRestrictions: ArtRestrictions,
+        allowFalseMaps: Boolean = true
+    ) : Pair<ArtObject,MagicItem?> {
 
         var temporaryRank:  Int
         var ageInYears:     Int
@@ -968,7 +1058,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         val paperTreasureMap = if ((artType == 0)||
             (Random.nextInt(1,101)<= itemRestrictions.paperMapChance)) {
 
-            createTreasureMap(parentHoardID,"paper artwork")
+            createTreasureMap(parentHoardID,"paper artwork",allowFalseMaps)
 
         } else null
         // endregion
@@ -1045,9 +1135,19 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         ) to paperTreasureMap
     }
 
-    override suspend fun createMagicItemTuple(parentHoardID: Int, givenTemplate: Int,
-                                      providedTypes: List<String>,
-                                      itemRestrictions: MagicItemRestrictions
+    /**
+     * Returns a [NewMagicItemTuple] containing a [MagicItem]. Returns a "Nothing" item if an error
+     * is encountered.
+     *
+     * @param givenTemplate Primary key to query for a specific item. Negative values are ignored.
+     * @param providedTypes Tables that are allowed to be queried to pick an item.
+     * @param itemRestrictions inherited parameters from hoard order limited what can be generated.
+     */
+    suspend fun createMagicItemTuple(
+        parentHoardID: Int, givenTemplate: Int = -1,
+        providedTypes: List<String> = ANY_MAGIC_ITEM_LIST,
+        itemRestrictions: MagicItemRestrictions = MagicItemRestrictions(),
+        allowFalseMaps: Boolean = true
     ) : NewMagicItemTuple{
 
         val VALID_TABLE_TYPES = linkedSetOf(
@@ -1326,8 +1426,6 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             val spellCount : Int
             val spellRange: IntRange
 
-            //TODO move all of this over to spell collection generator and replace this with inherited roll
-
             when (halvedIndex) {
 
                 1 -> { spellCount = 1
@@ -1585,7 +1683,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
                 // Get list of limited items of given type
                 val baseTemplateList = repository.getBaseLimItemTempsByType(
-                    itemType, itemRestrictions.allowCursedItems)
+                    itemType, itemRestrictions.allowCursedItems
+                )
 
                 if ( baseTemplateList.isNotEmpty() ) {
 
@@ -1608,7 +1707,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
                     while (template.hasChild != 0) {
 
                         val childTemplateList = repository.getChildLimItemTempsByParent(
-                            template.refId, itemRestrictions.allowCursedItems)
+                            template.refId, itemRestrictions.allowCursedItems
+                        )
 
                         if (childTemplateList.isNotEmpty()) {
 
@@ -3570,7 +3670,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             specialItemOrder, gemOrder)
     }
 
-    override fun createTreasureMap(parentHoard: Int, sourceDesc: String, allowFalseMaps: Boolean): MagicItem {
+    /** Generates a treasure map as a [MagicItem], following the rules outlined on GMG pgs 181 and 182 */
+    fun createTreasureMap(parentHoard: Int, sourceDesc: String = "", allowFalseMaps: Boolean = true): MagicItem {
 
         val flatNotesList=  ArrayList<Pair<String,String>>()
 
@@ -3704,7 +3805,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
             convertNotes())
     }
 
-    override suspend fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
+    /** Generates ioun stones when indicated by standard magic item generation methods */
+    suspend fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
 
         val iounList = arrayListOf<MagicItem>()
         val currentSet = mutableSetOf<Int>()
@@ -3730,17 +3832,21 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         currentSet.sorted().forEach { indexAddend ->
 
             // Add to running list
-            iounList.add(createMagicItemTuple(parentHoard,
+            iounList.add(createMagicItemTuple(
+                parentHoard,
                 (FIRST_IOUN_STONE_KEY + (indexAddend - 1)),
-                listOf("A14")).magicItem)
+                listOf("A14")
+            ).magicItem)
         }
         // endregion
 
         // region ( Add dead stones )
         if (deadStones > 0){
 
-            val deadStoneItem = createMagicItemTuple(parentHoard,
-                LAST_IOUN_STONE_KEY, listOf("A14")).magicItem
+            val deadStoneItem = createMagicItemTuple(
+                parentHoard,
+                LAST_IOUN_STONE_KEY, listOf("A14")
+            ).magicItem
 
             repeat(deadStones) { iounList.add(deadStoneItem) }
         }
@@ -3749,7 +3855,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         return iounList
     }
 
-    override suspend fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem> {
+    /** Generates [gems][Gem] from a [GemOrder], typically for Gut Stones when indicated in [createMagicItemTuple]. */
+    suspend fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem> {
 
         val gemTemplate = gemOrder.gemTemplate.coerceIn(1..58)
         val orderGemList = arrayListOf<Gem>()
@@ -3761,7 +3868,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         return orderGemList
     }
 
-    override suspend fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection {
+    /** Generates a Ring of Spell Storing as a [SpellCollection]. */
+    suspend fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection {
 
         val ringName = "Ring of Spell Storing" + if (order.spellType == SpCoDiscipline.ARCANE) {
             " (Magic-User)" } else " (Cleric)"
@@ -3940,7 +4048,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     // endregion
 
     // region [ Spell-related functions ]
-    override suspend fun convertOrderToSpellScroll(parentHoard : Int, order: SpellCollectionOrder): SpellCollection {
+    /** Converts a [SpellCollectionOrder] into a [SpellCollection], always as a scroll.*/
+    suspend fun convertOrderToSpellScroll(parentHoard : Int, order: SpellCollectionOrder): SpellCollection {
 
         // region < Local extension functions >
 
@@ -4275,7 +4384,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
     private suspend fun SpellCollectionOrder.convertToScroll(parentHoard: Int): SpellCollection =
         convertOrderToSpellScroll(parentHoard,this)
 
-    override suspend fun createSpellCollection(parentHoard: Int, spCoParams: SpellCoRestrictions) : SpellCollection {
+    suspend fun createSpellCollection(parentHoard: Int, spCoParams: SpellCoRestrictions) : SpellCollection {
 
         return when (spCoParams.genMethod) {
 
@@ -4295,16 +4404,16 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         }
     }
 
-    override fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
+    fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
 
         val scrollDiscipline: SpCoDiscipline
-        val effectiveLvlRange: IntRange
-        val spellCount = Random.nextInt(1,scrollParams.spellCountMax + 1)
-        val scrollMethod = if (isByBook) SpCoGenMethod.BY_THE_BOOK else SpCoGenMethod.TRUE_RANDOM
+        val spellCount = Random.nextInt(scrollParams.spellCountRange.first,
+            scrollParams.spellCountRange.last + 1)
+        val scrollMethod = if (isByBook &&
+            !(scrollParams.allowedDisciplines.natural)) SpCoGenMethod.BY_THE_BOOK
+        else SpCoGenMethod.TRUE_RANDOM
 
         fun chooseSpCoDiscipline() : SpCoDiscipline {
-
-            val randomBookLegalDiscipline = setOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE).random()
 
             if (isByBook){
 
@@ -4360,7 +4469,7 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         scrollDiscipline = chooseSpCoDiscipline()
 
-        effectiveLvlRange = if (scrollDiscipline != SpCoDiscipline.ARCANE) {
+        val effectiveLvlRange: IntRange = if (scrollDiscipline != SpCoDiscipline.ARCANE) {
             val newMin = scrollParams.levelRange.first.coerceAtLeast(1)
             val newMax = scrollParams.levelRange.last.coerceIn(newMin,7)
             IntRange(newMin,newMax)
@@ -4372,8 +4481,9 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         )
     }
 
-    override suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
-                                        sources: SpCoSources, rerollChoices: Boolean,
+    /** Gets a random spell from allowed sources of the level, discipline, and restriction provided. */
+    suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
+                                        sources: SpCoSources, rerollChoices: Boolean = false,
                                         allowRestricted: Boolean): Spell {
 
         val discipline = if (_discipline == SpCoDiscipline.ALL_MAGIC) {
@@ -4420,7 +4530,8 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
         return spellHolder ?: FALLBACK_SPELL
     }
 
-    override suspend fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: SpellSchool?,
+    /** Returns a magic-user spell as if acquired by leveling up, outlined in the GMG/SSG */
+    suspend fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: SpellSchool?,
                                            rerollChoices: Boolean, useSSG: Boolean): Spell {
 
         val gmgSpellTablePgs = mapOf(
@@ -7319,9 +7430,25 @@ class LootGeneratorAsync(private val repository: HMRepository) : BaseLootGenerat
 
         return spellList
     }
+
+    /** Returns a [SpellCollection] of a spellbook following the procedure mentioned on SSG pgs 82-87 */
+    fun createSpellBook(parentHoard: Int, _effectiveLevel: Int, _extraSpells: Int,
+                        _specialistType: String, extraProperties: Int = 0,
+                        extraSpellMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
+                        useSSG: Boolean = true,
+                        allowRestricted: Boolean): SpellCollection
      */
 
-    override suspend fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int) : Spell {
+    /**
+     * Returns a cleric or druid spell using Appendix E on pgs 132-133 of ZG
+     *
+     * @param _inputLevel Spell level of the spell to be generated.
+     * @param allowDruid If false, any druid-only spells will be re-rolled.
+     * @param useZG If false, spells not in the PHB will be re-rolled.
+     * @param _maxCastable Highest castable spell level of theoretical caster. If 0, any
+     * restrictions (i.e. spell level of Indulgence) regarding spell level are ignored.
+     */
+   suspend fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int = 0) : Spell {
 
         val inputLevel = _inputLevel.coerceIn(1..7)
         val maxCastable = _maxCastable.coerceIn(0..7)

@@ -90,6 +90,13 @@ dependencies {
     implementation 'com.github.doyaaaaaken:kotlin-csv-jvm:1.2.0' //TODO attribute creator, if used
     implementation 'com.google.android.flexbox:flexbox:3.0.0' //TODO attribute creator
 
+    // PowerAdapter TODO attribute https://github.com/NextFaze/power-adapters
+    implementation 'com.nextfaze.poweradapters:power-adapters-kotlin:0.26.0'
+    implementation 'com.nextfaze.poweradapters:power-adapters-data-kotlin:0.26.0'
+    implementation 'com.nextfaze.poweradapters:power-adapters-rxjava2-kotlin:0.26.0'
+    implementation 'com.nextfaze.poweradapters:power-adapters-data-rxjava2-kotlin:0.26.0'
+    implementation 'com.nextfaze.poweradapters:power-adapters-recyclerview-v7-kotlin:0.26.0'
+
     // Lifecycle
     implementation "androidx.fragment:fragment-ktx:1.4.1"
     implementation "androidx.activity:activity-ktx:1.4.0"

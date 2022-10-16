@@ -139,11 +139,12 @@
         android:id="@+id/hoard_list_item_spell_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:drawablePadding="4dp"
         app:drawableStartCompat="@drawable/clipart_spellbook_vector_icon"
         app:drawableTint="?colorOnSurface"
         app:layout_constraintBottom_toBottomOf="@+id/hoard_list_item_list_icon"
-        app:layout_constraintEnd_toStartOf="@id/hoard_list_item_end_barrier"
+        app:layout_constraintEnd_toStartOf="@+id/hoard_list_item_favorited"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/hoard_list_item_magic_count"
         tools:text="100" />

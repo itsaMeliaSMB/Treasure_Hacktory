@@ -60,21 +60,6 @@ data class MagicItemTemplate(
     @ColumnInfo(name = "vi_power") val viPower: Int
 )
 
-@Entity(tableName = "hackmaster_spell_reference")
-data class SpellTemplate(
-    @PrimaryKey @ColumnInfo(name="ref_id") val refId: Int,
-    val name: String,
-    @ColumnInfo(name="ref_type") val refType: Int,
-    val source: String,
-    val page: Int,
-    val type: Int,
-    val level: Int,
-    val schools: String,
-    @ColumnInfo(name="restricted_to") val restrictions: String,
-    @ColumnInfo(name="spell_spheres") val spellSpheres: String,
-    @ColumnInfo(name="arcane_subclass") val subclass: String,
-    val note: String)
-
 @Entity(tableName = "command_word_suggestions")
 data class CommandWord(
     @PrimaryKey @NotNull val commandWord: String,

@@ -21,7 +21,6 @@ private const val DATABASE_NAME = "treasure-database"
         HoardEvent::class,
         GemTemplate::class,
         MagicItemTemplate::class,
-        SpellTemplate::class,
         Gem::class,
         GemEvaluation::class,
         ArtObject::class,
@@ -289,12 +288,12 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates spell table using hardcoded CSV file. */
         suspend fun populateSpellsByCSV(spellDao: SpellCollectionDao) {
 
-            //val csvFilePath = "src/main/res/raw/seed_spell_v03.csv"
+            //val csvFilePath = "src/main/res/raw/seed_spell_final.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
                 context.resources.getIdentifier(
-                    "seed_spell_v03","raw",context.packageName))
+                    "seed_spell_final","raw",context.packageName))
 
             fun String.toSchoolList() : List<SpellSchool> {
                 return this.lowercase().split("/").mapNotNull{ entry ->
@@ -958,13 +957,15 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "HERE-THERE",
                     "COCHRANE",
                     "BOP-BAM-BOOM",
-                    "SALTO"),
+                    "SALTO",
+                    "BLUE-SKADOO"),
                 "transform" to listOf(
                     "DITTO",
                     "WILDCARD",
                     "FUNGE",
                     "DOPPLE",
                     "METAMORPHO",
+                    "MORBIN",
                     "MUTE",
                     "ALIFORMI",
                     "CHEMOS",
@@ -983,7 +984,8 @@ abstract class TreasureDatabase : RoomDatabase() {
                     "HACHACHA",
                     "WOKKA-WOKKA",
                     "JOKER",
-                    "ITAZURA"),
+                    "ITAZURA",
+                    "SUSSUS"),
                 "viking" to listOf(
                     "EINHERJAR",
                     "BIFROST",
@@ -1076,6 +1078,9 @@ interface HoardDao {
 
     @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
     suspend fun getHoardOnce(id: Int): Hoard?
+
+    @Query("SELECT effortRating FROM hackmaster_hoard_table WHERE hoardID=(:id)")
+    suspend fun getHoardEffortRatingOnce(id: Int): Double?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addHoard(hoard: Hoard) : Long
@@ -1304,6 +1309,9 @@ interface MagicItemDao {
     @Query("SELECT IFNULL(SUM(gpValue), 0.0) FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     suspend fun getMagicItemValueTotalOnce(hoardID: Int): Double
 
+    @Query("SELECT IFNULL(SUM(xpValue), 0) FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
+    suspend fun getMagicItemXPTotalOnce(hoardID: Int): Int
+
     @Query("SELECT * FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     fun getMagicItems(hoardID: Int): LiveData<List<MagicItem>>
 
@@ -1327,21 +1335,6 @@ interface MagicItemDao {
 @Dao
 interface SpellCollectionDao{
 
-    // region ( SpellTemplate )
-    @Query("SELECT * FROM hackmaster_spell_reference WHERE ref_id=(:spellId)")
-    suspend fun getSpellTemplate(spellId: Int): SpellTemplate?
-
-    @Query("SELECT * FROM hackmaster_spell_reference WHERE name=(:spellName) AND type=(:discipline) AND level=(:level)")
-    suspend fun getSpellTemplateByName(spellName: String, discipline: Int, level: Int): SpellTemplate?
-
-    @Query("SELECT ref_id FROM hackmaster_spell_reference WHERE type=(:discipline) " +
-            "AND level=(:level)")
-    suspend fun getSpellTemplateIDs(discipline: Int, level: Int): List<Int>
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addSpellTemplate(entry: SpellTemplate)
-    // endregion
-
     // region ( Spell )
     @Query("SELECT * FROM hackmaster_spell_table WHERE spell_id=(:spellID)")
     suspend fun getSpell(spellID: Int): Spell?
@@ -1349,7 +1342,7 @@ interface SpellCollectionDao{
     @Query("SELECT * FROM hackmaster_spell_table WHERE name=(:spellName) AND type=(:discipline) AND spellLevel=(:level)")
     suspend fun getSpellByNmDsLv(spellName: String, discipline: Int, level: Int): Spell?
 
-    @Query("SELECT ref_id FROM hackmaster_spell_table WHERE type=(:discipline) " +
+    @Query("SELECT spell_id FROM hackmaster_spell_table WHERE type=(:discipline) " +
             "AND spellLevel=(:level)")
     suspend fun getSpellIDs(discipline: Int, level: Int): List<Int>
 
@@ -1369,6 +1362,9 @@ interface SpellCollectionDao{
 
     @Query("SELECT IFNULL(SUM(gpValue), 0.0) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
     suspend fun getSpellCollectionValueTotalOnce(hoardID: Int): Double
+
+    @Query("SELECT IFNULL(SUM(xpValue), 0.0) FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
+    suspend fun getSpellCollectionXPTotalOnce(hoardID: Int): Int
 
     @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
     fun getSpellCollections(hoardID: Int): LiveData<List<SpellCollection>>

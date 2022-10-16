@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="4dp">
-
-    <TextView
-        android:id="@+id/unique_details_listitem_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14sp"
-        tools:text="Dragon Slayer \n(affects Red-Crested Amber-Bellied dragons)"/>
-
-</LinearLayout>
+    android:minHeight="54dp"
+    android:paddingHorizontal="16dp"
+    android:gravity="center_vertical"
+    android:textSize="14sp"
+    tools:text="Dragon Slayer \n(affects Red-Crested Amber-Bellied dragons)"/>

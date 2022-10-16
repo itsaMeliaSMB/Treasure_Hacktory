@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Filter
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.android.treasurefactory.R
@@ -24,6 +26,7 @@ import com.example.android.treasurefactory.model.HoardEvent
 import com.example.android.treasurefactory.viewmodel.HoardEditViewModel
 import com.example.android.treasurefactory.viewmodel.HoardEditViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlin.math.roundToInt
 
 class HoardEditBottomDialog() : BottomSheetDialogFragment() {
 
@@ -92,6 +95,11 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
 
                     activeHoard = hoard
 
+                    val initialEffortString = activeHoard.effortRating.toString()
+
+                    binding.hoardEditGpEdit.text = Editable.Factory.getInstance()
+                        .newEditable(initialEffortString)
+
                     this.getMostValuableItemStrings()
                 }
             }
@@ -114,6 +122,7 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                         requireContext(), R.layout.dropdown_menu_item,
                         badgeDropdownArray.map { it.menuLabel }.toTypedArray(),
                         badgeEnabledList.toBooleanArray())
+                    val initBadgePos = activeHoard.badge.ordinal
 
                     // Update dropdown options
                     binding.hoardEditIconAuto.apply{
@@ -121,17 +130,17 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                         isEnabled = true
                     }
                     binding.hoardEditBadgeAuto.apply {
-                        initializeAsDropdown(badgeAdapter, 0, badgeEnabledList.toTypedArray())
+                        initializeAsDropdown(badgeAdapter, initBadgePos,
+                            badgeEnabledList.toTypedArray())
                         isEnabled = true
                     }
-                    //TODO instead set the default position for badge dropdown to hoard's badge value's ordinal
 
                     // Hide progress indicator
                     binding.hoardEditProgressIndicator.visibility = View.GONE
 
                     // Set preview
                     setPreviewIcon(iconDropdownArray[0].cachedDrawable)
-                    setPreviewBadge(badgeDropdownArray[0].cachedDrawable) //TODO when badges are implemented, set from hoard accordingly.
+                    setPreviewBadge(badgeDropdownArray[initBadgePos].cachedDrawable)
                 }
             }
         }
@@ -169,6 +178,27 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                 }
             }
 
+            hoardEditGpEdit.addTextChangedListener { input ->
+
+                val oldEffortRating = hoardEditViewModel.newEffortValue
+
+                val roundedValue = (100 * (input.toString().toDoubleOrNull() ?: 0.00)).roundToInt() / 100.00
+
+                // Set error message if applicable
+                hoardEditGpInput.error = when {
+                    roundedValue <= 0.00    -> "Too low"
+                    roundedValue > 20.00    -> "Too high"
+                    else                    -> null
+                }
+
+                if (hoardEditGpEdit.error == null) {
+                    hoardEditViewModel.newEffortValue = roundedValue
+                    Log.d("hoardEditGpEdit.addTextChangedListener",
+                        "hoardEditViewModel.newEffortValue = $oldEffortRating -> " +
+                                "${hoardEditViewModel.newEffortValue}")
+                }
+            }
+
             hoardEditCancelButton.setOnClickListener {
                 dialog?.cancel()
             }
@@ -182,10 +212,13 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                     val newHoardIconString = iconDropdownArray[hoardEditViewModel.iconDropdownPos]
                         .imageString
                     val newHoardBadge = HoardBadge.values()[hoardEditViewModel.badgeDropdownPos]
+                    var newEffortValue = hoardEditViewModel.newEffortValue
 
                     if (newHoardName != activeHoard.name ||
                         newHoardIconString != activeHoard.iconID ||
-                            newHoardBadge != activeHoard.badge) {
+                        newHoardBadge != activeHoard.badge ||
+                        (newEffortValue != activeHoard.effortRating && binding.hoardEditGpEdit.error == null)
+                    ) {
 
                         val eventStringBuilder = StringBuilder()
 
@@ -204,6 +237,20 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                                 badgeDropdownArray[hoardEditViewModel.badgeDropdownPos].menuLabel}")
                         }
 
+                        if (newEffortValue != activeHoard.effortRating && binding.hoardEditGpEdit.error == null) {
+
+                            eventStringBuilder.append("\n\t- Difficulty ratio changed from " +
+                                    "${activeHoard.effortRating} gp = 1 xp to " +
+                                    "$newEffortValue gp = 1 xp")
+                            Log.d("hoardEditSaveButton.setOnClickListener",
+                                "activeHoard.effortRating = ${activeHoard.effortRating}, " +
+                                        "newEffortValue = $newEffortValue")
+                        } else {
+                            newEffortValue = activeHoard.effortRating
+                            Log.d("hoardEditSaveButton.setOnClickListener",
+                                "No change in effortRating detected, or an error prevented it.")
+                        }
+
                         val editEvent = HoardEvent(
                             hoardID = activeHoard.hoardID,
                             timestamp = System.currentTimeMillis(),
@@ -212,7 +259,8 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                         )
 
                         hoardEditViewModel.saveHoard(activeHoard.copy(name = newHoardName,
-                            iconID = newHoardIconString, badge = newHoardBadge), editEvent)
+                            iconID = newHoardIconString, badge = newHoardBadge,
+                            effortRating = newEffortValue), editEvent)
                     }
                     dialog?.dismiss()
                 }
@@ -474,17 +522,6 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
 
             null
         }
-
-    }
-
-    fun updateUI() {
-
-        // TODO Left off here. Probably should finish the AddHoardEvent stuff before finishing this.
-        //  Still, finish it, save for the badge implementation, and the AddHoardEvent
-        //  functionality. The sooner the refactor gets done, the sooner everything else can
-        //  proceed. Once first two points are done, at least apply for the dev account.
-
-        // TODO also, don't forget to cancel freepik subscription.
 
     }
 

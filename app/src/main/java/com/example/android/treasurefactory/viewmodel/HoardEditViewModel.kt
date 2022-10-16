@@ -35,6 +35,8 @@ class HoardEditViewModel(private val repository: HMRepository): ViewModel() {
     var iconDropdownPos = 0
     var badgeDropdownPos = 0
 
+    var newEffortValue = 5.0
+
     fun loadHoard(hoardID: Int) {
         hoardIDLiveData.value = hoardID
     }

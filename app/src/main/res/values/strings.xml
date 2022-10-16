@@ -53,4 +53,18 @@
     <string name="spell_sphere_warding">Warding</string>
     <string name="spell_sphere_water">Water</string>
     <string name="spell_sphere_weather">Weather</string>
+    <string name="difficulty_low_7">Non-existent</string>
+    <string name="difficulty_low_6">Trivial</string>
+    <string name="difficulty_low_5">Laughable</string>
+    <string name="difficulty_low_4">Exceptionally Easy</string>
+    <string name="difficulty_low_3">Very Easy</string>
+    <string name="difficulty_low_2">Easy</string>
+    <string name="difficulty_low_1">Below Average</string>
+    <string name="difficulty_average">Average</string>
+    <string name="difficulty_high_1">Above Average</string>
+    <string name="difficulty_high_2">Tough</string>
+    <string name="difficulty_high_3">Really Tough</string>
+    <string name="difficulty_high_4">Supremely Tough</string>
+    <string name="difficulty_high_5">Heroic Trial</string>
+    <string name="difficulty_high_6">Ungawdly Ordeal</string>
 </resources>
