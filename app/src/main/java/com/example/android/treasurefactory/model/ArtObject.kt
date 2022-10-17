@@ -5,6 +5,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 @Entity(tableName = "hackmaster_art_table")

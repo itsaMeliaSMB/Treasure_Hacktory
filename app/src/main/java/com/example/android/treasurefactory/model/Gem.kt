@@ -18,7 +18,7 @@ data class Gem(
     var name: String,
     val opacity: Int,
     var description: String = "",
-    var currentGPValue: Double = 0.0){
+    var currentGPValue: Double = 0.0) {
 
     @Ignore
     fun getTypeAsString() : String {
@@ -141,10 +141,6 @@ data class Gem(
 
         return sizeToCarats.getOrDefault(size,0.67) * typeToMultiplier.getOrDefault(type,1.0)
     }
-
-    @Ignore
-    fun getSubtitle(): String = getSizeAsString().capitalized() + ", " + getQualityAsString() +
-            " " + getTypeAsString()
 
     @Ignore
     fun getFlavorTextAsList(): List<Pair<String,String>> {

@@ -519,16 +519,11 @@ class CoinageEditDialog(): DialogFragment() {
 
     private fun updateTotals() {
 
-        // TODO Left off here. Coinage value functionality almost fully implemented.
-        //  Totals add up incorrectly, however. Go over math again, test the hoard event addition,
-        //  and add "add user event" functionality. This should be doable in one day, if you stay
-        //  on it.
-
         val coinTotalQty = coinageEditViewModel.getCoinTotalQty()
         val coinTotalValue = coinageEditViewModel.getCoinTotalValue()
-        val qtyDiff = coinTotalQty - (activeHoard.cp + activeHoard.sp + activeHoard.ep + activeHoard.gp +
-                activeHoard.hsp + activeHoard.pp)
-        val valueDiff = coinTotalValue - activeHoard.getTotalCoinageValue()
+        val qtyDiff = (activeHoard.cp + activeHoard.sp + activeHoard.ep + activeHoard.gp +
+                activeHoard.hsp + activeHoard.pp - coinTotalQty) * -1
+        val valueDiff = (activeHoard.getTotalCoinageValue() - coinTotalValue) * -1
         val coinsString = resources.getQuantityString(R.plurals.coinString,qtyDiff)
         val diffString : String
         @ColorInt

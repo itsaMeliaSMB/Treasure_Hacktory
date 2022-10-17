@@ -532,11 +532,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     description = "Order Spell Collection Parameters:\n" +
                             "\tQuantity: ${hoardOrder.extraSpellCols} (generated ${spellPile.size} total)\n" +
                             "\tSpell level range: ${
-                                hoardOrder.genParams.magicParams.spellCoRestrictions.levelRange.first
+                                hoardOrder.genParams.magicParams.spellCoRestrictions.levelRange.first.takeIf { it != 0 } ?: "Cantrip"
                             } to ${
                                 hoardOrder.genParams.magicParams.spellCoRestrictions.levelRange.last
                             }\n" +
-                            "\tMaximum spells per collection: ${
+                            "\tPossible spells per collection: ${
                                 hoardOrder.genParams.magicParams.spellCoRestrictions.spellCountRange
                             }\n" +
                             "\tDisciplines:\n" +

@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
+        android:padding="16dp"
         tools:padding="48dp">
 
         <androidx.constraintlayout.widget.Guideline
@@ -263,7 +263,7 @@
             app:layout_constraintBottom_toBottomOf="@id/generator_option_map_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText=""/>
+            android:tooltipText="In Letter code mode, chance per code is rolled for every letter ordered."/>
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -368,6 +368,7 @@
             android:drawableTint="?attr/colorOnSurface"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center_horizontal"
+            android:lines="3"
             android:text="chance per hoard/code for map"
             android:textSize="14sp"
             app:drawableBottomCompat="@drawable/clipart_map_vector_icon"
@@ -385,6 +386,7 @@
             android:drawableTint="?attr/colorOnSurface"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center_horizontal"
+            android:lines="3"
             android:text="chance to replace paper art objects"
             android:textSize="14sp"
             app:drawableBottomCompat="@drawable/clipart_origami_vector_icon"
@@ -402,6 +404,7 @@
             android:drawableTint="?attr/colorOnSurface"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center_horizontal"
+            android:lines="3"
             android:text="chance to replace magic scrolls"
             android:textSize="14sp"
             app:drawableBottomCompat="@drawable/clipart_scroll_vector_icon"

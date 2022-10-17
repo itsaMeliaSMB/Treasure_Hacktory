@@ -309,9 +309,9 @@
     <string name="generator_option_magic_item_error">At least one type of magic item must be enabled.</string>
     <string name="value_bias_range_tooltip">Generator will re-roll results outside this range, up to a point.</string>
     <string name="allowed_scroll_tooltip">If a scroll is indicated on table A1, allow these scrolls.</string>
-    <string name="allow_magic_item_types_tooltip">Which types of magic items can be generated.\nIf no selected types overlap with a rolled treasure type (e.g. type F),\nthis preference is ignored.</string>
+    <string name="allow_magic_item_types_tooltip">If no picked types overlap with a rolled treasure type (e.g. type F), this list is ignored.</string>
     <string name="allowed_sources_tooltip">If checked, magic items and spells from these sources may also be picked.</string>
-    <string name="allowed_disciplines_tooltip">Only generate collections of the selected type.\nIf Arcane/Divine is indicated, both types can be separately generated.\nNOTE: Druid scrolls are officially disallowed.</string>
+    <string name="allowed_disciplines_tooltip">If Arcane/Divine, both types can be SEPARATELY generated.\nNOTE: Druid scrolls are unofficial.</string>
     <string name="spell_curse_tooltip">What curses may be applied to any cursed spell collections generated.</string>
     <string name="generation_options">Generation options</string>
     <string name="spell_method_random_radio_label">Unweighted, random picks</string>

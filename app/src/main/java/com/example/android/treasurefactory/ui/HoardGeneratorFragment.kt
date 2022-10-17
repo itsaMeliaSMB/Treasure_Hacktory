@@ -334,8 +334,10 @@ class HoardGeneratorFragment : Fragment() {
 
                         // https://stackoverflow.com/questions/67136040/how-to-use-view-binding-in-custom-dialog-box-layout
 
+                        Toast.makeText(context,"Loading, please wait...",Toast.LENGTH_SHORT).show()
+
                         val gemSliderStringValues  = resources.getStringArray(R.array.range_slider_gem_label)
-                        val artSliderStringValues = resources.getStringArray(R.array.range_slider_gem_label)
+                        val artSliderStringValues = resources.getStringArray(R.array.range_slider_art_label)
 
                         val options = generatorViewModel.generatorOptions
 
@@ -363,7 +365,6 @@ class HoardGeneratorFragment : Fragment() {
                                 valueTo = 17.0f
                                 values = listOf(options.gemMin.toFloat(),options.gemMax.toFloat())
                                 stepSize = 1.0f
-                                minSeparation = 1.0f
                                 setLabelFormatter { value : Float ->
                                     val intValue = value.toInt()
                                     gemSliderStringValues.getOrNull(intValue) ?: "???"
@@ -383,10 +384,9 @@ class HoardGeneratorFragment : Fragment() {
                             generatorOptionArtSlider.apply {
                                 stepSize = 1.0f
                                 valueFrom = 0.0f
-                                valueTo = 49.0f
-                                values = listOf(options.artMin.toFloat(),options.artMax.toFloat())
+                                valueTo = 50.0f
+                                values = listOf(options.artMin.toFloat() + 19f,options.artMax.toFloat() + 19f)
                                 stepSize = 1.0f
-                                minSeparation = 1.0f
                                 setLabelFormatter { value : Float ->
                                     val intValue = value.toInt()
                                     artSliderStringValues.getOrNull(intValue) ?: "???"
@@ -394,9 +394,9 @@ class HoardGeneratorFragment : Fragment() {
                                 addOnChangeListener { slider, _, _ ->
                                     val newValues = slider.values.map { it.toInt() }
                                     dialogBinding.generatorOptionArtMinValue.text =
-                                        gemSliderStringValues.getOrNull(newValues[0]) ?: "???"
+                                        artSliderStringValues.getOrNull(newValues[0]) ?: "???"
                                     dialogBinding.generatorOptionArtMaxValue.text =
-                                        gemSliderStringValues.getOrNull(newValues[1]) ?: "???"
+                                        artSliderStringValues.getOrNull(newValues[1]) ?: "???"
                                 }
                             }
                             generatorOptionMapRawEdit.apply{
@@ -693,14 +693,60 @@ class HoardGeneratorFragment : Fragment() {
                             }
                             generatorOptionCursedSwitch.isChecked = options.cursedOk
                             generatorOptionIntelligentSwitch.isChecked = options.intelOk
-                            generatorOptionSpellDisciplineGroup.check(
-                                when (options.spellDisciplinePos) {
-                                    0   -> R.id.generator_option_spell_discipline_arcane_radio
-                                    1   -> R.id.generator_option_spell_discipline_divine_radio
-                                    2   -> R.id.generator_option_spell_discipline_natural_radio
-                                    else-> R.id.generator_option_spell_discipline_all_radio
+                            when (options.spellDisciplinePos) {
+                                0   -> {
+                                    generatorOptionSpellDisciplineArcaneRadio.isChecked = true
+                                    generatorOptionSpellDisciplineDivineRadio.isChecked = false
+                                    generatorOptionSpellDisciplineNaturalRadio.isChecked = false
+                                    generatorOptionSpellDisciplineAllRadio.isChecked = false
                                 }
-                            )
+                                1   -> {
+                                    generatorOptionSpellDisciplineArcaneRadio.isChecked = false
+                                    generatorOptionSpellDisciplineDivineRadio.isChecked = true
+                                    generatorOptionSpellDisciplineNaturalRadio.isChecked = false
+                                    generatorOptionSpellDisciplineAllRadio.isChecked = false
+                                }
+                                2   -> {
+                                    generatorOptionSpellDisciplineArcaneRadio.isChecked = false
+                                    generatorOptionSpellDisciplineDivineRadio.isChecked = false
+                                    generatorOptionSpellDisciplineNaturalRadio.isChecked = true
+                                    generatorOptionSpellDisciplineAllRadio.isChecked = false
+                                }
+                                else-> {
+                                    generatorOptionSpellDisciplineArcaneRadio.isChecked = false
+                                    generatorOptionSpellDisciplineDivineRadio.isChecked = false
+                                    generatorOptionSpellDisciplineNaturalRadio.isChecked = false
+                                    generatorOptionSpellDisciplineAllRadio.isChecked = true
+                                }
+                            }
+                            generatorOptionSpellDisciplineArcaneRadio.setOnCheckedChangeListener { _, isChecked ->
+                                if (isChecked){
+                                    generatorOptionSpellDisciplineDivineRadio.isChecked = false
+                                    generatorOptionSpellDisciplineNaturalRadio.isChecked = false
+                                    generatorOptionSpellDisciplineAllRadio.isChecked = false
+                                }
+                            }
+                            generatorOptionSpellDisciplineDivineRadio.setOnCheckedChangeListener { _, isChecked ->
+                                if (isChecked){
+                                    generatorOptionSpellDisciplineArcaneRadio.isChecked = false
+                                    generatorOptionSpellDisciplineNaturalRadio.isChecked = false
+                                    generatorOptionSpellDisciplineAllRadio.isChecked = false
+                                }
+                            }
+                            generatorOptionSpellDisciplineNaturalRadio.setOnCheckedChangeListener { _, isChecked ->
+                                if (isChecked){
+                                    generatorOptionSpellDisciplineArcaneRadio.isChecked = false
+                                    generatorOptionSpellDisciplineDivineRadio.isChecked = false
+                                    generatorOptionSpellDisciplineAllRadio.isChecked = false
+                                }
+                            }
+                            generatorOptionSpellDisciplineAllRadio.setOnCheckedChangeListener { _, isChecked ->
+                                if (isChecked){
+                                    generatorOptionSpellDisciplineArcaneRadio.isChecked = false
+                                    generatorOptionSpellDisciplineDivineRadio.isChecked = false
+                                    generatorOptionSpellDisciplineNaturalRadio.isChecked = false
+                                }
+                            }
                             generatorOptionSpellMethodGroup.check(
                                 if (options.spellMethod == SpCoGenMethod.BY_THE_BOOK) {
                                     R.id.generator_option_book_checkbox
@@ -752,8 +798,8 @@ class HoardGeneratorFragment : Fragment() {
                                                 generatorViewModel.generatorOptions = GeneratorOptions(
                                                     gemMin = dialogBinding.generatorOptionGemSlider.values[0].toInt(),
                                                     gemMax = dialogBinding.generatorOptionGemSlider.values[1].toInt(),
-                                                    artMin = dialogBinding.generatorOptionArtSlider.values[0].toInt(),
-                                                    artMax = dialogBinding.generatorOptionArtSlider.values[1].toInt(),
+                                                    artMin = dialogBinding.generatorOptionArtSlider.values[0].toInt() - 19,
+                                                    artMax = dialogBinding.generatorOptionArtSlider.values[1].toInt() - 19,
                                                     mapBase = (dialogBinding.generatorOptionMapRawEdit.text.toString().toIntOrNull() ?: 0).coerceIn(0..100),
                                                     mapPaper = (dialogBinding.generatorOptionMapPaperEdit.text.toString().toIntOrNull() ?: 0).coerceIn(0..100),
                                                     mapScroll = (dialogBinding.generatorOptionMapScrollEdit.text.toString().toIntOrNull() ?: 0).coerceIn(0..100),
@@ -1693,6 +1739,10 @@ class HoardGeneratorFragment : Fragment() {
                 valueFrom = 0.0f
                 valueTo = 9.0f
                 stepSize = 1.0f
+                values = listOf(
+                    generatorViewModel.spellLevelRange.first.toFloat(),
+                    generatorViewModel.spellLevelRange.last.toFloat()
+                )
                 setLabelFormatter { value ->
                     val intValue = value.toInt()
                     if (intValue in spLvlRangeShortLabels.indices) {
@@ -1717,13 +1767,17 @@ class HoardGeneratorFragment : Fragment() {
                 valueFrom = 1.0f
                 valueTo = 20.0f
                 stepSize = 1.0f
+                values = listOf(
+                    generatorViewModel.spellsPerRange.first.toFloat(),
+                    generatorViewModel.spellsPerRange.last.toFloat()
+                )
                 setLabelFormatter { it.toInt().toString() }
                 addOnChangeListener { slider, _, _ ->
                     val intValues = slider.values.first().toInt() to slider.values.last().toInt()
                     generatorViewModel.spellLevelRange = IntRange(intValues.first,intValues.second)
-                    binding.generatorSpellLevelMinValue.text =
+                    binding.generatorSpellPerQtyMinValue.text =
                         intValues.first.toString()
-                    binding.generatorSpellLevelMaxValue.text =
+                    binding.generatorSpellPerQtyMaxValue.text =
                         intValues.second.toString()
                 }
             }
@@ -2386,18 +2440,7 @@ class HoardGeneratorFragment : Fragment() {
 
         // Spell collections
         generatorSpellQtyEdit.setText( generatorViewModel.spCoQty.toString() )
-        generatorSpellLevelMinValue.text = with(generatorViewModel.spellLevelRange.first) {
-            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "???"
-        }
-        generatorSpellLevelMaxValue.text = with(generatorViewModel.spellLevelRange.last) {
-            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "???"
-        }
-        generatorSpellPerQtyMinValue.text = with(generatorViewModel.spellsPerRange.first) {
-            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "??"
-        }
-        generatorSpellPerQtyMaxValue.text = with(generatorViewModel.spellsPerRange.last) {
-            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "??"
-        }
+
         generatorSpellLevelSlider.values = listOf(
             generatorViewModel.spellLevelRange.first.toFloat(),
             generatorViewModel.spellLevelRange.last.toFloat()
@@ -2406,6 +2449,14 @@ class HoardGeneratorFragment : Fragment() {
             generatorViewModel.spellsPerRange.first.toFloat(),
             generatorViewModel.spellsPerRange.last.toFloat()
         )
+        generatorSpellLevelMinValue.text = with(generatorViewModel.spellLevelRange.first) {
+            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "???"
+        }
+        generatorSpellLevelMaxValue.text = with(generatorViewModel.spellLevelRange.last) {
+            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "???"
+        }
+        generatorSpellPerQtyMinValue.text = generatorViewModel.spellsPerRange.first.toString()
+        generatorSpellPerQtyMaxValue.text = generatorViewModel.spellsPerRange.last.toString()
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
