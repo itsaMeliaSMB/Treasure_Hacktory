@@ -52,104 +52,108 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_margin="3dp"
-        app:layout_constraintBottom_toBottomOf="@id/unique_list_item_thumbnail"
-        app:layout_constraintEnd_toEndOf="@id/unique_list_item_thumbnail"
+        android:elevation="3dp"
         android:scaleType="fitCenter"
         android:visibility="gone"
-        android:elevation="3dp"
-        tools:visibility="visible"
-        tools:src="@drawable/badge_art_nobility"/>
+        app:layout_constraintBottom_toBottomOf="@id/unique_list_item_thumbnail"
+        app:layout_constraintEnd_toEndOf="@id/unique_list_item_thumbnail"
+        tools:src="@drawable/badge_art_nobility"
+        tools:visibility="visible" />
 
-    <!-- Might need to add marquee -->
     <TextView
         android:id="@+id/unique_list_item_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/list_item_element_margin"
         android:textSize="18sp"
-        android:maxLines="1"
-        android:ellipsize="end"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/unique_list_item_gp"
-        app:layout_constraintStart_toEndOf="@id/unique_list_item_thumbnail"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/unique_list_item_section_guideline"
-        tools:text="[Placeholder Item]" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/unique_list_item_value_barrier"
+        app:layout_constraintStart_toEndOf="@id/unique_list_item_thumbnail"
+        tools:text="Combination Ring of Invisibility and Demon Spawn Slaying" />
 
     <TextView
         android:id="@+id/unique_list_item_gp"
-        android:minWidth="128sp"
-        android:textAlignment="viewEnd"
-        app:drawableStartCompat="@drawable/clipart_coinbag_vector_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/unique_list_item_thumbnail"
-        app:layout_constraintTop_toBottomOf="@id/unique_list_item_name"
-        android:layout_marginStart="8dp"
-        tools:text="1,000,000.00 gp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.6"
         android:drawablePadding="2dp"
-        app:drawableTint="?attr/colorOnSurface"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnSurface"
         android:fontFamily="sans-serif-condensed"
-        android:alpha="0.6" />
+        android:minWidth="128sp"
+        android:textAlignment="viewEnd"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/clipart_coinbag_vector_icon"
+        app:drawableTint="?attr/colorOnSurface"
+        app:layout_constraintBottom_toTopOf="@id/unique_list_item_xp"
+        app:layout_constraintEnd_toStartOf="@id/unique_list_item_section_guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1,000,000.00 gp" />
 
     <TextView
         android:id="@+id/unique_list_item_xp"
-        android:minWidth="96sp"
-        android:textAlignment="viewEnd"
-        app:drawableStartCompat="@drawable/clipart_experience_vector_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/unique_list_item_gp"
-        app:layout_constraintTop_toBottomOf="@id/unique_list_item_name"
-        android:layout_marginStart="8dp"
-        tools:text="250,000 xp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:alpha="0.6"
         android:drawablePadding="2dp"
-        app:drawableTint="?attr/colorOnSurface"
-        android:textSize="16sp"
-        android:textColor="?attr/colorOnSurface"
         android:fontFamily="sans-serif-condensed"
-        android:alpha="0.6" />
+        android:minWidth="128sp"
+        android:textAlignment="viewEnd"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/clipart_experience_vector_icon"
+        app:drawableTint="?attr/colorOnSurface"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/unique_list_item_section_guideline"
+        app:layout_constraintTop_toBottomOf="@id/unique_list_item_gp"
+        tools:text="250,000 xp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/unique_list_item_section_guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="70dp"/>
+        app:layout_constraintGuide_end="96dp" />
 
     <ImageView
         android:id="@+id/unique_list_item_type_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="4dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/unique_list_item_section_guideline"
+        android:alpha="0.65"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/unique_list_item_section_guideline"
+        app:layout_constraintTop_toTopOf="parent"
         app:tint="?attr/colorOnSurface"
-        tools:src="@drawable/clipart_artifact_crown_vector_icon"
-        android:alpha="0.65"/>
+        tools:src="@drawable/clipart_artifact_crown_vector_icon" />
 
     <TextView
         android:id="@+id/unique_list_item_type_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/unique_list_item_section_guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/unique_list_item_type_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:maxLines="1"
-        android:fontFamily="sans-serif-condensed"
-        android:ellipsize="middle"
-        android:textStyle="italic"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="12sp"
-        android:autoSizeMaxTextSize="14sp"
+        android:autoSizeMaxTextSize="16sp"
+        android:autoSizeMinTextSize="14sp"
         android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:ellipsize="middle"
+        android:fontFamily="sans-serif-condensed"
+        android:maxLines="1"
         android:textAlignment="center"
-        tools:text="Artifact A24"/>
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/unique_list_item_section_guideline"
+        app:layout_constraintTop_toBottomOf="@id/unique_list_item_type_icon"
+        tools:text="Artifact A24" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/unique_list_item_value_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left"
+        app:constraint_referenced_ids="unique_list_item_xp,unique_list_item_gp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

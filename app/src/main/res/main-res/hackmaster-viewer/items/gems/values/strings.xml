@@ -132,7 +132,7 @@
     <string name="poneti_artstation"><a href="https://poneti.artstation.com/">ArtStation</a></string>
     <string name="akiza_artstation"><a href="https://www.artstation.com/paminori">ArtStation</a></string>
     <string name="game_icons_cc_link">Provided under <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons 3.0 BY license</a></string>
-    <string name="game_icons_site_link">Available on https://Game-icons.net</string>
+    <string name="game_icons_site_link">Available on <a href="https://game-icons.net/">Game-icons website</a></string>
     <string name="game_icons_contributors">Caro Asercion\nDarkZaitzev\nDelapouite\nLorc\nSkoll\nViscious Speed\nWilldabeast</string>
     <string name="item_vector_icons">Item Vector Icons (Game-icons.net)</string>
     <string name="app_version_string">version 1.0</string>
@@ -319,4 +319,13 @@
     <string name="reference_splatbook_label">Splatbooks (i.e. Spellslinger\'s Guide and Zealot\'s Guide)</string>
     <string name="reference_hackjournal_label">HackJournals</string>
     <string name="reference_modules_etc_label"><![CDATA[Other official Kenzer & Company-published material (i.e. modules)]]></string>
+    <string name="unique_list_whenempty_text">Seems that this hoard doesn\'t contain any items of this type. Would you like to add some?</string>
+    <string name="sell_shorthand">Sell</string>
+    <string name="action_sell">Sell</string>
+    <string name="action_move">Move</string>
+    <string name="action_reevaluate_gems">Re-evaluate gems</string>
+    <string name="viewer_gem_card_title"><![CDATA[Jewels & Gemstones]]></string>
+    <string name="viewer_art_object_cart_title">Art Objects</string>
+    <string name="viewer_magic_item_card_title">Magic Items, Etc.</string>
+    <string name="viewer_spell_collections_card_title">Spell Collections</string>
 </resources>

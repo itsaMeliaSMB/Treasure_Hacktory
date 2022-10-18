@@ -419,7 +419,7 @@
                                 android:breakStrategy="simple"
                                 android:textSize="16sp"
                                 android:textColor="@color/gemOnPrimary"
-                                android:text="Jewels &amp; Gemstones"/>
+                                android:text="@string/viewer_gem_card_title"/>
 
                             <TextView
                                 android:id="@+id/hoard_overview_gem_value"
@@ -497,7 +497,7 @@
                                 android:breakStrategy="simple"
                                 android:textSize="16sp"
                                 android:textColor="@color/artOnPrimary"
-                                android:text="Art Objects"/>
+                                android:text="@string/viewer_art_object_cart_title"/>
 
                             <TextView
                                 android:id="@+id/hoard_overview_art_value"
@@ -575,7 +575,7 @@
                                 android:breakStrategy="simple"
                                 android:textSize="16sp"
                                 android:textColor="@color/magicOnPrimary"
-                                android:text="Magic Items, Etc."/>
+                                android:text="@string/viewer_magic_item_card_title"/>
 
                             <TextView
                                 android:id="@+id/hoard_overview_magic_value"
@@ -653,7 +653,7 @@
                                 android:breakStrategy="simple"
                                 android:textSize="16sp"
                                 android:textColor="@color/spellOnPrimary"
-                                android:text="Spell Collections"/>
+                                android:text="@string/viewer_spell_collections_card_title"/>
 
                             <TextView
                                 android:id="@+id/hoard_overview_spells_value"

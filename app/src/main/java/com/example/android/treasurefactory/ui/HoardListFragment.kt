@@ -201,11 +201,6 @@ class HoardListFragment : Fragment() {
                         true
                     }
 
-                    R.id.action_settings    -> {
-                        Toast.makeText(context, "Settings option selected.", Toast.LENGTH_SHORT).show()
-                        true
-                    }
-
                     // Default case
                     else    -> false
                 }
@@ -360,9 +355,7 @@ class HoardListFragment : Fragment() {
             viewHolder.bind(hoard, isSelected(position))
         }
 
-        //TODO fix overrides to work with ActionMode
-
-        // functions affecting selectedItems
+        // Functions affecting selectedItems
         override fun toggleSelection(position: Int) {
             super.toggleSelection(position)
             setActionModeFromCount()

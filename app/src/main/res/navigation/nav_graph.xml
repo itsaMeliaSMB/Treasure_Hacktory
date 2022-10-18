@@ -23,9 +23,6 @@
         <action
             android:id="@+id/hoard_list_to_about_page_action"
             app:destination="@id/aboutFragment" />
-        <action
-            android:id="@+id/hoard_list_to_settings_action"
-            app:destination="@id/settings_placeholder" />
     </fragment>
 
     <fragment
@@ -74,32 +71,14 @@
         </action>
 
         <action
-            android:id="@+id/hoard_overview_to_gem_list_action"
-            app:destination="@id/gemList_placeholder" >
+            android:id="@+id/hoard_overview_to_unique_list_action"
+            app:destination="@id/uniqueListFragment">
             <argument
-                android:name="gemHoardID"
-                app:argType="integer"/>
-        </action>
-        <action
-            android:id="@+id/hoard_overview_to_art_object_list_action"
-            app:destination="@id/artObjectList_placeholder">
+                android:name="hoardID"
+                app:argType="integer" />
             <argument
-                android:name="artHoardID"
-                app:argType="integer"/>
-        </action>
-        <action
-            android:id="@+id/hoard_overview_to_magic_item_list_action"
-            app:destination="@id/magicItemList_placeholder">
-            <argument
-                android:name="magicHoardID"
-                app:argType="integer"/>
-        </action>
-        <action
-            android:id="@+id/hoard_overview_to_spell_collection_list_action"
-            app:destination="@id/spellCollectionList_placeholder">
-            <argument
-                android:name="spellHoardID"
-                app:argType="integer"/>
+                android:name="listType"
+                app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
         </action>
     </fragment>
     <fragment
@@ -118,8 +97,6 @@
                 app:argType="integer"/>
         </action>
     </fragment>
-
-    <fragment android:id="@+id/settings_placeholder" />
 
     <fragment
         android:id="@+id/aboutFragment"
@@ -156,59 +133,39 @@
             android:name="activeHoardID"
             app:argType="integer"/>
     </fragment>
-    <fragment android:id="@+id/gemList_placeholder" >
+    <fragment
+        android:id="@+id/uniqueListFragment"
+        android:name="com.example.android.treasurefactory.ui.UniqueListFragment"
+        android:label="UniqueListFragment"
+        tools:layout="@layout/layout_unique_list" >
+        <argument
+            android:name="hoardID"
+            app:argType="integer" />
+        <argument
+            android:name="listType"
+            app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
         <action
-            android:id="@+id/gem_list_to_detail_action"
-            app:destination="@id/gemDetail_placeholder">
+            android:id="@+id/unique_list_to_details_action"
+            app:destination="@id/uniqueDetailsFragment">
             <argument
-                android:name="gemID"
-                app:argType="integer"/>
+                android:name="itemID"
+                app:argType="integer" />
+            <argument
+                android:name="itemType"
+                app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
         </action>
     </fragment>
-    <fragment android:id="@+id/artObjectList_placeholder" >
-        <action
-            android:id="@+id/art_object_list_to_detail_action"
-            app:destination="@id/artObjectDetail_placeholder">
-            <argument
-                android:name="artID"
-                app:argType="integer"/>
-        </action>
+    <fragment
+        android:id="@+id/uniqueDetailsFragment"
+        android:name="com.example.android.treasurefactory.ui.UniqueDetailsFragment"
+        android:label="UniqueDetailsFragment"
+        tools:layout="@layout/layout_unique_details">
+        <argument
+            android:name="itemID"
+            app:argType="integer" />
+        <argument
+            android:name="itemType"
+            app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
     </fragment>
-    <fragment android:id="@+id/magicItemList_placeholder" >
-        <action
-            android:id="@+id/magic_item_list_to_detail_action"
-            app:destination="@id/magicItemDetail_placeholder">
-            <argument
-                android:name="magicItemID"
-                app:argType="integer"/>
-        </action>
-    </fragment>
-    <fragment android:id="@+id/spellCollectionList_placeholder" >
-        <action
-            android:id="@+id/spell_collection_list_to_detail_action"
-            app:destination="@id/spellCollectionDetail_placeholder">
-            <argument
-                android:name="spellCollectionID"
-                app:argType="integer"/>
-        </action>
-    </fragment>
-    <fragment android:id="@+id/gemDetail_placeholder" >
-        <action
-            android:id="@+id/gem_detail_to_event_log_action"
-            app:destination="@id/gemEvent_placeholder" />
-    </fragment>
-    <fragment android:id="@+id/artObjectDetail_placeholder" />
-    <fragment android:id="@+id/magicItemDetail_placeholder" />
-    <fragment android:id="@+id/spellCollectionDetail_placeholder" >
-        <action
-            android:id="@+id/spell_collection_to_spell_dialog_action"
-            app:destination="@id/spell_placeholder">
-            <argument
-                android:name="spellID"
-                app:argType="integer"/>
-        </action>
-    </fragment>
-    <fragment android:id="@+id/gemEvent_placeholder" />
-    <fragment android:id="@+id/spell_placeholder" />
 
 </navigation>

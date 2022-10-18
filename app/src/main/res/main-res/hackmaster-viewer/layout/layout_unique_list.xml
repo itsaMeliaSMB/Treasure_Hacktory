@@ -1,30 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/unique_list_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    <!--https://developer.android.com/guide/fragments/appbar#fragment-->
+    <!--https://developer.android.com/guide/navigation/navigation-ui-->
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/unique_list_tab_layout"
-        app:tabBackground="?attr/colorPrimary"
-        app:tabIconTint="?attr/colorOnPrimary"
-        app:tabIndicatorColor="?attr/colorOnPrimary"
-        app:tabGravity="center"
-        app:tabMode="fixed"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/unique_list_pager"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/unique_list_toolbar"
+            style="@style/Widget.Design.AppBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbar_height"
+            android:minHeight="4dp"
+            app:buttonGravity="center_vertical"
+            app:layout_scrollFlags="noScroll"
+            tools:title="@string/viewer_magic_item_card_title"
+            tools:subtitle="Hoard Name"
+            tools:menu="@menu/unique_list_toolbar_menu"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</LinearLayout>
+        <FrameLayout
+            android:id="@+id/unique_list_content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/backgroundColor">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/unique_list_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/unique_list_item" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/unique_list_whenempty_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/unique_list_whenempty_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0.5"
+                    android:src="@drawable/clipart_treasure_add_vector_icon"
+                    app:layout_constraintBottom_toTopOf="@id/unique_list_whenempty_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:tint="?attr/colorOnBackground" />
+
+                <TextView
+                    android:id="@+id/unique_list_whenempty_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="48dp"
+                    android:text="@string/unique_list_whenempty_text"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_list_whenempty_image" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/unique_list_progress_indicator"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:indeterminateOnly="true"
+        android:visibility="gone"
+        android:layout_gravity="center" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

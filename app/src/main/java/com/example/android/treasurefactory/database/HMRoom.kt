@@ -1214,6 +1214,9 @@ interface GemDao {
     @Query("SELECT * FROM hackmaster_gem_table WHERE gemID=(:id)")
     fun getGem(id: Int): LiveData<Gem?>
 
+    @Query("SELECT * FROM hackmaster_gem_table WHERE gemID=(:id)")
+    suspend fun getGemOnce(id: Int): Gem
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addGem(newGem: Gem)
 
@@ -1249,6 +1252,9 @@ interface ArtDao {
 
     @Query("SELECT * FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
     suspend fun getArtObjectsOnce(hoardID: Int): List<ArtObject>
+
+    @Query("SELECT * FROM hackmaster_art_table WHERE artID=(:artId)")
+    suspend fun getArtObjectOnce(artId: Int): ArtObject?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addArtObject(newArt: ArtObject)
@@ -1321,6 +1327,9 @@ interface MagicItemDao {
     @Query("SELECT * FROM hackmaster_magic_item_table WHERE hoardID=(:hoardID)")
     suspend fun getMagicItemsOnce(hoardID: Int): List<MagicItem>
 
+    @Query("SELECT * FROM hackmaster_magic_item_table WHERE mItemID=(:itemID)")
+    suspend fun getMagicItemOnce(itemID: Int): MagicItem?
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMagicItem(newItem: MagicItem)
 
@@ -1374,6 +1383,9 @@ interface SpellCollectionDao{
 
     @Query("SELECT * FROM hackmaster_spell_collection_table WHERE hoardID=(:hoardID)")
     suspend fun getSpellCollectionsOnce(hoardID: Int): List<SpellCollection>
+
+    @Query("SELECT * FROM hackmaster_spell_collection_table WHERE sCollectID=(:spCoId)")
+    suspend fun getSpellCollectionOnce(spCoId: Int): SpellCollection?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addSpellCollection(newSpellCollection: SpellCollection)

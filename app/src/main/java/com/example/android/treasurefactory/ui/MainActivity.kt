@@ -6,12 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android.treasurefactory.R
+import com.example.android.treasurefactory.model.UniqueItemType
 
 private const val TAG = "MainActivity"
 
 // Note the Callbacks implementation in MainActivity class
 
-class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
+class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks,
+    UniqueListFragment.Callbacks {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,14 @@ class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks {
     override fun onHoardSelected(view: View, hoardID: Int) {
         val action =
             HoardListFragmentDirections.hoardListToOverviewAction(hoardID)
+
+        view.findNavController().navigate(action)
+    }
+
+    override fun onUniqueSelected(view: View, itemID: Int, itemType: UniqueItemType) {
+
+        val action =
+            UniqueListFragmentDirections.uniqueListToDetailsAction(itemID,itemType)
 
         view.findNavController().navigate(action)
     }

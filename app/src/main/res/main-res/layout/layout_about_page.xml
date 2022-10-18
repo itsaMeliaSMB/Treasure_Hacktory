@@ -550,7 +550,7 @@
                             android:alpha="0.5"
                             android:rotation="90"
                             android:src="@drawable/clipart_indicator_vector_icon"
-                            app:tint="?attr/colorOnSurface"/>
+                            app:tint="?attr/colorOnSurface" />
 
                     </RelativeLayout>
 
@@ -737,7 +737,7 @@
                             android:alpha="0.5"
                             android:rotation="90"
                             android:src="@drawable/clipart_indicator_vector_icon"
-                            app:tint="?attr/colorOnSurface"/>
+                            app:tint="?attr/colorOnSurface" />
 
                     </RelativeLayout>
 

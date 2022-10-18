@@ -95,6 +95,8 @@ class HMRepository (
 
     fun getGem(gemId: Int): LiveData<Gem?> = gemDao.getGem(gemId)
 
+    suspend fun getGemOnce(gemId: Int): Gem? = gemDao.getGemOnce(gemId)
+
     suspend fun addGem(newGem: Gem) {
         gemDao.addGem(newGem)
     }
@@ -124,6 +126,8 @@ class HMRepository (
     fun getArtObjects(hoardId: Int): LiveData<List<ArtObject>> = artDao.getArtObjects(hoardId)
 
     fun getArtObject(artId: Int): LiveData<ArtObject?> = artDao.getArtObject(artId)
+
+    suspend fun getArtObjectOnce(artId: Int): ArtObject? = artDao.getArtObjectOnce(artId)
 
     suspend fun getArtObjectsOnce(hoardId: Int): List<ArtObject> = artDao.getArtObjectsOnce(hoardId)
 
@@ -206,6 +210,8 @@ class HMRepository (
     suspend fun getMagicItemsOnce(hoardId: Int): List<MagicItem> =
         magicItemDao.getMagicItemsOnce(hoardId)
 
+    suspend fun getMagicItemOnce(itemId: Int): MagicItem? = magicItemDao.getMagicItemOnce(itemId)
+
     suspend fun addMagicItem(newItem: MagicItem) {
         magicItemDao.addMagicItem(newItem)
     }
@@ -265,6 +271,9 @@ class HMRepository (
     suspend fun getSpellCollectionsOnce(hoardId: Int): List<SpellCollection> =
         spellCollectionDao.getSpellCollectionsOnce(hoardId)
 
+    suspend fun getSpellCollectionOnce(spCoId: Int): SpellCollection? =
+        spellCollectionDao.getSpellCollectionOnce(spCoId)
+
     suspend fun addSpellCollection(newSpellCollection: SpellCollection) {
         spellCollectionDao.addSpellCollection(newSpellCollection)
     }
@@ -287,6 +296,32 @@ class HMRepository (
 
     suspend fun addCommandWord(wordToAdd: CommandWord) =
         spellCollectionDao.addCommandWord(wordToAdd)
+    // endregion
+
+    // region [ Unique item functions ]
+
+    /*fun getListableItems(hoardID: Int, itemType: UniqueItemType) : LiveData<List<Listable>> {
+
+        when (itemType) {
+
+            UniqueItemType.GEM              -> {
+
+            }
+            UniqueItemType.ART_OBJECT       -> {
+
+            }
+            UniqueItemType.MAGIC_ITEM       -> {
+
+            }
+            UniqueItemType.SPELL_COLLECTION -> {
+
+            }
+        }
+
+        return LiveData<Listable>(emptyList<ListableGem>())
+    }
+    */
+
     // endregion
 
     // endregion

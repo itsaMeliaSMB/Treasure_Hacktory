@@ -43,15 +43,13 @@
                 android:layout_height="match_parent"
                 android:scrollbarStyle="outsideOverlay"
                 android:scrollbars="vertical"
-                tools:listitem="@layout/hoard_list_item"
-                tools:visibility="gone"/>
+                tools:listitem="@layout/hoard_list_item" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/hoard_list_whenempty_group"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/hoard_list_whenempty_image"
