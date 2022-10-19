@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_edit_item"
+        android:title="@string/action_edit_item"
+        android:enabled="false"
+        android:icon="@drawable/clipart_edit_vector_icon"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_copy_item_text"
+        android:title="@string/action_copy_to_clipboard"
+        android:titleCondensed="@string/action_copy_to_clipboard_condensed"
+        android:enabled="false"
+        app:showAsAction="never"/>
+
+</menu>

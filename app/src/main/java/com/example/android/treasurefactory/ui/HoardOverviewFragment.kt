@@ -29,8 +29,6 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
-private const val ARG_HOARD_ID = "hoard_id"
-
 class HoardOverviewFragment : Fragment() {
 
     // region [ Property declarations ]
@@ -38,7 +36,7 @@ class HoardOverviewFragment : Fragment() {
 
     private var isNowFavorite = false
 
-    val safeArgs : HoardOverviewFragmentArgs by navArgs()
+    private val safeArgs : HoardOverviewFragmentArgs by navArgs()
 
     private var totalGemValue = 0.0
     private var totalArtValue = 0.0

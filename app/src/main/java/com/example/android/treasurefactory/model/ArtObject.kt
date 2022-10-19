@@ -5,7 +5,6 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
 @Entity(tableName = "hackmaster_art_table")
@@ -158,7 +157,7 @@ data class ArtObject(
     @Ignore
     fun getAgeAsString(): String {
         val ageRank = getAgeInYearsAsRank()
-        return "$age years old [${if (ageRank < 0) ageRank else "+$ageRank"} value ranks]"
+        return "~$age years old (${if (ageRank < 0) ageRank else "+$ageRank"} Value Ranks)"
     }
 
     @Ignore
@@ -204,6 +203,30 @@ data class ArtObject(
         }
 
     @Ignore
+    fun getFlavorTextAsDetailsList(): Pair<String,List<LabelledQualityEntry>> {
+        return "Artwork details" to listOf(
+            LabelledQualityEntry("Type of artwork",
+                getArtTypeAsString().capitalized()),
+            LabelledQualityEntry("Artist's renown",
+                getRenownAsString().capitalized()),
+            LabelledQualityEntry("Size",
+                getSizeAsString().capitalized()),
+            LabelledQualityEntry("Quality of materials used",
+                getMaterialsAsString().capitalized()),
+            LabelledQualityEntry("Quality of work",
+                getQualityAsString().capitalized()),
+            LabelledQualityEntry("Age when found", getAgeAsString()),
+            LabelledQualityEntry("Condition when found",
+                getConditionAsString().capitalized()),
+            LabelledQualityEntry("Subject matter depicted",
+                getSubjectAsString().capitalized()),
+            LabelledQualityEntry("Combined value rank","$valueLevel  = " +
+                    "($renown) + ($size) + ($condition) + ($quality) + (${getSubjectAsRank()}) + " +
+                    "(${getAgeInYearsAsRank()})")
+        )
+    }
+
+        @Ignore
     private fun updateValueLevel() {
 
         valueLevel =

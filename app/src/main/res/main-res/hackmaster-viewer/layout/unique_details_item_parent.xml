@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/unique_detail_parent_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/unique_detail_parent_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/clipart_indicator_vector_icon"
+                app:tint="?attr/colorOnPrimary"
+                tools:rotation="0f" />
+
+            <TextView
+                android:id="@+id/unique_detail_parent_title"
+                style="@style/generator_letter_cardview_header"
+                android:layout_alignTop="@id/unique_detail_parent_indicator"
+                android:layout_alignBottom="@id/unique_detail_parent_indicator"
+                android:layout_toEndOf="@id/unique_detail_parent_indicator"
+                tools:text="Additional Notes" />
+
+            <ImageView
+                android:id="@+id/unique_detail_parent_header_icon"
+                style="@style/generator_cardview_letter_header_icon"
+                android:src="@drawable/clipart_extranotes_vector_icon"
+                app:tint="?attr/colorOnPrimary" />
+
+        </RelativeLayout>
+
+        <!-- Expandable portion of cardview -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/unique_detail_parent_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:itemCount="3"
+            tools:listitem="@layout/unique_details_item_spell"
+            tools:visibility="visible"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

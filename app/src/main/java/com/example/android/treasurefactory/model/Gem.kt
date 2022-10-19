@@ -143,16 +143,15 @@ data class Gem(
     }
 
     @Ignore
-    fun getFlavorTextAsList(): List<Pair<String,String>> {
+    fun getFlavorTextAsDetailsList(): Pair<String,List<LabelledQualityEntry>> {
 
-        //TODO look up formatting for cast-double strings in kotlin for leading zeros and limited decimal places
-        return listOf(
-            Pair("Weight","${String.format("%.3f",getWeightInCarats())} ct (~ ${
+        return "Stone details" to listOf(
+            LabelledQualityEntry("Weight","${String.format("%.3f",getWeightInCarats())} ct (~ ${
                 String.format("%.3f",getWeightInCarats() * 0.200)} g)"),
-            Pair("Diameter","${String.format("%.3f",getDiameterInInches())} in (~ ${
+            LabelledQualityEntry("Diameter","${String.format("%.3f",getDiameterInInches())} in (~ ${
                 String.format("%.3f",getDiameterInInches() * 2.54)} cm)"),
-            Pair("Opacity",getOpacityAsString().capitalized()),
-            Pair("Appearance",description.capitalized())
+            LabelledQualityEntry("Opacity",getOpacityAsString().capitalized()),
+            LabelledQualityEntry("Appearance",description.capitalized())
         )
     }
 }
@@ -164,4 +163,5 @@ data class GemEvaluation(
     val timestamp: Long = System.currentTimeMillis(),
     val description: String = "",
     val newGpValue: Double
+    //TODO add val valueChange: Double
 )

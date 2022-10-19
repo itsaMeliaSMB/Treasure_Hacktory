@@ -153,6 +153,9 @@
             <argument
                 android:name="itemType"
                 app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
+            <argument
+                android:name="hoardID"
+                app:argType="integer" />
         </action>
     </fragment>
     <fragment
@@ -166,6 +169,9 @@
         <argument
             android:name="itemType"
             app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
+        <argument
+            android:name="hoardID"
+            app:argType="integer" />
     </fragment>
 
 </navigation>

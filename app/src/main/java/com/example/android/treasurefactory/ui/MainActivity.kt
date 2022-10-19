@@ -40,10 +40,10 @@ class MainActivity : AppCompatActivity(), HoardListFragment.Callbacks,
         view.findNavController().navigate(action)
     }
 
-    override fun onUniqueSelected(view: View, itemID: Int, itemType: UniqueItemType) {
+    override fun onUniqueSelected(view: View, itemID: Int, itemType: UniqueItemType, hoardID: Int) {
 
         val action =
-            UniqueListFragmentDirections.uniqueListToDetailsAction(itemID,itemType)
+            UniqueListFragmentDirections.uniqueListToDetailsAction(itemID,itemType,hoardID)
 
         view.findNavController().navigate(action)
     }

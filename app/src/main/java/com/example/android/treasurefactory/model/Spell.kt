@@ -224,6 +224,12 @@ data class Spell(
         return runningList.toString().trimEnd()
     }
 
+    @Ignore
+    fun toSimpleSpellEntry(isUsed: Boolean = false) : SimpleSpellEntry {
+        return SimpleSpellEntry(spellID, name, spellLevel, type, schools, subclass,
+            "$sourceText, pg $sourcePage", isUsed)
+    }
+
     companion object {
 
 

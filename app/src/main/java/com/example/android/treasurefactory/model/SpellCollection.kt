@@ -3,7 +3,9 @@ package com.example.android.treasurefactory.model
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.android.treasurefactory.repository.HMRepository
 import org.jetbrains.annotations.NotNull
+import java.text.DecimalFormat
 
 data class SpellEntry(
     val spellID: Int,
@@ -63,5 +65,47 @@ data class SpellCollection(
         }
 
         return xpTotal
+    }
+
+    @Ignore
+    fun getSubtitle(): String {
+        val result = StringBuilder()
+
+        if (curse.isNotBlank()) result.append("cursed ")
+
+        when (iconID){
+            "scroll_base"   -> result.append("assorted ")
+            "scroll_red"    -> result.append("arcane ")
+            "scroll_blue"   -> result.append("divine ")
+            "scroll_green"  -> result.append("druidic (non-standard) ")
+            "scroll_cursed" -> if (result.isEmpty()) result.append("cursed ")
+            //TODO when spellbooks are implemented, include string checks for spellbook resources
+            "icon_chosen_one" -> result.append("bestowed ")
+        }
+
+        result.append(when (type){
+            SpCoType.SCROLL -> "scroll "
+            SpCoType.BOOK -> "spellbook "
+            SpCoType.ALLOTMENT -> "Chosen One allotment "
+            SpCoType.RING -> "ring "
+            SpCoType.OTHER -> "collection "
+        })
+
+        result.append(" of ${spells.size} spells")
+
+        return result.toString()
+    }
+
+    @Ignore
+    suspend fun getFlavorTextAndSpellsAsDetailsLists(repository: HMRepository): List<Pair<String,List<DetailEntry>>> {
+
+        return listOf(
+            "Spell collection properties" to properties.map { (spCoProperty, gpValue) ->
+                LabelledQualityEntry(spCoProperty,"${DecimalFormat("#,##0.0#")
+                    .format(gpValue).removeSuffix(".0")} gp")},
+            "Spell list" to spells.map { spEntry ->
+                repository.getSpell(spEntry.spellID)
+                    ?.toSimpleSpellEntry(spEntry.usedUp) ?:
+                    PlainTextEntry("This spell could not be loaded") })
     }
 }

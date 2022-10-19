@@ -5,10 +5,15 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.*
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.annotation.ColorInt
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +32,25 @@ import java.text.NumberFormat
 class UniqueListFragment : Fragment() {
 
     interface Callbacks{
-        fun onUniqueSelected(view: View, itemID: Int, itemType: UniqueItemType)
+        fun onUniqueSelected(view: View, itemID: Int, itemType: UniqueItemType, hoardID: Int)
+    }
+
+    private val backCallback = object : OnBackPressedCallback(true) {
+
+        override fun handleOnBackPressed() {
+
+            if (uniqueListViewModel.isRunningAsyncLiveData.value != true) {
+
+                actionMode?.finish()
+
+                findNavController().popBackStack()
+
+            } else {
+
+                Toast.makeText(context,"Cannot navigate back; still manipulating treasure.",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     // region [ Property declarations ]
@@ -39,7 +62,7 @@ class UniqueListFragment : Fragment() {
     private var shortAnimationDuration = 0
     private var isContentFrameAnimating = false
 
-    private var callbacks: UniqueListFragment.Callbacks? = null
+    private var callbacks: Callbacks? = null
 
     private var _binding: LayoutUniqueListBinding? = null
     private val binding get() = _binding!!
@@ -59,7 +82,7 @@ class UniqueListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        callbacks = context as UniqueListFragment.Callbacks?
+        callbacks = context as Callbacks?
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,6 +94,8 @@ class UniqueListFragment : Fragment() {
         val itemType: UniqueItemType = safeArgs.listType
 
         uniqueListViewModel.loadHoardInfo(hoardID, itemType)
+
+        requireActivity().onBackPressedDispatcher.addCallback(this,backCallback)
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -186,6 +211,21 @@ class UniqueListFragment : Fragment() {
                     resources.getString(R.string.viewer_spell_collections_card_title)
             }
             subtitle = parentHoard.name
+            navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
+            setNavigationOnClickListener {
+
+                if (uniqueListViewModel.isRunningAsyncLiveData.value != true) {
+
+                    actionMode?.finish()
+
+                    findNavController().popBackStack()
+
+                } else {
+
+                    Toast.makeText(context,"Cannot navigate back; still manipulating treasure.",
+                        Toast.LENGTH_SHORT).show()
+                }
+            }
             setOnMenuItemClickListener { item ->
 
                 // https://developer.android.com/guide/fragments/appbar#fragment-click
@@ -202,6 +242,7 @@ class UniqueListFragment : Fragment() {
                     else    -> false
                 }
             }
+
         }
     }
 
@@ -351,7 +392,7 @@ class UniqueListFragment : Fragment() {
                     is ListableArtObject -> UniqueItemType.ART_OBJECT
                     is ListableMagicItem -> UniqueItemType.MAGIC_ITEM
                     is ListableSpellCollection -> UniqueItemType.SPELL_COLLECTION
-                })
+                },safeArgs.hoardID)
             }
         }
 
@@ -444,26 +485,109 @@ class UniqueListFragment : Fragment() {
 
     private inner class ActionModeCallback : ActionMode.Callback {
 
-        //TODO Left off here. Only ActionMode and relevant new viewmodel/repository functions (i.e.
-        // sales) need to be implemented for UniqueListFragment to theoretically be done.
-        // UniqueListViewModel may still need some functionality copied over and implementing themes
-        // would be a massive bonus; but finish this up, apply for the dev account, test, debug,
-        // then implement UniqueDetailsFragment, UniqueDetailsViewModel, and ViewableItem.
+        override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
 
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            TODO("Not yet implemented")
+            //TODO implement as separate menus depending on item list type
+
+            // Inflate menu
+            mode.menuInflater.inflate(R.menu.unique_list_action_menu,menu)
+
+            // Get the color to change the status bar background to
+            val typedValue = TypedValue()
+            requireActivity().theme.resolveAttribute(R.attr.colorSecondaryVariant,typedValue,true)
+            @ColorInt
+            val newStatusBarColor = typedValue.data
+
+            // Change the status bar's color
+            requireActivity().window.apply {
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = newStatusBarColor
+            }
+
+            return true
         }
 
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            TODO("Not yet implemented")
+        override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
+            return false
         }
 
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            TODO("Not yet implemented")
+        override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
+            return when (item.itemId) {
+
+                R.id.action_move_items -> {
+
+                    // TODO unimplemented!
+
+                    Toast.makeText(context,"Move action clicked (Unimplemented).",
+                        Toast.LENGTH_SHORT)
+                        .show()
+
+                    true
+                }
+
+                R.id.action_select_all_items -> {
+
+                    (binding.uniqueListRecycler.adapter as UniqueAdapter).selectAllItems()
+
+                    true
+                }
+
+                R.id.action_copy_items -> {
+
+                    // TODO unimplemented!
+
+                    Toast.makeText(context,"Duplicate action clicked (Unimplemented).",
+                        Toast.LENGTH_SHORT)
+                        .show()
+
+                    true
+                }
+
+                R.id.action_sell_items -> {
+
+                    // TODO unimplemented!
+
+                    Toast.makeText(context,"Sell action clicked (Unimplemented).",
+                        Toast.LENGTH_SHORT)
+                        .show()
+
+                    true
+                }
+
+                R.id.action_delete_items -> {
+
+                    // TODO unimplemented!
+
+                    Toast.makeText(context,"Delete action clicked (Unimplemented).",
+                        Toast.LENGTH_SHORT)
+                        .show()
+
+                    true
+                }
+
+                else -> false
+            }
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
-            TODO("Not yet implemented")
+
+            // Clear all selections first
+            (binding.uniqueListRecycler.adapter as MultiselectRecyclerAdapter).clearAllSelections()
+
+            // Get the color to change the status bar background to
+            val typedValue = TypedValue()
+            requireActivity().theme.resolveAttribute(R.attr.colorPrimaryDark,typedValue,true)
+            @ColorInt
+            val newStatusBarColor = typedValue.data
+
+            // Change the status bar's color
+            requireActivity().window.apply{
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = newStatusBarColor
+            }
+
+            // Fully close actionMode
+            actionMode = null
         }
 
     }
@@ -474,6 +598,7 @@ class UniqueListFragment : Fragment() {
     private fun updateUI(listables: List<ListableItem>) {
         uniqueAdapter = UniqueAdapter(listables)
         binding.uniqueListRecycler.adapter = uniqueAdapter
+        binding.uniqueListToolbar.subtitle = parentHoard.name
     }
 
     private fun showContentFrameCrossfade() {

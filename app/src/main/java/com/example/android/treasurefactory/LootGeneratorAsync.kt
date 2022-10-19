@@ -318,7 +318,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 // Roll explicit treasure maps
                 repeat(hoardOrder.baseMaps) {
-                    createTreasureMap(newHoardID,"Didn't replace another item.",
+                    createTreasureMap(newHoardID,"",
                         hoardOrder.allowFalseMaps)
                 }
 
@@ -1165,11 +1165,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             "NG" to "Neutral Good"
         )
         val USABLE_BY_ALL = mapOf(
-            "fighter" to true,
-            "thief" to true,
-            "cleric" to true,
-            "magic-user" to true,
-            "druid" to true)
+            "Fighter" to true,
+            "Thief" to true,
+            "Cleric" to true,
+            "Magic-user" to true,
+            "Cruid" to true)
         /**
          * Returns full alignment string from valid abbreviations
          *
@@ -1763,7 +1763,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "Fighter" to (template.fUsable == 1),
                 "Thief" to (template.tUsable == 1),
                 "Cleric" to (template.cUsable == 1),
-                "Magic-User" to (template.mUsable == 1),
+                "Magic-user" to (template.mUsable == 1),
                 "Druid" to (template.dUsable == 1)
             )
             mIconID = template.iconRef
@@ -3795,11 +3795,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             0,
             0.0,
             mapOf(
-                "fighter" to true,
-                "thief" to true,
-                "cleric" to true,
-                "magic-user" to true,
-                "druid" to true),
+                "Fighter" to true,
+                "Thief" to true,
+                "Cleric" to true,
+                "Magic-user" to true,
+                "Druid" to true),
             !isRealMap,
             "",
             convertNotes())

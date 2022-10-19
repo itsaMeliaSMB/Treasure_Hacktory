@@ -1,6 +1,7 @@
 package com.example.android.treasurefactory.model
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
@@ -53,4 +54,12 @@ data class MagicItem(
     val classUsability: Map<String,Boolean>,
     val isCursed: Boolean,
     val alignment: String,
-    val notes: List<Pair<String,List<String>>> = emptyList())
+    val notes: List<Pair<String,List<String>>> = emptyList()) {
+
+    @Ignore
+    fun getNotesAsDetailsLists(): List<Pair<String,List<PlainTextEntry>>> {
+        return notes.map { (listLabel, detailList) ->
+            listLabel to detailList.map { PlainTextEntry(it) }
+        }
+    }
+}

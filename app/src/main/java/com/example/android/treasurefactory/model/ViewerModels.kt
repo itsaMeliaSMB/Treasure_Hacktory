@@ -62,15 +62,112 @@ suspend fun ListableSpellCollection.toSpellCollection(repository: HMRepository):
 // endregion
 
 // region [ Viewable ]
+interface Viewable {
+    val itemID: Int
+    val hoardID: Int
+    val name: String
+    val subtitle: String
+    val creationTime: Long
+    val iconStr: String
+    val iFrameFlavor: ItemFrameFlavor
+    val source: String
+    val sourcePage: Int
+    val gpValue: Double
+    val xpValue: Int
+    val itemType: UniqueItemType
+    val details: List<Pair<String,List<DetailEntry>>>
+}
 
-sealed class Viewable() {}
+sealed class ViewableItem : Viewable
 
 // region ( Subclasses )
 
-class ViewableGem() : Viewable()
-class ViewableArtObject() : Viewable()
-class ViewableMagicItem() : Viewable()
-class ViewableSpellCollection : Viewable()
+class ViewableGem(
+    override val itemID: Int,
+    override val hoardID: Int,
+    override val name: String,
+    override val subtitle: String,
+    override val creationTime: Long,
+    override val iconStr: String,
+    override val iFrameFlavor: ItemFrameFlavor,
+    override val source: String,
+    override val sourcePage: Int,
+    override val gpValue: Double,
+    override val xpValue: Int,
+    override val itemType: UniqueItemType,
+    override val details: List<Pair<String,List<DetailEntry>>>,
+    val gemType: Int,
+    val gemQuality: Int,
+    val gemOpacity: Int,
+    val gemDesc: String,
+) : ViewableItem()
+
+class ViewableArtObject(
+    override val itemID: Int,
+    override val hoardID: Int,
+    override val name: String,
+    override val subtitle: String,
+    override val creationTime: Long,
+    override val iconStr: String,
+    override val iFrameFlavor: ItemFrameFlavor,
+    override val source: String,
+    override val sourcePage: Int,
+    override val gpValue: Double,
+    override val xpValue: Int,
+    override val itemType: UniqueItemType,
+    override val details: List<Pair<String,List<DetailEntry>>>,
+    val artType: Int,
+    val artRenown: Int,
+    val artSize: Int,
+    val artCondition: Int,
+    val artMaterials: Int,
+    val artQuality: Int,
+    val artAge: Int,
+    val artSubject: Int,
+    var artValueLevel: Int
+) : ViewableItem()
+
+class ViewableMagicItem(
+    override val itemID: Int,
+    override val hoardID: Int,
+    override val name: String,
+    override val subtitle: String,
+    override val creationTime: Long,
+    override val iconStr: String,
+    override val iFrameFlavor: ItemFrameFlavor,
+    override val source: String,
+    override val sourcePage: Int,
+    override val gpValue: Double,
+    override val xpValue: Int,
+    override val itemType: UniqueItemType,
+    override val details: List<Pair<String,List<DetailEntry>>>,
+    val mgcTemplateID: Int,
+    val mgcItemType: MagicItemType,
+    val mgcClassUsability: Map<String,Boolean>,
+    val mgcIsCursed: Boolean,
+    val mgcAlignment: String,
+    val mgcOriginalNotes: List<Pair<String,List<String>>>
+) : ViewableItem()
+
+class ViewableSpellCollection(
+    override val itemID: Int,
+    override val hoardID: Int,
+    override val name: String,
+    override val subtitle: String,
+    override val creationTime: Long,
+    override val iconStr: String,
+    override val iFrameFlavor: ItemFrameFlavor,
+    override val source: String,
+    override val sourcePage: Int,
+    override val gpValue: Double,
+    override val xpValue: Int,
+    override val itemType: UniqueItemType,
+    override val details: List<Pair<String,List<DetailEntry>>>,
+    val spCoType: SpCoType,
+    val spCoProperties: List<Pair<String,Double>>,
+    val spCoSpells: List<SpellEntry>,
+    val spCoCurse: String
+) : ViewableItem()
 
 // endregion
 
@@ -82,7 +179,19 @@ class ViewableSpellCollection : Viewable()
 
 // endregion
 
-enum class UniqueItemType(){
+// region [ DetailEntry ]
+
+sealed class DetailEntry
+
+class PlainTextEntry(val message: String) : DetailEntry()
+class LabelledQualityEntry(val caption: String, val value: String) : DetailEntry()
+class SimpleSpellEntry(
+    val spellID: Int, val name: String, val level: Int, val discipline: SpCoDiscipline,
+    val schools: List<SpellSchool>, val subclass: String, val sourceString: String, val isUsed: Boolean) : DetailEntry()
+
+// endregion
+
+enum class UniqueItemType{
     GEM,
     ART_OBJECT,
     MAGIC_ITEM,
@@ -94,3 +203,4 @@ enum class ItemFrameFlavor {
     CURSED,
     GOLDEN
 }
+
