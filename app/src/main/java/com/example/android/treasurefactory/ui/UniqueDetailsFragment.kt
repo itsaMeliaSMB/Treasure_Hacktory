@@ -1,14 +1,12 @@
 package com.example.android.treasurefactory.ui
 
-import android.R.color
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
-import android.graphics.Typeface.BOLD
-import android.graphics.Typeface.BOLD_ITALIC
+import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -20,7 +18,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.ResourcesCompat.getDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -338,13 +335,13 @@ class UniqueDetailsFragment() : Fragment() {
 
                 binding.uniqueDetailListSimpleTextview.apply {
                     when {
-                        //TODO left off here. cheeky formating. Good luck getting everything done!
+                        //TODO left off here. cheeky formatting. Good luck getting everything done!
                         (entry.message.startsWith("[ ") && entry.message.endsWith(" ]")) -> {
                             text = entry.message.removeSurrounding("[ "," ]")
-                            typeface = Typeface(BOLD)
+                            setTypeface(DEFAULT_BOLD)
                         }
                         (entry.message == HACKMASTER_CLASS_ITEM_TEXT) -> {
-                            typeface = Typeface(BOLD_ITALIC)
+                            typeface = typeface.apply{}
                             textSize = 18f
                             setCompoundDrawablesRelative(
                                 getDrawable(resources,R.drawable.clipart_winged_sword_vector_icon,context?.theme),
@@ -352,25 +349,25 @@ class UniqueDetailsFragment() : Fragment() {
                                 getDrawable(resources,R.drawable.clipart_winged_sword_vector_icon,context?.theme),
                                 null
                             )
-                            gravity = View.CENTER
-                            for (drawable in textView.getCompoundDrawables()) {
+                            gravity = CENTER
+                            for (drawable in this.compoundDrawables) {
                                 if (drawable != null) {
                                     drawable.colorFilter =
                                         PorterDuffColorFilter(
                                             ContextCompat.getColor(
-                                                textView.getContext(),
-                                                color
+                                                this.context,
+                                                R.color.golden
                                             ), PorterDuff.Mode.SRC_IN
                                         )
                                 }
                             }
-                            setTextColor(R.color.golden)
+                            setTextColor(resources.getColor(R.color.golden,context.theme))
                         }
+                        //TODO if you ever figure out spanned text, add check for colors for potion flavor text
                         else    -> {
                             text = entry.message
                         }
                     }
-                    //TODO if you ever figure out spanned text, add check for colors for potion flavor text
                 }
 
             }
@@ -425,6 +422,28 @@ class UniqueDetailsFragment() : Fragment() {
                                     resources.getColor(R.color.white,
                                         context?.theme))
                             }
+                            "Choice" -> {
+
+                                if (entry.name.startsWith("GM")){
+
+                                    spellItemSubclassCard
+                                        .setCardBackgroundColor(
+                                            resources.getColor(R.color.ultramarine,
+                                                context?.theme))
+                                    spellItemSubclassText.setTextColor(
+                                        resources.getColor(R.color.white,
+                                            context?.theme))
+
+                                } else {
+                                    spellItemSubclassCard
+                                        .setCardBackgroundColor(
+                                            resources.getColor(R.color.teal,
+                                                context?.theme))
+                                    spellItemSubclassText.setTextColor(
+                                        resources.getColor(R.color.white,
+                                            context?.theme))
+                                }
+                            }
                             "Wild" -> {
                                 spellItemSubclassCard
                                     .setCardBackgroundColor(
@@ -442,7 +461,7 @@ class UniqueDetailsFragment() : Fragment() {
 
                     spellItemTypeBackdrop.apply{
                         setImageDrawable(
-                            ResourcesCompat.getDrawable(resources,
+                            getDrawable(resources,
                                 if(entry.isUsed){
 
                                     when (entry.discipline) {
@@ -461,7 +480,10 @@ class UniqueDetailsFragment() : Fragment() {
                                     }
                                 }, context?.theme)
                         )
-                        if (entry.discipline == SpCoDiscipline.ALL_MAGIC) alpha = 0.5f
+                        if (entry.discipline == SpCoDiscipline.ALL_MAGIC) {
+
+                            alpha = if (entry.isUsed) { 0.25f } else { 0.5f }
+                        }
                     }
 
                     spellItemName.text = entry.name
@@ -480,7 +502,27 @@ class UniqueDetailsFragment() : Fragment() {
 
                         1   -> {
 
-                            spellItemSchoolCard1.visibility = View.VISIBLE
+                            spellItemSchoolCard1.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (entry.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
 
                             spellItemSchoolImage1.setImageResource(
                                 when (entry.schools[0]) {
@@ -503,7 +545,27 @@ class UniqueDetailsFragment() : Fragment() {
 
                         2   -> {
 
-                            spellItemSchoolCard1.visibility = View.VISIBLE
+                            spellItemSchoolCard1.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (entry.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
 
                             spellItemSchoolImage1.setImageResource(
                                 when (entry.schools[0]) {
@@ -518,7 +580,27 @@ class UniqueDetailsFragment() : Fragment() {
                                 }
                             )
 
-                            spellItemSchoolCard2.visibility = View.VISIBLE
+                            spellItemSchoolCard2.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (entry.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
 
                             spellItemSchoolImage2.setImageResource(
                                 when (entry.schools[1]) {
@@ -539,7 +621,27 @@ class UniqueDetailsFragment() : Fragment() {
 
                         else-> {
 
-                            spellItemSchoolCard1.visibility = View.VISIBLE
+                            spellItemSchoolCard1.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (entry.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
 
                             spellItemSchoolImage1.setImageResource(
                                 when (entry.schools[0]) {
@@ -554,7 +656,27 @@ class UniqueDetailsFragment() : Fragment() {
                                 }
                             )
 
-                            spellItemSchoolCard2.visibility = View.VISIBLE
+                            spellItemSchoolCard2.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (entry.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
 
                             spellItemSchoolImage2.setImageResource(
                                 when (entry.schools[1]) {
@@ -569,7 +691,27 @@ class UniqueDetailsFragment() : Fragment() {
                                 }
                             )
 
-                            spellItemSchoolCard3.visibility = View.VISIBLE
+                            spellItemSchoolCard3.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (entry.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
 
                             spellItemSchoolImage3.setImageResource(
                                 when (entry.schools[2]) {

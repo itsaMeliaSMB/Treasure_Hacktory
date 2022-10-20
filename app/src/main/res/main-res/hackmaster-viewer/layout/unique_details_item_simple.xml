@@ -9,12 +9,5 @@
     android:minHeight="48dp"
     android:textSize="14sp"
     android:gravity="center_vertical"
-    tools:drawablePadding="8dp"
-    tools:drawableStart="@drawable/clipart_winged_sword_vector_icon"
-    tools:drawableEnd="@drawable/clipart_winged_sword_vector_icon"
-    tools:gravity="center"
-    android:drawableTint="@color/golden"
-    tools:textStyle="italic|bold"
-    tools:textColor="@color/golden"
-    tools:textSize="18sp"
-    tools:text="THIS IS A HACKMASTER CLASS ITEM!"/>
+
+    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
