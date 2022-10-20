@@ -16,6 +16,8 @@ import kotlin.random.Random
 
 const val ORDER_LABEL_STRING = "order_details"
 
+const val HACKMASTER_CLASS_ITEM_TEXT = "THIS IS A HACKMASTER-CLASS ITEM!"
+
 const val MAX_SPELLS_PER_SCROLL = 50
 const val MAX_SPELLS_PER_BOOK = 120
 
@@ -331,14 +333,22 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 val innerSpellPile = arrayListOf<SpellCollection>()
 
+                var runningCount = 1
+
                 // Generate spell collections
                 repeat(hoardOrder.extraSpellCols) {
+
+                    Log.d("deferredSpellPile()","Starting iteration 1")
 
                     innerSpellPile.add(
                         createSpellCollection(
                             newHoardID,hoardOrder.genParams.magicParams.spellCoRestrictions
                         )
                     )
+
+                    Log.d("deferredSpellPile()","Ending iteration 1")
+
+                    runningCount ++
                 }
 
                 return@async innerSpellPile.toList()
@@ -730,7 +740,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             gemType,
             gemSize,
             gemQuality,
-            gemTemplate.name,
+            gemTemplate.name.capitalized(),
             gemTemplate.opacity,
             gemTemplate.description,
             initialGPValue
@@ -1169,7 +1179,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             "Thief" to true,
             "Cleric" to true,
             "Magic-user" to true,
-            "Cruid" to true)
+            "Druid" to true)
+
         /**
          * Returns full alignment string from valid abbreviations
          *
@@ -1296,7 +1307,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         }
 
         var template= MagicItemTemplate(0, 1, "Template of Error Handling",
-            1, "Treasure Hacktory", 0, 0, 1, 0,
+            ReferenceType.OTHER_HOMEBREW, "Treasure Hacktory", 0, 0, 1, 0,
             "Something went wrong when generating this magical item.",
             dieCount = 0, dieSides = 0, dieMod = 0, "A17", "container_chest",
             0, 0, 0, 0, 0, 0, 0,
@@ -1636,7 +1647,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     0,
                     0,
                     "Null item",
-                    1,
+                    ReferenceType.OTHER_HOMEBREW,
                     source = "???",
                     page = 0,
                     xpValue = 0,
@@ -1826,15 +1837,30 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             // region ( Grab imitation name, if applicable )
             if (template.imitationKeyword.isNotBlank()){
 
+                //TODO remove debug logging when this is sorted out
+
+                Log.d("createMagicItemTuple() | imitation","Imitation name indicated " +
+                        "(${template.imitationKeyword}.isNotBlank()).")
+
                 val keywords = template.imitationKeyword.split(";").map{"$it%"}
+
+                Log.d("createMagicItemTuple() | imitation","keywords : " + keywords.map { "[$it] " })
 
                 val imitationList = ArrayList<String>()
 
-                keywords.forEach { key -> imitationList.addAll(repository.getNamesToImitate(key)) }
+                Log.d("createMagicItemTuple() | imitation","imitationList : " + imitationList.map { "[$it] " })
 
-                // Query DB for item imitate TODO
+                keywords.forEach { key ->
+
+                    imitationList.addAll(repository.getNamesToImitate(key))
+                }
+
+                Log.d("createMagicItemTuple() | imitation","imitationList : " + imitationList.map { "[$it] " })
+
                 // keywords[Random.nextInt(0,keywords.size)]
                 val imitationName = imitationList.randomOrNull() ?: ""
+
+                Log.d("createMagicItemTuple() | imitation","imitationName = imitationList.randomOrNull() = $imitationName")
 
                 if (imitationName.isNotBlank()) {
 
@@ -1843,6 +1869,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                     flatNotesList.add("Additional notes" to
                             "Appears to be ${if (useAn) "an" else "a"} $imitationName")
+
+                    Log.d("createMagicItemTuple() | imitation","result = Appears to be ${if (useAn) 
+                        "an" else "a"} $imitationName")
                 }
             }
             // endregion
@@ -1877,9 +1906,16 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             // region ( Add command word, if applicable )
             if (template.commandWord.isNotBlank()) {
 
+                //TODO remove debug logging when this is sorted out
+
+                Log.d("createMagicItemTuple() | commandWord","Command word indicated " +
+                        "(${template.commandWord}.isNotBlank()).")
+
                 val keywords = if (template.commandWord == "THREE"){
                     listOf("ANY","ANY","ANY")
                 } else template.commandWord.split(";")
+
+                Log.d("createMagicItemTuple() | commandWord","keywords : " + keywords.map { "[$it] " })
 
                 val commandWords = ArrayList<String>()
                 val textBuilder = StringBuilder().apply {
@@ -1892,20 +1928,39 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 keywords.forEach { currentKeyword ->
 
                     val wordSet = if (currentKeyword == "ANY") {
-
                         repository.getAllCommandWords().toMutableSet()
+                    } else {
+                        repository.getThemedCommandWords(currentKeyword).toMutableSet()
+                    }
 
-                    } else repository.getThemedCommandWords(currentKeyword).toMutableSet()
+                    Log.d("createMagicItemTuple() | commandWord | currentKeyword($currentKeyword)",
+                        "wordSet (before): " + wordSet.map { "[$it] " })
 
-                    wordSet.removeAll(commandWords)
+                    wordSet.removeAll(commandWords.toSet())
+
+                    Log.d("createMagicItemTuple() | commandWord | currentKeyword($currentKeyword)",
+                        "wordSet (after): " + wordSet.map { "[$it] " })
 
                     commandWords.add(wordSet.randomOrNull() ?: currentKeyword.uppercase())
+
+                    Log.d("createMagicItemTuple() | commandWord | currentKeyword($currentKeyword)",
+                        "Adding \"${wordSet.randomOrNull() ?: currentKeyword.uppercase()
+                        }\" (wordSet.randomOrNull() ?: $currentKeyword.uppercase())")
                 }
+
+                Log.d("createMagicItemTuple() | commandWord",
+                    "commandWords (before): " + commandWords.map { "[$it] " })
 
                 commandWords.forEachIndexed { index, entry ->
 
                     textBuilder.append( if (index > 0) " / $entry" else entry )
+
+                    Log.d("createMagicItemTuple() | commandWord | ($index, $entry)",
+                        "Appended ${if (index > 0) " / $entry" else entry }")
                 }
+
+                Log.d("createMagicItemTuple() | commandWord",
+                    "Returning \"${textBuilder.toString()}\"")
 
                 flatNotesList.add("Additional notes" to textBuilder.toString())
             }
@@ -2962,7 +3017,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             if (itemType == "A24") {
 
-                flatNotesList.add("Artifact particulars" to "THIS IS A HACKMASTER-CLASS ITEM!")
+                Log.d("createMagicItemTuple() | artifact","Artifact indicated.")
+
+                if (template.multiType == 4) {
+                    flatNotesList.add("Artifact particulars" to HACKMASTER_CLASS_ITEM_TEXT)
+                }
 
                 // region ( Roll minor benign effects )
                 if (template.iPower in 1..46){
@@ -3017,7 +3076,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     )
                     val typeIList = arrayListOf<Int>()
 
-                    flatNotesList.add("Artifact particulars" to "[ I. MINOR BENIGN EFFECTS" +
+                    flatNotesList.add("Artifact particulars" to "[ I. MINOR BENIGN EFFECT" +
                                 "${if (template.iPower > 1)"S" else ""} ]")
 
                     repeat (template.iPower) {
@@ -3034,7 +3093,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         // Add unique effect to list
                         typeIList.add(newEffect)
                     }
-
+                    
                     // Add effects once all are generated
                     typeIList.forEachIndexed {index, entry ->
                         flatNotesList.add("Artifact particulars" to
@@ -3117,7 +3176,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         // Add unique effect to list
                         typeIIList.add(newEffect)
                     }
-
+                    
                     // Add effects once all are generated
                     typeIIList.forEachIndexed {index, entry ->
                         flatNotesList.add("Artifact particulars" to
@@ -3128,6 +3187,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 // region ( Roll minor malevolent effects )
                 if (template.iiiPower in 1..25){
+
+                    Log.d("createMagicItemTuple() | artifact | III","${template.iiiPower} " +
+                            "minor malevolent effect(s) indicated.")
 
                     val minorMalevolentEffects = listOf(
                         "A. Acne on possessor's face",
@@ -3443,7 +3505,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     flatNotesList.add("Artifact particulars" to "[ VI. SIDE EFFECT " +
                                 "${if (template.vPower > 1)"S" else ""} ]")
 
-                    repeat (template.vPower) {
+                    repeat (template.viPower) {
 
                         var newEffect : Int
 
@@ -3580,15 +3642,29 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             val nestedList = ArrayList<Pair<String,List<String>>>()
             val tableNames = flatNotesList.distinctBy { it.first }.map { it.first }
 
+            flatNotesList.forEachIndexed { index, (title, entry) ->
+                Log.d("convertNotes() | flatNotesList","#${index+1}) \"$title\" to " +
+                        "\"$entry\"")
+            }
+
+            // 1) Split into sublist of same first() value TODO
+
+            // 2) Capture first() value of sublist[0] to serve as table name TODO
+
+            // 3) Map sublist into single-string list of second() values TODO
+
             tableNames.forEach { tableName ->
                 val noteList = flatNotesList.filter { it.first == tableName }.map{ it.second }
 
                 nestedList.add(tableName to noteList)
             }
 
-            nestedList.forEach {
-                Log.d("convertNotes()","[${it.first}] has ${it.second.size}" +
-                    if (it.second.size == 1) "entry." else "entries.")
+            nestedList.forEach { (listLabel, detailList) ->
+                Log.d("convertNotes()","[${listLabel}] has ${detailList.size}" +
+                    if (detailList.size == 1) "entry." else "entries.")
+                detailList.forEach { listedDetail ->
+                    Log.d("convertNotes() | \"$listLabel\"","\"$listedDetail\"")
+                }
             }
 
             return nestedList.toList()
@@ -3933,8 +4009,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         }
 
         return SpellCollection(0, parentHoard,
-            System.currentTimeMillis(),"ring_runes",ringName,SpCoType.RING,
-            gpValue = 7000.00, xpValue = 2500,
+            System.currentTimeMillis(), "ring_runes", ringName, SpCoType.RING,
+            order.spellType, gpValue = 7000.00, xpValue = 2500,
             spells = spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name }))
                 .map { it.toSpellEntry() })
     }
@@ -4153,39 +4229,69 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             SpCoGenMethod.TRUE_RANDOM   -> {
 
+                Log.d("convertOrderToSpellScroll()","Picking spells according to " +
+                        "SpCoGenMethod.TRUE_RANDOM.")
+
                 repeat(spellCount) {
 
                     val spellLevel = spellRange.random()
 
+                    Log.d("convertOrderToSpellScroll() | TRUE_RANDOM (${it + 1})",
+                        "spellLevel = $spellRange.random() = $spellLevel")
+
                     spellList.add(getRandomSpell(spellLevel,spellType,
                         order.allowedSources, order.rerollChoices, order.allowRestricted
                     ))
+
+                    Log.d("convertOrderToSpellScroll() | TRUE_RANDOM (${it + 1})",
+                        "Spell added to spellList (size = ${spellList.size})")
                 }
             }
 
             SpCoGenMethod.BY_THE_BOOK   -> {
 
+                Log.d("convertOrderToSpellScroll()","Picking spells according to " +
+                        "SpCoGenMethod.BY_THE_BOOK.")
+
                 when (spellType) {
 
                     SpCoDiscipline.ARCANE   -> {
+
+                        Log.d("convertOrderToSpellScroll() | BY_THE_BOOK","Rolling " +
+                                "ARCANE spells with getSpellByLevelUp().")
 
                         repeat(spellCount) {
 
                             val spellLevel = spellRange.random()
 
+                            Log.d("convertOrderToSpellScroll() | BY_THE_BOOK (${it + 1})",
+                                "spellLevel = $spellRange.random() = $spellLevel")
+
                             spellList.add(getSpellByLevelUp(spellLevel,null,
                                 order.rerollChoices,order.allowedSources.splatbooksOK))
+
+                            Log.d("convertOrderToSpellScroll() | BY_THE_BOOK (${it + 1})",
+                                "Spell added to spellList (size = ${spellList.size})")
                         }
                     }
 
                     SpCoDiscipline.DIVINE   -> {
 
+                        Log.d("convertOrderToSpellScroll() | BY_THE_BOOK","Rolling " +
+                                "DIVINE spells with getSpellByChosenOneTable().")
+
                         repeat(spellCount) {
 
                             val spellLevel = spellRange.random()
 
+                            Log.d("convertOrderToSpellScroll() | BY_THE_BOOK (${it + 1})",
+                                "spellLevel = $spellRange.random() = $spellLevel")
+
                             spellList.add(getSpellByChosenOneTable(spellLevel,false,
                                 order.allowedSources.splatbooksOK))
+
+                            Log.d("convertOrderToSpellScroll() | BY_THE_BOOK (${it + 1})",
+                                "Spell added to spellList (size = ${spellList.size})")
                         }
                     }
 
@@ -4367,13 +4473,15 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // endregion
 
-        return SpellCollection(0,
+        return SpellCollection(
+            0,
             parentHoard,
             System.currentTimeMillis(),
             iconID,
             itemName,
             SpCoType.SCROLL,
-            propertiesList.toList(),
+            spellType,
+             propertiesList.toList(),
             gpTotal,
             xpTotal,
             spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name })).map { it.toSpellEntry() },
@@ -4507,25 +4615,46 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         var spellHolder : Spell? = null
 
-        fun Spell?.isNotValid() : Boolean {
+        fun Spell?.isValid() : Boolean {
 
-            return ( this == null ) ||
-                    !( validSources.contains(this.refType) &&
-                            (this.restrictions.isEmpty() || allowRestricted)) ||
-                    (rerollChoices && this.name.contains(" Choice")
-                            && this.refType.ordinal > 3)
+            return (
+                    // Spell is not null
+                    (this != null) &&
+                            // Spell is from a source permitted by the order
+                            (validSources.contains(this.refType)) &&
+                            // Spell is either unrestricted or restricted spells are allowed
+                            (this.restrictions.isEmpty() || allowRestricted) &&
+                            // Either re-roll choice is disabled or does not apply to this spell
+                            !(rerollChoices && this.name.contains(" Choice") && this.refType.ordinal > 3)
+                    )
         }
 
         while(spellIDs.isNotEmpty() && spellHolder == null) {
+
+            Log.d("getRandomSpell()","Attempting to pick from list. spellIDs.size = ${
+                spellIDs.size}")
 
             val pulledID = spellIDs.random()
 
             spellIDs.remove(pulledID)
 
+            Log.d("getRandomSpell()","Pulled random entry. pulledID = $pulledID")
+
             spellHolder = repository.getSpell(pulledID)
 
-            if (spellHolder.isNotValid()) spellHolder = null
+            Log.d("getRandomSpell()","Looked up spell with ID $pulledID. Spell name is ${
+                spellHolder?.name ?: "[ null ]"}")
+
+            // Check if spell is valid, otherwise clear it
+            if ( !( spellHolder.isValid() ) ) {
+                Log.d("getRandomSpell()","Spell failed validation, clearing holder. " +
+                        "spellIDs.size = ${spellIDs.size}")
+                spellHolder = null
+            }
         }
+
+        Log.d("getRandomSpell()","Returning ${if (spellHolder != null) "result" 
+            else "fallback spell"}.")
 
         return spellHolder ?: FALLBACK_SPELL
     }
@@ -4533,28 +4662,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     /** Returns a magic-user spell as if acquired by leveling up, outlined in the GMG/SSG */
     suspend fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: SpellSchool?,
                                            rerollChoices: Boolean, useSSG: Boolean): Spell {
-
-        val gmgSpellTablePgs = mapOf(
-            SpellSchool.DIVINATION to 77,
-            SpellSchool.ILLUSION to 77,
-            SpellSchool.ABJURATION to 78,
-            SpellSchool.ENCHANTMENT to 78,
-            SpellSchool.CONJURATION to 78,
-            SpellSchool.NECROMANCY to 78,
-            SpellSchool.ALTERATION to 79,
-            SpellSchool.EVOCATION to 79
-        )
-
-        val ssgSpellTablePgs = mapOf(
-            SpellSchool.DIVINATION to 13,
-            SpellSchool.ILLUSION to 15,
-            SpellSchool.ABJURATION to 8,
-            SpellSchool.ENCHANTMENT to 14,
-            SpellSchool.CONJURATION to 12,
-            SpellSchool.NECROMANCY to 18,
-            SpellSchool.ALTERATION to 10,
-            SpellSchool.EVOCATION to 17
-        )
 
         val inputLevel = _inputLevel.coerceIn(1..9)
         var spellName: String
@@ -4787,6 +4894,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     else-> enumValues<SpellSchool>().random()
                 }
             }
+
+        Log.d("getSpellByLevelUp()","school = ${school.name}, enforcedSchool = ${
+            enforcedSchool?.name ?: "null"}.")
 
         fun getSpellName(): String = when (school){
 
@@ -6907,11 +7017,17 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             else    -> "GM Choice"
         }
 
-        fun Spell?.isNotValid(): Boolean {
 
-            return ( this == null ) ||
-                    !((this.refType == ReferenceType.CORE || useSSG) &&
-                            (this.name.endsWith(" Choice") || rerollChoices))
+        fun Spell?.isValid(): Boolean {
+
+            return (
+                    // Spell is not null
+                    ( this != null ) &&
+                            // Spell is either from PHB or other sources are allowed
+                            ( this.refType == ReferenceType.CORE || useSSG ) &&
+                            // Either re-roll choice is disabled or dooes not apply to this spell
+                            !( this.name.endsWith(" Choice") || rerollChoices )
+                    )
         }
 
         //minor to-do: Add spell lists for specialists/unorthodox practitioners
@@ -6919,10 +7035,17 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         // Attempt to roll a valid spell
         while (spellHolder == null) {
 
+            Log.d("getSpellByLevelUp()","Attempting to get a Level $inputLevel ${
+                school.name} spell from ${if (useSSG) "SSG table" else "GMG table"}.")
+
             // Get spell name from copied tables
             spellName = getSpellName()
 
+            Log.d("getSpellByLevelUp()","Spell name pulled. spellName = $spellName")
+
             if ((spellName == "GM Choice")||(spellName == "Player Choice")){
+
+                Log.d("getSpellByLevelUp()","Choice spell detected. Appending school.")
 
                 if (useSSG) {
 
@@ -6952,13 +7075,24 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 }
 
+                Log.d("getSpellByLevelUp()","spellName = $spellName")
+
             }
 
             // Fetch first valid entry from database
             spellHolder = repository.getSpellByName(spellName,0,inputLevel)
 
-            if (spellHolder.isNotValid()) spellHolder = null
+            Log.d("getSpellByLevelUp()","Looked up spell with getSpellByName($spellName," +
+                    "0,$inputLevel). Result is ${ if (spellHolder != null) 
+                        "${spellHolder.name} (${spellHolder.spellLevel} " +
+                                "${spellHolder.schools.forEach { "<${it.name}>" }})" else "null"}.")
+
+            if ( !( spellHolder.isValid() ) ) {
+                Log.d("getSpellByLevelUp()","Spell failed validation, clearing holder.")
+                spellHolder = null }
         }
+
+        Log.d("getSpellByLevelUp()","Returning result.")
 
         return spellHolder
     }
@@ -7465,6 +7599,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         }
 
         while (spellHolder == null) {
+
+            Log.d("getSpellByChosenOneTable()","Attempting to pull a Level $inputLevel " +
+                    "spell (maxCastable = $maxCastable, allowDruid = $allowDruid, useZG = $useZG)")
 
             isDruidic = false
             isFromZG = false
@@ -8006,15 +8143,36 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 else -> spellName = null
             }
 
-            spellHolder = if (!(spellName == null || (isDruidic && !allowDruid) || (isFromZG && !useZG))) {
+            Log.d("getSpellByChosenOneTable()","Spell name picked. spellName = ${
+                spellName ?: "null"}")
 
-                repository.getSpellByName(
+            if (
+                !( spellName == null || ( isDruidic && !allowDruid ) || (isFromZG && !useZG) )
+            ) {
+
+                Log.d("getSpellByChosenOneTable()","spellName passed validation, " +
+                        "attempting to pull spell.")
+
+                spellHolder =  repository.getSpellByName(
                     spellName,
                     if (isDruidic) 2 else 1,
                     inputLevel)
 
-            } else null
+                Log.d("getSpellByChosenOneTable()","Attempted getSpellByName($spellName,${
+                    if (isDruidic) 2 else 1},$inputLevel). Result is ${ if (spellHolder != null)
+                    "${spellHolder.name} (${spellHolder.spellLevel} " +
+                            "${spellHolder.schools.forEach { "<${it.name}>" }})" else "null"}.")
+
+            } else {
+
+                Log.d("getSpellByChosenOneTable()","spellName failed validation, " +
+                        "clearing holder.")
+
+                spellHolder = null
+            }
         }
+
+        Log.d("getSpellByChosenOneTable()","Returning result.")
 
         return spellHolder
     }

@@ -280,13 +280,20 @@ class UniqueListFragment : Fragment() {
             // Bind elements inferred from Listable
             binding.apply {
 
-                uniqueListItemframeForeground.setImageResource(
-                    when (uniqueItem.iFrameFlavor) {
-                        ItemFrameFlavor.NORMAL -> R.drawable.itemframe_foreground
-                        ItemFrameFlavor.CURSED -> R.drawable.itemframe_foreground_cursed
-                        ItemFrameFlavor.GOLDEN -> R.drawable.itemframe_foreground_golden
+                when (uniqueItem.iFrameFlavor){
+                    ItemFrameFlavor.NORMAL -> {
+                        uniqueListItemframeForeground.setImageResource(R.drawable.itemframe_foreground)
+                        uniqueListItemframeBackground.setImageResource(R.drawable.itemframe_background_gray)
                     }
-                )
+                    ItemFrameFlavor.CURSED -> {
+                        uniqueListItemframeForeground.setImageResource(R.drawable.itemframe_foreground_cursed)
+                        uniqueListItemframeBackground.setImageResource(R.drawable.itemframe_background_cursed)
+                    }
+                    ItemFrameFlavor.GOLDEN -> {
+                        uniqueListItemframeForeground.setImageResource(R.drawable.itemframe_foreground_golden)
+                        uniqueListItemframeBackground.setImageResource(R.drawable.itemframe_background_golden)
+                    }
+                }
 
                 try{
                     uniqueListItemThumbnail.apply{
@@ -325,7 +332,7 @@ class UniqueListFragment : Fragment() {
                     }
                 }
 
-                uniqueListItemTypeLabel.text = uniqueItem.endIconStr
+                uniqueListItemTypeLabel.text = uniqueItem.endLabel
             }
 
             //Bind elements requiring type specificity
@@ -372,8 +379,27 @@ class UniqueListFragment : Fragment() {
                     (NumberFormat.getNumberInstance().format(
                         (uniqueItem as ListableSpellCollection).xpValue) + " xp")
                         .also { binding.uniqueListItemXp.text = it }
-                    // Hide badge
-                    binding.uniqueListItemframeBadge.visibility = View.GONE
+                    // Set badge
+                    binding.uniqueListItemframeBadge.apply{
+                        when ((uniqueItem as ListableSpellCollection).discipline) {
+                            SpCoDiscipline.ARCANE -> {
+                                setImageResource(R.drawable.class_magic_user_colored)
+                                visibility = View.VISIBLE
+                            }
+                            SpCoDiscipline.DIVINE -> {
+                                setImageResource(R.drawable.class_cleric_colored)
+                                visibility = View.VISIBLE
+                            }
+                            SpCoDiscipline.NATURAL -> {
+                                setImageResource(R.drawable.class_druid_colored)
+                                visibility = View.VISIBLE
+                            }
+                            SpCoDiscipline.ALL_MAGIC -> {
+                                setImageResource(R.drawable.badge_hoard_magic)
+                                visibility = View.GONE
+                            }
+                        }
+                    }
                 }
             }
         }

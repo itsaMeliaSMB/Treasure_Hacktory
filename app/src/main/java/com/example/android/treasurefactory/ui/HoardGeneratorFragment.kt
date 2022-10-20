@@ -334,7 +334,7 @@ class HoardGeneratorFragment : Fragment() {
 
                         // https://stackoverflow.com/questions/67136040/how-to-use-view-binding-in-custom-dialog-box-layout
 
-                        Toast.makeText(context,"Loading, please wait...",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,"Loading, please wait...",Toast.LENGTH_LONG).show()
 
                         val gemSliderStringValues  = resources.getStringArray(R.array.range_slider_gem_label)
                         val artSliderStringValues = resources.getStringArray(R.array.range_slider_art_label)
@@ -355,10 +355,6 @@ class HoardGeneratorFragment : Fragment() {
                         // Bind views
                         dialogBinding.apply{
 
-                            generatorOptionGemMinValue.text =
-                                gemSliderStringValues.getOrNull(options.gemMin) ?: "??? gp"
-                            generatorOptionGemMaxValue.text =
-                                gemSliderStringValues.getOrNull(options.gemMax) ?: "??? gp"
                             generatorOptionGemSlider.apply {
                                 stepSize = 1.0f
                                 valueFrom = 0.0f
@@ -376,11 +372,13 @@ class HoardGeneratorFragment : Fragment() {
                                     dialogBinding.generatorOptionGemMaxValue.text =
                                         gemSliderStringValues.getOrNull(newValues[1]) ?: "???"
                                 }
+
+                                generatorOptionGemMinValue.text =
+                                    gemSliderStringValues.getOrNull(values.first().toInt()) ?: "??? gp"
+                                generatorOptionGemMaxValue.text =
+                                    gemSliderStringValues.getOrNull(values.last().toInt()) ?: "??? gp"
                             }
-                            generatorOptionArtMinValue.text =
-                                artSliderStringValues.getOrNull(options.artMin) ?: "??? gp"
-                            generatorOptionArtMaxValue.text =
-                                artSliderStringValues.getOrNull(options.artMax) ?: "??? gp"
+
                             generatorOptionArtSlider.apply {
                                 stepSize = 1.0f
                                 valueFrom = 0.0f
@@ -398,7 +396,13 @@ class HoardGeneratorFragment : Fragment() {
                                     dialogBinding.generatorOptionArtMaxValue.text =
                                         artSliderStringValues.getOrNull(newValues[1]) ?: "???"
                                 }
+
+                                dialogBinding.generatorOptionArtMinValue.text =
+                                    artSliderStringValues.getOrNull(values.first().toInt()) ?: "???"
+                                dialogBinding.generatorOptionArtMaxValue.text =
+                                    artSliderStringValues.getOrNull(values.last().toInt()) ?: "???"
                             }
+
                             generatorOptionMapRawEdit.apply{
                                 setText(options.mapBase.toString())
                                 addTextChangedListener { input ->
@@ -749,7 +753,7 @@ class HoardGeneratorFragment : Fragment() {
                             }
                             generatorOptionSpellMethodGroup.check(
                                 if (options.spellMethod == SpCoGenMethod.BY_THE_BOOK) {
-                                    R.id.generator_option_book_checkbox
+                                    R.id.generator_option_spell_method_book_radio
                                 } else R.id.generator_option_spell_method_random_radio
                             )
                             generatorOptionSpellCurseGroup.check(
@@ -1761,6 +1765,15 @@ class HoardGeneratorFragment : Fragment() {
                             spLvlRangeLongLabels[intValues.second]
                         } else "???"
                 }
+
+                binding.generatorSpellLevelMinValue.text =
+                    if (values.first().toInt() in spLvlRangeLongLabels.indices) {
+                        spLvlRangeLongLabels[values.first().toInt()]
+                    } else "???"
+                binding.generatorSpellLevelMaxValue.text =
+                    if (values.last().toInt() in spLvlRangeLongLabels.indices) {
+                        spLvlRangeLongLabels[values.last().toInt()]
+                    } else "???"
             }
 
             generatorSpellPerQtySlider.apply{
@@ -1780,6 +1793,11 @@ class HoardGeneratorFragment : Fragment() {
                     binding.generatorSpellPerQtyMaxValue.text =
                         intValues.second.toString()
                 }
+
+                binding.generatorSpellPerQtyMinValue.text =
+                    values.first().toInt().toString()
+                binding.generatorSpellPerQtyMaxValue.text =
+                    values.last().toInt().toString()
             }
          // endregion
         }
@@ -2449,14 +2467,6 @@ class HoardGeneratorFragment : Fragment() {
             generatorViewModel.spellsPerRange.first.toFloat(),
             generatorViewModel.spellsPerRange.last.toFloat()
         )
-        generatorSpellLevelMinValue.text = with(generatorViewModel.spellLevelRange.first) {
-            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "???"
-        }
-        generatorSpellLevelMaxValue.text = with(generatorViewModel.spellLevelRange.last) {
-            if (this in spLvlRangeLongLabels.indices) { spLvlRangeLongLabels[this] } else "???"
-        }
-        generatorSpellPerQtyMinValue.text = generatorViewModel.spellsPerRange.first.toString()
-        generatorSpellPerQtyMaxValue.text = generatorViewModel.spellsPerRange.last.toString()
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {

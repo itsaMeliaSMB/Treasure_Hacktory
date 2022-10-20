@@ -102,6 +102,13 @@ class HoardTypeConverters {
 
     // region [ Enums ]
 
+    @TypeConverter
+    fun fromReferenceType(refType: ReferenceType) : Int = refType.ordinal
+
+    @TypeConverter
+    fun toReferenceType(ordinal: Int) : ReferenceType = enumValues<ReferenceType>()[ordinal]
+    //endregion
+
     // region ( SpellSchool )
 
     @TypeConverter
@@ -177,6 +184,16 @@ class HoardTypeConverters {
     fun toSpCoType(ordinal: Int) : SpCoType = enumValues<SpCoType>()[ordinal]
     //endregion
 
+    // region ( SpCoDiscipline )
+
+    @TypeConverter
+    fun fromSpCoDiscipline(spCoDiscipline: SpCoDiscipline) : Int = spCoDiscipline.ordinal
+
+    @TypeConverter
+    fun toSpCoDiscipline(ordinal: Int) : SpCoDiscipline = enumValues<SpCoDiscipline>()[ordinal]
+    //endregion
+
+
     // region ( MagicItemType )
 
     @TypeConverter
@@ -201,28 +218,6 @@ class HoardTypeConverters {
 
     @TypeConverter
     fun toBoolean(jsonBool: String?): Boolean = Gson().fromJson(jsonBool,Boolean::class.java)
-
-    // region TODO <Remove after Spell refactor>
-
-    @TypeConverter
-    fun fromSpell(spell: Spell?) : String? = Gson().toJson(spell,Spell::class.java)
-
-    @TypeConverter
-    fun toSpell(jsonSpell: String?) : Spell? = Gson().fromJson(jsonSpell,Spell::class.java)
-
-    @TypeConverter
-    fun fromSpellList(list: List<Spell?>?) : String? = Gson().toJson(list)
-
-    @TypeConverter
-    fun toSpellList(jsonList: String?) : List<Spell?>? {
-
-        if (jsonList == null) return emptyList()
-
-        val typeToken = object : TypeToken<List<Spell?>?>() {}.type
-
-        return Gson().fromJson(jsonList,typeToken)
-    }
-    // endregion
 
     // region TODO < Remove after GemEvaluation refactor >
 

@@ -193,11 +193,11 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates magic item template table using hardcoded CSV file. */
         suspend fun populateItemsByCSV(magicItemDao: MagicItemDao) {
 
-            //val csvFilePath = "src/main/res/raw/seed_magicitems_v03.csv"
+            //val csvFilePath = "src/main/res/raw/seed_magicitems_final.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_magicitems_v03","raw",context.packageName))
+                context.resources.getIdentifier("seed_magicitems_final","raw",context.packageName))
 
             inputStream
                 .bufferedReader()
@@ -209,7 +209,7 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val _refId: Int = lineData[0].toIntOrNull() ?: 0
                     val _wt: Int = lineData[1].toIntOrNull() ?: 0
                     val _name: String = lineData[2].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _homebrew: Int =  lineData[3].toIntOrNull() ?: 0
+                    val _refType: Int =  lineData[3].toIntOrNull() ?: 0
                     val _source: String = lineData[4].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _page: Int = lineData[5].toIntOrNull() ?: 0
                     val _xpValue: Int = lineData[6].toIntOrNull() ?: 0
@@ -228,24 +228,27 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val _dUsable: Int = lineData[19].toIntOrNull() ?: 0
                     val _hasChild: Int = lineData[20].toIntOrNull() ?: 0
                     val _parentID: Int = lineData[21].toIntOrNull() ?: 0
-                    val _imitationKeyword: String = lineData[22].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _isCursed: Int  = lineData[23].toIntOrNull() ?: 0
-                    val _commandWord: String = lineData[24].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _intelChance: Int = lineData[25].toIntOrNull() ?: 0
-                    val _alignment: String = lineData[26].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _iPower: Int = lineData[27].toIntOrNull() ?: 0
-                    val _iiPower: Int = lineData[28].toIntOrNull() ?: 0
-                    val _iiiPower: Int = lineData[29].toIntOrNull() ?: 0
-                    val _ivPower: Int = lineData[30].toIntOrNull() ?: 0
-                    val _vPower: Int = lineData[31].toIntOrNull() ?: 0
-                    val _viPower: Int = lineData[32].toIntOrNull() ?: 0
+                    // 22 intentionally dropped. parent_row in csv
+                    val _imitationKeyword: String = lineData[23].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _isCursed: Int  = lineData[24].toIntOrNull() ?: 0
+                    val _commandWord: String = lineData[25].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _intelChance: Int = lineData[26].toIntOrNull() ?: 0
+                    val _alignment: String = lineData[27].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _iPower: Int = lineData[28].toIntOrNull() ?: 0
+                    val _iiPower: Int = lineData[29].toIntOrNull() ?: 0
+                    val _iiiPower: Int = lineData[30].toIntOrNull() ?: 0
+                    val _ivPower: Int = lineData[31].toIntOrNull() ?: 0
+                    val _vPower: Int = lineData[32].toIntOrNull() ?: 0
+                    val _viPower: Int = lineData[33].toIntOrNull() ?: 0
 
                     magicItemDao.addMagicItemTemplate(
                         MagicItemTemplate(
-                            _refId,
-                            _wt,
-                            _name,
-                            _homebrew,
+                            refId = _refId,
+                            wt = _wt,
+                            name = _name,
+                            refType = try {
+                                enumValues<ReferenceType>()[_refType]
+                            } catch(e: Exception) { ReferenceType.OTHER_HOMEBREW },
                             source = _source,
                             page = _page,
                             xpValue = _xpValue,
@@ -411,8 +414,6 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val _spellSpheres: String = lineData[10].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _subclass: String = lineData[11].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _note: String = lineData[12].trim('"').takeUnless { it.isBlank() } ?: ""
-
-
 
                     spellDao.addSpell(
                         Spell(

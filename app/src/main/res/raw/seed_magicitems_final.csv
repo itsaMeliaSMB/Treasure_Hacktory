@@ -2268,155 +2268,155 @@
 2268¤4¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤0¤2800¤0¤"Appears to be a Bastard Sword +2¶Cursed Berserking"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2116¤"Sword +2 (a)"¤¤1¤¤25¤"TN"¤0¤0¤0¤0¤0¤0
 2269¤1¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤0¤2800¤0¤"Appears to be a Two-Handed Sword +2¶Cursed Berserking"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2116¤"Sword +2 (a)"¤¤1¤¤25¤"TN"¤0¤0¤0¤0¤0¤0
 2270¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
-2271¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2272¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2273¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2274¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2275¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2276¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2277¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2278¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2279¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2280¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2281¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2282¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2283¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2284¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2285¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2286¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2287¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2288¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2289¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2290¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2291¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2292¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2293¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2294¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2295¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2296¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2297¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2298¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2299¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2300¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2301¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2302¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2303¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2304¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2305¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2306¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2307¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2308¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2309¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2310¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2311¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2312¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2313¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2314¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2315¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2316¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2317¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2318¤360¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2319¤120¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2320¤60¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2321¤30¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2322¤24¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2323¤6¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2324¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2325¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2326¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2327¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2328¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2329¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2330¤300¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2331¤100¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2332¤50¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2333¤25¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2334¤20¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2335¤5¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2336¤360¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2337¤120¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2338¤60¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2339¤30¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2340¤24¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2341¤6¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2342¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2343¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2344¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2345¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2346¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2347¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2348¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2349¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2350¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2351¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2352¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2353¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2354¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2355¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2356¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2357¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2358¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2359¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2360¤600¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2361¤200¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2362¤100¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2363¤50¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2364¤40¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2365¤10¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2366¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2367¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2368¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2369¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2370¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2371¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2372¤300¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2373¤100¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2374¤50¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2375¤25¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2376¤20¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2377¤5¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2378¤300¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2379¤100¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2380¤50¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2381¤25¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2382¤20¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2383¤5¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2384¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2385¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2386¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2387¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2388¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2389¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2390¤300¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2391¤100¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2392¤50¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2393¤25¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2394¤20¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2395¤5¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2396¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2397¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2398¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2399¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2400¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2401¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2402¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2403¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2404¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2405¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2406¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2407¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2408¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2409¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2410¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2411¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2412¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2413¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2414¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2415¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2416¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2417¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2418¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
-2419¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤¤¤¤¤¤
+2271¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2272¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2273¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2274¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2275¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Scoria dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2276¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2277¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2278¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2279¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2280¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2281¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Black dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2282¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2283¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2284¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2285¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2286¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2287¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Horny Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2288¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2289¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2290¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2291¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2292¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2293¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny-Backed Blue Ridged dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2294¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2295¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2296¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2297¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2298¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2299¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Blue, Spiny Horned dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2300¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2301¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2302¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2303¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2304¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2305¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Brass dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2306¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2307¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2308¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2309¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2310¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2311¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Bronze dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2312¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2313¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2314¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2315¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2316¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2317¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Cloud dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2318¤360¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2319¤120¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2320¤60¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2321¤30¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2322¤24¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2323¤6¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2324¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2325¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2326¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2327¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2328¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2329¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Copper dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2330¤300¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2331¤100¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2332¤50¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2333¤25¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2334¤20¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2335¤5¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Gold dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2336¤360¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2337¤120¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2338¤60¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2339¤30¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2340¤24¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2341¤6¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Green dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2342¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2343¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2344¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2345¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2346¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2347¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mist dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2348¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2349¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2350¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2351¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2352¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2353¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Mottled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2354¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2355¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2356¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2357¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2358¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2359¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Onyx dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2360¤600¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2361¤200¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2362¤100¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2363¤50¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2364¤40¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2365¤10¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2366¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2367¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2368¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2369¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2370¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2371¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Red-Crested Amber-Bellied dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2372¤300¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2373¤100¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2374¤50¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2375¤25¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2376¤20¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2377¤5¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Shadow dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2378¤300¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2379¤100¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2380¤50¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2381¤25¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2382¤20¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2383¤5¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Silver dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2384¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2385¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2386¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2387¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2388¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2389¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Slag-Scaled Titanium dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2390¤300¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2391¤100¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2392¤50¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2393¤25¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2394¤20¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2395¤5¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Speckled dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2396¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2397¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2398¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2399¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2400¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2401¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Spiny dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2402¤180¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2403¤60¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2404¤30¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2405¤15¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2406¤12¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2407¤3¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2408¤120¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2409¤40¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2410¤20¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2411¤10¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2412¤8¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2413¤2¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects Albino Swack Iron dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2414¤240¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2415¤80¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2416¤40¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2417¤20¤"Scimitar +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_scimitar"¤1¤1¤0¤0¤1¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2418¤16¤"Bastard Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_bastard"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
+2419¤4¤"Two-Handed Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤18500¤0¤"Dragon Slayer (affects White dragons)"¤0¤0¤0¤"A23"¤"weapon_sword_two"¤1¤0¤0¤0¤0¤0¤2117¤"Sword +2 (b)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
 2420¤60¤"Long Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤17000¤0¤"Giant Slayer"¤0¤0¤0¤"A23"¤"weapon_sword_long"¤1¤1¤0¤0¤0¤0¤2118¤"Sword +2 (c)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
 2421¤20¤"Short Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤17000¤0¤"Giant Slayer"¤0¤0¤0¤"A23"¤"weapon_sword_short"¤1¤1¤0¤0¤0¤0¤2118¤"Sword +2 (c)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0
 2422¤10¤"Broad Sword +2"¤0¤"GameMaster’s Guide"¤273¤900¤17000¤0¤"Giant Slayer"¤0¤0¤0¤"A23"¤"weapon_sword_broad"¤1¤1¤0¤0¤0¤0¤2118¤"Sword +2 (c)"¤¤0¤¤25¤¤0¤0¤0¤0¤0¤0

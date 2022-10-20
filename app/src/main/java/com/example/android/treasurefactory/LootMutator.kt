@@ -217,8 +217,8 @@ class LootMutator() {
                             is SpellCollection  -> {
                                 if ((bestItemPair.first as SpellCollection).gpValue > bestItemValue) {
 
-                                    bestItemValue = (bestItemPair.first as MagicItem).gpValue
-                                    hoardIconString = (bestItemPair.first as MagicItem).iconID
+                                    bestItemValue = (bestItemPair.first as SpellCollection).gpValue
+                                    hoardIconString = (bestItemPair.first as SpellCollection).iconID
                                 }
                             }
                         }

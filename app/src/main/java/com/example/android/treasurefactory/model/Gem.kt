@@ -146,10 +146,13 @@ data class Gem(
     fun getFlavorTextAsDetailsList(): Pair<String,List<LabelledQualityEntry>> {
 
         return "Stone details" to listOf(
+            LabelledQualityEntry("Base value category",getTypeAsString().capitalized()),
+            LabelledQualityEntry("Size",getSizeAsString().capitalized()),
             LabelledQualityEntry("Weight","${String.format("%.3f",getWeightInCarats())} ct (~ ${
                 String.format("%.3f",getWeightInCarats() * 0.200)} g)"),
             LabelledQualityEntry("Diameter","${String.format("%.3f",getDiameterInInches())} in (~ ${
                 String.format("%.3f",getDiameterInInches() * 2.54)} cm)"),
+            LabelledQualityEntry("Quality",getQualityAsString().capitalized()),
             LabelledQualityEntry("Opacity",getOpacityAsString().capitalized()),
             LabelledQualityEntry("Appearance",description.capitalized())
         )

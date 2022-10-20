@@ -3,6 +3,7 @@ package com.example.android.treasurefactory.model
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import com.example.android.treasurefactory.capitalized
 import com.example.android.treasurefactory.repository.HMRepository
 import org.jetbrains.annotations.NotNull
 import java.text.DecimalFormat
@@ -22,11 +23,13 @@ data class SpellCollection(
     var iconID: String,
     var name: String = "<Spell Collection>",
     var type: SpCoType,
-    var properties: List<Pair<String,Double>> = emptyList(),
+    val discipline: SpCoDiscipline = SpCoDiscipline.ALL_MAGIC,
+    var properties: List<Pair<String, Double>> = emptyList(),
     var gpValue: Double = 0.0,
     var xpValue: Int = 0,
     var spells: List<SpellEntry> = emptyList(),
-    var curse: String = "") {
+    var curse: String = ""
+) {
 
     @Ignore
     fun calculateGPValue(): Double {
@@ -73,39 +76,60 @@ data class SpellCollection(
 
         if (curse.isNotBlank()) result.append("cursed ")
 
-        when (iconID){
-            "scroll_base"   -> result.append("assorted ")
-            "scroll_red"    -> result.append("arcane ")
-            "scroll_blue"   -> result.append("divine ")
-            "scroll_green"  -> result.append("druidic (non-standard) ")
-            "scroll_cursed" -> if (result.isEmpty()) result.append("cursed ")
-            //TODO when spellbooks are implemented, include string checks for spellbook resources
-            "icon_chosen_one" -> result.append("bestowed ")
-        }
-
         result.append(when (type){
-            SpCoType.SCROLL -> "scroll "
-            SpCoType.BOOK -> "spellbook "
+            SpCoType.SCROLL     -> "scroll "
+            SpCoType.BOOK       -> "spellbook "
             SpCoType.ALLOTMENT -> "Chosen One allotment "
-            SpCoType.RING -> "ring "
-            SpCoType.OTHER -> "collection "
+            SpCoType.RING       -> "ring "
+            SpCoType.OTHER      -> "collection "
         })
 
-        result.append(" of ${spells.size} spells")
+        result.append(" of ${spells.size}")
 
-        return result.toString()
+        when (discipline){
+            SpCoDiscipline.ARCANE       -> result.append("arcane spells")
+            SpCoDiscipline.DIVINE       -> result.append("divine spells")
+            SpCoDiscipline.NATURAL      -> result.append("druidic spells (non-standard)")
+            SpCoDiscipline.ALL_MAGIC    -> result.append("varied spells")
+        }
+
+        return result.toString().capitalized()
     }
 
     @Ignore
     suspend fun getFlavorTextAndSpellsAsDetailsLists(repository: HMRepository): List<Pair<String,List<DetailEntry>>> {
 
-        return listOf(
-            "Spell collection properties" to properties.map { (spCoProperty, gpValue) ->
-                LabelledQualityEntry(spCoProperty,"${DecimalFormat("#,##0.0#")
-                    .format(gpValue).removeSuffix(".0")} gp")},
-            "Spell list" to spells.map { spEntry ->
-                repository.getSpell(spEntry.spellID)
-                    ?.toSimpleSpellEntry(spEntry.usedUp) ?:
-                    PlainTextEntry("This spell could not be loaded") })
+        val spellCollectionPropertiesList = ArrayList<List<LabelledQualityEntry>>()
+
+        val resultList = ArrayList<Pair<String,List<DetailEntry>>>()
+
+        if (properties.isNotEmpty()) {
+            spellCollectionPropertiesList.add(
+                properties.map { (spCoProperty, gpValue) ->
+                    LabelledQualityEntry(spCoProperty,"${DecimalFormat("#,##0.0#")
+                        .format(gpValue).removeSuffix(".0")} gp")}
+            )
+        }
+
+        if (curse.isNotBlank()) {
+            spellCollectionPropertiesList.add(
+                    listOf(LabelledQualityEntry("Suggested curse", curse))
+            )
+        }
+
+        if (spellCollectionPropertiesList.isNotEmpty()) {
+            resultList.add("Spell collection properties" to spellCollectionPropertiesList.flatten())
+        }
+
+        if (spells.isNotEmpty()) {
+            resultList.add(
+                "Spell list" to spells.map { spEntry ->
+                    repository.getSpell(spEntry.spellID)
+                        ?.toSimpleSpellEntry(spEntry.usedUp) ?:
+                    PlainTextEntry("This spell could not be loaded") }
+            )
+        }
+
+        return resultList.toList()
     }
 }

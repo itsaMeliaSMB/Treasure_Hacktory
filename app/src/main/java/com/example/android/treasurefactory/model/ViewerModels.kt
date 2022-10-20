@@ -32,11 +32,13 @@ class ListableMagicItem(override val id: Int, override val name: String,
                         override val gpValue: Double, override val endIconStr: String,
                         override val endLabel: String, val xpValue: Int) : ListableItem()
 
-class ListableSpellCollection(override val id: Int, override val name: String,
-                              override val iconStr: String,
-                              override val iFrameFlavor: ItemFrameFlavor,
-                              override val gpValue: Double, override val endIconStr: String,
-                              override val endLabel: String, val xpValue: Int) : ListableItem()
+class ListableSpellCollection(
+    override val id: Int, override val name: String,
+    override val iconStr: String,
+    override val iFrameFlavor: ItemFrameFlavor,
+    override val gpValue: Double, override val endIconStr: String,
+    override val endLabel: String, val xpValue: Int, val discipline: SpCoDiscipline
+) : ListableItem()
 // endregion
 
 // region ( Extension functions )
@@ -162,9 +164,10 @@ class ViewableSpellCollection(
     override val gpValue: Double,
     override val xpValue: Int,
     override val itemType: UniqueItemType,
-    override val details: List<Pair<String,List<DetailEntry>>>,
+    override val details: List<Pair<String, List<DetailEntry>>>,
     val spCoType: SpCoType,
-    val spCoProperties: List<Pair<String,Double>>,
+    val spCoDiscipline: SpCoDiscipline,
+    val spCoProperties: List<Pair<String, Double>>,
     val spCoSpells: List<SpellEntry>,
     val spCoCurse: String
 ) : ViewableItem()

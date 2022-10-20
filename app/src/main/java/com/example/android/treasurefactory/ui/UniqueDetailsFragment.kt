@@ -1,18 +1,27 @@
 package com.example.android.treasurefactory.ui
 
+import android.R.color
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
+import android.graphics.Typeface.BOLD
+import android.graphics.Typeface.BOLD_ITALIC
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
+import android.view.Gravity.CENTER
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat.getDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,6 +30,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.treasurefactory.HACKMASTER_CLASS_ITEM_TEXT
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
 import com.example.android.treasurefactory.databinding.*
@@ -30,6 +40,7 @@ import com.example.android.treasurefactory.viewmodel.UniqueDetailsViewModelFacto
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+
 
 class UniqueDetailsFragment() : Fragment() {
 
@@ -173,7 +184,9 @@ class UniqueDetailsFragment() : Fragment() {
 
                     updateUI()
 
-                } else setNullUI()
+                } else {
+                    setNullUI()
+                }
 
             }
         }
@@ -188,7 +201,7 @@ class UniqueDetailsFragment() : Fragment() {
             @ColorInt
             val titleTextColor = typedValue.data
 
-            inflateMenu(R.menu.hoard_overview_toolbar_menu)
+            inflateMenu(R.menu.unique_details_toolbar_menu)
             title = getString(R.string.item_details)
             setTitleTextColor(titleTextColor)
             setNavigationIcon(R.drawable.clipart_back_vector_icon)
@@ -323,7 +336,43 @@ class UniqueDetailsFragment() : Fragment() {
 
                 entry = newEntry
 
-                binding.uniqueDetailListSimpleTextview.text = entry.message
+                binding.uniqueDetailListSimpleTextview.apply {
+                    when {
+                        //TODO left off here. cheeky formating. Good luck getting everything done!
+                        (entry.message.startsWith("[ ") && entry.message.endsWith(" ]")) -> {
+                            text = entry.message.removeSurrounding("[ "," ]")
+                            typeface = Typeface(BOLD)
+                        }
+                        (entry.message == HACKMASTER_CLASS_ITEM_TEXT) -> {
+                            typeface = Typeface(BOLD_ITALIC)
+                            textSize = 18f
+                            setCompoundDrawablesRelative(
+                                getDrawable(resources,R.drawable.clipart_winged_sword_vector_icon,context?.theme),
+                                null,
+                                getDrawable(resources,R.drawable.clipart_winged_sword_vector_icon,context?.theme),
+                                null
+                            )
+                            gravity = View.CENTER
+                            for (drawable in textView.getCompoundDrawables()) {
+                                if (drawable != null) {
+                                    drawable.colorFilter =
+                                        PorterDuffColorFilter(
+                                            ContextCompat.getColor(
+                                                textView.getContext(),
+                                                color
+                                            ), PorterDuff.Mode.SRC_IN
+                                        )
+                                }
+                            }
+                            setTextColor(R.color.golden)
+                        }
+                        else    -> {
+                            text = entry.message
+                        }
+                    }
+                    //TODO if you ever figure out spanned text, add check for colors for potion flavor text
+                }
+
             }
         }
 
@@ -405,9 +454,9 @@ class UniqueDetailsFragment() : Fragment() {
 
                                 } else {
                                     when (entry.discipline) {
-                                        SpCoDiscipline.ARCANE -> R.drawable.spell_item_arcane_backdrop_gradient_used
-                                        SpCoDiscipline.DIVINE -> R.drawable.spell_item_divine_backdrop_gradient_used
-                                        SpCoDiscipline.NATURAL -> R.drawable.spell_item_natural_backdrop_gradient_used
+                                        SpCoDiscipline.ARCANE -> R.drawable.spell_item_arcane_backdrop_gradient
+                                        SpCoDiscipline.DIVINE -> R.drawable.spell_item_divine_backdrop_gradient
+                                        SpCoDiscipline.NATURAL -> R.drawable.spell_item_natural_backdrop_gradient
                                         SpCoDiscipline.ALL_MAGIC -> R.drawable.badge_hoard_magic
                                     }
                                 }, context?.theme)
@@ -606,7 +655,7 @@ class UniqueDetailsFragment() : Fragment() {
                         if (binding.uniqueDetailParentRecycler.isVisible){
 
                             binding.apply{
-                                uniqueDetailParentRecycler.visibility = View.VISIBLE
+                                uniqueDetailParentRecycler.visibility = View.GONE
                                 uniqueDetailParentIndicator.rotation = 0f
                             }
 
@@ -635,13 +684,20 @@ class UniqueDetailsFragment() : Fragment() {
             uniqueDetailsToolbar.subtitle = parentHoard.name
 
             // Header
-            uniqueDetailsFrameForeground.setImageResource(
-                when (viewedItem.iFrameFlavor){
-                    ItemFrameFlavor.NORMAL -> R.drawable.itemframe_foreground
-                    ItemFrameFlavor.CURSED -> R.drawable.itemframe_foreground_cursed
-                    ItemFrameFlavor.GOLDEN -> R.drawable.itemframe_foreground_golden
+            when (viewedItem.iFrameFlavor){
+                ItemFrameFlavor.NORMAL -> {
+                    uniqueDetailsFrameForeground.setImageResource(R.drawable.itemframe_foreground)
+                    uniqueDetailsFrameBackground.setImageResource(R.drawable.itemframe_background_gray)
                 }
-            )
+                ItemFrameFlavor.CURSED -> {
+                    uniqueDetailsFrameForeground.setImageResource(R.drawable.itemframe_foreground_cursed)
+                    uniqueDetailsFrameBackground.setImageResource(R.drawable.itemframe_background_cursed)
+                }
+                ItemFrameFlavor.GOLDEN -> {
+                    uniqueDetailsFrameForeground.setImageResource(R.drawable.itemframe_foreground_golden)
+                    uniqueDetailsFrameBackground.setImageResource(R.drawable.itemframe_background_golden)
+                }
+            }
 
             try {
 
@@ -752,48 +808,82 @@ class UniqueDetailsFragment() : Fragment() {
                 }
                 is ViewableSpellCollection -> {
 
-                    uniqueDetailsUsableLabel.visibility = View.VISIBLE
+
                     uniqueDetailsFighter.visibility = View.GONE
                     uniqueDetailsThief.visibility = View.GONE
 
-                    uniqueDetailsMagicUser.apply{
+                    when ((viewedItem as ViewableSpellCollection).spCoDiscipline) {
+                        SpCoDiscipline.ARCANE -> {
 
-                        alpha = if ((viewedItem as ViewableMagicItem).mgcClassUsability["Magic-user"] == true) {
-                            setImageResource(R.drawable.class_magic_user_colored)
-                            tooltipText = context.getString(R.string.usable_by_arcane_casters)
-                            1f
-                        } else {
-                            setImageResource(R.drawable.class_magic_user_outline)
-                            0.25f
+                            uniqueDetailsUsableLabel.visibility = View.VISIBLE
+
+                            uniqueDetailsMagicUser.apply{
+                                alpha = 1f
+                                setImageResource(R.drawable.class_magic_user_colored)
+                                tooltipText = context.getString(R.string.usable_by_arcane_casters)
+                                visibility = View.VISIBLE
+                            }
+                            uniqueDetailsCleric.apply{
+                                alpha = 0.25f
+                                setImageResource(R.drawable.class_cleric_outline)
+                                visibility = View.VISIBLE
+                            }
+                            uniqueDetailsDruid.apply{
+
+                                alpha = 0.25f
+                                setImageResource(R.drawable.class_druid_outline)
+                                visibility = View.VISIBLE
+                            }
                         }
+                        SpCoDiscipline.DIVINE -> {
+                            uniqueDetailsUsableLabel.visibility = View.VISIBLE
 
-                        visibility = View.VISIBLE
-                    }
-                    uniqueDetailsCleric.apply{
+                            uniqueDetailsMagicUser.apply{
+                                alpha = 0.25f
+                                setImageResource(R.drawable.class_magic_user_outline)
+                                tooltipText = context.getString(R.string.usable_by_arcane_casters)
+                                visibility = View.VISIBLE
+                            }
+                            uniqueDetailsCleric.apply{
+                                alpha = 1f
+                                setImageResource(R.drawable.class_cleric_colored)
+                                tooltipText = context.getString(R.string.usable_by_divine_casters)
+                                visibility = View.VISIBLE
+                            }
+                            uniqueDetailsDruid.apply{
 
-                        alpha = if ((viewedItem as ViewableMagicItem).mgcClassUsability["Cleric"] == true) {
-                            setImageResource(R.drawable.class_cleric_colored)
-                            tooltipText = context.getString(R.string.usable_by_divine_casters)
-                            1f
-                        } else {
-                            setImageResource(R.drawable.class_cleric_outline)
-                            0.25f
+                                alpha = 0.25f
+                                setImageResource(R.drawable.class_druid_outline)
+                                visibility = View.VISIBLE
+                            }
                         }
+                        SpCoDiscipline.NATURAL -> {
+                            uniqueDetailsUsableLabel.visibility = View.VISIBLE
 
-                        visibility = View.VISIBLE
-                    }
-                    uniqueDetailsDruid.apply{
+                            uniqueDetailsMagicUser.apply{
+                                alpha = 0.25f
+                                setImageResource(R.drawable.class_magic_user_outline)
+                                visibility = View.VISIBLE
+                            }
+                            uniqueDetailsCleric.apply{
+                                alpha = 0.25f
+                                setImageResource(R.drawable.class_cleric_outline)
+                                visibility = View.VISIBLE
+                            }
+                            uniqueDetailsDruid.apply{
 
-                        alpha = if ((viewedItem as ViewableMagicItem).mgcClassUsability["Druid"] == true) {
-                            setImageResource(R.drawable.class_druid_colored)
-                            tooltipText = context.getString(R.string.usable_by_natural_casters)
-                            1f
-                        } else {
-                            setImageResource(R.drawable.class_druid_outline)
-                            0.25f
+                                alpha = 1f
+                                setImageResource(R.drawable.class_druid_colored)
+                                tooltipText = context.getString(R.string.usable_by_natural_casters)
+                                visibility = View.VISIBLE
+                            }
                         }
-
-                        visibility = View.VISIBLE
+                        SpCoDiscipline.ALL_MAGIC -> {
+                            uniqueDetailsUsableLabel.visibility = View.GONE
+                            uniqueDetailsMagicUser.visibility = View.GONE
+                            uniqueDetailsCleric.visibility = View.GONE
+                            uniqueDetailsDruid.visibility = View.GONE
+                        }
                     }
                 }
                 else -> {
@@ -826,6 +916,8 @@ class UniqueDetailsFragment() : Fragment() {
                 uniqueDetailsRecycler.visibility = View.GONE
             }
 
+            Log.d("updateUI()","About to reveal viewable group")
+
             // Reveal viewable group only after UI fully updated
             uniqueDetailsWhenemptyGroup.visibility = View.GONE
             uniqueDetailsViewableGroup.visibility = View.VISIBLE
@@ -838,6 +930,7 @@ class UniqueDetailsFragment() : Fragment() {
             uniqueDetailsViewableGroup.visibility = View.GONE
             uniqueDetailsWhenemptyGroup.visibility = View.VISIBLE
         }
+        Log.d("setNullUI()","nullUI set.")
     }
 
     private fun showContentFrameCrossfade() {

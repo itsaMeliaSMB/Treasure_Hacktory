@@ -98,7 +98,8 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                 }
                 UniqueItemType.SPELL_COLLECTION -> {
                     repository.getSpellCollectionsOnce(hoardID).map { spCo ->
-                        ListableSpellCollection(spCo.sCollectID,
+                        ListableSpellCollection(
+                            spCo.sCollectID,
                             spCo.name,
                             spCo.iconID,
                             if (spCo.curse.isNotEmpty()) {
@@ -107,7 +108,8 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                             spCo.gpValue,
                             spCo.getEndIconStr(),
                             spCo.getEndLabel(),
-                            spCo.xpValue
+                            spCo.xpValue,
+                            spCo.discipline
                         )
                     }
                 }
@@ -199,7 +201,7 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
             4   -> "clipart_chisel_vector_icon"
             5   -> "clipart_amphora_vector_icon"
             6   -> "clipart_glass_ball_vector_icon"
-            7   -> "clipart_stone_tools"
+            7   -> "clipart_stone_tools_vector_icon"
             8   -> "clipart_anvil_vector_icon"
             9   -> "clipart_fairy_vector_icon"
             else-> "badge_hoard_broken"

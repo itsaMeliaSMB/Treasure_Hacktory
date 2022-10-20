@@ -7,7 +7,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -23,6 +22,7 @@ import com.example.android.treasurefactory.databinding.LayoutHoardOverviewBindin
 import com.example.android.treasurefactory.model.CoinType
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.model.HoardBadge
+import com.example.android.treasurefactory.model.UniqueItemType
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModel
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModelFactory
 import java.text.DecimalFormat
@@ -223,22 +223,32 @@ class HoardOverviewFragment : Fragment() {
         }
 
         binding.hoardOverviewGemCard.setOnClickListener {
-            Toast.makeText(context, "Gem card clicked", Toast.LENGTH_SHORT).show()
+            val action = HoardOverviewFragmentDirections
+                .hoardOverviewToUniqueListAction(activeHoard.hoardID,UniqueItemType.GEM)
+
+            findNavController().navigate(action)
         }
 
         binding.hoardOverviewArtCard.setOnClickListener {
-            Toast.makeText(context, "Art card clicked", Toast.LENGTH_SHORT).show()
+            val action = HoardOverviewFragmentDirections
+                .hoardOverviewToUniqueListAction(activeHoard.hoardID,UniqueItemType.ART_OBJECT)
+
+            findNavController().navigate(action)
         }
 
         binding.hoardOverviewMagicCard.setOnClickListener {
-            Toast.makeText(context, "Item card clicked", Toast.LENGTH_SHORT).show()
-            //TODO start with magic items, I think
-            // Sticky headers/collapsable nested recylcer views
-            // Detail fragment
+            val action = HoardOverviewFragmentDirections
+                .hoardOverviewToUniqueListAction(activeHoard.hoardID,UniqueItemType.MAGIC_ITEM)
+
+            findNavController().navigate(action)
         }
 
         binding.hoardOverviewSpellsCard.setOnClickListener {
-            Toast.makeText(context, "Spells card clicked", Toast.LENGTH_SHORT).show()
+            val action = HoardOverviewFragmentDirections
+                .hoardOverviewToUniqueListAction(
+                    activeHoard.hoardID,UniqueItemType.SPELL_COLLECTION)
+
+            findNavController().navigate(action)
         }
     }
 

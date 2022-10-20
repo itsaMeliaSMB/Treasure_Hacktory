@@ -3,6 +3,7 @@ package com.example.android.treasurefactory.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.android.treasurefactory.model.ReferenceType
 import org.jetbrains.annotations.NotNull
 
 // region [ Read-only template entities ]
@@ -28,7 +29,7 @@ data class MagicItemTemplate(
     @PrimaryKey @ColumnInfo(name = "ref_id") val refId: Int,
     val wt: Int,
     val name: String,
-    val homebrew:  Int,
+    @ColumnInfo(name = "ref_type") val refType: ReferenceType,
     val source: String,
     val page: Int,
     @ColumnInfo(name = "xp_value") val xpValue: Int,

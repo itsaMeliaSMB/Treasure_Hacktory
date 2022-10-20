@@ -343,7 +343,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
     }
     // endregion
 
-    suspend fun compileLetterHoardOrder(): HoardOrder{
+    private suspend fun compileLetterHoardOrder(): HoardOrder{
 
         var generatedCp = 0
         var generatedSp = 0
@@ -455,8 +455,8 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                         }
                     }
 
-                    if (Random.nextInt(101) <=
-                        generatorOptions.mapBase.coerceIn(1..100)) generatedMaps ++
+                    if (Random.nextInt(1,101) <= generatorOptions.mapBase.coerceIn(0..100)) {
+                        generatedMaps ++ }
 
                 }
                 compString.append("$letterKey x$orderQty,")
@@ -523,7 +523,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
 
     // region [ Order compilation functions ]
 
-    fun compileSpecificQtyHoardOrder() : HoardOrder {
+    private fun compileSpecificQtyHoardOrder() : HoardOrder {
 
         val newOrder : HoardOrder
 
@@ -594,8 +594,8 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
             anyButWeapons = anyButQty,
             anyMagicItems = anyMgcQty,
             extraSpellCols = spCoQty,
-            baseMaps = if ((Random.nextInt(101) <=
-                        generatorOptions.mapBase.coerceIn(1..100))) 1 else 0,
+            baseMaps = if ((Random.nextInt(1,101) <=
+                        generatorOptions.mapBase.coerceIn(0..100))) 1 else 0,
             allowFalseMaps = generatorOptions.falseMapsOK,
             genParams = newParams
         )

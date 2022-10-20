@@ -130,7 +130,7 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                             mgc.name,
                             mgc.typeOfItem.tableLabel +
                                     (if (mgc.typeOfItem.ordinal <= 20)
-                                        "[${mgc.typeOfItem.name}]" else ""),
+                                        " [${mgc.typeOfItem.name}]" else ""),
                             mgc.creationTime,
                             mgc.iconID,
                             when {
@@ -155,6 +155,10 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                 UniqueItemType.SPELL_COLLECTION -> {
 
                     repository.getSpellCollectionOnce(itemID)?.let{ spCo ->
+
+                        val spellDisciplines = spCo.spells.mapNotNull { entry ->
+                            entry.toSpellOrNull(repository)?.type
+                        }
 
                         ViewableSpellCollection(
                             spCo.sCollectID,
@@ -187,9 +191,10 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                             UniqueItemType.SPELL_COLLECTION,
                             spCo.getFlavorTextAndSpellsAsDetailsLists(repository),
                             spCo.type,
+                            spCo.discipline,
                             spCo.properties,
                             spCo.spells,
-                            spCo.curse,
+                            spCo.curse
                         )
                     }
                 }
@@ -197,7 +202,7 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
             viewedItemLiveData.postValue(viewableItem)
 
-            delay(100)
+            delay(500)
 
             setRunningAsync(false)
         }

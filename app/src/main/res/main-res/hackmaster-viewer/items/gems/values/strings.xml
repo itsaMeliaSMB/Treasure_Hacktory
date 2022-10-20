@@ -347,4 +347,5 @@
     <string name="action_edit_item">Edit</string>
     <string name="action_copy_to_clipboard">Copy info to clipboard</string>
     <string name="action_copy_to_clipboard_condensed">Copy info</string>
+    <string name="generator_spell_curse_disclaimer">Please note that if \"Allow cursed magic items\" is enabled, all scrolls ordered from this section will automatically have a curse applied to them!</string>
 </resources>
