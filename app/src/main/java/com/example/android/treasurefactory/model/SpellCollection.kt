@@ -42,12 +42,14 @@ data class SpellCollection(
 
         if (spells.isNotEmpty()) { spells.forEach {
 
+            if (!(it.usedUp)){
+
                 gpTotal += if (it.spellLevel == 0) {
                     75.0
                 } else {
                     (300.0 * it.spellLevel)
                 }
-            }
+            } }
         }
 
         return gpTotal
@@ -62,7 +64,7 @@ data class SpellCollection(
 
         if (spells.isNotEmpty()) { spells.forEach {
 
-            xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel)
+            if (!(it.usedUp)) { xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel) }
 
             }
         }
@@ -84,7 +86,7 @@ data class SpellCollection(
             SpCoType.OTHER      -> "collection "
         })
 
-        result.append(" of ${spells.size}")
+        result.append(" of ${spells.size} ")
 
         when (discipline){
             SpCoDiscipline.ARCANE       -> result.append("arcane spells")
@@ -123,9 +125,9 @@ data class SpellCollection(
 
         if (spells.isNotEmpty()) {
             resultList.add(
-                "Spell list" to spells.map { spEntry ->
+                "Spell list" to spells.mapIndexed { index, spEntry ->
                     repository.getSpell(spEntry.spellID)
-                        ?.toSimpleSpellEntry(spEntry.usedUp) ?:
+                        ?.toSimpleSpellEntry(spEntry.usedUp,index) ?:
                     PlainTextEntry("This spell could not be loaded") }
             )
         }

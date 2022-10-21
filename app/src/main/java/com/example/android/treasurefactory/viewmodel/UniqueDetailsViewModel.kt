@@ -21,6 +21,11 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
     var viewedItemLiveData = MutableLiveData<ViewableItem?>()
 
+    /**
+     * Triple of the [spell][Spell] and [SimpleSpellEntry] that was clicked to request this.
+     * */
+    var dialogSpellInfoLiveData = MutableLiveData<Pair<Spell?,SimpleSpellEntry>?>(null)
+
     val isRunningAsyncLiveData = MutableLiveData(isRunningAsync)
 
     val textToastHolderLiveData = MutableLiveData<Pair<String,Int>?>(null)
@@ -42,6 +47,18 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
         // - Get and compare against row at key if it exists
         // - Update itemToUpdate's entry in database
         // - Correct count on hoard, if applicable.
+
+        when (itemToUpdate) {
+            is ViewableGem              -> {
+                TODO()
+            }
+            is ViewableArtObject        -> TODO()
+            is ViewableMagicItem        -> TODO()
+            is ViewableSpellCollection  -> {
+                itemToUpdate.convertBack()
+                //TODO need repository function for transactionally updating hoard and list of Spell Collections
+            }
+        }
     }
 
     fun updateViewedItem(itemID: Int, itemType: UniqueItemType, hoardID: Int){
@@ -99,9 +116,9 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                             art.creationTime,
                             art.getArtTypeAsIconString(),
                             when {
+                                art.isForgery       -> ItemFrameFlavor.CURSED
                                 art.valueLevel > 27 -> ItemFrameFlavor.GOLDEN
-                                // if forgeries are added, indicate with CURSED
-                                else -> ItemFrameFlavor.NORMAL },
+                                else                -> ItemFrameFlavor.NORMAL },
                             "HackJournal #6",
                             2,
                             art.gpValue,
@@ -116,7 +133,8 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                             art.quality,
                             art.age,
                             art.subject,
-                            art.valueLevel
+                            art.valueLevel,
+                            art.isForgery
                         )
                     }
                 }
@@ -155,10 +173,6 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                 UniqueItemType.SPELL_COLLECTION -> {
 
                     repository.getSpellCollectionOnce(itemID)?.let{ spCo ->
-
-                        val spellDisciplines = spCo.spells.mapNotNull { entry ->
-                            entry.toSpellOrNull(repository)?.type
-                        }
 
                         ViewableSpellCollection(
                             spCo.sCollectID,
@@ -203,6 +217,20 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
             viewedItemLiveData.postValue(viewableItem)
 
             delay(500)
+
+            setRunningAsync(false)
+        }
+    }
+
+    fun fetchSpellForDialog(entry: SimpleSpellEntry) {
+
+        viewModelScope.launch{
+
+            setRunningAsync(true)
+
+            val fetchedSpell = repository.getSpell(entry.spellID)
+
+            dialogSpellInfoLiveData.postValue(fetchedSpell to entry)
 
             setRunningAsync(false)
         }

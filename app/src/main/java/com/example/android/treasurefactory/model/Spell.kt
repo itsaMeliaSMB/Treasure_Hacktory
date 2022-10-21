@@ -206,8 +206,40 @@ data class Spell(
     val spheres: List<ClericalSphere>,
     val subclass: String,
     val restrictions: List<ArcaneSpecialist> = emptyList<ArcaneSpecialist>(),
-    val note: String,
+    val note: String
 ) {
+
+    @Ignore
+    fun getClipboardText(context: Context) : String{
+        val result = StringBuilder()
+
+        result.append("$name ")
+
+        result.append("( ${schools.joinToString("/") { it.getShortName(context)}} - ${
+            if (spellLevel == 0) "Cantrip" else spellLevel.toString()} )")
+
+        if (spheres.isNotEmpty()) result.append(" [ ${
+            spheres.joinToString(" / ") { it.getNameString(context)}}] ")
+
+        if (subclass.isNotBlank()) { "\n" + result.append(subclass.uppercase()) }
+
+        if (reverse) {
+            result.append(if (type == SpCoDiscipline.ARCANE) {
+                "\n" + context.getString(R.string.spell_is_reversible).uppercase()
+            } else {
+                "\n" + context.getString(R.string.spell_is_reversed).uppercase()
+            })
+        }
+
+        result.append("\n$sourceText, pg $sourcePage")
+
+        if (restrictions.isNotEmpty()) { result.append("\nOnly available to: " +
+            restrictions.joinToString(separator = ", ") { it.getFullName(context) }) }
+
+        if (note.isNotBlank()) {result.append("\nNOTE: $note")}
+
+        return result.toString()
+    }
 
     @Ignore
     fun getRestrictionsString():String {
@@ -225,85 +257,13 @@ data class Spell(
     }
 
     @Ignore
-    fun toSimpleSpellEntry(isUsed: Boolean = false) : SimpleSpellEntry {
-        return SimpleSpellEntry(spellID, name, spellLevel, type, schools, subclass,
-            "$sourceText, pg $sourcePage", isUsed)
-    }
-
-    companion object {
-
-
-        @Ignore
-        val mageSpecialistTags = listOf("Abjurer","DS_Abjurer","Battle_Mage","Blood_Mage",
-            "Conjurer","DS_Conjurer","Diviner","DS_Diviner",
-            "Fire_Elementalist","Water_Elementalist","Air_Elementalist",
-            "Earth_Elementalist","Enchanter","DS_Enchanter",
-            "Illusionist","DS_Illusionist","Invoker","DS_Invoker",
-            "Necromancer","DS_Necromancy","Painted_Mage","Transmuter",
-            "DS_Transmuter","Wild_Mage","Anti-Mage","Guardian",
-            "Constructor","Metamorpher","Transporter","SP_Conjurer",
-            "Power_Speaker","Summoner","Detective","Seer","Itemist",
-            "Puppeteer","Hypnotist","Shadow_Weaver","Demolitionist",
-            "Icer", "Pyrotechnician","Sniper","Animator","Exterminator"
+    fun toSimpleSpellEntry(isUsed: Boolean = false, spellsPos: Int) : SimpleSpellEntry {
+        return SimpleSpellEntry(
+            spellID, name, spellLevel, type, schools, subclass,
+            "$sourceText, pg $sourcePage", isUsed, spellsPos
         )
-
-        @Ignore
-        fun specialistTagToString(_input: String) : String {
-
-            val input = _input.trim().lowercase()
-
-
-            val tagMap = mapOf(
-
-                "abjurer" to "Abjurer",
-                "ds_abjurer" to "Double specialist; Abjurer",
-                "battle_mage" to "Battle Mage",
-                "blood_mage" to "Blood Mage",
-                "conjurer" to "Conjurer",
-                "ds_conjurer" to "Double specialist; Conjurer",
-                "diviner" to "Diviner",
-                "ds_diviner" to "Double specialist; Diviner",
-                "fire_elementalist" to "Fire Elementalist",
-                "water_elementalist" to "Water Elementalist",
-                "air_elementalist" to "Air Elementalist",
-                "earth_elementalist" to "Earth Elementalist",
-                "enchanter" to "Enchanter",
-                "ds_enchanter" to "Double specialist; Enchanter",
-                "illusionist" to "Illusionist",
-                "ds_illusionist" to "Double specialist; Illusionist",
-                "invoker" to "Invoker",
-                "ds_invoker" to "Double specialist; Invoker",
-                "necromancer" to "Necromancer",
-                "ds_necromancy" to "Double specialist; Necromancer",
-                "painted_mage" to "Painted Mage",
-                "transmuter" to "Transmuter",
-                "ds_transmuter" to "Double specialist; Transmuter",
-                "wild_mage" to "Wild Mage",
-                "anti-mage" to "Anti-Mage [Abjuration]",
-                "guardian" to "Guardian [Abjuration]",
-                "constructor" to "Constructor [Alteration]",
-                "metamorpher" to "Metamorpher [Alteration]",
-                "transporter" to "Transporter [Alteration]",
-                "sp_conjurer" to "Conjurer [Conjuration/Summoning]",
-                "power_speaker" to "Power Speaker [Conjuration/Summoning]",
-                "summoner" to "Summoner [Conjuration/Summoning]",
-                "detective" to "Detective [Divination]",
-                "seer" to "Seer [Divination]",
-                "itemist" to "Itemist [Enchantment/Charm]",
-                "puppeteer" to "Puppeteer [Enchantment/Charm]",
-                "hypnotist" to "Hypnotist [Illusion]",
-                "shadow_weaver" to "Shadow Weaver [Illusion]",
-                "demolitionist" to "Demolitionist [Invocation/Evocation]",
-                "icer" to "Icer [Invocation/Evocation]",
-                "pyrotechnician" to "Pyrotechnician [Invocation/Evocation]",
-                "sniper" to "Sniper [Invocation/Evocation]",
-                "animator" to "Animator [Necromancy]",
-                "exterminator" to "Exterminator [Necromancy]"
-            )
-
-            return tagMap.getOrDefault(input,"[Undocumented specialist]")
-        }
     }
+
 }
 
 /**

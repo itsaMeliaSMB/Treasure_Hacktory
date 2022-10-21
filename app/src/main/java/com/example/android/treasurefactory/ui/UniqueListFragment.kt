@@ -60,7 +60,7 @@ class UniqueListFragment : Fragment() {
     val safeArgs : UniqueListFragmentArgs by navArgs()
 
     private var shortAnimationDuration = 0
-    private var isContentFrameAnimating = false
+    private var isWaitingCardAnimating = false
 
     private var callbacks: Callbacks? = null
 
@@ -153,34 +153,32 @@ class UniqueListFragment : Fragment() {
 
             if (isRunningAsync) {
 
-                binding.uniqueListRecycler.isEnabled = false
+                // binding.uniqueDetailsViewableGroup.isEnabled = false
 
-                if (binding.uniqueListContentFrame.visibility == View.VISIBLE &&
-                    !isContentFrameAnimating) {
+                if (binding.uniqueListWaitingCard.waitingCard.visibility == View.GONE &&
+                    !isWaitingCardAnimating) {
 
-                    hideContentFrameCrossfade()
+                    fadeInWaitingCard()
 
                 } else {
 
-                    binding.uniqueListContentFrame.visibility = View.GONE
-                    binding.uniqueListProgressIndicator.visibility = View.VISIBLE
-                    isContentFrameAnimating = false
+                    binding.uniqueListWaitingCard.waitingCard.visibility = View.VISIBLE
+                    isWaitingCardAnimating = false
                 }
 
             } else {
 
-                binding.uniqueListRecycler.isEnabled = true
+                //binding.uniqueDetailsViewableGroup.isEnabled = true
 
-                if (binding.uniqueListProgressIndicator.visibility == View.VISIBLE &&
-                    !isContentFrameAnimating) {
+                if (binding.uniqueListWaitingCard.waitingCard.visibility == View.VISIBLE &&
+                    !isWaitingCardAnimating) {
 
-                    showContentFrameCrossfade()
+                    fadeOutWaitingCard()
 
                 } else {
 
-                    binding.uniqueListContentFrame.visibility = View.VISIBLE
-                    binding.uniqueListProgressIndicator.visibility = View.GONE
-                    isContentFrameAnimating = false
+                    binding.uniqueListWaitingCard.waitingCard.visibility = View.GONE
+                    isWaitingCardAnimating = false
                 }
             }
         }
@@ -627,22 +625,11 @@ class UniqueListFragment : Fragment() {
         binding.uniqueListToolbar.subtitle = parentHoard.name
     }
 
-    private fun showContentFrameCrossfade() {
+    private fun fadeOutWaitingCard() {
 
-        isContentFrameAnimating = true
+        isWaitingCardAnimating = true
 
-        binding.uniqueListContentFrame.apply {
-
-            alpha = 0f
-            visibility = View.VISIBLE
-
-            animate()
-                .alpha(1f)
-                .setDuration(shortAnimationDuration.toLong())
-                .setListener(null)
-        }
-
-        binding.uniqueListProgressIndicator.apply {
+        binding.uniqueListWaitingCard.waitingCard.apply {
             alpha = 1f
             visibility = View.VISIBLE
             animate()
@@ -650,38 +637,26 @@ class UniqueListFragment : Fragment() {
                 .setDuration(shortAnimationDuration.toLong())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        binding.uniqueListProgressIndicator.visibility = View.GONE
-                        isContentFrameAnimating = false
+                        this@apply.visibility = View.GONE
+                        isWaitingCardAnimating = false
                     }
                 })
         }
     }
 
-    private fun hideContentFrameCrossfade() {
+    private fun fadeInWaitingCard() {
 
-        isContentFrameAnimating = true
+        isWaitingCardAnimating = true
 
-        binding.uniqueListProgressIndicator.apply {
+        binding.uniqueListWaitingCard.waitingCard.apply {
             alpha = 0f
             visibility = View.VISIBLE
             animate()
                 .alpha(1f)
                 .setDuration(shortAnimationDuration.toLong())
-                .setListener(null)
-        }
-
-        binding.uniqueListContentFrame.apply {
-
-            alpha = 1f
-            visibility = View.VISIBLE
-
-            animate()
-                .alpha(0f)
-                .setDuration(shortAnimationDuration.toLong())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        isContentFrameAnimating = false
-                        binding.uniqueListContentFrame.visibility = View.GONE
+                        isWaitingCardAnimating = false
                     }
                 })
         }

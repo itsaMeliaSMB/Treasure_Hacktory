@@ -10,6 +10,12 @@
         app:showAsAction="ifRoom"/>
 
     <item
+        android:id="@+id/action_test_spells"
+        android:title="DEBUG - Test spells"
+        app:showAsAction="never"
+        />
+
+    <item
         android:id="@+id/action_select_all_main"
         android:title="@string/action_select_all"
         app:showAsAction="never"

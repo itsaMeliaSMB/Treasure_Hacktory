@@ -22,7 +22,9 @@ data class ArtObject(
     val age: Int,
     val subject: Int,
     var valueLevel: Int,
-    var gpValue: Double = 0.0) {
+    var gpValue: Double = 0.0,
+    val isForgery: Boolean = false
+) {
 
     @Ignore
     fun generateNewName() { name = getRandomName(artType, subject) }
@@ -157,7 +159,7 @@ data class ArtObject(
     @Ignore
     fun getAgeAsString(): String {
         val ageRank = getAgeInYearsAsRank()
-        return "~$age years old (${if (ageRank < 0) ageRank else "+$ageRank"} Value Ranks)"
+        return "~$age years old"
     }
 
     @Ignore
@@ -205,6 +207,8 @@ data class ArtObject(
     @Ignore
     fun getFlavorTextAsDetailsList(): Pair<String,List<LabelledQualityEntry>> {
         return "Artwork details" to listOf(
+            LabelledQualityEntry("Authenticity",
+                if (isForgery) { "Forgery" } else { "Genuine" }),
             LabelledQualityEntry("Type of artwork",
                 getArtTypeAsString().capitalized()),
             LabelledQualityEntry("Artist's renown",
@@ -221,8 +225,8 @@ data class ArtObject(
             LabelledQualityEntry("Subject matter depicted",
                 getSubjectAsString().capitalized()),
             LabelledQualityEntry("Combined value rank","$valueLevel  = " +
-                    "($renown) + ($size) + ($condition) + ($quality) + (${getSubjectAsRank()}) + " +
-                    "(${getAgeInYearsAsRank()})")
+                    "($renown) + ($size) + ($materials) + ($quality) + " +
+                    "(${getAgeInYearsAsRank()}) + ($condition) + (${getSubjectAsRank()})")
         )
     }
 

@@ -49,13 +49,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             "dull and indicates an error in gemstone generation", "stone_hard"
     )
 
-    val FALLBACK_SPELL = Spell(517, name = "Push", spellLevel = 1, refType = ReferenceType.CORE, type= SpCoDiscipline.ARCANE, schools = listOf(SpellSchool.CONJURATION), spheres = emptyList(), subclass= "", note= "")
+    private val FALLBACK_SPELL = Spell(517, name = "Push", spellLevel = 1, refType = ReferenceType.CORE, type= SpCoDiscipline.ARCANE, schools = listOf(SpellSchool.CONJURATION), spheres = emptyList(), subclass= "", note= "")
     // endregion
-
-    init {
-
-        Log.d("LootGeneratorAsync","Class instance initialized.")
-    }
 
     // region [ Order processing functions ]
     @WorkerThread
@@ -1065,8 +1060,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // region [ Append treasure map, if indicated ]
 
-        val paperTreasureMap = if ((artType == 0)||
-            (Random.nextInt(1,101)<= itemRestrictions.paperMapChance)) {
+        val paperTreasureMap = if ((artType == 0)&&
+            (Random.nextInt(1,101) <= itemRestrictions.paperMapChance)) {
 
             createTreasureMap(parentHoardID,"paper artwork",allowFalseMaps)
 
@@ -1137,7 +1132,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // ---Generate and return new art object ---
 
-        return ArtObject(0, parentHoardID, System.currentTimeMillis(),
+        return ArtObject(
+            0, parentHoardID, System.currentTimeMillis(),
             ArtObject.getRandomName(artType,subject),
             artType, renown, size, condition, materials, quality, ageInYears,
             subject, ( renown + size + condition + quality + subjectRank + ageRank ),
@@ -2016,8 +2012,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     41 to "grassy",
                     42 to "gray/grey",
                     43 to "green",
-                    44 to "heliotrope [purple]",
-                    45 to "henna [red-brown]",
+                    44 to "heliotrope",
+                    45 to "henna",
                     46 to "indigo",
                     47 to "inky",
                     48 to "iron",
@@ -2029,7 +2025,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     54 to "lime",
                     55 to "madder",
                     56 to "magenta",
-                    57 to "\"mahawgany\"",
+                    57 to "mahawgany",
                     58 to "maroon",
                     59 to "mauve",
                     60 to "neutral",
@@ -2060,7 +2056,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     85 to "silver",
                     86 to "sky",
                     87 to "soot",
-                    88 to "sorrel [chestnut]",
+                    88 to "sorrel",
                     89 to "steel",
                     90 to "straw",
                     91 to "tan",
@@ -2568,24 +2564,24 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 flatNotesList.add("Potion flavor text" to
                         "Appearance (unless entry says otherwise): " +
-                            when (Random.nextInt(1,101)) {
+                        when (Random.nextInt(1,101)) {
 
-                                in 1..29    -> "Clear (transparent)"
-                                in 30..34   -> "Flecked (transparent ${getSubstanceColor()} with " +
-                                        "${getSubstanceColor()} flecks)"
-                                in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()})"
-                                in 40..54   -> "Luminous (${getSubstanceColor()}, " +
-                                        "~${Random.nextInt(0,21) * 5}% opacity)"
-                                in 55..59   -> "Opaline (glowing)"
-                                in 60..69   -> "Phosphorescent (${getSubstanceColor()}, " +
-                                        "~${Random.nextInt(0,21) * 5}% opacity)"
-                                in 70..79   -> "Rainbowed (transparent)"
-                                in 80..84   -> "Ribboned (${getSubstanceColor()}, " +
-                                        "~${Random.nextInt(0,21) * 5}% opacity)"
-                                in 85..94   -> "Translucent (${getSubstanceColor()})"
-                                else        -> "Varigated (${getSubstanceColor()}, " +
-                                        "${getSubstanceColor()}, and maybe some ${getSubstanceColor()})"
-                            } )
+                            in 1..29    -> "Clear (transparent)"
+                            in 30..34   -> "Flecked (transparent [[${getSubstanceColor()}]] with " +
+                                    "[[${getSubstanceColor()}]] flecks)"
+                            in 35..39   -> "Layered ([[${getSubstanceColor()}]] to [[${getSubstanceColor()}]])"
+                            in 40..54   -> "Luminous ([[${getSubstanceColor()}]], " +
+                                    "~${Random.nextInt(0,21) * 5}% opacity)"
+                            in 55..59   -> "Opaline (glowing)"
+                            in 60..69   -> "Phosphorescent ([[${getSubstanceColor()}]], " +
+                                    "~${Random.nextInt(0,21) * 5}% opacity)"
+                            in 70..79   -> "Rainbowed (transparent)"
+                            in 80..84   -> "Ribboned ([[${getSubstanceColor()}]], " +
+                                    "~${Random.nextInt(0,21) * 5}% opacity)"
+                            in 85..94   -> "Translucent ([[${getSubstanceColor()}]])"
+                            else        -> "Varigated ([[${getSubstanceColor()}]], " +
+                                    "[[${getSubstanceColor()}]], and maybe some [[${getSubstanceColor()}]])"
+                        } )
                 // endregion
 
                 // region ( Roll potion taste/odor )
@@ -4144,7 +4140,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 SpCoDiscipline.DIVINE -> {
                     if ((this == SpCoGenMethod.CHOSEN_ONE)||
-                        (this == SpCoGenMethod.SPELL_BOOK)) {
+                        (this == SpCoGenMethod.SPELL_BOOK)||
+                        (this == SpCoGenMethod.ANY_PHYSICAL)) {
+
                         SpCoGenMethod.TRUE_RANDOM
                     } else {
                         this
@@ -4450,7 +4448,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 SpCoDiscipline.ARCANE   -> "scroll_red"
                 SpCoDiscipline.DIVINE   -> "scroll_blue"
                 SpCoDiscipline.NATURAL  -> "scroll_green"
-                else                    -> "scroll_base"
+                SpCoDiscipline.ALL_MAGIC-> "scroll_base"
             }
 
         } else {
@@ -7025,8 +7023,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     ( this != null ) &&
                             // Spell is either from PHB or other sources are allowed
                             ( this.refType == ReferenceType.CORE || useSSG ) &&
-                            // Either re-roll choice is disabled or dooes not apply to this spell
-                            !( this.name.endsWith(" Choice") || rerollChoices )
+                            // Either re-roll choice is disabled or does not apply to this spell
+                            !( this.name.contains(" Choice ") && rerollChoices )
                     )
         }
 
@@ -7088,6 +7086,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "${spellHolder.schools.forEach { "<${it.name}>" }})" else "null"}.")
 
             if ( !( spellHolder.isValid() ) ) {
+
+                // TODO this is what needs to get fixed most here.
+
                 Log.d("getSpellByLevelUp()","Spell failed validation, clearing holder.")
                 spellHolder = null }
         }
@@ -7096,9 +7097,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         return spellHolder
     }
-
-    //TODO make function for getting flat list of spells for By-the-book GM/Player Choice selection
-    // either with repo or as hardcoded string list
 
     /* TODO Comment out until spellbooks are being implemented
     override fun getInitialSpellbookSpells(_specialistType: String, useSSG: Boolean): List<Spell> {
@@ -7582,7 +7580,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
      * @param _maxCastable Highest castable spell level of theoretical caster. If 0, any
      * restrictions (i.e. spell level of Indulgence) regarding spell level are ignored.
      */
-   suspend fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int = 0) : Spell {
+    suspend fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int = 0) : Spell {
 
         val inputLevel = _inputLevel.coerceIn(1..7)
         val maxCastable = _maxCastable.coerceIn(0..7)
@@ -8176,5 +8174,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         return spellHolder
     }
+
     // endregion
 }

@@ -87,12 +87,9 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <ProgressBar
-        android:id="@+id/unique_list_progress_indicator"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:indeterminateOnly="true"
+    <include layout="@layout/overlay_waiting_card"
+        android:id="@+id/unique_list_waiting_card"
         android:visibility="gone"
-        android:layout_gravity="center" />
+        tools:visibility="visible"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

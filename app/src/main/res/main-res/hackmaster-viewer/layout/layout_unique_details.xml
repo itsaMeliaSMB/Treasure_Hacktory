@@ -43,10 +43,9 @@
                 android:id="@+id/unique_details_viewable_group"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="16dp">
-
-                <!--TODO for implementing nested recyclerviews instead of expandablelisteview
-                https://medium.com/nerd-for-tech/nested-recyclerview-in-android-e5afb2b9771a-->
+                android:paddingBottom="16dp"
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <ImageView
                     android:id="@+id/unique_details_frame_foreground"
@@ -397,7 +396,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="?backgroundColor"
-                android:visibility="gone">
+                android:visibility="visible"
+                tools:visibility="gone">
 
                 <ImageView
                     android:id="@+id/unique_details_whenempty_image"
@@ -428,19 +428,14 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         </FrameLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-    <ProgressBar
-        android:id="@+id/unique_details_progress_indicator"
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:indeterminateOnly="true"
+    <include layout="@layout/overlay_waiting_card"
+        android:id="@+id/unique_details_waiting_card"
         android:visibility="gone"
-        android:indeterminateTint="?attr/colorSecondary"
-        android:layout_gravity="center" />
+        tools:visibility="visible"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

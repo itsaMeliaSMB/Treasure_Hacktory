@@ -183,6 +183,13 @@ class HoardListFragment : Fragment() {
                         true
                     }
 
+                    R.id.action_test_spells -> {
+
+                        hoardListViewModel.testSpellTriples()
+
+                        true
+                    }
+
                     R.id.action_select_all_main  -> {
 
                         (binding.hoardListRecycler.adapter as HoardAdapter).selectAllHoards()

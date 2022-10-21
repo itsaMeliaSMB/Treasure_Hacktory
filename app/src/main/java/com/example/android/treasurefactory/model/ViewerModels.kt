@@ -117,7 +117,7 @@ class ViewableArtObject(
     override val gpValue: Double,
     override val xpValue: Int,
     override val itemType: UniqueItemType,
-    override val details: List<Pair<String,List<DetailEntry>>>,
+    override val details: List<Pair<String, List<DetailEntry>>>,
     val artType: Int,
     val artRenown: Int,
     val artSize: Int,
@@ -126,7 +126,8 @@ class ViewableArtObject(
     val artQuality: Int,
     val artAge: Int,
     val artSubject: Int,
-    var artValueLevel: Int
+    var artValueLevel: Int,
+    val artIsForgery: Boolean
 ) : ViewableItem()
 
 class ViewableMagicItem(
@@ -170,13 +171,23 @@ class ViewableSpellCollection(
     val spCoProperties: List<Pair<String, Double>>,
     val spCoSpells: List<SpellEntry>,
     val spCoCurse: String
-) : ViewableItem()
+) : ViewableItem() {
 
-// endregion
-
-// region ( Extension functions )
-
-//TODO
+    fun convertBack() : SpellCollection = SpellCollection(
+        sCollectID = itemID,
+        hoardID = hoardID,
+        creationTime= creationTime,
+        iconID = iconStr,
+        name = name,
+        type = spCoType,
+        discipline = spCoDiscipline,
+        properties = spCoProperties,
+        gpValue = gpValue,
+        xpValue = xpValue,
+        spells = spCoSpells,
+        curse = spCoCurse
+    )
+}
 
 // endregion
 
@@ -189,8 +200,16 @@ sealed class DetailEntry
 class PlainTextEntry(val message: String) : DetailEntry()
 class LabelledQualityEntry(val caption: String, val value: String) : DetailEntry()
 class SimpleSpellEntry(
-    val spellID: Int, val name: String, val level: Int, val discipline: SpCoDiscipline,
-    val schools: List<SpellSchool>, val subclass: String, val sourceString: String, val isUsed: Boolean) : DetailEntry()
+    val spellID: Int,
+    val name: String,
+    val level: Int,
+    val discipline: SpCoDiscipline,
+    val schools: List<SpellSchool>,
+    val subclass: String,
+    val sourceString: String,
+    val isUsed: Boolean,
+    val spellsPos: Int
+) : DetailEntry()
 
 // endregion
 

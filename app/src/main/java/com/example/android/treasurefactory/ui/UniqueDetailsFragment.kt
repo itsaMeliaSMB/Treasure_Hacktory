@@ -3,9 +3,12 @@ package com.example.android.treasurefactory.ui
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Typeface
+import android.graphics.Typeface.BOLD_ITALIC
 import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat.getDrawable
 import androidx.core.view.isVisible
@@ -59,7 +63,7 @@ class UniqueDetailsFragment() : Fragment() {
     }
 
     private var shortAnimationDuration = 0
-    private var isContentFrameAnimating = false
+    private var isWaitingCardAnimating = false
 
     private lateinit var parentHoard: Hoard
     private lateinit var viewedItem : ViewableItem
@@ -117,34 +121,32 @@ class UniqueDetailsFragment() : Fragment() {
 
                 if (isRunningAsync) {
 
-                    binding.uniqueDetailsViewableGroup.isEnabled = false
+                   // binding.uniqueDetailsViewableGroup.isEnabled = false
 
-                    if (binding.uniqueDetailsContentFrame.visibility == View.VISIBLE &&
-                        !isContentFrameAnimating) {
+                    if (binding.uniqueDetailsWaitingCard.waitingCard.visibility == View.GONE &&
+                        !isWaitingCardAnimating) {
 
-                        hideContentFrameCrossfade()
+                        fadeInWaitingCard()
 
                     } else {
 
-                        binding.uniqueDetailsContentFrame.visibility = View.GONE
-                        binding.uniqueDetailsProgressIndicator.visibility = View.VISIBLE
-                        isContentFrameAnimating = false
+                        binding.uniqueDetailsWaitingCard.waitingCard.visibility = View.VISIBLE
+                        isWaitingCardAnimating = false
                     }
 
                 } else {
 
-                    binding.uniqueDetailsViewableGroup.isEnabled = true
+                    //binding.uniqueDetailsViewableGroup.isEnabled = true
 
-                    if (binding.uniqueDetailsProgressIndicator.visibility == View.VISIBLE &&
-                        !isContentFrameAnimating) {
+                    if (binding.uniqueDetailsWaitingCard.waitingCard.visibility == View.VISIBLE &&
+                        !isWaitingCardAnimating) {
 
-                        showContentFrameCrossfade()
+                        fadeOutWaitingCard()
 
                     } else {
 
-                        binding.uniqueDetailsContentFrame.visibility = View.VISIBLE
-                        binding.uniqueDetailsProgressIndicator.visibility = View.GONE
-                        isContentFrameAnimating = false
+                        binding.uniqueDetailsWaitingCard.waitingCard.visibility = View.GONE
+                        isWaitingCardAnimating = false
                     }
                 }
             }
@@ -182,9 +184,32 @@ class UniqueDetailsFragment() : Fragment() {
                     updateUI()
 
                 } else {
+
                     setNullUI()
                 }
 
+            }
+
+            dialogSpellInfoLiveData.observe(viewLifecycleOwner) { spellPair ->
+
+                if (spellPair != null){
+
+                    spellPair.let{ (spell, entry) ->
+
+                        if (spell != null) {
+
+
+
+                        } else {
+
+                            Toast.makeText(context, "Could not find details for #${
+                                entry.spellsPos}: \"${entry.name}\" (id: ${entry.spellID})",
+                                Toast.LENGTH_LONG)
+                        }
+                    }
+
+                    dialogSpellInfoLiveData.value = null
+                }
             }
         }
         // endregion
@@ -341,7 +366,7 @@ class UniqueDetailsFragment() : Fragment() {
                             setTypeface(DEFAULT_BOLD)
                         }
                         (entry.message == HACKMASTER_CLASS_ITEM_TEXT) -> {
-                            typeface = typeface.apply{}
+                            setTypeface(null, BOLD_ITALIC)
                             textSize = 18f
                             setCompoundDrawablesRelative(
                                 getDrawable(resources,R.drawable.clipart_winged_sword_vector_icon,context?.theme),
@@ -403,10 +428,12 @@ class UniqueDetailsFragment() : Fragment() {
                     "#${position + 1}".also { spellItemIndexLabel.text = it }
 
                     if (entry.subclass.isNotBlank()) {
+
+                        spellItemSubclassCard.visibility = View.VISIBLE
+
                         when (entry.subclass) {
                             "Vengeance" -> {
-                                spellItemSubclassCard
-                                    .setCardBackgroundColor(
+                                spellItemSubclassCard.setCardBackgroundColor(
                                         resources.getColor(R.color.sanguine,
                                             context?.theme))
                                 spellItemSubclassText.setTextColor(
@@ -582,7 +609,7 @@ class UniqueDetailsFragment() : Fragment() {
 
                             spellItemSchoolCard2.apply {
                                 visibility = View.VISIBLE
-                                tooltipText = when (entry.schools[0]) {
+                                tooltipText = when (entry.schools[1]) {
                                     SpellSchool.ABJURATION ->
                                         getString(R.string.spell_school_abjuration_l)
                                     SpellSchool.ALTERATION ->
@@ -658,7 +685,7 @@ class UniqueDetailsFragment() : Fragment() {
 
                             spellItemSchoolCard2.apply {
                                 visibility = View.VISIBLE
-                                tooltipText = when (entry.schools[0]) {
+                                tooltipText = when (entry.schools[1]) {
                                     SpellSchool.ABJURATION ->
                                         getString(R.string.spell_school_abjuration_l)
                                     SpellSchool.ALTERATION ->
@@ -693,7 +720,7 @@ class UniqueDetailsFragment() : Fragment() {
 
                             spellItemSchoolCard3.apply {
                                 visibility = View.VISIBLE
-                                tooltipText = when (entry.schools[0]) {
+                                tooltipText = when (entry.schools[2]) {
                                     SpellSchool.ABJURATION ->
                                         getString(R.string.spell_school_abjuration_l)
                                     SpellSchool.ALTERATION ->
@@ -732,16 +759,17 @@ class UniqueDetailsFragment() : Fragment() {
 
                     spellItemLayout.setOnClickListener {
 
-                        //TODO placeholder toast. Should launch spell dialog.
-                        Toast.makeText(context,"\"${entry.name}\" from ${viewedItem.name} " +
-                                "[id: ${viewedItem.itemID}] clicked.",Toast.LENGTH_LONG).show()
+                        if (uniqueDetailsViewModel.isRunningAsyncLiveData.value != true) {
+                            entry.requestSpellForDialog()
+                        }
                     }
                 }
             }
         }
     }
 
-    private inner class ParentListAdapter(val parentLists: List<Pair<String,List<DetailEntry>>>) : RecyclerView.Adapter<ParentListAdapter.ParentListHolder>() {
+    private inner class ParentListAdapter(val parentLists: List<Pair<String,List<DetailEntry>>>)
+        : RecyclerView.Adapter<ParentListAdapter.ParentListHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentListHolder {
             val binding = UniqueDetailsItemParentBinding
@@ -758,7 +786,8 @@ class UniqueDetailsFragment() : Fragment() {
 
         override fun getItemCount(): Int = parentLists.size
 
-        inner class ParentListHolder(val binding: UniqueDetailsItemParentBinding) : RecyclerView.ViewHolder(binding.root) {
+        inner class ParentListHolder(val binding: UniqueDetailsItemParentBinding)
+            : RecyclerView.ViewHolder(binding.root) {
 
             private lateinit var parentList: Pair<String,List<DetailEntry>>
 
@@ -853,7 +882,16 @@ class UniqueDetailsFragment() : Fragment() {
                     .setImageResource(R.drawable.loot_lint)
             }
 
-            uniqueDetailsNameLabel.text = viewedItem.name
+            if(viewedItem.name.endsWith("*")){
+
+                uniqueDetailsNameLabel.apply{
+                    text = viewedItem.name.removeSuffix("*")
+                    setTextColor(resources.getColor(R.color.ultramarine,context.theme))
+                }
+
+            } else {
+                uniqueDetailsNameLabel.text = viewedItem.name
+            }
 
             uniqueDetailsSubtitle.text = viewedItem.subtitle
 
@@ -1075,22 +1113,11 @@ class UniqueDetailsFragment() : Fragment() {
         Log.d("setNullUI()","nullUI set.")
     }
 
-    private fun showContentFrameCrossfade() {
+    private fun fadeOutWaitingCard() {
 
-        isContentFrameAnimating = true
+        isWaitingCardAnimating = true
 
-        binding.uniqueDetailsContentFrame.apply {
-
-            alpha = 0f
-            visibility = View.VISIBLE
-
-            animate()
-                .alpha(1f)
-                .setDuration(shortAnimationDuration.toLong())
-                .setListener(null)
-        }
-
-        binding.uniqueDetailsProgressIndicator.apply {
+        binding.uniqueDetailsWaitingCard.waitingCard.apply {
             alpha = 1f
             visibility = View.VISIBLE
             animate()
@@ -1098,41 +1125,355 @@ class UniqueDetailsFragment() : Fragment() {
                 .setDuration(shortAnimationDuration.toLong())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        binding.uniqueDetailsProgressIndicator.visibility = View.GONE
-                        isContentFrameAnimating = false
+                        this@apply.visibility = View.GONE
+                        isWaitingCardAnimating = false
                     }
                 })
         }
     }
 
-    private fun hideContentFrameCrossfade() {
+    private fun fadeInWaitingCard() {
 
-        isContentFrameAnimating = true
+        isWaitingCardAnimating = true
 
-        binding.uniqueDetailsProgressIndicator.apply {
+        binding.uniqueDetailsWaitingCard.waitingCard.apply {
             alpha = 0f
             visibility = View.VISIBLE
             animate()
                 .alpha(1f)
                 .setDuration(shortAnimationDuration.toLong())
-                .setListener(null)
-        }
-
-        binding.uniqueDetailsContentFrame.apply {
-
-            alpha = 1f
-            visibility = View.VISIBLE
-
-            animate()
-                .alpha(0f)
-                .setDuration(shortAnimationDuration.toLong())
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {
-                        isContentFrameAnimating = false
-                        binding.uniqueDetailsContentFrame.visibility = View.GONE
+                        isWaitingCardAnimating = false
                     }
                 })
         }
+    }
+
+    private fun SimpleSpellEntry.requestSpellForDialog() {
+
+        uniqueDetailsViewModel.fetchSpellForDialog(this)
+    }
+
+    private fun showSpellDialog(spell: Spell, entry: SimpleSpellEntry) {
+
+        fun SpCoDiscipline.getClassString() : String = when (this) {
+            SpCoDiscipline.ARCANE   -> "Magic-User"
+            SpCoDiscipline.DIVINE   -> "Cleric"
+            SpCoDiscipline.NATURAL  -> "Druid"
+            SpCoDiscipline.ALL_MAGIC-> "indeterminate"
+        }
+
+        val dialogBinding: DialogSpellDetailsBinding =
+            DialogSpellDetailsBinding.inflate(layoutInflater)
+
+        dialogBinding.apply {
+
+            // Spell school icons
+            when (spell.schools.size) {
+                0   -> {
+
+                    spellDialogSchoolCard1.visibility = View.GONE
+                    spellDialogSchoolCard2.visibility = View.GONE
+                    spellDialogSchoolCard3.visibility = View.GONE
+                }
+
+                1   -> {
+
+                    spellDialogSchoolCard1.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.schools[0].getLongName(context)
+                    }
+                    spellDialogSchool1.setImageResource(
+                        spell.schools[0].getDrawableResID(requireContext()))
+
+                    spellDialogSchoolCard2.visibility = View.GONE
+                    spellDialogSchoolCard3.visibility = View.GONE
+                }
+
+                2   -> {
+
+                    spellDialogSchoolCard1.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.schools[1].getLongName(context)
+                    }
+                    spellDialogSchool1.setImageResource(
+                        spell.schools[1].getDrawableResID(requireContext()))
+
+                    spellDialogSchoolCard2.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.schools[1].getLongName(context)
+                    }
+                    spellDialogSchool2.setImageResource(
+                        spell.schools[1].getDrawableResID(requireContext()))
+
+                    spellDialogSchoolCard3.visibility = View.GONE
+                }
+
+                else-> {
+
+                    spellDialogSchoolCard1.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.schools[1].getLongName(context)
+                    }
+                    spellDialogSchool1.setImageResource(
+                        spell.schools[1].getDrawableResID(requireContext()))
+
+                    spellDialogSchoolCard2.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.schools[1].getLongName(context)
+                    }
+                    spellDialogSchool2.setImageResource(
+                        spell.schools[1].getDrawableResID(requireContext()))
+
+                    spellDialogSchoolCard3.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.schools[2].getLongName(context)
+                    }
+                    spellDialogSchool3.setImageResource(
+                        spell.schools[2].getDrawableResID(requireContext()))
+
+                }
+            }
+
+            if (entry.isUsed){
+                spellDialogName.apply{
+                    alpha = 0.45f
+                    text = spell.name
+                }
+                spellDialogUsedLabel.visibility = View.VISIBLE
+
+            } else {
+                spellDialogName.apply{
+                    alpha = 1.0f
+                    text = spell.name
+                }
+                spellDialogUsedLabel.visibility = View.GONE
+            }
+
+            spellDialogChooseButton.visibility = if (spell.name.contains(" Choice ")) {
+                View. VISIBLE
+            } else { View.GONE }
+
+            spellDialogLeveltype.text= when (spell.spellLevel) {
+                0   -> "Magic-User Cantrip"
+                1   -> {
+                    "1st Level " + spell.type.getClassString() + " spell"
+                }
+                2   -> {
+                    "2nd Level " + spell.type.getClassString() + " spell"
+                }
+                3   -> {
+                    "3rd Level " + spell.type.getClassString() + " spell"
+                }
+                else-> {
+                    "${spell.spellLevel}th Level " + spell.type.getClassString() + " spell"
+                }
+            }
+
+            spellDialogReversible.apply{
+
+                visibility = if (spell.reverse) {
+                    if (spell.type == SpCoDiscipline.ARCANE) {
+                        getString(R.string.spell_is_reversible)
+                    } else {
+                        getString(R.string.spell_is_reversed)
+                    }
+
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+            }
+
+            spellDialogSourceValue.text = spell.sourceText
+
+            "Page ${spell.sourcePage}".also { spellDialogSourcePage.text = it }
+
+            spellDialogSubclassLabel.visibility = if (spell.subclass.isNotBlank()) {
+
+                spellDialogSubclassValue.apply{
+                    text = spell.subclass
+                    visibility = View.VISIBLE
+                }
+                View.VISIBLE
+            } else {
+
+                spellDialogSubclassValue.visibility = View.GONE
+                View.GONE
+            }
+
+            spellDialogSpheresLabel.visibility = when (spell.spheres.size) {
+
+                1   -> {
+                    spellDialogSphereCard1.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[0].getNameString(context)
+                    }
+                    spellDialogSphere1.setImageResource(
+                        spell.spheres[0].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard2.visibility = View.GONE
+                    spellDialogSphereCard3.visibility = View.GONE
+                    spellDialogSphereCard4.visibility = View.GONE
+                    View.VISIBLE
+                }
+                2   -> {
+                    spellDialogSphereCard1.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[0].getNameString(context)
+                    }
+                    spellDialogSphere1.setImageResource(
+                        spell.spheres[0].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard2.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[1].getNameString(context)
+                    }
+                    spellDialogSphere2.setImageResource(
+                        spell.spheres[1].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard3.visibility = View.GONE
+                    spellDialogSphereCard4.visibility = View.GONE
+                    View.VISIBLE
+                }
+                3   -> {
+                    spellDialogSphereCard1.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[0].getNameString(context)
+                    }
+                    spellDialogSphere1.setImageResource(
+                        spell.spheres[0].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard2.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[1].getNameString(context)
+                    }
+                    spellDialogSphere2.setImageResource(
+                        spell.spheres[1].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard3.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[2].getNameString(context)
+                    }
+                    spellDialogSphere3.setImageResource(
+                        spell.spheres[2].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard4.visibility = View.GONE
+                    View.VISIBLE
+                }
+                4   -> {
+                    spellDialogSphereCard1.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[0].getNameString(context)
+                    }
+                    spellDialogSphere1.setImageResource(
+                        spell.spheres[0].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard2.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[1].getNameString(context)
+                    }
+                    spellDialogSphere2.setImageResource(
+                        spell.spheres[1].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard3.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[2].getNameString(context)
+                    }
+                    spellDialogSphere3.setImageResource(
+                        spell.spheres[2].getDrawableResID(requireContext()))
+
+                    spellDialogSphereCard4.apply{
+                        visibility = View.VISIBLE
+                        tooltipText = spell.spheres[3].getNameString(context)
+                    }
+                    spellDialogSphere4.setImageResource(
+                        spell.spheres[3].getDrawableResID(requireContext()))
+
+
+                    View.VISIBLE
+                }
+                else-> {
+                    spellDialogSphereCard1.visibility = View.GONE
+                    spellDialogSphereCard2.visibility = View.GONE
+                    spellDialogSphereCard3.visibility = View.GONE
+                    spellDialogSphereCard4.visibility = View.GONE
+                    View.GONE
+                }
+            }
+
+            spellDialogRestrictionsLabel.visibility = if (spell.restrictions.isNotEmpty()) {
+
+                spellDialogRestrictionsValue.apply{
+                    text = spell.restrictions
+                        .joinToString(separator = "\n") { it.getFullName(requireContext()) }
+                    visibility = View.VISIBLE
+                }
+
+                View.VISIBLE
+
+            } else {
+                spellDialogRestrictionsValue.visibility = View.GONE
+                View.GONE
+            }
+
+            spellDialogNoteLabel.visibility = if (spell.note.isNotBlank()) {
+
+                spellDialogNoteValue.apply{
+                    visibility = View.VISIBLE
+                    text = spell.note
+                }
+
+                View.VISIBLE
+            } else {
+                spellDialogNoteValue.visibility = View.GONE
+                View.GONE
+            }
+
+            spellDialogFlagButton.text = if (entry.isUsed) {
+                getString(R.string.unflag_as_used_button)
+            } else {
+                getString(R.string.flag_as_used_button)
+            }
+        }
+
+        val spellDialogBuiler = AlertDialog.Builder(requireContext(),R.style.SpellCollectionSubStyle)
+            .setView(dialogBinding.root)
+
+        val spellDialog = spellDialogBuiler.create()
+
+        // Set onClickListeners
+        dialogBinding.apply{
+
+            spellDialogClipboardButton.setOnClickListener{
+
+                val textToCopy = spell.getClipboardText(requireContext())
+                val clipboardManager = requireContext().getSystemService(ClipboardManager::class.java)
+                val clipData = ClipData.newPlainText("text", textToCopy)
+
+                clipboardManager.setPrimaryClip(clipData)
+                Toast.makeText(requireContext(), "Spell information copied to clipboard", Toast.LENGTH_LONG).show()
+
+                spellDialog.dismiss()
+            }
+
+            spellDialogFlagButton.setOnClickListener{
+                Toast.makeText(requireContext(),"Flag button clicked.",Toast.LENGTH_LONG).show()
+                //TODO implement
+            }
+
+            spellDialogChooseButton.setOnClickListener{
+                Toast.makeText(requireContext(),"Choose button clicked.",Toast.LENGTH_LONG).show()
+                //TODO implement
+            }
+
+            spellDialogCloseButton.setOnClickListener{
+                spellDialog.dismiss()
+            }
+        }
+
+        //if (viewedItem is ViewableSpellCollection)
     }
 
     // endregion
