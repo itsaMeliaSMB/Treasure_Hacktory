@@ -185,7 +185,7 @@ class HoardListFragment : Fragment() {
 
                     R.id.action_test_spells -> {
 
-                        hoardListViewModel.testSpellTriples()
+                        hoardListViewModel.testSpellTriples(context)
 
                         true
                     }

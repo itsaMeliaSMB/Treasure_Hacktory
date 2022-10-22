@@ -1,0 +1,329 @@
+Abjure;4
+Adjustable Light;2
+Aerial Servant;6
+Aid;2
+Air Breathing;3
+Air Walk;5
+Alleviate Headache;1
+Animal Friendship;1
+Animal Growth;5
+Animal Reduction;5
+Animal Summoning I;4
+Animal Summoning II;5
+Animal Summoning III;6
+Animate Corpse;2
+Animate Dead;3
+Animate Object;6
+Animate Rock;7
+Anti-Animal Shell;6
+Anti-Plant Shell;5
+Astral Spell;7
+Atonement;5
+Attach Limb;6
+Augury;2
+Aura of Comfort;2
+Awaken;1
+Babble;4
+Badberry;2
+Barkskin;2
+Befriend;1
+Bestow Curse;3
+Blade Barrier;6
+Bless;1
+Blessed Abundance;5
+Blessed Warmth;4
+Call Lightning;3
+Call Upon Faith;1
+Call Woodland Beings;4
+Cause Blindness/Deafness;3
+Cause Critical Wounds;5
+Cause Disease;3
+Cause Inclement Weather;7
+Cause Light Wounds;1
+Cause Lycanthropy;4
+Cause Moderate Wounds;2
+Cause Nasty Wounds;3
+Cause Serious Wounds;4
+Ceremony;1
+Changestaff;7
+Chant;2
+Chariot of Sustarre;7
+Charm Person;2
+Chill Metal;2
+Cloudburst;3
+Combine;1
+Command;1
+Commune With Nature;5
+Commune;5
+Confusion;7
+Conjure Animals;6
+Conjure Earth Elemental;7
+Conjure Fire Elemental;6
+Construct Temple;7
+Continual Darkness;3
+Continual Light;3
+Control Temperature, 10' Radius;4
+Control Weather;7
+Control Winds;5
+Control Winds;6
+Create Campfire;3
+Create Food & Water;3
+Create Holy Symbol;2
+Create Water;1
+Create Water;2
+Creeping Doom;7
+Cure Blindness/Deafness;3
+Cure Color Blindness;2
+Cure Critical Wounds;5
+Cure Disease;3
+Cure Light Wounds;1
+Cure Serious Wounds;4
+Cure-All;6
+Curse;1
+Darkness;1
+Destroy Water;1
+Destruction;7
+Detect Balance;1
+Detect Charm;2
+Detect Evil;1
+Detect Good;1
+Detect Lie;4
+Detect Magic;1
+Detect Poison;1
+Detect Snares & Pits;1
+Detect Ulterior Motives;5
+Diagnose Injury;1
+Diminished Rite;2
+Dismiss Earth Elemental;7
+Dispel Evil;5
+Dispel Good;5
+Dispel Magic;3
+Divination;4
+Divine Inspiration;7
+Draw Upon Holy Might;2
+Dust Devil;2
+Earthquake;7
+Easy March;6
+Emotion Control;3
+Endure Cold;1
+Endure Heat;1
+Enstrangle;3
+Entangle;1
+Enthrall;2
+Exaction;7
+Exorcism;5
+Extinguish;2
+Faerie Fire;1
+False Dawn;6
+False Seeing;5
+Feeblemind;5
+Feign Death;3
+Feign Life;4
+Find Traps;2
+Find the Path;6
+Finger of Death;7
+Fire Quench;7
+Fire Storm;7
+Fire Trap;2
+Flame Blade;2
+Flame Strike;5
+Flame Walk;3
+Fog Vision;1
+Forbiddance;6
+Free Action;4
+Gate;7
+Giant Insect;4
+Glyph of Warding;3
+Goodberry;2
+Gourmet Dinner;4
+Greater Enstrangle;6
+Greater Restore Movement;4
+Grow;4
+Hallucinatory Forest;4
+Harm;6
+Heal Light Wounds;2
+Heal Moderate Wounds;3
+Heal Nasty Wounds;4
+Heal Serious Wounds;5
+Heat Metal;2
+Helping Hand;3
+Hold Animals;3
+Hold Crowd;6
+Hold Person;2
+Hold Persons;3
+Hold Plant;4
+Holy Word;7
+Ignite;2
+Imbue With Spell Ability;4
+Indulgence;1
+Indulgence;2
+Indulgence;3
+Indulgence;4
+Indulgence;5
+Indulgence;6
+Indulgence;7
+Insect Plague;5
+Invisibility to Animals;1
+Invisibility to Undead;1
+Join With Astral Traveler;4
+Know Alignment;2
+Know Direction;1
+Lesser Reanimation;3
+Light;1
+Lighten Load;2
+Live Oak;6
+Locate Animals or Plants;1
+Locate Object;3
+Log of Everburning;1
+Lose the Path;6
+Lower Water;4
+Magic Font;5
+Magic Vestment;3
+Magical Stone;1
+Meld Into Stone;3
+Mend Broken Bone;3
+Mend Limb;2
+Mend Tendon;2
+Messenger;2
+Minor Raise Dead;4
+Moonbeam;5
+Negative Plane Protection;3
+Neutralize Poison;4
+No Fear;4
+Obscure Object;3
+Obscurement;2
+Part Water;6
+Pass Plant;5
+Pass Without Trace;1
+Plane Shift;5
+Plant Door;4
+Poison;4
+Prayer;3
+Precipitation;1
+Predict Weather;1
+Premonition;2
+Produce Fire;4
+Produce Flame;2
+Protection From Evil;1
+Protection From Fire;3
+Protection From Good;1
+Protection from Elementals;4
+Protection from Lightning;4
+Protection from Lycanthropes;4
+Protection from Nefarians;5
+Protection from Plants and Fungus;4
+Protection from Possession;4
+Protection from Undead;4
+Protection from Water;4
+Purify Food & Drink;1
+Putrify Food & Drink;1
+Pyrotechnics;3
+Quench;4
+Quest;5
+Rain of Fire;6
+Rainbow;5
+Raise Dead;5
+Raise Water;4
+Reattach Limb;5
+Reflecting Pool;2
+Reflecting Pool;4
+Regenerate;7
+Reincarnation;7
+Remove Curse;3
+Remove Fear;1
+Remove Paralysis;3
+Repair Strain or Injury;1
+Repel Insects;4
+Repel Living Creatures & Plants;7
+Resist Acid and Caustic;3
+Resist Cold;2
+Resist Electricity;2
+Resist Fire;2
+Resist Gas;2
+Restoration;7
+Restorative Cure-All;7
+Restore Movement;2
+Resurrection;7
+Rigor Mortis, 10' Radius;4
+Rigor Mortis;2
+Sanctuary;1
+Shillelagh;1
+Shock Therapy;3
+Shrink Insect;4
+Silence, 15' Radius;2
+Sink Into Earth;5
+Slay Living;5
+Slow Poison;2
+Snake Charm;2
+Snakes to Sticks;4
+Snare;3
+Soften Stone;2
+Speak With Animals;2
+Speak With Monsters;6
+Speak to the Dead;3
+Speak with Plants;4
+Spell Immunity;4
+Spider Charm;2
+Spiders to Stones;4
+Spike Growth;3
+Spike Stones;3
+Spike Stones;5
+Spiritual Brigade;4
+Spiritual Hammer;2
+Starshine;3
+Staunch Bleeding;2
+Sticks to Snakes;4
+Stone Passage;4
+Stone Shape;3
+Stone Tell;6
+Stones to Spiders;4
+Straighten Wood;2
+Strength of Stone;1
+Succor;7
+Summon Divine Lackey;1
+Summon Insects;3
+Sunray;7
+Symbol;7
+Tongues;4
+Touch of Death;4
+Transmute Dust to Water;6
+Transmute Lava to Rock;7
+Transmute Metal to Wood;7
+Transmute Mud to Rock;5
+Transmute Rock to Lava;7
+Transmute Rock to Mud;5
+Transmute Water to Dust;6
+Transmute Wood to Metal;7
+Transport via Plants;6
+Tree;3
+Trip;2
+True Seeing;5
+Turn Wood;6
+Turn;3
+Undetectable Alignment;2
+Undetectable Charm;2
+Undetectable Lie;4
+Unholy Word;7
+Vitality;3
+Walking Corpse;1
+Wall of Fire;5
+Wall of Thorns;6
+Ward Off Evil;3
+Ward Off Good;3
+Warp Stone or Metal;4
+Warp Wood;2
+Water Breathing;3
+Water Walk;3
+Weather Prediction;3
+Weather Stasis;4
+Weather Summoning;6
+Whirlwind;6
+White Hot Metal;3
+Wind Column;1
+Wind Walk;7
+Withdraw;2
+Wither;7
+Wood Shape;3
+Word of Recall;6
+Wyvern Watch;2
+Zone of Sweet Air;4

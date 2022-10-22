@@ -1,15 +1,14 @@
 package com.example.android.treasurefactory.viewmodel
 
+import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.android.treasurefactory.BookSpellListKeeper
 import com.example.android.treasurefactory.MultihoardProcessor
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.model.SpCoDiscipline
-import com.example.android.treasurefactory.model.SpellSchool
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -128,103 +127,127 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
         isRunningAsyncLiveData.postValue(isRunningAsync)
     }
 
-    fun testSpellTriples() {
+    fun testSpellTriples(context: Context) {
 
-        viewModelScope.launch {
+        //TODO delete this after tests are finished; I really don't like having a context reference in viewmodel!
 
-            val bookSpellListKeeper = BookSpellListKeeper()
+        viewModelScope.launch{
 
             setRunningAsync(true)
 
-            val coreNullReturnEntries = ArrayList<Triple<String, Int, Int>>()
+            println("Beginning spell validation test...\n")
 
-            val splatNullReturnEntries = ArrayList<Triple<String, Int, Int>>()
+            val nullReturnEntries = ArrayList<Triple<String,SpCoDiscipline,Int>>()
 
-            repeat(2 ) { rootCount ->
+            val validReturnEntries = ArrayList<Triple<String,SpCoDiscipline,Int>>()
 
-                enumValues<SpCoDiscipline>().forEach { spCoDiscipline ->
+            suspend fun testArcane() {
 
-                    for (index in 0..9) {
+                val inputStream = context.resources.openRawResource(
+                    context.resources.getIdentifier("unique_book_arcane_doubles","raw",context.packageName))
 
-                        enumValues<SpellSchool>().forEach { spellSchool ->
+                inputStream
+                    .bufferedReader()
+                    .lineSequence()
+                    .forEach { spellLine ->
 
-                            val orderTripleList = bookSpellListKeeper.getSpellChoiceTripleList(
-                                spCoDiscipline,
-                                index,
-                                spellSchool,
-                                (rootCount == 0)
-                            )
+                        val spellName : String
+                        val spellLevel : Int
 
-                            orderTripleList.forEach { entry ->
+                        spellLine.split(";").let{
+                            spellName = it.first()
+                            spellLevel = it.last().toIntOrNull() ?: -1
+                        }
 
-                                entry.let{ (name, disciplineInt, level) ->
-                                    val pulledSpell =
-                                        repository.getSpellByName(name,disciplineInt,level)
+                        val spellPull = repository.getSpellByName(spellName,0,spellLevel)
 
-                                    if (pulledSpell == null) {
-                                        if (rootCount == 0) {
-                                            splatNullReturnEntries.add(entry)
-                                        } else {
-                                            coreNullReturnEntries.add(entry)
-                                        }
-                                    }
-                                }
-                            }
+                        if (spellPull == null) {
+                            nullReturnEntries.add(
+                                Triple(spellName,SpCoDiscipline.ARCANE,spellLevel))
+                        } else {
+                            validReturnEntries.add(
+                                Triple(spellName,SpCoDiscipline.ARCANE,spellLevel))
                         }
                     }
+            }
 
-                    for (index in 0..3) {
+            suspend fun testDivine() {
 
-                        val orderTripleList = bookSpellListKeeper.getSpellChoiceTripleList(
-                            spCoDiscipline,
-                            index,
-                            null,
-                            (rootCount == 0),
-                            index
-                        )
+                val inputStream = context.resources.openRawResource(
+                    context.resources.getIdentifier("unique_book_divine_doubles","raw",context.packageName))
 
-                        orderTripleList.forEach { entry ->
+                inputStream
+                    .bufferedReader()
+                    .lineSequence()
+                    .forEach { spellLine ->
 
-                            entry.let{ (name, disciplineInt, level) ->
-                                val pulledSpell =
-                                    repository.getSpellByName(name,disciplineInt,level)
+                        val spellName : String
+                        val spellLevel : Int
 
-                                if (pulledSpell == null) {
-                                    if (rootCount == 0) {
-                                        splatNullReturnEntries.add(entry)
-                                    } else {
-                                        coreNullReturnEntries.add(entry)
-                                    }
-                                }
-                            }
+                        spellLine.split(";").let{
+                            spellName = it.first()
+                            spellLevel = it.last().toIntOrNull() ?: -1
+                        }
+
+                        val clericSpellPull = repository.getSpellByName(spellName,1,spellLevel)
+                        val druidSpellPull = repository.getSpellByName(spellName,2,spellLevel)
+
+                        if (clericSpellPull == null) {
+                            nullReturnEntries.add(
+                                Triple(spellName,SpCoDiscipline.DIVINE,spellLevel))
+                        } else {
+                            validReturnEntries.add(
+                                Triple(spellName,SpCoDiscipline.DIVINE,spellLevel))
+                        }
+
+                        if (druidSpellPull == null) {
+                            nullReturnEntries.add(
+                                Triple(spellName,SpCoDiscipline.NATURAL,spellLevel))
+                        } else {
+                            validReturnEntries.add(
+                                Triple(spellName,SpCoDiscipline.NATURAL,spellLevel))
                         }
                     }
+            }
+
+            testArcane()
+            testDivine()
+
+            println("-------------------------------------------")
+            println("<<< Entries which yielded valid results >>>")
+            println("-------------------------------------------")
+            validReturnEntries.sortedBy { it.second }.let{ sortedList ->
+
+                if (sortedList.isNotEmpty()) {
+
+                    sortedList.forEach { (name, discipline, level) ->
+
+                        println("[${discipline.name} $level] \"$name\"")
+                    }
+                } else {
+                    println("Er... none. Uh-oh.")
                 }
             }
 
-            println("< GMG entries which yielded null result >")
-            if (coreNullReturnEntries.isNotEmpty()) {
+            println("")
 
-                coreNullReturnEntries.forEach { (name, disciplineInt, level) ->
+            println("------------------------------------------")
+            println("<<< Entries which yielded null results >>>")
+            println("------------------------------------------")
+            nullReturnEntries.sortedBy { it.second }.let{ sortedList ->
 
-                    println("[${enumValues<SpCoDiscipline>()[disciplineInt].name} $level] " + name)
+                if (sortedList.isNotEmpty()) {
+
+                    sortedList.forEach { (name, discipline, level) ->
+
+                        println("[${discipline.name} $level] \"$name\"")
+                    }
+                } else {
+                    println("None, good job!")
                 }
-                println("")
-            } else {
-                println("None, good job!\n")
             }
 
-            println("< Splat entries which yielded null result >")
-            if (splatNullReturnEntries.isNotEmpty()) {
-
-                splatNullReturnEntries.forEach { (name, disciplineInt, level) ->
-
-                    println("[${enumValues<SpCoDiscipline>()[disciplineInt].name} $level] " + name)
-                }
-                println("")
-            } else {
-                println("None, good job!\n")
-            }
+            println("\nTest concluded.\n")
 
             textToastHolderLiveData.postValue("Test concluded. Check console for results." to Toast.LENGTH_LONG)
 

@@ -595,7 +595,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     SpCoGenMethod.TRUE_RANDOM -> "Randomly from all qualified spells"
                                     SpCoGenMethod.BY_THE_BOOK -> "Following book-described methodology"
                                     SpCoGenMethod.SPELL_BOOK  -> "As if creating a new magic-user"
-                                    SpCoGenMethod.CHOSEN_ONE  -> "As if rolling a chosen one's allotment"
+                                    SpCoGenMethod.CHOSEN_ONE  -> "As if rolling a chosen one’s allotment"
                                     SpCoGenMethod.ANY_PHYSICAL-> "Using any method resulting in item"
                                 }}", tag = "creation|spell-collection|verbose")
 
@@ -639,7 +639,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
     //region [ Item generation functions ]
     /**
-     * Returns a [gem][Gem] based on the method laid out on page 178 of the GameMaster's Guide.
+     * Returns a [gem][Gem] based on the method laid out on page 178 of the GameMaster’s Guide.
      *
      * @param givenTemplate Primary key to query for a specific gem. Negative values are ignored.
      */
@@ -1621,7 +1621,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         if (gmChoice) {
             baseTemplateID = -1
-            mName = "GM's Choice"
+            mName = "GM’s Choice"
         }
         // endregion
 
@@ -1758,7 +1758,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         if (baseTemplateID > 0) {
 
-            // region < Use template to populate magic item's details >
+            // region < Use template to populate magic item’s details >
 
             mTemplateID = template.refId
             mName = template.name
@@ -2296,7 +2296,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     }
 
                     else        -> {
-                        flatNotesList.add("Potion flavor text" to "Container: GM's option")
+                        flatNotesList.add("Potion flavor text" to "Container: GM’s option")
                         if (mIconID == "potion_empty") mIconID = "potion_other"
                     }
                 }
@@ -2910,13 +2910,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         in 26..55   ->  "Fear for 1d4 rounds (Upon scoring a with w/ weapon, " +
                                 "unless opponent saves vs. Spell)"
 
-                        in 56..65   -> "Zarba's Sphere of Insanity for 1d4 rounds (Upon scoring " +
+                        in 56..65   -> "Zarba’s Sphere of Insanity for 1d4 rounds (Upon scoring " +
                                 "a with w/ weapon, unless opponent saves vs. Spell)"
 
                         in 66..80   -> "Paralyzation for 1d4 rounds (Upon scoring a with w/ " +
                                 "weapon, unless opponent saves vs. Spell)"
 
-                        else        -> "+2 to all wielder's saving throws, -1 to each die of " +
+                        else        -> "+2 to all wielder’s saving throws, -1 to each die of " +
                                 "damage sustained"
                     }
                 }
@@ -3004,7 +3004,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 flatNotesList.add("Intelligent weapon info" to
                         "This weapon has a specific profile outlined in the source text. As " +
-                        "such, please refer to this item's entry on page $mSourcePage for " +
+                        "such, please refer to this item’s entry on page $mSourcePage for " +
                         "specifics.")
             }
             // endregion
@@ -3023,7 +3023,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 if (template.iPower in 1..46){
 
                     val minorBenignEffects = listOf(
-                        "A. Adds 1 point to possessor's major attribute",
+                        "A. Adds 1 point to possessor’s major attribute",
                         "B. Animate Dead (1 creature by touch) 7 times/week",
                         "C. Audible Glamer upon command 3 times/day",
                         "D. Bless (by touch)",
@@ -3128,7 +3128,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         "X. Hold Monster (1 time/day)",
                         "Y. Hold Person (1 time/day)",
                         "Z. Lightning Bolt (12-15 dice) 2 times/day",
-                        "AA. Lyggl's Cone of Cold (12-15 dice) 2 times/day",
+                        "AA. Lyggl’s Cone of Cold (12-15 dice) 2 times/day",
                         "BB. Minor Globe of Invulnerability (1 time/day)",
                         "CC. Paralyzation by touch",
                         "DD. Phantasmal Killer (1 time/day)",
@@ -3188,7 +3188,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             "minor malevolent effect(s) indicated.")
 
                     val minorMalevolentEffects = listOf(
-                        "A. Acne on possessor's face",
+                        "A. Acne on possessor’s face",
                         "B. Blindness for 1-4 rounds when first used against an enemy",
                         "C. Body odor noticeable at distance of ten feet",
                         "D. Deafness for 1-4 turns when first used against an enemy",
@@ -3197,18 +3197,18 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         "G. Lose 1-4 points of Charisma for 1-4 days when major power is used",
                         "H. Possessor loses interest in sex",
                         "I. Possessor has satyriasis",
-                        "J. Possessor's hair turns white",
+                        "J. Possessor’s hair turns white",
                         "K. Saving throws versus spells are at -1",
                         "L. Saving throw versus poison are at -2",
                         "M. Sense of smell lost for 2-8 hours when used against an enemy",
                         "N. Small fires (torches, et al.) extinguished when major powers are used",
-                        "O. Small items of wood rot from possessor's touch (any item up to normal door size, 1-7 days time)",
+                        "O. Small items of wood rot from possessor’s touch (any item up to normal door size, 1-7 days time)",
                         "P. Touch of possessor kills green plants",
                         "Q. User causes hostility towards himself in all mammals within 60 yards",
                         "R. User loses 1 point of Comeliness permanently",
-                        "S. User must eat and drink 6 times the normal amount due to the item's drain upon him or her",
-                        "T. User's sex changes",
-                        "U. Wart appears on possessor's nose",
+                        "S. User must eat and drink 6 times the normal amount due to the item’s drain upon him or her",
+                        "T. User’s sex changes",
+                        "U. Wart appears on possessor’s nose",
                         "V. Weight gain of 10-40 pounds",
                         "W. Weight loss of 5-30 pounds",
                         "X. Yearning for item forces possessor to never be away from it for more than 1 day if at all possible",
@@ -3249,7 +3249,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         "A. Body rot [see Table B126] is 10% likely cumulative whenever a primary power is used, and part of the body is lost permanently",
                         "B. Capricious alignment change each time a primary power is used",
                         "C. Geas/Quest [see Table B126] placed upon possessor",
-                        "D. Item contains the life force of a person — after a set number of uses, the possessor's life force is drawn into it and the former soul is released (see GMG pg 285)",
+                        "D. Item contains the life force of a person — after a set number of uses, the possessor’s life force is drawn into it and the former soul is released (see GMG pg 285)",
                         "E. Item has power to affect its possessor when a primary power is used if the character has not followed the alignment of the artifact/relic",
                         "F. Item is a prison for for a powerful being — there is a 1%-4% cumulative chance per usage that it will [see Table B126]",
                         "G. Item is itself a living, sentient being forced to serve; but each usage of a primary power gives it a 1%-3% cumulative chance the spell will be broken and the being will [see Table B126]",
@@ -3279,7 +3279,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         "EE. User transformed into a powerful but minor being from another plane [see Table B126]",
                         "FF. User withers and ages 3-30 years [see Table B126] each time primary power is used, eventually the possessor becomes a withered Zombie guardian of the item",
                         "GG. Utterance of a spell causes complete loss of voice for one day",
-                        "HH. Yearning to be worshipped is uncontrollable; those failing to bow and scrape to the artifact's possessor will be subject to instant attack"
+                        "HH. Yearning to be worshipped is uncontrollable; those failing to bow and scrape to the artifact’s possessor will be subject to instant attack"
                     )
                     val typeIVList = arrayListOf<Int>()
 
@@ -3350,8 +3350,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 if (template.vPower in 1..37){
 
                     val primePowers = listOf(
-                        "A. All of possessor's ability totals permanently raised by 2 points each upon pronouncement of a command word (18 maximum)",
-                        "B. All of the possessor's ability scores are raised to 18 each upon pronouncement of a command word",
+                        "A. All of possessor’s ability totals permanently raised by 2 points each upon pronouncement of a command word (18 maximum)",
+                        "B. All of the possessor’s ability scores are raised to 18 each upon pronouncement of a command word",
                         "C. Bones/exoskeleton/cartilage of opponent turned to jelly - 1 time/day",
                         "D. Cacodemon-like power summons a Demon Lord, Arch-Devil, or Daemon Prince — 1 time/month",
                         "E. Creeping Doom - 1 time/day",
@@ -3561,7 +3561,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             when (mName) {
 
                 "Treasure Map"  -> {
-                    mSourceText =   "GameMaster's Guide"
+                    mSourceText =   "GameMaster’s Guide"
                     mSourcePage =   182
                     mXpValue =      0
                     mGpValue =      0.0
@@ -3571,7 +3571,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 }
 
                 "Spell Scroll"  -> {
-                    mSourceText =   "GameMaster's Guide"
+                    mSourceText =   "GameMaster’s Guide"
                     mSourcePage =   225
                     mXpValue =      0
                     mGpValue =      0.0
@@ -3580,8 +3580,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     specialItemType = SpItType.SPELL_SCROLL
                 }
 
-                "GM's Choice"   -> {
-                    mSourceText =   "GameMaster's Guide"
+                "GM’s Choice"   -> {
+                    mSourceText =   "GameMaster’s Guide"
                     mSourcePage =   213
                     mXpValue =      0
                     mGpValue =      0.0
@@ -3862,7 +3862,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             "scroll_map",
             MagicItemType.Map,
             nameBuilder.toString(),
-            "GameMaster's Guide",
+            "GameMaster’s Guide",
             182,
             0,
             0.0,
@@ -4237,8 +4237,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     Log.d("convertOrderToSpellScroll() | TRUE_RANDOM (${it + 1})",
                         "spellLevel = $spellRange.random() = $spellLevel")
 
-                    spellList.add(getRandomSpell(spellLevel,spellType,
-                        order.allowedSources, order.rerollChoices, order.allowRestricted
+                    spellList.add(getRandomSpell(
+                        spellLevel,
+                        spellType,
+                        order.allowedSources,
+                        order.rerollChoices,
+                        order.allowRestricted
                     ))
 
                     Log.d("convertOrderToSpellScroll() | TRUE_RANDOM (${it + 1})",
@@ -4340,7 +4344,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             in 1..5 -> "Material: Vellum" to 0.0
             in 6..8 -> "Material: Parchment" to 0.0
             9       -> "Material: Papyrus" to 0.0
-            else    -> "Material: Non-standard (GM's choice)" to 0.0
+            else    -> "Material: Non-standard (GM’s choice)" to 0.0
         })
 
         // endregion
@@ -4359,7 +4363,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             /** Example curse list on GMG pgs 225-226 */
             val cursesExample = listOf(
                 "(GMG) Bad luck (-1 on attacks and saving throws).",
-                "(GMG) The character's beard grows one inch per minute.",
+                "(GMG) The character’s beard grows one inch per minute.",
                 "(GMG) The character is teleported away from the rest of the party.",
                 "(GMG) Random monster appears and attacks (See GMG pg 319).",
                 "(GMG) The character is polymorphed into a mouse.",
@@ -4369,7 +4373,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "(GMG) The character develops an uncontrollable appetite.",
                 "(GMG) The character must always talk in rhyme (preventing spell casting).",
                 "(GMG) The character is stricken with cowardice and must make a morale check every time a monster is encountered.",
-                "(GMG) The character's alignment is changed.",
+                "(GMG) The character’s alignment is changed.",
                 "(GMG) The character suffers amnesia.",
                 "(GMG) The character feels compelled to give away all [their] belongings.",
                 "(GMG) The character must save vs. paralyzation or suffer petrification.",
@@ -4380,7 +4384,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "[GMG+] The character suffers a spell mishap (see GMG pg 82, Table 7E).",
                 "[GMG+] The character develops some form insanity (see GMG pg 86, Table 7H).",
                 "[GMG+] The character suffers from a minor malevolent effect (see GMG pg 285, Table B125). Re-roll incompatible results.",
-                "[SSG] The character suffers the effect of a Witch's Curse (see SSG pg 49, Table 5C).",
+                "[SSG] The character suffers the effect of a Witch’s Curse (see SSG pg 49, Table 5C).",
                 "[SSG] The character experiences the effect of a Wild Surge (see SSG pg 38, Table 4L).",
                 "[SSG] The character suffers from the effect of a Tattoo Effect (see SSG pg 35, Table 4G) for 1 week.",
                 "[PHB] The character suffers the effect of Bestow Curse (see PHB page 215).",
@@ -4393,25 +4397,25 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "<TrH> The character loses access to one of their talents, determined at random.",
                 "<TrH> Loud, embarrassing sound is produced on casting. User must save vs. apology or lose 5 honor.",
                 "<TrH> The target of any beneficial spell (or, fail that, the caster) will suffer a Fumble on their next attack (see GMG pg 124, Table 8KK).",
-                "<TrH> All magic items in character's possessions rendered unusable for 10 turns.",
+                "<TrH> All magic items in character’s possessions rendered unusable for 10 turns.",
                 "<TrH> Spell effect is subject to potion miscibility effect as if imbibed (see GMG pg 221, Table B1).",
                 "<TrH> Scroll explodes into a puff of gas (see GMG pg 335, Table F20) when used.",
                 "<TrH> Trap materializes and activates, targeting user (see GMG pg 335, Table F19). Re-roll if nonsensical.",
                 "<TrH> All active magical enhancements are dispelled on all friendly creatures within 10 ft of caster.",
                 "<TrH> All active magical detriments are doubled (GM chooses if duration, magnitude, etc) on all friendly creatures within 10 ft of caster.",
                 "<TrH> Effects of any spells cast from this scroll are purely illusory.",
-                "<TrH> All ink on items in character's possession disappears for 24 hours.",
+                "<TrH> All ink on items in character’s possession disappears for 24 hours.",
                 "<TrH> The character immediately becomes one step more intoxicated (see GMG pgs 170-172).",
                 "<TrH> The GM may use a single GM coupon, provided they do so immediately and target the caster.",
                 "<TrH> Any spells the user cast after casting a spell from this scroll (including that spell) for 24 hours are treated as if the caster is spell-jacked.",
                 "<TrH> The caster must save vs. Apology or be compelled to blurt out their darkest or most embarrassing secret.",
                 "<TrH> The caster must save vs. Poison or contract a disease from HackJournal #17, page 9.",
-                "<TrH> All un-cast scribed spells in the caster's possession must save vs. Spell or be turned into hostile Explosive Runes.",
+                "<TrH> All un-cast scribed spells in the caster’s possession must save vs. Spell or be turned into hostile Explosive Runes.",
                 "<TrH> The caster is considered the prime suspect in a recent crime in the nearest settlement, regardless of their actual guilt.",
                 "<TrH> The caster must save vs. Polymorph or have two of their attribute scores swapped (Roll a d8, re-rolling 8).",
                 "<TrH> Any spell cast from this spell inflicts 3 points of damage per spell level on the caster (cantrips inflict 1).",
-                "<TrH> All containers on the caster's person becomes transparent for 24 hours.",
-                "<TrH> A 30'-radius spherical version of Hiamohr's Unfortunate Incident immediately takes effect, centered on (and including) the caster.",
+                "<TrH> All containers on the caster’s person becomes transparent for 24 hours.",
+                "<TrH> A 30'-radius spherical version of Hiamohr’s Unfortunate Incident immediately takes effect, centered on (and including) the caster.",
                 "<TrH> The caster immediately sheds all hair on their head and body."
             )
 
@@ -4667,7 +4671,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // Determine school of spell to roll
         val school = enforcedSchool
-            ?: if (useSSG) { //Spellslinger's guide Table 1B, pg 7
+            ?: if (useSSG) { //Spellslinger’s guide Table 1B, pg 7
                 when (inputLevel) {
                     1   -> {
                         when(Random.nextInt(1,101)){
@@ -4971,7 +4975,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Fire Trap",
                                 "Minor Globe of Invulnerability",
                                 "Remove Curse",
-                                "Wimpel's Dispelling Screen",
+                                "Wimpel’s Dispelling Screen",
                                 "GM Choice",
                                 "GM Choice",
                                 "Player Choice"
@@ -4990,7 +4994,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             listOf(
                                 "Avoidance",
                                 "Dismissal",
-                                "Jorrel's Private Sanctum",
+                                "Jorrel’s Private Sanctum",
                                 "Spell Shield",
                                 "GM Choice",
                                 "Player Choice"
@@ -5054,7 +5058,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         if (useSSG){
                             listOf(
                                 "Dispel Enchantment",
-                                "Gandle's Spell Immunity",
+                                "Gandle’s Spell Immunity",
                                 "Mind Blank",
                                 "GM Choice",
                                 "GM Choice",
@@ -5062,7 +5066,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             ).random()
                         } else {
                             listOf(
-                                "Gandle's Spell Immunity",
+                                "Gandle’s Spell Immunity",
                                 "Mind Blank"
                             ).random()
                         }
@@ -5074,7 +5078,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Elemental Aura",
                                 "Immunity to Undeath",
                                 "Imprisonment",
-                                "Jebidiah's Ultimate Circle",
+                                "Jebidiah’s Ultimate Circle",
                                 "Prismatic Sphere",
                                 "GM Choice",
                                 "GM Choice",
@@ -5113,7 +5117,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Feather Fall",
                                     "Fireball, Barrage",
                                     "Firewater",
-                                    "Fist of Stone",
                                     "Flutter Soft",
                                     "Gaze Reflection",
                                     "Hold Portal",
@@ -5183,12 +5186,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Continual Light",
                                     "Darkness, 15’ Radius",
                                     "Deeppockets",
-                                    "Elenwyd's Majestic Bosom",
+                                    "Elenwyd’s Majestic Bosom",
                                     "Fire Telekinesis",
                                     "Fog Cloud",
-                                    "Fool's Gold",
-                                    "Fustis's Mnemonic Enhancer",
-                                    "Galinor's Gender Reversal",
+                                    "Fool’s Gold",
+                                    "Fustis’s Mnemonic Enhancer",
+                                    "Galinor’s Gender Reversal",
                                     "Irritation",
                                     "Knock",
                                     "Levitate",
@@ -5210,7 +5213,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                             when(Random.nextInt(1,101)){
                                 in 1..5     -> "Deeppockets"
-                                in 6..10    -> "Fool's Gold"
+                                in 6..10    -> "Fool’s Gold"
                                 in 11..15   -> "Whispering Wind"
                                 in 16..20   -> "Alter Self"
                                 in 21..25   -> "Cheetah Speed"
@@ -5241,8 +5244,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             when (Random.nextInt(1,21)+Random.nextInt(1,21)){
 
                                 2   -> "A Day in the Life"
-                                3   -> "Airbolt"
-                                4   -> "Arinathor's Dark Limbs"
+                                4   -> "Arinthor’s Dark Limbs"
                                 5   -> "Blink"
                                 6   -> "Cloudburst"
                                 7   -> "Continual Darkness"
@@ -5251,15 +5253,15 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 10  -> "Explosive Runes"
                                 11  -> "Fireflow"
                                 12  -> "Fly"
-                                13  -> "Fool's Speech"
-                                14  -> "Gandle's Humble Hut"
+                                13  -> "Fool’s Speech"
+                                14  -> "Gandle’s Humble Hut"
                                 15  -> "Grow"
                                 16  -> "Gust of Wind"
                                 17  -> "Haste"
                                 18  -> "Infravision"
                                 19  -> "Item"
-                                20  -> "Mericutyn's Grotesquely Distented Nose"
-                                21  -> "Morton's Minute Meteors"
+                                20  -> "Mericutyn’s Grotesquely Distended Nose"
+                                21  -> "Morton’s Minute Meteors"
                                 22  -> "Phantom Wind"
                                 23  -> "Polymorph to Insect"
                                 24  -> "Polymorph to Amphibian"
@@ -5267,13 +5269,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 26  -> "Runes of Eyeball Implosion"
                                 27  -> "Secret Page"
                                 28  -> "Slow"
-                                29  -> "Snapping Teeth"
                                 30  -> "Tongues"
                                 31  -> "Transmute Wood to Steel"
                                 32  -> "Water Breathing"
                                 33  -> "Wind Wall"
                                 34  -> "Wraithform"
-                                35  -> "Zargosa's Flaming Spheres of Torment"
+                                35  -> "Zargosa’s Flaming Spheres of Torment"
                                 40  -> "Player Choice"
                                 else-> "GM Choice"
                             }
@@ -5287,7 +5288,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 in 21..25   -> "Delude"
                                 in 26..30   -> "Explosive Runes"
                                 in 31..35   -> "Fly"
-                                in 36..40   -> "Gandle's Humble Hut"
+                                in 36..40   -> "Gandle’s Humble Hut"
                                 in 41..45   -> "Grow"
                                 in 46..50   -> "Gust of Wind"
                                 in 51..55   -> "Haste"
@@ -5317,8 +5318,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 5   -> "Extension I"
                                 6   -> "Fire Shield"
                                 7   -> "Flying Familiar"
-                                8   -> "Haarpang's Magnificent Sphere of Resiliency"
-                                9   -> "Haarpang's Memory Kick"
+                                8   -> "Haarpang’s Magnificent Sphere of Resiliency"
+                                9   -> "Haarpang’s Memory Kick"
                                 10  -> "Hurl Animal"
                                 11  -> "Massmorph"
                                 12  -> "Perpetual Shocking Grasp"
@@ -5334,7 +5335,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 22  -> "Ultravision"
                                 23  -> "Vacancy"
                                 24  -> "Wizard Eye"
-                                25  -> "Zargosa's Lodge of Protection"
+                                25  -> "Zargosa’s Lodge of Protection"
                                 30  -> "Player Choice"
                                 else-> "GM Choice"
                             }
@@ -5343,13 +5344,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             when(Random.nextInt(1,101)){
                                 in 1..5     -> "Rainbow Pattern"
                                 in 6..10    -> "Vacancy"
-                                in 11..15   -> "Haarpang's Magnificent Sphere of Resiliency"
-                                in 16..20   -> "Zargosa's Lodge of Protection"
+                                in 11..15   -> "Haarpang’s Magnificent Sphere of Resiliency"
+                                in 16..20   -> "Zargosa’s Lodge of Protection"
                                 in 21..25   -> "Close Portal"
                                 in 26..30   -> "Dimension Door"
                                 in 31..35   -> "Emergency Teleport at Random"
                                 in 36..40   -> "Extension I"
-                                in 41..45   -> "Haarpang's Memory Kick"
+                                in 41..45   -> "Haarpang’s Memory Kick"
                                 in 46..50   -> "Hurl Animal"
                                 in 51..55   -> "Massmorph"
                                 in 56..60   -> "Perpetual Shocking Grasp"
@@ -5360,7 +5361,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 in 81..84   -> "Stone Passage"
                                 in 85..88   -> "Stoneskin"
                                 in 89..92   -> "Ultravision"
-                                in 93..96   -> "Wizard's Eye"
+                                in 93..96   -> "Wizard Eye"
                                 else        -> "Fire Shield"
                             }
                         }
@@ -5376,12 +5377,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 in 16..20   -> "Breed Fusion"
                                 in 21..25   -> "Centaur’s Gift, The"
                                 in 26..30   -> "Distance Distortion"
-                                in 31..35   -> "Drayton's Hidden Stash"
-                                in 36..40   -> "Extension"
+                                in 31..35   -> "Drayton’s Hidden Stash"
+                                in 36..40   -> "Extension I"
                                 in 41..45   -> "Fabricate"
-                                in 46..50   -> "Hiamohr's Unfortunate Incident"
-                                in 51..55   -> "Jorrel's Private Sanctum"
-                                in 56..60   -> "Manor's Mindsight"
+                                in 46..50   -> "Hiamohr’s Unfortunate Incident"
+                                in 51..55   -> "Jorrel’s Private Sanctum"
+                                in 56..60   -> "Manor’s Mindsight"
                                 in 61..65   -> "Polymorph Plant to Mammal"
                                 in 66..70   -> "Stone Shape"
                                 in 71..75   -> "Telekinesis"
@@ -5396,7 +5397,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                             listOf(
                                 "Avoidance",
-                                "Drayton's Hidden Stash",
+                                "Drayton’s Hidden Stash",
                                 "Airy Water",
                                 "Animal Growth",
                                 "Distance Distortion",
@@ -5404,7 +5405,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Stone Shape",
                                 "Telekinesis",
                                 "Teleport",
-                                "Transmute Rock to Mud",
+                                "Transmute Stone to Mud",
                                 "Wall Passage",
                                 "Fabricate"
                             ).random()
@@ -5425,9 +5426,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Extension III",
                                     "Glassee",
                                     "Guards and Wards",
-                                    "Haarpang's Magnificent Sphere of Freezing",
-                                    "Hyptor's Total Recall",
-                                    "Karnaac's Tranformation",
+                                    "Haarpang’s Magnificent Sphere of Freezing",
+                                    "Hyptor’s Total Recall",
+                                    "Karnaac’s Tranformation",
                                     "Lower Water",
                                     "Mirage Arcana",
                                     "Move Earth",
@@ -5435,29 +5436,29 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Project Image",
                                     "Stone to Flesh",
                                     "Tentacles",
-                                    "Transmute Water into Dust",
+                                    "Transmute Water to Dust",
                                     "Transmute Metal to Water",
                                     "Velimurio’s Merger",
-                                    "Zarba's Sphere of Personal Inclement Weather"
+                                    "Zarba’s Sphere of Personal Inclement Weather"
                                 ).random()
                             }
                         } else {
 
                             listOf(
                                 "Project Image",
-                                "Haarpang's Magnificent Sphere of Freezing",
+                                "Haarpang’s Magnificent Sphere of Freezing",
                                 "Control Weather",
                                 "Disintegrate",
                                 "Extension III",
                                 "Glassee",
-                                "Hyptor's Total Recall",
+                                "Hyptor’s Total Recall",
                                 "Lower Water",
                                 "Move Earth",
                                 "Part Water",
                                 "Stone to Flesh",
                                 "Transmute Water to Dust",
-                                "Zarba's Sphere of Personal Inclement Weather",
-                                "Karnaac's Transformation",
+                                "Zarba’s Sphere of Personal Inclement Weather",
+                                "Karnaac’s Transformation",
                                 "Death Fog",
                                 "Guards and Wards",
                                 "Mirage Arcana",
@@ -5485,9 +5486,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Torment",
                                     "Transmute Rock to Lava",
                                     "Truename",
-                                    "Tybalt's Planar Pacifier",
+                                    "Tybalt’s Planar Pacifier",
                                     "Vanish",
-                                    "Zargosa's Opulent Manor House"
+                                    "Zargosa’s Opulent Manor House"
                                 ).random()
                             }
                         } else {
@@ -5500,7 +5501,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Teleport without Error",
                                 "Transmute Rock to Lava",
                                 "Vanish",
-                                "Zargosa's Opulent Manor House",
+                                "Zargosa’s Opulent Manor House",
                                 "Truename",
                                 "Torment"
                             ).random()
@@ -5512,7 +5513,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                             when(Random.nextInt(1,13)){
                                 1   -> "Glassteel"
-                                2   -> "Haarpang's Magnificent Sphere of Telekinesis"
+                                2   -> "Haarpang’s Magnificent Sphere of Telekinesis"
                                 3   -> "Incendiary Cloud"
                                 4   -> "Permanency"
                                 5   -> "Polymorph Any Object"
@@ -5528,7 +5529,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Permanency",
                                 "Polymorph Any Object",
                                 "Sink",
-                                "Haarpang's Magnificent Sphere of Telekinesis"
+                                "Haarpang’s Magnificent Sphere of Telekinesis"
                             ).random()
                         }
                     }
@@ -5539,7 +5540,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                             when(Random.nextInt(1,21)){
                                 1   -> "Crystalbrittle"
-                                2   -> "Hyptor's Disjunction"
+                                2   -> "Hyptor’s Disjunction"
                                 3   -> "Ring of Swords"
                                 4   -> "Shape Change"
                                 5   -> "Succor"
@@ -5548,13 +5549,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 8   -> "Tempestcone"
                                 9   -> "Temporal Stasis"
                                 10  -> "Time Stop"
-                                20  -> "Player's Choice"
+                                20  -> "Player’s Choice"
                                 else-> "GM Choice"
                             }
                         } else {
 
                             listOf(
-                                "Hyptor's Disjunction",
+                                "Hyptor’s Disjunction",
                                 "Succor",
                                 "Crystalbrittle",
                                 "Shape Change",
@@ -5603,15 +5604,15 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     2   -> {
                         if (useSSG) {
                             listOf(
-                                "Aname's Extra-Dimensional Mallet",
+                                "Aname’s Extra-Dimensional Mallet",
                                 "Choke",
                                 "Glitterdust",
-                                "Munz's Bolt of Acid",
+                                "Munz’s Bolt of Acid",
                                 "Power Word: Belch",
                                 "Power Word: Detect",
                                 "Power Word: Light",
                                 "Summon Swarm",
-                                "Zed's Crystal Dagger",
+                                "Zed’s Crystal Dagger",
                                 "GM Choice",
                                 "GM Choice",
                                 "Player Choice"
@@ -5620,7 +5621,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             listOf(
                                 "Summon Swarm",
                                 "Glitterdust",
-                                "Munz's Bolt of Acid"
+                                "Munz’s Bolt of Acid"
                             ).random()
                         }
                     }
@@ -5636,7 +5637,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Power Word: Burn",
                                 "Power Word: Chill",
                                 "Sepia Snake Sigil",
-                                "Zed's Crystal Dirk",
+                                "Zed’s Crystal Dirk",
                                 "GM Choice",
                                 "GM Choice",
                                 "Player Choice"
@@ -5657,12 +5658,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         if (useSSG) {
                             listOf(
                                 "Monster Summoning II",
-                                "Zargoza's Tentacled Fury",
+                                "Zargosa’s Tentacled Fury",
                                 "Duplicate",
                                 "Power Word: Anosmitize",
                                 "Power Word: Freeze",
                                 "Power Word: Slow",
-                                "Segwick's Tool Box",
+                                "Segwick’s Tool Box",
                                 "GM Choice",
                                 "GM Choice",
                                 "Player Choice"
@@ -5679,8 +5680,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         if (useSSG) {
                             listOf(
                                 "Conjure Elemental",
-                                "Drayton's Hidden Stash",
-                                "Hyptor's Faithful Bitch-Hound",
+                                "Drayton’s Hidden Stash",
+                                "Hyptor’s Faithful Bitch-Hound",
                                 "Monster Summoning III",
                                 "Power Word: Charm",
                                 "Power Word: Fear",
@@ -5693,7 +5694,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             ).random()
                         } else {
                             listOf(
-                                "Drayton's Hidden Stash",
+                                "Drayton’s Hidden Stash",
                                 "Summon Shadow",
                                 "Conjure Elemental",
                                 "Hyptor’s Faithful Bitch-Hound",
@@ -5708,7 +5709,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             listOf(
                                 "Conjure Animals",
                                 "Ensnarement",
-                                "Fandango's Fiery Constrictor",
+                                "Fandango’s Fiery Constrictor",
                                 "Invisible Stalker",
                                 "Monster Summoning IV",
                                 "Power Word: Forget",
@@ -5735,11 +5736,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Cacodemon",
                                 "Limited Wish",
                                 "Monster Summoning V",
-                                "Power Word: Deafness",
+                                "Power Word: Deafnen",
                                 "Power Word: Dispel",
                                 "Power Word: Heal",
                                 "Power Word: Stun",
-                                "Zargosa's Instant Summons",
+                                "Zargosa’s Instant Summons",
                                 "GM Choice",
                                 "GM Choice",
                                 "GM Choice",
@@ -5761,7 +5762,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         if (useSSG) {
                             listOf(
                                 "Grasping Death",
-                                "Jonid's Jewel",
+                                "Jonid’s Jewel",
                                 "Maze",
                                 "Monster Summoning VI",
                                 "Power Word: Banish",
@@ -5920,8 +5921,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             listOf(
                                 "Contact Other Plane",
                                 "False Vision",
-                                "Segwick's Seeking",
-                                "Wizard's Oracle",
+                                "Segwick’s Seeking",
+                                "Wizard’s Oracle",
                                 "GM Choice",
                                 "Player Choice"
                             ).random()
@@ -5956,7 +5957,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             listOf(
                                 "Anticipation",
                                 "Find the Path",
-                                "Manor's Mind Vision",
+                                "Manor’s Mind Vision",
                                 "Vision",
                                 "GM Choice",
                                 "GM Choice",
@@ -5971,9 +5972,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     8   -> {
                         if (useSSG) {
                             listOf(
-                                "Diviner's Insight",
+                                "Diviner’s Insight",
                                 "Screen",
-                                "Jonid's Jewel",
+                                "Jonid’s Jewel",
                                 "GM Choice",
                                 "GM Choice",
                                 "Player Choice"
@@ -6042,8 +6043,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Bind",
                                 "Deeppockets",
                                 "Forget",
-                                "Fustis's Mnemonic Enhancer",
-                                "Murgain's Muster Strength",
+                                "Fustis’s Mnemonic Enhancer",
+                                "Murgain’s Muster Strength",
                                 "Proadus’ Uncontrollable Fit of Laughter",
                                 "Ray of Enfeeblement",
                                 "Scare",
@@ -6058,7 +6059,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Forget",
                                 "Bind",
                                 "Proadus’ Uncontrollable Fit of Laughter",
-                                "Murgain's Muster Strength",
+                                "Murgain’s Muster Strength",
                                 "Deeppockets"
                             ).random()
                         }
@@ -6074,7 +6075,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "No Fear",
                                 "Perceived Malignment",
                                 "Suggestion",
-                                "Yargroove's Eidelon"
+                                "Yargroove’s Eidelon"
                             ).random()
                         } else {
                             listOf(
@@ -6098,12 +6099,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Mage Lock",
                                 "Magic Mirror",
                                 "Stirring Oration",
-                                "Zargosa's Lodge of Protection"
+                                "Zargosa’s Lodge of Protection"
                             ).random()
                         } else {
                             listOf(
                                 //Omitted "Haarpang’s Magnificent Sphere of Resiliency" due to being Alt/Evo
-                                "Zargosa's Lodge of Protection",
+                                "Zargosa’s Lodge of Protection",
                                 "Charm Monster",
                                 "Confusion",
                                 "Fire Charm",
@@ -6179,7 +6180,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Mass Hypnosis",
                                 "Steal Enchantment",
                                 "Truename",
-                                "Tybalt's Planar Pacifier",
+                                "Tybalt’s Planar Pacifier",
                                 "Zarba’s Sphere of Insanity"
                             ).random()
                         } else {
@@ -6211,7 +6212,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     else-> {
                         if (useSSG) {
                             listOf(
-                                "Hyptor's Disjunction",
+                                "Hyptor’s Disjunction",
                                 "Mass Domination",
                                 "Programmed Amnesia",
                                 "Succor",
@@ -6220,7 +6221,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             ).random()
                         } else {
                             listOf(
-                                "Hyptor's Disjunction",
+                                "Hyptor’s Disjunction",
                                 "Succor"
                             ).random()
                         }
@@ -6241,8 +6242,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Change Self",
                                     "Corpse Visage",
                                     "Faerie Phantoms",
-                                    "Fool's Silver",
-                                    "Gabal's Magic Aura",
+                                    "Fool’s Silver",
+                                    "Gabal’s Magic Aura",
                                     "Imaginary Friend",
                                     "Phantasmal Fireball",
                                     "Phantasmal Force",
@@ -6258,7 +6259,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Audible Glamer",
                                 "Change Self",
                                 "Faerie Phantoms",
-                                "Gabal's Magic Aura",
+                                "Gabal’s Magic Aura",
                                 "Phantasmal Fireball",
                                 "Phantasmal Force",
                                 "Phantasmal Force",
@@ -6283,7 +6284,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Deafness",
                                     "Deepen Shadows",
                                     "Fascinate",
-                                    "Fool's Gold",
+                                    "Fool’s Gold",
                                     "Hypnotic Pattern",
                                     "Improved Phantasmal Force",
                                     "Invisibility",
@@ -6299,14 +6300,14 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Blur",
                                 "Deafness",
                                 "Fascinate",
-                                "Gandle's Feeble Trap",
+                                "Gandle’s Feeble Trap",
                                 "Hypnotic Pattern",
                                 "Improved Phantasmal Force",
                                 "Invisibility",
                                 "Mirror Image",
                                 "Misdirection",
                                 "Whispering Wind",
-                                "Fool's Gold"
+                                "Fool’s Gold"
                             ).random()
                         }
                     }
@@ -6434,7 +6435,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             listOf(
                                 "Mass Hypnosis",
                                 "Mass Invisibility",
-                                "Merryweather's Dramatic Death",
+                                "Merrywether’s Dramatic Death",
                                 "Sequester",
                                 "Shadow Walk",
                                 "Shadowcat",
@@ -6490,15 +6491,15 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Chromatic Orb",
                                     "Copy",
                                     "Fireball, Sidewinder Factor 1",
-                                    "Haarpang's Floating Cart",
-                                    "Icy Sphere",
+                                    "Haarpang’s Floating Cart",
+                                    "Icy Blast",
                                     "Jack Punch",
-                                    "Kachirut's Exploding Palm",
+                                    "Kachirut’s Exploding Palm",
                                     "Magic Missile",
                                     "Magic Shield",
                                     "Resist Cold",
                                     "Wall of Fog",
-                                    "Yudder's Whistle of Hell's Gate",
+                                    "Yudder’s Whistle of Hell’s Gate",
                                     "Player Choice"
                                 ).random()
                             }
@@ -6508,11 +6509,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Bash Door",
                                 "Chromatic Orb",
                                 "Fireball, Sidewinder Factor 1",
-                                "Haarpang's Floating Cart",
+                                "Haarpang’s Floating Cart",
                                 "Magic Missile",
                                 "Magic Shield",
                                 "Wall of Fog",
-                                "Yudder's Whistle of Hell's Gate",
+                                "Yudder’s Whistle of Hell’s Gate",
                                 "GM Choice"
                             ).random()
                         }
@@ -6531,15 +6532,14 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Flaming Sphere",
                                     "Heat Seeking Fist of Thunder",
                                     "Ice Knife",
-                                    "Icy Sphere", // per HackJournal errata
-                                    "Kachirut's Kinetic Strike",
+                                    "Kachirut’s Kinetic Strike",
                                     "Magic Missile, Sidewinder",
                                     "Magic Missile of Skewering",
                                     "Shield Screen",
                                     "Stinking Cloud",
                                     "Web",
                                     "Whip",
-                                    "Zed's Crystal Dagger",
+                                    "Zed’s Crystal Dagger",
                                     "Player Choice"
                                 ).random()
                             }
@@ -6569,17 +6569,17 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Fireball",
                                     "Fireball, Sidewinder Factor 3",
                                     "Fireball, Scatter-Blast",
-                                    "Force Hammer",
+                                    "Icy Sphere", // per HackJournal errata
                                     "Glyph of Ice",
                                     "Glyph of Sniping",
                                     "Lightning Bolt",
                                     "Material",
-                                    "Morton's Minute Meteors",
+                                    "Morton’s Minute Meteors",
                                     "Preemptive Strike",
                                     "Sure Grip Snare",
                                     "Wall of Water",
                                     "Zargosa’s Flaming Spheres of Torment",
-                                    "Zed's Crystal Dirk",
+                                    "Zed’s Crystal Dirk",
                                     "Player Choice"
                                 ).random()
                             }
@@ -6620,7 +6620,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 in 76..80   -> "Wall of Acid"
                                 in 81..85   -> "Wall of Fire"
                                 in 86..90   -> "Wall of Ice"
-                                in 91..95   -> "Wimpel's Dispelling Screen"
+                                in 91..95   -> "Wimpel’s Dispelling Screen"
                                 in 96..99   -> "GM Choice"
                                 else        -> "Player Choice"
                             }
@@ -6653,17 +6653,17 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Dream",
                                     "Fireball, Sidewinder Factor 5",
                                     "Fireball, Torrential",
-                                    "Haarpang's Polar Screen",
-                                    "Lyggl's Cone of Cold",
-                                    "Preston's Moonbow",
+                                    "Haarpang’s Polar Screen",
+                                    "Lyggl’s Cone of Cold",
+                                    "Preston’s Moonbow",
                                     "Sending", // Corrected from "Seeming"
-                                    "Shincock's Major Missile",
+                                    "Shincock’s Major Missile",
                                     "Stone Sphere",
                                     "Wall of Force",
                                     "Wall of Iron",
                                     "Wall of Stone",
                                     "Zarba’s Guardian Hand",
-                                    "Player's Choice"
+                                    "Player’s Choice"
                                 ).random()
                             }
                         } else {
@@ -6672,7 +6672,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Cloudkill",
                                 "Fireball, Sidewinder Factor 5",
                                 "Fireball, Torrential",
-                                "Lyggl's Cone of Cold",
+                                "Lyggl’s Cone of Cold",
                                 "Sending",
                                 "Stone Sphere",
                                 "Wall of Force",
@@ -6691,7 +6691,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             } else {
                                 listOf(
                                     "Body Heat Activation Spell",
-                                    "Bradley's Besieging Bolt",
+                                    "Bradley’s Besieging Bolt",
                                     "Chain Lightning",
                                     "Contingency",
                                     "Death Fog",
@@ -6700,18 +6700,18 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Gauntlet of Teeth",
                                     "Guards and Wards",
                                     "Haarpang’s Magnificent Sphere of Freezing",
-                                    "Haarpang's Orb of Containment",
-                                    "Kaarnac's Transformation",
+                                    "Haarpang’s Orb of Containment",
+                                    "Karnaac’s Transformation",
                                     "Snap Drake",
                                     "Spiritwrack",
-                                    "Zarba's Shoving Hand",
+                                    "Zarba’s Shoving Hand",
                                     "Player Choice"
                                 ).random()
                             }
                         } else {
                             listOf(
                                 "Haarpang’s Magnificent Sphere of Freezing",
-                                "Kaarnac's Transformation",
+                                "Kaarnac’s Transformation",
                                 "Death Fog",
                                 "Guards and Wards",
                                 "Spiritwrack",
@@ -6720,7 +6720,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Contingency",
                                 "Fireball, Proximity Fused",
                                 "Fireball, Show-No-Mercy",
-                                "Zarba's Shoving Hand",
+                                "Zarba’s Shoving Hand",
                                 "GM Choice"
                             ).random()
                         }
@@ -6736,9 +6736,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Forcecage",
                                 "Hyptor’s Shimmering Sword",
                                 "Limited Wish",
-                                "Merrywether's Frost Fist", //TODO search for "Merryweather" in other spell names
+                                "Merrywether’s Frost Fist", //TODO search for "Merryweather" in other spell names
                                 "Torment",
-                                "Zarba's Grasping Hand",
+                                "Zarba’s Grasping Hand",
                                 "GM Choice",
                                 "Player Choice"
                             ).random()
@@ -6747,7 +6747,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Fireball, Delayed Blast",
                                 "Forcecage",
                                 "Hyptor’s Shimmering Sword",
-                                "Zarba's Grasping Hand",
+                                "Zarba’s Grasping Hand",
                                 "Torment",
                                 "Limited Wish"
                             ).random()
@@ -6766,11 +6766,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                     "Fireball, Maximus",
                                     "Freeze",
                                     "Haarpang’s Magnificent Sphere of Telekinesis",
-                                    "Hornet's Nest",
+                                    "Hornet’s Nest",
                                     "Incendiary Cloud",
                                     "Shooting Stars",
-                                    "Zarba's Fist of Rage",
-                                    "Player's Choice"
+                                    "Zarba’s Fist of Rage",
+                                    "Player’s Choice"
                                 ).random()
                             }
                         } else {
@@ -6780,7 +6780,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Demand",
                                 "Fireball, Death Brusher",
                                 "Fireball, Maximus",
-                                "Zarba's Fist of Rage",
+                                "Zarba’s Fist of Rage",
                                 "Incendiary Cloud",
                                 "GM Choice"
                             ).random()
@@ -6795,10 +6795,10 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Energy Drain",
                                 "Fireball, Lava Yield",
                                 "Ice Juggernaut",
-                                "Kachirut's White Lance",
+                                "Kachirut’s White Lance",
                                 "Meteor Swarm",
                                 "Tempestcone",
-                                "Zarba's Crushing Hand",
+                                "Zarba’s Crushing Hand",
                                 "GM Choice",
                                 "GM Choice",
                                 "Player Choice"
@@ -6808,7 +6808,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Astral Spell",
                                 "Fireball, Lava Yield",
                                 "Meteor Swarm",
-                                "Zarba's Crushing Hand",
+                                "Zarba’s Crushing Hand",
                                 "Energy Drain",
                                 "GM Choice"
                             ).random()
@@ -6829,7 +6829,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Detect Undead",
                                 "Disable Hand",
                                 "Exterminate",
-                                "Ralph's Placid Arrow",
+                                "Ralph’s Placid Arrow",
                                 "GM Choice",
                                 "GM Choice",
                                 "Player Choice"
@@ -6848,7 +6848,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Choke",
                                 "Death Recall",
                                 "Disable Foot",
-                                "Fihrsid's Horrid Armor",
+                                "Fihrsid’s Horrid Armor",
                                 "Ghoul Touch",
                                 "Slow Healing",
                                 "Spectral Hand",
@@ -6872,7 +6872,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Feign Death",
                                 "Hold Undead",
                                 "Hovering Skull",
-                                "Murgain's Migraine",
+                                "Murgain’s Migraine",
                                 "Pain Touch",
                                 "Rot Dawgs",
                                 "Vampiric Touch",
@@ -6884,7 +6884,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Charm Undead",
                                 "Feign Death",
                                 "Hold Undead",
-                                "Murgain's Migraine",
+                                "Murgain’s Migraine",
                                 "Vampiric Touch",
                                 "GM Choice"
                             ).random()
@@ -6939,8 +6939,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     6   -> {
                         if (useSSG) {
                             listOf(
-                                "Aliron's Dark Graft",
-                                "Dead Man's Eyes",
+                                "Aliron’s Dark Graft",
+                                "Dead Man’s Eyes",
                                 "Death Spell",
                                 "Reincarnation",
                                 "GM Choice",
@@ -6993,7 +6993,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Blood Curse",
                                 "Death Rune",
                                 "Energy Drain",
-                                "Fawlgar's Grasping Death",
+                                "Fawlgar’s Grasping Death",
                                 "Immunity to Undeath",
                                 "Master Undead",
                                 "GM Choice",
@@ -7005,7 +7005,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             listOf(
                                 "Death Rune",
                                 "Energy Drain",
-                                "Fawlgar's Grasping Death"
+                                "Fawlgar’s Grasping Death"
                             ).random()
                         }
                     }
@@ -7014,7 +7014,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             else    -> "GM Choice"
         }
-
 
         fun Spell?.isValid(): Boolean {
 
@@ -7041,7 +7040,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             Log.d("getSpellByLevelUp()","Spell name pulled. spellName = $spellName")
 
-            if ((spellName == "GM Choice")||(spellName == "Player Choice")){
+            if (spellName.contains("GM Choice")){
 
                 Log.d("getSpellByLevelUp()","Choice spell detected. Appending school.")
 
@@ -7171,7 +7170,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             "Erase",
             "Find Familiar",
             "Fog Vision",
-            "Gabal's Magic Aura",
+            "Gabal’s Magic Aura",
             "Melt",
             "Mend",
             "Merge Coin Pile",
@@ -7257,7 +7256,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             "Erase",
             "Find Familiar",
             "Fog Vision",
-            "Gabal's Magic Aura",
+            "Gabal’s Magic Aura",
             "Melt",
             "Mend",
             "Merge Coin Pile",
@@ -7354,7 +7353,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             tempHolder = if ((name == "GM Choice (Defensive)") || ( name == "Player Choice (Defensive)")){
                 // Return a custom "Choice" SpellTemplate
                 SpellTemplate(0,name,1,
-                    "Spellslinger's Guide to Wurld Domination", 6,
+                    "Spellslinger’s Guide to Wurld Domination", 6,
                     0, 1, "Abj", "", "", "", "See errata for updated Table 1A")
             } else {
 

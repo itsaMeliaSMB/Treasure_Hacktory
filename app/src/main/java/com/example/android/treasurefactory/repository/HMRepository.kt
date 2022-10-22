@@ -101,12 +101,20 @@ class HMRepository (
         gemDao.addGem(newGem)
     }
 
-    suspend fun updateGem(gemToUpdate: Gem) {
-        gemDao.updateGem(gemToUpdate)
+    suspend fun addGems(newGems: List<Gem>) { gemDao.addGems(newGems) }
+
+    suspend fun updateGems(gemsToUpdate: List<Gem>) { gemDao.updateGems(gemsToUpdate) }
+
+    suspend fun deleteGems(gemsToDelete: List<Gem>) { gemDao.deleteGems(gemsToDelete) }
+
+    suspend fun updateGemsAndHoards(gems: List<Gem>, hoards: List<Hoard>,
+                                    events: List<HoardEvent>) {
+        gemDao.updateGemsAndHoards(gems, hoards, events)
     }
 
-    suspend fun deleteGem(gemToDelete: Gem) {
-        gemDao.deleteGem(gemToDelete)
+    suspend fun deleteGemsUpdateHoards(gems: List<Gem>, hoards: List<Hoard>,
+                                       events: List<HoardEvent>) {
+        gemDao.deleteGemsUpdateHoards(gems, hoards, events)
     }
     // endregion
     // endregion
@@ -135,12 +143,26 @@ class HMRepository (
         artDao.addArtObject(newArt)
     }
 
-    suspend fun updateArtObject(artToUpdate: ArtObject) {
-        artDao.updateArtObject(artToUpdate)
+    suspend fun addArtObjects(newArt: List<ArtObject>) {
+        artDao.addArtObjects(newArt)
     }
 
-    suspend fun deleteArtObject(artToDelete: ArtObject) {
-        artDao.deleteArtObject(artToDelete)
+    suspend fun updateArtObjects(artToUpdate: List<ArtObject>) {
+        artDao.updateArtObjects(artToUpdate)
+    }
+
+    suspend fun deleteArtObjects(artToDelete: List<ArtObject>) {
+        artDao.deleteArtObjects(artToDelete)
+    }
+
+    suspend fun updateArtObjectsAndHoards(art: List<ArtObject>, hoards: List<Hoard>,
+                                          events: List<HoardEvent>) {
+        artDao.updateArtObjectsAndHoards(art, hoards, events)
+    }
+
+    suspend fun deleteArtObjectsUpdateHoards(art: List<ArtObject>, hoards: List<Hoard>,
+                                       events: List<HoardEvent>) {
+        artDao.deleteArtObjectsUpdateHoards(art,hoards,events)
     }
     // endregion
 
@@ -216,12 +238,26 @@ class HMRepository (
         magicItemDao.addMagicItem(newItem)
     }
 
-    suspend fun updateMagicItem(itemToUpdate: MagicItem) {
-        magicItemDao.updateMagicItem(itemToUpdate)
+    suspend fun addMagicItems(newItems: List<MagicItem>) {
+        magicItemDao.addMagicItems(newItems)
     }
 
-    suspend fun deleteMagicItem(itemToDelete: MagicItem) {
-        magicItemDao.deleteMagicItem(itemToDelete)
+    suspend fun updateMagicItems(itemsToUpdate: List<MagicItem>) {
+        magicItemDao.updateMagicItems(itemsToUpdate)
+    }
+
+    suspend fun deleteMagicItems(itemsToDelete: List<MagicItem>) {
+        magicItemDao.deleteMagicItems(itemsToDelete)
+    }
+
+    suspend fun updateMagicItemsAndHoards(items: List<MagicItem>, hoards: List<Hoard>,
+                                          events: List<HoardEvent>) {
+        magicItemDao.updateMagicItemsAndHoards(items, hoards, events)
+    }
+
+    suspend fun deleteMagicItemsUpdateHoards(items: List<MagicItem>, hoards: List<Hoard>,
+                                             events: List<HoardEvent>) {
+        magicItemDao.deleteMagicItemsUpdateHoards(items, hoards, events)
     }
     // endregion
 
@@ -239,6 +275,14 @@ class HMRepository (
 
     suspend fun getSpellIDs(discipline: Int, level: Int): List<Int> =
         spellCollectionDao.getSpellIDs(discipline, level)
+
+    suspend fun getLevelChoiceSpells(level: Int, school: SpellSchool,
+                                       useSplat: Boolean): List<Spell> =
+        spellCollectionDao.getLevelChoiceSpells(level,"%${school.ordinal }%", "%${
+            if (useSplat) "S" else "s"}%")
+
+    suspend fun getInitialChoiceSpells(choiceStr: String): List<Spell> =
+        spellCollectionDao.getInitialChoiceSpells("%$choiceStr%")
 
     suspend fun addSpell(entry: Spell) {
         spellCollectionDao.addSpell(entry)
@@ -278,14 +322,29 @@ class HMRepository (
         spellCollectionDao.addSpellCollection(newSpellCollection)
     }
 
-    suspend fun updateSpellCollection(spellCollectionToUpdate: SpellCollection) {
-        spellCollectionDao.updateSpellCollection(spellCollectionToUpdate)
+    suspend fun addSpellCollections(newSpellCollections: List<SpellCollection>) {
+        spellCollectionDao.addSpellCollections(newSpellCollections)
     }
 
-    suspend fun deleteSpellCollection(spellCollectionToDelete: SpellCollection) {
-        spellCollectionDao.deleteSpellCollection(spellCollectionToDelete)
+    suspend fun updateSpellCollections(spellCollectionsToUpdate: List<SpellCollection>) {
+        spellCollectionDao.updateSpellCollections(spellCollectionsToUpdate)
+    }
+
+    suspend fun deleteSpellCollections(spellCollectionsToDelete: List<SpellCollection>) {
+        spellCollectionDao.deleteSpellCollections(spellCollectionsToDelete)
+    }
+
+    suspend fun updateSpellCollectionsAndHoards(spellCollections: List<SpellCollection>,
+                                                hoards: List<Hoard>, events: List<HoardEvent>) {
+        spellCollectionDao.updateSpellCollectionsAndHoards(spellCollections, hoards, events)
+    }
+    suspend fun deleteSpellCollectionsUpdateHoards(spellCollections: List<SpellCollection>,
+                                                   hoards: List<Hoard>, events: List<HoardEvent>) {
+        spellCollectionDao.deleteSpellCollectionsUpdateHoards(spellCollections, hoards, events)
     }
     // endregion
+
+
 
     // region ( CommandWord )
     suspend fun getThemedCommandWords(theme: String): List<String> =

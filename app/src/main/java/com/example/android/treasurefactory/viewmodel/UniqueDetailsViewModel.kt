@@ -1,7 +1,9 @@
 package com.example.android.treasurefactory.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.treasurefactory.capitalized
+import com.example.android.treasurefactory.database.MagicItemTemplate
 import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.delay
@@ -22,9 +24,20 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
     var viewedItemLiveData = MutableLiveData<ViewableItem?>()
 
     /**
-     * Triple of the [spell][Spell] and [SimpleSpellEntry] that was clicked to request this.
+     * Pair of the [spell][Spell] and [SimpleSpellEntry] that was clicked to request this.
      * */
     var dialogSpellInfoLiveData = MutableLiveData<Pair<Spell?,SimpleSpellEntry>?>(null)
+
+    /**
+     * Pair of the lists of spells for deciding a choice slot and the [SimpleSpellEntry]
+     * of the choice slot to be replaced.
+     */
+    var dialogSpellsInfoLiveData = MutableLiveData<Pair<List<Spell>,SimpleSpellEntry>?>(null)
+
+    /**
+     * List of [magic item templates][MagicItemTemplate] for deciding a choice slot.
+     */
+    var dialogItemTemplatesInfoLiveData = MutableLiveData<List<MagicItemTemplate>?>(null)
 
     val isRunningAsyncLiveData = MutableLiveData(isRunningAsync)
 
@@ -47,13 +60,19 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
         // - Get and compare against row at key if it exists
         // - Update itemToUpdate's entry in database
         // - Correct count on hoard, if applicable.
+        // - Update hoard in db
+        // - call loadItemArgs to reload
 
         when (itemToUpdate) {
             is ViewableGem              -> {
                 TODO()
             }
-            is ViewableArtObject        -> TODO()
-            is ViewableMagicItem        -> TODO()
+            is ViewableArtObject        -> {
+                TODO()
+            }
+            is ViewableMagicItem        -> {
+                TODO()
+            }
             is ViewableSpellCollection  -> {
                 itemToUpdate.convertBack()
                 //TODO need repository function for transactionally updating hoard and list of Spell Collections
@@ -228,9 +247,55 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
             setRunningAsync(true)
 
+            Log.d("fetchSpellForDialog","attempting to pull spell \"${entry.name}\"")
+
             val fetchedSpell = repository.getSpell(entry.spellID)
 
             dialogSpellInfoLiveData.postValue(fetchedSpell to entry)
+
+            Log.d("fetchSpellForDialog","Finished grabbing spell. Result: ${
+                fetchedSpell?.name ?: "null"}")
+
+            setRunningAsync(false)
+        }
+    }
+
+    fun fetchSpellsForDialog(entry: SimpleSpellEntry) {
+
+        viewModelScope.launch {
+
+            setRunningAsync(true)
+
+            if (entry.schools.isEmpty()) {
+
+                dialogSpellsInfoLiveData.postValue(
+
+                    when {entry.name.contains("SSG")  -> {
+
+                            when (entry.name.substringAfter("(").removeSuffix(")")) {
+                                "Offensive"     -> repository.getInitialChoiceSpells("O")
+                                "Defensive"     -> repository.getInitialChoiceSpells("D")
+                                "Miscellaneous" -> repository.getInitialChoiceSpells("M")
+                                else        -> emptyList<Spell>()
+                            }
+                        }
+                        entry.name.contains("GMG")  -> {
+
+                            when (entry.name.substringAfter("(").removeSuffix(")")) {
+                                "Offensive"     -> repository.getInitialChoiceSpells("o")
+                                "Defensive"     -> repository.getInitialChoiceSpells("d")
+                                "Miscellaneous" -> repository.getInitialChoiceSpells("m")
+                                else        -> emptyList<Spell>()
+                            }
+                        }
+                        else -> emptyList()
+                    } to entry)
+
+            } else {
+
+                dialogSpellsInfoLiveData.postValue(repository.getLevelChoiceSpells(
+                    entry.level,entry.schools.first(), (entry.name.contains("GMG"))) to entry)
+            }
 
             setRunningAsync(false)
         }

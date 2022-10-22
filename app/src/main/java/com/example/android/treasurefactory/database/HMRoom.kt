@@ -414,6 +414,7 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val _spellSpheres: String = lineData[10].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _subclass: String = lineData[11].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _note: String = lineData[12].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _choiceString: String = lineData[12].trim('"').takeUnless { it.isBlank() } ?: ""
 
                     spellDao.addSpell(
                         Spell(
@@ -433,7 +434,8 @@ abstract class TreasureDatabase : RoomDatabase() {
                             spheres = _spellSpheres.toSphereList(),
                             subclass = _subclass,
                             restrictions = _restrictions.toSpecialistList(),
-                            note = _note
+                            note = _note,
+                            choiceString = _choiceString
                             )
                     )
                     iterationCount ++
@@ -1128,6 +1130,9 @@ interface HoardDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addHoardEvent(newEvent: HoardEvent)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addHoardEvents(newEvents: List<HoardEvent>)
     // endregion
 
     // region ( LetterCode )
@@ -1182,6 +1187,8 @@ interface HoardDao {
 @Dao
 interface GemDao {
 
+    //TODO add GemEvaluation queries
+
     // region ( GemTemplate )
     @Query("SELECT * FROM hackmaster_gem_reference WHERE type=(:type) ORDER BY ordinal")
     suspend fun getGemTemplatesByType(type: Int) : List<GemTemplate>
@@ -1221,12 +1228,36 @@ interface GemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addGem(newGem: Gem)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addGems(newGems: List<Gem>)
+
     @Update
-    suspend fun updateGem(gemToUpdate: Gem)
+    suspend fun updateGems(gemsToUpdate: List<Gem>) : Int
 
     @Delete
-    suspend fun deleteGem(gemToDelete: Gem)
+    suspend fun deleteGems(gemToDelete: List<Gem>) : Int
     //endregion
+
+    @Update
+    suspend fun updateRelevantHoards(hoards: List<Hoard>): Int
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addHoardEvents(newEvents: List<HoardEvent>)
+
+    @Transaction
+    suspend fun updateGemsAndHoards(gems: List<Gem>, hoards: List<Hoard>,
+                                    events: List<HoardEvent>) {
+        updateGems(gems)
+        updateRelevantHoards(hoards)
+        addHoardEvents(events)
+    }
+    @Transaction
+    suspend fun deleteGemsUpdateHoards(gems: List<Gem>, hoards: List<Hoard>,
+                                       events: List<HoardEvent>) {
+        deleteGems(gems)
+        updateRelevantHoards(hoards)
+        addHoardEvents(events)
+    }
 }
 
 @Dao
@@ -1260,12 +1291,36 @@ interface ArtDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addArtObject(newArt: ArtObject)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addArtObjects(newArt: List<ArtObject>) : Int
+
     @Update
-    suspend fun updateArtObject(artToUpdate: ArtObject)
+    suspend fun updateArtObjects(artToUpdate: List<ArtObject>) : Int
 
     @Delete
-    suspend fun deleteArtObject(artToDelete: ArtObject)
-    // endregion
+    suspend fun deleteArtObjects(artToDelete: List<ArtObject>) : Int
+    //endregion
+
+    @Update
+    suspend fun updateRelevantHoards(hoards: List<Hoard>): Int
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addHoardEvents(newEvents: List<HoardEvent>)
+
+    @Transaction
+    suspend fun updateArtObjectsAndHoards(art: List<ArtObject>, hoards: List<Hoard>,
+                                          events: List<HoardEvent>) {
+        updateArtObjects(art)
+        updateRelevantHoards(hoards)
+        addHoardEvents(events)
+    }
+    @Transaction
+    suspend fun deleteArtObjectsUpdateHoards(art: List<ArtObject>, hoards: List<Hoard>,
+                                             events: List<HoardEvent>) {
+        updateArtObjects(art)
+        updateRelevantHoards(hoards)
+        addHoardEvents(events)
+    }
 }
 
 @Dao
@@ -1334,12 +1389,36 @@ interface MagicItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMagicItem(newItem: MagicItem)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addMagicItems(newItems: List<MagicItem>) : Int
+
     @Update
-    suspend fun updateMagicItem(itemToUpdate: MagicItem)
+    suspend fun updateMagicItems(itemsToUpdate: List<MagicItem>) : Int
 
     @Delete
-    suspend fun deleteMagicItem(itemToDelete: MagicItem)
-    // endregion
+    suspend fun deleteMagicItems(itemsToDelete: List<MagicItem>) : Int
+    //endregion
+
+    @Update
+    suspend fun updateRelevantHoards(hoards: List<Hoard>): Int
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addHoardEvents(newEvents: List<HoardEvent>)
+
+    @Transaction
+    suspend fun updateMagicItemsAndHoards(items: List<MagicItem>, hoards: List<Hoard>,
+                                          events: List<HoardEvent>) {
+        updateMagicItems(items)
+        updateRelevantHoards(hoards)
+        addHoardEvents(events)
+    }
+    @Transaction
+    suspend fun deleteMagicItemsUpdateHoards(items: List<MagicItem>, hoards: List<Hoard>,
+                                             events: List<HoardEvent>) {
+        updateMagicItems(items)
+        updateRelevantHoards(hoards)
+        addHoardEvents(events)
+    }
 }
 
 @Dao
@@ -1355,6 +1434,14 @@ interface SpellCollectionDao{
     @Query("SELECT spell_id FROM hackmaster_spell_table WHERE type=(:discipline) " +
             "AND spellLevel=(:level)")
     suspend fun getSpellIDs(discipline: Int, level: Int): List<Int>
+
+    @Query("SELECT * FROM hackmaster_spell_table WHERE spellLevel=(:level) AND schools " +
+            "LIKE (:schOrdStr) AND choiceString LIKE (:choiceStr)")
+    suspend fun getLevelChoiceSpells(level: Int, schOrdStr: String, choiceStr: String): List<Spell>
+
+    @Query("SELECT * FROM hackmaster_spell_table WHERE spellLevel=1 AND choiceString LIKE " +
+            "(:choiceStr)")
+    suspend fun getInitialChoiceSpells(choiceStr: String): List<Spell>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addSpell(entry: Spell)
@@ -1391,11 +1478,14 @@ interface SpellCollectionDao{
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addSpellCollection(newSpellCollection: SpellCollection)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addSpellCollections(newSpellCollections: List<SpellCollection>) : Int
+
     @Update
-    suspend fun updateSpellCollection(spellCollectionToUpdate: SpellCollection)
+    suspend fun updateSpellCollections(spellCollectionsToUpdate: List<SpellCollection>) : Int
 
     @Delete
-    suspend fun deleteSpellCollection(spellCollectionToDelete: SpellCollection)
+    suspend fun deleteSpellCollections(spellCollectionsToDelete: List<SpellCollection>) : Int
     // endregion
 
     // region ( CommandWord )
@@ -1408,5 +1498,27 @@ interface SpellCollectionDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addCommandWord(wordToAdd: CommandWord)
     // endregion
+
+    @Update
+    suspend fun updateRelevantHoards(hoards: List<Hoard>): Int
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addHoardEvents(newEvents: List<HoardEvent>)
+
+    @Transaction
+    suspend fun updateSpellCollectionsAndHoards(spellCollections: List<SpellCollection>,
+                                                hoards: List<Hoard>, events: List<HoardEvent>) {
+        updateSpellCollections(spellCollections)
+        updateRelevantHoards(hoards)
+        addHoardEvents(events)
+    }
+
+    @Transaction
+    suspend fun deleteSpellCollectionsUpdateHoards(spellCollections: List<SpellCollection>,
+                                                   hoards: List<Hoard>, events: List<HoardEvent>) {
+        deleteSpellCollections(spellCollections)
+        updateRelevantHoards(hoards)
+        addHoardEvents(events)
+    }
 }
 //endregion

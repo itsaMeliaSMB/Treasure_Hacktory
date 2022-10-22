@@ -198,7 +198,7 @@ class UniqueDetailsFragment() : Fragment() {
 
                         if (spell != null) {
 
-
+                            showSpellDialog(spell,entry)
 
                         } else {
 
@@ -209,6 +209,28 @@ class UniqueDetailsFragment() : Fragment() {
                     }
 
                     dialogSpellInfoLiveData.value = null
+                }
+            }
+
+            dialogSpellsInfoLiveData.observe(viewLifecycleOwner) { spellsPair ->
+
+                if (spellsPair != null){
+
+                    spellsPair.let{ (spells, entry) ->
+
+                        if (spells.isNotEmpty()) {
+
+                            showChoiceSpellDialog(spells, entry)
+
+                        } else {
+
+                            Toast.makeText(context, "No spell list found for ${
+                                entry.spellsPos}: \"${entry.name}\" (id: ${entry.spellID})",
+                                Toast.LENGTH_LONG)
+                        }
+                    }
+
+                    dialogSpellsInfoLiveData.value = null
                 }
             }
         }
@@ -1464,8 +1486,8 @@ class UniqueDetailsFragment() : Fragment() {
             }
 
             spellDialogChooseButton.setOnClickListener{
-                Toast.makeText(requireContext(),"Choose button clicked.",Toast.LENGTH_LONG).show()
-                //TODO implement
+                uniqueDetailsViewModel.fetchSpellsForDialog(entry)
+                spellDialog.dismiss()
             }
 
             spellDialogCloseButton.setOnClickListener{
@@ -1474,6 +1496,11 @@ class UniqueDetailsFragment() : Fragment() {
         }
 
         //if (viewedItem is ViewableSpellCollection)
+    }
+
+    private fun showChoiceSpellDialog(spellList: List<Spell>, entry: SimpleSpellEntry) {
+
+        //TODO implement
     }
 
     // endregion

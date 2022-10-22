@@ -206,7 +206,8 @@ data class Spell(
     val spheres: List<ClericalSphere>,
     val subclass: String,
     val restrictions: List<ArcaneSpecialist> = emptyList<ArcaneSpecialist>(),
-    val note: String
+    val note: String,
+    val choiceString: String = ""
 ) {
 
     @Ignore
