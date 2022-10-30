@@ -116,7 +116,7 @@ class AboutFragment : Fragment() {
 
                 if (binding.fraimCardExpandedGroup.visibility == View.VISIBLE) {
 
-                    val collapseAnimator = ObjectAnimator.ofFloat(binding.fraimCardIndicator, View.ROTATION, 90f, -90f)
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.fraimCardIndicator, View.ROTATION, -90f, 90f)
 
                     // Rotate the indicator
                     collapseAnimator.apply{
@@ -125,12 +125,12 @@ class AboutFragment : Fragment() {
                         start() }
 
                     // Hide the links
-                    TransitionManager.beginDelayedTransition(binding.fraimCard, AutoTransition())
+                    TransitionManager.beginDelayedTransition(binding.fraimCardExpandedGroup, AutoTransition())
                     binding.fraimCardExpandedGroup.visibility = View.GONE
 
                 } else {
 
-                    val expandAnimator = ObjectAnimator.ofFloat(binding.fraimCardIndicator, View.ROTATION, -90f, 90f)
+                    val expandAnimator = ObjectAnimator.ofFloat(binding.fraimCardIndicator, View.ROTATION, 90f, -90f)
 
                     // Rotate the indicator
                     expandAnimator.apply{
@@ -148,7 +148,7 @@ class AboutFragment : Fragment() {
 
                 if (binding.ponetiCardExpandedGroup.visibility == View.VISIBLE) {
 
-                    val collapseAnimator = ObjectAnimator.ofFloat(binding.ponetiCardIndicator, View.ROTATION, 90f, -90f)
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.ponetiCardIndicator, View.ROTATION, -90f, 90f)
 
                     // Rotate the indicator
                     collapseAnimator.apply{
@@ -157,12 +157,12 @@ class AboutFragment : Fragment() {
                         start() }
 
                     // Hide the links
-                    TransitionManager.beginDelayedTransition(binding.ponetiCard, AutoTransition())
+                    TransitionManager.beginDelayedTransition(binding.ponetiCardExpandedGroup, AutoTransition())
                     binding.ponetiCardExpandedGroup.visibility = View.GONE
 
                 } else {
 
-                    val expandAnimator = ObjectAnimator.ofFloat(binding.ponetiCardIndicator, View.ROTATION, -90f, 90f)
+                    val expandAnimator = ObjectAnimator.ofFloat(binding.ponetiCardIndicator, View.ROTATION, 90f, -90f)
 
                     // Rotate the indicator
                     expandAnimator.apply{
@@ -180,7 +180,7 @@ class AboutFragment : Fragment() {
 
                 if (binding.akizaCardExpandedGroup.visibility == View.VISIBLE) {
 
-                    val collapseAnimator = ObjectAnimator.ofFloat(binding.akizaCardIndicator, View.ROTATION, 90f, -90f)
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.akizaCardIndicator, View.ROTATION, -90f, 90f)
 
                     // Rotate the indicator
                     collapseAnimator.apply{
@@ -189,12 +189,12 @@ class AboutFragment : Fragment() {
                         start() }
 
                     // Hide the links
-                    TransitionManager.beginDelayedTransition(binding.akizaCard, AutoTransition())
+                    TransitionManager.beginDelayedTransition(binding.akizaCardExpandedGroup, AutoTransition())
                     binding.akizaCardExpandedGroup.visibility = View.GONE
 
                 } else {
 
-                    val expandAnimator = ObjectAnimator.ofFloat(binding.akizaCardIndicator, View.ROTATION, -90f, 90f)
+                    val expandAnimator = ObjectAnimator.ofFloat(binding.akizaCardIndicator, View.ROTATION, 90f, -90f)
 
                     // Rotate the indicator
                     expandAnimator.apply{
@@ -212,7 +212,7 @@ class AboutFragment : Fragment() {
 
                 if (binding.gameIconsCardExpandedGroup.visibility == View.VISIBLE) {
 
-                    val collapseAnimator = ObjectAnimator.ofFloat(binding.gameIconsCardIndicator, View.ROTATION, 90f, -90f)
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.gameIconsCardIndicator, View.ROTATION, -90f, 90f)
 
                     // Rotate the indicator
                     collapseAnimator.apply{
@@ -221,12 +221,12 @@ class AboutFragment : Fragment() {
                         start() }
 
                     // Hide the links
-                    TransitionManager.beginDelayedTransition(binding.gameIconsCard, AutoTransition())
+                    TransitionManager.beginDelayedTransition(binding.gameIconsCardExpandedGroup, AutoTransition())
                     binding.gameIconsCardExpandedGroup.visibility = View.GONE
 
                 } else {
 
-                    val expandAnimator = ObjectAnimator.ofFloat(binding.gameIconsCardIndicator, View.ROTATION, -90f, 90f)
+                    val expandAnimator = ObjectAnimator.ofFloat(binding.gameIconsCardIndicator, View.ROTATION, 90f, -90f)
 
                     // Rotate the indicator
                     expandAnimator.apply{
@@ -244,7 +244,7 @@ class AboutFragment : Fragment() {
 
                 if (binding.iconscoutCardExpandedGroup.visibility == View.VISIBLE) {
 
-                    val collapseAnimator = ObjectAnimator.ofFloat(binding.iconscoutCardIndicator, View.ROTATION, 90f, -90f)
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.iconscoutCardIndicator, View.ROTATION, -90f, 90f)
 
                     // Rotate the indicator
                     collapseAnimator.apply{
@@ -253,12 +253,12 @@ class AboutFragment : Fragment() {
                         start() }
 
                     // Hide the links
-                    TransitionManager.beginDelayedTransition(binding.iconscoutCard, AutoTransition())
+                    TransitionManager.beginDelayedTransition(binding.iconscoutCardExpandedGroup, AutoTransition())
                     binding.iconscoutCardExpandedGroup.visibility = View.GONE
 
                 } else {
 
-                    val expandAnimator = ObjectAnimator.ofFloat(binding.iconscoutCardIndicator, View.ROTATION, -90f, 90f)
+                    val expandAnimator = ObjectAnimator.ofFloat(binding.iconscoutCardIndicator, View.ROTATION, 90f, -90f)
 
                     // Rotate the indicator
                     expandAnimator.apply{
@@ -272,11 +272,43 @@ class AboutFragment : Fragment() {
                 }
             }
 
+            maxIconsCardFooter.setOnClickListener {
+
+                if (binding.maxIconsCardExpandedGroup.visibility == View.VISIBLE) {
+
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.maxIconsCardIndicator, View.ROTATION, -90f, 90f)
+
+                    // Rotate the indicator
+                    collapseAnimator.apply{
+                        duration = 100
+                        disableViewDuringAnimation(binding.maxIconsCardFooter)
+                        start() }
+
+                    // Hide the links
+                    TransitionManager.beginDelayedTransition(binding.maxIconsCardExpandedGroup, AutoTransition())
+                    binding.maxIconsCardExpandedGroup.visibility = View.GONE
+
+                } else {
+
+                    val expandAnimator = ObjectAnimator.ofFloat(binding.maxIconsCardIndicator, View.ROTATION, 90f, -90f)
+
+                    // Rotate the indicator
+                    expandAnimator.apply{
+                        duration = 100
+                        disableViewDuringAnimation(binding.maxIconsCardFooter)
+                        start() }
+
+                    // Show the links
+                    TransitionManager.beginDelayedTransition(binding.maxIconsCard, AutoTransition())
+                    binding.maxIconsCardExpandedGroup.visibility = View.VISIBLE
+                }
+            }
+
             materialIconsCardFooter.setOnClickListener {
 
                 if (binding.materialIconsCardExpandedGroup.visibility == View.VISIBLE) {
 
-                    val collapseAnimator = ObjectAnimator.ofFloat(binding.materialIconsCardIndicator, View.ROTATION, 90f, -90f)
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.materialIconsCardIndicator, View.ROTATION, -90f, 90f)
 
                     // Rotate the indicator
                     collapseAnimator.apply{
@@ -285,12 +317,12 @@ class AboutFragment : Fragment() {
                         start() }
 
                     // Hide the links
-                    TransitionManager.beginDelayedTransition(binding.materialIconsCard, AutoTransition())
+                    TransitionManager.beginDelayedTransition(binding.materialIconsCardExpandedGroup, AutoTransition())
                     binding.materialIconsCardExpandedGroup.visibility = View.GONE
 
                 } else {
 
-                    val expandAnimator = ObjectAnimator.ofFloat(binding.materialIconsCardIndicator, View.ROTATION, -90f, 90f)
+                    val expandAnimator = ObjectAnimator.ofFloat(binding.materialIconsCardIndicator, View.ROTATION, 90f, -90f)
 
                     // Rotate the indicator
                     expandAnimator.apply{
@@ -308,7 +340,7 @@ class AboutFragment : Fragment() {
 
                 if (binding.puzwedCardExpandedGroup.visibility == View.VISIBLE) {
 
-                    val collapseAnimator = ObjectAnimator.ofFloat(binding.puzwedCardIndicator, View.ROTATION, 90f, -90f)
+                    val collapseAnimator = ObjectAnimator.ofFloat(binding.puzwedCardIndicator, View.ROTATION, -90f, 90f)
 
                     // Rotate the indicator
                     collapseAnimator.apply{
@@ -317,12 +349,12 @@ class AboutFragment : Fragment() {
                         start() }
 
                     // Hide the links
-                    TransitionManager.beginDelayedTransition(binding.puzwedCard, AutoTransition())
+                    TransitionManager.beginDelayedTransition(binding.puzwedCardExpandedGroup, AutoTransition())
                     binding.puzwedCardExpandedGroup.visibility = View.GONE
 
                 } else {
 
-                    val expandAnimator = ObjectAnimator.ofFloat(binding.puzwedCardIndicator, View.ROTATION, -90f, 90f)
+                    val expandAnimator = ObjectAnimator.ofFloat(binding.puzwedCardIndicator, View.ROTATION, 90f, -90f)
 
                     // Rotate the indicator
                     expandAnimator.apply{
@@ -352,6 +384,7 @@ class AboutFragment : Fragment() {
             iconscoutLicenseLink.movementMethod = LinkMovementMethod.getInstance()
             iconscoutCreatorLink.movementMethod = LinkMovementMethod.getInstance()
             iconscoutOriginalLink.movementMethod = LinkMovementMethod.getInstance()
+            maxIconsCreatorLink.movementMethod = LinkMovementMethod.getInstance()
             materialIconsSiteLink.movementMethod = LinkMovementMethod.getInstance()
             materialIconsApacheLink.movementMethod = LinkMovementMethod.getInstance()
             puzwedDiscordLink.movementMethod = LinkMovementMethod.getInstance()
@@ -381,19 +414,6 @@ class AboutFragment : Fragment() {
 
             override fun onAnimationEnd(animation: Animator?) {
                 view.isEnabled = (view.visibility == View.VISIBLE)
-            }
-        })
-    }
-
-    private fun ObjectAnimator.setGoneAfterAnimation(view: View) {
-
-        addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?) {
-                view.visibility = View.VISIBLE
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-                view.visibility = View.GONE
             }
         })
     }

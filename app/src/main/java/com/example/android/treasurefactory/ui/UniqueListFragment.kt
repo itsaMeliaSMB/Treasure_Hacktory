@@ -2,6 +2,7 @@ package com.example.android.treasurefactory.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +11,8 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
-import androidx.appcompat.content.res.AppCompatResources
+import androidx.annotation.StyleRes
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.MultiselectRecyclerAdapter
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
+import com.example.android.treasurefactory.databinding.HoardListItemBinding
 import com.example.android.treasurefactory.databinding.LayoutUniqueListBinding
 import com.example.android.treasurefactory.databinding.UniqueListItemBinding
 import com.example.android.treasurefactory.model.*
@@ -28,6 +31,7 @@ import com.example.android.treasurefactory.viewmodel.UniqueListViewModel
 import com.example.android.treasurefactory.viewmodel.UniqueListViewModelFactory
 import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 
 class UniqueListFragment : Fragment() {
 
@@ -56,6 +60,7 @@ class UniqueListFragment : Fragment() {
     // region [ Property declarations ]
 
     private lateinit var parentHoard : Hoard
+    private lateinit var itemType : UniqueItemType
 
     val safeArgs : UniqueListFragmentArgs by navArgs()
 
@@ -91,7 +96,7 @@ class UniqueListFragment : Fragment() {
         parentHoard = Hoard()
 
         val hoardID: Int = safeArgs.hoardID
-        val itemType: UniqueItemType = safeArgs.listType
+        itemType = safeArgs.listType
 
         uniqueListViewModel.loadHoardInfo(hoardID, itemType)
 
@@ -101,9 +106,40 @@ class UniqueListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+        @StyleRes
+        val itemTheme : Int
+        @ColorInt
+        val newStatusBarColor : Int
+
+        when(itemType){
+            UniqueItemType.GEM -> {
+                itemTheme = R.style.GemSubStyle
+                newStatusBarColor = R.color.gemPrimaryDark
+            }
+            UniqueItemType.ART_OBJECT -> {
+                itemTheme = R.style.ArtObjectSubStyle
+                newStatusBarColor = R.color.artPrimaryDark
+            }
+            UniqueItemType.MAGIC_ITEM -> {
+                itemTheme = R.style.MagicItemSubStyle
+                newStatusBarColor = R.color.magicPrimaryDark
+            }
+            UniqueItemType.SPELL_COLLECTION -> {
+                itemTheme = R.style.SpellCollectionSubStyle
+                newStatusBarColor = R.color.spellPrimaryDark
+            }
+        }
+
+        requireActivity().window.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = resources.getColor(newStatusBarColor,null)
+        }
+
+        val contextThemeWrapper = ContextThemeWrapper(context,itemTheme)
+        val localInflater = inflater.cloneInContext(contextThemeWrapper)
 
         // Inflate the layout for this fragment
-        _binding = LayoutUniqueListBinding.inflate(inflater, container, false)
+        _binding = LayoutUniqueListBinding.inflate(localInflater, container, false)
         val view = binding.root
 
         // Give RecyclerView a Layout manager [required]
@@ -121,82 +157,105 @@ class UniqueListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        uniqueListViewModel.exposedHoardLiveData.observe(viewLifecycleOwner) { readyHoard ->
+        // Listeners
+        uniqueListViewModel.apply{
 
-            if (readyHoard != null) {
-                parentHoard = readyHoard
+            exposedHoardLiveData.observe(viewLifecycleOwner) { readyHoard ->
 
-                val hoardID: Int = safeArgs.hoardID
-                val itemType: UniqueItemType = safeArgs.listType
+                if (readyHoard != null) {
+                    parentHoard = readyHoard
 
-                uniqueListViewModel.updateUniqueItems(hoardID, itemType)
+                    val hoardID: Int = safeArgs.hoardID
+                    val itemType: UniqueItemType = safeArgs.listType
+
+                    uniqueListViewModel.updateUniqueItems(hoardID, itemType)
+                }
             }
-        }
 
-        uniqueListViewModel.uniqueItemsLiveData.observe(viewLifecycleOwner) { itemList ->
+            uniqueItemsLiveData.observe(viewLifecycleOwner) { itemList ->
 
-            updateUI(itemList)
+                updateUI(itemList)
 
-            if (itemList.isEmpty()) {
+                if (itemList.isEmpty()) {
 
-                binding.uniqueListWhenemptyGroup.visibility = View.VISIBLE
-                binding.uniqueListRecycler.visibility = View.GONE
-
-            } else {
-
-                binding.uniqueListWhenemptyGroup.visibility = View.GONE
-                binding.uniqueListRecycler.visibility = View.VISIBLE
-            }
-        }
-
-        uniqueListViewModel.isRunningAsyncLiveData.observe(viewLifecycleOwner) { isRunningAsync ->
-
-            if (isRunningAsync) {
-
-                // binding.uniqueDetailsViewableGroup.isEnabled = false
-
-                if (binding.uniqueListWaitingCard.waitingCard.visibility == View.GONE &&
-                    !isWaitingCardAnimating) {
-
-                    fadeInWaitingCard()
+                    binding.uniqueListWhenemptyGroup.visibility = View.VISIBLE
+                    binding.uniqueListRecycler.visibility = View.GONE
 
                 } else {
 
-                    binding.uniqueListWaitingCard.waitingCard.visibility = View.VISIBLE
-                    isWaitingCardAnimating = false
+                    binding.uniqueListWhenemptyGroup.visibility = View.GONE
+                    binding.uniqueListRecycler.visibility = View.VISIBLE
                 }
+            }
 
-            } else {
+            isRunningAsyncLiveData.observe(viewLifecycleOwner) { isRunningAsync ->
 
-                //binding.uniqueDetailsViewableGroup.isEnabled = true
+                if (isRunningAsync) {
 
-                if (binding.uniqueListWaitingCard.waitingCard.visibility == View.VISIBLE &&
-                    !isWaitingCardAnimating) {
+                    // binding.uniqueDetailsViewableGroup.isEnabled = false
 
-                    fadeOutWaitingCard()
+                    if (binding.uniqueListWaitingCard.waitingCard.visibility == View.GONE &&
+                        !isWaitingCardAnimating
+                    ) {
+
+                        fadeInWaitingCard()
+
+                    } else {
+
+                        binding.uniqueListWaitingCard.waitingCard.visibility = View.VISIBLE
+                        isWaitingCardAnimating = false
+                    }
 
                 } else {
 
-                    binding.uniqueListWaitingCard.waitingCard.visibility = View.GONE
-                    isWaitingCardAnimating = false
+                    //binding.uniqueDetailsViewableGroup.isEnabled = true
+
+                    if (binding.uniqueListWaitingCard.waitingCard.visibility == View.VISIBLE &&
+                        !isWaitingCardAnimating
+                    ) {
+
+                        fadeOutWaitingCard()
+
+                    } else {
+
+                        binding.uniqueListWaitingCard.waitingCard.visibility = View.GONE
+                        isWaitingCardAnimating = false
+                    }
                 }
             }
-        }
 
-        uniqueListViewModel.textToastHolderLiveData.observe(viewLifecycleOwner) { pendingAlert ->
+            textToastHolderLiveData.observe(viewLifecycleOwner) { pendingAlert ->
 
-            if (pendingAlert != null) {
+                if (pendingAlert != null) {
 
-                // Show the pending toast
-                Toast.makeText(context,pendingAlert.first,pendingAlert.second).show()
+                    // Show the pending toast
+                    Toast.makeText(context, pendingAlert.first, pendingAlert.second).show()
 
-                // Clear the livedata for pending toasts
-                uniqueListViewModel.textToastHolderLiveData.value = null
+                    // Clear the livedata for pending toasts
+                    uniqueListViewModel.textToastHolderLiveData.value = null
+                }
+            }
+
+            hoardsLiveData.observe(viewLifecycleOwner) { fetchedHoards ->
+
+                if (fetchedHoards != null) {
+
+                    showTargetHoardDialog(fetchedHoards)
+
+                    hoardsLiveData.value = null
+                }
             }
         }
 
         // Set up toolbar
         binding.uniqueListToolbar.apply {
+
+            // Get themed color attribute for Toolbar's title
+            val typedValue = TypedValue()
+            context.theme.resolveAttribute(R.attr.colorOnPrimary,typedValue,true)
+            @ColorInt
+            val colorOnPrimary = typedValue.data
+
             inflateMenu(R.menu.unique_list_toolbar_menu)
             title = when(safeArgs.listType){
                 UniqueItemType.GEM  ->
@@ -208,8 +267,16 @@ class UniqueListFragment : Fragment() {
                 UniqueItemType.SPELL_COLLECTION ->
                     resources.getString(R.string.viewer_spell_collections_card_title)
             }
+            setTitleTextColor(colorOnPrimary)
+            setSubtitleTextColor(colorOnPrimary)
             subtitle = parentHoard.name
-            navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
+            setNavigationIcon(R.drawable.clipart_back_vector_icon)
+            navigationIcon?.apply {
+                setTint(colorOnPrimary)
+            }
+            overflowIcon?.apply{
+                setTint(colorOnPrimary)
+            }
             setNavigationOnClickListener {
 
                 if (uniqueListViewModel.isRunningAsyncLiveData.value != true) {
@@ -507,20 +574,137 @@ class UniqueListFragment : Fragment() {
         }
     }
 
+    private inner class TargetHoardAdapter(val hoards : List<Hoard>) : RecyclerView.Adapter<TargetHoardAdapter.TargetHoardHolder>() {
+
+        var selectedPos = -1
+            private set
+        private var lastSelectedPos = -1
+        var selectedID = -1
+            private set
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TargetHoardHolder{
+            val binding = HoardListItemBinding
+                .inflate(LayoutInflater.from(parent.context),parent,false)
+            return TargetHoardHolder(binding)
+        }
+
+        override fun onBindViewHolder(holder: TargetHoardHolder, position: Int) {
+            val hoard = hoards[position]
+
+            holder.bind(hoard, position)
+        }
+
+        override fun getItemCount(): Int = hoards.size
+
+        inner class TargetHoardHolder(val binding: HoardListItemBinding)
+            : RecyclerView.ViewHolder(binding.root) {
+
+            private lateinit var hoard: Hoard
+
+            @SuppressLint("SimpleDateFormat")
+            fun bind(newHoard: Hoard, position: Int) {
+
+                hoard = newHoard
+
+                if (hoard.badge != HoardBadge.NONE) {
+                    try{
+                        binding.hoardListItemListBadge.apply{
+                            setImageResource(resources
+                                .getIdentifier(hoard.badge.resString,
+                                    "drawable",view?.context?.packageName))
+                            visibility = View.VISIBLE
+                        }
+                    } catch (e: Exception){
+                        binding.hoardListItemListBadge.apply{
+                            setImageResource(R.drawable.badge_hoard_broken)
+                            visibility = View.VISIBLE
+                        }
+                    }
+                } else {
+                    binding.hoardListItemListBadge.visibility = View.INVISIBLE
+                }
+
+                // Toggle background color of list item if selected
+                binding.layoutHoardListItem.apply {
+                    isSelected = position == selectedPos
+                    setOnClickListener {
+                        if (position == selectedPos) {
+                            // Deselect if selected
+                            updateSelectedItem(-1, -1)
+                        } else {
+                            updateSelectedItem(position, hoard.hoardID)
+                        }
+                    }
+                }
+
+                // Set hoard name and [ NEW ] visibility
+                binding.hoardListItemName.apply {
+                    text = hoard.name
+                    if (hoard.isNew) {
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.clipart_new_vector_icon,0,0,0)
+                    } else {
+                        setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,0,0)
+                    }
+                }
+
+                // Set hoard date
+                binding.hoardListItemDate.text =
+                    SimpleDateFormat("MM/dd/yyyy").format(hoard.creationDate)
+
+                // Set text for gp value counter
+                ("Worth ${DecimalFormat("#,##0.0#")
+                    .format(hoard.gpTotal)
+                    .removeSuffix(".0")} gp").also { binding.hoardListItemGpValue.text = it }
+
+                // Set text for unique item counters
+                binding.hoardListItemGemCount.text = String.format("%03d",hoard.gemCount)
+                binding.hoardListItemArtCount.text = String.format("%03d",hoard.artCount)
+                binding.hoardListItemMagicCount.text = String.format("%03d",hoard.magicCount)
+                binding.hoardListItemSpellCount.text = String.format("%03d",hoard.spellsCount)
+
+                // Set icon for hoard
+                try {
+
+                    binding.hoardListItemListIcon
+                        .setImageResource(resources
+                            .getIdentifier(hoard.iconID,"drawable",view?.context?.packageName))
+
+                } catch (e: Exception) {
+
+                    binding.hoardListItemListIcon
+                        .setImageResource(R.drawable.clipart_default_image)
+                }
+
+                binding.hoardListItemFavorited.visibility = View.GONE
+            }
+        }
+
+        fun updateSelectedItem(selectionPos: Int, selectedHoardID: Int){
+
+            lastSelectedPos = selectedPos
+            selectedPos = selectionPos
+            selectedID = selectedHoardID
+
+            if (selectedPos in hoards.indices) {
+                notifyItemChanged(selectedPos)
+            }
+
+            if (lastSelectedPos in hoards.indices) {
+                Log.d("updateSelectedItem($selectedPos, $selectedHoardID)", "Notifying change at position $lastSelectedPos")
+                notifyItemChanged(lastSelectedPos)
+            }
+        }
+    }
+
     private inner class ActionModeCallback : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
 
-            //TODO implement as separate menus depending on item list type
-
             // Inflate menu
             mode.menuInflater.inflate(R.menu.unique_list_action_menu,menu)
 
-            // Get the color to change the status bar background to
-            val typedValue = TypedValue()
-            requireActivity().theme.resolveAttribute(R.attr.colorSecondaryVariant,typedValue,true)
             @ColorInt
-            val newStatusBarColor = typedValue.data
+            val newStatusBarColor = resources.getColor(R.color.actionModePrimaryDark,null)
 
             // Change the status bar's color
             requireActivity().window.apply {
@@ -538,13 +722,10 @@ class UniqueListFragment : Fragment() {
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
 
+
                 R.id.action_move_items -> {
 
-                    // TODO unimplemented!
-
-                    Toast.makeText(context,"Move action clicked (Unimplemented).",
-                        Toast.LENGTH_SHORT)
-                        .show()
+                    uniqueListViewModel.fetchHoardsForDialog(parentHoard.hoardID)
 
                     true
                 }
@@ -556,23 +737,26 @@ class UniqueListFragment : Fragment() {
                     true
                 }
 
-                R.id.action_copy_items -> {
-
-                    // TODO unimplemented!
-
-                    Toast.makeText(context,"Duplicate action clicked (Unimplemented).",
-                        Toast.LENGTH_SHORT)
-                        .show()
-
-                    true
-                }
-
                 R.id.action_sell_items -> {
 
-                    // TODO unimplemented!
+                    val targetCount = (binding.uniqueListRecycler.adapter as UniqueAdapter)
+                        .selectedCount
 
-                    Toast.makeText(context,"Sell action clicked (Unimplemented).",
-                        Toast.LENGTH_SHORT)
+                    AlertDialog.Builder(requireContext())
+                        .setMessage("$targetCount item(s) will be converted into coinage. " +
+                                "Are you sure you want to proceed?")
+                        .setPositiveButton(R.string.action_sell) { dialog, _ ->
+
+                            uniqueListViewModel.sellSelectedItems(
+                                (binding.uniqueListRecycler.adapter as UniqueAdapter)
+                                    .getSelectedAsListableItems(),parentHoard)
+
+                            actionMode?.finish()
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                            dialog.cancel()
+                        }
                         .show()
 
                     true
@@ -580,10 +764,24 @@ class UniqueListFragment : Fragment() {
 
                 R.id.action_delete_items -> {
 
-                    // TODO unimplemented!
+                    val targetCount = (binding.uniqueListRecycler.adapter as UniqueAdapter)
+                        .selectedCount
 
-                    Toast.makeText(context,"Delete action clicked (Unimplemented).",
-                        Toast.LENGTH_SHORT)
+                    AlertDialog.Builder(requireContext())
+                        .setMessage("$targetCount item(s) will be deleted. " +
+                                "Are you sure you want to proceed?")
+                        .setPositiveButton(R.string.action_delete) { dialog, _ ->
+
+                            uniqueListViewModel.deleteSelectedItems(
+                                (binding.uniqueListRecycler.adapter as UniqueAdapter)
+                                    .getSelectedAsListableItems(),parentHoard.hoardID)
+
+                            actionMode?.finish()
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                            dialog.cancel()
+                        }
                         .show()
 
                     true
@@ -598,16 +796,18 @@ class UniqueListFragment : Fragment() {
             // Clear all selections first
             (binding.uniqueListRecycler.adapter as MultiselectRecyclerAdapter).clearAllSelections()
 
-            // Get the color to change the status bar background to
-            val typedValue = TypedValue()
-            requireActivity().theme.resolveAttribute(R.attr.colorPrimaryDark,typedValue,true)
+            // Set status bar color back to proper one for theme
             @ColorInt
-            val newStatusBarColor = typedValue.data
+            val newStatusBarColor : Int = when(itemType){
+                UniqueItemType.GEM -> R.color.gemPrimaryDark
+                UniqueItemType.ART_OBJECT -> R.color.artPrimaryDark
+                UniqueItemType.MAGIC_ITEM -> R.color.magicPrimaryDark
+                UniqueItemType.SPELL_COLLECTION -> R.color.spellPrimaryDark
+            }
 
-            // Change the status bar's color
-            requireActivity().window.apply{
+            requireActivity().window.apply {
                 addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-                statusBarColor = newStatusBarColor
+                statusBarColor = resources.getColor(newStatusBarColor,null)
             }
 
             // Fully close actionMode
@@ -660,6 +860,63 @@ class UniqueListFragment : Fragment() {
                     }
                 })
         }
+    }
+
+    private fun showTargetHoardDialog(hoards: List<Hoard>) {
+
+        val dialogRecycler = RecyclerView(requireContext())
+
+        dialogRecycler.apply{
+            layoutManager = LinearLayoutManager(context)
+            adapter = TargetHoardAdapter(hoards)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            isNestedScrollingEnabled = true
+        }
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogRecycler)
+            .setTitle(getString(R.string.unique_list_target_hoard_dialog_title))
+            .setPositiveButton(R.string.ok_affirmative, null)
+            .setNegativeButton(R.string.action_cancel, null)
+            .create().apply {
+                setOnShowListener { dialog ->
+
+                    getButton(android.app.AlertDialog.BUTTON_POSITIVE)
+                        .setOnClickListener {
+
+                            if ((dialogRecycler.adapter as TargetHoardAdapter)
+                                    .selectedPos in hoards.indices) {
+
+                                val targetID = (dialogRecycler.adapter as TargetHoardAdapter)
+                                    .selectedID
+
+                                if ((binding.uniqueListRecycler.adapter as UniqueAdapter)
+                                        .getSelectedAsListableItems()
+                                        .isNotEmpty() && targetID > 0){
+
+                                    val triplesToMove = (binding.uniqueListRecycler.adapter as UniqueAdapter)
+                                        .getSelectedAsListableItems()
+                                        .map{
+                                            Triple(it.id, when (it){
+                                                is ListableGem -> UniqueItemType.GEM
+                                                is ListableArtObject -> UniqueItemType.ART_OBJECT
+                                                is ListableMagicItem -> UniqueItemType.MAGIC_ITEM
+                                                is ListableSpellCollection -> UniqueItemType.SPELL_COLLECTION
+                                            }, parentHoard.hoardID) }
+
+                                    uniqueListViewModel.moveSelectedItems(triplesToMove,targetID)
+                                }
+
+                                actionMode?.finish()
+                                dialog.dismiss()
+                            }}
+
+                    getButton(android.app.AlertDialog.BUTTON_NEGATIVE)
+                        .setOnClickListener { dialog.cancel() }
+                }
+            }
+
+        dialog.show()
     }
 
     // endregion

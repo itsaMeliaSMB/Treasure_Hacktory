@@ -5,23 +5,19 @@ import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.Typeface
-import android.graphics.Typeface.BOLD_ITALIC
+import android.content.res.Resources
 import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
+import android.view.*
 import android.view.Gravity.CENTER
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
+import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat.getColor
 import androidx.core.content.res.ResourcesCompat.getDrawable
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -34,6 +30,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.android.treasurefactory.HACKMASTER_CLASS_ITEM_TEXT
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
+import com.example.android.treasurefactory.capitalized
+import com.example.android.treasurefactory.database.MagicItemTemplate
 import com.example.android.treasurefactory.databinding.*
 import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.viewmodel.UniqueDetailsViewModel
@@ -66,6 +64,7 @@ class UniqueDetailsFragment() : Fragment() {
     private var isWaitingCardAnimating = false
 
     private lateinit var parentHoard: Hoard
+    private lateinit var itemType: UniqueItemType
     private lateinit var viewedItem : ViewableItem
 
     private val safeArgs : UniqueDetailsFragmentArgs by navArgs()
@@ -89,6 +88,7 @@ class UniqueDetailsFragment() : Fragment() {
 
         safeArgs.let{
             uniqueDetailsViewModel.loadItemArgs(it.itemID,it.itemType,it.hoardID)
+            itemType = it.itemType
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(this,backCallback)
@@ -96,7 +96,39 @@ class UniqueDetailsFragment() : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-        _binding = LayoutUniqueDetailsBinding.inflate(inflater,container,false)
+        @StyleRes
+        val itemTheme : Int
+        @ColorInt
+        val newStatusBarColor : Int
+
+        when(itemType){
+            UniqueItemType.GEM -> {
+                itemTheme = R.style.GemSubStyle
+                newStatusBarColor = R.color.gemPrimaryDark
+            }
+            UniqueItemType.ART_OBJECT -> {
+                itemTheme = R.style.ArtObjectSubStyle
+                newStatusBarColor = R.color.artPrimaryDark
+            }
+            UniqueItemType.MAGIC_ITEM -> {
+                itemTheme = R.style.MagicItemSubStyle
+                newStatusBarColor = R.color.magicPrimaryDark
+            }
+            UniqueItemType.SPELL_COLLECTION -> {
+                itemTheme = R.style.SpellCollectionSubStyle
+                newStatusBarColor = R.color.spellPrimaryDark
+            }
+        }
+
+        requireActivity().window.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = resources.getColor(newStatusBarColor,null)
+        }
+
+        val contextThemeWrapper = ContextThemeWrapper(context,itemTheme)
+        val localInflater = inflater.cloneInContext(contextThemeWrapper)
+
+        _binding = LayoutUniqueDetailsBinding.inflate(localInflater,container,false)
         val view = binding.root
 
         binding.uniqueDetailsRecycler.apply{
@@ -192,6 +224,8 @@ class UniqueDetailsFragment() : Fragment() {
 
             dialogSpellInfoLiveData.observe(viewLifecycleOwner) { spellPair ->
 
+                Log.d("dialogSpellInfoLiveData observer", "spellPair update observed")
+
                 if (spellPair != null){
 
                     spellPair.let{ (spell, entry) ->
@@ -216,11 +250,14 @@ class UniqueDetailsFragment() : Fragment() {
 
                 if (spellsPair != null){
 
+                    Log.d("dialogSpellsInfoLiveData.observe()","Non-null spellsPair observed.")
+
                     spellsPair.let{ (spells, entry) ->
 
                         if (spells.isNotEmpty()) {
 
-                            showChoiceSpellDialog(spells, entry)
+                            showChoiceSpellDialog(spells.map{
+                                it.toSimpleSpellEntry(false, entry.spellsPos)}, entry)
 
                         } else {
 
@@ -233,6 +270,16 @@ class UniqueDetailsFragment() : Fragment() {
                     dialogSpellsInfoLiveData.value = null
                 }
             }
+
+            dialogItemTemplatesInfoLiveData.observe(viewLifecycleOwner) { templates ->
+
+                if (templates != null){
+
+                    showChoiceItemDialog(templates)
+
+                    dialogItemTemplatesInfoLiveData.value = null
+                }
+            }
         }
         // endregion
 
@@ -243,12 +290,19 @@ class UniqueDetailsFragment() : Fragment() {
             val typedValue = TypedValue()
             context.theme.resolveAttribute(R.attr.colorOnPrimary,typedValue,true)
             @ColorInt
-            val titleTextColor = typedValue.data
+            val colorOnPrimary = typedValue.data
 
             inflateMenu(R.menu.unique_details_toolbar_menu)
             title = getString(R.string.item_details)
-            setTitleTextColor(titleTextColor)
-            setNavigationIcon(R.drawable.clipart_back_vector_icon)
+            setTitleTextColor(colorOnPrimary)
+            setSubtitleTextColor(colorOnPrimary)
+            navigationIcon?.apply {
+                R.drawable.clipart_back_vector_icon
+                setTint(colorOnPrimary)
+            }
+            overflowIcon?.apply{
+                setTint(colorOnPrimary)
+            }
             setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
@@ -266,12 +320,120 @@ class UniqueDetailsFragment() : Fragment() {
                         true
                     }
 
-                    R.id.action_copy_item_text    -> {
+                    R.id.action_set_hoard_icon  -> {
 
-                        //TODO implement
+                        uniqueDetailsViewModel.setItemAsHoardIcon(parentHoard.hoardID,viewedItem)
 
-                        Toast.makeText(context, "Not yet implemented, sorry!",
-                            Toast.LENGTH_SHORT)
+                        true
+                    }
+
+                    R.id.action_toggle_forgery  -> {
+
+                        if (viewedItem is ViewableArtObject) {
+                            uniqueDetailsViewModel
+                                .toggleArtObjectAuthenticity(viewedItem as ViewableArtObject)
+                        }
+
+                        true
+                    }
+
+                    R.id.action_rename_item     -> {
+
+                        val renameBinding : DialogRenameItemBinding =
+                            DialogRenameItemBinding.inflate(layoutInflater)
+
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("Set item name/nickname")
+                            .setView(renameBinding.root)
+                            .setPositiveButton(R.string.save) { dialog, _ ->
+
+                                val newName = renameBinding.renameDialogNameEdit.text.toString()
+                                    .replace("¤","*").take(70)
+
+                                if (newName.isNotBlank() && newName != viewedItem.name) {
+
+                                    uniqueDetailsViewModel.renameItem(viewedItem, parentHoard,
+                                        newName, false)
+
+                                    Toast.makeText(context,"Item's name was changed to \"" +
+                                            "$newName\".", Toast.LENGTH_SHORT).show()
+
+                                } else {
+                                    Toast.makeText(context,"Item's name was not changed.",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+                                dialog.dismiss()
+                            }
+                            .setNeutralButton("Restore") { dialog, _ ->
+                                if (viewedItem.name != viewedItem.originalName){
+
+                                    uniqueDetailsViewModel.renameItem(viewedItem, parentHoard,
+                                        viewedItem.originalName, true)
+
+                                    Toast.makeText(context,"Item's original name was restored.",
+                                        Toast.LENGTH_SHORT).show()
+
+                                } else {
+                                    Toast.makeText(context,"Item's name was not changed.",
+                                        Toast.LENGTH_SHORT).show()
+                                }
+
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                                dialog.cancel()
+                            }
+                            .show()
+
+                        true
+                    }
+
+                    R.id.action_reroll_item     -> {
+
+                        AlertDialog.Builder(requireContext())
+                            .setMessage("This will re-roll and overwrite \"${viewedItem.name}\"" +
+                                    ", which cannot be undone. Are you sure you want to proceed?")
+                            .setPositiveButton(R.string.action_reroll_item_condensed) { dialog, _ ->
+                                uniqueDetailsViewModel.rerollItem(viewedItem)
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                                dialog.cancel()
+                            }
+                            .show()
+
+                        true
+                    }
+
+                    R.id.action_convert_to_choice -> {
+
+                        if (viewedItem is ViewableMagicItem) {
+
+                            AlertDialog.Builder(requireContext())
+                                .setMessage("This will convert \"${viewedItem.name}\" into a " +
+                                        "wildcard item, which cannot be undone. Are you sure you " +
+                                        "want to proceed?")
+                                .setPositiveButton(context.getString(R.string.action_convert_to_choice_condensed)) { dialog, _ ->
+                                    uniqueDetailsViewModel.replaceItemAsGMChoice(
+                                        viewedItem as ViewableMagicItem)
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                                    dialog.cancel()
+                                }
+                                .show()
+                        }
+
+                        true
+                    }
+
+
+                    R.id.action_resolve_gm_choice -> {
+
+                        if (viewedItem is ViewableMagicItem) {
+                            uniqueDetailsViewModel.fetchItemTemplatesForDialog(
+                                (viewedItem as ViewableMagicItem).mgcItemType)
+                        }
 
                         true
                     }
@@ -382,13 +544,12 @@ class UniqueDetailsFragment() : Fragment() {
 
                 binding.uniqueDetailListSimpleTextview.apply {
                     when {
-                        //TODO left off here. cheeky formatting. Good luck getting everything done!
                         (entry.message.startsWith("[ ") && entry.message.endsWith(" ]")) -> {
                             text = entry.message.removeSurrounding("[ "," ]")
                             setTypeface(DEFAULT_BOLD)
                         }
                         (entry.message == HACKMASTER_CLASS_ITEM_TEXT) -> {
-                            setTypeface(null, BOLD_ITALIC)
+                            setTypeface(DEFAULT_BOLD)
                             textSize = 18f
                             setCompoundDrawablesRelative(
                                 getDrawable(resources,R.drawable.clipart_winged_sword_vector_icon,context?.theme),
@@ -397,20 +558,7 @@ class UniqueDetailsFragment() : Fragment() {
                                 null
                             )
                             gravity = CENTER
-                            for (drawable in this.compoundDrawables) {
-                                if (drawable != null) {
-                                    drawable.colorFilter =
-                                        PorterDuffColorFilter(
-                                            ContextCompat.getColor(
-                                                this.context,
-                                                R.color.golden
-                                            ), PorterDuff.Mode.SRC_IN
-                                        )
-                                }
-                            }
-                            setTextColor(resources.getColor(R.color.golden,context.theme))
                         }
-                        //TODO if you ever figure out spanned text, add check for colors for potion flavor text
                         else    -> {
                             text = entry.message
                         }
@@ -452,6 +600,10 @@ class UniqueDetailsFragment() : Fragment() {
                     if (entry.subclass.isNotBlank()) {
 
                         spellItemSubclassCard.visibility = View.VISIBLE
+                        spellItemSubclassText.apply{
+                            visibility = View.VISIBLE
+                            text = entry.subclass
+                        }
 
                         when (entry.subclass) {
                             "Vengeance" -> {
@@ -502,10 +654,14 @@ class UniqueDetailsFragment() : Fragment() {
                                     setTextColor(
                                         resources.getColor(R.color.amethyst,
                                             context?.theme))
-                                    typeface = Typeface.DEFAULT_BOLD
+                                    typeface = DEFAULT_BOLD
                                 }
                             }
                         }
+
+                    } else {
+                        spellItemSubclassCard.visibility = View.GONE
+                        spellItemSubclassText.visibility = View.GONE
                     }
 
                     spellItemTypeBackdrop.apply{
@@ -865,6 +1021,611 @@ class UniqueDetailsFragment() : Fragment() {
         }
     }
 
+    private inner class MagicItemChoiceAdapter(val itemTemplates: List<MagicItemTemplate>)
+        : RecyclerView.Adapter<MagicItemChoiceAdapter.ItemTemplateHolder>() {
+
+        var selectedPos = -1
+            private set
+        private var lastSelectedPos = -1
+        var selectedID = -1
+            private set
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemTemplateHolder {
+            val binding = UniqueListItemBinding
+                .inflate(LayoutInflater.from(parent.context),parent,false)
+            return ItemTemplateHolder(binding)
+        }
+
+        override fun onBindViewHolder(holder: ItemTemplateHolder, position: Int) {
+            val itemTemplate = itemTemplates[position]
+
+            holder.bind(itemTemplate, position)
+        }
+
+        override fun getItemCount(): Int = itemTemplates.size
+
+        inner class ItemTemplateHolder(val binding: UniqueListItemBinding)
+            : RecyclerView.ViewHolder(binding.root) {
+
+            private lateinit var template : MagicItemTemplate
+
+            fun bind(newTemplate: MagicItemTemplate, position: Int) {
+
+                template = newTemplate
+
+                binding.apply {
+
+                    fun String.asMagicItemType() : MagicItemType =
+                        if (enumValues<MagicItemType>().map{it.name}.contains(this)) {
+                            MagicItemType.valueOf(this)
+                        } else {
+                            MagicItemType.Mundane
+                        }
+
+                    fun MagicItemTemplate.getEndIconStr() : String {
+                        return when (this.tableType.asMagicItemType()){
+                            MagicItemType.A2 -> "clipart_potion_vector_icon"
+                            MagicItemType.A3 -> "clipart_scroll_vector_icon"
+                            MagicItemType.A4 -> "clipart_ring_vector_icon"
+                            MagicItemType.A5 -> "clipart_rod_vector_icon"
+                            MagicItemType.A6 -> "clipart_staff_vector_icon"
+                            MagicItemType.A7 -> "clipart_wand_vector_icon"
+                            MagicItemType.A8 -> "clipart_book_vector_icon"
+                            MagicItemType.A9 -> "clipart_jewelry_vector_icon"
+                            MagicItemType.A10 -> "clipart_robe_vector_icon"
+                            MagicItemType.A11 -> "clipart_boot_vector_icon"
+                            MagicItemType.A12 -> "clipart_belt_hat_vector_icon"
+                            MagicItemType.A13 -> "clipart_bag_vector_icon"
+                            MagicItemType.A14 -> "clipart_dust_vector_icon"
+                            MagicItemType.A15 -> "clipart_toolbox_vector_icon"
+                            MagicItemType.A16 -> "clipart_lyre_vector_icon"
+                            MagicItemType.A17 -> "clipart_crystal_ball_vector_icon"
+                            MagicItemType.A18 -> "clipart_armor_vector_icon"
+                            MagicItemType.A20 -> "clipart_cape_armor_vector_icon"
+                            MagicItemType.A21 -> "clipart_axe_sword_vector_icon"
+                            MagicItemType.A23 -> "clipart_winged_sword_vector_icon"
+                            MagicItemType.A24 -> "clipart_artifact_crown_vector_icon"
+                            MagicItemType.Map -> "clipart_map_vector_icon"
+                            MagicItemType.Mundane -> "clipart_crate_vector_icon"
+                        }
+                    }
+
+                    fun MagicItemTemplate.getEndLabel() : String {
+                        return when (this.tableType.asMagicItemType()){
+                            MagicItemType.A2 -> "Potion A2"
+                            MagicItemType.A3 -> "Scroll A3"
+                            MagicItemType.A4 -> "Ring A4"
+                            MagicItemType.A5 -> "Rod A5"
+                            MagicItemType.A6 -> "Staff A6"
+                            MagicItemType.A7 -> "Wand A7"
+                            MagicItemType.A8 -> "Book A8"
+                            MagicItemType.A9 -> "Jewelry A9"
+                            MagicItemType.A10 -> "Robe, etc. A10"
+                            MagicItemType.A11 -> "Boots,etc. A11"
+                            MagicItemType.A12 -> "Hat, etc. A12"
+                            MagicItemType.A13 -> "Container A13"
+                            MagicItemType.A14 -> "Dust, etc. A14"
+                            MagicItemType.A15 -> "Tools A15"
+                            MagicItemType.A16 -> "Musical A16"
+                            MagicItemType.A17 -> "Odd Stuff A17"
+                            MagicItemType.A18 -> "Armor A18"
+                            MagicItemType.A20 -> "Sp.Armor A20"
+                            MagicItemType.A21 -> "Weapon A21"
+                            MagicItemType.A23 -> "Sp.Weap. A23"
+                            MagicItemType.A24 -> "Artifact A24"
+                            MagicItemType.Map -> "Treasure Map"
+                            MagicItemType.Mundane -> "Mundane"
+                        }
+                    }
+
+                    layoutUniqueListItem.apply {
+
+                        isSelected = (adapterPosition == selectedPos)
+
+                        setOnClickListener {
+                            if (position == selectedPos) {
+                                // Deselect if selected
+                                updateSelectedItem(-1, -1)
+                            } else {
+                                updateSelectedItem(position, template.refId)
+                            }
+                        }
+                    }
+
+                    when {
+                        (template.isCursed == 1) -> {
+                            uniqueListItemframeForeground.setImageResource(R.drawable.itemframe_foreground_cursed)
+                            uniqueListItemframeBackground.setImageResource(R.drawable.itemframe_background_cursed)
+                        }
+                        template.tableType == "A24" -> {
+                            uniqueListItemframeForeground.setImageResource(R.drawable.itemframe_foreground_golden)
+                            uniqueListItemframeBackground.setImageResource(R.drawable.itemframe_background_golden)
+                        }
+                        else    -> {
+                            uniqueListItemframeForeground.setImageResource(R.drawable.itemframe_foreground)
+                            uniqueListItemframeBackground.setImageResource(R.drawable.itemframe_background_gray)
+                        }
+                    }
+
+                    try{
+                        uniqueListItemThumbnail.apply{
+                            setImageResource(resources
+                                .getIdentifier(template.iconRef,
+                                    "drawable",view?.context?.packageName))
+                            visibility = View.VISIBLE
+                        }
+                    } catch (e: Exception){
+                        uniqueListItemThumbnail.apply{
+                            setImageResource(R.drawable.container_chest)
+                            visibility = View.VISIBLE
+                        }
+                    }
+
+                    "[${template.refId}] ${template.name}".also { uniqueListItemName.text = it }
+
+                    uniqueListItemName.apply{
+                        maxLines = 2
+                        textSize = 14f
+                    }
+
+                    ("${
+                        DecimalFormat("#,##0.0#")
+                            .format(template.gpValue)
+                            .removeSuffix(".0")} gp")
+                        .also {uniqueListItemGp.text = it}
+
+                    uniqueListItemGp.minWidth = 48
+
+                    try{
+                        uniqueListItemTypeIcon.apply{
+                            setImageResource(resources
+                                .getIdentifier(template.getEndIconStr(),
+                                    "drawable",view?.context?.packageName))
+                            visibility = View.VISIBLE
+                        }
+
+                    } catch (e: Exception){
+                        uniqueListItemTypeIcon.apply{
+                            setImageResource(R.drawable.clipart_prohibited_vector_icon)
+                            visibility = View.VISIBLE
+                        }
+                    }
+
+                    uniqueListItemTypeLabel.apply{
+                        text = template.getEndLabel()
+                        visibility = View.INVISIBLE
+                    }
+
+                    // Set xp value
+                    (NumberFormat.getNumberInstance().format(
+                        template.xpValue) + " xp")
+                        .also { uniqueListItemXp.text = it }
+
+                    uniqueListItemXp.minWidth = 48
+
+                    // Hide badge
+                    uniqueListItemframeBadge.visibility = View.GONE
+                }
+            }
+        }
+
+        fun updateSelectedItem(selectionPos: Int, selectedTemplateID: Int){
+
+            lastSelectedPos = selectedPos
+            selectedPos = selectionPos
+            selectedID = selectedTemplateID
+
+            if (selectedPos in itemTemplates.indices) {
+                Log.d("updateSelectedItem($selectedPos, $selectedTemplateID)", "Notifying change at position $selectionPos")
+                notifyItemChanged(selectedPos)
+            }
+
+            if (lastSelectedPos in itemTemplates.indices) {
+                Log.d("updateSelectedItem($selectedPos, $selectedTemplateID)", "Notifying change at position $lastSelectedPos")
+                notifyItemChanged(lastSelectedPos)
+            }
+        }
+    }
+
+    private inner class SpellChoiceAdapter(val spells: List<SimpleSpellEntry>)
+        : RecyclerView.Adapter<SpellChoiceAdapter.SpellHolder>() {
+
+        var selectedPos = -1
+            private set
+        private var lastSelectedPos = -1
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpellHolder {
+            val binding = UniqueDetailsItemSpellBinding
+                .inflate(LayoutInflater.from(parent.context),parent,false)
+            return SpellHolder(binding)
+        }
+
+        override fun onBindViewHolder(holder: SpellHolder, position: Int) {
+            val spell = spells[position]
+
+            holder.bind(spell, position)
+        }
+
+        override fun getItemCount(): Int = spells.size
+
+        inner class SpellHolder(val binding: UniqueDetailsItemSpellBinding)
+            : RecyclerView.ViewHolder(binding.root) {
+
+            private lateinit var spell : SimpleSpellEntry
+
+            fun bind(newSpell: SimpleSpellEntry, position: Int) {
+
+                spell = newSpell
+
+                binding.apply{
+
+                    spellItemLayout.apply{
+
+                        isSelected = (position == selectedPos)
+
+                        setOnClickListener {
+                            if (position == selectedPos) {
+                                // Deselect if selected
+                                updateSelectedItem(-1)
+                            } else {
+                                updateSelectedItem(position)
+                            }
+                        }
+                    }
+
+                    "#${position + 1}".also { spellItemIndexLabel.text = it }
+
+                    if (spell.subclass.isNotBlank()) {
+
+                        spellItemSubclassCard.visibility = View.VISIBLE
+                        spellItemSubclassText.visibility = View.VISIBLE
+
+                        when (spell.subclass) {
+                            "Vengeance" -> {
+                                spellItemSubclassCard.setCardBackgroundColor(
+                                    resources.getColor(R.color.sanguine,
+                                        context?.theme))
+                                spellItemSubclassText.setTextColor(
+                                    resources.getColor(R.color.white,
+                                        context?.theme))
+                            }
+                            "Woeful" -> {
+                                spellItemSubclassCard
+                                    .setCardBackgroundColor(
+                                        resources.getColor(R.color.rust,
+                                            context?.theme))
+                                spellItemSubclassText.setTextColor(
+                                    resources.getColor(R.color.white,
+                                        context?.theme))
+                            }
+                            "Choice" -> {
+
+                                if (spell.name.startsWith("GM")){
+
+                                    spellItemSubclassCard
+                                        .setCardBackgroundColor(
+                                            resources.getColor(R.color.ultramarine,
+                                                context?.theme))
+                                    spellItemSubclassText.setTextColor(
+                                        resources.getColor(R.color.white,
+                                            context?.theme))
+
+                                } else {
+                                    spellItemSubclassCard
+                                        .setCardBackgroundColor(
+                                            resources.getColor(R.color.teal,
+                                                context?.theme))
+                                    spellItemSubclassText.setTextColor(
+                                        resources.getColor(R.color.white,
+                                            context?.theme))
+                                }
+                            }
+                            "Wild" -> {
+                                spellItemSubclassCard
+                                    .setCardBackgroundColor(
+                                        resources.getColor(R.color.white,
+                                            context?.theme))
+                                spellItemSubclassText.apply{
+                                    setTextColor(
+                                        resources.getColor(R.color.amethyst,
+                                            context?.theme))
+                                    typeface = DEFAULT_BOLD
+                                }
+                            }
+                        }
+                    }
+
+                    spellItemTypeBackdrop.apply{
+                        setImageDrawable(
+                            getDrawable(resources,
+                                if(spell.isUsed){
+
+                                    when (spell.discipline) {
+                                        SpCoDiscipline.ARCANE -> R.drawable.spell_item_arcane_backdrop_gradient_used
+                                        SpCoDiscipline.DIVINE -> R.drawable.spell_item_divine_backdrop_gradient_used
+                                        SpCoDiscipline.NATURAL -> R.drawable.spell_item_natural_backdrop_gradient_used
+                                        SpCoDiscipline.ALL_MAGIC -> R.drawable.badge_hoard_magic
+                                    }
+
+                                } else {
+                                    when (spell.discipline) {
+                                        SpCoDiscipline.ARCANE -> R.drawable.spell_item_arcane_backdrop_gradient
+                                        SpCoDiscipline.DIVINE -> R.drawable.spell_item_divine_backdrop_gradient
+                                        SpCoDiscipline.NATURAL -> R.drawable.spell_item_natural_backdrop_gradient
+                                        SpCoDiscipline.ALL_MAGIC -> R.drawable.badge_hoard_magic
+                                    }
+                                }, context?.theme)
+                        )
+                        if (spell.discipline == SpCoDiscipline.ALL_MAGIC) {
+
+                            alpha = if (spell.isUsed) { 0.25f } else { 0.5f }
+                        }
+                    }
+
+                    spellItemName.text = spell.name
+
+                    spellItemLevel.text = if (spell.level == 0) {
+                        "Cantrip"
+                    } else { "Level ${spell.level}" }
+
+                    when (spell.schools.size) {
+
+                        0   -> {
+                            spellItemSchoolCard1.visibility = View.GONE
+                            spellItemSchoolCard2.visibility = View.GONE
+                            spellItemSchoolCard3.visibility = View.GONE
+                        }
+
+                        1   -> {
+
+                            spellItemSchoolCard1.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (spell.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
+
+                            spellItemSchoolImage1.setImageResource(
+                                when (spell.schools[0]) {
+                                    SpellSchool.ABJURATION -> R.drawable.spell_school_abjuration
+                                    SpellSchool.ALTERATION -> R.drawable.spell_school_alteration
+                                    SpellSchool.CONJURATION -> R.drawable.spell_school_conjuration
+                                    SpellSchool.DIVINATION -> R.drawable.spell_school_divination
+                                    SpellSchool.ENCHANTMENT -> R.drawable.spell_school_enchantment
+                                    SpellSchool.EVOCATION -> R.drawable.spell_school_evocation
+                                    SpellSchool.ILLUSION -> R.drawable.spell_school_illusion
+                                    SpellSchool.NECROMANCY -> R.drawable.spell_school_necromancy
+                                }
+                            )
+
+                            spellItemSchoolCard2.visibility = View.GONE
+
+                            spellItemSchoolCard3.visibility = View.GONE
+
+                        }
+
+                        2   -> {
+
+                            spellItemSchoolCard1.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (spell.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
+
+                            spellItemSchoolImage1.setImageResource(
+                                when (spell.schools[0]) {
+                                    SpellSchool.ABJURATION -> R.drawable.spell_school_abjuration
+                                    SpellSchool.ALTERATION -> R.drawable.spell_school_alteration
+                                    SpellSchool.CONJURATION -> R.drawable.spell_school_conjuration
+                                    SpellSchool.DIVINATION -> R.drawable.spell_school_divination
+                                    SpellSchool.ENCHANTMENT -> R.drawable.spell_school_enchantment
+                                    SpellSchool.EVOCATION -> R.drawable.spell_school_evocation
+                                    SpellSchool.ILLUSION -> R.drawable.spell_school_illusion
+                                    SpellSchool.NECROMANCY -> R.drawable.spell_school_necromancy
+                                }
+                            )
+
+                            spellItemSchoolCard2.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (spell.schools[1]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
+
+                            spellItemSchoolImage2.setImageResource(
+                                when (spell.schools[1]) {
+                                    SpellSchool.ABJURATION -> R.drawable.spell_school_abjuration
+                                    SpellSchool.ALTERATION -> R.drawable.spell_school_alteration
+                                    SpellSchool.CONJURATION -> R.drawable.spell_school_conjuration
+                                    SpellSchool.DIVINATION -> R.drawable.spell_school_divination
+                                    SpellSchool.ENCHANTMENT -> R.drawable.spell_school_enchantment
+                                    SpellSchool.EVOCATION -> R.drawable.spell_school_evocation
+                                    SpellSchool.ILLUSION -> R.drawable.spell_school_illusion
+                                    SpellSchool.NECROMANCY -> R.drawable.spell_school_necromancy
+                                }
+                            )
+
+                            spellItemSchoolCard3.visibility = View.GONE
+
+                        }
+
+                        else-> {
+
+                            spellItemSchoolCard1.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (spell.schools[0]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
+
+                            spellItemSchoolImage1.setImageResource(
+                                when (spell.schools[0]) {
+                                    SpellSchool.ABJURATION -> R.drawable.spell_school_abjuration
+                                    SpellSchool.ALTERATION -> R.drawable.spell_school_alteration
+                                    SpellSchool.CONJURATION -> R.drawable.spell_school_conjuration
+                                    SpellSchool.DIVINATION -> R.drawable.spell_school_divination
+                                    SpellSchool.ENCHANTMENT -> R.drawable.spell_school_enchantment
+                                    SpellSchool.EVOCATION -> R.drawable.spell_school_evocation
+                                    SpellSchool.ILLUSION -> R.drawable.spell_school_illusion
+                                    SpellSchool.NECROMANCY -> R.drawable.spell_school_necromancy
+                                }
+                            )
+
+                            spellItemSchoolCard2.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (spell.schools[1]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
+
+                            spellItemSchoolImage2.setImageResource(
+                                when (spell.schools[1]) {
+                                    SpellSchool.ABJURATION -> R.drawable.spell_school_abjuration
+                                    SpellSchool.ALTERATION -> R.drawable.spell_school_alteration
+                                    SpellSchool.CONJURATION -> R.drawable.spell_school_conjuration
+                                    SpellSchool.DIVINATION -> R.drawable.spell_school_divination
+                                    SpellSchool.ENCHANTMENT -> R.drawable.spell_school_enchantment
+                                    SpellSchool.EVOCATION -> R.drawable.spell_school_evocation
+                                    SpellSchool.ILLUSION -> R.drawable.spell_school_illusion
+                                    SpellSchool.NECROMANCY -> R.drawable.spell_school_necromancy
+                                }
+                            )
+
+                            spellItemSchoolCard3.apply {
+                                visibility = View.VISIBLE
+                                tooltipText = when (spell.schools[2]) {
+                                    SpellSchool.ABJURATION ->
+                                        getString(R.string.spell_school_abjuration_l)
+                                    SpellSchool.ALTERATION ->
+                                        getString(R.string.spell_school_alteration_l)
+                                    SpellSchool.CONJURATION ->
+                                        getString(R.string.spell_school_conjuration_l)
+                                    SpellSchool.DIVINATION ->
+                                        getString(R.string.spell_school_divination_l)
+                                    SpellSchool.ENCHANTMENT ->
+                                        getString(R.string.spell_school_enchantment_l)
+                                    SpellSchool.EVOCATION ->
+                                        getString(R.string.spell_school_evocation_l)
+                                    SpellSchool.ILLUSION ->
+                                        getString(R.string.spell_school_illusion_l)
+                                    SpellSchool.NECROMANCY ->
+                                        getString(R.string.spell_school_necromancy_l)
+                                }
+                            }
+
+                            spellItemSchoolImage3.setImageResource(
+                                when (spell.schools[2]) {
+                                    SpellSchool.ABJURATION -> R.drawable.spell_school_abjuration
+                                    SpellSchool.ALTERATION -> R.drawable.spell_school_alteration
+                                    SpellSchool.CONJURATION -> R.drawable.spell_school_conjuration
+                                    SpellSchool.DIVINATION -> R.drawable.spell_school_divination
+                                    SpellSchool.ENCHANTMENT -> R.drawable.spell_school_enchantment
+                                    SpellSchool.EVOCATION -> R.drawable.spell_school_evocation
+                                    SpellSchool.ILLUSION -> R.drawable.spell_school_illusion
+                                    SpellSchool.NECROMANCY -> R.drawable.spell_school_necromancy
+                                }
+                            )
+                        }
+                    }
+
+                    spellItemSource.text = spell.sourceString
+                }
+            }
+        }
+
+        fun updateSelectedItem(selectionPos: Int){
+
+            lastSelectedPos = selectedPos
+            selectedPos = selectionPos
+
+            if (selectedPos in spells.indices) {
+                Log.d("updateSelectedItem($selectedPos)", "Notifying change at position $selectionPos")
+                notifyItemChanged(selectedPos)
+            }
+            if (lastSelectedPos in spells.indices) {
+                Log.d("updateSelectedItem($selectedPos)", "Notifying change at position $lastSelectedPos")
+                notifyItemChanged(lastSelectedPos)
+            }
+        }
+
+    }
+
     // endregion
 
     // region [ Helper functions ]
@@ -874,7 +1635,44 @@ class UniqueDetailsFragment() : Fragment() {
         binding.apply{
 
             // Toolbar
-            uniqueDetailsToolbar.subtitle = parentHoard.name
+            uniqueDetailsToolbar.apply {
+                menu.apply {
+
+                    if (viewedItem is ViewableArtObject) {
+
+                        findItem(R.id.action_toggle_forgery).apply {
+                            isVisible = true
+                            isEnabled = true
+                        }
+                    }
+                    if (viewedItem is ViewableMagicItem) {
+
+                        if (viewedItem.name.endsWith(" Choice")
+                        ) {
+
+                            findItem(R.id.action_resolve_gm_choice).apply {
+                                isVisible = true
+                                isEnabled = true
+                            }
+                            findItem(R.id.action_convert_to_choice).apply {
+                                isVisible = false
+                                isEnabled = false
+                            }
+                        } else {
+
+                            findItem(R.id.action_resolve_gm_choice).apply {
+                                isVisible = false
+                                isEnabled = false
+                            }
+                            findItem(R.id.action_convert_to_choice).apply {
+                                isVisible = true
+                                isEnabled = true
+                            }
+                        }
+                    }
+                }
+                subtitle = parentHoard.name
+            }
 
             // Header
             when (viewedItem.iFrameFlavor){
@@ -904,21 +1702,45 @@ class UniqueDetailsFragment() : Fragment() {
                     .setImageResource(R.drawable.loot_lint)
             }
 
-            if(viewedItem.name.endsWith("*")){
-
-                uniqueDetailsNameLabel.apply{
-                    text = viewedItem.name.removeSuffix("*")
-                    setTextColor(resources.getColor(R.color.ultramarine,context.theme))
-                }
-
-            } else {
-                uniqueDetailsNameLabel.text = viewedItem.name
-            }
+            uniqueDetailsNameLabel.text = viewedItem.name
 
             uniqueDetailsSubtitle.text = viewedItem.subtitle
 
             // Static details
             uniqueDetailsFullNameValue.text = viewedItem.name
+
+            if (viewedItem.name != viewedItem.originalName) {
+                uniqueDetailsOriginalNameLabel.visibility = View.VISIBLE
+                uniqueDetailsOriginalNameValue.apply{
+                    visibility = View.VISIBLE
+                    text = viewedItem.originalName
+                }
+
+                @ColorInt
+                val nicknameColor = when (viewedItem){
+                    is ViewableGem -> getColor(resources,R.color.gemSecondaryDark,null)
+                    is ViewableArtObject -> getColor(resources,R.color.artSecondaryDark,null)
+                    is ViewableMagicItem -> getColor(resources,R.color.magicSecondaryDark,null)
+                    is ViewableSpellCollection -> getColor(resources,R.color.spellSecondaryDark,null)
+                }
+
+                uniqueDetailsNameLabel.apply{
+                    text = viewedItem.name.removeSuffix("*")
+                    setTextColor(nicknameColor)
+                }
+            } else {
+                uniqueDetailsOriginalNameLabel.visibility = View.GONE
+                uniqueDetailsOriginalNameValue.visibility = View.GONE
+
+                val typedValue = TypedValue()
+                requireContext().theme.resolveAttribute(R.attr.colorOnSurface,typedValue,true)
+                @ColorInt
+                val nameColor = typedValue.data
+
+                uniqueDetailsNameLabel.setTextColor(nameColor)
+            }
+
+            uniqueDetailsIdValue.text = "# ${ viewedItem.itemID }"
 
             uniqueDetailsCreationDateValue.text = SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
                 .format(viewedItem.creationTime)
@@ -949,6 +1771,7 @@ class UniqueDetailsFragment() : Fragment() {
                             1f
                         } else {
                             setImageResource(R.drawable.class_fighter_outline)
+                            tooltipText = null
                             0.25f
                         }
 
@@ -962,6 +1785,7 @@ class UniqueDetailsFragment() : Fragment() {
                             1f
                         } else {
                             setImageResource(R.drawable.class_magic_user_outline)
+                            tooltipText = null
                             0.25f
                         }
 
@@ -975,6 +1799,7 @@ class UniqueDetailsFragment() : Fragment() {
                             1f
                         } else {
                             setImageResource(R.drawable.class_thief_outline)
+                            tooltipText = null
                             0.25f
                         }
 
@@ -988,6 +1813,7 @@ class UniqueDetailsFragment() : Fragment() {
                             1f
                         } else {
                             setImageResource(R.drawable.class_cleric_outline)
+                            tooltipText = null
                             0.25f
                         }
 
@@ -1001,6 +1827,7 @@ class UniqueDetailsFragment() : Fragment() {
                             1f
                         } else {
                             setImageResource(R.drawable.class_druid_outline)
+                            tooltipText = null
                             0.25f
                         }
 
@@ -1028,12 +1855,14 @@ class UniqueDetailsFragment() : Fragment() {
                             uniqueDetailsCleric.apply{
                                 alpha = 0.25f
                                 setImageResource(R.drawable.class_cleric_outline)
+                                tooltipText = null
                                 visibility = View.VISIBLE
                             }
                             uniqueDetailsDruid.apply{
 
                                 alpha = 0.25f
                                 setImageResource(R.drawable.class_druid_outline)
+                                tooltipText = null
                                 visibility = View.VISIBLE
                             }
                         }
@@ -1043,7 +1872,7 @@ class UniqueDetailsFragment() : Fragment() {
                             uniqueDetailsMagicUser.apply{
                                 alpha = 0.25f
                                 setImageResource(R.drawable.class_magic_user_outline)
-                                tooltipText = context.getString(R.string.usable_by_arcane_casters)
+                                tooltipText = null
                                 visibility = View.VISIBLE
                             }
                             uniqueDetailsCleric.apply{
@@ -1056,6 +1885,7 @@ class UniqueDetailsFragment() : Fragment() {
 
                                 alpha = 0.25f
                                 setImageResource(R.drawable.class_druid_outline)
+                                tooltipText = null
                                 visibility = View.VISIBLE
                             }
                         }
@@ -1065,11 +1895,13 @@ class UniqueDetailsFragment() : Fragment() {
                             uniqueDetailsMagicUser.apply{
                                 alpha = 0.25f
                                 setImageResource(R.drawable.class_magic_user_outline)
+                                tooltipText = null
                                 visibility = View.VISIBLE
                             }
                             uniqueDetailsCleric.apply{
                                 alpha = 0.25f
                                 setImageResource(R.drawable.class_cleric_outline)
+                                tooltipText = null
                                 visibility = View.VISIBLE
                             }
                             uniqueDetailsDruid.apply{
@@ -1097,6 +1929,154 @@ class UniqueDetailsFragment() : Fragment() {
                     uniqueDetailsCleric.visibility = View.GONE
                     uniqueDetailsDruid.visibility = View.GONE
                 }
+            }
+
+            // Potion color preview group
+            if (viewedItem is ViewableMagicItem) {
+
+                when ((viewedItem as ViewableMagicItem).mgcPotionColors.size) {
+                    0   -> {
+                        uniqueDetailsColorLabel.visibility = View.GONE
+
+                        uniqueDetailsColorPreview1.visibility = View.GONE
+                        uniqueDetailsColorOutline1.visibility = View.GONE
+
+                        uniqueDetailsColorPreview2.visibility = View.GONE
+                        uniqueDetailsColorOutline2.visibility = View.GONE
+
+                        uniqueDetailsColorPreview3.visibility = View.GONE
+                        uniqueDetailsColorOutline3.visibility = View.GONE
+                    }
+
+                    1   -> {
+                        uniqueDetailsColorLabel.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview1.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[0].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[0].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline1.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview2.visibility = View.GONE
+                        uniqueDetailsColorOutline2.visibility = View.GONE
+
+                        uniqueDetailsColorPreview3.visibility = View.GONE
+                        uniqueDetailsColorOutline3.visibility = View.GONE
+                    }
+                    2   -> {
+                        uniqueDetailsColorLabel.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview1.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[0].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[0].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline1.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview2.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[1].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[1].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline2.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview3.visibility = View.GONE
+                        uniqueDetailsColorOutline3.visibility = View.GONE
+                    }
+
+                    else-> {
+                        uniqueDetailsColorLabel.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview1.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[0].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[0].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline1.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview2.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[1].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[1].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline2.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview3.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[2].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[2].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline3.visibility = View.VISIBLE
+                    }
+                }
+
+            } else {
+
+                uniqueDetailsColorLabel.visibility = View.GONE
+
+                uniqueDetailsColorPreview1.visibility = View.GONE
+                uniqueDetailsColorOutline1.visibility = View.GONE
+
+                uniqueDetailsColorPreview2.visibility = View.GONE
+                uniqueDetailsColorOutline2.visibility = View.GONE
+
+                uniqueDetailsColorPreview3.visibility = View.GONE
+                uniqueDetailsColorOutline3.visibility = View.GONE
             }
 
             // Item detail group
@@ -1217,10 +2197,10 @@ class UniqueDetailsFragment() : Fragment() {
 
                     spellDialogSchoolCard1.apply{
                         visibility = View.VISIBLE
-                        tooltipText = spell.schools[1].getLongName(context)
+                        tooltipText = spell.schools[0].getLongName(context)
                     }
                     spellDialogSchool1.setImageResource(
-                        spell.schools[1].getDrawableResID(requireContext()))
+                        spell.schools[0].getDrawableResID(requireContext()))
 
                     spellDialogSchoolCard2.apply{
                         visibility = View.VISIBLE
@@ -1236,10 +2216,10 @@ class UniqueDetailsFragment() : Fragment() {
 
                     spellDialogSchoolCard1.apply{
                         visibility = View.VISIBLE
-                        tooltipText = spell.schools[1].getLongName(context)
+                        tooltipText = spell.schools[0].getLongName(context)
                     }
                     spellDialogSchool1.setImageResource(
-                        spell.schools[1].getDrawableResID(requireContext()))
+                        spell.schools[0].getDrawableResID(requireContext()))
 
                     spellDialogSchoolCard2.apply{
                         visibility = View.VISIBLE
@@ -1481,8 +2461,23 @@ class UniqueDetailsFragment() : Fragment() {
             }
 
             spellDialogFlagButton.setOnClickListener{
-                Toast.makeText(requireContext(),"Flag button clicked.",Toast.LENGTH_LONG).show()
-                //TODO implement
+
+                val toggledEntry = SimpleSpellEntry(
+                    entry.spellID,
+                    entry.name,
+                    entry.level,
+                    entry.discipline,
+                    entry.schools,
+                    entry.subclass,
+                    entry.sourceString,
+                    entry.isUsed.not(),
+                    entry.spellsPos
+                )
+
+                uniqueDetailsViewModel.replaceSpellFromDialog(toggledEntry,
+                    (viewedItem as ViewableSpellCollection).toSpellCollection())
+
+                spellDialog.dismiss()
             }
 
             spellDialogChooseButton.setOnClickListener{
@@ -1495,12 +2490,97 @@ class UniqueDetailsFragment() : Fragment() {
             }
         }
 
+        spellDialog.show()
+
         //if (viewedItem is ViewableSpellCollection)
     }
 
-    private fun showChoiceSpellDialog(spellList: List<Spell>, entry: SimpleSpellEntry) {
+    private fun showChoiceSpellDialog(spellList: List<SimpleSpellEntry>, entry: SimpleSpellEntry) {
 
-        //TODO implement
+        val dialogRecycler = RecyclerView(requireContext())
+
+        dialogRecycler.apply{
+            layoutManager = LinearLayoutManager(context)
+            adapter = SpellChoiceAdapter(spellList)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            isNestedScrollingEnabled = true
+        }
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogRecycler)
+            .setTitle(getString(R.string.gm_choice_spell_dialog_title))
+            .setPositiveButton(R.string.save, null)
+            .setNegativeButton(R.string.action_cancel, null)
+            .create().apply {
+                setOnShowListener { dialog ->
+
+                    getButton(android.app.AlertDialog.BUTTON_POSITIVE)
+                        .setOnClickListener {
+                            if ((dialogRecycler.adapter as SpellChoiceAdapter)
+                                    .selectedPos in spellList.indices) {
+
+                                val spellEntry = spellList[
+                                        (dialogRecycler.adapter as SpellChoiceAdapter).selectedPos]
+
+                                if (viewedItem is ViewableSpellCollection &&
+                                    spellEntry.spellID > 0){
+                                    uniqueDetailsViewModel.replaceSpellFromDialog(spellEntry,
+                                        (viewedItem as ViewableSpellCollection).toSpellCollection())
+                                }
+
+                                dialog.dismiss()
+                            }}
+
+                    getButton(android.app.AlertDialog.BUTTON_NEGATIVE)
+                        .setOnClickListener { dialog.cancel() }
+                }
+            }
+
+        dialog.show()
+    }
+
+    private fun showChoiceItemDialog(itemList: List<MagicItemTemplate>) {
+
+        val dialogRecycler = RecyclerView(requireContext())
+
+        dialogRecycler.apply{
+            layoutManager = LinearLayoutManager(context)
+            adapter = MagicItemChoiceAdapter(itemList)
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+            isNestedScrollingEnabled = true
+        }
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogRecycler)
+            .setTitle(getString(R.string.gm_choice_item_dialog_title))
+            .setPositiveButton(R.string.save, null)
+            .setNegativeButton(R.string.action_cancel, null)
+            .create().apply {
+                setOnShowListener { dialog ->
+
+                    getButton(android.app.AlertDialog.BUTTON_POSITIVE)
+                        .setOnClickListener {
+                            if ((dialogRecycler.adapter as MagicItemChoiceAdapter)
+                                    .selectedPos in itemList.indices) {
+
+                                val templateID = (dialogRecycler.adapter as MagicItemChoiceAdapter)
+                                    .selectedID
+
+                                if (viewedItem is ViewableMagicItem &&
+                                        templateID > 0){
+                                    uniqueDetailsViewModel.replaceItemFromTemplateID(templateID,
+                                        (viewedItem as ViewableMagicItem))
+                                }
+
+                                dialog.dismiss()
+                        }}
+
+                    getButton(android.app.AlertDialog.BUTTON_NEGATIVE)
+                        .setOnClickListener { dialog.cancel() }
+                }
+            }
+
+        dialog.show()
     }
 
     // endregion

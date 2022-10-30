@@ -1,10 +1,16 @@
 package com.example.android.treasurefactory.viewmodel
 
+import android.widget.Toast
 import androidx.lifecycle.*
+import com.example.android.treasurefactory.LootMutator
+import com.example.android.treasurefactory.MultihoardProcessor
 import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import kotlin.math.floor
 
 class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
 
@@ -19,6 +25,8 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
     }
 
     var uniqueItemsLiveData = MutableLiveData<List<ListableItem>>()
+
+    var hoardsLiveData = MutableLiveData<List<Hoard>>(null)
 
     val isRunningAsyncLiveData = MutableLiveData(isRunningAsync)
 
@@ -70,8 +78,8 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                             art.name,
                             art.getIconStr(),
                             when {
+                                art.isForgery -> ItemFrameFlavor.CURSED
                                 art.valueLevel > 27 -> ItemFrameFlavor.GOLDEN
-                                // if forgeries are added, indicate with CURSED
                                 else -> ItemFrameFlavor.NORMAL },
                             art.gpValue,
                             art.getEndIconStr(),
@@ -86,7 +94,8 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                             item.name,
                             item.iconID,
                             when {
-                                item.typeOfItem == MagicItemType.A24 -> ItemFrameFlavor.GOLDEN
+                                item.typeOfItem == MagicItemType.A24 ||
+                                        item.name.endsWith(" Choice")-> ItemFrameFlavor.GOLDEN
                                 item.isCursed -> ItemFrameFlavor.CURSED
                                 else -> ItemFrameFlavor.NORMAL },
                             item.gpValue,
@@ -102,7 +111,7 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                             spCo.sCollectID,
                             spCo.name,
                             spCo.iconID,
-                            if (spCo.curse.isNotEmpty()) {
+                            if (spCo.curse.isNotBlank()) {
                                 ItemFrameFlavor.CURSED
                             } else ItemFrameFlavor.NORMAL,
                             spCo.gpValue,
@@ -124,16 +133,466 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
 
     }
 
-    fun deleteSelectedItems(itemsToDelete: List<ListableItem>) {
-        //TODO Not yet implemented
+    fun moveSelectedItems(itemsToMove: List<Triple<Int,UniqueItemType,Int>>, targetHoardID: Int) {
+
+        viewModelScope.launch{
+
+            setRunningAsync(true)
+
+            val expandedItems = itemsToMove.mapNotNull { (itemID, itemType, hoardID) ->
+
+                when (itemType){
+
+                    UniqueItemType.GEM -> {
+
+                        val effortRating = repository.getHoardEffortRatingOnce(hoardID)
+                            .takeUnless { it == 0.0 } ?: 5.0
+
+                        repository.getGemOnce(itemID)?.toViewableGem(effortRating)
+                    }
+
+                    UniqueItemType.ART_OBJECT -> {
+
+                        val effortRating = repository.getHoardEffortRatingOnce(hoardID)
+                            .takeUnless { it == 0.0 } ?: 5.0
+
+                        repository.getArtObjectOnce(itemID)?.toViewableArtObject(effortRating)
+                    }
+
+                    UniqueItemType.MAGIC_ITEM -> {
+
+                        repository.getMagicItemOnce(itemID)?.toViewableMagicItem()
+                    }
+
+                    UniqueItemType.SPELL_COLLECTION -> {
+
+                        repository.getSpellCollectionOnce(itemID)?.toViewableSpellCollection(repository)
+                    }
+                }
+            }
+
+            val processor = MultihoardProcessor(repository)
+
+            val result = processor.moveItems(targetHoardID,expandedItems)
+
+            setRunningAsync(false)
+
+            textToastHolderLiveData.postValue(result.second to Toast.LENGTH_LONG)
+        }
+    }
+
+    fun deleteSelectedItems(itemsToDelete: List<ListableItem>, targetHoardID: Int) {
+
+        viewModelScope.launch {
+
+            setRunningAsync(true)
+
+            if (itemsToDelete.isNotEmpty()) {
+
+                val gemList = ArrayList<Gem>()
+                val artList = ArrayList<ArtObject>()
+                val itemList = ArrayList<MagicItem>()
+                val spCoList = ArrayList<SpellCollection>()
+
+                itemsToDelete.forEach {
+
+                    when (it){
+
+                        is ListableGem -> {
+
+                            repository.getGemOnce(it.id).let{ item ->
+                                if (item != null){
+                                    gemList.add(item)
+                                }
+                            }
+                        }
+
+                        is ListableArtObject -> {
+
+                            repository.getArtObjectOnce(it.id).let{ item ->
+                                if (item != null){
+                                    artList.add(item)
+                                }
+                            }
+                        }
+
+                        is ListableMagicItem -> {
+
+                            repository.getMagicItemOnce(it.id).let{ item ->
+                                if (item != null){
+                                    itemList.add(item)
+                                }
+                            }
+                        }
+
+                        is ListableSpellCollection -> {
+
+                            repository.getSpellCollectionOnce(it.id).let{ item ->
+                                if (item != null){
+                                    spCoList.add(item)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                val maxSize = 25
+                val maxLength = 20
+
+                val description = StringBuilder().apply{
+                    append("The following item(s) were deleted from this hoard " +
+                            "[id:$targetHoardID]:\n\n")
+                }
+                val tags = StringBuilder().apply{
+                    append("deletion")
+                }
+
+                if (gemList.isNotEmpty()) {
+
+                    description.append("< Gemstone(s) & Jewel(s) >\n")
+                    tags.append("|gemstone")
+
+                    repository.deleteGems(gemList.toList())
+
+                    gemList.take(maxSize).forEachIndexed { index, item ->
+
+                        val clippedName = item.name.take(maxLength) +
+                                if (item.name.length > maxLength) "..." else ""
+                        description.append("\t[#${index+1}] $clippedName [id:${item.gemID}]\n")
+                    }
+
+                    if (gemList.size > maxSize) {
+                        description.append("\t...And ${gemList.size - maxSize} more.\n")
+                    }
+                }
+
+                if (artList.isNotEmpty()) {
+
+                    description.append("< Art Object(s) >\n")
+                    tags.append("|art-object")
+
+                    repository.deleteArtObjects(artList.toList())
+
+                    artList.take(maxSize).forEachIndexed { index, item ->
+
+                        val clippedName = item.name.take(maxLength) +
+                                if (item.name.length > maxLength) "..." else ""
+                        description.append("\t[#${index+1}] $clippedName [id:${item.artID}]\n")
+                    }
+
+                    if (artList.size > maxSize) {
+                        description.append("\t...And ${artList.size - maxSize} more.\n")
+                    }
+                }
+
+                if (itemList.isNotEmpty()) {
+
+                    description.append("< Magic Item(s) >\n")
+                    tags.append("|magic-item")
+
+                    repository.deleteMagicItems(itemList.toList())
+
+                    itemList.take(maxSize).forEachIndexed { index, item ->
+
+                        val clippedName = item.name.take(maxLength) +
+                                if (item.name.length > maxLength) "..." else ""
+                        description.append("\t[#${index+1}] $clippedName [id:${item.mItemID}]\n")
+                    }
+
+                    if (itemList.size > maxSize) {
+                        description.append("\t...And ${itemList.size - maxSize} more.\n")
+                    }
+                }
+
+                if (spCoList.isNotEmpty()) {
+
+                    description.append("< Spell Collection(s) >\n")
+                    tags.append("|spell-collection")
+
+                    repository.deleteSpellCollections(spCoList.toList())
+
+                    spCoList.take(maxSize).forEachIndexed { index, item ->
+
+                        val clippedName = item.name.take(maxLength) +
+                                if (item.name.length > maxLength) "..." else ""
+                        description.append("\t[#${index+1}] $clippedName [id:${item.sCollectID}]\n")
+                    }
+
+                    if (spCoList.size > maxSize) {
+                        description.append("\t...And ${spCoList.size - maxSize} more.\n")
+                    }
+                }
+
+                val deletionEvent = HoardEvent(
+                    timestamp = System.currentTimeMillis(),
+                    hoardID = targetHoardID,
+                    description = description.toString(),
+                    tag = tags.toString()
+                )
+
+                val updatedHoard = LootMutator.auditHoard(targetHoardID,repository)
+
+                if (updatedHoard != null) {
+                    repository.updateHoards(listOf(updatedHoard))
+                }
+
+                repository.addHoardEvent(deletionEvent)
+            }
+
+            setRunningAsync(false)
+        }
     }
 
     fun sellSelectedItems(itemsToSell: List<ListableItem>, parentHoard: Hoard) {
-        //TODO Not yet implemented
+
+        fun CoinType.getMaxCapacity(): Int = (MAXIMUM_COINAGE_AMOUNT / this.gpValue).toInt()
+
+        viewModelScope.launch{
+
+            setRunningAsync(true)
+
+            val gemsToSell  = ArrayList<Gem>()
+            val artToSell   = ArrayList<ArtObject>()
+            val mItemsToSell= ArrayList<MagicItem>()
+            val spCosToSell = ArrayList<SpellCollection>()
+
+            val maxSize = 25
+            val maxLength = 20
+
+            val removalDesc = StringBuilder().apply{
+                append("The following item(s) from this hoard " +
+                        "[id:${parentHoard.hoardID}] were liquidated:\n\n") }
+            val removalTags = StringBuilder().apply{
+                append("sale|deletion")
+            }
+
+            itemsToSell.forEach{ item ->
+                when (item) {
+                    is ListableGem              -> {
+                        item.toGem(repository).let{ expandedItem ->
+                            if (expandedItem != null) {
+                                gemsToSell.add(expandedItem)
+                            }
+                        }
+                    }
+                    is ListableArtObject        -> {
+                        item.toArtObject(repository).let{ expandedItem ->
+                            if (expandedItem != null) {
+                                artToSell.add(expandedItem)
+                            }
+                        }
+                    }
+                    is ListableMagicItem        -> {
+                        item.toMagicItem(repository).let{ expandedItem ->
+                            if (expandedItem != null) {
+                                mItemsToSell.add(expandedItem)
+                            }
+                        }
+                    }
+                    is ListableSpellCollection  -> {
+                        item.toSpellCollection(repository).let{ expandedItem ->
+                            if (expandedItem != null) {
+                                spCosToSell.add(expandedItem)
+                            }
+                        }
+                    }
+                }
+            }
+
+            var totalSaleRemaining = gemsToSell.sumOf { it.currentGPValue } +
+                    artToSell.sumOf { it.gpValue } + mItemsToSell.sumOf { it.gpValue } +
+                    spCosToSell.sumOf { it.gpValue }
+            val addedCoins = mutableMapOf<CoinType,Int>()
+            val remainingCapacity = mutableMapOf(
+                CoinType.CP to ((CoinType.CP).getMaxCapacity() - parentHoard.cp),
+                CoinType.SP to ((CoinType.SP).getMaxCapacity() - parentHoard.sp),
+                CoinType.EP to ((CoinType.EP).getMaxCapacity() - parentHoard.ep),
+                CoinType.GP to ((CoinType.GP).getMaxCapacity() - parentHoard.gp),
+                CoinType.HSP to ((CoinType.HSP).getMaxCapacity() - parentHoard.hsp),
+                CoinType.PP to ((CoinType.PP).getMaxCapacity() - parentHoard.pp)
+            )
+
+            // Greedily make sale in as few coins as hoard as room for
+            enumValues<CoinType>().reversed().forEach { coinType ->
+
+                if (totalSaleRemaining > 0.00) {
+
+                    val mostCoinsPossible = coinType.getMaxCapacity()
+                    val remainingTypeCapacity = mostCoinsPossible.coerceAtMost(remainingCapacity[coinType]!!)
+
+                    val coinsPutTowardsTotal = floor(totalSaleRemaining / coinType.gpValue).toInt()
+                        .coerceAtMost(remainingTypeCapacity)
+
+                    addedCoins[coinType] = coinsPutTowardsTotal
+
+                    totalSaleRemaining -= coinsPutTowardsTotal * coinType.gpValue
+                } else {
+                    addedCoins[coinType] = 0
+                }
+            }
+
+            // Delete sold items
+            if (gemsToSell.isNotEmpty()) {
+
+                removalDesc.append("< Gemstone(s) & Jewel(s) >\n")
+                removalTags.append("|gemstone")
+
+                repository.deleteGems(gemsToSell.toList())
+
+                gemsToSell.take(maxSize).forEachIndexed { index, item ->
+
+                    val clippedName = item.name.take(maxLength) +
+                            if (item.name.length > maxLength) "..." else ""
+                    removalDesc.append("\t[#${index+1}] $clippedName [id:${item.gemID}]\n")
+                    removalDesc.append("\t(Worth " +
+                            DecimalFormat("#,##0.0#")
+                                .format(item.currentGPValue)
+                                .removeSuffix(".0") + " gp when sold)\n")
+                }
+
+                if (gemsToSell.size > maxSize) {
+                    removalDesc.append("\t...And ${gemsToSell.size - maxSize} more.\n")
+                }
+            }
+            if (artToSell.isNotEmpty()) {
+                removalDesc.append("< Art Object(s) >\n")
+                removalTags.append("|art-object")
+
+                repository.deleteArtObjects(artToSell.toList())
+
+                artToSell.take(maxSize).forEachIndexed { index, item ->
+
+                    val clippedName = item.name.take(maxLength) +
+                            if (item.name.length > maxLength) "..." else ""
+                    removalDesc.append("\t[#${index+1}] $clippedName [id:${item.artID}]\n")
+                    removalDesc.append("\t(Worth " +
+                            DecimalFormat("#,##0.0#")
+                                .format(item.gpValue)
+                                .removeSuffix(".0") + " gp when sold)\n")
+                }
+
+                if (artToSell.size > maxSize) {
+                    removalDesc.append("\t...And ${artToSell.size - maxSize} more.\n")
+                }
+            }
+            if (mItemsToSell.isNotEmpty()) {
+                removalDesc.append("< Magic Item(s) >\n")
+                removalTags.append("|magic-item")
+
+                repository.deleteMagicItems(mItemsToSell.toList())
+
+                mItemsToSell.take(maxSize).forEachIndexed { index, item ->
+
+                    val clippedName = item.name.take(maxLength) +
+                            if (item.name.length > maxLength) "..." else ""
+                    removalDesc.append("\t[#${index+1}] $clippedName [id:${item.mItemID}]\n")
+                    removalDesc.append("\t(Worth " +
+                            DecimalFormat("#,##0.0#")
+                                .format(item.gpValue)
+                                .removeSuffix(".0") + " gp when sold)\n")
+                }
+
+                if (mItemsToSell.size > maxSize) {
+                    removalDesc.append("\t...And ${mItemsToSell.size - maxSize} more.\n")
+                }
+            }
+            if (spCosToSell.isNotEmpty()) {
+                removalDesc.append("< Spell Collection(s) >\n")
+                removalTags.append("|spell-collection")
+
+                repository.deleteSpellCollections(spCosToSell.toList())
+
+                spCosToSell.take(maxSize).forEachIndexed { index, item ->
+
+                    val clippedName = item.name.take(maxLength) +
+                            if (item.name.length > maxLength) "..." else ""
+                    removalDesc.append("\t[#${index+1}] $clippedName [id:${item.sCollectID}]\n")
+                    removalDesc.append("\t(Worth " +
+                            DecimalFormat("#,##0.0#")
+                                .format(item.gpValue)
+                                .removeSuffix(".0") + " gp when sold)\n")
+                }
+
+                if (spCosToSell.size > maxSize) {
+                    removalDesc.append("\t...And ${spCosToSell.size - maxSize} more.\n")
+                }
+            }
+
+            // Update coinage on hoard before audit
+            repository.updateHoard(
+                parentHoard.copy(
+                    cp = parentHoard.cp + addedCoins[CoinType.CP]!!,
+                    sp = parentHoard.sp + addedCoins[CoinType.SP]!!,
+                    ep = parentHoard.ep + addedCoins[CoinType.EP]!!,
+                    gp = parentHoard.gp + addedCoins[CoinType.GP]!!,
+                    hsp= parentHoard.hsp + addedCoins[CoinType.HSP]!!,
+                    pp = parentHoard.pp + addedCoins[CoinType.PP]!!)
+            )
+
+            // Audit and update hoard with new item totals
+            LootMutator.auditHoard(parentHoard.hoardID,repository).also{
+                if (it != null) {
+                    repository.updateHoard(it)
+                }
+            }
+
+            // Log sale as two events
+            val removalEvent = HoardEvent(
+                hoardID = parentHoard.hoardID,
+                timestamp = System.currentTimeMillis(),
+                description = removalDesc.toString(),
+                tag = removalTags.toString()
+            )
+
+            val coinageDesc = StringBuilder()
+
+            coinageDesc.append("Coins added for sale of ${itemsToSell.size} item(s):\n")
+
+            addedCoins.toSortedMap().forEach { (coinType, coinQty) ->
+                if (coinQty > 0) {
+                    coinageDesc.append("\t+" +  (NumberFormat.getNumberInstance().format(coinQty)) +
+                            " ${coinType.name.lowercase()} (" +
+                            DecimalFormat("#,##0.0#")
+                                .format(coinQty * coinType.gpValue)
+                                .removeSuffix(".0") + " gp)\n")
+                     }
+            }
+
+            if (totalSaleRemaining > 0.001) {
+                coinageDesc.append("\t(" + DecimalFormat("#,##0.0#")
+                    .format(totalSaleRemaining).removeSuffix(".0") +
+                        " gp left on the table)\n")
+            }
+
+            coinageDesc.append("\nTotal value of " +
+                    DecimalFormat("#,##0.0#")
+                        .format((gemsToSell.sumOf { it.currentGPValue } +
+                                artToSell.sumOf { it.gpValue } + mItemsToSell.sumOf { it.gpValue } +
+                                spCosToSell.sumOf { it.gpValue })).removeSuffix(".0") +
+                    " gp")
+
+            val coinageEvent = HoardEvent(
+                hoardID = parentHoard.hoardID,
+                timestamp = System.currentTimeMillis(),
+                description = coinageDesc.toString(),
+                tag = "sale|coinage"
+            )
+
+            repository.addHoardEvent(listOf(removalEvent,coinageEvent))
+
+            setRunningAsync(false)
+        }
     }
 
     fun duplicateSelectedItems(itemsToCopy: List<ListableItem>) {
         //TODO Not yet implemented
+    }
+
+    fun fetchHoardsForDialog(excludedHoardID: Int) {
+
+        viewModelScope.launch{
+            hoardsLiveData.postValue(
+                repository.getHoardsOnce().filter{ it.hoardID != excludedHoardID }) }
     }
 
     // region [ Extension functions ]

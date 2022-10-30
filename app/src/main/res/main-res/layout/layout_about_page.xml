@@ -21,8 +21,6 @@
             app:cardElevation="16dp"
             app:cardCornerRadius="8dp">
 
-            <!--TODO Add an easter egg penetrating dice roller by long-clicking icon-->
-
             <ImageView
                 android:layout_width="160dp"
                 android:layout_height="160dp"
@@ -37,8 +35,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginHorizontal="16dp"
             android:textStyle="bold"
+            android:lines="1"
+            android:gravity="center"
             android:layout_gravity="center"
-            android:textSize="36sp"
+            android:textSize="28sp"
             android:text="@string/app_title_text"
             android:textColor="?attr/colorOnBackground"
             android:alpha="0.7"
@@ -52,7 +52,7 @@
             android:layout_gravity="center"
             android:text="@string/about_page_description"
             android:textAlignment="center"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -63,7 +63,7 @@
             android:textStyle="italic"
             android:text="@string/app_version_string"
             android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -71,10 +71,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="64dp"
             android:layout_gravity="center"
-            android:text="Created by Amelia K."
+            android:text="Treasure Hacktory © 2022 Amelia K.\nAll rights reserved."
             android:layout_marginBottom="16dp"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <!-- Attributions group -->
 
@@ -502,7 +502,7 @@
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="8dp"
                         android:textAlignment="textEnd"
-                        android:text="PONETI\n(Kristian Bakalov)"
+                        android:text="PONETI"
                         android:textSize="16sp" />
 
                     <!-- Expandable portion of cardview -->
@@ -858,6 +858,94 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/max_icons_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="16dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="Roleplaying Avatars"
+                        android:fontFeatureSettings="smcp"
+                        android:textStyle="bold"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="textEnd"
+                        android:text="max.icons"
+                        android:textSize="16sp" />
+
+                    <!-- Expandable portion of cardview -->
+                    <LinearLayout
+                        android:id="@+id/max_icons_card_expanded_group"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/max_icons_creator_link"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="32dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/max_icons_creator_link"
+                            android:textSize="18sp"
+                            android:drawablePadding="16dp"
+                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
+
+                    </LinearLayout>
+
+                    <!-- Always-visible footer -->
+                    <RelativeLayout
+                        android:id="@+id/max_icons_card_footer"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_alignParentTop="true"
+                            android:alpha="0.25"
+                            android:background="?attr/colorOnSurface" />
+
+                        <ImageView
+                            android:id="@+id/max_icons_card_indicator"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_centerInParent="true"
+                            android:alpha="0.5"
+                            android:rotation="90"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSurface"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                 android:id="@+id/material_icons_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1027,6 +1115,24 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
                     android:text="@string/mitch_thanks"
+                    android:textSize="16sp" />
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/friends_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/friends_thanks"
                     android:textSize="16sp" />
 
             </androidx.cardview.widget.CardView>

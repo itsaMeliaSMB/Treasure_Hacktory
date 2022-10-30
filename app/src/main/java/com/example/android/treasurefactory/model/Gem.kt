@@ -5,6 +5,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
+import kotlin.math.roundToInt
 
 @Entity(tableName = "hackmaster_gem_table")
 data class Gem(
@@ -18,7 +19,9 @@ data class Gem(
     var name: String,
     val opacity: Int,
     var description: String = "",
-    var currentGPValue: Double = 0.0) {
+    var currentGPValue: Double = 0.0,
+    val originalName: String
+) {
 
     @Ignore
     fun getTypeAsString() : String {
@@ -155,6 +158,36 @@ data class Gem(
             LabelledQualityEntry("Quality",getQualityAsString().capitalized()),
             LabelledQualityEntry("Opacity",getOpacityAsString().capitalized()),
             LabelledQualityEntry("Appearance",description.capitalized())
+        )
+    }
+
+    @Ignore
+    fun toViewableGem(effortRating: Double) : ViewableGem {
+
+        return ViewableGem(
+            gemID,
+            hoardID,
+            name,
+            "${getSizeAsString().capitalized()}, " +
+                    "${getQualityAsString()} ${getTypeAsString()}",
+            creationTime,
+            iconID,
+            when {
+                currentGPValue < 0.0        -> ItemFrameFlavor.CURSED
+                currentGPValue >= 1000000.0 -> ItemFrameFlavor.GOLDEN
+                else                            -> ItemFrameFlavor.NORMAL },
+            "GameMaster's Guide",
+            178,
+            currentGPValue,
+            (currentGPValue / effortRating).roundToInt().coerceAtLeast(0),
+            UniqueItemType.GEM,
+            listOf(getFlavorTextAsDetailsList()), //TODO add gem evaluation history when implemented
+            originalName,
+            type,
+            size,
+            quality,
+            opacity,
+            description
         )
     }
 }

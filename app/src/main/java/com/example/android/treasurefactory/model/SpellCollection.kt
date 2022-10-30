@@ -15,6 +15,13 @@ data class SpellEntry(
     val usedUp: Boolean = false
 )
 
+data class SpCoAugmentation(
+    val label: String,
+    val textValue: String,
+    val gpModifier: Double = 0.0,
+    val byPage: Boolean = false
+)
+
 @Entity(tableName = "hackmaster_spell_collection_table")
 data class SpellCollection(
     @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
@@ -24,53 +31,14 @@ data class SpellCollection(
     var name: String = "<Spell Collection>",
     var type: SpCoType,
     val discipline: SpCoDiscipline = SpCoDiscipline.ALL_MAGIC,
-    var properties: List<Pair<String, Double>> = emptyList(),
+    var augmentations: List<SpCoAugmentation> = emptyList(),
     var gpValue: Double = 0.0,
     var xpValue: Int = 0,
     var spells: List<SpellEntry> = emptyList(),
-    var curse: String = ""
+    var curse: String = "",
+    val pageCount: Int = 0,
+    val originalName: String
 ) {
-
-    @Ignore
-    fun calculateGPValue(): Double {
-
-        if (type == SpCoType.RING) return 7000.0
-
-        var gpTotal: Double = 0.0
-
-        if (properties.isNotEmpty()) { properties.forEach { (_, gpValue) -> gpTotal += gpValue} }
-
-        if (spells.isNotEmpty()) { spells.forEach {
-
-            if (!(it.usedUp)){
-
-                gpTotal += if (it.spellLevel == 0) {
-                    75.0
-                } else {
-                    (300.0 * it.spellLevel)
-                }
-            } }
-        }
-
-        return gpTotal
-    }
-
-    @Ignore
-    fun calculateXpValue() : Int {
-
-        if (type == SpCoType.RING) return 2500
-
-        var xpTotal = 0
-
-        if (spells.isNotEmpty()) { spells.forEach {
-
-            if (!(it.usedUp)) { xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel) }
-
-            }
-        }
-
-        return xpTotal
-    }
 
     @Ignore
     fun getSubtitle(): String {
@@ -81,7 +49,7 @@ data class SpellCollection(
         result.append(when (type){
             SpCoType.SCROLL     -> "scroll "
             SpCoType.BOOK       -> "spellbook "
-            SpCoType.ALLOTMENT -> "Chosen One allotment "
+            SpCoType.ALLOTMENT  -> "Chosen One allotment "
             SpCoType.RING       -> "ring "
             SpCoType.OTHER      -> "collection "
         })
@@ -105,11 +73,20 @@ data class SpellCollection(
 
         val resultList = ArrayList<Pair<String,List<DetailEntry>>>()
 
-        if (properties.isNotEmpty()) {
+        if (pageCount > 0){
             spellCollectionPropertiesList.add(
-                properties.map { (spCoProperty, gpValue) ->
-                    LabelledQualityEntry(spCoProperty,"${DecimalFormat("#,##0.0#")
-                        .format(gpValue).removeSuffix(".0")} gp")}
+                listOf(LabelledQualityEntry("Total page count", pageCount.toString()))
+            )
+        }
+
+        if (augmentations.isNotEmpty()) {
+            spellCollectionPropertiesList.add(
+                augmentations.map { augment ->
+                    LabelledQualityEntry(
+                        augment.label,augment.textValue + " (" +
+                            "${DecimalFormat("#,##0.0#")
+                                .format(augment.gpModifier).removeSuffix(".0")} gp" +
+                            if (augment.byPage)" / page)" else ")")}
             )
         }
 
@@ -133,5 +110,97 @@ data class SpellCollection(
         }
 
         return resultList.toList()
+    }
+
+    @Ignore
+    suspend fun toViewableSpellCollection(repository: HMRepository) : ViewableSpellCollection {
+
+        return ViewableSpellCollection(
+            sCollectID,
+            hoardID,
+            name,
+            getSubtitle(),
+            creationTime,
+            iconID,
+            when {
+                curse.isNotEmpty() -> ItemFrameFlavor.CURSED
+                type == SpCoType.ALLOTMENT -> ItemFrameFlavor.GOLDEN
+                else -> ItemFrameFlavor.NORMAL
+            },
+            when (type){
+                SpCoType.SCROLL -> "GameMaster's Guide"
+                SpCoType.BOOK -> "Spellslinger's Guide to Wurld Domination"
+                SpCoType.ALLOTMENT -> "Zealot’s Guide to Wurld Conversion"
+                SpCoType.RING -> "GameMaster's Guide"
+                SpCoType.OTHER -> "Unspecified"
+            },
+            when (type){
+                SpCoType.SCROLL -> 225
+                SpCoType.BOOK -> 82
+                SpCoType.ALLOTMENT -> 6
+                SpCoType.RING -> 231
+                SpCoType.OTHER -> 0
+            },
+            gpValue,
+            xpValue,
+            UniqueItemType.SPELL_COLLECTION,
+            getFlavorTextAndSpellsAsDetailsLists(repository),
+            originalName,
+            type,
+            discipline,
+            augmentations,
+            spells,
+            curse,
+            pageCount,
+        )
+    }
+
+    companion object {
+
+        @Ignore
+        fun calculateGPValue(type: SpCoType, augmentations: List<SpCoAugmentation>, pageCount: Int,
+                             spells: List<SpellEntry>): Double {
+
+            if (type == SpCoType.RING) return 7000.0
+
+            var gpTotal = 0.0
+
+            if (augmentations.isNotEmpty()) {
+                augmentations.forEach { augment ->
+                    gpTotal += if (augment.byPage) pageCount * augment.gpModifier else augment.gpModifier
+                }
+            }
+
+            if (spells.isNotEmpty()) { spells.forEach {
+
+                if (!(it.usedUp)){
+
+                    gpTotal += if (it.spellLevel == 0) {
+                        75.0
+                    } else {
+                        (300.0 * it.spellLevel)
+                    }
+                } }
+            }
+
+            return gpTotal
+        }
+
+        @Ignore
+        fun calculateXPValue(type: SpCoType, spells: List<SpellEntry>) : Int {
+
+            if (type == SpCoType.RING) return 2500
+
+            var xpTotal = 0
+
+            if (spells.isNotEmpty()) { spells.forEach {
+
+                if (!(it.usedUp)) { xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel) }
+
+            }
+            }
+
+            return xpTotal
+        }
     }
 }

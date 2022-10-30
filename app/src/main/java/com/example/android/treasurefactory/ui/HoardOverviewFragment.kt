@@ -1,13 +1,19 @@
 package com.example.android.treasurefactory.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,19 +21,21 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.android.treasurefactory.LootMutator
 import com.example.android.treasurefactory.R
 import com.example.android.treasurefactory.TreasureHacktoryApplication
+import com.example.android.treasurefactory.capitalized
 import com.example.android.treasurefactory.databinding.HoardOverviewCoinageListItemBinding
 import com.example.android.treasurefactory.databinding.LayoutHoardOverviewBinding
-import com.example.android.treasurefactory.model.CoinType
-import com.example.android.treasurefactory.model.Hoard
-import com.example.android.treasurefactory.model.HoardBadge
-import com.example.android.treasurefactory.model.UniqueItemType
+import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModel
 import com.example.android.treasurefactory.viewmodel.HoardOverviewViewModelFactory
+import java.io.BufferedWriter
+import java.io.IOException
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import kotlin.io.path.bufferedWriter
 
 class HoardOverviewFragment : Fragment() {
 
@@ -70,6 +78,16 @@ class HoardOverviewFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = LayoutHoardOverviewBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        val typedValue = TypedValue()
+        requireContext().theme.resolveAttribute(R.attr.colorPrimaryDark,typedValue,true)
+        @ColorInt
+        val newStatusBarColor = typedValue.data
+
+        requireActivity().window.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = newStatusBarColor
+        }
 
         // Give RecyclerView a Layout manager [required]
         binding.hoardOverviewCoinageList.apply {
@@ -158,6 +176,18 @@ class HoardOverviewFragment : Fragment() {
                     " xp").also { binding.hoardOverviewExperienceInfo.text = it }
             updateDifficultyLabel()
         }
+
+        hoardOverviewViewModel.reportInfoLiveData.observe(viewLifecycleOwner) { reportInfo ->
+
+            if (reportInfo != null) {
+
+                val fileName = "hoard_overview_report"
+                sendCSVReport(reportInfo, fileName)
+
+                hoardOverviewViewModel.clearReportInfo()
+            }
+
+        }
         // endregion
 
         // region [ Toolbar ]
@@ -167,12 +197,20 @@ class HoardOverviewFragment : Fragment() {
             val typedValue = TypedValue()
             context.theme.resolveAttribute(R.attr.colorOnPrimary,typedValue,true)
             @ColorInt
-            val titleTextColor = typedValue.data
+            val colorOnPrimary = typedValue.data
 
             inflateMenu(R.menu.hoard_overview_toolbar_menu)
             title = getString(R.string.hoard_overview_fragment_title)
-            setTitleTextColor(titleTextColor)
-            setNavigationIcon(R.drawable.clipart_back_vector_icon)
+            setTitleTextColor(colorOnPrimary)
+            setSubtitleTextColor(colorOnPrimary)
+            navigationIcon?.apply {
+                R.drawable.clipart_back_vector_icon
+                setTint(colorOnPrimary)
+                visibility = View.VISIBLE
+            }
+            overflowIcon?.apply{
+                setTint(colorOnPrimary)
+            }
             setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
@@ -185,6 +223,30 @@ class HoardOverviewFragment : Fragment() {
                         val action = HoardOverviewFragmentDirections
                             .hoardOverviewEditBottomDialogAction(activeHoard.hoardID)
                         findNavController().navigate(action)
+
+                        true
+                    }
+
+                    R.id.action_csv_report      -> {
+
+                        val dialog = AlertDialog.Builder(requireContext()).setTitle("Generate & Share CSV Report")
+                            .setMessage("This will generate an overview report of this treasure hoard. Proceed?\n\n" +
+                                    "\t- The report will not be stored here after it is shared, so be sure to save it where you can view it later.\n" +
+                                    "\t- If you are having trouble viewing the report, the item delimiter is \"¤\" (U+00A4) and the line separator is \"\\r\".")
+                            .setPositiveButton(R.string.generate) { dialog, _ ->
+
+                                Toast.makeText(context,"Generating report (This may take a moment)...", Toast.LENGTH_LONG).show()
+
+                                hoardOverviewViewModel.fetchReportInfo(activeHoard.hoardID)
+
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                                dialog.cancel()
+                            }
+                            .create()
+
+                        dialog.show()
 
                         true
                     }
@@ -262,6 +324,20 @@ class HoardOverviewFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    /* TODO override fun onDestroy() {
+        super.onDestroy()
+
+        val tempDir = requireContext().cacheDir
+
+        // Delete any temp files in directory first
+        tempDir.listFiles()?.forEach { file ->
+            if (file.isFile) {
+                file.delete()
+            }
+        }
+    }*/
+
     // endregion
 
     // region [ Inner classes ]
@@ -381,6 +457,7 @@ class HoardOverviewFragment : Fragment() {
             hoardOverviewNameLabel.text = activeHoard.name
             hoardOverviewDateInfo.text = SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
                 .format(activeHoard.creationDate)
+            hoardOverviewIdInfo.text = "# ${activeHoard.hoardID}"
             ("Worth ${DecimalFormat("#,##0.0#")
                 .format(activeHoard.gpTotal)
                 .removeSuffix(".0")} gp").also { binding.hoardOverviewValueInfo.text = it }
@@ -500,7 +577,7 @@ class HoardOverviewFragment : Fragment() {
         }
     }
 
-    fun updateDifficultyLabel() {
+    private fun updateDifficultyLabel() {
 
         val effortRating = activeHoard.effortRating
 
@@ -584,6 +661,510 @@ class HoardOverviewFragment : Fragment() {
         if (activeHoard.pp > 0) coinArrayList.add(CoinType.PP to activeHoard.pp)
 
         return coinArrayList.toList()
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun sendCSVReport(hoardBundle: Triple<Hoard,HoardUniqueItemBundle,List<HoardEvent>>,
+                          fileName: String = "hoard_report") {
+
+        val fileExtension: String = "csv"
+        val fileUri = generateCSVFile(hoardBundle,fileName,fileExtension)
+
+        if (fileUri != null) {
+            val shareIntent = Intent().apply{
+                action = Intent.ACTION_SEND
+                setDataAndTypeAndNormalize(fileUri,"text/plain")
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+
+            startActivity(Intent.createChooser(shareIntent,"Share report using:"))
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun generateCSVFile(hoardBundle: Triple<Hoard, HoardUniqueItemBundle, List<HoardEvent>>,
+                                fileName: String, fileExtension: String): Uri? {
+
+        val tempDir = requireContext().cacheDir
+
+        // Delete any temp files in directory first
+        tempDir.listFiles()?.forEach { file ->
+            if (file.isFile) {
+                file.delete()
+            }
+        }
+
+        val filePath = kotlin.io.path.createTempFile(tempDir.toPath(), fileName, "." + fileExtension)
+
+        val writer: BufferedWriter?
+
+        try {
+
+            writer = filePath.bufferedWriter()
+
+            hoardBundle.let { (hoard, itemBundle, events) ->
+
+                // region [ Simplified write functions ]
+                fun List<String>.writeAsRow() {
+                    writer.append(this.joinToString(separator = "¤", postfix = "\r"))
+                }
+
+                fun List<List<String>>.writeAsRows() {
+                    this.forEach { rowList -> rowList.writeAsRow() }
+                }
+
+                fun writeEmptyRow() {
+                    writer.append("\r")
+                }
+                // endregion
+
+                var grandGPTotal = 0.0
+                var grandXPTotal = 0
+
+                // region [ Treasure category compiling functions ]
+                fun compileCoinageForCSV(): List<List<String>> {
+                    val gpTotal = hoard.getTotalCoinageValue()
+                    val xpTotal = (hoard.getTotalCoinageValue() / hoard.effortRating).toInt()
+                    val countTotal =
+                        hoard.cp + hoard.sp + hoard.ep + hoard.gp + hoard.hsp + hoard.pp
+                    val outputList = arrayListOf(
+                        listOf(
+                            "Taken",
+                            "Coinage by denomination",
+                            "Total in GP",
+                            "Total in XP",
+                            "Count",
+                            "Weight",
+                            "By Value",
+                            "By Count"
+                        )
+                    )
+
+                    fun addCoinCountToRowList(type: CoinType, count: Int) {
+                        val coinList = arrayListOf("")
+                        val subGpTotal = count * type.gpValue
+                        val subXpTotal = (subGpTotal / hoard.effortRating).toInt()
+
+                        coinList.add(type.longName + " (${type.name.lowercase()})")
+                        coinList.add(
+                            DecimalFormat("#,##0.0#")
+                                .format(subGpTotal)
+                                .removeSuffix(".0")
+                        )
+                        coinList.add(NumberFormat.getNumberInstance().format(subXpTotal))
+                        coinList.add(NumberFormat.getNumberInstance().format(count))
+                        coinList.add(
+                            ("${
+                                DecimalFormat("#,##0.0#")
+                                    .format(count / 10.0)
+                                    .removeSuffix(".0")
+                            } ib")
+                        )
+                        coinList.add(
+                            ("${
+                                DecimalFormat("#0.0#")
+                                    .format(subGpTotal / gpTotal)
+                                    .removeSuffix(".0")
+                            } %")
+                        )
+                        coinList.add(
+                            ("${
+                                DecimalFormat("#0.0#")
+                                    .format(count / countTotal)
+                                    .removeSuffix(".0")
+                            } %")
+                        )
+
+                    }
+
+                    if (hoard.cp > 0) {
+                        addCoinCountToRowList(CoinType.CP, hoard.cp)
+                    }
+                    if (hoard.sp > 0) {
+                        addCoinCountToRowList(CoinType.SP, hoard.sp)
+                    }
+                    if (hoard.ep > 0) {
+                        addCoinCountToRowList(CoinType.EP, hoard.ep)
+                    }
+                    if (hoard.gp > 0) {
+                        addCoinCountToRowList(CoinType.GP, hoard.gp)
+                    }
+                    if (hoard.hsp > 0) {
+                        addCoinCountToRowList(CoinType.HSP, hoard.hsp)
+                    }
+                    if (hoard.pp > 0) {
+                        addCoinCountToRowList(CoinType.PP, hoard.pp)
+                    }
+
+                    grandGPTotal += gpTotal
+                    grandXPTotal += xpTotal
+
+                    outputList.add(
+                        listOf(
+                            "- - -", "COINAGE TOTAL",
+                            (DecimalFormat("#,##0.0#").format(gpTotal).removeSuffix(".0")),
+                            NumberFormat.getNumberInstance().format(xpTotal),
+                            "- - -", "- - -", "- - -", "- - -"
+                        )
+                    )
+
+                    return outputList.toList()
+                }
+
+                fun MagicItem.getShortTableName(): String {
+                    return when (this.typeOfItem) {
+                        MagicItemType.A2 -> "Potion"
+                        MagicItemType.A3 -> "Scroll"
+                        MagicItemType.A4 -> "Ring"
+                        MagicItemType.A5 -> "Rod"
+                        MagicItemType.A6 -> "Staff"
+                        MagicItemType.A7 -> "Wand"
+                        MagicItemType.A8 -> "Book"
+                        MagicItemType.A9 -> "Jewelry"
+                        MagicItemType.A10 -> "Robe, etc."
+                        MagicItemType.A11 -> "Boots,etc."
+                        MagicItemType.A12 -> "Hat, etc."
+                        MagicItemType.A13 -> "Container"
+                        MagicItemType.A14 -> "Dust, etc."
+                        MagicItemType.A15 -> "Tools A15"
+                        MagicItemType.A16 -> "Musical"
+                        MagicItemType.A17 -> "Odd Stuff"
+                        MagicItemType.A18 -> "Armor"
+                        MagicItemType.A20 -> "Sp.Armor"
+                        MagicItemType.A21 -> "Weapon"
+                        MagicItemType.A23 -> "Sp.Weap."
+                        MagicItemType.A24 -> "Artifact"
+                        MagicItemType.Map -> "Tr. Map"
+                        MagicItemType.Mundane -> "Mundane"
+                    }
+                }
+
+                fun List<Gem>.compileForCSV(): List<List<String>> {
+
+                    var gpTotal = 0.0
+                    var xpTotal = 0
+                    val outputList = arrayListOf(
+                        listOf(
+                            "Taken",
+                            "Gem [and id]",
+                            "GP Value",
+                            "XP Value",
+                            "Stone Type",
+                            "Size",
+                            "Quality",
+                            "Original GP Value"
+                        )
+                    )
+
+                    this.forEach { item ->
+                        val itemList = arrayListOf("")
+
+                        itemList.add(
+                            item.name.take(25) + (if (item.name.length > 25) "... " else " ") +
+                                    "[id:${item.gemID}]"
+                        )
+                        item.currentGPValue.let { itemGPV ->
+                            gpTotal += itemGPV
+                            itemList.add(
+                                DecimalFormat("#,##0.0#")
+                                    .format(itemGPV)
+                                    .removeSuffix(".0")
+                            )
+                        }
+
+                        ((item.currentGPValue / hoard.effortRating).toInt()).let { itemXPV ->
+                            xpTotal += itemXPV
+                            itemList.add((NumberFormat.getNumberInstance().format(itemXPV)))
+                        }
+                        itemList.add(item.getTypeAsString().capitalized())
+                        itemList.add(item.getSizeAsString().capitalized())
+                        itemList.add(item.getQualityAsString().capitalized())
+                        itemList.add(
+                            DecimalFormat("#,##0.0#")
+                                .format(LootMutator.convertGemValueToGP(item.getDefaultBaseValue()))
+                                .removeSuffix(".0")
+                        )
+
+                        outputList.add(itemList.toList())
+                    }
+
+                    outputList.add(
+                        listOf(
+                            "- - -", "GEM TOTAL",
+                            (DecimalFormat("#,##0.0#").format(gpTotal).removeSuffix(".0")),
+                            NumberFormat.getNumberInstance().format(xpTotal),
+                            "- - -", "- - -", "- - -", "- - -"
+                        )
+                    )
+
+                    grandGPTotal += gpTotal
+                    grandXPTotal += xpTotal
+
+                    return outputList.toList()
+                }
+
+                fun List<ArtObject>.compileForCSV(): List<List<String>> {
+
+                    var gpTotal = 0.0
+                    var xpTotal = 0
+                    val outputList = arrayListOf(
+                        listOf(
+                            "Taken",
+                            "Art Object [and id]",
+                            "GP Value",
+                            "XP Value",
+                            "Medium",
+                            "Size",
+                            "Subject",
+                            "Authenticity"
+                        )
+                    )
+
+                    this.forEach { item ->
+                        val itemList = arrayListOf("")
+
+                        itemList.add(
+                            item.name.take(25) + (if (item.name.length > 25) "... " else " ") +
+                                    "[id:${item.artID}]"
+                        )
+                        item.gpValue.let { itemGPV ->
+                            gpTotal += itemGPV
+                            itemList.add(
+                                DecimalFormat("#,##0.0#")
+                                    .format(itemGPV)
+                                    .removeSuffix(".0")
+                            )
+                        }
+
+                        ((item.gpValue / hoard.effortRating).toInt()).let { itemXPV ->
+                            xpTotal += itemXPV
+                            itemList.add((NumberFormat.getNumberInstance().format(itemXPV)))
+                        }
+                        itemList.add(item.getArtTypeAsString().capitalized())
+                        itemList.add(item.getSizeAsString().capitalized())
+                        itemList.add(item.getSubjectAsString().capitalized())
+                        itemList.add(if (item.isForgery) "Forgery" else "Genuine")
+
+                        outputList.add(itemList.toList())
+                    }
+
+                    outputList.add(
+                        listOf(
+                            "- - -", "ART OBJECT TOTAL",
+                            (DecimalFormat("#,##0.0#").format(gpTotal).removeSuffix(".0")),
+                            NumberFormat.getNumberInstance().format(xpTotal),
+                            "- - -", "- - -", "- - -", "- - -"
+                        )
+                    )
+
+                    grandGPTotal += gpTotal
+                    grandXPTotal += xpTotal
+
+                    return outputList.toList()
+                }
+
+                fun List<MagicItem>.compileForCSV(): List<List<String>> {
+
+                    var gpTotal = 0.0
+                    var xpTotal = 0
+                    val outputList = arrayListOf(
+                        listOf(
+                            "Taken",
+                            "Magic Item [and id]",
+                            "GP Value",
+                            "XP Value",
+                            "Table Type",
+                            "TrH Identifier",
+                            "Source",
+                            "Cursed?"
+                        )
+                    )
+
+                    this.forEach { item ->
+                        val itemList = arrayListOf("")
+
+                        itemList.add(
+                            item.name.take(25) + (if (item.name.length > 25) "... " else " ") +
+                                    "[id:${item.mItemID}]"
+                        )
+                        item.gpValue.let { itemGPV ->
+                            gpTotal += itemGPV
+                            itemList.add(
+                                DecimalFormat("#,##0.0#")
+                                    .format(itemGPV)
+                                    .removeSuffix(".0")
+                            )
+                        }
+
+                        item.xpValue.let { itemXPV ->
+                            xpTotal += itemXPV
+                            itemList.add((NumberFormat.getNumberInstance().format(itemXPV)))
+                        }
+                        itemList.add(item.typeOfItem.name + "(${item.getShortTableName()})")
+                        itemList.add("#${item.templateID}")
+                        itemList.add(item.sourceText + ", pg ${item.sourcePage}")
+                        itemList.add(if (item.isCursed) "YES" else "")
+
+                        outputList.add(itemList.toList())
+                    }
+
+                    outputList.add(
+                        listOf(
+                            "- - -", "MAGIC ITEM TOTAL",
+                            (DecimalFormat("#,##0.0#").format(gpTotal).removeSuffix(".0")),
+                            NumberFormat.getNumberInstance().format(xpTotal),
+                            "- - -", "- - -", "- - -", "- - -"
+                        )
+                    )
+
+                    grandGPTotal += gpTotal
+                    grandXPTotal += xpTotal
+
+                    return outputList.toList()
+                }
+
+                fun List<SpellCollection>.compileForCSV(): List<List<String>> {
+
+                    var gpTotal = 0.0
+                    var xpTotal = 0
+                    val outputList = arrayListOf(
+                        listOf(
+                            "Taken",
+                            "Spell Collection [and id]",
+                            "GP Value",
+                            "XP Value",
+                            "Collection Type",
+                            "Discipline",
+                            "Spell Count",
+                            "Cursed?"
+                        )
+                    )
+
+                    this.forEach { item ->
+                        val itemList = arrayListOf("")
+
+                        itemList.add(
+                            item.name.take(25) + (if (item.name.length > 25) "... " else " ") +
+                                    "[id:${item.sCollectID}]"
+                        )
+                        item.gpValue.let { itemGPV ->
+                            gpTotal += itemGPV
+                            itemList.add(
+                                DecimalFormat("#,##0.0#")
+                                    .format(itemGPV)
+                                    .removeSuffix(".0")
+                            )
+                        }
+
+                        item.xpValue.let { itemXPV ->
+                            xpTotal += itemXPV
+                            itemList.add((NumberFormat.getNumberInstance().format(itemXPV)))
+                        }
+                        itemList.add(
+                            when (item.type) {
+                                SpCoType.SCROLL -> "Spell Scroll"
+                                SpCoType.BOOK -> "Spellbook"
+                                SpCoType.ALLOTMENT -> "Chosen One Allotment"
+                                SpCoType.RING -> "Ring of Spell Storing"
+                                SpCoType.OTHER -> "? ? ?"
+                            }
+                        )
+                        itemList.add(item.discipline.name.lowercase().capitalized())
+                        itemList.add(item.spells.size.toString())
+                        itemList.add(if (item.curse.isNotEmpty()) "YES" else "")
+
+                        outputList.add(itemList.toList())
+                    }
+
+                    outputList.add(
+                        listOf(
+                            "- - -", "SPELL COLLECTION TOTAL",
+                            (DecimalFormat("#,##0.0#").format(gpTotal).removeSuffix(".0")),
+                            NumberFormat.getNumberInstance().format(xpTotal),
+                            "- - -", "- - -", "- - -", "- - -"
+                        )
+                    )
+
+                    grandGPTotal += gpTotal
+                    grandXPTotal += xpTotal
+
+                    return outputList.toList()
+                }
+                // endregion
+
+                // Write the temp file
+                writer.use {
+
+                    listOf("", hoard.name + " [id:${hoard.hoardID}]").writeAsRow()
+                    writeEmptyRow()
+                    listOf(
+                        "", "Creation date / time:",
+                        SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
+                            .format(hoard.creationDate)
+                    ).writeAsRow()
+                    listOf(
+                        "", "Difficulty ratio:", String.format("%.2f", hoard.effortRating) +
+                                " gp to 1 xp"
+                    ).writeAsRow()
+                    writeEmptyRow()
+                    listOf("[!]", "PLEASE NOTE:").writeAsRow()
+                    listOf("[!]", getString(R.string.csv_no_formula_note)).writeAsRow()
+                    listOf("[!]", getString(R.string.csv_no_detail_note)).writeAsRow()
+
+                    // Write coinage table
+                    compileCoinageForCSV().writeAsRows()
+
+                    // Write unique item table(s)
+                    itemBundle.hoardGems.let { gems ->
+                        if (gems.isNotEmpty()) {
+                            gems.compileForCSV().writeAsRows()
+                            writeEmptyRow()
+                        }
+                    }
+                    itemBundle.hoardArt.let { artObjects ->
+                        if (artObjects.isNotEmpty()) {
+                            artObjects.compileForCSV().writeAsRows()
+                            writeEmptyRow()
+                        }
+                    }
+                    itemBundle.hoardItems.let { magicItems ->
+                        if (magicItems.isNotEmpty()) {
+                            magicItems.compileForCSV().writeAsRows()
+                            writeEmptyRow()
+                        }
+                    }
+                    itemBundle.hoardSpellCollections.let { spCos ->
+                        if (spCos.isNotEmpty()) {
+                            spCos.compileForCSV().writeAsRows()
+                            writeEmptyRow()
+                        }
+                    }
+
+                    // Write grand total
+                    listOf(
+                        "- - -", "HOARD GRAND TOTAL",
+                        (DecimalFormat("#,##0.0#").format(grandGPTotal).removeSuffix(".0")),
+                        NumberFormat.getNumberInstance().format(grandXPTotal),
+                        "- - -", "- - -", "- - -", "- - -"
+                    ).writeAsRow()
+                }
+            }
+
+            val newFile = filePath.toFile()
+
+            return FileProvider.getUriForFile(requireContext(),
+                "com.example.android.treasurefactory.fileprovider", newFile)
+
+        } catch (e: IOException) {
+            Toast.makeText(
+                requireContext(),
+                "Something went wrong when generating $fileName$fileExtension.",
+                Toast.LENGTH_LONG
+            ).show()
+            e.printStackTrace()
+
+            return null
+        }
     }
     // endregion
 }

@@ -58,7 +58,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         Log.d("createHoardFromOrder()","Starting hoard generation")
 
-        val maxRerolls = 20
+        val maxRerolls = 1500
 
         val newHoardID: Int
 
@@ -147,8 +147,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         newArtPair = createArtObject(newHoardID, hoardOrder.genParams.artParams)
                         rollsMade ++
                     } while ((rollsMade < maxRerolls) &&
-                        (newArtPair.second != null) &&
-                        (newArtPair.first.valueLevel !in hoardOrder.genParams.artParams.levelRange))
+                        ((newArtPair.second != null) ||
+                        (newArtPair.first.valueLevel !in hoardOrder.genParams.artParams.levelRange)))
 
                     // Add map over art object, if present.
                     if (newArtPair.second != null) {
@@ -635,6 +635,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         return newHoardID
     }
+
+    @WorkerThread
+    suspend fun generateNewItemForChoiceSlot(hoardID: Int, itemID: Int, templateID: Int) : MagicItem {
+
+        return createMagicItemTuple(hoardID,templateID).magicItem.copy(mItemID = itemID)
+    }
+
     // endregion
 
     //region [ Item generation functions ]
@@ -728,7 +735,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // endregion
 
-        return Gem(0,
+        return Gem(
+            0,
             parentHoardID,
             System.currentTimeMillis(),
             gemTemplate.iconID,
@@ -738,12 +746,14 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             gemTemplate.name.capitalized(),
             gemTemplate.opacity,
             gemTemplate.description,
-            initialGPValue
+            initialGPValue,
+            originalName = gemTemplate.name.capitalized()
         )
     }
 
     /**
-     * Returns an [art object][ArtObject] / treasure map pair based on the method laid out in HackJournal #6
+     * Returns an [art object][ArtObject] / [treasure map][MagicItem] pair based on the method laid
+     * out in HackJournal #6.
      */
     fun createArtObject(
         parentHoardID: Int,
@@ -1132,13 +1142,14 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // ---Generate and return new art object ---
 
+        val generatedName = ArtObject.getRandomName(artType,subject)
+
         return ArtObject(
             0, parentHoardID, System.currentTimeMillis(),
-            ArtObject.getRandomName(artType,subject),
+            generatedName,
             artType, renown, size, condition, materials, quality, ageInYears,
-            subject, ( renown + size + condition + quality + subjectRank + ageRank ),
-            convertValueLevelToGP()
-        ) to paperTreasureMap
+            subject, ( renown + size + condition + +materials + quality + subjectRank + ageRank ),
+            convertValueLevelToGP(), originalName = generatedName) to paperTreasureMap
     }
 
     /**
@@ -1331,6 +1342,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         /** Flat notes container. First in pair is table name, second is actual note. */
         val flatNotesList   = ArrayList<Pair<String,String>>()
+        val potionColors    = ArrayList<String>()
         var specialItemType : SpItType? = null
         var spellListOrder  : SpellCollectionOrder? = null
         var gemOrder        : GemOrder? = null
@@ -1654,7 +1666,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     dieSides = 0,
                     dieMod = 0,
                     tableType = "Mundane",
-                    iconRef = "",
+                    iconRef = "loot_lint",
                     fUsable = 0,
                     tUsable = 0,
                     cUsable = 0,
@@ -1663,7 +1675,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     hasChild = 0,
                     parentID = 0,
                     imitationKeyword = "",
-                    isCursed = 0,
+                    isCursed = 1,
                     commandWord = "",
                     intelChance = 0,
                     alignment = "",
@@ -1887,7 +1899,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 if (template.multiType != 3) {
 
                     flatNotesList.add("Additional notes" to
-                            "Found with $itemCharges charges/uses remaining")
+                            "Found with $itemCharges ${if (itemCharges == 1) "charge/use" else 
+                                "charges/uses"} remaining")
                 }
 
             } else {
@@ -1916,7 +1929,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 val commandWords = ArrayList<String>()
                 val textBuilder = StringBuilder().apply {
                     append("Has ${keywords.size} command word" +
-                        if (keywords.size > 1) {
+                        if (keywords.size != 1) {
                             "s. Here are some randomly-generated suggestions: "
                         } else ". Here is a randomly-generated suggestion: ")
                 }
@@ -1956,9 +1969,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 }
 
                 Log.d("createMagicItemTuple() | commandWord",
-                    "Returning \"${textBuilder.toString()}\"")
+                    "Returning \"${textBuilder}\"")
 
-                flatNotesList.add("Additional notes" to textBuilder.toString())
+                flatNotesList.add("Additional notes" to textBuilder.toString().trimEnd(','))
             }
             // endregion
 
@@ -1968,107 +1981,107 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             if (itemType == "A2") {
 
-                val COLOR_MAP =  mapOf<Int,String>(
-                    1 to "amber",
-                    2 to "amethyst",
-                    3 to "apricot",
-                    4 to "aquamarine",
-                    5 to "auburn",
-                    6 to "azure blue",
-                    7 to "black",
-                    8 to "blue",
-                    9 to "bone [white]",
-                    10 to "bronze",
-                    11 to "brass",
-                    12 to "brown",
-                    13 to "buff [leather]",
-                    14 to "carmine",
-                    15 to "cerise",
-                    16 to "cerulean",
-                    17 to "cherry",
-                    18 to "chestnut",
-                    19 to "chocolate",
-                    20 to "cinnabar",
-                    21 to "citrine",
-                    22 to "colorless",
-                    23 to "copper",
-                    24 to "coral",
-                    25 to "cream",
-                    26 to "crimson",
-                    27 to "dove",
-                    28 to "dun [tan]",
-                    29 to "ebony",
-                    30 to "ecru [beige]",
-                    31 to "emerald",
-                    32 to "fallow brown",
-                    33 to "fawn",
-                    34 to "flame",
-                    35 to "flaxen",
-                    36 to "fog",
-                    37 to "fuchsia",
-                    38 to "ginger",
-                    39 to "gold",
-                    40 to "golden",
-                    41 to "grassy",
-                    42 to "gray/grey",
-                    43 to "green",
-                    44 to "heliotrope",
-                    45 to "henna",
-                    46 to "indigo",
-                    47 to "inky",
-                    48 to "iron",
-                    49 to "ivory",
-                    50 to "jade",
-                    51 to "lake",
-                    52 to "lavender",
-                    53 to "lilac",
-                    54 to "lime",
-                    55 to "madder",
-                    56 to "magenta",
-                    57 to "mahawgany",
-                    58 to "maroon",
-                    59 to "mauve",
-                    60 to "neutral",
-                    61 to "ochre",
-                    62 to "olive",
-                    63 to "orange",
-                    64 to "parchment",
-                    65 to "peach",
-                    66 to "pearl",
-                    67 to "pewter",
-                    68 to "pink",
-                    69 to "pitch black",
-                    70 to "plum",
-                    71 to "purple",
-                    72 to "purple",
-                    73 to "red",
-                    74 to "rose",
-                    75 to "ruby",
-                    76 to "russet",
-                    77 to "rust",
-                    78 to "sable",
-                    79 to "saffron",
-                    80 to "salmon",
-                    81 to "sand",
-                    82 to "sanguine",
-                    83 to "sapphire",
-                    84 to "scarlet",
-                    85 to "silver",
-                    86 to "sky",
-                    87 to "soot",
-                    88 to "sorrel",
-                    89 to "steel",
-                    90 to "straw",
-                    91 to "tan",
-                    92 to "tawny",
-                    93 to "teal",
-                    94 to "terra cotta",
-                    95 to "turquoise",
-                    96 to "ultramarine",
-                    97 to "vermilion",
-                    98 to "white",
-                    99 to "woolen",
-                    100 to "yellow"
+                val colors = listOf(
+                    "amber",
+                    "amethyst",
+                    "apricot",
+                    "aquamarine",
+                    "auburn",
+                    "azure blue",
+                    "black",
+                    "blue",
+                    "bone",
+                    "bronze",
+                    "brass",
+                    "brown",
+                    "buff",
+                    "carmine",
+                    "cerise",
+                    "cerulean",
+                    "cherry",
+                    "chestnut",
+                    "chocolate",
+                    "cinnabar",
+                    "citrine",
+                    "colorless",
+                    "copper",
+                    "coral",
+                    "cream",
+                    "crimson",
+                    "dove",
+                    "dun",
+                    "ebony",
+                    "ecru",
+                    "emerald",
+                    "fallow brown",
+                    "fawn",
+                    "flame",
+                    "flaxen",
+                    "fog",
+                    "fuchsia",
+                    "ginger",
+                    "gold",
+                    "golden",
+                    "grassy",
+                    "gray",
+                    "green",
+                    "heliotrope",
+                    "henna",
+                    "indigo",
+                    "inky",
+                    "iron",
+                    "ivory",
+                    "jade",
+                    "lake",
+                    "lavender",
+                    "lilac",
+                    "lime",
+                    "madder",
+                    "magenta",
+                    "mahawgany",
+                    "maroon",
+                    "mauve",
+                    "neutral",
+                    "ochre",
+                    "olive",
+                    "orange",
+                    "parchment",
+                    "peach",
+                    "pearl",
+                    "pewter",
+                    "pink",
+                    "pitch black",
+                    "plum",
+                    "purple",
+                    "purple",
+                    "red",
+                    "rose",
+                    "ruby",
+                    "russet",
+                    "rust",
+                    "sable",
+                    "saffron",
+                    "salmon",
+                    "sand",
+                    "sanguine",
+                    "sapphire",
+                    "scarlet",
+                    "silver",
+                    "sky",
+                    "soot",
+                    "sorrel",
+                    "steel",
+                    "straw",
+                    "tan",
+                    "tawny",
+                    "teal",
+                    "terra cotta",
+                    "turquoise",
+                    "ultramarine",
+                    "vermilion",
+                    "white",
+                    "woolen",
+                    "yellow"
                 )
 
                 var isRoundBulb = false
@@ -2105,7 +2118,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     return dosesUsed
                 }
 
-                fun getSubstanceColor(): String? = COLOR_MAP[Random.nextInt(1,101)]
+                fun getSubstanceColor(): String {
+                    val pickedColor = colors.random()
+                    potionColors.add(pickedColor)
+                    return pickedColor
+                }
 
                 // region ( Roll for potion container )
 
@@ -2567,20 +2584,20 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         when (Random.nextInt(1,101)) {
 
                             in 1..29    -> "Clear (transparent)"
-                            in 30..34   -> "Flecked (transparent [[${getSubstanceColor()}]] with " +
-                                    "[[${getSubstanceColor()}]] flecks)"
-                            in 35..39   -> "Layered ([[${getSubstanceColor()}]] to [[${getSubstanceColor()}]])"
-                            in 40..54   -> "Luminous ([[${getSubstanceColor()}]], " +
+                            in 30..34   -> "Flecked (transparent ${getSubstanceColor()} with " +
+                                    "${getSubstanceColor()} flecks)"
+                            in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()})"
+                            in 40..54   -> "Luminous (${getSubstanceColor()}, " +
                                     "~${Random.nextInt(0,21) * 5}% opacity)"
                             in 55..59   -> "Opaline (glowing)"
-                            in 60..69   -> "Phosphorescent ([[${getSubstanceColor()}]], " +
+                            in 60..69   -> "Phosphorescent (${getSubstanceColor()}, " +
                                     "~${Random.nextInt(0,21) * 5}% opacity)"
                             in 70..79   -> "Rainbowed (transparent)"
-                            in 80..84   -> "Ribboned ([[${getSubstanceColor()}]], " +
+                            in 80..84   -> "Ribboned (${getSubstanceColor()}, " +
                                     "~${Random.nextInt(0,21) * 5}% opacity)"
-                            in 85..94   -> "Translucent ([[${getSubstanceColor()}]])"
-                            else        -> "Varigated ([[${getSubstanceColor()}]], " +
-                                    "[[${getSubstanceColor()}]], and maybe some [[${getSubstanceColor()}]])"
+                            in 85..94   -> "Translucent (${getSubstanceColor()})"
+                            else        -> "Varigated (${getSubstanceColor()}, " +
+                                    "${getSubstanceColor()}, and maybe some ${getSubstanceColor()})"
                         } )
                 // endregion
 
@@ -3737,13 +3754,14 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 mClassUsability,
                 mIsCursed,
                 mAlignment,
-                convertNotes()
-            ),
+                convertNotes(),
+                potionColors.toList(),
+                originalName = mName),
             specialItemOrder, gemOrder)
     }
 
     /** Generates a treasure map as a [MagicItem], following the rules outlined on GMG pgs 181 and 182 */
-    fun createTreasureMap(parentHoard: Int, sourceDesc: String = "", allowFalseMaps: Boolean = true): MagicItem {
+    private fun createTreasureMap(parentHoard: Int, sourceDesc: String = "", allowFalseMaps: Boolean = true): MagicItem {
 
         val flatNotesList=  ArrayList<Pair<String,String>>()
 
@@ -3874,11 +3892,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "Druid" to true),
             !isRealMap,
             "",
-            convertNotes())
+            convertNotes(),
+            originalName = nameBuilder.toString()
+        )
     }
 
     /** Generates ioun stones when indicated by standard magic item generation methods */
-    suspend fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
+    private suspend fun createIounStones(parentHoard: Int, qty: Int): List<MagicItem> {
 
         val iounList = arrayListOf<MagicItem>()
         val currentSet = mutableSetOf<Int>()
@@ -3928,7 +3948,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     }
 
     /** Generates [gems][Gem] from a [GemOrder], typically for Gut Stones when indicated in [createMagicItemTuple]. */
-    suspend fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem> {
+    private suspend fun createGemsFromGemOrder(parentHoard: Int, gemOrder: GemOrder): List<Gem> {
 
         val gemTemplate = gemOrder.gemTemplate.coerceIn(1..58)
         val orderGemList = arrayListOf<Gem>()
@@ -3941,7 +3961,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     }
 
     /** Generates a Ring of Spell Storing as a [SpellCollection]. */
-    suspend fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection {
+    private suspend fun createRingOfSpellStoring(parentHoard: Int, order: SpellCollectionOrder) : SpellCollection {
 
         val ringName = "Ring of Spell Storing" + if (order.spellType == SpCoDiscipline.ARCANE) {
             " (Magic-User)" } else " (Cleric)"
@@ -4004,11 +4024,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             }
         }
 
-        return SpellCollection(0, parentHoard,
+        return SpellCollection(
+            0, parentHoard,
             System.currentTimeMillis(), "ring_runes", ringName, SpCoType.RING,
             order.spellType, gpValue = 7000.00, xpValue = 2500,
             spells = spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name }))
-                .map { it.toSpellEntry() })
+                .map { it.toSpellEntry() },originalName = ringName
+        )
     }
 
     /* TODO finish implementing after first shipped build
@@ -4123,6 +4145,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     /** Converts a [SpellCollectionOrder] into a [SpellCollection], always as a scroll.*/
     suspend fun convertOrderToSpellScroll(parentHoard : Int, order: SpellCollectionOrder): SpellCollection {
 
+        Log.d("convertOrderToSpellScroll | initial","order.spellLvRange = ${order.spellLvRange.joinToString("|")}")
+
         // region < Local extension functions >
 
         fun SpCoGenMethod.fixGenerationMethod(inputType: SpCoDiscipline) : SpCoGenMethod {
@@ -4189,6 +4213,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 }
             }
 
+            Log.d("convertOrderToSpellScroll | fixSpellRange","spellRange = ${IntRange(fixedMinimum,fixedMaximum).joinToString("|")}")
+
             return IntRange(fixedMinimum,fixedMaximum)
         }
 
@@ -4204,7 +4230,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         // endregion
 
         val spellList = ArrayList<Spell>()
-        val propertiesList = ArrayList<Pair<String,Double>>()
+        val augmentations = ArrayList<SpCoAugmentation>()
         val itemName: String
         val iconID : String
         val spellType = order.spellType.decideSpellDiscipline()
@@ -4329,22 +4355,22 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         // region [ Roll non-spell details ]
 
         // Roll container
-        propertiesList.plusAssign( when (Random.nextInt(1,7)) {
+        augmentations.plusAssign( when (Random.nextInt(1,7)) {
 
-            1   -> "Container: Ivory tube" to 0.0
-            2   -> "Container: Jade tube" to 0.0
-            3   -> "Container: Leather tube" to 0.0
-            4   -> "Container: Metal tube" to 0.0
-            5   -> "Container: Wooden tube" to 0.0
-            else-> "Container: None (found loose)" to 0.0
+            1   -> SpCoAugmentation("Container", "Ivory tube")
+            2   -> SpCoAugmentation("Container", "Jade tube")
+            3   -> SpCoAugmentation("Container", "Leather tube")
+            4   -> SpCoAugmentation("Container", "Metal tube")
+            5   -> SpCoAugmentation("Container", "Wooden tube")
+            else-> SpCoAugmentation("Container", "None (found loose)")
         })
 
         // Roll material
-        propertiesList.plusAssign( when (Random.nextInt(1,11)){
-            in 1..5 -> "Material: Vellum" to 0.0
-            in 6..8 -> "Material: Parchment" to 0.0
-            9       -> "Material: Papyrus" to 0.0
-            else    -> "Material: Non-standard (GM’s choice)" to 0.0
+        augmentations.plusAssign( when (Random.nextInt(1,11)){
+            in 1..5 -> SpCoAugmentation("Material","Vellum")
+            in 6..8 -> SpCoAugmentation("Material"," Parchment")
+            9       -> SpCoAugmentation("Material","Papyrus")
+            else    -> SpCoAugmentation("Material","Non-standard (GM’s choice)")
         })
 
         // endregion
@@ -4466,7 +4492,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         var gpTotal = 0.0
         var xpTotal = 0
 
-        if (propertiesList.isNotEmpty()) { propertiesList.forEach { (_, gpValue) -> gpTotal += gpValue} }
+        if (augmentations.isNotEmpty()) {
+            augmentations.forEach { augment ->
+                gpTotal += if (augment.byPage) 0 * augment.gpModifier else augment.gpModifier
+            }
+        }
 
         if (spellList.isNotEmpty()) { spellList.forEach {
             gpTotal += if (it.spellLevel == 0) 75.0 else (300.0 * it.spellLevel)
@@ -4483,11 +4513,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             itemName,
             SpCoType.SCROLL,
             spellType,
-             propertiesList.toList(),
+            augmentations.toList(),
             gpTotal,
             xpTotal,
             spellList.sortedWith(compareBy ({ it.spellLevel },{ it.name })).map { it.toSpellEntry() },
-            curse
+            curse,
+            originalName = itemName
         )
     }
 
@@ -4516,12 +4547,19 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
     fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
 
+        Log.d("createNewScrollOrder | initial",
+            "scrollParams.spellCountRange = ${scrollParams.spellCountRange.joinToString("|")}")
+
         val scrollDiscipline: SpCoDiscipline
         val spellCount = Random.nextInt(scrollParams.spellCountRange.first,
             scrollParams.spellCountRange.last + 1)
         val scrollMethod = if (isByBook &&
             !(scrollParams.allowedDisciplines.natural)) SpCoGenMethod.BY_THE_BOOK
         else SpCoGenMethod.TRUE_RANDOM
+
+        Log.d("createNewScrollOrder",
+            "spellCount = Random.nextInt(${scrollParams.spellCountRange.first},${
+                scrollParams.spellCountRange.last + 1}) = $spellCount")
 
         fun chooseSpCoDiscipline() : SpCoDiscipline {
 
@@ -4580,10 +4618,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         scrollDiscipline = chooseSpCoDiscipline()
 
         val effectiveLvlRange: IntRange = if (scrollDiscipline != SpCoDiscipline.ARCANE) {
-            val newMin = scrollParams.levelRange.first.coerceAtLeast(1)
+            val newMin = scrollParams.levelRange.first.coerceIn(1,7)
             val newMax = scrollParams.levelRange.last.coerceIn(newMin,7)
             IntRange(newMin,newMax)
-        } else scrollParams.levelRange
+        } else {
+            scrollParams.levelRange
+        }
 
         return SpellCollectionOrder(SpCoType.SCROLL,scrollDiscipline,spellCount,effectiveLvlRange,
             scrollParams.spellSources,scrollParams.allowRestricted,scrollParams.allowCurse,
@@ -4595,6 +4635,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
                                         sources: SpCoSources, rerollChoices: Boolean = false,
                                         allowRestricted: Boolean): Spell {
+
+        Log.d("getRandomSpell()","rerollChoices = $rerollChoices")
+
 
         val discipline = if (_discipline == SpCoDiscipline.ALL_MAGIC) {
                 listOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE,SpCoDiscipline.NATURAL).random()
@@ -4627,7 +4670,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             // Spell is either unrestricted or restricted spells are allowed
                             (this.restrictions.isEmpty() || allowRestricted) &&
                             // Either re-roll choice is disabled or does not apply to this spell
-                            !(rerollChoices && this.name.contains(" Choice") && this.refType.ordinal > 3)
+                            !(rerollChoices && this.name.contains(" Choice") && this.refType.ordinal < 3)
                     )
         }
 
@@ -4646,6 +4689,14 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             Log.d("getRandomSpell()","Looked up spell with ID $pulledID. Spell name is ${
                 spellHolder?.name ?: "[ null ]"}")
+
+            // Log if spell fails current reroll criteria
+            if (spellHolder != null && rerollChoices) {
+                if (spellHolder.name.contains(" Choice") && spellHolder.refType.ordinal < 3) {
+                    Log.e("getRandomSpell() | re-roll check","Spell should be re-rolled " +
+                            "under current criteria.")
+                }
+            }
 
             // Check if spell is valid, otherwise clear it
             if ( !( spellHolder.isValid() ) ) {

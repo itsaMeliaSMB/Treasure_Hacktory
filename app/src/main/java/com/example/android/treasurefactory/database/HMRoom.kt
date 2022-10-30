@@ -69,7 +69,7 @@ abstract class TreasureDatabase : RoomDatabase() {
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_lettercode_v01","raw",context.packageName))
+                context.resources.getIdentifier("seed_letter_codes","raw",context.packageName))
 
             inputStream
                 .bufferedReader()
@@ -147,11 +147,10 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates gem template table using hardcoded CSV file. */
         suspend fun populateGemsByCSV(gemDao: GemDao) {
 
-            // val csvFilePath = "src/main/res/raw/seed_gem_v01.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_gem_v01","raw",context.packageName))
+                context.resources.getIdentifier("seed_gems","raw",context.packageName))
 
             /*
             File(csvFilePath)
@@ -193,11 +192,10 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates magic item template table using hardcoded CSV file. */
         suspend fun populateItemsByCSV(magicItemDao: MagicItemDao) {
 
-            //val csvFilePath = "src/main/res/raw/seed_magicitems_final.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
-                context.resources.getIdentifier("seed_magicitems_final","raw",context.packageName))
+                context.resources.getIdentifier("seed_magic_items","raw",context.packageName))
 
             inputStream
                 .bufferedReader()
@@ -291,12 +289,11 @@ abstract class TreasureDatabase : RoomDatabase() {
         /** Populates spell table using hardcoded CSV file. */
         suspend fun populateSpellsByCSV(spellDao: SpellCollectionDao) {
 
-            //val csvFilePath = "src/main/res/raw/seed_spell_final.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
                 context.resources.getIdentifier(
-                    "seed_spell_final","raw",context.packageName))
+                    "seed_spells","raw",context.packageName))
 
             fun String.toSchoolList() : List<SpellSchool> {
                 return this.lowercase().split("/").mapNotNull{ entry ->
@@ -414,7 +411,7 @@ abstract class TreasureDatabase : RoomDatabase() {
                     val _spellSpheres: String = lineData[10].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _subclass: String = lineData[11].trim('"').takeUnless { it.isBlank() } ?: ""
                     val _note: String = lineData[12].trim('"').takeUnless { it.isBlank() } ?: ""
-                    val _choiceString: String = lineData[12].trim('"').takeUnless { it.isBlank() } ?: ""
+                    val _choiceString: String = lineData[13].trim('"').takeUnless { it.isBlank() } ?: ""
 
                     spellDao.addSpell(
                         Spell(
@@ -447,598 +444,32 @@ abstract class TreasureDatabase : RoomDatabase() {
 
         suspend fun populateCommandWords(spellDao: SpellCollectionDao) {
 
-            val commandWordLists = listOf(
-                "absorb" to listOf(
-                    "SPONGE",
-                    "SLURP",
-                    "DRAIN",
-                    "ENSORBI",
-                    "MITIIA"),
-                "air" to listOf(
-                    "EASY-BREEZY",
-                    "DRAFT",
-                    "MIENO",
-                    "POVITRYA",
-                    "HURU"),
-                "alarm" to listOf(
-                    "COCKADOODLEDOO",
-                    "RINGALING",
-                    "CLAXON",
-                    "STARTLE",
-                    "KONSTERNO"),
-                "alternate" to listOf(
-                    "WHAT-IF",
-                    "ANOTHER",
-                    "NEW-CHOICE",
-                    "FAIRWEATHER",
-                    "SWITCHAROO",
-                    "SUROGATA",
-                    "HAHA-UNLESS"),
-                "animal" to listOf(
-                    "CRIKEY",
-                    "FURRY",
-                    "FUZZBALL",
-                    "FLUFFY",
-                    "CRITTERS",
-                    "BESTO",
-                    "ZOO",
-                    "PAWPRINT",
-                    "MENAGERIE"),
-                "apology" to listOf(
-                    "MEA-CULPA",
-                    "GOMEN",
-                    "WHOOPSIE-DAISY",
-                    "ACCIDENT",
-                    "PENTI-PRI",
-                    "NEVER-THOUGHT-I-WOULD-HAVE-TO-MAKE-THIS"),
-                "blast" to listOf(
-                    "KABLAM",
-                    "KERPOW",
-                    "EXPLOSION",
-                    "DETONATE",
-                    "EKSPLODBRUI"),
-                "breach" to listOf(
-                    "CHARGE",
-                    "BANZAI",
-                    "OH-YEAAAAAH",
-                    "BOMBARD",
-                    "ENROMPO"),
-                "break" to listOf(
-                    "CRASH",
-                    "SHATTER",
-                    "SMAAAAASH",
-                    "SNAP",
-                    "DISROMPI"),
-                "burst" to listOf(
-                    "GARDENHOSE",
-                    "ANEURISMO",
-                    "BALLOON",
-                    "POP-POP",
-                    "DILATI"),
-                "cat" to listOf(
-                    "PUSSYCAT",
-                    "WHISKER",
-                    "NEKO",
-                    "HAIRBALL",
-                    "NYAA",
-                    "FELISO",
-                    "MEOW-MEOW-MEOW-MEOW-MEOW",
-                    "KATINO"),
-                "charm" to listOf(
-                    "SWEETIE-PIE",
-                    "HONEYDEW",
-                    "CARMEGI",
-                    "AMITIE",
-                    "INCANTARE",
-                    "BUTTERLUMPS"),
-                "command" to listOf("WOULD-YOU-KINDLY",
-                    "KOMANDI",
-                    "BEFEHLEN",
-                    "ULTIMATUM",
-                    "CEDI",
-                    "HONEYDEW"),
-                "cure" to listOf(
-                    "HOWZER",
-                    "QUE-QUE",
-                    "HOPKINS",
-                    "NIGHTINGALE",
-                    "MEDIC",
-                    "TAKE-TWO",
-                    "MAYO",
-                    "SANIGI",
-                    "PANACEA",
-                    "PHYSICK",
-                    "FAT-LOG"),
-                "demon" to listOf(
-                    "DEMONIC",
-                    "HELLSPAWN",
-                    "DOMINATION",
-                    "HORN",
-                    "DIABLO",
-                    "SIX-SIX-SIX",
-                    "ASMODEUS"),
-                "detect" to listOf(
-                    "COLUMBO",
-                    "HERLOCK",
-                    "GUMSHOE",
-                    "ZVARRI",
-                    "WHODUNIT",
-                    "HOWCATCHEM",
-                    "SLEUTH",
-                    "WATSON",
-                    "MALKOVRO",
-                    "SHOLMES"),
-                "devastation" to listOf(
-                    "CALAMITOUS",
-                    "ANNIHILATE",
-                    "SCORCHED",
-                    "ERASED",
-                    "GLASS-IT",
-                    "RUINIGI"),
-                "dog" to listOf(
-                    "ARF-ARF-ARF-ARF-ARF-ARF",
-                    "BARK-BARK",
-                    "DOGGONE",
-                    "GOODBOY",
-                    "FIDO",
-                    "VIRHUNDO",
-                    "BALTO",
-                    "UPDOG"),
-                "elephant" to listOf(
-                    "BARBAR",
-                    "HANNIBAL",
-                    "JAWAHARLAL",
-                    "TRUNK",
-                    "IVORY",
-                    "PAKIDERMO"),
-                "exorcism" to listOf(
-                    "BEGONE",
-                    "EGO-TE-ABSOLVO",
-                    "GUTOR",
-                    "EXORCIZAMUS-TE",
-                    "VADE-RETRO",
-                    "ELPELI-DEMONOJN",
-                    "CONSTANTINE"),
-                "extinguish" to listOf(
-                    "SETON",
-                    "ORR-N-ORR",
-                    "MEREX",
-                    "ESTINGAPARATO",
-                    "TOOTHPASTE",
-                    "SMOKY"),
-                "fear" to listOf(
-                    "SPOOKUM",
-                    "BOO",
-                    "GOOSEBUMPS",
-                    "TERURI",
-                    "MALKURAJI",
-                    "JINKIES"),
-                "fight" to listOf(
-                    "SICCUM",
-                    "MELEE",
-                    "BOPPEM",
-                    "GETTEM",
-                    "AFFRAY",
-                    "INTERBATIJI"),
-                "fire" to listOf(
-                    "ZIPPO",
-                    "SIZZLE",
-                    "INFERNO",
-                    "COMBUST",
-                    "ASHES",
-                    "EKBRULIGI"),
-                "flail" to listOf(
-                    "BASTONEGO",
-                    "USE-STICK",
-                    "BALL-AND-CHAIN",
-                    "KRIEGSFLEGEL",
-                    "PYEONGON",
-                    "HUSSITE"),
-                "flight" to listOf(
-                    "SOAR",
-                    "WINGED",
-                    "DELTA",
-                    "TAKEOFF",
-                    "VOLARE",
-                    "PEANUTS",
-                    "FLUGO"),
-                "forest" to listOf(
-                    "MUSHROOM",
-                    "UPROOT",
-                    "ARBARO",
-                    "MONTEVERDE",
-                    "HALLERBOS",
-                    "BWINDI",
-                    "WAIPOUA"),
-                "gaze" to listOf(
-                    "EYES-UP-HERE",
-                    "AMORSPEKTEMULO",
-                    "BOOBA",
-                    "DOBONHONKEROS",
-                    "PEEKING-TOM",
-                    "HUBBA-HUBBA"),
-                "genderbend" to listOf(
-                    "EGGY",
-                    "TIT-FOR-TAT",
-                    "CISNT",
-                    "PRONOUNS",
-                    "TRANSSEKSULO",
-                    "BRISKET",
-                    "RANMA",
-                    "ECHARETEA",
-                    "MERMAIDS",
-                    "CLOWNFISH"),
-                "ghost" to listOf(
-                    "FANTOMO",
-                    "BOO-DIDDLY",
-                    "MOGWAI",
-                    "MONONOKE",
-                    "DYBBUK",
-                    "PEEK-A-BOO",
-                    "GEIST"),
-                "goat" to listOf(
-                    "TIN-CAN",
-                    "CAPRICORN",
-                    "TANNGRISNIR",
-                    "NANNY",
-                    "BILLY",
-                    "OREAMNOSO"),
-                "grow" to listOf(
-                    "EMBIGGEN",
-                    "SUPER-SIZE",
-                    "REDSHROOM",
-                    "GRANDIJI",
-                    "AMPLIAR",
-                    "VERGROTEN"),
-                "horse" to listOf(
-                    "NEIGHBOR",
-                    "GALLOP,",
-                    "SADDLE",
-                    "CEVALO",
-                    "SEABISCUIT",
-                    "CLIP-CLOP",
-                    "OSAGE"),
-                "ice" to listOf(
-                    "CHILL",
-                    "IGLOO",
-                    "MAY-TAG",
-                    "AMUNDSEN",
-                    "SNOWFLAKE",
-                    "GLACIO",
-                    "FROSTBITE"),
-                "insect" to listOf(
-                    "CRAWLIES",
-                    "HIVE",
-                    "EUSOCIAL",
-                    "INSEKTOJ",
-                    "APHID",
-                    "CHRYSALIS",
-                    "KATYDID",
-                    "TSETSE",
-                    "BUGSBUGSBUGS"),
-                "jail" to listOf(
-                    "GUANTANAMO",
-                    "SING-SING",
-                    "DUFFY",
-                    "WILLOT",
-                    "SHAWSHANK",
-                    "SUPERMAX",
-                    "GAOL",
-                    "MALLIBEREJO"),
-                "launch" to listOf(
-                    "HOUSTON",
-                    "GODDARD",
-                    "SLINGSHOT",
-                    "BOSSART",
-                    "LIFTOFF",
-                    "LANCHI"),
-                "light" to listOf(
-                    "MAG-LITE",
-                    "FENIX",
-                    "ROMER",
-                    "CLAP-ON",
-                    "ILUMINI",
-                    "LUMIERE"),
-                "lightning" to listOf(
-                    "ZIP-ZAP",
-                    "FARADAY",
-                    "TESLA",
-                    "COULOMB",
-                    "AMPERE",
-                    "CEI-U",
-                    "FULMO"),
-                "lord" to listOf(
-                    "MILORD",
-                    "LAIRD",
-                    "THE-RIGHT-HONOURABLE-THE-LORDS-SPIRITUAL-AND-TEMPORAL-ASSEMBLED",
-                    "PATRICIUS",
-                    "FEUDESTRO",
-                    "BIG-SHOT"),
-                "luxury" to listOf("GUCCI",
-                        "ROYCE",
-                        "CHANEL",
-                        "LUKSA",
-                        "MALSEVERE",
-                        "WEELDE",
-                        "CADILLAC"),
-                "mace" to listOf("WHACKA",
-                        "SHARUR",
-                        "BAYEUX",
-                        "PERNACH",
-                        "SHISHPAR",
-                        "BULAVA",
-                        "KLABO"),
-                "magic" to listOf(
-                    "ALAKAZAM",
-                    "ABRACADABRA",
-                    "SIM-SALA-BIM",
-                    "BIPPITY-BOPPITY",
-                    "SKEDADDLE-SKIDOODLE",
-                    "MECCA-LECCA-HI",
-                    "SKADOOSH",
-                    "PLEASE",
-                    "MEDEA"),
-                "metal" to listOf(
-                    "ALLOY",
-                    "CLANK",
-                    "TROUVE",
-                    "ANTIMONY",
-                    "EUREKA",
-                    "METALDETEKTILO"),
-                "missile" to listOf(
-                    "TOMAHAWK",
-                    "PEACEKEEPER",
-                    "HIROC",
-                    "RUBEZH",
-                    "SARMAT",
-                    "HWASONG",
-                    "SURYA",
-                    "SKIFF",
-                    "SIPER",
-                    "THUNDERBIRD",
-                    "MORFEY",
-                    "VITYAZ",
-                    "BOLIDE",
-                    "AEGIS",
-                    "ASPIDE",
-                    "ASRAD"
-                ),
-                "nullify" to listOf(
-                    "VOIDOUT",
-                    "NO-SELL",
-                    "NUH-UH",
-                    "NONONO",
-                    "NICE-TRY",
-                    "ABROGATE",
-                    "ANNULLIEREN",
-                    "NULIGI"),
-                "obey" to listOf(
-                    "SIMON-SAYS",
-                    "SKRIBORDONO",
-                    "ERLASS",
-                    "EDITTO",
-                    "MOM-SAID"),
-                "observe" to listOf(
-                    "VIDI",
-                    "LEMME-SEE",
-                    "I-SCRY",
-                    "ACTION",
-                    "ETZPE"),
-                "open" to listOf(
-                    "SESAME",
-                    "EF-BE-AYE",
-                    "KNOCK-KNOCK",
-                    "APERTI",
-                    "AVATA"),
-                "owl" to listOf(
-                    "NIGHTJAR",
-                    "MINERVA",
-                    "LAKSHMI",
-                    "KAEPORA",
-                    "COO",
-                    "STRIGO"),
-                "passage" to listOf(
-                    "SHORTCUT",
-                    "TRAIREJO",
-                    "QHAPAC",
-                    "LIMINATE",
-                    "SQUEEZIN"),
-                "power" to listOf(
-                    "BEEFY",
-                    "STRONK",
-                    "POTENCO",
-                    "WHAMMY",
-                    "CHECK-THIS-OUT",
-                    "CASTMA",
-                    "MALKATENI"),
-                "protect" to listOf(
-                    "KEVLAR",
-                    "KIRASO",
-                    "AEGIS",
-                    "HEATER",
-                    "BARDING",
-                    "SUITUP",
-                    "IRONCLAD",
-                    "PANOPLY"),
-                "resurrect" to listOf(
-                    "REVIVIJI",
-                    "PHOENIX",
-                    "MULLIGAN",
-                    "ANASTASIS",
-                    "ASCLEPIUS",
-                    "INDRA"),
-                "seal" to listOf(
-                    "ENKARCERIGI",
-                    "PANDORA",
-                    "TARTARUS",
-                    "FETTER",
-                    "LOCK-EM-UP"),
-                "security" to listOf(
-                    "GET-AWAY",
-                    "PARADISO",
-                    "PARADIZEO",
-                    "SAFE-SPACE",
-                    "NIRVANA",
-                    "TIR-NA-NOG"),
-                "shadow" to listOf(
-                    "UMBRA",
-                    "UMTHUNZI",
-                    "IILIM",
-                    "POURI",
-                    "DIMMER",
-                    "HADH"),
-                "shelter" to listOf(
-                    "XANADU",
-                    "VERSAILLES",
-                    "ALHAMBRA",
-                    "TAJ-MAHUL",
-                    "PETERHOF",
-                    "MYSORE",
-                    "POTALA"),
-                "sling" to listOf(
-                    "STONJETILO",
-                    "LACROSSE",
-                    "FUSTIBALUS",
-                    "BALEAR",
-                    "KESTROS"),
-                "smite" to listOf(
-                    "LUDD",
-                    "FRAPI",
-                    "PERCUTITE",
-                    "TARAW",
-                    "HAHAU"),
-                "snake" to listOf(
-                    "SERPENTETO",
-                    "HISSSSS",
-                    "ASP",
-                    "ADDER",
-                    "UROBOROS"),
-                "spear" to listOf(
-                    "AMENONUHOKO",
-                    "TONBOKIRI",
-                    "HOPLITE",
-                    "PILUM",
-                    "ITAGAKI",
-                    "IAPETUS",
-                    "GUNGNIR",
-                    "LONGINUS"),
-                "stone" to listOf(
-                    "ARGILA",
-                    "ANDESITE",
-                    "FELDSPAR",
-                    "GABBRO",
-                    "GNEISS",
-                    "LAHAR",
-                    "MORAINE",
-                    "SCHIST"),
-                "strike" to listOf(
-                    "BLOCK-THIS-OVERHEAD",
-                    "WAPOW",
-                    "ATAKO",
-                    "KERSPLAT",
-                    "ROOSEVELT",
-                    "PELIDAE",
-                    "THWACK"),
-                "stun" to listOf(
-                    "PARALIZI",
-                    "DOVA",
-                    "FLASHBANG",
-                    "WHAZZAT",
-                    "YOWZA",
-                    "CHUCKLENUTS"),
-                "summon" to listOf(
-                    "SHOUKAN",
-                    "FETCH",
-                    "SUSAUKIMAS",
-                    "HEED",
-                    "NGUNDANG",
-                    "TAGHAIRM",
-                    "COMERE"),
-                "teleport" to listOf(
-                    "SHUNKAN-IDOU",
-                    "WARPZONE",
-                    "HERE-THERE",
-                    "COCHRANE",
-                    "BOP-BAM-BOOM",
-                    "SALTO",
-                    "BLUE-SKADOO"),
-                "transform" to listOf(
-                    "DITTO",
-                    "WILDCARD",
-                    "FUNGE",
-                    "DOPPLE",
-                    "METAMORPHO",
-                    "MORBIN",
-                    "MUTE",
-                    "ALIFORMI",
-                    "CHEMOS",
-                    "KAERU"),
-                "travel" to listOf(
-                    "EXPEDIUS",
-                    "TRIPLE-A",
-                    "PASSPORT",
-                    "HERMES",
-                    "YUKUE",
-                    "VOYAJO",
-                    "ODYSSEY"),
-                "trick" to listOf(
-                    "GOTCHA",
-                    "BAZOOPLE",
-                    "HACHACHA",
-                    "WOKKA-WOKKA",
-                    "JOKER",
-                    "ITAZURA",
-                    "SUSSUS"),
-                "viking" to listOf(
-                    "EINHERJAR",
-                    "BIFROST",
-                    "ASGARD",
-                    "VALHALLA",
-                    "YGGDRASIL",
-                    "BLUETOOTH"),
-                "water" to listOf(
-                    "SPLISH-SPLASH",
-                    "BATH",
-                    "NILE",
-                    "AKVO",
-                    "CULLIGAN",
-                    "THAMES",
-                    "DANUBE",
-                    "YANGTZE",
-                    "GULF"),
-                "weather" to listOf(
-                    "WINDCHILL",
-                    "GULFSTREAM",
-                    "VETERO",
-                    "BARO",
-                    "OVERCAST",
-                    "ADVECTION",
-                    "CORIOLIS",
-                    "CUMULUS",
-                    "KATABATIC",
-                    "THUNDERHEAD"),
-                "wind" to listOf(
-                    "GALEFORCE",
-                    "UPDRAFT",
-                    "KAZE",
-                    "SQUALL",
-                    "WESTERLIES",
-                    "VENTO"),
-                "wither" to listOf(
-                    "ERODE",
-                    "SAP",
-                    "VELKI",
-                    "PUTRA",
-                    "DESICCATE")
-            )
+            //val csvFilePath = "src/main/res/raw/seed_command_words.csv"
+            var iterationCount = 0
 
-            commandWordLists.forEach { (themeWord, commandList) ->
+            val inputStream = context.resources.openRawResource(
+                context.resources.getIdentifier(
+                    "seed_command_words","raw",context.packageName))
 
-                commandList.forEach { commandWord ->
+            inputStream
+                .bufferedReader()
+                .lineSequence()
+                .forEach { txtLine ->
 
-                    spellDao.addCommandWord(CommandWord(commandWord,themeWord))
+                    val lineData = txtLine.split(';').let{
+
+                        val themeWord = it.first()
+                        val commandWords = it.last().split(",")
+
+                        commandWords.forEach { commandWord ->
+                            spellDao.addCommandWord(CommandWord(commandWord,themeWord)) }
+                    }
+
+                    iterationCount ++
                 }
-            }
+
+            Log.d("InitialPopulationCallback","Command word addition by TXT ran. " +
+                    "[ Iteration count = $iterationCount ]")
         }
     }
 
@@ -1073,6 +504,9 @@ interface HoardDao {
     @Query("SELECT * FROM hackmaster_hoard_table")
     fun getHoards(): LiveData<List<Hoard>>
 
+    @Query("SELECT * FROM hackmaster_hoard_table")
+    suspend fun getHoardsOnce(): List<Hoard>
+
     @Query("SELECT * FROM hackmaster_hoard_table WHERE hoardID=(:id)")
     fun getHoard(id: Int): LiveData<Hoard?>
 
@@ -1091,10 +525,11 @@ interface HoardDao {
     @Update
     suspend fun updateHoard(hoardToUpdate: Hoard)
 
+    @Update
+    suspend fun updateHoards(hoardsToUpdate: List<Hoard>) : Int
+
     @Delete
     suspend fun deleteHoard(hoardToDelete: Hoard)
-
-    //TODO add vararg version of delete hoard for handling lists of hoards
 
     @Query("SELECT hoardID FROM hackmaster_hoard_table WHERE ROWID=(:hoardRowID)")
     suspend fun getIdByRowId(hoardRowID: Long) : Int
@@ -1292,7 +727,7 @@ interface ArtDao {
     suspend fun addArtObject(newArt: ArtObject)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addArtObjects(newArt: List<ArtObject>) : Int
+    suspend fun addArtObjects(newArt: List<ArtObject>)
 
     @Update
     suspend fun updateArtObjects(artToUpdate: List<ArtObject>) : Int
@@ -1334,6 +769,15 @@ interface MagicItemDao {
      */
     @Query("SELECT ref_id, wt, is_cursed FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_id=0")
     suspend fun getBaseLimItemTempsByType(type: String): List<LimitedItemTemplate>
+
+    @Query("SELECT * FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_id=0")
+    suspend fun getBaseItemTempsByType(type: String): List<MagicItemTemplate>
+
+    @Query("SELECT name FROM hackmaster_magic_item_reference WHERE ref_id=(:itemID)")
+    suspend fun getNameOfTemplateOnce(itemID: Int): String?
+
+    @Query("SELECT parent_id FROM hackmaster_magic_item_reference WHERE ref_id=(:itemID)")
+    suspend fun getParentIDOfItemOnce(itemID: Int): Int?
 
     /**
      * Pulls all item entries with given parent ref_id as a LimitedItemTemplate
@@ -1390,7 +834,7 @@ interface MagicItemDao {
     suspend fun addMagicItem(newItem: MagicItem)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addMagicItems(newItems: List<MagicItem>) : Int
+    suspend fun addMagicItems(newItems: List<MagicItem>)
 
     @Update
     suspend fun updateMagicItems(itemsToUpdate: List<MagicItem>) : Int
@@ -1435,12 +879,12 @@ interface SpellCollectionDao{
             "AND spellLevel=(:level)")
     suspend fun getSpellIDs(discipline: Int, level: Int): List<Int>
 
-    @Query("SELECT * FROM hackmaster_spell_table WHERE spellLevel=(:level) AND schools " +
-            "LIKE (:schOrdStr) AND choiceString LIKE (:choiceStr)")
+    @Query("SELECT * FROM hackmaster_spell_table WHERE spellLevel=(:level) AND (schools " +
+            "LIKE '%' || :schOrdStr || '%' AND choiceString LIKE '%' || :choiceStr || '%')")
     suspend fun getLevelChoiceSpells(level: Int, schOrdStr: String, choiceStr: String): List<Spell>
 
-    @Query("SELECT * FROM hackmaster_spell_table WHERE spellLevel=1 AND choiceString LIKE " +
-            "(:choiceStr)")
+    @Query("SELECT * FROM hackmaster_spell_table WHERE spellLevel=1 AND (choiceString LIKE " +
+            "'%' || :choiceStr || '%')")
     suspend fun getInitialChoiceSpells(choiceStr: String): List<Spell>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -1479,7 +923,7 @@ interface SpellCollectionDao{
     suspend fun addSpellCollection(newSpellCollection: SpellCollection)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addSpellCollections(newSpellCollections: List<SpellCollection>) : Int
+    suspend fun addSpellCollections(newSpellCollections: List<SpellCollection>)
 
     @Update
     suspend fun updateSpellCollections(spellCollectionsToUpdate: List<SpellCollection>) : Int

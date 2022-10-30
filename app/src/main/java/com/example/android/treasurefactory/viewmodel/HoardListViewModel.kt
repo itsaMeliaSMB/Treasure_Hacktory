@@ -1,6 +1,5 @@
 package com.example.android.treasurefactory.viewmodel
 
-import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.android.treasurefactory.MultihoardProcessor
 import com.example.android.treasurefactory.model.Hoard
-import com.example.android.treasurefactory.model.SpCoDiscipline
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -126,135 +124,6 @@ class HoardListViewModel(private val repository: HMRepository) : ViewModel() {
         isRunningAsync = newValue
         isRunningAsyncLiveData.postValue(isRunningAsync)
     }
-
-    fun testSpellTriples(context: Context) {
-
-        //TODO delete this after tests are finished; I really don't like having a context reference in viewmodel!
-
-        viewModelScope.launch{
-
-            setRunningAsync(true)
-
-            println("Beginning spell validation test...\n")
-
-            val nullReturnEntries = ArrayList<Triple<String,SpCoDiscipline,Int>>()
-
-            val validReturnEntries = ArrayList<Triple<String,SpCoDiscipline,Int>>()
-
-            suspend fun testArcane() {
-
-                val inputStream = context.resources.openRawResource(
-                    context.resources.getIdentifier("unique_book_arcane_doubles","raw",context.packageName))
-
-                inputStream
-                    .bufferedReader()
-                    .lineSequence()
-                    .forEach { spellLine ->
-
-                        val spellName : String
-                        val spellLevel : Int
-
-                        spellLine.split(";").let{
-                            spellName = it.first()
-                            spellLevel = it.last().toIntOrNull() ?: -1
-                        }
-
-                        val spellPull = repository.getSpellByName(spellName,0,spellLevel)
-
-                        if (spellPull == null) {
-                            nullReturnEntries.add(
-                                Triple(spellName,SpCoDiscipline.ARCANE,spellLevel))
-                        } else {
-                            validReturnEntries.add(
-                                Triple(spellName,SpCoDiscipline.ARCANE,spellLevel))
-                        }
-                    }
-            }
-
-            suspend fun testDivine() {
-
-                val inputStream = context.resources.openRawResource(
-                    context.resources.getIdentifier("unique_book_divine_doubles","raw",context.packageName))
-
-                inputStream
-                    .bufferedReader()
-                    .lineSequence()
-                    .forEach { spellLine ->
-
-                        val spellName : String
-                        val spellLevel : Int
-
-                        spellLine.split(";").let{
-                            spellName = it.first()
-                            spellLevel = it.last().toIntOrNull() ?: -1
-                        }
-
-                        val clericSpellPull = repository.getSpellByName(spellName,1,spellLevel)
-                        val druidSpellPull = repository.getSpellByName(spellName,2,spellLevel)
-
-                        if (clericSpellPull == null) {
-                            nullReturnEntries.add(
-                                Triple(spellName,SpCoDiscipline.DIVINE,spellLevel))
-                        } else {
-                            validReturnEntries.add(
-                                Triple(spellName,SpCoDiscipline.DIVINE,spellLevel))
-                        }
-
-                        if (druidSpellPull == null) {
-                            nullReturnEntries.add(
-                                Triple(spellName,SpCoDiscipline.NATURAL,spellLevel))
-                        } else {
-                            validReturnEntries.add(
-                                Triple(spellName,SpCoDiscipline.NATURAL,spellLevel))
-                        }
-                    }
-            }
-
-            testArcane()
-            testDivine()
-
-            println("-------------------------------------------")
-            println("<<< Entries which yielded valid results >>>")
-            println("-------------------------------------------")
-            validReturnEntries.sortedBy { it.second }.let{ sortedList ->
-
-                if (sortedList.isNotEmpty()) {
-
-                    sortedList.forEach { (name, discipline, level) ->
-
-                        println("[${discipline.name} $level] \"$name\"")
-                    }
-                } else {
-                    println("Er... none. Uh-oh.")
-                }
-            }
-
-            println("")
-
-            println("------------------------------------------")
-            println("<<< Entries which yielded null results >>>")
-            println("------------------------------------------")
-            nullReturnEntries.sortedBy { it.second }.let{ sortedList ->
-
-                if (sortedList.isNotEmpty()) {
-
-                    sortedList.forEach { (name, discipline, level) ->
-
-                        println("[${discipline.name} $level] \"$name\"")
-                    }
-                } else {
-                    println("None, good job!")
-                }
-            }
-
-            println("\nTest concluded.\n")
-
-            textToastHolderLiveData.postValue("Test concluded. Check console for results." to Toast.LENGTH_LONG)
-
-            setRunningAsync(false)
-        }
-    }
-
     // endregion
 }
 

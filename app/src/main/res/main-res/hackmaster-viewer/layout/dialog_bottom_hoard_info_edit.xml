@@ -125,6 +125,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:drawablePadding="4dp"
+            android:textSize="13sp"
             android:inputType="none"
             android:text="@string/dropdown_loading"
             android:enabled="false"/>
@@ -149,6 +150,7 @@
             android:id="@+id/hoard_edit_badge_auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textSize="13sp"
             android:inputType="none"
             android:drawablePadding="4dp"
             android:text="@string/dropdown_loading"

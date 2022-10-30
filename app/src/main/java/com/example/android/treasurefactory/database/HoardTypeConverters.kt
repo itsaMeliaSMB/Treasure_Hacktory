@@ -219,17 +219,20 @@ class HoardTypeConverters {
     @TypeConverter
     fun toBoolean(jsonBool: String?): Boolean = Gson().fromJson(jsonBool,Boolean::class.java)
 
-    // region TODO < Remove after GemEvaluation refactor >
+    // region ( SpCoAugmentation )
 
     @TypeConverter
-    fun fromListOfLongStringPairs(list: List<Pair<Long,String>>?) : String? = Gson().toJson(list)
+    fun fromSpCoAugmentationList(list: List<SpCoAugmentation?>?) : String? = Gson().toJson(list)
 
     @TypeConverter
-    fun toListOfLongStringPairs(jsonList: String?) : List<Pair<Long,String>?>? {
+    fun toSpCoAugmentationList(jsonList: String?) : List<SpCoAugmentation?>? {
 
-        val typeToken = object : TypeToken<List<Pair<Long,String>>>() {}.type
+        if (jsonList == null) return emptyList()
+
+        val typeToken = object : TypeToken<List<SpCoAugmentation?>?>() {}.type
 
         return Gson().fromJson(jsonList,typeToken)
     }
+
     // endregion
 }

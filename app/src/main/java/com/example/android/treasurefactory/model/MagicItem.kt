@@ -51,15 +51,51 @@ data class MagicItem(
     val sourcePage: Int,
     val xpValue: Int,
     val gpValue: Double,
-    val classUsability: Map<String,Boolean>,
+    val classUsability: Map<String, Boolean>,
     val isCursed: Boolean,
     val alignment: String,
-    val notes: List<Pair<String,List<String>>> = emptyList()) {
+    val notes: List<Pair<String, List<String>>> = emptyList(),
+    val potionColors: List<String> = emptyList(),
+    val originalName: String
+) {
 
     @Ignore
     fun getNotesAsDetailsLists(): List<Pair<String,List<PlainTextEntry>>> {
         return notes.map { (listLabel, detailList) ->
             listLabel to detailList.map { PlainTextEntry(it) }
         }
+    }
+
+    @Ignore
+    fun toViewableMagicItem() : ViewableMagicItem {
+
+        return ViewableMagicItem(
+            mItemID,
+            hoardID,
+            name,
+            typeOfItem.tableLabel +
+                    (if (typeOfItem.ordinal <= 20)
+                        " [${typeOfItem.name}]" else ""),
+            creationTime,
+            iconID,
+            when {
+                typeOfItem == MagicItemType.A24 -> ItemFrameFlavor.GOLDEN
+                isCursed -> ItemFrameFlavor.CURSED
+                else -> ItemFrameFlavor.NORMAL },
+            sourceText,
+            sourcePage,
+            gpValue,
+            xpValue,
+            UniqueItemType.MAGIC_ITEM,
+            getNotesAsDetailsLists(),
+            originalName,
+            templateID,
+            typeOfItem,
+            classUsability,
+            isCursed,
+            alignment,
+            notes,
+            potionColors
+        )
     }
 }

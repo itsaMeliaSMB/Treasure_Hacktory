@@ -3,6 +3,8 @@ package com.example.android.treasurefactory.viewmodel
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.treasurefactory.model.Hoard
+import com.example.android.treasurefactory.model.HoardEvent
+import com.example.android.treasurefactory.model.HoardUniqueItemBundle
 import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -31,6 +33,9 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
     }
     var hoardTotalXPLiveData = MutableLiveData(0)
         private set
+
+    /** Bundle of data observed to generate a hoard report. */
+    val reportInfoLiveData = MutableLiveData<Triple<Hoard,HoardUniqueItemBundle,List<HoardEvent>>?>(null)
     // endregion
 
     // region [ Functions ]
@@ -68,6 +73,35 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
                 Log.d("updateXPTotal($hoardID)","dependentJob.await() + " +
                         "independentJob.await() = $xpTotal")
                 hoardTotalXPLiveData.postValue(xpTotal)
+            }
+        }
+    }
+
+    fun clearReportInfo() { reportInfoLiveData.value = null }
+
+    fun fetchReportInfo(hoardID: Int) {
+
+        viewModelScope.launch{
+
+            //TODO add running async to this fragment/viewmodel
+            try {
+
+                val hoard = repository.getHoardOnce(hoardID)
+
+                val deferredGems = repository.getGemsOnce(hoardID)
+                val deferredArt = repository.getArtObjectsOnce(hoardID)
+                val deferredItems = repository.getMagicItemsOnce(hoardID)
+                val deferredSpCos = repository.getSpellCollectionsOnce(hoardID)
+
+                val hoardItems = HoardUniqueItemBundle(deferredGems, deferredArt, deferredItems, deferredSpCos)
+                val events = repository.getHoardEventsOnce(hoardID)
+
+                if (hoard != null) {
+                    reportInfoLiveData.postValue(Triple(hoard, hoardItems, events))
+                }
+
+            } catch(e: Exception){
+                Log.e("fetchReportInfo($hoardID)", e.message.toString())
             }
         }
     }

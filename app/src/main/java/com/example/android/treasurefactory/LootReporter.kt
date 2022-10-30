@@ -1,32 +1,26 @@
 package com.example.android.treasurefactory
 
 import android.content.Context
-import com.example.android.treasurefactory.model.*
+import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.repository.HMRepository
 import java.io.File
 import java.lang.Math.abs
 
-class LootReporter(context: Context, private val repository: HMRepository){
+class LootReporter(private val context : Context, private val repository: HMRepository){
 
     val darkBlock = "▓"
     val semidarkBlock = "▒"
 
-    fun getHoardFromID() {
-        //TODO unimplemented
-    }
-
     /**
      *
      */
-    fun exportHoardContentsAsPlainText(hoard: Hoard, gemList: List<Gem>, artList: List<ArtObject>,
-                                itemList: List<MagicItem>, spellList: List<SpellCollection>,
-                                eventLog: List<HoardEvent>, _pageWidth: Int = 80, ): String {
+    suspend fun exportHoardContentsAsPlainText(hoard: Hoard, _pageWidth: Int = 80 ): String {
 
-        val gemList = ArrayList<Gem>()
-        val artList = ArrayList<ArtObject>()
-        val itemList = ArrayList<MagicItem>()
-        val spellList = ArrayList<SpellCollection>()
-        val eventLog = ArrayList<HoardEvent>()
+        val hoardGems = repository.getGemsOnce(hoard.hoardID)
+        val hoardArt = repository.getArtObjectOnce(hoard.hoardID)
+        val hoardItems = repository.getMagicItemsOnce(hoard.hoardID)
+        val hoardSpCos = repository.getSpellCollectionOnce(hoard.hoardID)
+        val hoardEvents = repository.getHoardEventsOnce(hoard.hoardID)
 
         //TODO rename later
         val fileName = "hoardreport.txt"
@@ -623,5 +617,4 @@ class LootReporter(context: Context, private val repository: HMRepository){
 
         return "lol" // TODO fix/remove return type
     }
-
 }

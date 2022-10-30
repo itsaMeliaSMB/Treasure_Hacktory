@@ -1,6 +1,7 @@
 package com.example.android.treasurefactory
 
 import com.example.android.treasurefactory.model.*
+import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import java.text.DecimalFormat
@@ -455,6 +456,42 @@ class LootMutator() {
             )
 
             return valueLevelToGPValue.getOrDefault(input.coerceIn(-19,31), 1000.0)
+        }
+
+        /**
+         * Takes the ID of a given hoard and re-evaluates it's totals, returning the update result.
+         */
+        suspend fun auditHoard(hoardID: Int, repository: HMRepository): Hoard? {
+
+            val originalHoard = repository.getHoardOnce(hoardID)
+
+            if (originalHoard != null){
+
+                val coinageTotal = originalHoard.getTotalCoinageValue()
+
+                val newGemTotalCount = repository.getGemCountOnce(hoardID)
+                val newGemTotalValue = repository.getGemValueTotalOnce(hoardID)
+                val newArtTotalCount = repository.getArtCountOnce(hoardID)
+                val newArtTotalValue = repository.getArtValueTotalOnce(hoardID)
+                val newItemTotalCount = repository.getMagicItemCountOnce(hoardID)
+                val newItemTotalValue = repository.getMagicItemValueTotalOnce(hoardID)
+                val newSpCoTotalCount = repository.getSpellCollectionCountOnce(hoardID)
+                val newSpCoTotalValue = repository.getSpellCollectionValueTotalOnce(hoardID)
+
+                val newTotalValue = coinageTotal + newGemTotalValue + newArtTotalValue +
+                        newItemTotalValue + newSpCoTotalValue
+
+                return originalHoard.copy(
+                    gemCount = newGemTotalCount,
+                    artCount = newArtTotalCount,
+                    magicCount = newItemTotalCount,
+                    spellsCount = newSpCoTotalCount,
+                    gpTotal = newTotalValue
+                )
+
+            } else {
+                return null
+            }
         }
     }
 }

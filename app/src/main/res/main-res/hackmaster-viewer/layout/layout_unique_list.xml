@@ -45,13 +45,15 @@
                 android:layout_height="match_parent"
                 android:scrollbarStyle="outsideOverlay"
                 android:scrollbars="vertical"
-                tools:listitem="@layout/unique_list_item" />
+                tools:listitem="@layout/unique_list_item"
+                tools:visibility="gone"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/unique_list_whenempty_group"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <ImageView
                     android:id="@+id/unique_list_whenempty_image"
@@ -59,7 +61,7 @@
                     android:layout_height="64dp"
                     android:layout_marginBottom="8dp"
                     android:alpha="0.5"
-                    android:src="@drawable/clipart_treasure_add_vector_icon"
+                    android:src="@drawable/loot_lint"
                     app:layout_constraintBottom_toTopOf="@id/unique_list_whenempty_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +92,6 @@
     <include layout="@layout/overlay_waiting_card"
         android:id="@+id/unique_list_waiting_card"
         android:visibility="gone"
-        tools:visibility="visible"/>
+/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

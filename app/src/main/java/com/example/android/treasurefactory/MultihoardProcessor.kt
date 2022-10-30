@@ -15,6 +15,504 @@ import kotlin.math.roundToInt
 class MultihoardProcessor(private val repository: HMRepository) {
 
     /**
+     * Moves valid items passed in to an acceptor [Hoard] by changing the hoard ID on the items and
+     * re-evaluating all affected hoards.
+     *
+     * @return Pair of whether or not move was successful and provided message.
+     */
+    suspend fun moveItems(acceptorHoardID: Int, itemsToMove: List<ViewableItem>) : Pair<Boolean,String>{
+
+        val donorHoardIDs = mutableSetOf<Int>()
+
+        val gemsToMove = ArrayList<Gem>()
+        val artObjectsToMove = ArrayList<ArtObject>()
+        val magicItemsToMove = ArrayList<MagicItem>()
+        val spellCollectionsToMove = ArrayList<SpellCollection>()
+
+        itemsToMove.forEach { itemToMove ->
+
+            // Log unique hoard IDs
+            donorHoardIDs.add(itemToMove.hoardID)
+
+            // Convert and cache item to move
+            when (itemToMove){
+                is ViewableGem              -> {
+                    val gemToMove = itemToMove.toGem()
+                    gemsToMove.add(gemToMove)
+                }
+                is ViewableArtObject        -> {
+                    val artToMove = itemToMove.toArtObject()
+                    artObjectsToMove.add(artToMove)
+                }
+                is ViewableMagicItem        -> {
+                    val mItemToMove = itemToMove.toMagicItem()
+                    magicItemsToMove.add(mItemToMove)
+                }
+                is ViewableSpellCollection  -> {
+                    val spCoToMove = itemToMove.toSpellCollection()
+                    spellCollectionsToMove.add(spCoToMove)
+                }
+            }
+        }
+
+        // Check if new Hoard would exceed limits
+        val hoardCapacityResult = ensureHoardCapacity(acceptorHoardID,
+            HoardUniqueItemBundle(
+                gemsToMove.toList(),
+                artObjectsToMove.toList(),
+                magicItemsToMove.toList(),
+                spellCollectionsToMove.toList()),
+            emptyMap())
+
+        if (hoardCapacityResult.first) {
+
+            // Proceed only if move is permitted.
+            /**
+             * Key is the original hoard ID of the item. Value is a list of a moved items'
+             * [UniqueItemType]s, names, and ids.
+             */
+            val moveLedger = mutableMapOf<Int,List<Triple<UniqueItemType, String, Int>>>()
+            var moveOccurred = false
+
+            // Log prospective moves and update lists
+            gemsToMove.forEachIndexed { index, movedItem ->
+
+                // Log in move ledger
+                val itemTriple = Triple(UniqueItemType.GEM, movedItem.name, movedItem.gemID)
+
+                val priorList = moveLedger.getOrPut(movedItem.hoardID) { emptyList() }
+
+                moveLedger[movedItem.hoardID] = listOf(priorList, listOf(itemTriple)).flatten()
+
+                // Change the hoard ID on the affected item
+                gemsToMove[index] = movedItem.copy(hoardID = acceptorHoardID)
+            }
+
+            artObjectsToMove.forEachIndexed { index, movedItem ->
+
+                // Log in move ledger
+                val itemTriple = Triple(UniqueItemType.ART_OBJECT, movedItem.name, movedItem.artID)
+
+                val priorList = moveLedger.getOrPut(movedItem.hoardID) { emptyList() }
+
+                moveLedger[movedItem.hoardID] = listOf(priorList, listOf(itemTriple)).flatten()
+
+                // Change the hoard ID on the affected item
+                artObjectsToMove[index] = movedItem.copy(hoardID = acceptorHoardID)
+            }
+
+            magicItemsToMove.forEachIndexed { index, movedItem ->
+
+                // Log in move ledger
+                val itemTriple = Triple(UniqueItemType.MAGIC_ITEM, movedItem.name, movedItem.mItemID)
+
+                val priorList = moveLedger.getOrPut(movedItem.hoardID) { emptyList() }
+
+                moveLedger[movedItem.hoardID] = listOf(priorList, listOf(itemTriple)).flatten()
+
+                // Change the hoard ID on the affected item
+                magicItemsToMove[index] = movedItem.copy(hoardID = acceptorHoardID)
+            }
+
+            spellCollectionsToMove.forEachIndexed { index, movedItem ->
+
+                // Log in move ledger
+                val itemTriple = Triple(UniqueItemType.SPELL_COLLECTION, movedItem.name, movedItem.sCollectID)
+
+                val priorList = moveLedger.getOrPut(movedItem.hoardID) { emptyList() }
+
+                moveLedger[movedItem.hoardID] = listOf(priorList, listOf(itemTriple)).flatten()
+
+                // Change the hoard ID on the affected item
+                spellCollectionsToMove[index] = movedItem.copy(hoardID = acceptorHoardID)
+            }
+
+            // Update listed items in db
+            if (gemsToMove.isNotEmpty()) {
+                repository.updateGems(gemsToMove.toList())
+                moveOccurred = true
+            }
+            if (artObjectsToMove.isNotEmpty()) {
+                repository.updateArtObjects(artObjectsToMove.toList())
+                moveOccurred = true
+            }
+            if (magicItemsToMove.isNotEmpty()) {
+                repository.updateMagicItems(magicItemsToMove.toList())
+                moveOccurred = true
+            }
+            if (spellCollectionsToMove.isNotEmpty()) {
+                repository.updateSpellCollections(spellCollectionsToMove.toList())
+                moveOccurred = true
+            }
+
+            if (moveOccurred) {
+
+                val moveEvents = ArrayList<HoardEvent>()
+                val originalAcceptor = repository.getHoardOnce(acceptorHoardID)
+                val newHoards = ArrayList<Hoard?>()
+
+                // Acceptor event
+                moveLedger.values.toList().flatten().let { itemTripleList ->
+
+                    val gemList = ArrayList<String>()
+                    val artList = ArrayList<String>()
+                    val itemList = ArrayList<String>()
+                    val spCoList = ArrayList<String>()
+
+                    val maxSize = 25
+
+                    val description = StringBuilder().apply{
+                        append("The following items were moved this hoard [id:$acceptorHoardID] :\n\n")
+                    }
+                    val tags = StringBuilder().apply{
+                        append("merge")
+                    }
+
+                    itemTripleList.sortedBy { it.first }.forEach {
+                        when (it.first) {
+                            UniqueItemType.GEM -> {
+                                gemList.add("${
+                                    if (it.second.length > 25) it.second.take(25) + "..."
+                                    else {it.second} } [id:$${it.third}]")
+                            }
+                            UniqueItemType.ART_OBJECT -> {
+                                artList.add("${
+                                    if (it.second.length > 25) it.second.take(25) + "..."
+                                    else {it.second} } [id:$${it.third}]")
+                            }
+                            UniqueItemType.MAGIC_ITEM -> {
+                                itemList.add("${
+                                    if (it.second.length > 25) it.second.take(25) + "..."
+                                    else {it.second} } [id:$${it.third}]")
+                            }
+                            UniqueItemType.SPELL_COLLECTION -> {
+                                spCoList.add("${
+                                    if (it.second.length > 25) it.second.take(25) + "..."
+                                    else {it.second} } [id:$${it.third}]")
+                            }
+                        }
+                    }
+
+                    if (gemList.size > 0) {
+                        description.append("< Gemstone(s) & Jewel(s) >\n")
+                        if (gemList.size > maxSize) {
+                            gemList.take(maxSize).forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                            description.append("\t...And ${gemList.size - maxSize} more.\n")
+                        } else {
+                            gemList.forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                        }
+                        tags.append("|gemstone")
+                    }
+
+                    if (artList.size > 0) {
+                        description.append("< Art Object(s) >\n")
+                        if (artList.size > maxSize) {
+                            artList.take(maxSize).forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                            description.append("\t...And ${artList.size - maxSize} more.\n")
+                        } else {
+                            artList.forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                        }
+                        tags.append("|art-object")
+                    }
+
+                    if (itemList.size > 0) {
+                        description.append("< Magic item(s) >\n")
+                        if (itemList.size > maxSize) {
+                            itemList.take(maxSize).forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                            description.append("\t...And ${itemList.size - maxSize} more.\n")
+                        } else {
+                            artList.forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                        }
+                        tags.append("|magic-item")
+                    }
+
+                    if (spCoList.size > 0) {
+                        description.append("< Spell Collection(s) >\n")
+                        if (itemList.size > maxSize) {
+                            itemList.take(maxSize).forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                            description.append("\t...And ${itemList.size - maxSize} more.\n")
+                        } else {
+                            artList.forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                        }
+                        tags.append("|spell-collection")
+                    }
+
+                    val acceptorEvent = HoardEvent(
+                        timestamp = System.currentTimeMillis(),
+                        hoardID = acceptorHoardID,
+                        description = description.toString(),
+                        tag = tags.toString()
+                    )
+
+                    moveEvents.add(acceptorEvent)
+                }
+
+                // Donor events
+                moveLedger.forEach { (origParentID, itemTripleList) ->
+
+                    val gemList = ArrayList<String>()
+                    val artList = ArrayList<String>()
+                    val itemList = ArrayList<String>()
+                    val spCoList = ArrayList<String>()
+
+                    val maxSize = 25
+
+                    val description = StringBuilder().apply{
+                        append("The following items were moved from this hoard to \"" +
+                                originalAcceptor?.name + " [id:$acceptorHoardID] :\n\n")
+                    }
+                    val tags = StringBuilder().apply{
+                        append("merge")
+                    }
+
+                    itemTripleList.sortedBy { it.first }.forEach {
+                        when (it.first) {
+                            UniqueItemType.GEM -> {
+                                gemList.add("${
+                                    if (it.second.length > 25) it.second.take(25) + "..." 
+                                    else {it.second} } [id:$${it.third}]")
+                            }
+                            UniqueItemType.ART_OBJECT -> {
+                                artList.add("${
+                                    if (it.second.length > 25) it.second.take(25) + "..."
+                                    else {it.second} } [id:$${it.third}]")
+                            }
+                            UniqueItemType.MAGIC_ITEM -> {
+                                itemList.add("${
+                                    if (it.second.length > 25) it.second.take(25) + "..."
+                                    else {it.second} } [id:$${it.third}]")
+                            }
+                            UniqueItemType.SPELL_COLLECTION -> {
+                                spCoList.add("${
+                                    if (it.second.length > 25) it.second.take(25) + "..."
+                                    else {it.second} } [id:$${it.third}]")
+                            }
+                        }
+                    }
+
+                    if (gemList.size > 0) {
+                        description.append("< Gemstone(s) & Jewel(s) >\n")
+                        if (gemList.size > maxSize) {
+                            gemList.take(maxSize).forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                            description.append("\t...And ${gemList.size - maxSize} more.\n")
+                        } else {
+                            gemList.forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                        }
+                        tags.append("|gemstone")
+                    }
+
+                    if (artList.size > 0) {
+                        description.append("< Art Object(s) >\n")
+                        if (artList.size > maxSize) {
+                            artList.take(maxSize).forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                            description.append("\t...And ${artList.size - maxSize} more.\n")
+                        } else {
+                            artList.forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                        }
+                        tags.append("|art-object")
+                    }
+
+                    if (itemList.size > 0) {
+                        description.append("< Magic item(s) >\n")
+                        if (itemList.size > maxSize) {
+                            itemList.take(maxSize).forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                            description.append("\t...And ${itemList.size - maxSize} more.\n")
+                        } else {
+                            artList.forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                        }
+                        tags.append("|magic-item")
+                    }
+
+                    if (spCoList.size > 0) {
+                        description.append("< Spell Collection(s) >\n")
+                        if (itemList.size > maxSize) {
+                            itemList.take(maxSize).forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                            description.append("\t...And ${itemList.size - maxSize} more.\n")
+                        } else {
+                            artList.forEachIndexed { index, entry ->
+                                description.append("\t[#${index+1}] $entry\n")
+                            }
+                        }
+                        tags.append("|spell-collection")
+                    }
+
+                    val donorEvent = HoardEvent(
+                        timestamp = System.currentTimeMillis(),
+                        hoardID = origParentID,
+                        description = description.toString(),
+                        tag = tags.toString()
+                    )
+
+                    moveEvents.add(donorEvent)
+                }
+
+                // Update values on affected hoards
+                newHoards.add(LootMutator.auditHoard(acceptorHoardID,repository))
+
+                donorHoardIDs.forEach { donorID ->
+                    newHoards.add(LootMutator.auditHoard(donorID,repository))
+                }
+
+                // Update hoards and events in database.
+                repository.updateHoards(newHoards.filterNotNull())
+                repository.addHoardEvent(moveEvents.toList())
+
+                return true to "${itemsToMove.size} item(s) successfully moved."
+            }
+
+            return false to "No items were actually selected."
+
+        } else {
+
+            return hoardCapacityResult
+        }
+    }
+
+    suspend fun ensureHoardCapacity(targetHoardID: Int, newItems: HoardUniqueItemBundle,
+                                    newCoinage: Map<CoinType,Int>) : Pair<Boolean,String> {
+
+        val originalHoard = repository.getHoardOnce(targetHoardID)
+
+        if (originalHoard != null) {
+
+            val newGemTotalValue : Double
+            val newArtTotalValue : Double
+            val newItemTotalValue : Double
+            val newSpCoTotalValue : Double
+
+            val newCoinTotals = newCoinage.toMutableMap().apply{
+                enumValues<CoinType>().forEach { enumCoinType ->
+                    this.putIfAbsent(enumCoinType, 0) } }.toSortedMap().toList()
+
+            newItems.run {
+
+                newGemTotalValue = hoardGems.sumOf { it.currentGPValue}
+                newArtTotalValue = hoardArt.sumOf { it.gpValue }
+                newItemTotalValue = hoardItems.sumOf { it.gpValue }
+                newSpCoTotalValue = hoardSpellCollections.sumOf { it.gpValue }
+            }
+
+            val newTotalValue = originalHoard.gpTotal +
+                    newCoinTotals.sumOf { (coinType, coinQty) ->
+                        (coinQty * coinType.gpValue * 100.00).roundToInt() / 100.00 } +
+                    newGemTotalValue + newArtTotalValue + newItemTotalValue + newSpCoTotalValue
+
+            return when {
+
+                newTotalValue > MAXIMUM_HOARD_VALUE ->
+                    false to "Total value of hoard would be " +
+                            ((newTotalValue * 100.00).roundToInt() / 100.00).toString() +
+                            " gp, which exceeds the maximum single-hoard value of $MAXIMUM_HOARD_VALUE gp."
+
+                (newCoinTotals[0].second * newCoinTotals[0].first.gpValue * 100.00).roundToInt() / 100.00 >
+                        MAXIMUM_COINAGE_AMOUNT ->
+                    false to "Hoard would have " +
+                            ((newCoinTotals[0].second * newCoinTotals[0].first.gpValue * 100.00)
+                                .roundToInt() / 100.00).toString() +
+                            " gp worth of copper pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
+
+                (newCoinTotals[1].second * newCoinTotals[1].first.gpValue * 100.00).roundToInt() / 100.00 >
+                        MAXIMUM_COINAGE_AMOUNT ->
+                    false to "Hoard would have " +
+                            ((newCoinTotals[1].second * newCoinTotals[1].first.gpValue * 100.00)
+                                .roundToInt() / 100.00).toString() +
+                            " gp worth of silver pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
+
+                (newCoinTotals[2].second * newCoinTotals[2].first.gpValue * 100.00).roundToInt() / 100.00 >
+                        MAXIMUM_COINAGE_AMOUNT ->
+                    false to "Hoard would have " +
+                            ((newCoinTotals[2].second * newCoinTotals[2].first.gpValue * 100.00)
+                                .roundToInt() / 100.00).toString() +
+                            " gp worth of electrum pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
+
+                (newCoinTotals[3].second * newCoinTotals[3].first.gpValue * 100.00).roundToInt() / 100.00 >
+                        MAXIMUM_COINAGE_AMOUNT ->
+                    false to "Hoard would have " +
+                            ((newCoinTotals[3].second * newCoinTotals[3].first.gpValue * 100.00)
+                                .roundToInt() / 100.00).toString() +
+                            " gp worth of gold pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
+
+                (newCoinTotals[4].second * newCoinTotals[4].first.gpValue * 100.00).roundToInt() / 100.00 >
+                        MAXIMUM_COINAGE_AMOUNT ->
+                    false to "Hoard would have " +
+                            ((newCoinTotals[4].second * newCoinTotals[4].first.gpValue * 100.00)
+                                .roundToInt() / 100.00).toString() +
+                            " gp worth of hard silver pieces. " +
+                            "Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
+
+                (newCoinTotals[5].second * newCoinTotals[5].first.gpValue * 100.00).roundToInt() / 100.00 >
+                        MAXIMUM_COINAGE_AMOUNT ->
+                    false to "Hoard would have " +
+                            ((newCoinTotals[5].second * newCoinTotals[5].first.gpValue * 100.00)
+                                .roundToInt() / 100.00).toString() +
+                            " gp worth of platinum pieces. Maximum allowed is $MAXIMUM_COINAGE_AMOUNT gp."
+
+                (newItems.hoardGems.size + repository.getGemCountOnce(targetHoardID))
+                        > MAXIMUM_UNIQUE_QTY ->
+                    false to "Hoard would have ${(newItems.hoardGems.size + 
+                            repository.getGemCountOnce(targetHoardID))} gems. Maximum allowed is " +
+                            "$MAXIMUM_UNIQUE_QTY gems."
+
+                (newItems.hoardArt.size + repository.getArtCountOnce(targetHoardID))
+                        > MAXIMUM_UNIQUE_QTY ->
+                    false to "Hoard would have ${(newItems.hoardArt.size + 
+                            repository.getArtCountOnce(targetHoardID))} art objects. Maximum " +
+                            "allowed is $MAXIMUM_UNIQUE_QTY art objects."
+
+                (newItems.hoardItems.size + repository.getMagicItemCountOnce(targetHoardID))
+                        > MAXIMUM_UNIQUE_QTY ->
+                    false to "Hoard would have ${(newItems.hoardItems.size + 
+                            repository.getMagicItemCountOnce(targetHoardID))} magic items. " +
+                            "Maximum allowed is $MAXIMUM_UNIQUE_QTY magic items."
+
+                (newItems.hoardSpellCollections.size + repository.getSpellCollectionCountOnce(targetHoardID))
+                        > MAXIMUM_SPELL_COLLECTION_QTY ->
+                    false to "Hoard would have ${(newItems.hoardSpellCollections.size + 
+                            repository.getSpellCollectionCountOnce(targetHoardID))} spell " +
+                            "collections. Maximum allowed is $MAXIMUM_SPELL_COLLECTION_QTY " +
+                            "regardless of number of spells contained."
+
+                else ->
+                    true to "Move permitted."
+            }
+
+        } else {
+
+            return false to "No hoard found at id $targetHoardID"
+        }
+    }
+
+    /**
      * Creates a new hoard combining the coinage and unique items of the original hoard, adding it
      * to the database and discarding originals, unless directed otherwise.
      * @param providedName If not null, the name of the new super-hoard.
@@ -276,20 +774,6 @@ class MultihoardProcessor(private val repository: HMRepository) {
             else ->
                 true to "Merge permitted."
         }
-    }
-
-    //TODO implement splitHoard when hoard viewer is up and running.
-    fun splitHoard(originalHoard: Hoard, splitHoard: Hoard, splitBundle: HoardUniqueItemBundle,
-                   keepOriginal: Boolean) {
-
-        // TODO Ensure split is permitted first
-            // Split cannot leave an empty hoard
-            // Split cannot take out more coinage than is present in original
-
-        // TODO Create and add new split hoard
-
-        // TODO Remove items and coinage from original if instructed
-            // Record split in hoard events
     }
 
     /**

@@ -1,14 +1,16 @@
 package com.example.android.treasurefactory.viewmodel
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.android.treasurefactory.capitalized
+import com.example.android.treasurefactory.LootGeneratorAsync
+import com.example.android.treasurefactory.LootMutator
 import com.example.android.treasurefactory.database.MagicItemTemplate
 import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel() {
 
@@ -54,30 +56,41 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
         itemArgsLiveData.value = Triple(itemID,type,hoardID)
     }
 
-    fun saveViewedItem(itemToUpdate: ViewableItem, parentHoard: Hoard) {
-        //TODO unimplemented.
-        // - Map itemToUpdate to a RoomEntity
-        // - Get and compare against row at key if it exists
-        // - Update itemToUpdate's entry in database
-        // - Correct count on hoard, if applicable.
-        // - Update hoard in db
-        // - call loadItemArgs to reload
+    fun saveViewedItem(itemToUpdate: ViewableItem, parentHoard: Hoard, event: HoardEvent?) {
 
-        when (itemToUpdate) {
-            is ViewableGem              -> {
-                TODO()
+        viewModelScope.launch {
+
+            when (itemToUpdate) {
+
+                is ViewableGem              -> {
+                    repository.updateGems(listOf(itemToUpdate.toGem()))
+                }
+                is ViewableArtObject        -> {
+                    repository.updateArtObjects(listOf(itemToUpdate.toArtObject()))
+                }
+                is ViewableMagicItem        -> {
+                    repository.updateMagicItems(listOf(itemToUpdate.toMagicItem()))
+                }
+                is ViewableSpellCollection  -> {
+                    repository.updateSpellCollections(listOf(itemToUpdate.toSpellCollection()))
+                }
             }
-            is ViewableArtObject        -> {
-                TODO()
-            }
-            is ViewableMagicItem        -> {
-                TODO()
-            }
-            is ViewableSpellCollection  -> {
-                itemToUpdate.convertBack()
-                //TODO need repository function for transactionally updating hoard and list of Spell Collections
+
+            // Update parent hoard after updating item
+
+            val updatedHoard : Hoard? = LootMutator.auditHoard(parentHoard.hoardID,repository)
+
+            if (updatedHoard != null) { repository.updateHoard(updatedHoard) }
+
+            if (event != null) { repository.addHoardEvent(event) }
+
+            // Repost load-in values to trigger reload
+            itemArgsLiveData.run {
+                val oldValue = this.value
+                postValue(oldValue)
             }
         }
+
     }
 
     fun updateViewedItem(itemID: Int, itemType: UniqueItemType, hoardID: Int){
@@ -87,155 +100,35 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
             setRunningAsync(true)
 
             val viewableItem = when (itemType){
+
                 UniqueItemType.GEM -> {
 
                     val effortRating = repository.getHoardEffortRatingOnce(hoardID)
                         .takeUnless { it == 0.0 } ?: 5.0
 
-                    repository.getGemOnce(itemID)?.let{ gem ->
-
-                        ViewableGem(
-                            gem.gemID,
-                            gem.hoardID,
-                            gem.name,
-                            "${gem.getSizeAsString().capitalized()}, " +
-                                    "${gem.getQualityAsString()} ${gem.getTypeAsString()}",
-                            gem.creationTime,
-                            gem.iconID,
-                            when {
-                                gem.currentGPValue < 0.0        -> ItemFrameFlavor.CURSED
-                                gem.currentGPValue >= 1000000.0 -> ItemFrameFlavor.GOLDEN
-                                else                            -> ItemFrameFlavor.NORMAL },
-                            "GameMaster's Guide",
-                            178,
-                            gem.currentGPValue,
-                            (gem.currentGPValue / effortRating).roundToInt().coerceAtLeast(0),
-                            UniqueItemType.GEM,
-                            listOf(gem.getFlavorTextAsDetailsList()), //TODO add gem evaluation history when implemented
-                            gem.type,
-                            gem.quality,
-                            gem.opacity,
-                            gem.description
-                        )
-                    }
+                    repository.getGemOnce(itemID)?.toViewableGem(effortRating)
                 }
+
                 UniqueItemType.ART_OBJECT -> {
 
                     val effortRating = repository.getHoardEffortRatingOnce(hoardID)
                         .takeUnless { it == 0.0 } ?: 5.0
 
-                    repository.getArtObjectOnce(itemID)?.let{ art ->
-
-                        ViewableArtObject(
-                            art.artID,
-                            art.hoardID,
-                            art.name,
-                            "${art.getSizeAsString().capitalized()}, " +
-                                    "${art.getSubjectAsString()} ${art.getArtTypeAsString()}",
-                            art.creationTime,
-                            art.getArtTypeAsIconString(),
-                            when {
-                                art.isForgery       -> ItemFrameFlavor.CURSED
-                                art.valueLevel > 27 -> ItemFrameFlavor.GOLDEN
-                                else                -> ItemFrameFlavor.NORMAL },
-                            "HackJournal #6",
-                            2,
-                            art.gpValue,
-                            (art.gpValue / effortRating).roundToInt().coerceAtLeast(0),
-                            UniqueItemType.ART_OBJECT,
-                            listOf(art.getFlavorTextAsDetailsList()),
-                            art.artType,
-                            art.renown,
-                            art.size,
-                            art.condition,
-                            art.materials,
-                            art.quality,
-                            art.age,
-                            art.subject,
-                            art.valueLevel,
-                            art.isForgery
-                        )
-                    }
+                    repository.getArtObjectOnce(itemID)?.toViewableArtObject(effortRating)
                 }
+
                 UniqueItemType.MAGIC_ITEM -> {
 
-                    repository.getMagicItemOnce(itemID)?.let{ mgc ->
-
-                        ViewableMagicItem(
-                            mgc.mItemID,
-                            mgc.hoardID,
-                            mgc.name,
-                            mgc.typeOfItem.tableLabel +
-                                    (if (mgc.typeOfItem.ordinal <= 20)
-                                        " [${mgc.typeOfItem.name}]" else ""),
-                            mgc.creationTime,
-                            mgc.iconID,
-                            when {
-                                mgc.typeOfItem == MagicItemType.A24 -> ItemFrameFlavor.GOLDEN
-                                mgc.isCursed -> ItemFrameFlavor.CURSED
-                                else -> ItemFrameFlavor.NORMAL },
-                            mgc.sourceText,
-                            mgc.sourcePage,
-                            mgc.gpValue,
-                            mgc.xpValue,
-                            UniqueItemType.MAGIC_ITEM,
-                            mgc.getNotesAsDetailsLists(),
-                            mgc.templateID,
-                            mgc.typeOfItem,
-                            mgc.classUsability,
-                            mgc.isCursed,
-                            mgc.alignment,
-                            mgc.notes
-                        )
-                    }
+                    repository.getMagicItemOnce(itemID)?.toViewableMagicItem()
                 }
+
                 UniqueItemType.SPELL_COLLECTION -> {
 
-                    repository.getSpellCollectionOnce(itemID)?.let{ spCo ->
-
-                        ViewableSpellCollection(
-                            spCo.sCollectID,
-                            spCo.hoardID,
-                            spCo.name,
-                            spCo.getSubtitle(),
-                            spCo.creationTime,
-                            spCo.iconID,
-                            when {
-                                spCo.curse.isNotEmpty() -> ItemFrameFlavor.CURSED
-                                spCo.type == SpCoType.ALLOTMENT -> ItemFrameFlavor.GOLDEN
-                                else -> ItemFrameFlavor.NORMAL
-                            },
-                            when (spCo.type){
-                                SpCoType.SCROLL -> "GameMaster's Guide"
-                                SpCoType.BOOK -> "Spellslinger's Guide to Wurld Domination"
-                                SpCoType.ALLOTMENT -> "Zealot’s Guide to Wurld Conversion"
-                                SpCoType.RING -> "GameMaster's Guide"
-                                SpCoType.OTHER -> "Unspecified"
-                            },
-                            when (spCo.type){
-                                SpCoType.SCROLL -> 225
-                                SpCoType.BOOK -> 82
-                                SpCoType.ALLOTMENT -> 6
-                                SpCoType.RING -> 231
-                                SpCoType.OTHER -> 0
-                            },
-                            spCo.gpValue,
-                            spCo.xpValue,
-                            UniqueItemType.SPELL_COLLECTION,
-                            spCo.getFlavorTextAndSpellsAsDetailsLists(repository),
-                            spCo.type,
-                            spCo.discipline,
-                            spCo.properties,
-                            spCo.spells,
-                            spCo.curse
-                        )
-                    }
+                    repository.getSpellCollectionOnce(itemID)?.toViewableSpellCollection(repository)
                 }
             }
 
             viewedItemLiveData.postValue(viewableItem)
-
-            delay(500)
 
             setRunningAsync(false)
         }
@@ -264,43 +157,536 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
         viewModelScope.launch {
 
+            Log.d("fetchSpellsForDialog()","Beginning fetch for \"${entry.name}\"")
+
             setRunningAsync(true)
 
             if (entry.schools.isEmpty()) {
 
-                dialogSpellsInfoLiveData.postValue(
+                val result = when {
 
-                    when {entry.name.contains("SSG")  -> {
+                    entry.name.contains("SSG") -> {
 
-                            when (entry.name.substringAfter("(").removeSuffix(")")) {
-                                "Offensive"     -> repository.getInitialChoiceSpells("O")
-                                "Defensive"     -> repository.getInitialChoiceSpells("D")
-                                "Miscellaneous" -> repository.getInitialChoiceSpells("M")
-                                else        -> emptyList<Spell>()
+                        when (entry.name.substringAfter("(").removeSuffix(")")) {
+                            "Offensive" -> {
+                                Log.d("fetchSpellsForDialog()","repository.getInitialChoiceSpells(\"O\")")
+                                repository.getInitialChoiceSpells("O")
+                            }
+                            "Defensive" -> {
+                                Log.d("fetchSpellsForDialog()","")
+                                repository.getInitialChoiceSpells("D")
+                            }
+                            "Miscellaneous" -> {
+                                Log.d("fetchSpellsForDialog()","")
+                                repository.getInitialChoiceSpells("M")
+                            }
+                            else -> {
+                                Log.e("fetchSpellsForDialog()","Empty return for Initial SSG")
+                                emptyList<Spell>()
                             }
                         }
-                        entry.name.contains("GMG")  -> {
+                    }
+                    entry.name.contains("GMG") -> {
 
-                            when (entry.name.substringAfter("(").removeSuffix(")")) {
-                                "Offensive"     -> repository.getInitialChoiceSpells("o")
-                                "Defensive"     -> repository.getInitialChoiceSpells("d")
-                                "Miscellaneous" -> repository.getInitialChoiceSpells("m")
-                                else        -> emptyList<Spell>()
+                        when (entry.name.substringAfter("(").removeSuffix(")")) {
+                            "Offensive" -> {
+                                Log.d("fetchSpellsForDialog()","repository.getInitialChoiceSpells(\"o\")")
+                                repository.getInitialChoiceSpells("o")
+                            }
+                            "Defensive" -> {
+                                Log.d("fetchSpellsForDialog()","repository.getInitialChoiceSpells(\"d\")")
+                                repository.getInitialChoiceSpells("d")
+                            }
+                            "Miscellaneous" -> {
+                                Log.d("fetchSpellsForDialog()","repository.getInitialChoiceSpells(\"m\")")
+                                repository.getInitialChoiceSpells("m")
+                            }
+                            else -> {
+                                Log.e("fetchSpellsForDialog()","Empty return for Initial GMG")
+                                emptyList<Spell>()
                             }
                         }
-                        else -> emptyList()
-                    } to entry)
+                    }
+                    else -> {
+                        Log.e("fetchSpellsForDialog()","Empty return for Initial (else branch)")
+                        emptyList()
+                    }
+                }
+
+                Log.d("fetchSpellsForDialog()","result.size = ${result.size}")
+
+                dialogSpellsInfoLiveData.postValue(result to entry)
 
             } else {
 
-                dialogSpellsInfoLiveData.postValue(repository.getLevelChoiceSpells(
-                    entry.level,entry.schools.first(), (entry.name.contains("GMG"))) to entry)
+                Log.d("fetchSpellsForDialog()","repository.getLevelChoiceSpells(${
+                    entry.level}, ${entry.schools.first()}, ${(entry.name.contains("GMG"))
+                    }) to entry[name:${entry.name}])")
+
+                val result = repository.getLevelChoiceSpells(entry.level,entry.schools.first(),
+                        (entry.name.contains("SSG")))
+
+                Log.d("fetchSpellsForDialog()","result.size = ${result.size}")
+
+                dialogSpellsInfoLiveData.postValue(result to entry)
             }
 
             setRunningAsync(false)
         }
     }
 
+    fun fetchItemTemplatesForDialog(tableType: MagicItemType) {
+
+        viewModelScope.launch {
+
+            val templates = repository.getBaseItemTempsByType(tableType)
+
+            dialogItemTemplatesInfoLiveData.postValue(templates)
+        }
+    }
+
+    fun replaceItemFromTemplateID(templateID: Int, targetItem: ViewableMagicItem) {
+
+        viewModelScope.launch{
+
+            setRunningAsync(true)
+
+            val parentHoard = exposedHoardLiveData.value
+            val generator = LootGeneratorAsync(repository)
+
+            val newItem = generator.generateNewItemForChoiceSlot(
+                targetItem.hoardID, targetItem.itemID, templateID)
+
+            val newHoardEvent = HoardEvent(
+                hoardID = targetItem.hoardID,
+                timestamp = System.currentTimeMillis(),
+                description = "${targetItem.name} [id: ${targetItem.itemID}|table: ${
+                    targetItem.mgcItemType.name}] was resolved as ${newItem.name}.",
+                tag = "modification|magic-item|choice"
+            )
+
+            if (parentHoard != null) {
+
+                saveViewedItem(newItem.toViewableMagicItem(), parentHoard, newHoardEvent)
+            }
+
+            setRunningAsync(false)
+        }
+    }
+
+    fun replaceItemAsGMChoice(targetItem: ViewableMagicItem) {
+
+        @SuppressLint("SimpleDateFormat")
+        fun ViewableMagicItem.convertToChoice(parentHoardName : String) : ViewableMagicItem {
+            val newType = if (this.mgcItemType == MagicItemType.Map ||
+                this.mgcItemType == MagicItemType.Mundane) {
+
+                enumValues<MagicItemType>().filter{ it == MagicItemType.Map ||
+                        it == MagicItemType.Mundane}.random()
+            } else {
+                this.mgcItemType
+            }
+
+            return ViewableMagicItem(
+                    this.itemID,
+                    this.hoardID,
+                    "[Converted] GM's Choice",
+                    this.subtitle,
+                    this.creationTime,
+                    when(newType){
+                        MagicItemType.A2    -> "potion_empty"
+                        MagicItemType.A3    -> "scroll_base"
+                        MagicItemType.A4    -> "ring_gold"
+                        MagicItemType.A5    -> "staff_ruby"
+                        MagicItemType.A6    -> "staff_iron"
+                        MagicItemType.A7    -> "wand_wood"
+                        MagicItemType.A8    -> "book_normal"
+                        MagicItemType.A9    -> "jewelry_box"
+                        MagicItemType.A13   -> "container_full"
+                        MagicItemType.A14   -> "dust_incense"
+                        MagicItemType.A24   -> "artifact_box"
+                        else                -> "container_chest"
+                    },
+                this.iFrameFlavor,
+                "GameMaster’s Guide",
+                213,
+                0.0,
+                0,
+                UniqueItemType.MAGIC_ITEM,
+                listOf("Pre-conversion info" to listOf(
+                    PlainTextEntry("Was previously an instance of \"${this.originalName}\" " +
+                            "(template #${this.mgcTemplateID})."),
+                    PlainTextEntry("Was part of hoard \"${parentHoardName}\" (id:${
+                        this.hoardID}) when converted."),
+                    PlainTextEntry("Converted on ${
+                        SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
+                        .format(System.currentTimeMillis())}."),
+                    PlainTextEntry("Was worth ${this.gpValue} gp and ${this.xpValue} xp at time " +
+                            "of conversion."))
+                ),
+                "[Converted] GM's Choice",
+                -1,
+                newType,
+                mapOf(
+                    "Fighter" to true,
+                    "Thief" to true,
+                    "Cleric" to true,
+                    "Magic-user" to true,
+                    "Druid" to true),
+                false,
+                "",
+                listOf("Pre-conversion info" to listOf(
+                    "Was previously an instance of \"${this.originalName}\" (template #${
+                        this.mgcTemplateID}).",
+                    "Was part of hoard \"${parentHoardName}\" (id:${this.hoardID}) when converted.",
+                    "Converted on ${SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
+                            .format(System.currentTimeMillis())}.",
+                    "Was worth ${this.gpValue} gp and ${this.xpValue} xp at time of conversion.")),
+                if (newType == MagicItemType.A2) {
+                    listOf("red","green","blue")
+                } else { emptyList() }
+            )
+        }
+
+        viewModelScope.launch{
+
+            setRunningAsync(true)
+
+            val parentHoard = exposedHoardLiveData.value
+
+            if (parentHoard != null) {
+
+                val newItem = targetItem.convertToChoice(parentHoard.name)
+
+                val newHoardEvent = HoardEvent(
+                    hoardID = targetItem.hoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "${targetItem.name} [id: ${targetItem.itemID}|type: ${
+                        targetItem.mgcItemType.name}] was resolved converted into a wildcard " +
+                            "entry of type ${newItem.mgcItemType.name} (${
+                                newItem.mgcItemType.tableLabel}).",
+                    tag = "modification|magic-item|choice"
+                )
+
+                saveViewedItem(newItem, parentHoard, newHoardEvent)
+            }
+
+            setRunningAsync(false)
+        }
+    }
+
+    fun replaceSpellFromDialog(entry: SimpleSpellEntry, targetSpCo: SpellCollection) {
+
+        viewModelScope.launch{
+
+            val parentHoard = exposedHoardLiveData.value
+
+            val newSpellList = targetSpCo.spells.toMutableList()
+
+            // Replace the entry in the copy list
+            newSpellList[entry.spellsPos] =
+                SpellEntry(entry.spellID,entry.level,0, entry.isUsed)
+
+            val newHoardEvent = HoardEvent(
+                hoardID = targetSpCo.hoardID,
+                timestamp = System.currentTimeMillis(),
+                description = (repository.getSpell(
+                    targetSpCo.spells[entry.spellsPos].spellID)?.let {
+                    it.name + " (Lv ${it.spellLevel}) "
+                } ?: "Choice Spell ") +
+                        "in ${targetSpCo.name} [id:${targetSpCo.sCollectID}] was changed to ${
+                            entry.name}.",
+                tag = "modification|spell-collection|choice"
+            )
+
+            if (parentHoard != null) {
+
+                saveViewedItem(
+                    targetSpCo.copy(
+                        spells = newSpellList.toList(),
+                        gpValue = SpellCollection.calculateGPValue(targetSpCo.type,
+                            targetSpCo.augmentations,targetSpCo.pageCount,newSpellList.toList()),
+                        xpValue = SpellCollection.calculateXPValue(targetSpCo.type,
+                            newSpellList.toList())
+                    )
+                        .toViewableSpellCollection(repository),
+                    parentHoard, newHoardEvent)
+            }
+        }
+    }
+
+    fun toggleArtObjectAuthenticity(targetArt: ViewableArtObject) {
+        viewModelScope.launch {
+
+            setRunningAsync(true)
+
+            val parentHoard = exposedHoardLiveData.value
+
+            val convertedArt = targetArt.toArtObject().copy(
+                isForgery = targetArt.artIsForgery.not(),
+                gpValue = if (targetArt.artIsForgery) {
+                    // Remember, this is what the *new* value will be
+                    LootMutator.convertArtValueToGP(targetArt.artValueLevel)
+                } else {
+                    0.0
+                }
+            )
+
+            val event = HoardEvent(
+                hoardID = convertedArt.hoardID,
+                timestamp = System.currentTimeMillis(),
+                description = "\"${convertedArt.name}\" [id:${convertedArt.artID}] was " +
+                        "marked as " + (if (convertedArt.isForgery) {
+                    "a worthless forgery" } else { "the genuine article" }) + ", changing its" +
+                        "estimated value to " + DecimalFormat("#,##0.0#")
+                    .format(convertedArt.gpValue).removeSuffix(".0") + "gp.",
+                tag = "modification|art-object"
+            )
+
+            if (parentHoard != null) {
+
+                saveViewedItem(
+                    convertedArt.toViewableArtObject(parentHoard.effortRating),
+                    parentHoard, event)
+            }
+
+            setRunningAsync(false)
+        }
+    }
+
+    fun setItemAsHoardIcon(hoardID: Int, viewableItem: ViewableItem) {
+
+        viewModelScope.launch{
+
+            setRunningAsync(true)
+
+            val targetHoard = repository.getHoardOnce(hoardID)
+
+            if (targetHoard != null) {
+                repository.updateHoard(targetHoard.copy(iconID = viewableItem.iconStr))
+
+                val iconEvent = HoardEvent(
+                    hoardID = hoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "Changed hoard thumbnail to that of ${viewableItem.name} " +
+                            "[id:${viewableItem.itemID}]",
+                    tag = "modification" + when (viewableItem){
+                        is ViewableGem              -> "|gemstone"
+                        is ViewableArtObject        -> "|art-object"
+                        is ViewableMagicItem        -> "|magic-item"
+                        is ViewableSpellCollection  -> "|spell-collection"
+                    }
+                )
+
+                repository.addHoardEvent(iconEvent)
+            }
+
+            setRunningAsync(false)
+        }
+    }
+
+    fun rerollItem(viewableItem: ViewableItem){
+
+        viewModelScope.launch {
+
+            setRunningAsync(true)
+
+            val generator = LootGeneratorAsync(repository)
+
+            when (viewableItem){
+                is ViewableGem -> {
+                    repository.run {
+                        val newItem = generator.createGem(viewableItem.hoardID)
+                            .copy(gemID = viewableItem.itemID)
+
+                        updateGems( listOf( newItem ) )
+
+                        LootMutator.auditHoard(viewableItem.hoardID,this).also{
+                            if (it != null) {
+                                this.updateHoard(it)
+                            }
+                        }
+
+                        val rerollEvent = HoardEvent(
+                            hoardID = viewableItem.hoardID,
+                            timestamp = System.currentTimeMillis(),
+                            description = "Re-rolled \"${viewableItem.name}\" [id:${
+                                viewableItem.itemID}]. It was replaced with \"${newItem.name}\"",
+                            tag = "modification|gemstone|reroll"
+                        )
+
+                        this.addHoardEvent(rerollEvent)
+                    }
+                }
+                is ViewableArtObject -> {
+                    repository.run {
+                        val newItem = generator.createArtObject(viewableItem.hoardID,
+                            ArtRestrictions()).first.copy(artID = viewableItem.itemID)
+
+                        updateArtObjects( listOf( newItem ) )
+
+                        LootMutator.auditHoard(viewableItem.hoardID,this).also{
+                            if (it != null) {
+                                this.updateHoard(it)
+                            }
+                        }
+
+                        val rerollEvent = HoardEvent(
+                            hoardID = viewableItem.hoardID,
+                            timestamp = System.currentTimeMillis(),
+                            description = "Re-rolled \"${viewableItem.name}\" [id:${
+                                viewableItem.itemID}]. It was replaced with \"${newItem.name}\"",
+                            tag = "modification|art-object|reroll"
+                        )
+
+                        this.addHoardEvent(rerollEvent)
+                    }
+                }
+                is ViewableMagicItem -> {
+                    repository.run {
+                        val newItem = generator.createMagicItemTuple(viewableItem.hoardID)
+                            .magicItem.copy(mItemID = viewableItem.itemID)
+
+                        updateMagicItems( listOf( newItem ) )
+
+                        LootMutator.auditHoard(viewableItem.hoardID,this).also{
+                            if (it != null) {
+                                this.updateHoard(it)
+                            }
+                        }
+
+                        val rerollEvent = HoardEvent(
+                            hoardID = viewableItem.hoardID,
+                            timestamp = System.currentTimeMillis(),
+                            description = "Re-rolled \"${viewableItem.name}\" [id:${
+                                viewableItem.itemID}]. It was replaced with \"${newItem.name}\"",
+                            tag = "modification|magic-item|reroll"
+                        )
+
+                        this.addHoardEvent(rerollEvent)
+                    }
+                }
+                is ViewableSpellCollection -> {
+                    repository.run {
+                        val newItem = generator.createSpellCollection(viewableItem.hoardID,
+                            SpellCoRestrictions(allowedDisciplines = when (viewableItem.spCoDiscipline){
+                                SpCoDiscipline.ARCANE -> AllowedDisciplines(true,false,false)
+                                SpCoDiscipline.DIVINE -> AllowedDisciplines(false,true,false)
+                                SpCoDiscipline.NATURAL -> AllowedDisciplines(false, false,true)
+                                SpCoDiscipline.ALL_MAGIC -> AllowedDisciplines(true,true,false)
+                            })).copy(sCollectID = viewableItem.itemID)
+
+                        updateSpellCollections( listOf( newItem ) )
+
+                        LootMutator.auditHoard(viewableItem.hoardID,this).also{
+                            if (it != null) {
+                                this.updateHoard(it)
+                            }
+                        }
+
+                        val rerollEvent = HoardEvent(
+                            hoardID = viewableItem.hoardID,
+                            timestamp = System.currentTimeMillis(),
+                            description = "Re-rolled \"${viewableItem.name}\" [id:${
+                                viewableItem.itemID}]. It was replaced with \"${newItem.name}\"",
+                            tag = "modification|spell-collection|reroll"
+                        )
+
+                        this.addHoardEvent(rerollEvent)
+                    }
+                }
+            }
+
+            loadItemArgs(viewableItem.itemID, viewableItem.itemType, viewableItem.hoardID)
+
+            setRunningAsync(false)
+        }
+    }
+
+    fun renameItem(viewableItem: ViewableItem, parentHoard: Hoard, newName : String, isRestore: Boolean){
+
+        viewModelScope.launch {
+
+            setRunningAsync(true)
+
+            if (isRestore) {
+
+                val restoreEvent = HoardEvent(
+                    hoardID = viewableItem.hoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "\"${viewableItem.name}\" [id:${
+                        viewableItem.itemID}] was restored to it's original name, \"$newName\".",
+                    tag="modification|" + when (viewableItem){
+                        is ViewableGem -> "gemstone"
+                        is ViewableArtObject -> "art-object"
+                        is ViewableMagicItem -> "magic-item"
+                        is ViewableSpellCollection -> "spell-collection"
+                    }
+                )
+
+                val newItem = when (viewableItem){
+                    is ViewableGem -> {
+                        viewableItem.toGem().copy(name=viewableItem.originalName)
+                            .toViewableGem(parentHoard.effortRating)
+                    }
+                    is ViewableArtObject -> {
+                        viewableItem.toArtObject().copy(name=viewableItem.originalName)
+                            .toViewableArtObject(parentHoard.effortRating)
+                    }
+                    is ViewableMagicItem -> {
+                        viewableItem.toMagicItem().copy(name=viewableItem.originalName)
+                            .toViewableMagicItem()
+                    }
+                    is ViewableSpellCollection -> {
+                        viewableItem
+                            .toSpellCollection().copy(name=viewableItem.originalName)
+                            .toViewableSpellCollection(repository)
+                    }
+                }
+
+                saveViewedItem(newItem, parentHoard, restoreEvent)
+
+            } else {
+
+                val renameEvent = HoardEvent(
+                    hoardID = viewableItem.hoardID,
+                    timestamp = System.currentTimeMillis(),
+                    description = "\"${viewableItem.name}\" [id:${
+                        viewableItem.itemID}] was re-named to \"$newName\".",
+                    tag="modification|" + when (viewableItem){
+                        is ViewableGem -> "gemstone"
+                        is ViewableArtObject -> "art-object"
+                        is ViewableMagicItem -> "magic-item"
+                        is ViewableSpellCollection -> "spell-collection"
+                    }
+                )
+
+                val newItem = when (viewableItem){
+                    is ViewableGem -> {
+                        viewableItem.toGem().copy(name=newName)
+                            .toViewableGem(parentHoard.effortRating)
+                    }
+                    is ViewableArtObject -> {
+                        viewableItem.toArtObject().copy(name=newName)
+                            .toViewableArtObject(parentHoard.effortRating)
+                    }
+                    is ViewableMagicItem -> {
+                        viewableItem.toMagicItem().copy(name=newName)
+                            .toViewableMagicItem()
+                    }
+                    is ViewableSpellCollection -> {
+                        viewableItem
+                            .toSpellCollection().copy(name=newName)
+                            .toViewableSpellCollection(repository)
+                    }
+                }
+
+                saveViewedItem(newItem, parentHoard, renameEvent)
+            }
+
+            setRunningAsync(false)
+        }
+    }
 }
 
 class UniqueDetailsViewModelFactory(private val repository: HMRepository) : ViewModelProvider.Factory {

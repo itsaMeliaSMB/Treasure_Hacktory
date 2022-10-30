@@ -42,7 +42,7 @@ data class SpellCollectionOrder(val collectionType: SpCoType,
                                 val isCursed: Boolean,
                                 val rerollChoices: Boolean,
                                 val genMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
-                                val allowedCurses: SpCoCurses = SpCoCurses.ANY_CURSE,)
+                                val allowedCurses: SpCoCurses = SpCoCurses.ANY_CURSE)
 
 /** Type of spell collection to generate. */
 enum class SpCoType{

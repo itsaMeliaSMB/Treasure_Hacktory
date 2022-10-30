@@ -2,8 +2,8 @@
     <string name="app_name">Treasure Hacktory</string>
     <string name="hoard_name_label">Hoard Name</string>
     <string name="hoard_gen_label">Generation Method</string>
-    <string name="gen_method_letter_label">By Letter Code</string>
-    <string name="gen_method_specific_label">Specific Quantity</string>
+    <string name="gen_method_letter_label">By Letter\nCode</string>
+    <string name="gen_method_specific_label">Specific\nQuantity</string>
     <string name="hackmaster_gen_gem_quantity_label">Generate how many gems?</string>
     <string name="time_date_gen_label">Generated on:</string>
     <string name="hoard_type_label">Hoard type:</string>

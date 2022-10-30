@@ -165,8 +165,19 @@ class HoardListFragment : Fragment() {
 
         // Set up toolbar
         binding.hoardListToolbar.apply {
+
+            val typedValue = TypedValue()
+            context.theme.resolveAttribute(R.attr.colorOnPrimary,typedValue,true)
+            @ColorInt
+            val colorOnPrimary = typedValue.data
+
             inflateMenu(R.menu.list_toolbar_menu)
             title = getString(R.string.hoard_list_fragment_title)
+            setTitleTextColor(colorOnPrimary)
+            setSubtitleTextColor(colorOnPrimary)
+            overflowIcon?.apply{
+                setTint(colorOnPrimary)
+            }
             setOnMenuItemClickListener { item ->
 
                 // https://developer.android.com/guide/fragments/appbar#fragment-click
@@ -179,13 +190,6 @@ class HoardListFragment : Fragment() {
                             val actionID = R.id.hoard_list_to_generator_action
                             findNavController().navigate(actionID)
                         }
-
-                        true
-                    }
-
-                    R.id.action_test_spells -> {
-
-                        hoardListViewModel.testSpellTriples(context)
 
                         true
                     }
@@ -245,6 +249,27 @@ class HoardListFragment : Fragment() {
         fun bind(newHoard: Hoard, selected: Boolean) {
 
             hoard = newHoard
+
+            when {
+                !hoard.successful   -> {
+                    binding.hoardListItemListFrameBackground.setImageResource(
+                        R.drawable.itemframe_background_cursed)
+                    binding.hoardListItemListFrameForeground.setImageResource(
+                        R.drawable.itemframe_foreground_cursed)
+                }
+                hoard.isFavorite    -> {
+                    binding.hoardListItemListFrameBackground.setImageResource(
+                        R.drawable.itemframe_background_golden)
+                    binding.hoardListItemListFrameForeground.setImageResource(
+                        R.drawable.itemframe_foreground_golden)
+                }
+                else    -> {
+                    binding.hoardListItemListFrameBackground.setImageResource(
+                        R.drawable.itemframe_background_gray)
+                    binding.hoardListItemListFrameForeground.setImageResource(
+                        R.drawable.itemframe_foreground)
+                }
+            }
 
             if (hoard.badge != HoardBadge.NONE) {
                 try{
@@ -435,10 +460,8 @@ class HoardListFragment : Fragment() {
             mode.menuInflater.inflate(R.menu.master_list_action_menu,menu)
 
             // Get the color to change the status bar background to
-            val typedValue = TypedValue()
-            requireActivity().theme.resolveAttribute(R.attr.colorSecondaryVariant,typedValue,true)
             @ColorInt
-            val newStatusBarColor = typedValue.data
+            val newStatusBarColor = resources.getColor(R.color.actionModePrimaryDark,null)
 
             // Change the status bar's color
             requireActivity().window.apply {
@@ -618,11 +641,16 @@ class HoardListFragment : Fragment() {
             // Clear all selections first
             (binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter).clearAllSelections()
 
-            // Get the color to change the status bar background to
             val typedValue = TypedValue()
             requireActivity().theme.resolveAttribute(R.attr.colorPrimaryDark,typedValue,true)
             @ColorInt
             val newStatusBarColor = typedValue.data
+
+            // Change the status bar's color
+            requireActivity().window.apply {
+                addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+                statusBarColor = newStatusBarColor
+            }
 
             // Change the status bar's color
             requireActivity().window.apply{

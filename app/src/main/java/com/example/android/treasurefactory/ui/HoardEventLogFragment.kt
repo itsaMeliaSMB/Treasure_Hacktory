@@ -1,12 +1,14 @@
 package com.example.android.treasurefactory.ui
 
+import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -82,10 +84,24 @@ class HoardEventLogFragment : Fragment() {
 
         // Set up toolbar
         binding.hoardEventLogToolbar.apply{
+
+            val typedValue = TypedValue()
+            context.theme.resolveAttribute(R.attr.colorOnPrimary,typedValue,true)
+            @ColorInt
+            val colorOnPrimary = typedValue.data
+
             inflateMenu(R.menu.event_log_toolbar_menu)
             title = getString(R.string.hoard_event_log_fragment_title)
             subtitle = hoardEventLogViewModel.hoardNameLiveData.value
-            navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
+            setTitleTextColor(colorOnPrimary)
+            setSubtitleTextColor(colorOnPrimary)
+            setNavigationIcon(R.drawable.clipart_back_vector_icon)
+            navigationIcon?.apply {
+                setTint(colorOnPrimary)
+            }
+            overflowIcon?.apply{
+                setTint(colorOnPrimary)
+            }
             setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
@@ -141,17 +157,23 @@ class HoardEventLogFragment : Fragment() {
             fun bind(newTag: String) {
 
                 rawTag = newTag
-                @ColorInt
-                val tintOnTag = R.attr.colorOnSecondary //TODO change to be themed resource
+
+                val bgTint = rawTag.getBackgroundColorList()
+                val fgTint = rawTag.getForegroundColor()
 
                 binding.hoardEventTagIcon.apply {
                     setImageResource(rawTag.toDrawableResID())
-                    drawable.setTint(tintOnTag)
+                    drawable.setTint(fgTint)
                 }
 
                 binding.hoardEventTagText.apply{
                     text = rawTag.refine()
-                    setTextColor(tintOnTag)
+                    setTextColor(fgTint)
+                }
+
+                binding.hoardEventTagLayout.apply{
+                    backgroundTintList = bgTint
+                    backgroundTintMode = PorterDuff.Mode.SRC_ATOP
                 }
             }
 
@@ -167,6 +189,7 @@ class HoardEventLogFragment : Fragment() {
                     "gemstone" ->           R.drawable.clipart_gem_vector_icon
                     "homebrew" ->           R.drawable.clipart_house_vector_icon
                     "magic-item" ->         R.drawable.clipart_magicwand_vector_icon
+                    "map" ->                R.drawable.clipart_map_vector_icon
                     "merge" ->              R.drawable.clipart_merge_vector_icon
                     "modification" ->       R.drawable.clipart_edit_vector_icon
                     "note" ->               R.drawable.clipart_extranotes_vector_icon
@@ -176,6 +199,89 @@ class HoardEventLogFragment : Fragment() {
                     "user" ->               R.drawable.clipart_user_vector_icon
                     "verbose" ->            R.drawable.clipart_info_vector_icon
                     else ->                 R.drawable.clipart_tag_vector_icon
+                }
+            }
+
+            private fun String.getBackgroundColorList() : ColorStateList {
+
+                return when (this){
+                    "art-object" ->         ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.artPrimary,null))
+                    )
+                    "coinage" -> ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.silver,null))
+                    )
+                    "gemstone" ->           ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.gemPrimary,null))
+                    )
+                    "homebrew" ->           ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.orange,null))
+                    )
+                    "magic-item" ->         ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.gemPrimary,null))
+                    )
+                    "spell-collection"->    ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.spellPrimary,null))
+                    )
+                    "system" ->             ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.emerald,null))
+                    )
+                    "user" ->               ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.azure_blue,null))
+                    )
+                    "verbose" ->            ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.gray,null))
+                    )
+                    else ->                 ColorStateList(
+                        arrayOf(
+                            intArrayOf(android.R.attr.state_enabled)
+                        ),
+                        intArrayOf(resources.getColor(R.color.defaultSecondary,null))
+                    )
+                }
+            }
+
+            @ColorInt
+            private fun String.getForegroundColor() : Int {
+
+                return when (this){
+                    "art-object" ->         R.color.artOnPrimary
+                    "coinage" ->            R.color.black
+                    "gemstone" ->           R.color.gemOnPrimary
+                    "homebrew" ->           R.color.white
+                    "magic-item" ->         R.color.magicOnPrimary
+                    "spell-collection"->    R.color.spellOnPrimary
+                    "system" ->             R.color.white
+                    "user" ->               R.color.white
+                    "verbose" ->            R.color.iron
+                    else ->                 R.color.defaultOnSecondary
                 }
             }
 
@@ -238,7 +344,6 @@ class HoardEventLogFragment : Fragment() {
                     .format(Date(event.timestamp))
                 binding.hoardEventDescription.text = event.description
                 binding.hoardEventTagRecyclerView.apply {
-                    //setHasFixedSize(true) TODO remove if tests better without
                     layoutManager = tagLayoutManager
                     adapter = TagAdapter(event.tag.getRawTags())
                     addItemDecoration(tagSpacingDecoration)

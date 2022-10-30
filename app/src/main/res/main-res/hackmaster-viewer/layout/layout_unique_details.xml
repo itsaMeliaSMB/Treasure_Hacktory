@@ -107,7 +107,7 @@
                     android:layout_marginHorizontal="@dimen/unique_details_standard_margin"
                     android:gravity="end"
                     android:maxLines="1"
-                    android:ellipsize="marquee"
+                    android:ellipsize="middle"
                     android:marqueeRepeatLimit="marquee_forever"
                     android:focusable="auto"
                     android:textSize="13sp"
@@ -155,7 +155,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/unique_details_thumbnail" />
 
-
                 <TextView
                     android:id="@+id/unique_details_full_name_value"
                     android:layout_width="0dp"
@@ -170,6 +169,57 @@
                     tools:text="Combination Ring of Invisibility and Demon Spawn Slaying" />
 
                 <TextView
+                    android:id="@+id/unique_details_original_name_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="Original name:"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_full_name_value" />
+
+                <TextView
+                    android:id="@+id/unique_details_original_name_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_original_name_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="Combination Ring of Invisibility and Demon Spawn Slaying" />
+
+                <TextView
+                    android:id="@+id/unique_details_id_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="Instance ID:"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_original_name_value" />
+
+                <TextView
+                    android:id="@+id/unique_details_id_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    android:lines="1"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_id_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="# 1" />
+
+                <TextView
                     android:id="@+id/unique_details_creation_date_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -179,8 +229,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/unique_details_full_name_value" />
-
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_id_value" />
 
                 <TextView
                     android:id="@+id/unique_details_creation_date_value"
@@ -347,12 +396,92 @@
                     app:barrierMargin="8dp"
                     app:constraint_referenced_ids="unique_details_gp_label,unique_details_xp_label,unique_details_source_label,unique_details_full_name_label,unique_details_creation_date_label,unique_details_usable_label" />
 
+                <TextView
+                    android:id="@+id/unique_details_color_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="Color example(s):"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_druid" />
+
+                <ImageView
+                    android:id="@+id/unique_details_color_preview_1"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_goneMarginEnd="0dp"
+                    android:src="@drawable/clipart_potion_vector_icon"
+                    app:layout_constraintEnd_toStartOf="@id/unique_details_color_preview_2"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
+                    app:tint="?attr/backgroundColor"
+                    tools:tint="@color/red"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_preview_2"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_goneMarginEnd="0dp"
+                    android:src="@drawable/clipart_potion_vector_icon"
+                    app:layout_constraintEnd_toStartOf="@id/unique_details_color_preview_3"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
+                    app:tint="?attr/backgroundColor"
+                    tools:tint="@color/green"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_preview_3"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_vector_icon"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_druid"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
+                    app:tint="?attr/backgroundColor"
+                    tools:tint="@color/blue"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_outline_1"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_stroke_vector_icon"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_color_preview_1"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_1"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_1"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_1"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_outline_2"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_stroke_vector_icon"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_color_preview_2"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_2"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_2"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_2"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_outline_3"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_stroke_vector_icon"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_color_preview_3"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_3"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_3"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_3"/>
+
+
                 <androidx.constraintlayout.widget.Barrier
                     android:id="@+id/class_icons_barrier"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:barrierDirection="bottom"
-                    app:constraint_referenced_ids="unique_details_fighter,unique_details_magic_user,unique_details_thief,unique_details_cleric,unique_details_druid" />
+                    app:constraint_referenced_ids="unique_details_fighter,unique_details_magic_user,unique_details_thief,unique_details_cleric,unique_details_druid,unique_details_color_preview_1,unique_details_color_preview_2,unique_details_color_preview_3" />
 
                 <View
                     android:id="@+id/unique_details_divider"
@@ -434,8 +563,7 @@
 
     <include layout="@layout/overlay_waiting_card"
         android:id="@+id/unique_details_waiting_card"
-        android:visibility="gone"
-        tools:visibility="visible"/>
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

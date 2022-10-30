@@ -121,12 +121,13 @@
     <string name="credits_chest_link"><a href="https://iconscout.com/icon/treasure-chest-10">Original icon</a> by Flaticons</string>
     <string name="credits_iconscout_link"><a href="https://iconscout.com/licenses#iconscout">IconScout Digital License</a></string>
     <string name="unique_details_usable_by_label">Usable by:</string>
-    <string name="mitch_thanks">My friend and the best GM I\'ve ever had, Mitch.\n\nThis app would not exist if it weren\'t for the fantastic worlds you\'ve forged and stories you\'ve weaved. Thank you for everything!</string>
+    <string name="mitch_thanks">My friend and the best GM I\'ve ever had, Mitch.\n\nThis app would not exist if it weren\'t for the fantastic worlds you\'ve forged and stories you\'ve weaved.</string>
+    <string name="friends_thanks">My friends, Zircean and MasaQueen, who have both helped me substantially in overcoming some of the more stubborn technical barriers to this project.</string>
     <string name="puzwed_challonge"><a href="https://challonge.com/communities/puzzlewednesday">Challonge community</a></string>
     <string name="puzwed_discord"><a href="https://discord.com/invite/jgEKEtkruJ">Discord server</a></string>
     <string name="puzwed_youtube"><a href="https://www.youtube.com/channel/UCo46XFE-FZiOGMj3QY-xt9w">YouTube channel</a></string>
     <string name="puzwed_twitter"><a href="https://twitter.com/PuzzleWednesday">Twitter</a></string>
-    <string name="puzwed_thanks">Everyone (but especially the wonderful staff) over at Puzzle Wednesday, the variety puzzle game community and tournament series.\n\nIf you enjoy playing 4th edition HackMaster, there\'s probably something here for you.</string>
+    <string name="puzwed_thanks">Everyone (but especially the wonderful staff) over at Puzzle Wednesday, the variety puzzle game community and tournament series.\n\nIf you enjoy playing something as complex as 4th edition HackMaster, there\'s probably something here for you.</string>
     <string name="fraim_main_link"><a href="http://brosfraim.com/">FraimWorks website</a></string>
     <string name="fraim_instagram"><a href="https://www.instagram.com/thefraimbrothers/">Instagram</a></string>
     <string name="poneti_artstation"><a href="https://poneti.artstation.com/">ArtStation</a></string>
@@ -135,7 +136,7 @@
     <string name="game_icons_site_link">Available on <a href="https://game-icons.net/">Game-icons website</a></string>
     <string name="game_icons_contributors">Caro Asercion\nDarkZaitzev\nDelapouite\nLorc\nSkoll\nViscious Speed\nWilldabeast</string>
     <string name="item_vector_icons">Item Vector Icons (Game-icons.net)</string>
-    <string name="app_version_string">version 1.0</string>
+    <string name="app_version_string">version 1.0.0</string>
     <string name="app_title_text">Treasure Hacktory</string>
     <string name="material_icons_apache_link">Provided under the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a></string>
     <string name="material_icons_library_link"><a href="https://fonts.google.com/icons">Material Icons Library</a></string>
@@ -319,7 +320,7 @@
     <string name="reference_splatbook_label">Splatbooks (i.e. Spellslinger\'s Guide and Zealot\'s Guide)</string>
     <string name="reference_hackjournal_label">HackJournals</string>
     <string name="reference_modules_etc_label"><![CDATA[Other official Kenzer & Company-published material (i.e. modules)]]></string>
-    <string name="unique_list_whenempty_text">Seems that this hoard doesn\'t contain any items of this type. Would you like to add some?</string>
+    <string name="unique_list_whenempty_text">Seems that this hoard doesn\'t contain any items of this type.\nYou can add some by moving some in from another treasure hoard!</string>
     <string name="sell_shorthand">Sell</string>
     <string name="action_sell">Sell</string>
     <string name="action_move">Move</string>
@@ -349,4 +350,21 @@
     <string name="action_copy_to_clipboard_condensed">Copy info</string>
     <string name="generator_spell_curse_disclaimer">Please note that if \"Allow cursed magic items\" is enabled, all scrolls ordered from this section will automatically have a curse applied to them!</string>
     <string name="please_wait">Please wait...</string>
+    <string name="action_resolve_gem_choice">Pick item</string>
+    <string name="gm_choice_item_dialog_title">Select an Item</string>
+    <string name="gm_choice_spell_dialog_title">Select a Spell</string>
+    <string name="action_reroll_item">Re-roll this item</string>
+    <string name="action_reroll_item_condensed">Re-roll</string>
+    <string name="unique_list_target_hoard_dialog_title">Move items to:</string>
+    <string name="action_set_as_hoard_icon">Set as hoard thumbnail</string>
+    <string name="action_set_as_hoard_icon_condensed">Use as icon</string>
+    <string name="csv_no_formula_note">File is generated without any formulas applied to table. Be sure to add them after creation if you intend to manipulate these lists!</string>
+    <string name="csv_no_detail_note">CSV is intended as a quick reference of hoard composition for distributing spoils. For a more detailed information, check the record on the app.</string>
+    <string name="action_csv_report">Share CSV report</string>
+    <string name="action_toggle_forgery">Toggle authenticity</string>
+    <string name="action_rename_item">Re-name this item</string>
+    <string name="flagged_as_used">[ Flagged as Used ]</string>
+    <string name="action_convert_to_choice">Convert to \"GM\'s Choice\"</string>
+    <string name="action_convert_to_choice_condensed">Convert</string>
+    <string name="max_icons_creator_link"><a href="https://www.flaticon.com/authors/maxicons">Creator\'s profile</a> on flaticon</string>
 </resources>

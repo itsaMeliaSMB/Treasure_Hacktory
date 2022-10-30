@@ -1,5 +1,6 @@
 package com.example.android.treasurefactory.repository
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -24,6 +25,8 @@ class HMRepository (
 
     fun getHoard(hoardID: Int): LiveData<Hoard?> = hoardDao.getHoard(hoardID)
 
+    suspend fun getHoardsOnce(): List<Hoard> = hoardDao.getHoardsOnce()
+
     fun getHoardName(hoardID: Int): LiveData<String?> = hoardDao.getHoardName(hoardID)
 
     suspend fun getHoardOnce(hoardID: Int): Hoard? = hoardDao.getHoardOnce(hoardID)
@@ -36,6 +39,8 @@ class HMRepository (
     }
 
     suspend fun updateHoard(hoardToUpdate: Hoard) = hoardDao.updateHoard(hoardToUpdate)
+
+    suspend fun updateHoards(hoardsToUpdate: List<Hoard>) = hoardDao.updateHoards(hoardsToUpdate)
 
     suspend fun deleteHoardAndChildren(hoardToDelete: Hoard) = hoardDao.deleteHoardAndChildren(hoardToDelete)
 
@@ -55,6 +60,8 @@ class HMRepository (
     suspend fun getHoardEventsOnce(parentHoardId: Int) : List<HoardEvent> = hoardDao.getHoardEventsOnce(parentHoardId)
 
     suspend fun addHoardEvent(newEvent: HoardEvent) = hoardDao.addHoardEvent(newEvent)
+
+    suspend fun addHoardEvent(newEvents: List<HoardEvent>) = hoardDao.addHoardEvents(newEvents)
     // endregion
 
     // region ( LetterCode )
@@ -181,7 +188,10 @@ class HMRepository (
     suspend fun getBaseLimItemTempsByType(type: String, allowCursed: Boolean): List<Pair<Int,Int>> =
         magicItemDao.getBaseLimItemTempsByType(type)
             .dropWhile { it.isCursed == 1 && !allowCursed }
-            .map { it -> it.templateID to it.weight }
+            .map { it.templateID to it.weight }
+
+    suspend fun getBaseItemTempsByType(type: MagicItemType): List<MagicItemTemplate> =
+        magicItemDao.getBaseItemTempsByType(type.name)
 
     /**
      * Pulls all item entries with given ref_id as a LimitedItemTemplate.
@@ -205,6 +215,16 @@ class HMRepository (
     @WorkerThread
     suspend fun addMagicItemTemplate(magicItemTemplate: MagicItemTemplate) {
         magicItemDao.addMagicItemTemplate(magicItemTemplate)
+    }
+
+    suspend fun getNameOfItemParent(templateID: Int) : String {
+        val parentID = if (templateID > 0) {
+            magicItemDao.getParentIDOfItemOnce(templateID) ?: 0
+        } else { 0 }
+
+        return if (parentID > 0) {
+            magicItemDao.getNameOfTemplateOnce(parentID) ?: "[template #${parentID}]"
+        } else { "" }
     }
 
     suspend fun getNamesToImitate(keyword: String) : List<String> = magicItemDao.getNamesToImitate(keyword)
@@ -277,12 +297,15 @@ class HMRepository (
         spellCollectionDao.getSpellIDs(discipline, level)
 
     suspend fun getLevelChoiceSpells(level: Int, school: SpellSchool,
-                                       useSplat: Boolean): List<Spell> =
-        spellCollectionDao.getLevelChoiceSpells(level,"%${school.ordinal }%", "%${
-            if (useSplat) "S" else "s"}%")
+                                       useSplat: Boolean): List<Spell> {
+        Log.d("repository.getSpellChoiceLevels()", "useSplat = $useSplat")
+       return spellCollectionDao
+           .getLevelChoiceSpells(level,school.ordinal.toString(), if (useSplat) "S" else "s")
+           .filter { spell -> spell.choiceString.contains(if(useSplat) 'S' else 's') }
+    }
 
     suspend fun getInitialChoiceSpells(choiceStr: String): List<Spell> =
-        spellCollectionDao.getInitialChoiceSpells("%$choiceStr%")
+        spellCollectionDao.getInitialChoiceSpells(choiceStr)
 
     suspend fun addSpell(entry: Spell) {
         spellCollectionDao.addSpell(entry)

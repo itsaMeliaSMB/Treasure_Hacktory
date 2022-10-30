@@ -173,4 +173,9 @@
     <color name="spellTertiaryDark">#8c2e40</color>
     <color name="spellTertiaryLight">#f58c99</color>
     <color name="spellOnTertiary">@color/pitch_black</color>
+    <!--Action mode colors-->
+    <color name="actionModePrimary">#a1887f</color>
+    <color name="actionModePrimaryDark">#725b53</color>
+    <color name="actionModePrimaryLight">#d3b8ae</color>
+    <color name="actionModeOnPrimary">@color/pitch_black</color>
 </resources>

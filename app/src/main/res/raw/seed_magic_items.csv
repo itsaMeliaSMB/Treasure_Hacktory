@@ -213,7 +213,7 @@
 213¤1¤"Ring of Friendship"¤0¤"GameMaster’s Guide"¤228¤1200¤3000¤0¤¤0¤0¤0¤"A4"¤"ring_silver"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 214¤1¤"Ring of Gentle Persuasion"¤0¤"GameMaster’s Guide"¤228¤1000¤3000¤0¤¤2¤10¤5¤"A4"¤"ring_silver"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 215¤1¤"Ring of Giant Might"¤0¤"GameMaster’s Guide"¤229¤1500¤3000¤0¤¤0¤0¤0¤"A4"¤"ring_evil"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-216¤1¤"Ring of Good Omens"¤0¤"GameMaster’s Guide"¤229¤2000¤5500¤0¤¤0¤0¤1¤"A4"¤"ring_ruby_red"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+216¤1¤"Ring of Good Omens"¤0¤"GameMaster’s Guide"¤229¤2000¤5500¤0¤¤0¤0¤1¤"A4"¤"ring_ruby_gold"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 217¤1¤"Grawdyng’s Ring of Servitude"¤0¤"GameMaster’s Guide"¤229¤0¤1000¤0¤¤0¤0¤0¤"A4"¤"ring_evil"¤1¤1¤1¤1¤1¤0¤0¤¤¤1¤¤0¤"NE"¤0¤0¤0¤0¤0¤0
 218¤1¤"Ring of Hefty Damage"¤0¤"GameMaster’s Guide"¤229¤1500¤10000¤0¤¤0¤0¤0¤"A4"¤"ring_silver"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 219¤1¤"Ring of Hefty Healing"¤0¤"GameMaster’s Guide"¤229¤1000¤10000¤0¤¤0¤0¤0¤"A4"¤"ring_gold"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
@@ -392,7 +392,7 @@
 392¤1¤"Book of Exalted Deeds"¤0¤"GameMaster’s Guide"¤243¤1500¤20000¤0¤¤0¤0¤1¤"A8"¤"book_holy"¤0¤0¤1¤0¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 393¤1¤"Book of Infinite Spells"¤0¤"GameMaster’s Guide"¤244¤2000¤30000¤0¤"Due to the special nature of this item, the GM is recommended to generate spells “just-in-time”"¤1¤8¤22¤"A8"¤"book_runes"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 394¤1¤"Book of Vile Darkness"¤0¤"GameMaster’s Guide"¤244¤2500¤25000¤0¤¤0¤0¤1¤"A8"¤"book_unholy"¤0¤0¤1¤0¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-395¤1¤"Libram of Gainful Conjuration"¤0¤"GameMaster’s Guide"¤258¤1500¤25000¤0¤¤0¤0¤1¤"A8"¤"book_ruins"¤0¤0¤0¤1¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+395¤1¤"Libram of Gainful Conjuration"¤0¤"GameMaster’s Guide"¤258¤1500¤25000¤0¤¤0¤0¤1¤"A8"¤"book_runes"¤0¤0¤0¤1¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 396¤1¤"Libram of Ineffable Damnation"¤0¤"GameMaster’s Guide"¤258¤2000¤30000¤0¤¤0¤0¤1¤"A8"¤"book_unholy"¤0¤0¤0¤1¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 397¤1¤"Libram of Legalese"¤0¤"GameMaster’s Guide"¤258¤500¤5000¤0¤¤0¤0¤0¤"A8"¤"book_legal"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 398¤1¤"Libram of Silver Magic"¤0¤"GameMaster’s Guide"¤258¤2000¤15000¤0¤¤0¤0¤1¤"A8"¤"book_holy"¤0¤0¤0¤1¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
@@ -986,7 +986,7 @@
 986¤2¤"Goggles of Detect Magic"¤0¤"GameMaster’s Guide"¤254¤2000¤30000¤0¤¤0¤0¤0¤"A17"¤"weird_goggles"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 987¤3¤"Gold Tooth of Purify Beverage"¤0¤"GameMaster’s Guide"¤254¤1000¤15000¤0¤¤0¤0¤0¤"A17"¤"jewelry_box"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 988¤2¤"Handkerchief of Healing"¤0¤"GameMaster’s Guide"¤254¤1500¤25000¤0¤¤0¤0¤0¤"A17"¤"weird_cloth"¤1¤1¤1¤1¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-989¤3¤"Holy Symbol of Protection"¤0¤"GameMaster’s Guide"¤256¤800¤10000¤0¤¤0¤0¤0¤"A17"¤"jewelry_necklace_holy"¤1¤1¤1¤1¤0¤1¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+989¤3¤"Holy Symbol of Protection"¤0¤"GameMaster’s Guide"¤256¤800¤10000¤0¤¤0¤0¤0¤"A17"¤"jewelry_neck_holy"¤1¤1¤1¤1¤0¤1¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 990¤2¤"Horseshoes of Silence"¤0¤"GameMaster’s Guide"¤257¤500¤5000¤0¤¤0¤0¤0¤"A17"¤"weird_horseshoe"¤1¤1¤1¤1¤1¤1¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 991¤2¤"Horseshoes of Speed"¤0¤"GameMaster’s Guide"¤257¤1000¤15000¤0¤¤0¤0¤0¤"A17"¤"weird_horseshoe"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 992¤2¤"Horseshoes of a Zephyr"¤0¤"GameMaster’s Guide"¤257¤1500¤10000¤0¤¤0¤0¤0¤"A17"¤"weird_horseshoe"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
@@ -1001,7 +1001,7 @@
 1001¤2¤"Sheet of Smallness"¤0¤"GameMaster’s Guide"¤264¤1000¤10000¤0¤¤0¤0¤0¤"A17"¤"weird_sheet"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 1002¤2¤"Spectacles of Methane Detection"¤0¤"GameMaster’s Guide"¤0¤800¤7500¤0¤¤0¤0¤0¤"A17"¤"weird_glasses"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 1003¤1¤"Sphere of Annihilation"¤0¤"GameMaster’s Guide"¤265¤3000¤35000¤0¤"See Table B90 for movement rates and probabilities of control"¤0¤0¤0¤"A17"¤"weird_sphere"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-1004¤2¤"Spurs of Speed +4"¤0¤"GameMaster’s Guide"¤265¤2000¤25000¤0¤¤0¤0¤0¤"A17"¤"jewelry_case"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+1004¤2¤"Spurs of Speed +4"¤0¤"GameMaster’s Guide"¤265¤2000¤25000¤0¤¤0¤0¤0¤"A17"¤"jewelry_box"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 1005¤2¤"Stone Horse"¤0¤"GameMaster’s Guide"¤265¤1500¤20000¤0¤¤0¤0¤0¤"A17"¤"container_chest"¤1¤1¤1¤1¤1¤1¤0¤¤¤0¤"horse"¤0¤¤0¤0¤0¤0¤0¤0
 1006¤1¤"Well of Many Worlds"¤0¤"GameMaster’s Guide"¤266¤3000¤45000¤0¤"Appears to be a Portable Hole"¤0¤0¤0¤"A17"¤"container_fabric"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 1007¤2¤"Wind Fan"¤0¤"GameMaster’s Guide"¤266¤500¤1000¤0¤¤0¤0¤0¤"A17"¤"container_chest"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"wind"¤0¤¤0¤0¤0¤0¤0¤0

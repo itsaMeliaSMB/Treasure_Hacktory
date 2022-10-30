@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/appbar_height"
             android:minHeight="4dp"
+            app:navigationIcon="@drawable/clipart_back_vector_icon"
             app:buttonGravity="center_vertical"
             app:layout_scrollFlags="noScroll" />
 

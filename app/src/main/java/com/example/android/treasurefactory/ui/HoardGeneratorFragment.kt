@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
@@ -17,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -228,9 +226,20 @@ class HoardGeneratorFragment : Fragment() {
                                     }
                                 }
                             findViewById<ImageView>(R.id.hoard_list_item_list_badge)
-                                .apply{
-                                    //TODO implement when badges are a property of hoards
-                                    visibility = View.INVISIBLE
+                                .apply {
+                                    visibility = if (newHoard.badge != HoardBadge.NONE) {
+                                        try{
+                                            setImageResource(resources
+                                                .getIdentifier(newHoard.badge.resString,
+                                                    "drawable", view.context?.packageName))
+                                            View.VISIBLE
+                                        } catch (e: Exception){
+                                            setImageResource(R.drawable.badge_hoard_broken)
+                                            View.VISIBLE
+                                        }
+                                    } else {
+                                        View.INVISIBLE
+                                    }
                                 }
                             findViewById<TextView>(R.id.hoard_list_item_name)
                                 .apply {
@@ -274,19 +283,17 @@ class HoardGeneratorFragment : Fragment() {
                         }
 
                     val dialogBuilder = AlertDialog.Builder(context).setView(dialogView)
-                        .setPositiveButton(R.string.action_view_new_hoard,
-                            DialogInterface.OnClickListener { _, _ ->
+                        .setPositiveButton(R.string.action_view_new_hoard) { _, _ ->
 
                                 val action = HoardGeneratorFragmentDirections
                                     .hoardGeneratorToOverviewAction(newHoard.hoardID)
 
                                 findNavController().navigate(action)
 
-                            })
-                        .setNegativeButton(R.string.action_cancel,
-                            DialogInterface.OnClickListener { dialog, _ ->
+                            }
+                        .setNegativeButton(R.string.action_cancel) { dialog, _ ->
                                 dialog.cancel()
-                            })
+                            }
                         .show()
 
                     // Clear the livedata
@@ -308,10 +315,18 @@ class HoardGeneratorFragment : Fragment() {
             val typedValue = TypedValue()
             context.theme.resolveAttribute(R.attr.colorOnPrimary,typedValue,true)
             @ColorInt
-            val titleTextColor = typedValue.data
+            val colorOnPrimary = typedValue.data
 
             inflateMenu(R.menu.generator_options_toolbar_menu)
-            navigationIcon = AppCompatResources.getDrawable(context,R.drawable.clipart_back_vector_icon)
+            setTitleTextColor(colorOnPrimary)
+            setSubtitleTextColor(colorOnPrimary)
+            navigationIcon?.apply {
+                R.drawable.clipart_back_vector_icon
+                setTint(colorOnPrimary)
+            }
+            overflowIcon?.apply{
+                setTint(colorOnPrimary)
+            }
             setNavigationOnClickListener {
 
                 if (generatorViewModel.isRunningAsyncLiveData.value != true) {
@@ -325,7 +340,6 @@ class HoardGeneratorFragment : Fragment() {
                 }
             }
             title = getString(R.string.hoard_generator_fragment_title)
-            setTitleTextColor(titleTextColor)
             setOnMenuItemClickListener { item ->
 
                 when (item.itemId) {
@@ -333,8 +347,6 @@ class HoardGeneratorFragment : Fragment() {
                     R.id.action_generator_options   -> {
 
                         // https://stackoverflow.com/questions/67136040/how-to-use-view-binding-in-custom-dialog-box-layout
-
-                        Toast.makeText(context,"Loading, please wait...",Toast.LENGTH_LONG).show()
 
                         val gemSliderStringValues  = resources.getStringArray(R.array.range_slider_gem_label)
                         val artSliderStringValues = resources.getStringArray(R.array.range_slider_art_label)
@@ -777,7 +789,7 @@ class HoardGeneratorFragment : Fragment() {
                         val dialog = AlertDialog.Builder(context).setView(dialogBinding.root)
                             .setCancelable(true)
                             .setPositiveButton(R.string.ok_affirmative, null)
-                            .setNeutralButton("Restore to default") { dialog, _ ->
+                            .setNeutralButton("Revert") { dialog, _ ->
                                 generatorViewModel.generatorOptions = GeneratorOptions()
                                 dialog.dismiss()
                             }
@@ -847,7 +859,6 @@ class HoardGeneratorFragment : Fragment() {
                             }
 
                             dialog.show()
-                        //TODO left off here 10/14/2022
 
                             true
                         }
@@ -1764,6 +1775,10 @@ class HoardGeneratorFragment : Fragment() {
                         if (intValues.second in spLvlRangeLongLabels.indices) {
                             spLvlRangeLongLabels[intValues.second]
                         } else "???"
+                    Log.d("generatorSpellLevelSlider | OnChangeListener",
+                        "values = ${values.joinToString("|")}")
+                    Log.d("generatorSpellLevelSlider | OnChangeListener",
+                        "generatorViewModel.spellLevelRange = ${generatorViewModel.spellLevelRange.joinToString("|")}")
                 }
 
                 binding.generatorSpellLevelMinValue.text =
@@ -1787,11 +1802,15 @@ class HoardGeneratorFragment : Fragment() {
                 setLabelFormatter { it.toInt().toString() }
                 addOnChangeListener { slider, _, _ ->
                     val intValues = slider.values.first().toInt() to slider.values.last().toInt()
-                    generatorViewModel.spellLevelRange = IntRange(intValues.first,intValues.second)
+                    generatorViewModel.spellsPerRange = IntRange(intValues.first,intValues.second)
                     binding.generatorSpellPerQtyMinValue.text =
                         intValues.first.toString()
                     binding.generatorSpellPerQtyMaxValue.text =
                         intValues.second.toString()
+                    Log.d("generatorSpellPerQtySlider | OnChangeListener",
+                        "values = ${values.joinToString("|")}")
+                    Log.d("generatorSpellPerQtySlider | OnChangeListener",
+                        "generatorViewModel.spellLevelRange = ${generatorViewModel.spellsPerRange.joinToString("|")}")
                 }
 
                 binding.generatorSpellPerQtyMinValue.text =
@@ -1811,7 +1830,7 @@ class HoardGeneratorFragment : Fragment() {
                     // Zero out type counters
                     generatorViewModel.resetLairCount()
                     generatorViewModel.resetSmallCount()
-                    // Update recyclerviews TODO see why DiffUtil doesn't automatically update
+                    // Update recyclerviews
                     binding.generatorLairRecyclerview.adapter?.notifyDataSetChanged()
                     binding.generatorSmallRecyclerview.adapter?.notifyDataSetChanged()
                 } else {
@@ -1906,10 +1925,6 @@ class HoardGeneratorFragment : Fragment() {
                         text = qtyString
                         setOnClickListener {
 
-                        //TODO test that the views get set to the correct values without any
-                        // additional binding required. Otherwise, God help you in wrangling
-                        // intended behavior.
-
                         val dialogString =
                             "${getString(R.string.letter_qty_picker_dialog_message)} ${entry.first}:"
 
@@ -1928,22 +1943,23 @@ class HoardGeneratorFragment : Fragment() {
                         qtyDialogView.findViewById<TextView>(R.id.dialog_letter_qty_current).text =
                             entry.second.toString()
 
-                        val qtyDialogBuilder = AlertDialog.Builder(context).setView(qtyDialogView)
-                            .setTitle(getString(R.string.new_qty_title))
-                            .setPositiveButton(R.string.action_submit_qty_update) { _, _ ->
-                                if (qtyPicker.value != entry.second) {
-                                    if (isLairHolder) {
-                                        generatorViewModel.updateLairEntry(adapterPosition,
-                                            qtyPicker.value)
-                                    } else {
-                                        generatorViewModel.updateSmallEntry(adapterPosition,
-                                            qtyPicker.value)
-                                    }
-                                } }
-                            .setNegativeButton(R.string.action_cancel) { dialog, which ->
-                                dialog.cancel() }
-                            .setCancelable(true)
-                            .show()
+                                // Build and show dialog
+                            AlertDialog.Builder(context).setView(qtyDialogView)
+                                .setTitle(getString(R.string.new_qty_title))
+                                .setPositiveButton(R.string.action_submit_qty_update) { _, _ ->
+                                    if (qtyPicker.value != entry.second) {
+                                        if (isLairHolder) {
+                                            generatorViewModel.updateLairEntry(adapterPosition,
+                                                qtyPicker.value)
+                                        } else {
+                                            generatorViewModel.updateSmallEntry(adapterPosition,
+                                                qtyPicker.value)
+                                        }
+                                    } }
+                                .setNegativeButton(R.string.action_cancel) { dialog, which ->
+                                    dialog.cancel() }
+                                .setCancelable(true)
+                                .show()
                     }
                     }
                 }

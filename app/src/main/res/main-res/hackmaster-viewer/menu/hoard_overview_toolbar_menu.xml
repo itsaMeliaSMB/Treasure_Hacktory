@@ -2,11 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--TODO re-enable menu items as implemented-->
     <item
         android:title="@string/action_overview_edit"
         android:id="@+id/action_edit_hoard"
         android:icon="@drawable/clipart_edit_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
+        android:iconTintMode="src_atop"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_csv_report"
+        android:title="@string/action_csv_report"
+        android:icon="@drawable/clipart_share_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
+        android:iconTintMode="src_in"
         app:showAsAction="ifRoom" />
     <item
         android:title="@string/view_event_log_hoard"
@@ -15,10 +23,5 @@
         android:title="@string/edit_coinage_values"
         android:titleCondensed="Edit coins"
         android:id="@+id/action_edit_coinage"/>
-    <item
-        android:title="@string/report_as_txt"
-        android:titleCondensed="Save report"
-        android:id="@+id/action_save_report"
-        android:enabled="false"/>
 
 </menu>

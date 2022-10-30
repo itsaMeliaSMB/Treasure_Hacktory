@@ -78,6 +78,7 @@ interface Viewable {
     val xpValue: Int
     val itemType: UniqueItemType
     val details: List<Pair<String,List<DetailEntry>>>
+    val originalName : String
 }
 
 sealed class ViewableItem : Viewable
@@ -97,12 +98,30 @@ class ViewableGem(
     override val gpValue: Double,
     override val xpValue: Int,
     override val itemType: UniqueItemType,
-    override val details: List<Pair<String,List<DetailEntry>>>,
+    override val details: List<Pair<String, List<DetailEntry>>>,
+    override val originalName: String,
     val gemType: Int,
+    val gemSize: Int,
     val gemQuality: Int,
     val gemOpacity: Int,
     val gemDesc: String,
-) : ViewableItem()
+) : ViewableItem() {
+
+    fun toGem() : Gem = Gem(
+        gemID = itemID,
+        hoardID = hoardID,
+        creationTime = creationTime,
+        iconID = iconStr,
+        type = gemType,
+        size = gemSize,
+        quality= gemQuality,
+        name = name,
+        opacity = gemOpacity,
+        description = gemDesc,
+        currentGPValue = gpValue,
+        originalName = originalName
+    )
+}
 
 class ViewableArtObject(
     override val itemID: Int,
@@ -118,6 +137,7 @@ class ViewableArtObject(
     override val xpValue: Int,
     override val itemType: UniqueItemType,
     override val details: List<Pair<String, List<DetailEntry>>>,
+    override val originalName: String,
     val artType: Int,
     val artRenown: Int,
     val artSize: Int,
@@ -128,7 +148,27 @@ class ViewableArtObject(
     val artSubject: Int,
     var artValueLevel: Int,
     val artIsForgery: Boolean
-) : ViewableItem()
+) : ViewableItem() {
+
+    fun toArtObject() : ArtObject = ArtObject(
+        artID = itemID,
+        hoardID = hoardID,
+        creationTime = creationTime,
+        name = name,
+        artType = artType,
+        renown = artRenown,
+        size = artSize,
+        condition = artCondition,
+        materials = artMaterials,
+        quality = artQuality,
+        age = artAge,
+        subject = artSubject,
+        valueLevel = artValueLevel,
+        gpValue = gpValue,
+        isForgery = artIsForgery,
+        originalName = originalName
+    )
+}
 
 class ViewableMagicItem(
     override val itemID: Int,
@@ -143,14 +183,37 @@ class ViewableMagicItem(
     override val gpValue: Double,
     override val xpValue: Int,
     override val itemType: UniqueItemType,
-    override val details: List<Pair<String,List<DetailEntry>>>,
+    override val details: List<Pair<String, List<DetailEntry>>>,
+    override val originalName: String,
     val mgcTemplateID: Int,
     val mgcItemType: MagicItemType,
-    val mgcClassUsability: Map<String,Boolean>,
+    val mgcClassUsability: Map<String, Boolean>,
     val mgcIsCursed: Boolean,
     val mgcAlignment: String,
-    val mgcOriginalNotes: List<Pair<String,List<String>>>
-) : ViewableItem()
+    val mgcOriginalNotes: List<Pair<String, List<String>>>,
+    val mgcPotionColors: List<String>
+) : ViewableItem() {
+
+    fun toMagicItem() : MagicItem = MagicItem(
+        mItemID = itemID,
+        templateID = mgcTemplateID,
+        hoardID = hoardID,
+        creationTime = creationTime,
+        iconID = iconStr,
+        typeOfItem = mgcItemType,
+        name = name,
+        sourceText = source,
+        sourcePage = sourcePage,
+        xpValue = xpValue,
+        gpValue = gpValue,
+        classUsability = mgcClassUsability,
+        isCursed = mgcIsCursed,
+        alignment = mgcAlignment,
+        notes = mgcOriginalNotes,
+        potionColors = mgcPotionColors,
+        originalName = originalName
+    )
+}
 
 class ViewableSpellCollection(
     override val itemID: Int,
@@ -166,26 +229,30 @@ class ViewableSpellCollection(
     override val xpValue: Int,
     override val itemType: UniqueItemType,
     override val details: List<Pair<String, List<DetailEntry>>>,
+    override val originalName: String,
     val spCoType: SpCoType,
     val spCoDiscipline: SpCoDiscipline,
-    val spCoProperties: List<Pair<String, Double>>,
+    val spCoAugmentations: List<SpCoAugmentation>,
     val spCoSpells: List<SpellEntry>,
-    val spCoCurse: String
+    val spCoCurse: String,
+    val spCoPageCount: Int,
 ) : ViewableItem() {
 
-    fun convertBack() : SpellCollection = SpellCollection(
+    fun toSpellCollection() : SpellCollection = SpellCollection(
         sCollectID = itemID,
         hoardID = hoardID,
-        creationTime= creationTime,
+        creationTime = creationTime,
         iconID = iconStr,
         name = name,
         type = spCoType,
         discipline = spCoDiscipline,
-        properties = spCoProperties,
+        augmentations = spCoAugmentations,
         gpValue = gpValue,
         xpValue = xpValue,
         spells = spCoSpells,
-        curse = spCoCurse
+        curse = spCoCurse,
+        pageCount = spCoPageCount,
+        originalName = originalName
     )
 }
 

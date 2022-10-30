@@ -21,7 +21,7 @@ const val MINIMUM_LETTER_QTY = 0
 const val MAXIMUM_LETTER_QTY = 20
 
 const val MAXIMUM_UNIQUE_QTY = 150
-const val MAXIMUM_SPELLS_PER_SCROLL = 7
+const val MAXIMUM_SPELLS_PER_SCROLL = 20
 const val MAXIMUM_SPELL_COLLECTION_QTY = 75
 
 const val MAXIMUM_HOARD_VALUE = 9999999999.99
@@ -438,7 +438,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                             }
                             letterCode.scrollChance > 0 -> {
                                 if (Random.nextInt(101) <= letterCode.scrollChance) {
-                                    generatedPotions += Random.nextInt(letterCode.scrollMin,
+                                    generatedScrolls += Random.nextInt(letterCode.scrollMin,
                                         letterCode.scrollMax + 1)
                                 }
                             }
@@ -490,8 +490,8 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                 GemRestrictions(
                     generatorOptions.gemMin, generatorOptions.gemMax),
                 ArtRestrictions(
-                    _minLvl = generatorOptions.artMin - 19,
-                    _maxLvl = generatorOptions.artMax - 19,
+                    _minLvl = generatorOptions.artMin,
+                    _maxLvl = generatorOptions.artMax,
                     paperMapChance = generatorOptions.mapPaper),
                 MagicItemRestrictions(
                     spellScrollEnabled = generatorOptions.spellOk,
@@ -505,7 +505,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                         spellLevelRange.last,
                         when(generatorOptions.spellDisciplinePos){
                             0   -> AllowedDisciplines(true,false,false)
-                            1   -> AllowedDisciplines(true,true,false)
+                            1   -> AllowedDisciplines(false,true,false)
                             2   -> AllowedDisciplines(false,false,true)
                             else-> AllowedDisciplines(true,true,false) },
                         spellsPerRange,
@@ -546,8 +546,8 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
             GemRestrictions(
                 generatorOptions.gemMin, generatorOptions.gemMax),
             ArtRestrictions(
-                _minLvl = generatorOptions.artMin - 19,
-                _maxLvl = generatorOptions.artMax - 19,
+                _minLvl = generatorOptions.artMin,
+                _maxLvl = generatorOptions.artMax,
                 paperMapChance = generatorOptions.mapPaper),
             MagicItemRestrictions(
                 spellScrollEnabled = generatorOptions.spellOk,

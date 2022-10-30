@@ -5,7 +5,7 @@
     android:id="@+id/spell_item_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/spell_item_height"
-    android:background="?attr/colorSurface">
+    android:background="@color/hoard_itemview_bg_colorlist">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/spell_item_index_guideline"
@@ -18,17 +18,17 @@
         android:id="@+id/spell_item_index_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/spell_item_index_guideline"
-        app:layout_constraintBottom_toTopOf="@id/spell_item_subclass_card"
         android:elevation="1dp"
-        android:textStyle="bold"
-        android:textSize="24sp"
+        android:shadowColor="@color/pitch_black"
         android:shadowRadius="9"
         android:textColor="@color/white"
-        android:shadowColor="@color/pitch_black"
-        tools:text="# 25"/>
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/spell_item_subclass_card"
+        app:layout_constraintEnd_toStartOf="@id/spell_item_index_guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="# 25" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/spell_item_subclass_card"
@@ -36,27 +36,27 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="1dp"
         android:layout_marginBottom="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/spell_item_index_guideline"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:cardElevation="1dp"
-        app:cardCornerRadius="4dp"
-        app:cardBackgroundColor="@color/lake"
         android:visibility="gone"
+        app:cardBackgroundColor="@color/lake"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/spell_item_index_guideline"
+        app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible">
 
         <TextView
             android:id="@+id/spell_item_subclass_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="1dp"
-            android:fontFamily="sans-serif-condensed"
             android:layout_gravity="center"
+            android:layout_margin="2dp"
+            android:ellipsize="middle"
+            android:fontFamily="sans-serif-condensed"
             android:fontFeatureSettings="smcp"
+            android:lines="1"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="11sp"
-            android:ellipsize="middle"
-            android:maxLines="1"
             tools:text="legerdemain" />
 
     </androidx.cardview.widget.CardView>
@@ -76,15 +76,15 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="4dp"
-        android:gravity="center_vertical"
-        android:autoSizeStepGranularity="2sp"
-        android:autoSizeTextType="uniform"
         android:autoSizeMaxTextSize="20sp"
         android:autoSizeMinTextSize="16sp"
+        android:autoSizeStepGranularity="2sp"
+        android:autoSizeTextType="uniform"
+        android:gravity="center_vertical"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/spell_item_level"
         app:layout_constraintEnd_toStartOf="@id/spell_item_school_barrier"
         app:layout_constraintStart_toEndOf="@id/spell_item_index_guideline"
-        app:layout_constraintBottom_toTopOf="@id/spell_item_level"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Sliggderlisp’s Particularly Noxious Depilatory Cloud" />
 
@@ -97,8 +97,8 @@
         android:layout_marginBottom="4dp"
         android:autoSizeMaxTextSize="14sp"
         android:autoSizeMinTextSize="12sp"
-        android:textAlignment="textStart"
         android:fontFeatureSettings="smcp"
+        android:textAlignment="textStart"
         android:textColor="?attr/colorOnSurface"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/spell_item_index_guideline"
@@ -107,15 +107,20 @@
     <TextView
         android:id="@+id/spell_item_source"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
         android:autoSizeMaxTextSize="14sp"
-        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMinTextSize="11sp"
+        android:autoSizeStepGranularity="1sp"
+        android:ellipsize="middle"
         android:fontFamily="sans-serif-condensed"
+        android:maxLines="1"
+        android:gravity="end|bottom"
         android:textAlignment="textEnd"
         android:textStyle="italic"
+        app:layout_constraintTop_toBottomOf="@id/spell_item_source_top_barrier"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/spell_item_level"
@@ -147,10 +152,10 @@
         android:layout_height="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="4dp"
+        android:visibility="gone"
         app:cardElevation="6dp"
         app:layout_constraintEnd_toStartOf="@id/spell_item_school_card_3"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
         tools:visibility="visible">
 
         <ImageView
@@ -168,10 +173,10 @@
         android:layout_height="24dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:visibility="gone"
         app:cardElevation="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
         tools:visibility="visible">
 
         <ImageView
@@ -188,7 +193,13 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         app:barrierDirection="start"
+        app:constraint_referenced_ids="spell_item_school_card_1" />
 
-        app:constraint_referenced_ids="spell_item_school_card_1"/>
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/spell_item_source_top_barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="spell_item_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

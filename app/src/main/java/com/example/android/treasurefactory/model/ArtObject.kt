@@ -5,14 +5,15 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.android.treasurefactory.capitalized
 import org.jetbrains.annotations.NotNull
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 @Entity(tableName = "hackmaster_art_table")
 data class ArtObject(
     @PrimaryKey(autoGenerate = true) @NotNull val artID: Int,
-    val hoardID: Int, // NOTE: removed iconID; TODO refactor accordingly
+    val hoardID: Int,
     val creationTime: Long,
-    var name: String, // NOT: added name field; TODO refactor accordingly
+    var name: String,
     val artType: Int,
     val renown: Int,
     val size: Int,
@@ -23,7 +24,8 @@ data class ArtObject(
     val subject: Int,
     var valueLevel: Int,
     var gpValue: Double = 0.0,
-    val isForgery: Boolean = false
+    val isForgery: Boolean = false,
+    val originalName: String
 ) {
 
     @Ignore
@@ -230,77 +232,39 @@ data class ArtObject(
         )
     }
 
-        @Ignore
-    private fun updateValueLevel() {
-
-        valueLevel =
-            ( renown + size + condition + quality + getSubjectAsRank() + getAgeInYearsAsRank() )
-                .coerceIn(-19,31)
-    }
-
     @Ignore
-    fun setGpValueFromLevel() : Double {
+    fun toViewableArtObject(effortRating: Double) : ViewableArtObject {
 
-        updateValueLevel()
-
-        val valueLevelToGPValue = mapOf(
-
-            -19 to 1.0,
-            -18 to 10.0,
-            -17 to 20.0,
-            -16 to 30.0,
-            -15 to 40.0,
-            -14 to 50.0,
-            -13 to 60.0,
-            -12 to 70.0,
-            -11 to 85.0,
-            -10 to 100.0,
-            -9 to 125.0,
-            -8 to 150.0,
-            -7 to 200.0,
-            -6 to 250.0,
-            -5 to 325.0,
-            -4 to 400.0,
-            -3 to 500.0,
-            -2 to 650.0,
-            -1 to 800.0,
-            0 to 1000.0,
-            1 to 1250.0,
-            2 to 1500.0,
-            3 to 2000.0,
-            4 to 2500.0,
-            5 to 3000.0,
-            6 to 4000.0,
-            7 to 5000.0,
-            8 to 6000.0,
-            9 to 7500.0,
-            10 to 10000.0,
-            11 to 12500.0,
-            12 to 15000.0,
-            13 to 20000.0,
-            14 to 25000.0,
-            15 to 30000.0,
-            16 to 40000.0,
-            17 to 50000.0,
-            18 to 60000.0,
-            19 to 70000.0,
-            20 to 85000.0,
-            21 to 100000.0,
-            22 to 125000.0,
-            23 to 150000.0,
-            24 to 200000.0,
-            25 to 250000.0,
-            26 to 300000.0,
-            27 to 400000.0,
-            28 to 500000.0,
-            29 to 650000.0,
-            30 to 800000.0,
-            31 to 1000000.0
+        return ViewableArtObject(
+            artID,
+            hoardID,
+            name,
+            "${getSizeAsString().capitalized()}, " +
+                    "${getSubjectAsString()} ${getArtTypeAsString()}",
+            creationTime,
+            getArtTypeAsIconString(),
+            when {
+                isForgery       -> ItemFrameFlavor.CURSED
+                valueLevel > 27 -> ItemFrameFlavor.GOLDEN
+                else                -> ItemFrameFlavor.NORMAL },
+            "HackJournal #6",
+            2,
+            gpValue,
+            (gpValue / effortRating).roundToInt().coerceAtLeast(0),
+            UniqueItemType.ART_OBJECT,
+            listOf(getFlavorTextAsDetailsList()),
+            originalName,
+            artType,
+            renown,
+            size,
+            condition,
+            materials,
+            quality,
+            age,
+            subject,
+            valueLevel,
+            isForgery
         )
-
-        gpValue = (valueLevelToGPValue[valueLevel])!!
-
-        return (valueLevelToGPValue[valueLevel])!!
     }
 
     companion object {
@@ -318,6 +282,7 @@ data class ArtObject(
                     "charcoal sketch",
                     "illuminated manuscript",
                     "illustration",
+                    "journal",
                     "napkin sketch",
                     "origami",
                     "papercraft",
@@ -325,16 +290,21 @@ data class ArtObject(
                     "paper print",
                     "papyrus art",
                     "parchment",
-                    "sketch"
+                    "political cartoon",
+                    "sketch",
+                    "sketchbook"
                 ).random()
 
                 1 -> listOf( // Fabric artwork types
                     "arras",
+                    "bathrobe",
+                    "cape",
                     "curtains",
                     "cushion",
                     "embroidery",
                     "kilim",
                     "pillowcase",
+                    "plush doll",
                     "quilt",
                     "tablecloth",
                     "tapestry",
@@ -345,6 +315,7 @@ data class ArtObject(
 
                 2 -> listOf( // Furnishing types
                     "armoire",
+                    "basket",
                     "bed",
                     "cabinet",
                     "candelabra",
@@ -420,8 +391,10 @@ data class ArtObject(
                     "glass bowl",
                     "goblet",
                     "hourglass",
+                    "ornate bottle",
                     "sculpture-in-a-bottle",
                     "shattered glass pile",
+                    "snow globe",
                     "stained glass"
                 ).random()
 
@@ -453,6 +426,7 @@ data class ArtObject(
                     "medallion",
                     "metallic ornament",
                     "ornate doorknob",
+                    "reliquary",
                     "silver tea set",
                     "tin inkwell",
                     "wall mirror"
@@ -493,15 +467,21 @@ data class ArtObject(
                         "aesthetics",
                         "beauty",
                         "concept",
+                        "consequences",
+                        "constipation",
                         "cost",
                         "dark side",
                         "divinity",
+                        "draw",
                         "essence",
                         "explosion",
                         "feeling",
                         "flow",
+                        "flavor",
                         "frivolity",
+                        "game",
                         "glory",
+                        "heat",
                         "hope",
                         "incomprehensibility",
                         "insatiability",
@@ -517,6 +497,7 @@ data class ArtObject(
                         "nothingness",
                         "opposite",
                         "reality",
+                        "resilience",
                         "resonance",
                         "scent",
                         "shadow",
@@ -563,9 +544,12 @@ data class ArtObject(
                         "nihilism",
                         "nature",
                         "pacifism",
+                        "patriotism",
                         "peace",
                         "petrichor",
                         "philosophy",
+                        "prisencolinensinainciusol",
+                        "prophecy",
                         "serendipity",
                         "shapes",
                         "silence",
@@ -588,6 +572,8 @@ data class ArtObject(
 
                     val monsterAdjective = listOf(
                         "angry",
+                        "average",
+                        "chipper",
                         "clever",
                         "comely",
                         "confused",
@@ -601,11 +587,14 @@ data class ArtObject(
                         "happy",
                         "hard-working",
                         "hungry",
+                        "intense",
                         "lively",
                         "lonely",
+                        "oily",
                         "purple",
                         "sad",
                         "sloven",
+                        "smelly",
                         "sneaky",
                         "spooky",
                         "stinky",
@@ -826,6 +815,7 @@ data class ArtObject(
                         "crafter",
                         "crossbowman",
                         "dancer",
+                        "dancing girl",
                         "doctor",
                         "druid",
                         "engineer",
@@ -845,6 +835,7 @@ data class ArtObject(
                         "leatherworker",
                         "maidservant",
                         "magic-user",
+                        "manservant",
                         "marine",
                         "mason",
                         "merchant",
@@ -854,6 +845,7 @@ data class ArtObject(
                         "patron",
                         "philosopher",
                         "plumber",
+                        "politician",
                         "ranger",
                         "rogue",
                         "saboteur",
@@ -866,6 +858,7 @@ data class ArtObject(
                         "slave",
                         "slinger",
                         "smith",
+                        "sommelier",
                         "spellslinger",
                         "sprinter",
                         "steward",
@@ -902,8 +895,10 @@ data class ArtObject(
                         "eating",
                         "eating a book",
                         "engrossed",
+                        "enjoying fine Kenzer & Company products",
                         "fighting",
                         "haggling",
+                        "getting drunk",
                         "hanging out",
                         "hard at work",
                         "helping out",
@@ -913,6 +908,7 @@ data class ArtObject(
                         "in mortal combat",
                         "in pursuit",
                         "investigating",
+                        "jumping",
                         "just vibing",
                         "laughing",
                         "looking really cool",
@@ -932,7 +928,8 @@ data class ArtObject(
                         "trying something new",
                         "up to no good",
                         "victorious",
-                        "waking up"
+                        "waking up",
+                        "waltzing"
                     ).random()
 
                     val humanCount = Random.nextInt(1,13) - 6
@@ -1015,7 +1012,7 @@ data class ArtObject(
                                 "tundra",
                                 "ugly",
                                 "urban",
-                                "were -",
+                                "were-",
                                 "winged",
                                 "woodland"
                             ).random()
@@ -1331,7 +1328,7 @@ data class ArtObject(
                         "coronation of sovereign",
                         "discovery of natural wonder",
                         "discovery of new lands",
-                        "establishment of colony",
+                        "establishment of a colony",
                         "first contact",
                         "first meeting of two cultures",
                         "founding of academy",
@@ -1425,67 +1422,73 @@ data class ArtObject(
 
                             val personName = if (personIsMale){
                                 listOf(
-                                    "Cuthbert",
-                                    "Boniface",
-                                    "Thomas",
-                                    "Benedict",
-                                    "Edmund",
-                                    "Hugh",
-                                    "Gilbert",
-                                    "John",
-                                    "Patrick",
-                                    "Oswald",
-                                    "Theodore",
-                                    "Vincent",
-                                    "Louis",
-                                    "Strength",
-                                    "Odo",
-                                    "Godot",
-                                    "Gregory",
-                                    "Maximillion",
-                                    "Justin",
-                                    "Henry",
-                                    "Godwin",
-                                    "Walter",
-                                    "Rudolph",
+                                    "Abraham",
                                     "Adam",
-                                    "Polybius",
-                                    "Stephen",
-                                    "Oliver",
-                                    "Paul",
-                                    "John Paul",
-                                    "Urban",
+                                    "Benedict",
+                                    "Boniface",
+                                    "Cuthbert",
+                                    "Deony",
+                                    "Edmund",
                                     "Gabriel",
+                                    "Gilbert",
+                                    "Godot",
+                                    "Godwin",
+                                    "Gregory",
+                                    "Henry",
+                                    "Hugh",
+                                    "John Paul",
+                                    "John",
+                                    "Justin",
+                                    "Louis",
+                                    "Luigi",
                                     "Luke",
-                                    "Abraham"
+                                    "Mario",
+                                    "Maximillion",
+                                    "Odo",
+                                    "Oliver",
+                                    "Oswald",
+                                    "Patrick",
+                                    "Paul",
+                                    "Polybius",
+                                    "Rudolph",
+                                    "Stephen",
+                                    "Strength",
+                                    "Theodore",
+                                    "Thomas",
+                                    "Urban",
+                                    "Vincent",
+                                    "Walter"
                                 ).random()
                             } else {
                                 listOf(
-                                    "Joan",
-                                    "Colette",
-                                    "Rose",
-                                    "Marigold",
-                                    "Lilith",
-                                    "Candice",
-                                    "Hildegard",
-                                    "Clementine",
-                                    "Matilda",
-                                    "Grace",
-                                    "Catherine",
-                                    "Kristina",
-                                    "Eve",
-                                    "Margaret",
-                                    "Mary",
-                                    "Theophany",
                                     "Agatha",
-                                    "Kim",
-                                    "Jadwiga",
-                                    "Cecilia",
-                                    "Olga",
-                                    "Bridgette",
+                                    "Amy",
+                                    "Annie",
                                     "Bridget",
-                                    "Veronica",
-                                    "Ursula"
+                                    "Bridgette",
+                                    "Candice",
+                                    "Catherine",
+                                    "Cecilia",
+                                    "Clementine",
+                                    "Colette",
+                                    "Eve",
+                                    "Grace",
+                                    "Hildegard",
+                                    "Jadwiga",
+                                    "Joan",
+                                    "Kim",
+                                    "Kristina",
+                                    "Lilith",
+                                    "Margaret",
+                                    "Marigold",
+                                    "Mary",
+                                    "Matilda",
+                                    "Olga",
+                                    "Penny",
+                                    "Rose",
+                                    "Theophany",
+                                    "Ursula",
+                                    "Veronica"
                                 ).random()
                             }
 
@@ -1552,10 +1555,12 @@ data class ArtObject(
                                 "Savior",
                                 "Scholar",
                                 "Shepherd",
+                                "Super",
                                 "Templebuilder",
                                 "Theologian",
                                 "Translator",
                                 "Undead Slayer",
+                                "Unrestrained",
                                 "Wicked",
                                 "Wise"
                             ).random()
@@ -1618,7 +1623,7 @@ data class ArtObject(
 
                         }
 
-                        else-> { // Diety
+                        else-> { // Deity
 
                             listOf(
                                 "Benyar, Gawd of Empire",
@@ -1674,7 +1679,7 @@ data class ArtObject(
                                 "Hanili Celanil, Gawdess of Love, Romance, Beauty, & Fine Arts",
                                 "Coyote, Gawd of Arts, Crafts, Fire, and Thieves",
                                 "Pinini the Raconteur, Gawd of the Arts",
-                                "Eilistraee, Demi-Gawdess of Moonlight, Beauty, et al.",
+                                "Eilistraee, Demi-Gawdess of Moonlight, Beauty, etc.",
                                 "Moradin, Gawd of Dwarves",
                                 "Corellon Larethian, Gawd of Elves, Music, Poetry, and Magic",
                                 "Garl Glittergold, Gawd of Dwarves",
@@ -1690,243 +1695,315 @@ data class ArtObject(
 
                 4 -> { // Wealthy/noble subject matter
 
-                    val nobleIsMale = Random.nextBoolean()
+                    if (Random.nextInt(1,51) == 7) {
 
-                    val nobleTitle = if (nobleIsMale){
-                        listOf(
-                            "Ambassador",
-                            "Arch-Mage",
-                            "Archon",
-                            "Baron",
-                            "Baronet",
-                            "Captain",
-                            "Castellan",
-                            "Chairman",
-                            "Chamberlain",
-                            "Chancellor",
-                            "Chief Eunuch",
-                            "Chief",
-                            "Commander",
-                            "Consul",
-                            "Count",
-                            "Court Wizard",
-                            "Dean",
-                            "Doctor",
-                            "Doge",
-                            "Earl",
-                            "General",
-                            "Governor",
-                            "Grandmaster",
-                            "Guildmaster",
-                            "Justice",
-                            "Lord",
-                            "Lord President",
-                            "Marquis",
-                            "Mayor",
-                            "Minister",
-                            "Professor",
-                            "Sir",
-                            "Spymaster",
-                            "Treasure Hunter",
-                            "Treasurer",
-                            "Vice President"
-                        ).random()
+                        val specificPerson = if (Random.nextInt(1,4) == 1) {
+
+                                // Favorite personal characters of developer and her friends
+
+                                listOf(
+                                    "BattleMage Frank Battleforge: Dwarven, Unbathed " +
+                                            "Aficionado of Elven Culture",
+                                    "Bladesinger Alaran Lodestar, the Slayer of the Dracolich",
+                                    "Cavalier Commander Gunner Calahander, the Undying",
+                                    "Centaurian Dancer Yosoti, the Unforgettable",
+                                    "Chairman of the Horde Leitric, the Book-burner",
+                                    "Contender Rebel the Goblin, Fire Giant of Opera City",
+                                    "Divinist Ambrose, the Prophet of Possibility",
+                                    "Dr. Joan Snow, Esq., the Arcane Anatomist",
+                                    "Eldritch Barbarian Clodagh Grenawich, the Hagblood Halberd",
+                                    "Gawdfather Kane Freeman, the Shadow Governor",
+                                    "Initiate Piperine Scoville, the Flame of Knowledge",
+                                    "Myrmidon Aspor Hundolfr, the Ambitious Revenant",
+                                    "Necromancer Ivanka, the Fallen Angel of Elturel",
+                                    "Sorceress Unioos Bugulnoz, Madame of the Glitzy Pixie",
+                                    "Sr. Researcher Theodore Webster, the Accident-Prone",
+                                    "Warlock Lugh Quicksmile, Son of Fey but Bastard to All",
+                                    "Yakuza Lord Ragna Vel, the Inauspicious Assassin"
+                                ).random()
+
+                            } else {
+
+                                // Canonical HackMaster 4e characters
+
+                                listOf(
+                                    "Animator Aliron Praetox, the Dark Beast",
+                                    "Arch Angelic Knight Michael De Shalaray, " +
+                                            "master of the Society for the Elimination of " +
+                                            "Lycanthropy and Undead Monstrosities",
+                                    "Arch Mage of the Circle Kramlak Lashym, " +
+                                            "head of the Circle of Sequestered Magic",
+                                    "Arch-Mage Yargrove Hendrachmin, the Golem Master",
+                                    "Arch-Mage Zarba, the Dweomer-Shaper",
+                                    "Consul Lord Rurrisen, head of the Supreme Council " +
+                                            "of the Pan-Elf Union",
+                                    "Dark Lord of the Pit Sosah Regeloj, " +
+                                            "head of the Shadow Heart Battalion",
+                                    "Grand Theocrat Hanzdor Warforge, " +
+                                            "superior of the Holy Dwarven Theocracy",
+                                    "Headmistress Drusilla Wystan, " +
+                                            "dean of the University of Tilan",
+                                    "Holy Knight Sir Lyran Daws, " +
+                                            "master of the Holy Order of Luvia",
+                                    "Iron General Frizdan Grazlyte, " +
+                                            "head of the Iron Axes of Praxter",
+                                    "Jonid Coincrawler, the Scourge of the Bag World",
+                                    "Lady Martaney Amaran, heir to Lady Amaran's Society for the " +
+                                            "Advancement of Swordplay",
+                                    "Lonnya Grasswillow, " +
+                                            "Artistic Director of the Five City Minstrel Society",
+                                    "Lord Flataroy, the Mighty Champion",
+                                    "Supreme Arch Transmuter Elenwyd Sesuliad, " +
+                                            "the High Transmuter of Whisperydown",
+                                    "Supreme Grand Merchant Wencelan Druffin, " +
+                                            "leader of the Gnomish Syndicate"
+                                ).random()
+                            }
+
+                        nameBuilder.append(specificPerson)
+
                     } else {
-                        listOf(
-                            "Ambassador",
-                            "Arch-Mage",
-                            "Baroness",
-                            "Chairwoman",
-                            "Chamberlain",
-                            "Clan Mother",
-                            "Commander",
-                            "Countess",
-                            "Court Tutor",
-                            "Court Wizard",
-                            "Dame",
-                            "Doge",
-                            "Emissary",
-                            "General",
-                            "Grandmaster",
-                            "Guildmistress",
-                            "Justice",
-                            "Lady",
-                            "Madame President",
-                            "Marquise",
-                            "Master Bard",
-                            "Preceptress",
-                            "Professor",
-                            "Spymaster",
-                            "Stewardess",
-                            "Treasure Huntress",
-                            "Vice President"
+
+                        val nobleIsMale = Random.nextBoolean()
+
+                        val nobleTitle = if (nobleIsMale) {
+                            listOf(
+                                "Ambassador",
+                                "Arch-Mage",
+                                "Archon",
+                                "Baron",
+                                "Baronet",
+                                "Captain",
+                                "Castellan",
+                                "Chairman",
+                                "Chamberlain",
+                                "Chancellor",
+                                "Chief Eunuch",
+                                "Chief",
+                                "Commander",
+                                "Consul",
+                                "Count",
+                                "Court Wizard",
+                                "Dean",
+                                "Doctor",
+                                "Doge",
+                                "Earl",
+                                "General",
+                                "Governor",
+                                "Grandmaster",
+                                "Guildmaster",
+                                "Justice",
+                                "Lord",
+                                "Lord President",
+                                "Marquis",
+                                "Mayor",
+                                "Minister",
+                                "Professor",
+                                "Sir",
+                                "Spymaster",
+                                "Treasure Hunter",
+                                "Treasurer",
+                                "Vice President"
+                            ).random()
+                        } else {
+                            listOf(
+                                "Ambassador",
+                                "Arch-Mage",
+                                "Baroness",
+                                "Chairwoman",
+                                "Chamberlain",
+                                "Clan Mother",
+                                "Commander",
+                                "Countess",
+                                "Court Tutor",
+                                "Court Wizard",
+                                "Dame",
+                                "Doge",
+                                "Emissary",
+                                "General",
+                                "Grandmaster",
+                                "Guildmistress",
+                                "Justice",
+                                "Lady",
+                                "Madame President",
+                                "Marquise",
+                                "Master Bard",
+                                "Preceptress",
+                                "Professor",
+                                "Spymaster",
+                                "Stewardess",
+                                "Treasure Huntress",
+                                "Vice President"
+                            ).random()
+                        }
+
+                        val nobleName = if (nobleIsMale) {
+                            listOf(
+                                "Albert",
+                                "Alexander",
+                                "Alfred",
+                                "Arthur",
+                                "Augustus",
+                                "Boris",
+                                "Charles",
+                                "Cyrus",
+                                "David",
+                                "Edmund",
+                                "Edward",
+                                "Eric",
+                                "Franklin",
+                                "Frederick",
+                                "George",
+                                "Giovanni",
+                                "Harald",
+                                "Harry",
+                                "Igor",
+                                "James",
+                                "John",
+                                "João",
+                                "Leopold",
+                                "Louis",
+                                "Luigi",
+                                "Marcus",
+                                "Mario",
+                                "Matthias",
+                                "Nicholas",
+                                "Patrick",
+                                "Pedro",
+                                "Peter",
+                                "Robert",
+                                "Simón",
+                                "Theodore",
+                                "Usidore",
+                                "Vladimir",
+                                "Wilfrid",
+                                "William"
+                            ).random()
+                        } else {
+                            listOf(
+                                "Alice",
+                                "Amelia",
+                                "Anastasia",
+                                "Anne",
+                                "Beatrice",
+                                "Blanche",
+                                "Catherine",
+                                "Cecilla",
+                                "Charlotte",
+                                "Diana",
+                                "Eleanor",
+                                "Elizabeth",
+                                "Gloria",
+                                "Helen",
+                                "Isabella",
+                                "Julia",
+                                "Kristina",
+                                "Lidelle",
+                                "Madeleine",
+                                "Mary",
+                                "Natalia",
+                                "Odelia",
+                                "Olga",
+                                "Persephone",
+                                "Robyn",
+                                "Sophia",
+                                "Tiffany",
+                                "Victoria",
+                                "Wilhelmina",
+                                "Yvette"
+                            ).random()
+                        }
+
+                        val noblePlacement = listOf(
+                            "",
+                            "",
+                            "",
+                            "",
+                            " Sr.",
+                            " Jr.",
+                            " II",
+                            " III",
+                            " IV",
+                            " V",
+                            " VI"
                         ).random()
+
+                        val nobleNickname = listOf(
+                            "Administrator",
+                            "Affable",
+                            "Ambitious",
+                            "Architect",
+                            "August",
+                            "Avaricious",
+                            "Awesome",
+                            "Benevolent",
+                            "Blue",
+                            "Bossy",
+                            "Brave",
+                            "Brilliant",
+                            "Charming",
+                            "Chronicler",
+                            "Conqueror",
+                            "Crow",
+                            "Curious",
+                            "Cynical",
+                            "Diligent",
+                            "Diplomat",
+                            "Elegant",
+                            "Enlightened",
+                            "Flexible",
+                            "Gallant",
+                            "Generous",
+                            "Guardian",
+                            "HackMaster",
+                            "Hard Ruler",
+                            "Historian",
+                            "Honorable",
+                            "Impaler",
+                            "Industrious",
+                            "Just",
+                            "Kind",
+                            "Lawgiver",
+                            "Logistician",
+                            "Magnanimous",
+                            "Magnificent",
+                            "Melancholic",
+                            "Noble",
+                            "Organizer",
+                            "Overseer",
+                            "Paranoid",
+                            "Peacemaker",
+                            "Pensive",
+                            "Rowdy",
+                            "Salty",
+                            "Sage",
+                            "Schemer",
+                            "Scholar",
+                            "Seducer",
+                            "Shadow",
+                            "Sly",
+                            "Snorer",
+                            "Spider",
+                            "Strategist",
+                            "Tactician",
+                            "Theologian",
+                            "Thrifty",
+                            "Torturer",
+                            "Truthseeker",
+                            "Unready",
+                            "Valiant",
+                            "Vengeful",
+                            "Well-endowed",
+                            "Whisperer",
+                            "Whole of Body",
+                            "Wizard of the 12th Realm of Ephysiyies, etc."
+                        ).random()
+
+                        nameBuilder.append(
+                            "$nobleTitle ${nobleName}$noblePlacement" +
+                                    " the $nobleNickname"
+                        )
                     }
-
-                    val nobleName = if (nobleIsMale){
-                        listOf(
-                            "Albert",
-                            "Alexander",
-                            "Alfred",
-                            "Arthur",
-                            "Augustus",
-                            "Boris",
-                            "Charles",
-                            "Cyrus",
-                            "David",
-                            "Edmund",
-                            "Edward",
-                            "Eric",
-                            "Franklin",
-                            "Frederick",
-                            "George",
-                            "Giovanni",
-                            "Harald",
-                            "Harry",
-                            "Igor",
-                            "James",
-                            "John",
-                            "João",
-                            "Leopold",
-                            "Louis",
-                            "Luigi",
-                            "Marcus",
-                            "Mario",
-                            "Matthias",
-                            "Nicholas",
-                            "Patrick",
-                            "Pedro",
-                            "Peter",
-                            "Robert",
-                            "Simón",
-                            "Theodore",
-                            "Usidore",
-                            "Vladimir",
-                            "Wilfrid",
-                            "William"
-                        ).random()
-                    } else {
-                        listOf(
-                            "Alice",
-                            "Amelia",
-                            "Anastasia",
-                            "Anne",
-                            "Beatrice",
-                            "Blanche",
-                            "Catherine",
-                            "Cecilla",
-                            "Charlotte",
-                            "Diana",
-                            "Eleanor",
-                            "Elizabeth",
-                            "Gloria",
-                            "Helen",
-                            "Isabella",
-                            "Julia",
-                            "Kristina",
-                            "Lidelle",
-                            "Madeleine",
-                            "Mary",
-                            "Natalia",
-                            "Odelia",
-                            "Olga",
-                            "Persephone",
-                            "Robyn",
-                            "Sophia",
-                            "Tiffany",
-                            "Victoria",
-                            "Wilhelmina",
-                            "Yvette"
-                        ).random()
-                    }
-
-                    val noblePlacement = listOf(
-                        "",
-                        "",
-                        "",
-                        "",
-                        " Sr.",
-                        " Jr.",
-                        " II",
-                        " III",
-                        " IV",
-                        " V",
-                        " VI"
-                    ).random()
-
-                    val nobleNickname = listOf(
-                        "Administrator",
-                        "Affable",
-                        "Ambitious",
-                        "Architect",
-                        "August",
-                        "Avaricious",
-                        "Awesome",
-                        "Benevolent",
-                        "Blue",
-                        "Bossy",
-                        "Brave",
-                        "Brilliant",
-                        "Charming",
-                        "Chronicler",
-                        "Conqueror",
-                        "Crow",
-                        "Curious",
-                        "Cynical",
-                        "Diligent",
-                        "Diplomat",
-                        "Elegant",
-                        "Enlightened",
-                        "Flexible",
-                        "Gallant",
-                        "Generous",
-                        "Guardian",
-                        "HackMaster",
-                        "Hard Ruler",
-                        "Historian",
-                        "Honorable",
-                        "Impaler",
-                        "Industrious",
-                        "Just",
-                        "Kind",
-                        "Lawgiver",
-                        "Logistician",
-                        "Magnanimous",
-                        "Magnificent",
-                        "Melancholic",
-                        "Noble",
-                        "Organizer",
-                        "Overseer",
-                        "Paranoid",
-                        "Peacemaker",
-                        "Pensive",
-                        "Rowdy",
-                        "Salty",
-                        "Sage",
-                        "Schemer",
-                        "Scholar",
-                        "Seducer",
-                        "Shadow",
-                        "Sly",
-                        "Snorer",
-                        "Spider",
-                        "Strategist",
-                        "Tactician",
-                        "Theologian",
-                        "Thrifty",
-                        "Torturer",
-                        "Truthseeker",
-                        "Unready",
-                        "Valiant",
-                        "Vengeful",
-                        "Well-endowed",
-                        "Whisperer",
-                        "Whole of Body",
-                        "Wizard of the 12th Realm of Ephysiyies, etc."
-                    ).random()
-
-                    nameBuilder.append("$nobleTitle ${nobleName}$noblePlacement" +
-                            " the $nobleNickname")
                 }
 
                 5 -> { // Royalty subject matter
