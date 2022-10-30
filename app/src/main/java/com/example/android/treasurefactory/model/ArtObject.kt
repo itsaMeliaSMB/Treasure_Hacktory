@@ -450,6 +450,7 @@ data class ArtObject(
                     "mystical artwork",
                     "non-Euclidian sculpture",
                     "permanent glamour",
+                    "size-adjusting outfit",
                     "talking bust",
                     "Two D'lusionary screen"
                 ).random()
@@ -497,6 +498,7 @@ data class ArtObject(
                         "nothingness",
                         "opposite",
                         "reality",
+                        "reason",
                         "resilience",
                         "resonance",
                         "scent",
@@ -506,6 +508,7 @@ data class ArtObject(
                         "synesthesia",
                         "taste",
                         "tears",
+                        "terminus",
                         "truth",
                         "totality",
                         "vortex",
@@ -513,6 +516,7 @@ data class ArtObject(
                     ).random()
 
                     val abstractTopic = listOf(
+                        "adventure",
                         "air",
                         "ambition",
                         "art",
@@ -528,18 +532,22 @@ data class ArtObject(
                         "everything",
                         "excess",
                         "fame",
+                        "femininity",
                         "fire",
                         "friendship",
                         "greed",
                         "hate",
                         "humanity",
                         "ignorance",
+                        "industry",
+                        "innovation",
                         "kitsch",
                         "knowledge",
                         "loss",
                         "love",
                         "love, laugh, live",
                         "magic",
+                        "masculinity",
                         "militarism",
                         "nihilism",
                         "nature",
@@ -550,14 +558,17 @@ data class ArtObject(
                         "philosophy",
                         "prisencolinensinainciusol",
                         "prophecy",
+                        "purple",
                         "serendipity",
                         "shapes",
                         "silence",
                         "socialism",
+                        "technology",
                         "the future",
                         "the past",
                         "the present",
                         "the unknown",
+                        "tradition",
                         "tragedy",
                         "war",
                         "water",
@@ -582,6 +593,7 @@ data class ArtObject(
                         "devious",
                         "enlightened",
                         "funny",
+                        "greasy",
                         "grotesque",
                         "grumpy",
                         "happy",
@@ -590,6 +602,7 @@ data class ArtObject(
                         "intense",
                         "lively",
                         "lonely",
+                        "magical",
                         "oily",
                         "purple",
                         "sad",
@@ -678,12 +691,14 @@ data class ArtObject(
                 0 -> { // Human subject matter
 
                     val humanAdjective = listOf(
+                        "adolescent",
                         "aesthetic",
                         "aloof",
                         "ancient",
                         "attractive",
                         "average",
                         "barbaric",
+                        "beautiful",
                         "benevolent",
                         "bespectacled",
                         "brilliant",
@@ -696,7 +711,6 @@ data class ArtObject(
                         "dirty",
                         "driven",
                         "dull",
-                        "female",
                         "feminine",
                         "foolhardy",
                         "foppish",
@@ -711,11 +725,11 @@ data class ArtObject(
                         "hot-headed",
                         "iconoclastic",
                         "imposing",
+                        "inauspicious",
                         "jealous",
                         "kindly",
                         "lazy",
                         "lusty",
-                        "male",
                         "malevolent",
                         "manly",
                         "masculine",
@@ -735,11 +749,13 @@ data class ArtObject(
                         "secretive",
                         "servile",
                         "studious",
+                        "stupid",
                         "suspicious",
                         "ugly",
                         "vengeful",
                         "violent",
                         "virtuous",
+                        "well-bred",
                         "young",
                         "youthful"
                     ).random()
@@ -750,31 +766,17 @@ data class ArtObject(
                         "dracon",
                         "drow",
                         "drow",
-                        "dwarven",
-                        "dwarven",
-                        "dwarven",
-                        "dwarven",
-                        "duergar",
+                        "dwarven", "dwarven", "dwarven", "dwarven", "duergar",
                         "elvariel",
                         "gray elven",
-                        "elven",
-                        "elven",
-                        "elven",
-                        "elven",
-                        "elven",
+                        "elven", "elven", "elven", "elven", "elven",
                         "fairy",
                         "giff",
                         "gnomish",
                         "gnome titan",
                         "grevan",
                         "Gronnanarian",
-                        "human",
-                        "human",
-                        "human",
-                        "human",
-                        "human",
-                        "human",
-                        "human",
+                        "human", "human", "human", "human", "human", "human", "human",
                         "half-elven",
                         "half-orcish",
                         "half-orge",
@@ -874,6 +876,7 @@ data class ArtObject(
                     ).random()
 
                     val humanActivity = listOf(
+                        "answering the call",
                         "arguing",
                         "at a ceremony",
                         "at a hot spring",
@@ -881,6 +884,7 @@ data class ArtObject(
                         "at rest",
                         "attacking",
                         "beckoning",
+                        "being foolish",
                         "being total bros",
                         "building/creating",
                         "celebrating",
@@ -906,6 +910,7 @@ data class ArtObject(
                         "in danger",
                         "in high spirits",
                         "in mortal combat",
+                        "in great pain",
                         "in pursuit",
                         "investigating",
                         "jumping",
@@ -923,6 +928,7 @@ data class ArtObject(
                         "showing off",
                         "sitting still",
                         "slacking off",
+                        "solving a puzzle",
                         "striking a pose",
                         "studying",
                         "trying something new",
@@ -1350,6 +1356,7 @@ data class ArtObject(
                         "signing of treaty",
                         "terrible cataclysm",
                         "the first magic spell",
+                        "the great flood",
                         "tournament finale",
                         "world wonder built"
                     ).random())
@@ -1695,14 +1702,12 @@ data class ArtObject(
 
                 4 -> { // Wealthy/noble subject matter
 
-                    if (Random.nextInt(1,51) == 7) {
+                    if (Random.nextInt(1,101) <= 5) {
 
                         val specificPerson = if (Random.nextInt(1,4) == 1) {
-
                                 // Favorite personal characters of developer and her friends
-
                                 listOf(
-                                    "BattleMage Frank Battleforge: Dwarven, Unbathed " +
+                                    "BattleMage Frank Battleforge, the Dwarven, Unbathed " +
                                             "Aficionado of Elven Culture",
                                     "Bladesinger Alaran Lodestar, the Slayer of the Dracolich",
                                     "Cavalier Commander Gunner Calahander, the Undying",
@@ -1710,22 +1715,22 @@ data class ArtObject(
                                     "Chairman of the Horde Leitric, the Book-burner",
                                     "Contender Rebel the Goblin, Fire Giant of Opera City",
                                     "Divinist Ambrose, the Prophet of Possibility",
-                                    "Dr. Joan Snow, Esq., the Arcane Anatomist",
+                                    "Dr. Joan Snow, Esq., the Arcane Anatomist / Psychic Surgeon",
                                     "Eldritch Barbarian Clodagh Grenawich, the Hagblood Halberd",
+                                    "Espion Aminah Abadaan, the Honest Hand",
                                     "Gawdfather Kane Freeman, the Shadow Governor",
+                                    "Griftmaster Aminah Abadaan, the Honest Hand",
                                     "Initiate Piperine Scoville, the Flame of Knowledge",
                                     "Myrmidon Aspor Hundolfr, the Ambitious Revenant",
                                     "Necromancer Ivanka, the Fallen Angel of Elturel",
                                     "Sorceress Unioos Bugulnoz, Madame of the Glitzy Pixie",
-                                    "Sr. Researcher Theodore Webster, the Accident-Prone",
+                                    "Sr. Researcher Theodore Webster, " +
+                                            "the Unintentionally-Calamitous",
                                     "Warlock Lugh Quicksmile, Son of Fey but Bastard to All",
                                     "Yakuza Lord Ragna Vel, the Inauspicious Assassin"
                                 ).random()
-
                             } else {
-
                                 // Canonical HackMaster 4e characters
-
                                 listOf(
                                     "Animator Aliron Praetox, the Dark Beast",
                                     "Arch Angelic Knight Michael De Shalaray, " +
@@ -1793,13 +1798,14 @@ data class ArtObject(
                                 "Grandmaster",
                                 "Guildmaster",
                                 "Justice",
-                                "Lord",
+                                "Lord", "Lord", "Lord",
                                 "Lord President",
                                 "Marquis",
                                 "Mayor",
                                 "Minister",
                                 "Professor",
-                                "Sir",
+                                "Sir", "Sir", "Sir", "Sir", "Sir",
+                                "Sorcerer",
                                 "Spymaster",
                                 "Treasure Hunter",
                                 "Treasurer",
@@ -1817,19 +1823,20 @@ data class ArtObject(
                                 "Countess",
                                 "Court Tutor",
                                 "Court Wizard",
-                                "Dame",
+                                "Dame", "Dame", "Dame", "Dame", "Dame",
                                 "Doge",
                                 "Emissary",
                                 "General",
                                 "Grandmaster",
                                 "Guildmistress",
                                 "Justice",
-                                "Lady",
+                                "Lady", "Lady", "Lady",
                                 "Madame President",
                                 "Marquise",
                                 "Master Bard",
                                 "Preceptress",
                                 "Professor",
+                                "Sorceress",
                                 "Spymaster",
                                 "Stewardess",
                                 "Treasure Huntress",
@@ -1906,6 +1913,7 @@ data class ArtObject(
                                 "Olga",
                                 "Persephone",
                                 "Robyn",
+                                "Rosalia",
                                 "Sophia",
                                 "Tiffany",
                                 "Victoria",
@@ -1915,17 +1923,16 @@ data class ArtObject(
                         }
 
                         val noblePlacement = listOf(
-                            "",
-                            "",
-                            "",
-                            "",
+                            "", "", "", "", "", "",
                             " Sr.",
-                            " Jr.",
+                            " Jr."," Jr.",
+                            " II",
                             " II",
                             " III",
                             " IV",
                             " V",
-                            " VI"
+                            " VI",
+                            "X"
                         ).random()
 
                         val nobleNickname = listOf(
@@ -1933,6 +1940,7 @@ data class ArtObject(
                             "Affable",
                             "Ambitious",
                             "Architect",
+                            "Artist",
                             "August",
                             "Avaricious",
                             "Awesome",
@@ -1971,6 +1979,7 @@ data class ArtObject(
                             "Noble",
                             "Organizer",
                             "Overseer",
+                            "Painter",
                             "Paranoid",
                             "Peacemaker",
                             "Pensive",
@@ -1979,6 +1988,7 @@ data class ArtObject(
                             "Sage",
                             "Schemer",
                             "Scholar",
+                            "Sculptor",
                             "Seducer",
                             "Shadow",
                             "Sly",
@@ -1996,7 +2006,8 @@ data class ArtObject(
                             "Well-endowed",
                             "Whisperer",
                             "Whole of Body",
-                            "Wizard of the 12th Realm of Ephysiyies, etc."
+                            "Wizard of the 12th Realm of Ephysiyies, etc.",
+                            "Wunderkind"
                         ).random()
 
                         nameBuilder.append(
@@ -2099,6 +2110,7 @@ data class ArtObject(
                             "Natalia",
                             "Odelia",
                             "Olga",
+                            "Rozemyne",
                             "Sophia",
                             "Tiffany",
                             "Victoria",
@@ -2129,6 +2141,7 @@ data class ArtObject(
                         "August",
                         "Avaricious",
                         "Benevolent",
+                        "Bookworm",
                         "Bossy",
                         "Brave",
                         "Brilliant Strategist",
