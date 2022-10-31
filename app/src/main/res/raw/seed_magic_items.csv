@@ -1936,10 +1936,10 @@
 1936¤12¤"Flail +1"¤0¤"GameMaster’s Guide"¤268¤500¤2500¤0¤¤0¤0¤0¤"A21"¤"weapon_flail"¤1¤0¤1¤0¤0¤0¤1882¤"Flail"¤¤0¤¤5¤¤0¤0¤0¤0¤0¤0
 1937¤5¤"Flail +2"¤0¤"GameMaster’s Guide"¤268¤1000¤5000¤0¤¤0¤0¤0¤"A21"¤"weapon_flail"¤1¤0¤1¤0¤0¤0¤1882¤"Flail"¤¤0¤¤5¤¤0¤0¤0¤0¤0¤0
 1938¤1¤"Flail +3"¤0¤"GameMaster’s Guide"¤268¤2000¤10000¤0¤¤0¤0¤0¤"A21"¤"weapon_flail"¤1¤0¤1¤0¤0¤0¤1882¤"Flail"¤¤0¤¤5¤¤0¤0¤0¤0¤0¤0
-1939¤2¤"Javelin -1"¤0¤"GameMaster’s Guide"¤268¤0¤0¤3¤¤1¤2¤0¤"A21"¤"weapon_javelin"¤1¤1¤0¤0¤0¤0¤1883¤"Javelin"¤¤1¤¤0¤¤0¤0¤0¤0¤0¤0
-1940¤12¤"Javelin +1"¤0¤"GameMaster’s Guide"¤268¤100¤400¤3¤¤1¤2¤0¤"A21"¤"weapon_javelin"¤1¤1¤0¤0¤0¤0¤1883¤"Javelin"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-1941¤5¤"Javelin +2"¤0¤"GameMaster’s Guide"¤268¤200¤800¤3¤¤1¤2¤0¤"A21"¤"weapon_javelin"¤1¤1¤0¤0¤0¤0¤1883¤"Javelin"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-1942¤1¤"Javelin +3"¤0¤"GameMaster’s Guide"¤268¤400¤1200¤3¤¤1¤2¤0¤"A21"¤"weapon_javelin"¤1¤1¤0¤0¤0¤0¤1883¤"Javelin"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+1939¤2¤"Javelin -1"¤0¤"GameMaster’s Guide"¤268¤0¤0¤3¤¤1¤2¤0¤"A21"¤"ammo_javelin"¤1¤1¤0¤0¤0¤0¤1883¤"Javelin"¤¤1¤¤0¤¤0¤0¤0¤0¤0¤0
+1940¤12¤"Javelin +1"¤0¤"GameMaster’s Guide"¤268¤100¤400¤3¤¤1¤2¤0¤"A21"¤"ammo_javelin"¤1¤1¤0¤0¤0¤0¤1883¤"Javelin"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+1941¤5¤"Javelin +2"¤0¤"GameMaster’s Guide"¤268¤200¤800¤3¤¤1¤2¤0¤"A21"¤"ammo_javelin"¤1¤1¤0¤0¤0¤0¤1883¤"Javelin"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+1942¤1¤"Javelin +3"¤0¤"GameMaster’s Guide"¤268¤400¤1200¤3¤¤1¤2¤0¤"A21"¤"ammo_javelin"¤1¤1¤0¤0¤0¤0¤1883¤"Javelin"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 1943¤2¤"Knife -1"¤0¤"GameMaster’s Guide"¤268¤0¤0¤0¤¤0¤0¤0¤"A21"¤"weapon_knife"¤1¤1¤0¤1¤0¤0¤1884¤"Knife"¤¤1¤¤5¤¤0¤0¤0¤0¤0¤0
 1944¤12¤"Knife +1"¤0¤"GameMaster’s Guide"¤268¤500¤2500¤0¤¤0¤0¤0¤"A21"¤"weapon_knife"¤1¤1¤0¤1¤0¤0¤1884¤"Knife"¤¤0¤¤5¤¤0¤0¤0¤0¤0¤0
 1945¤5¤"Knife +2"¤0¤"GameMaster’s Guide"¤268¤1000¤5000¤0¤¤0¤0¤0¤"A21"¤"weapon_knife"¤1¤1¤0¤1¤0¤0¤1884¤"Knife"¤¤0¤¤5¤¤0¤0¤0¤0¤0¤0
@@ -2081,7 +2081,7 @@
 2081¤12¤"Homing Bolt of Serpent Slaying"¤0¤"GameMaster’s Guide"¤271¤500¤4000¤0¤¤0¤0¤1¤"A23"¤"ammo_bolt"¤1¤1¤0¤0¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 2082¤10¤"Hornblade"¤0¤"GameMaster’s Guide"¤271¤500¤1500¤0¤¤0¤0¤0¤"A23"¤"weapon_bone"¤1¤0¤0¤0¤1¤1¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 2083¤3¤"Javelin of Lightning"¤0¤"GameMaster’s Guide"¤272¤250¤1000¤0¤¤0¤0¤1¤"A23"¤"ammo_javelin"¤1¤1¤0¤0¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-2084¤10¤"Javelin of Piercing"¤0¤"GameMaster’s Guide"¤272¤250¤1000¤0¤¤0¤0¤1¤"A23"¤"weapon_javelin"¤1¤1¤0¤0¤0¤0¤0¤¤¤0¤"launch"¤0¤¤0¤0¤0¤0¤0¤0
+2084¤10¤"Javelin of Piercing"¤0¤"GameMaster’s Guide"¤272¤250¤1000¤0¤¤0¤0¤1¤"A23"¤"ammo_javelin"¤1¤1¤0¤0¤0¤0¤0¤¤¤0¤"launch"¤0¤¤0¤0¤0¤0¤0¤0
 2085¤27¤"Buckle Knife"¤0¤"GameMaster’s Guide"¤272¤100¤1000¤0¤¤0¤0¤0¤"A23"¤"container_chest"¤1¤1¤0¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 2086¤7¤"Loki’s Bracelet of Missiles"¤0¤"GameMaster’s Guide"¤258¤1000¤4000¤0¤"AKA the Wrist Rocket of Loki"¤1¤6¤6¤"A23"¤"jewelry_bracelet_jeweled"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 2087¤4¤"Long Bow of Strumming +1"¤0¤"GameMaster’s Guide"¤272¤1000¤4000¤0¤¤0¤0¤0¤"A23"¤"weapon_bow_long"¤1¤0¤0¤0¤0¤0¤0¤¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0

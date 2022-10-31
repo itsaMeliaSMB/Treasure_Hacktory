@@ -404,6 +404,7 @@ data class ArtObject(
                     "marble bookend",
                     "marble chess set",
                     "marble statue",
+                    "painted rock",
                     "sarcophagus",
                     "stone carving",
                     "stone column",
@@ -415,10 +416,12 @@ data class ArtObject(
 
                 8 -> listOf( // Metalwork types
                     "antique armor",
+                    "brass relief",
                     "bronze bust",
                     "bronze sculpture",
                     "chimes",
                     "engraved bell",
+                    "Fabergé egg",
                     "gilded utensil",
                     "golden idol",
                     "hand mirror",

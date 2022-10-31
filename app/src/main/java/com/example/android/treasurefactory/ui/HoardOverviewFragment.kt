@@ -232,7 +232,7 @@ class HoardOverviewFragment : Fragment() {
                         val dialog = AlertDialog.Builder(requireContext()).setTitle("Generate & Share CSV Report")
                             .setMessage("This will generate an overview report of this treasure hoard. Proceed?\n\n" +
                                     "\t- The report will not be stored here after it is shared, so be sure to save it where you can view it later.\n" +
-                                    "\t- If you are having trouble viewing the report, the item delimiter is \"¤\" (U+00A4) and the line separator is \"\\r\".")
+                                    "\t- If you are having trouble viewing the report, the item delimiter is \"|\" (U+007C) and the line separator is \"\\r\".")
                             .setPositiveButton(R.string.generate) { dialog, _ ->
 
                                 Toast.makeText(context,"Generating report (This may take a moment)...", Toast.LENGTH_LONG).show()
@@ -673,7 +673,8 @@ class HoardOverviewFragment : Fragment() {
         if (fileUri != null) {
             val shareIntent = Intent().apply{
                 action = Intent.ACTION_SEND
-                setDataAndTypeAndNormalize(fileUri,"text/plain")
+                setTypeAndNormalize("text/csv")
+                putExtra(Intent.EXTRA_STREAM, fileUri)
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
@@ -706,7 +707,7 @@ class HoardOverviewFragment : Fragment() {
 
                 // region [ Simplified write functions ]
                 fun List<String>.writeAsRow() {
-                    writer.append(this.joinToString(separator = "¤", postfix = "\r"))
+                    writer.append(this.joinToString(separator = "|", postfix = "\r").replace("’","\'"))
                 }
 
                 fun List<List<String>>.writeAsRows() {
@@ -762,19 +763,20 @@ class HoardOverviewFragment : Fragment() {
                         )
                         coinList.add(
                             ("${
-                                DecimalFormat("#0.0#")
-                                    .format(subGpTotal / gpTotal)
+                                DecimalFormat("##0.0#")
+                                    .format((subGpTotal / gpTotal ) * 100.0)
                                     .removeSuffix(".0")
                             } %")
                         )
                         coinList.add(
                             ("${
-                                DecimalFormat("#0.0#")
-                                    .format(count / countTotal)
+                                DecimalFormat("##0.0#")
+                                    .format((count.toDouble() / countTotal.toDouble()) * 100.0)
                                     .removeSuffix(".0")
                             } %")
                         )
 
+                        outputList.add(coinList.toList())
                     }
 
                     if (hoard.cp > 0) {
@@ -860,8 +862,7 @@ class HoardOverviewFragment : Fragment() {
                         val itemList = arrayListOf("")
 
                         itemList.add(
-                            item.name.take(25) + (if (item.name.length > 25) "... " else " ") +
-                                    "[id:${item.gemID}]"
+                            item.name + " [id:${item.gemID}]"
                         )
                         item.currentGPValue.let { itemGPV ->
                             gpTotal += itemGPV
@@ -924,8 +925,7 @@ class HoardOverviewFragment : Fragment() {
                         val itemList = arrayListOf("")
 
                         itemList.add(
-                            item.name.take(25) + (if (item.name.length > 25) "... " else " ") +
-                                    "[id:${item.artID}]"
+                            item.name + " [id:${item.artID}]"
                         )
                         item.gpValue.let { itemGPV ->
                             gpTotal += itemGPV
@@ -984,8 +984,7 @@ class HoardOverviewFragment : Fragment() {
                         val itemList = arrayListOf("")
 
                         itemList.add(
-                            item.name.take(25) + (if (item.name.length > 25) "... " else " ") +
-                                    "[id:${item.mItemID}]"
+                            item.name + " [id:${item.mItemID}]"
                         )
                         item.gpValue.let { itemGPV ->
                             gpTotal += itemGPV
@@ -1044,8 +1043,7 @@ class HoardOverviewFragment : Fragment() {
                         val itemList = arrayListOf("")
 
                         itemList.add(
-                            item.name.take(25) + (if (item.name.length > 25) "... " else " ") +
-                                    "[id:${item.sCollectID}]"
+                            item.name + " [id:${item.sCollectID}]"
                         )
                         item.gpValue.let { itemGPV ->
                             gpTotal += itemGPV
@@ -1103,16 +1101,18 @@ class HoardOverviewFragment : Fragment() {
                             .format(hoard.creationDate)
                     ).writeAsRow()
                     listOf(
-                        "", "Difficulty ratio:", String.format("%.2f", hoard.effortRating) +
-                                " gp to 1 xp"
+                        "", "Difficulty ratio:", String.format("%.2f", hoard.effortRating),
+                        "gp to 1 xp"
                     ).writeAsRow()
                     writeEmptyRow()
-                    listOf("[!]", "PLEASE NOTE:").writeAsRow()
-                    listOf("[!]", getString(R.string.csv_no_formula_note)).writeAsRow()
-                    listOf("[!]", getString(R.string.csv_no_detail_note)).writeAsRow()
+                    listOf("[ ! ]", "PLEASE NOTE:").writeAsRow()
+                    listOf("[ ! ]", getString(R.string.csv_no_formula_note)).writeAsRow()
+                    listOf("[ ! ]", getString(R.string.csv_no_detail_note)).writeAsRow()
+                    writeEmptyRow()
 
                     // Write coinage table
                     compileCoinageForCSV().writeAsRows()
+                    writeEmptyRow()
 
                     // Write unique item table(s)
                     itemBundle.hoardGems.let { gems ->

@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="book_list_gmg_starter_offensive">
-        <item>Befriend</item>
-        <item>Burning Hands</item>
-        <item>Charm Person</item>
-        <item>Chill Touch</item>
-        <item>Chromatic Orb</item>
-        <item>Color Spray</item>
-        <item>Enlarge</item>
-        <item>Fireball, Barrage</item>
-        <item>Fireball, Sidewinder Factor 1</item>
-        <item>Firewater</item>
-        <item>Grease</item>
-        <item>Hypnotism</item>
-        <item>Light</item>
-        <item>Magic Missile</item>
-        <item>Minor Sphere of Perturbation</item>
-        <item>Phantasmal Fireball</item>
-        <item>Shocking Grasp</item>
-        <item>Sleep</item>
-        <item>Spook</item>
-        <item>Taunt</item>
-    </string-array>
     <string name="spell_is_reversible">Reversible</string>
     <string name="spell_is_reversed">Reversed version</string>
 </resources>
