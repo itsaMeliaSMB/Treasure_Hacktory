@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.Toast
@@ -535,10 +534,8 @@ class UniqueListFragment : Fragment() {
         }
 
         fun selectAllItems() {
-            Log.d("selectAllHoards()","Called")
             if (items.isNotEmpty()) {
                 val allHoardIndices = items.indices.toList()
-                Log.d("selectAllItems() | Indices", allHoardIndices.joinToString())
                 setPositions(allHoardIndices,true)
             }
             setActionModeFromCount()
@@ -690,7 +687,6 @@ class UniqueListFragment : Fragment() {
             }
 
             if (lastSelectedPos in hoards.indices) {
-                Log.d("updateSelectedItem($selectedPos, $selectedHoardID)", "Notifying change at position $lastSelectedPos")
                 notifyItemChanged(lastSelectedPos)
             }
         }

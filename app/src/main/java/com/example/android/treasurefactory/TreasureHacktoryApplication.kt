@@ -6,8 +6,6 @@ import com.example.android.treasurefactory.repository.HMRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
-//TODO:Rename entire project to "Treasure Hacktory"
-
 class TreasureHacktoryApplication : Application() {
 
     val applicationScope = CoroutineScope(SupervisorJob())

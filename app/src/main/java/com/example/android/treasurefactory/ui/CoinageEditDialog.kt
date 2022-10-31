@@ -1,7 +1,6 @@
 package com.example.android.treasurefactory.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -196,14 +195,12 @@ class CoinageEditDialog(): DialogFragment() {
 
     private fun setInitialUI() {
 
-        Log.d("setInitialUI()", "Initializing UI elements.")
         binding.apply{
 
 
             val totalCoinQty = activeHoard.cp + activeHoard.sp + activeHoard.ep +
                     activeHoard.gp + activeHoard.hsp + activeHoard.pp
 
-            Log.d("setInitialUI()", "Setting current coinage quantities")
             coinageEditCpLabel.text = activeHoard.cp.formatWithCommas()
             coinageEditSpLabel.text = activeHoard.sp.formatWithCommas()
             coinageEditEpLabel.text = activeHoard.ep.formatWithCommas()
@@ -212,7 +209,6 @@ class CoinageEditDialog(): DialogFragment() {
             coinageEditPpLabel.text = activeHoard.pp.formatWithCommas()
             coinageEditTotalLabel.text = totalCoinQty.formatWithCommas()
 
-            Log.d("setInitialUI()", "Setting current/new coinage value totals")
             ((activeHoard.cp * 0.01 * 100.00).roundToInt() / 100.00).formatAsGp()
                 .also {
                     coinageEditCpCurrentGpValue.text = it
@@ -249,7 +245,6 @@ class CoinageEditDialog(): DialogFragment() {
                     coinageEditTotalCurrentTotalValue.text = it
                 }
 
-            Log.d("setInitialUI()", "Setting new coinage quantities in text inputs")
             coinageEditCpQtyEdit.setText(activeHoard.cp.toString())
             coinageEditSpQtyEdit.setText(activeHoard.sp.toString())
             coinageEditEpQtyEdit.setText(activeHoard.ep.toString())
@@ -291,7 +286,6 @@ class CoinageEditDialog(): DialogFragment() {
                 setTextColor(diffTint)
             }
         }
-        Log.d("setInitialUI()", "Initial UI elements set.")
     }
 
     private fun updateUI(coinType: CoinType) {
@@ -304,8 +298,6 @@ class CoinageEditDialog(): DialogFragment() {
         val coinsString : String
         @ColorInt
         val diffTint : Int
-
-        Log.d("updateUI(CoinType.${coinType.name})","Updating UI for ${coinType.longName}")
 
         when (coinType){
 
@@ -545,17 +537,6 @@ class CoinageEditDialog(): DialogFragment() {
                 diffTint = resources.getColor(R.color.gray, this.context?.theme)
             }
         }
-
-        Log.d("updateTotals()","coinTotalQty = $coinTotalQty; coinTotalValue = " +
-                "$coinTotalValue;\nqtyDiff = coinTotalQty($coinTotalQty) - ( " +
-                "activeHoard.cp(${activeHoard.cp}) + activeHoard.sp(${activeHoard.sp}) + " +
-                "activeHoard.ep(${activeHoard.ep}) + activeHoard.gp(${activeHoard.gp}) + " +
-                "activeHoard.hsp(${activeHoard.hsp}) + activeHoard.pp(${activeHoard.pp}) [${
-                    activeHoard.cp + activeHoard.sp + activeHoard.ep + activeHoard.gp +
-                            activeHoard.hsp + activeHoard.pp
-                }]) = $qtyDiff;\nvalueDiff = coinTotalValue($coinTotalValue) - " +
-                "activeHoard.getTotalCoinageValue()(${activeHoard.getTotalCoinageValue()}) = " +
-                "$valueDiff;\ndiffString = {\n$diffString\n}")
 
         binding.apply{
             coinageEditTotalNewQty.text = coinTotalQty.formatWithCommas()

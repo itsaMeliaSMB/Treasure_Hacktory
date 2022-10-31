@@ -41,7 +41,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     //region << Sample entries and constants >>
     val ANY_MAGIC_ITEM_LIST = listOf(
         "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
-        "A17","A18","A21","A24")
+        "A17","A18","A20","A21","A23","A24")
 
     val FALLBACK_GEM_TEMPLATE =
         GemTemplate(
@@ -55,8 +55,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     // region [ Order processing functions ]
     @WorkerThread
     suspend fun createHoardFromOrder(hoardOrder: HoardOrder, appVersion: Int): Int {
-
-        Log.d("createHoardFromOrder()","Starting hoard generation")
 
         val maxRerolls = 1500
 
@@ -105,11 +103,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             // region [ Generate piles of unique items ]
 
-            Log.d("createHoardFromOrder()","[ Generate piles of unique items ]")
-
             val deferredGemPile = async {
 
-                Log.d("createHoardFromOrder()","[[Start Deferred Gems]]")
                 val innerGemPile = arrayListOf<Gem>()
 
                 // Generate gems
@@ -133,7 +128,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             val deferredArtPile = async {
 
-                Log.d("createHoardFromOrder()","[[Start Deferred Art]]")
                 val innerArtPile = arrayListOf<ArtObject>()
                 val innerItemPile = arrayListOf<MagicItem>()
 
@@ -162,8 +156,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             }
 
             val deferredItemPile = async {
-
-                Log.d("createHoardFromOrder()","[[Start Deferred Items]]")
 
                 val selectedAllowedTypes = hoardOrder.genParams.magicParams.allowedTables
                     .map { it.name }.toSet()
@@ -272,7 +264,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 repeat(hoardOrder.armorOrWeapons){
 
-                    val baseTables = listOf("A18","A21")
+                    val baseTables = listOf("A18","A20","A21","A23")
 
                     val rollableTables = baseTables.intersect(selectedAllowedTypes).toList()
                         .takeIf { it.isNotEmpty() } ?: baseTables
@@ -287,7 +279,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                     val baseTables = listOf(
                         "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12", "A13","A14",
-                        "A15","A16","A17","A18")
+                        "A15","A16","A17","A18","A20")
 
                     val rollableTables = baseTables.intersect(selectedAllowedTypes).toList()
                         .takeIf { it.isNotEmpty() } ?: baseTables
@@ -302,7 +294,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                     val baseTables = listOf(
                         "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12", "A13","A14",
-                        "A15","A16","A17","A18","A21","A24")
+                        "A15","A16","A17","A18","A20","A21","A23","A24")
 
                     val rollableTables = baseTables.intersect(selectedAllowedTypes).toList()
                         .takeIf { it.isNotEmpty() } ?: baseTables
@@ -324,8 +316,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             val deferredSpellPile = async {
 
-                Log.d("createHoardFromOrder()","[[Start Deferred Spells]]")
-
                 val innerSpellPile = arrayListOf<SpellCollection>()
 
                 var runningCount = 1
@@ -333,15 +323,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 // Generate spell collections
                 repeat(hoardOrder.extraSpellCols) {
 
-                    Log.d("deferredSpellPile()","Starting iteration 1")
-
                     innerSpellPile.add(
                         createSpellCollection(
                             newHoardID,hoardOrder.genParams.magicParams.spellCoRestrictions
                         )
                     )
-
-                    Log.d("deferredSpellPile()","Ending iteration 1")
 
                     runningCount ++
                 }
@@ -351,7 +337,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             // endregion
 
             // region [ Flatten deferred piles into lists ]
-            Log.d("createHoardFromOrder()","[ Flatten deferred piles into lists ]")
 
             fun sortDeferredPiles(unsortedGems: List<Gem>,
                                   unsortedArt: Pair<List<ArtObject>, List<MagicItem>>,
@@ -372,14 +357,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             sortDeferredPiles(deferredGemPile.await(),deferredArtPile.await(),
                 deferredItemPile.await(),deferredSpellPile.await())
-
-            Log.d("createHoardFromOrder()","gemPile (${gemPile.size}) | " +
-                    "artPile (${artPile.size}) | itemPile (${itemPile.size}) | " +
-                    "spellPile (${spellPile.size})")
             // endregion
 
             // region [ Add lists to database under parent hoard ]
-            Log.d("createHoardFromOrder()","[ Add lists to database under parent hoard ]")
 
             val addGemsJob = launch { gemPile.forEach { repository.addGem(it) } }
             val addArtJob = launch { artPile.forEach { repository.addArtObject(it) } }
@@ -391,21 +371,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             // endregion
 
             // region [ Update counts on new hoard ]
-            Log.d("createHoardFromOrder()","[ Update counts on new hoard ]")
 
             suspend fun updateItemDetails() {
-
-                Log.d("createHoardFromOrder()","updateItemCounts() called.")
 
                 val initialGemCount = repository.getGemCountOnce(newHoardID)
                 val initialArtCount = repository.getArtCountOnce(newHoardID)
                 val initialItemCount = repository.getMagicItemCountOnce(newHoardID)
                 val initialSpellCount = repository.getSpellCollectionCountOnce(newHoardID)
-
-                Log.d("updateItemCounts()","initialGemCount = $initialGemCount")
-                Log.d("updateItemCounts()","initialArtCount = $initialArtCount")
-                Log.d("updateItemCounts()","initialItemCount = $initialItemCount")
-                Log.d("updateItemCounts()","initialSpellCount = $initialSpellCount")
 
                 val initialGPTotal = (hoardOrder.let {
                     ((it.copperPieces * 0.01) + (it.silverPieces * 0.1) + (it.electrumPieces * 0.5) +
@@ -415,8 +387,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         (repository.getArtValueTotalOnce(newHoardID)) +
                         (repository.getMagicItemValueTotalOnce(newHoardID)) +
                         (repository.getSpellCollectionValueTotalOnce(newHoardID))
-
-                Log.d("updateItemCounts()","initialGPTotal = $initialGPTotal")
 
                 val newHoard = repository.getHoardOnce(newHoardID).takeIf { it != null }?.copy(
                     gpTotal = initialGPTotal,
@@ -431,8 +401,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         HoardUniqueItemBundle(gemPile, artPile, itemPile, spellPile)
                     )
                     repository.updateHoard(newHoard.copy(iconID = updatedIconString))
-                } else {
-                    Log.e("updateItemDetails()","newHoard is null.")
                 }
             }
 
@@ -440,11 +408,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             // endregion
 
             // region [ Log HoardEvents for creation ]
-            Log.d("createHoardFromOrder()","[ Log HoardEvents for creation ]")
 
             suspend fun logCreationEvents() {
-
-                Log.d("createHoardFromOrder()","logCreationEvents() called.")
 
                 val creationHoardEvent = HoardEvent(
                     hoardID = newHoardID,
@@ -1169,7 +1134,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         val VALID_TABLE_TYPES = linkedSetOf(
             "A2","A3","A4","A5","A6","A7","A8","A9","A10","A11","A12","A13","A14","A15","A16",
-            "A17","A18","A21","A24")
+            "A17","A18","A20","A21","A23","A24")
         val ALIGNMENT_MAP = mapOf(
             "CG" to "Chaotic Good",
             "CN" to "Chaotic Neutral",
@@ -1410,12 +1375,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 }
 
                 if (matchingEntry !in allowedProbabilities.indices) {
-                    Log.e("createMagicItemTuple | Table A1","Invalid index ($matchingEntry)" +
-                            "provided (valid range: ${allowedProbabilities.indices})")
 
                     matchingEntry = allowedProbabilities.indices.random()
-
-                    Log.d("createMagicItemTuple | Table A1","Pulling index $matchingEntry instead.")
                 }
 
                 itemType = "A" + allowedProbabilities[matchingEntry].second
@@ -1620,7 +1581,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 if (Random.nextInt(1, 101) >= 99){
 
-                    itemType = "A22"
+                    itemType = "A23"
 
                     if (Random.nextInt(1, 1001) >= 997) gmChoice = true
                 }
@@ -1648,8 +1609,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             } else {
 
                 val noteString = "Failed item request¶tagSuffix: $tagSuffix¶msgStr: $msgStr"
-
-                Log.e("createMagicItemTuple | $tagSuffix",msgStr)
 
                 return MagicItemTemplate(
                     0,
@@ -1696,6 +1655,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             template = repository.getMagicItemTemplate(baseTemplateID).nullCheck("Given Template",
                 "No template found for $baseTemplateID.")
 
+            // Pull child entry if they exist
+            while (template.hasChild != 0) {
+                template = getChildForTuple(template,itemRestrictions)
+            }
+
         } else {    // No template provided, roll from table
 
             if (VALID_TABLE_TYPES.contains(itemType) && !gmChoice){
@@ -1724,37 +1688,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                     // Pull child entry if they exist
                     while (template.hasChild != 0) {
-
-                        val childTemplateList = repository.getChildLimItemTempsByParent(
-                            template.refId, itemRestrictions.allowCursedItems
-                        )
-
-                        if (childTemplateList.isNotEmpty()) {
-
-                            val childItemTable = getWeightedItemMap(childTemplateList)
-
-                            currentRoll = Random.nextInt(childItemTable.first().first.first,
-                                childItemTable.last().first.last + 1)
-
-                            val childTemplateID = childItemTable[
-                                    childItemTable.indexOfFirst { it.first.contains(currentRoll) }
-                            ].second
-
-                            template = repository.getMagicItemTemplate(childTemplateID).takeIf{
-                                it != null } ?: template.copy(hasChild = 0)
-
-                        } else {
-
-                            Log.e("createMagicItemTuple | Child table","Empty childTemplateList for template ${template.refId} (${template.name}).")
-                            template = template.copy(hasChild = 0)
-                        }
+                        template = getChildForTuple(template,itemRestrictions)
                     }
+
                 } else {
 
                     baseTemplateID = -1
 
-                    Log.d("createMagicItemTuple | No given template","Empty base table " +
-                            "returned for type entered ($itemType).")
                     template = null.nullCheck("No given template",
                         "Empty base table returned for type entered ($itemType).")
                 }
@@ -1845,30 +1785,17 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             // region ( Grab imitation name, if applicable )
             if (template.imitationKeyword.isNotBlank()){
 
-                //TODO remove debug logging when this is sorted out
-
-                Log.d("createMagicItemTuple() | imitation","Imitation name indicated " +
-                        "(${template.imitationKeyword}.isNotBlank()).")
-
                 val keywords = template.imitationKeyword.split(";").map{"$it%"}
 
-                Log.d("createMagicItemTuple() | imitation","keywords : " + keywords.map { "[$it] " })
-
                 val imitationList = ArrayList<String>()
-
-                Log.d("createMagicItemTuple() | imitation","imitationList : " + imitationList.map { "[$it] " })
 
                 keywords.forEach { key ->
 
                     imitationList.addAll(repository.getNamesToImitate(key))
                 }
 
-                Log.d("createMagicItemTuple() | imitation","imitationList : " + imitationList.map { "[$it] " })
-
                 // keywords[Random.nextInt(0,keywords.size)]
                 val imitationName = imitationList.randomOrNull() ?: ""
-
-                Log.d("createMagicItemTuple() | imitation","imitationName = imitationList.randomOrNull() = $imitationName")
 
                 if (imitationName.isNotBlank()) {
 
@@ -1877,9 +1804,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                     flatNotesList.add("Additional notes" to
                             "Appears to be ${if (useAn) "an" else "a"} $imitationName")
-
-                    Log.d("createMagicItemTuple() | imitation","result = Appears to be ${if (useAn) 
-                        "an" else "a"} $imitationName")
                 }
             }
             // endregion
@@ -1915,16 +1839,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             // region ( Add command word, if applicable )
             if (template.commandWord.isNotBlank()) {
 
-                //TODO remove debug logging when this is sorted out
-
-                Log.d("createMagicItemTuple() | commandWord","Command word indicated " +
-                        "(${template.commandWord}.isNotBlank()).")
-
                 val keywords = if (template.commandWord == "THREE"){
                     listOf("ANY","ANY","ANY")
                 } else template.commandWord.split(";")
-
-                Log.d("createMagicItemTuple() | commandWord","keywords : " + keywords.map { "[$it] " })
 
                 val commandWords = ArrayList<String>()
                 val textBuilder = StringBuilder().apply {
@@ -1942,34 +1859,15 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         repository.getThemedCommandWords(currentKeyword).toMutableSet()
                     }
 
-                    Log.d("createMagicItemTuple() | commandWord | currentKeyword($currentKeyword)",
-                        "wordSet (before): " + wordSet.map { "[$it] " })
-
                     wordSet.removeAll(commandWords.toSet())
 
-                    Log.d("createMagicItemTuple() | commandWord | currentKeyword($currentKeyword)",
-                        "wordSet (after): " + wordSet.map { "[$it] " })
-
                     commandWords.add(wordSet.randomOrNull() ?: currentKeyword.uppercase())
-
-                    Log.d("createMagicItemTuple() | commandWord | currentKeyword($currentKeyword)",
-                        "Adding \"${wordSet.randomOrNull() ?: currentKeyword.uppercase()
-                        }\" (wordSet.randomOrNull() ?: $currentKeyword.uppercase())")
                 }
-
-                Log.d("createMagicItemTuple() | commandWord",
-                    "commandWords (before): " + commandWords.map { "[$it] " })
 
                 commandWords.forEachIndexed { index, entry ->
 
                     textBuilder.append( if (index > 0) " / $entry" else entry )
-
-                    Log.d("createMagicItemTuple() | commandWord | ($index, $entry)",
-                        "Appended ${if (index > 0) " / $entry" else entry }")
                 }
-
-                Log.d("createMagicItemTuple() | commandWord",
-                    "Returning \"${textBuilder}\"")
 
                 flatNotesList.add("Additional notes" to textBuilder.toString().trimEnd(','))
             }
@@ -1981,673 +1879,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             if (itemType == "A2") {
 
-                val colors = listOf(
-                    "amber",
-                    "amethyst",
-                    "apricot",
-                    "aquamarine",
-                    "auburn",
-                    "azure blue",
-                    "black",
-                    "blue",
-                    "bone",
-                    "bronze",
-                    "brass",
-                    "brown",
-                    "buff",
-                    "carmine",
-                    "cerise",
-                    "cerulean",
-                    "cherry",
-                    "chestnut",
-                    "chocolate",
-                    "cinnabar",
-                    "citrine",
-                    "colorless",
-                    "copper",
-                    "coral",
-                    "cream",
-                    "crimson",
-                    "dove",
-                    "dun",
-                    "ebony",
-                    "ecru",
-                    "emerald",
-                    "fallow brown",
-                    "fawn",
-                    "flame",
-                    "flaxen",
-                    "fog",
-                    "fuchsia",
-                    "ginger",
-                    "gold",
-                    "golden",
-                    "grassy",
-                    "gray",
-                    "green",
-                    "heliotrope",
-                    "henna",
-                    "indigo",
-                    "inky",
-                    "iron",
-                    "ivory",
-                    "jade",
-                    "lake",
-                    "lavender",
-                    "lilac",
-                    "lime",
-                    "madder",
-                    "magenta",
-                    "mahawgany",
-                    "maroon",
-                    "mauve",
-                    "neutral",
-                    "ochre",
-                    "olive",
-                    "orange",
-                    "parchment",
-                    "peach",
-                    "pearl",
-                    "pewter",
-                    "pink",
-                    "pitch black",
-                    "plum",
-                    "purple",
-                    "purple",
-                    "red",
-                    "rose",
-                    "ruby",
-                    "russet",
-                    "rust",
-                    "sable",
-                    "saffron",
-                    "salmon",
-                    "sand",
-                    "sanguine",
-                    "sapphire",
-                    "scarlet",
-                    "silver",
-                    "sky",
-                    "soot",
-                    "sorrel",
-                    "steel",
-                    "straw",
-                    "tan",
-                    "tawny",
-                    "teal",
-                    "terra cotta",
-                    "turquoise",
-                    "ultramarine",
-                    "vermilion",
-                    "white",
-                    "woolen",
-                    "yellow"
-                )
-
-                var isRoundBulb = false
-                val material =   if (Random.nextInt(1,11) <= 4) { "Crystal" }
-                else { "Glass" }
-                var isSealed = false
-
-                fun checkIfNullified(chance: Int): String {
-
-                    return if (Random.nextInt(1,101) <= chance) {
-                        "FAILED"
-                    } else {
-                        "PASSED"
-                    }
-                }
-
-                fun checkAlreadyQuaffedDoses(): Int {
-
-                    val dosesUsed : Int
-
-                    if (Random.nextInt(1,101) <= 70) {
-
-                        dosesUsed = Random.nextInt(1,4)
-
-                        itemCharges -= dosesUsed
-
-                        if (itemCharges < 0) itemCharges = 0
-
-                    } else {
-
-                        dosesUsed = 0
-                    }
-
-                    return dosesUsed
-                }
-
-                fun getSubstanceColor(): String {
-                    val pickedColor = colors.random()
-                    potionColors.add(pickedColor)
-                    return pickedColor
-                }
-
-                // region ( Roll for potion container )
-
-                when (Random.nextInt(1,101)) {
-
-                    in 1..2     -> {
-
-                        flatNotesList.add("Potion flavor text" to "Container: Porcelain Jar")
-                        if (mIconID == "potion_empty") mIconID = "potion_alabaster"
-                    }
-
-                    in 3..4     -> {
-                        flatNotesList.add("Potion flavor text" to "Container: Alabaster")
-                        if (mIconID == "potion_empty") mIconID = "potion_alabaster"
-                    }
-
-                    in 5..12    -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Round, long container")
-                        if (mIconID == "potion_empty") mIconID = "potion_round_long"
-                    }
-
-                    in 13..14   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Square, long container")
-                        if (mIconID == "potion_empty") mIconID = "potion_square_long"
-                    }
-
-                    in 15..19   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Conical bulb")
-                        if (mIconID == "potion_empty") mIconID = "potion_erlenmeyer"
-
-                        isRoundBulb = true
-                    }
-
-                    in 20..48   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Spherical bulb")
-                        if (mIconID == "potion_empty") mIconID = "potion_round_short"
-
-                        isRoundBulb = true
-                    }
-
-                    in 49..56   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Oval, 'squashed' bulb")
-                        if (mIconID == "potion_empty") mIconID = "potion_squashed"
-
-                        isRoundBulb = true
-                    }
-
-                    in 57..60   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Tapering neck, Conical flask")
-                        if (mIconID == "potion_empty") mIconID = "potion_fancy"
-                    }
-
-                    in 61..65   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Triangular bulb")
-                        if (mIconID == "potion_empty") mIconID = "potion_pointy"
-                    }
-
-                    in 66..69 -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "$material - Triangular, long container")
-                        if (mIconID == "potion_empty") mIconID = "potion_hexagonal"
-                    }
-
-                    in 70..73   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "$material - Twisted, almost misshapen neck, small diamond bulb")
-                        if (mIconID == "potion_empty") mIconID = "potion_pointy"
-                    }
-
-                    in 74..76   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Test-tube style")
-                        if (mIconID == "potion_empty") mIconID = "potion_tube"
-                    }
-
-                    in 77..78   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Lone wine bottle (Green glass):")
-                        if (mIconID == "potion_empty") mIconID = "potion_winebottle"
-                        itemCharges = Random.nextInt(1,4)
-
-                        flatNotesList.add("Potion flavor text" to
-                                "This container holds $itemCharges dose(s) of potion - all of " +
-                                "the same type. Liquid color is not immediately discernible. [1]")
-                    }
-
-                    in 79..80   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Rectangular bulb")
-                        if (mIconID == "potion_empty") mIconID = "potion_square_long"
-                    }
-
-                    in 81..84   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Hexagonal, long container")
-                        if (mIconID == "potion_empty") mIconID = "potion_hexagonal"
-                    }
-
-                    in 85..86   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Curved, swirl bulb")
-                        if (mIconID == "potion_empty") mIconID = "potion_fancy"
-
-                        isRoundBulb = true
-                    }
-
-                    in 87..88   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Rectangular, long container")
-                        if (mIconID == "potion_empty") mIconID = "potion_square_long"
-                    }
-
-                    89          -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: $material - Long necked bottle with " +
-                                "${Random.nextInt(2,5)} round bulbs, decreasing in " +
-                                "size as they go up the bottle, all totalling one dose of potion.")
-                        if (mIconID == "potion_empty") mIconID = "potion_other"
-
-                        itemCharges = 1
-
-                        isRoundBulb = true
-                    }
-
-                    90          -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: Metal - Sealed tankard")
-                        flatNotesList.add("Potion flavor text" to
-                                "Unless opened, these containers prevent the potion from " +
-                                "being viewed. [2]")
-                        if (mIconID == "potion_empty") mIconID = "potion_tankard"
-                    }
-
-                    in 91..92   -> {
-                        flatNotesList.add("Potion flavor text" to "Container: Metal - Flask")
-
-                        flatNotesList.add("Potion flavor text" to
-                                "Unless opened, these containers prevent the potion from being " +
-                                "viewed. [2]")
-
-                        if (mIconID == "potion_empty") mIconID = "potion_metal_flask"
-                    }
-
-                    in 93..95   -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Special - Unusually shaped ${material.lowercase()} (heart, " +
-                                "skull, Apple, Standing Nymph, etc.)")
-                        if (mIconID == "potion_empty") mIconID = "potion_unusual"
-                    }
-
-                    96          -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: Special - Berry Form:")
-
-                        flatNotesList.add("Potion flavor text" to
-                                "Imported from the desert Wurld of Hackthas, these sparkling " +
-                                "preserved berries are often found preserved within glass " +
-                                "bottles, and must be fully consumed in order for their magic to " +
-                                "take effect. For some reason, these forms are mainly prunes or " +
-                                "dusty-tasting peach-like fruits. [3]")
-
-                        if (mIconID == "potion_empty") mIconID = "potion_berry"
-                    }
-
-                    97          -> {
-                        flatNotesList.add("Potion flavor text" to
-                                "Container: Special - Wooden or ${material.lowercase()} charm " +
-                                "hanging from a chain:")
-
-                        if (mIconID == "potion_empty") mIconID = "potion_charm"
-
-                        isSealed = true
-
-                        flatNotesList.add("Potion flavor text" to
-                                "Aside from the liquid within, these necklaces are non-magical, " +
-                                "but must be snapped in order to access the potion within. Any " +
-                                "number of these may be worn around the neck without " +
-                                "interference with either each other or any other magical " +
-                                "pendants. These types of containers are designed to be worn " +
-                                "around a character’s neck. [4]")
-                    }
-
-                    else        -> {
-                        flatNotesList.add("Potion flavor text" to "Container: GM’s option")
-                        if (mIconID == "potion_empty") mIconID = "potion_other"
-                    }
-                }
-                // endregion
-
-                // region ( Roll for ridges )
-
-                if (Random.nextInt(1,101) <= 30) {
-
-                    flatNotesList.add("Potion flavor text" to "Has " +
-                            "${Random.nextInt(1,7)} ridge(s) incorporated into their " +
-                            "shape – either ribbed as vertical ridges running parallel with one " +
-                            "another, or small, fancy decorative layers on top of the bulb.")
-                }
-                // endregion
-
-                // region ( Roll for potion container sealant )
-
-                when (Random.nextInt(if (isSealed) 12 else 1,101)) {
-
-                    1           -> {
-
-                        flatNotesList.add("Potion flavor text" to "Sealant: No seal:")
-
-                        flatNotesList.add("Potion flavor text" to
-                                "Potions liquid has dried up – the residue can be re-hydrated, " +
-                                "but only for half strength; 30% chance all magic is nullified. " +
-                                "(This one ${checkIfNullified(30)} its check)")
-                    }
-
-                    in 2..11    -> {
-
-                        flatNotesList.add("Potion flavor text" to "Sealant: Seal broken:")
-
-                        flatNotesList.add("Potion flavor text" to
-                                "70% chance 1-3 doses of the potion (if the container holds more " +
-                                "than one) have already been quaffed (Result: " +
-                                "${checkAlreadyQuaffedDoses()} already used). 5% chance all " +
-                                "magic is nullified. (This one ${checkIfNullified(5)} its check)")
-                    }
-
-                    in 12..62   -> {
-
-                        flatNotesList.add("Potion flavor text" to "Sealant: Corked")
-                    }
-
-                    in 63..82   -> {
-
-                        flatNotesList.add("Potion flavor text" to "Sealant: Corked and waxed")
-                    }
-
-                    in 83..88   -> {
-
-                        flatNotesList.add("Potion flavor text" to "Sealant: Glass stopper")
-                    }
-
-                    in 87..93   -> {
-
-                        flatNotesList.add("Potion flavor text" to
-                                "Sealant: Corked with a chain that is attached to the bottle")
-                    }
-
-                    else        -> {
-
-                        flatNotesList.add("Potion flavor text" to "Sealant: Sealed $material neck:")
-
-                        flatNotesList.add("Potion flavor text" to "Neck must be broken before " +
-                                "use, one-chance only before becoming useless. Characters " +
-                                "drinking straight from a roughly shattered neck suffer 1d3-1 " +
-                                "hit points of damage. Speed Penalty - an extra 2 segments in " +
-                                "combat must be spent opening a bottle like this. (See footnote " +
-                                "for Table HJ21-B)")
-                    }
-
-                }
-                //endregion
-
-                // region ( Roll for bottle embellishments )
-
-                if (Random.nextInt(1,101) <= Random.nextInt(10,16)) {
-
-                    var currentRoll : Int
-
-                    do {
-
-                        currentRoll = Random.nextInt(1,21)      // Reroll until applicable embellishment is rolled
-
-                    } while ((currentRoll == 16)&&!(isRoundBulb))
-
-                    when (currentRoll) {
-
-                        1       -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: A minute but detailed etching of a grand " +
-                                    "battle runs around the base of the bottle")
-                        }
-
-                        2       -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: Potion bottle constructed of four parallel, " +
-                                    "differently colored glasses")
-                        }
-
-                        3       -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: All of the bulb/neck, except the base, is " +
-                                    "sheathed in fine/once-fine silk held in place with tiny " +
-                                    "silver studs")
-                        }
-
-                        4       -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: ${Random.nextInt(1,9)} fancy " +
-                                    "beads hang down an inch from the bottleneck base on golden " +
-                                    "threads")
-                        }
-
-                        5       -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: The ${material.lowercase()} for the bottle " +
-                                    "appears spider-webbed with cracks, but is as strong as a " +
-                                    "normal ${material.lowercase()} bottle")
-                        }
-
-                        6       -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: A name and ‘title’ (e.g. Magnuson the " +
-                                    "Flamehard) are found etched in the glass in fine cursive " +
-                                    "script")
-                        }
-
-                        7       -> {
-
-                            val addlGems = Random.nextInt(1,5)
-
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: $addlGems 20gp gems are studded into the " +
-                                    "bottle in a symmetrical style around it")
-
-                            mGpValue += (addlGems * 20.0)
-                        }
-
-                        8       -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: Arcane looking (but harmless) runes " +
-                                    "encircle the top of the bulb – actually spells out a " +
-                                    "domestic, household item in a long-extinct language")
-                        }
-
-                        9       -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: A series of metallic carved runes strung " +
-                                    "together on a silver wire run down 3 parts of the bottle")
-                        }
-
-                        10      -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: Potion bottle has a small handle in the " +
-                                    "shape of a swan between the top of bulb and neck")
-                        }
-
-                        11      -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: Small wisps of smoke can be constantly seen " +
-                                    "emanating from the bottle, which itself is always cold to " +
-                                    "the touch with a thin layer of ice on its surface")
-                        }
-
-                        12      -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: Bottle constructed of extremely bright and " +
-                                    "vastly differently psychedelically colored glasses in " +
-                                    "swirls, stars and odd patches")
-                        }
-
-                        13      -> {
-
-                            fun getInitial(): String {
-
-                                val alphabet = listOf("A","B","C","D","E","F","G","H","I","J",
-                                    "K","L","M","N","O","P","Q","R","S","T","U","V","W","X",
-                                    "Y","Z")
-
-                                return alphabet[Random.nextInt(0,alphabet.size)]
-                            }
-
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: 3 prominent initials molded into the bottle " +
-                                    "glass during creation: " +
-                                    "\"${getInitial()}.${getInitial()}.${getInitial()}.\"")
-                        }
-
-                        14      -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: Bottle held within 2 thin bands of gold, " +
-                                    "along with small legs at base of bulb")
-                        }
-
-                        15      -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: A Gawd’s symbol is inscribed within the " +
-                                    "glass or pulled out of the glass during creation (most " +
-                                    "commonly a key, the symbol of Hokalas)")
-                        }
-
-                        16      -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: An outline of the continent is etched " +
-                                    "around the bulb, with a tiny X somewhere on it.")
-                        }
-
-                        17      -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: Top of the bottle neck and cork are coated " +
-                                    "in a patterned silver metal")
-                        }
-
-                        18      -> {
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: The potion bottle is actually a test-tube " +
-                                    "style one inside the result rolled, the outer one filled " +
-                                    "with a liquid of a [potentially] very different color " +
-                                    "(${getSubstanceColor()}) to the potion within")
-                        }
-
-                        19      ->{
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: Bottle has a stopper in the shape of a " +
-                                    "butterfly in flight, dragonfly, or similar unusual design")
-                        }
-
-                        else    -> {
-
-                            val addlGems = 4 + Random.nextInt(1,9)
-
-                            flatNotesList.add("Potion flavor text" to
-                                    "Embellishment: $addlGems small gems (10gp ea.) adorn the " +
-                                    "bottle on one side in a geometric pattern")
-
-                            mGpValue += (addlGems * 10.0)
-                        }
-                    }
-                }
-                // endregion
-
-                // region ( Roll potion consistency )
-
-                flatNotesList.add("Potion flavor text" to "Substance consistency: " +
-                            when (Random.nextInt(1,101)) {
-                                in 1..19    -> "Bubbling"
-                                in 20..29   -> "Cloudy"
-                                in 30..39   -> "Effervescent"
-                                in 40..49   -> "Fuming"
-                                in 50..54   -> "Oily"
-                                in 55..64   -> "Smoky"
-                                in 65..74   -> "Syrupy"
-                                in 75..79   -> "Vaporous"
-                                in 80..84   -> "Viscous"
-                                else        -> "Watery"
-                            }
-                    )
-                // endregion
-
-                // region ( Roll potion appearance/color(s) )
-
-                flatNotesList.add("Potion flavor text" to
-                        "Appearance (unless entry says otherwise): " +
-                        when (Random.nextInt(1,101)) {
-
-                            in 1..29    -> "Clear (transparent)"
-                            in 30..34   -> "Flecked (transparent ${getSubstanceColor()} with " +
-                                    "${getSubstanceColor()} flecks)"
-                            in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()})"
-                            in 40..54   -> "Luminous (${getSubstanceColor()}, " +
-                                    "~${Random.nextInt(0,21) * 5}% opacity)"
-                            in 55..59   -> "Opaline (glowing)"
-                            in 60..69   -> "Phosphorescent (${getSubstanceColor()}, " +
-                                    "~${Random.nextInt(0,21) * 5}% opacity)"
-                            in 70..79   -> "Rainbowed (transparent)"
-                            in 80..84   -> "Ribboned (${getSubstanceColor()}, " +
-                                    "~${Random.nextInt(0,21) * 5}% opacity)"
-                            in 85..94   -> "Translucent (${getSubstanceColor()})"
-                            else        -> "Varigated (${getSubstanceColor()}, " +
-                                    "${getSubstanceColor()}, and maybe some ${getSubstanceColor()})"
-                        } )
-                // endregion
-
-                // region ( Roll potion taste/odor )
-
-                flatNotesList.add("Potion flavor text" to
-                        "Taste and/or Odor (unless entry says otherwise): " +
-                            when (Random.nextInt(1,101)) {
-
-                                in 1..3     -> "Acidic"
-                                in 4..5     -> "Billious"
-                                in 6..10    -> "Bitter"
-                                in 11..14   -> "Bland"
-                                in 15..16   -> "Burning/biting"
-                                in 17..18   -> "Buttery"
-                                in 19..20   -> "Dusty"
-                                in 21..22   -> "Earthy"
-                                in 23..26   -> "Fiery"
-                                in 27..29   -> "Fishy"
-                                in 30..32   -> "Greasy"
-                                in 33..34   -> "Herbal"
-                                in 35..39   -> "Honeyed"
-                                in 40..42   -> "Lemony"
-                                in 43..46   -> "Meaty"
-                                in 47..49   -> "Metallic"
-                                in 50..51   -> "Milky"
-                                in 52..53   -> "Musty"
-                                in 54..56   -> "Oniony"
-                                in 57..60   -> "Peppery"
-                                in 61..62   -> "Perfumy"
-                                in 63..65   -> "Pickled"
-                                in 66..69   -> "Rotten"
-                                in 70..72   -> "Salty"
-                                in 73..75   -> "Smoked"
-                                in 76..80   -> "Soothing/sugary"
-                                in 81..83   -> "Sour"
-                                in 84..88   -> "Spicy"
-                                in 89..92   -> "Sweet"
-                                in 93..95   -> "Tart"
-                                in 96..97   -> "Vinegary"
-                                in 98..100  -> "Watery"
-                                else        -> "Inscrutable"
-                            } )
-                // endregion
-
-                // region ( Add dosages remaining  )
-
-                flatNotesList.add("Potion flavor text" to
-                        "Found with $itemCharges dose(s) remaining")
-                //endregion
+                val potionInfo = generatePotionDetails(mIconID,itemCharges)
+
+                flatNotesList.addAll(potionInfo.first.first)
+                potionColors.addAll(potionInfo.first.second)
+                itemCharges = potionInfo.second.first
+                mGpValue += potionInfo.second.second
+                mIconID = potionInfo.third
             }
             // endregion
 
@@ -2655,367 +1893,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             if (Random.nextInt(1,101) <= template.intelChance) {
 
-                var wIntelligence:          Int
-                val weaponEgo:              Int
-                var wCommLevel              = 0
-                var wLanguagesKnown         = 0
-                var wPrimaryAbilities       = 1
-                var wExtraPrimaryRolls      = 0
-                var wExtraordinaryPowers    = 0
-                var wExtraExtraordinaryRolls= 0
-                var wSpecialPurpose         = ""
-                var wSpecialPurposePower    = ""
-                var wSpecialReadingPower    = ""
+                val intWeaponProfile = generateIntelligentWeaponProfile(template, mAlignment)
 
-                val effectiveWeaponMod : Int = if (template.name.contains("+")) {
+                flatNotesList.addAll(intWeaponProfile.first)
 
-                    if (template.isCursed == 0) {
-
-                        if ((template.notes.isNotBlank())){
-
-                            if (template.notes.contains("+")) {
-
-                                template.notes
-                                    .substring(template.name.lastIndexOf("+"))
-                                    .toIntOrNull() ?: 1
-
-                            } else {
-
-                                2 * (template.name
-                                    .substring(template.name.lastIndexOf("+"))
-                                    .toIntOrNull() ?: 1)
-                            }
-
-                        } else {
-
-                            2 * (template.name
-                                .substring(template.name.lastIndexOf("+"))
-                                .toIntOrNull() ?: 1)
-                        }
-
-                    } else {
-
-                        template.name
-                            .substring(template.name.lastIndexOf("+"))
-                            .toIntOrNull() ?: 1
-                    }
-
-                } else { 0 }
-
-                val primaryAbilityList =    mutableListOf<String>()
-                val extraordinaryPowerList= mutableListOf<String>()
-
-                val COMM_LEVEL_LIST = listOf(
-                    "Semi-empathy*","Empathy","Speech**","Speech and Telepathy***"
-                )
-
-                fun setInitialProperties(inputIntelligence:Int) {
-
-                    when (inputIntelligence) {
-
-                        12      -> {
-                            wIntelligence            = 12
-                            wPrimaryAbilities        = 1
-                            wExtraordinaryPowers     = 0
-                            wCommLevel               = 0
-                        }
-
-                        13      -> {
-                            wIntelligence            = 13
-                            wPrimaryAbilities        = 2
-                            wExtraordinaryPowers     = 0
-                            wCommLevel               = 1
-                        }
-
-                        14      -> {
-                            wIntelligence           = 14
-                            wPrimaryAbilities       = 2
-                            wExtraordinaryPowers    = 0
-                            wCommLevel              = 2
-                        }
-
-                        15      -> {
-                            wIntelligence           = 15
-                            wPrimaryAbilities       = 3
-                            wExtraordinaryPowers    = 0
-                            wCommLevel              = 2
-                        }
-
-                        16      -> {
-                            wPrimaryAbilities       = 3
-                            wExtraordinaryPowers    = 0
-                            wCommLevel              = 2
-                            wSpecialReadingPower    = "The weapon can also read languages/maps of any non-magical type"
-                        }
-
-                        else    -> {
-                            wPrimaryAbilities       = 3
-                            wExtraordinaryPowers    = 1
-                            wCommLevel              = 3
-                            wSpecialReadingPower    = "The weapon can read languages as well as magical writings." }
-                    }
-                }
-
-                fun getLanguageNumber(firstRoll: Boolean): Int =
-                    when (Random.nextInt(1,if (firstRoll) 101 else 100)) {
-
-                        in 1..40    -> 1
-                        in 41..70   -> 2
-                        in 71..85   -> 3
-                        in 86..95   -> 4
-                        in 96..99   -> 5
-                        else        -> 6
-                    }
-
-                // region [ Determine intelligence ]
-
-                wIntelligence = when (Random.nextInt(1,101)) {
-
-                    in 1..34    -> 12
-                    in 35..59   -> 13
-                    in 60..79   -> 14
-                    in 80..91   -> 15
-                    in 92..97   -> 16
-                    else        -> 17
-                }
-
-                setInitialProperties(wIntelligence)
-                // endregion
-
-                // region [ Determine alignment ]
-
-                val wAlignment = if (mAlignment.isBlank()){
-
-                    abbrevToAlignment( when (Random.nextInt(1,101)){
-
-                        in 1..5     -> "CG"
-                        in 6..15    -> "CN"
-                        in 16..20   -> "CE"
-                        in 21..25   -> "NE"
-                        in 26..30   -> "LE"
-                        in 31..55   -> "LG"
-                        in 56..60   -> "LN"
-                        in 61..80   -> "TN"
-                        else        -> "NG"
-                    })
-
-                } else {
-
-                    abbrevToAlignment(mAlignment)
-                }
-                // endregion
-
-                // region [ Determine primary abilities ]
-
-                while ((wPrimaryAbilities > 0)||(wExtraPrimaryRolls > 0)) {
-
-                    when (Random.nextInt(1, if ( wPrimaryAbilities > 0 ) 101 else 93)) {
-
-                        in 1..11    -> primaryAbilityList.add("Detect \"elevator\"/shifting rooms/walls in ten-foot radius")
-                        in 12..22   -> primaryAbilityList.add("Detect sloping passages in a ten-foot radius")
-                        in 23..33   -> primaryAbilityList.add("Detect traps of large size in a ten-foot radius")
-                        in 34..44   -> primaryAbilityList.add("Detect evil or good in a ten-foot radius")
-                        in 45..55   -> primaryAbilityList.add("Detect precious metals (type and amount) in a 20-foot radius")
-                        in 56..66   -> primaryAbilityList.add("Detect gems (type and number) in a five-foot radius")
-                        in 67..77   -> primaryAbilityList.add("Detect Magic in a ten-foot radius")
-                        in 78..82   -> primaryAbilityList.add("Detect secret doors in a five-foot radius")
-                        in 83..87   -> primaryAbilityList.add("Detect invisible objects in a ten-foot radius")
-                        in 88..92   -> primaryAbilityList.add("Locate Object in a 120-foot radius")
-                        in 93..94   -> wExtraPrimaryRolls += 2
-                        else        -> wExtraordinaryPowers++
-                    }
-
-                    if (wPrimaryAbilities>0) wPrimaryAbilities -- else wExtraPrimaryRolls --
-                }
-                // endregion
-
-                // region [ Determine extraordinary powers ]
-
-                while ((wExtraordinaryPowers > 0)||(wExtraExtraordinaryRolls > 0)) {
-
-                    when (Random.nextInt(1,101)) {
-
-                        in 1..7     -> extraordinaryPowerList.add("Charm Person on contact - " +
-                                "three times per day")
-
-                        in 8..15    -> extraordinaryPowerList.add("Clairaudience, 30 yards " +
-                                "range - three times per day, one round per use")
-
-                        in 16..22   -> extraordinaryPowerList.add("Clairvoyance, 30 yards " +
-                                "range - three times/day, one round per use")
-
-                        in 23..28   -> extraordinaryPowerList.add("Determine direction and " +
-                                "depth - twice/day")
-
-                        in 29..34   -> extraordinaryPowerList.add("ESP, 30 yards range - " +
-                                "three times per day, one round per use")
-
-                        in 35..41   -> extraordinaryPowerList.add("Fly, 120 feet/turn - one " +
-                                "hour/day")
-
-                        in 42..47   -> extraordinaryPowerList.add("Cure-All - one time/day")
-
-                        in 48..54   -> extraordinaryPowerList.add("Illusion, 120 yards " +
-                                "range - twice/day, as Wand of Illusion")
-
-                        in 55..61   -> extraordinaryPowerList.add("Levitation, one-turn " +
-                                "duration - three times/day, as 6th level magic user")
-
-                        in 62..67   -> extraordinaryPowerList.add("Strength - one time/day " +
-                                "(upon wielder only)")
-
-                        in 68..75   -> extraordinaryPowerList.add("Telekinesis, 250 pounds " +
-                                "maximum - twice/day, one round each per use")
-
-                        in 76..81   -> extraordinaryPowerList.add("Telepathy, 60 yards range " +
-                                "- twice/day")
-
-                        in 82..88   -> extraordinaryPowerList.add("Teleportation - one " +
-                                "time/day, 600 pounds maximum, casting time two segments")
-
-                        in 89..94   -> extraordinaryPowerList.add("X-ray vision, 40 yards " +
-                                "range - twice/day, one turn per use")
-
-                        in 95..97   -> wExtraExtraordinaryRolls +=
-                            if ( wExtraordinaryPowers > 0 ) 2 else 1
-
-                        in 98..99   -> extraordinaryPowerList.add("GM may choose one power " +
-                                "from Table B114 on GMG pg. 275")
-
-                        else        -> {
-
-                            extraordinaryPowerList.add("GM may choose one power from Table " +
-                                    "B114 on GMG pg. 275")
-
-                            if (wSpecialPurpose.isBlank()) {wSpecialPurpose = "Roll me"}
-                        }
-                    }
-
-                    if (wExtraordinaryPowers > 0) {wExtraordinaryPowers --} else {wExtraExtraordinaryRolls --}
-                }
-                // endregion
-
-                // region [ Determine special purpose ]
-
-                if (wSpecialPurpose == "Roll me") {
-
-                    wSpecialPurpose = when (Random.nextInt(1,101)) {
-
-                        in 1..10    -> "Defeat/slay diametrically opposed alignment"
-                        in 11..20   -> "Defeat clerics (of a particular type)"
-                        in 21..30   -> "Defeat fighters"
-                        in 31..40   -> "Defeat magic-users"
-                        in 41..50   -> "Defeat thieves"
-                        in 51..55   -> "Defeat bards"
-                        in 56..65   -> "Overthrow law and/or chaos"
-                        in 66..75   -> "Defeat good and/or evil"
-                        in 76..95   -> "Defeat nonhuman monsters"
-                        else        -> "Other"
-                    }
-
-                    wSpecialPurposePower = when (Random.nextInt(1,101)) {
-
-                        in 1..10    ->  "Blindness for 2d6 rounds (Upon scoring a with w/ " +
-                                "weapon, unless opponent saves vs. Spell)"
-
-                        in 11..20   -> "Confusion for 2d6 rounds (Upon scoring a with w/ weapon, " +
-                                "unless opponent saves vs. Spell)"
-
-                        in 21..25   -> "Disintegrate (Upon scoring a with w/ weapon, unless " +
-                                "opponent saves vs. Spell)"
-
-                        in 26..55   ->  "Fear for 1d4 rounds (Upon scoring a with w/ weapon, " +
-                                "unless opponent saves vs. Spell)"
-
-                        in 56..65   -> "Zarba’s Sphere of Insanity for 1d4 rounds (Upon scoring " +
-                                "a with w/ weapon, unless opponent saves vs. Spell)"
-
-                        in 66..80   -> "Paralyzation for 1d4 rounds (Upon scoring a with w/ " +
-                                "weapon, unless opponent saves vs. Spell)"
-
-                        else        -> "+2 to all wielder’s saving throws, -1 to each die of " +
-                                "damage sustained"
-                    }
-                }
-                // endregion
-
-                // region [ Determine languages known ]
-
-                if (wCommLevel > 1) { wLanguagesKnown = getLanguageNumber(true) }
-
-                if ( wLanguagesKnown == 6 ){
-
-                    // If max result was rolled, roll twice more on B117, sum them, and take higher result.
-
-                    wLanguagesKnown = (getLanguageNumber(false) +
-                            getLanguageNumber(false))
-
-                    if (wLanguagesKnown < 6) wLanguagesKnown = 6
-                }
-                // endregion
-
-                // region [ Calculate ego ]
-
-                weaponEgo = effectiveWeaponMod +
-                        primaryAbilityList.size +
-                        (extraordinaryPowerList.size * 2) +
-                        ( if (wSpecialPurpose.isNotEmpty()) {5} else {0} ) +
-                        wLanguagesKnown +
-                        ( when (wIntelligence) {
-                            16  -> 1
-                            17  -> 4
-                            else-> 0
-                        })
-                // endregion
-
-                // region [ Record info on table ]
-                flatNotesList.add("Intelligent weapon info" to "Ego rating: $weaponEgo")
-
-                flatNotesList.add("Intelligent weapon info" to "Intelligence: $wIntelligence")
-
-                flatNotesList.add("Intelligent weapon info" to "Alignment: $wAlignment")
-
-                flatNotesList.add("Intelligent weapon info" to "Languages known: $wLanguagesKnown")
-
-                flatNotesList.add("Intelligent weapon info" to "Communication mode: ${COMM_LEVEL_LIST[wCommLevel]}")
-
-                if (wSpecialReadingPower.isNotEmpty()) {
-                    flatNotesList.add("Intelligent weapon info" to wSpecialReadingPower)
-                }
-
-                flatNotesList.add("Intelligent weapon info" to "Please refer to GMG pgs. 275-276 for more details.")
-
-                if (primaryAbilityList.isNotEmpty()) {
-
-                    flatNotesList.add("Intelligent weapon info" to "[ PRIMARY ABILIT" +
-                                "${if (primaryAbilityList.size == 1) "Y" else "IES"} ]")
-
-                    primaryAbilityList.forEachIndexed { index, entry ->
-
-                        flatNotesList.add("Intelligent weapon info" to "${index + 1}) $entry")
-                    }
-                }
-
-                if (extraordinaryPowerList.isNotEmpty()) {
-
-                    flatNotesList.add("Intelligent weapon info" to "[ EXTRAORDINARY POWER" +
-                                "${if (extraordinaryPowerList.size == 1) "" else "S"} ]")
-
-                    extraordinaryPowerList.forEachIndexed { index, entry ->
-
-                        flatNotesList.add("Intelligent weapon info" to "${index + 1}) $entry")
-                    }
-                }
-
-                if (wSpecialPurpose.isNotEmpty()) {
-
-                    flatNotesList.add("Intelligent weapon info" to "[ SPECIAL PURPOSE INFO ]")
-                    flatNotesList.add("Intelligent weapon info" to
-                            "Special purpose: $wSpecialPurpose")
-                    flatNotesList.add("Intelligent weapon info" to
-                            "Special purpose power: $wSpecialPurposePower")
-                }
-                // endregion
+                mAlignment = intWeaponProfile.second
 
             } else if ( template.intelChance == -1 ) {
 
@@ -3029,546 +1911,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             // region [ Roll "Artifact particulars" ]
 
             if (itemType == "A24") {
-
-                Log.d("createMagicItemTuple() | artifact","Artifact indicated.")
-
-                if (template.multiType == 4) {
-                    flatNotesList.add("Artifact particulars" to HACKMASTER_CLASS_ITEM_TEXT)
-                }
-
-                // region ( Roll minor benign effects )
-                if (template.iPower in 1..46){
-
-                    val minorBenignEffects = listOf(
-                        "A. Adds 1 point to possessor’s major attribute",
-                        "B. Animate Dead (1 creature by touch) 7 times/week",
-                        "C. Audible Glamer upon command 3 times/day",
-                        "D. Bless (by touch)",
-                        "E. Clairaudience (when touched to ear)",
-                        "F. Clairvoyance (when touched to eyes)",
-                        "G. Color Spray (3 times/day)",
-                        "H. Comprehend Languages when held",
-                        "I. Create Food and Water (1 time/day)",
-                        "J. Cure Light Wounds (7 times/day)",
-                        "K. Darkness (5', 10', or 15' radius) 3 times/day",
-                        "L. Detect Charm (3 times/day)",
-                        "M. Detect Evil/Good when held or ordered",
-                        "N. Detect invisibility when ordered",
-                        "O. Detect Magic (3 times/day)",
-                        "R. Find Traps (3 times/day)",
-                        "S. Fly when held and ordered (1 time/day)",
-                        "T. Hypnotic Pattern (when moved) 3 times/day",
-                        "U. Infravision when held or worn",
-                        "V. Improved invisibility (3 times/day)",
-                        "W. Know alignment when held and ordered (1 time/day)",
-                        "X. Levitate when held and ordered (3 times/day)",
-                        "Y. Light (7 times/day)",
-                        "Z. Mind Blank (3 times/day)",
-                        "AA. Obscurement (1 time/day)",
-                        "BB. Pass without Trace (1 time/day)",
-                        "CC. Possessor immune to disease",
-                        "DD. Possessor immunne to fear",
-                        "EE. Possessor immune to gas of any type",
-                        "FF. Possessor need not eat/drink for up to 1 week",
-                        "II. Sanctuary when held or worn (1 time/day)",
-                        "JJ. Shield, when held or worn (1 time/day)",
-                        "KK. Speak with animals (3 times/day)",
-                        "LL. Speak to the dead (1 time/day)",
-                        "MM. Speak with plants (7 times/week)",
-                        "NN. Tongues when held or worn and commanded",
-                        "OO. Ultravision when held or worn",
-                        "PP. Ventriloquism upon command (3 times/day)",
-                        "QQ. Water Breathing upon command",
-                        "RR. Water Walk at will",
-                        "SS. Wearer immune to Charm and Hold spells",
-                        "TT. Wearer immune to Magic Missiles",
-                        "UU. Web (1 time/day)",
-                        "VV. Wizard Lock (7 times/week)",
-                        "WW. Write (1 time/day)",
-                        "XX. Zombie Animation (1 time/week)"
-                    )
-                    val typeIList = arrayListOf<Int>()
-
-                    flatNotesList.add("Artifact particulars" to "[ I. MINOR BENIGN EFFECT" +
-                                "${if (template.iPower > 1)"S" else ""} ]")
-
-                    repeat (template.iPower) {
-
-                        var newEffect: Int
-
-                        // Roll effect, re-rolling duplicates
-                        do {
-
-                            newEffect = Random.nextInt(minorBenignEffects.size)
-
-                        } while ((typeIList.contains(newEffect))||(newEffect < 0))
-
-                        // Add unique effect to list
-                        typeIList.add(newEffect)
-                    }
-                    
-                    // Add effects once all are generated
-                    typeIList.forEachIndexed {index, entry ->
-                        flatNotesList.add("Artifact particulars" to
-                                "${index + 1}) ${minorBenignEffects[entry]}")
-                    }
-                }
-                // endregion
-
-                // region ( Roll major benign effects )
-                if (template.iiPower in 1..50){
-
-                    val majorBenignEffects = listOf(
-                        "A. Animal Summoning (II or III) 2 times/day",
-                        "B. Animate Object upon command (1 time/day)",
-                        "C. +2 to AC of possessor or AC 0, whichever is better",
-                        "D. Cause Serious Wounds by touch",
-                        "E. Charm monster (2 times/day)",
-                        "F. Charm person (7 times/week)",
-                        "G. Confusion (1 time/day)",
-                        "H. Cure-All (1 time/day)",
-                        "I. Cure Blindness by touch",
-                        "J. Cure Disease by touch",
-                        "K. Dimension Door (2 times/day)",
-                        "L. Disintegrate (1 time/day)",
-                        "M. Dispel Illusions (automatically) upon command (2 times/day)",
-                        "N. Dispel Magic upon command (2 times/day)",
-                        "O. Double movement speed (on foot)",
-                        "P. Emotion (2 times/day)",
-                        "Q. Explosive Runes (1 time/month)",
-                        "R. Fear by touch or gaze",
-                        "S. Fireball (12-15 dice) 2 times/day",
-                        "T. Fire Shield (2 times/day)",
-                        "U. Giant strength (determine type randomly) for 2 turns 2 times/day",
-                        "V. Haste (1 time/day)",
-                        "W. Hold Animal (1 time/day)",
-                        "X. Hold Monster (1 time/day)",
-                        "Y. Hold Person (1 time/day)",
-                        "Z. Lightning Bolt (12-15 dice) 2 times/day",
-                        "AA. Lyggl’s Cone of Cold (12-15 dice) 2 times/day",
-                        "BB. Minor Globe of Invulnerability (1 time/day)",
-                        "CC. Paralyzation by touch",
-                        "DD. Phantasmal Killer (1 time/day)",
-                        "EE. Polymorph Self (7 times/week)",
-                        "FF. Regenerate 2 hp/turn (but not if killed)",
-                        "GG. Remove Curse by touch (7 times/week)",
-                        "HH. Slow (1 time/day)",
-                        "II. Speak with Monster (2 times/day)",
-                        "JJ. Stone to Flesh (1 time/day)",
-                        "KK. Suggestion (2 times/day)",
-                        "LL. Telekinesis (100-600 pounds weight) 2 times/day",
-                        "MM. Teleport Without Error (2 times/day)",
-                        "NN. Transmute Stone to Mud (2 times/day)",
-                        "OO. True Seeing (1 time/day)",
-                        "PP. Turn Wood (1 time/day)",
-                        "QQ. Wall of Fire (2 times/day)",
-                        "RR. Wall of Ice (2 times/day)",
-                        "SS. Wall of Thorns (2 times/day)",
-                        "TT. Wall Passage (2 times/day)",
-                        "UU. Weapon damage is +2 per hit",
-                        "VV. Wind Walk (1 time/day)",
-                        "WW. Wizard Eye (2 times/day)",
-                        "XX. Word of Recall (1 time/day)"
-                    )
-                    val typeIIList = arrayListOf<Int>()
-
-                    flatNotesList.add("Artifact particulars" to "[ II. MAJOR BENIGN EFFECT" +
-                                "${if (template.iiPower > 1)"S" else ""} ]")
-
-                    repeat (template.iiPower) {
-
-                        var newEffect = -1
-
-                        // Roll effect, re-rolling duplicates
-                        do {
-
-                            newEffect = Random.nextInt(majorBenignEffects.size)
-
-                        } while ((typeIIList.contains(newEffect))||(newEffect<0))
-
-                        // Add unique effect to list
-                        typeIIList.add(newEffect)
-                    }
-                    
-                    // Add effects once all are generated
-                    typeIIList.forEachIndexed {index, entry ->
-                        flatNotesList.add("Artifact particulars" to
-                                "${index + 1}) ${majorBenignEffects[entry]}")
-                    }
-                }
-                //endregion
-
-                // region ( Roll minor malevolent effects )
-                if (template.iiiPower in 1..25){
-
-                    Log.d("createMagicItemTuple() | artifact | III","${template.iiiPower} " +
-                            "minor malevolent effect(s) indicated.")
-
-                    val minorMalevolentEffects = listOf(
-                        "A. Acne on possessor’s face",
-                        "B. Blindness for 1-4 rounds when first used against an enemy",
-                        "C. Body odor noticeable at distance of ten feet",
-                        "D. Deafness for 1-4 turns when first used against an enemy",
-                        "E. Gems or jewelry found never increase in value",
-                        "F. Holy water within 10' of item becomes polluted",
-                        "G. Lose 1-4 points of Charisma for 1-4 days when major power is used",
-                        "H. Possessor loses interest in sex",
-                        "I. Possessor has satyriasis",
-                        "J. Possessor’s hair turns white",
-                        "K. Saving throws versus spells are at -1",
-                        "L. Saving throw versus poison are at -2",
-                        "M. Sense of smell lost for 2-8 hours when used against an enemy",
-                        "N. Small fires (torches, et al.) extinguished when major powers are used",
-                        "O. Small items of wood rot from possessor’s touch (any item up to normal door size, 1-7 days time)",
-                        "P. Touch of possessor kills green plants",
-                        "Q. User causes hostility towards himself in all mammals within 60 yards",
-                        "R. User loses 1 point of Comeliness permanently",
-                        "S. User must eat and drink 6 times the normal amount due to the item’s drain upon him or her",
-                        "T. User’s sex changes",
-                        "U. Wart appears on possessor’s nose",
-                        "V. Weight gain of 10-40 pounds",
-                        "W. Weight loss of 5-30 pounds",
-                        "X. Yearning for item forces possessor to never be away from it for more than 1 day if at all possible",
-                        "Y. Yelling becomes necessary to invoke spells with verbal components"
-                    )
-                    val typeIIIList = arrayListOf<Int>()
-
-                    flatNotesList.add("Artifact particulars" to "[ III. MINOR MALEVOLENT EFFECT" +
-                                "${if (template.iiiPower > 1)"S" else ""} ]")
-
-                    repeat (template.iiiPower) {
-
-                        var newEffect : Int
-
-                        // Roll effect, re-rolling duplicates
-                        do {
-
-                            newEffect = Random.nextInt(minorMalevolentEffects.size)
-
-                        } while ((typeIIIList.contains(newEffect))||(newEffect<0))
-
-                        // Add unique effect to list
-                        typeIIIList.add(newEffect)
-                    }
-
-                    // Add effects once all are generated
-                    typeIIIList.forEachIndexed {index, entry ->
-                        flatNotesList.add("Artifact particulars" to
-                                "${index + 1}) ${minorMalevolentEffects[entry]}")
-                    }
-                }
-                // endregion
-
-                // region ( Roll major malevolent effects )
-                if (template.ivPower in 1..34){
-
-                    val majorMalevolentEffects = listOf(
-                        "A. Body rot [see Table B126] is 10% likely cumulative whenever a primary power is used, and part of the body is lost permanently",
-                        "B. Capricious alignment change each time a primary power is used",
-                        "C. Geas/Quest [see Table B126] placed upon possessor",
-                        "D. Item contains the life force of a person — after a set number of uses, the possessor’s life force is drawn into it and the former soul is released (see GMG pg 285)",
-                        "E. Item has power to affect its possessor when a primary power is used if the character has not followed the alignment of the artifact/relic",
-                        "F. Item is a prison for for a powerful being — there is a 1%-4% cumulative chance per usage that it will [see Table B126]",
-                        "G. Item is itself a living, sentient being forced to serve; but each usage of a primary power gives it a 1%-3% cumulative chance the spell will be broken and the being will [see Table B126]",
-                        "H. Item is powerless against and hates 1-2 species of creatures [see Table B126] — when within 100 feet of any such creatures it forces possessor to attack",
-                        "I. Item releases a gas which renders all creatures [see Table B126], within 20 feet, including the wielder, powerless to move for 5-20 rounds",
-                        "J. Lose 1 point of Charisma permanently",
-                        "K. Lose 1 point of Constitution permanently",
-                        "L. Lose 1 point of Dexterity permanently",
-                        "M. Lose 1 hit point permanently",
-                        "N. Lose 1 point of Intelligence permanently",
-                        "O. Lose 1 point of Strength permanently",
-                        "P. Lose 1 point of Wisdom permanently",
-                        "Q. Magic drained from most powerful magic item (other than artifact or relic) within 20 feet of user",
-                        "R. Reverse alignment permanently",
-                        "S. Sacrifice a certain animal [see Table B126] to activate item for 1 day",
-                        "T. Sacrifice a human or player character to activate item for 1 day",
-                        "U. Sacrifice 10,000-60,000 gp worth of gems/jewelry to activate item for 1 day",
-                        "V. User becomes berserk and attacks creatures [see Table B126] within 20 feet randomly (check each round) for 5-20 rounds",
-                        "W. User goes insane for 1-4 days",
-                        "X. User grows 3 inches taller each time primary power is used",
-                        "Y. User instantly killed (but may be Raised or Resurrected)",
-                        "Z. User loses 1 level of experience",
-                        "AA. User receives 2-20 points of damage",
-                        "BB. User receives 5-30 points of damage",
-                        "CC. User required to slay a certain type of creature [see Table B126] to activate item, and slaying another set type will de-activate item",
-                        "DD. User shrinks 3 inches each time primary power is used",
-                        "EE. User transformed into a powerful but minor being from another plane [see Table B126]",
-                        "FF. User withers and ages 3-30 years [see Table B126] each time primary power is used, eventually the possessor becomes a withered Zombie guardian of the item",
-                        "GG. Utterance of a spell causes complete loss of voice for one day",
-                        "HH. Yearning to be worshipped is uncontrollable; those failing to bow and scrape to the artifact’s possessor will be subject to instant attack"
-                    )
-                    val typeIVList = arrayListOf<Int>()
-
-                    flatNotesList.add("Artifact particulars" to "[ IV. MAJOR MALEVOLENT EFFECT" +
-                                "${if (template.ivPower > 1)"S" else ""} ]")
-
-                    repeat (template.ivPower) {
-
-                        var newEffect: Int
-
-                        // Roll effect, re-rolling duplicates
-                        do {
-
-                            newEffect = when (Random.nextInt(1,101)){
-
-                                in 1..3     -> 0
-                                in 4..6     -> 1
-                                in 7..9     -> 2
-                                in 10..12   -> 3
-                                in 13..15   -> 4
-                                in 16..18   -> 5
-                                in 19..21   -> 6
-                                in 22..24   -> 7
-                                in 25..27   -> 8
-                                in 28..30   -> 9
-                                in 31..33   -> 10
-                                in 34..36   -> 11
-                                in 37..39   -> 12
-                                in 40..42   -> 13
-                                in 43..45   -> 14
-                                in 46..48   -> 15
-                                in 49..51   -> 16
-                                in 52..54   -> 17
-                                in 55..57   -> 18
-                                in 58..60   -> 19
-                                in 61..63   -> 20
-                                in 64..66   -> 21
-                                in 67..69   -> 22
-                                in 70..72   -> 23
-                                in 73..75   -> 24
-                                in 76..78   -> 25
-                                in 79..81   -> 26
-                                in 82..84   -> 27
-                                in 85..87   -> 28
-                                in 88..90   -> 29
-                                in 91..93   -> 30
-                                in 94..96   -> 31
-                                in 97..98   -> 32
-                                in 99..100  -> 33
-                                else        -> -1
-                            }
-
-                        } while ((typeIVList.contains(newEffect))||(newEffect < 0))
-
-                        // Add unique effect to list
-                        typeIVList.add(newEffect)
-                    }
-
-                    // Add effects once all are generated
-                    typeIVList.forEachIndexed {index, entry ->
-                        flatNotesList.add("Artifact particulars" to
-                                "${index + 1}) ${majorMalevolentEffects[entry]}")
-                    }
-                }
-                // endregion
-
-                // region ( Roll prime powers )
-                if (template.vPower in 1..37){
-
-                    val primePowers = listOf(
-                        "A. All of possessor’s ability totals permanently raised by 2 points each upon pronouncement of a command word (18 maximum)",
-                        "B. All of the possessor’s ability scores are raised to 18 each upon pronouncement of a command word",
-                        "C. Bones/exoskeleton/cartilage of opponent turned to jelly - 1 time/day",
-                        "D. Cacodemon-like power summons a Demon Lord, Arch-Devil, or Daemon Prince — 1 time/month",
-                        "E. Creeping Doom - 1 time/day",
-                        "F. Death Ray equal to a Finger of Death with no saving throw - 1 time/day",
-                        "G. Death Spell power of 110%-200% effectiveness with respect to number os levels/Hit Dice affected - 1 time/day",
-                        "H. Gate spell 1 time/day",
-                        "I. Imprisonment spell - 1 time/week",
-                        "J. Magic resistance (lasting 12 turns) of 50-75% for possessor upon command word - 1 time/day",
-                        "K. Major attribute permanently raised to 19 upon command word",
-                        "L. Meteor Swarm - 1 time/day",
-                        "M. Monster Summoning VIII - 2 times/day",
-                        "N. Plane Shift - 1 time/day",
-                        "O. Polymorph Any Object - 1 time/day",
-                        "P. Power Word: Blind, Kill, or Stun - 1 time/day",
-                        "Q. Premonition of death or serious hard to possessor",
-                        "R. Prismatic spray - 1 time/day",
-                        "S. Restoration - 1 time/day",
-                        "T. Resurrection - 7 times/week",
-                        "U. Shades - 2 times/day",
-                        "V. Shape Change - 2 times/day",
-                        "W. Spell absorption, 19-24 levels - 1 time/week",
-                        "X. Summon 1 of each type of elemental, 16 Hit Dice each, automatic control - 1 time/week",
-                        "Y. Summon Djinn or Efreet Lord (8 hp/dice, +2 to-hit and +4 to damage) for 1 day of service - 1 time/week",
-                        "Z. Super Sleep spell affects double number of creatures plus up to two 5th or 6th and one 7th or 8th level creature",
-                        "AA. Temporal Stasis, no saving throw, upon touch - 1 time/month",
-                        "BB. The item enables the possessor to Legend Lore, Commune, or Contact Other Plane - 1 time/week",
-                        "CC. Time Stop of twice normal duration - 1 time/week",
-                        "DD. Total fire/heat resistance for all creatures within 20 feet of the item",
-                        "EE. Total immunity to all forms of mental and psionic attacks",
-                        "FF. Total immunity to all forms of cold",
-                        "GG. Trap the Soul with 90% effectiveness - 1 time/month",
-                        "HH. User can cast combination spells (if a spell caster) with no chance of failure or mishap, as follows:" +
-                                "\n1) 1st and 2nd level spells simultaneously",
-                        "HH. User can cast combination spells (if a spell caster) with no chance of failure or mishap, as follows:" +
-                                "\n2) 2nd and 3rd level spells simultaneously",
-                        "HH. User can cast combination spells (if a spell caster) with no chance of failure or mishap, as follows:" +
-                                "\n3) 3rd and 4th level spells simultaneously",
-                        "HH. User can cast combination spells (if a spell caster) with no chance of failure or mishap, as follows:" +
-                                "\n4) 1st, 2nd, and 3rd level spells simultaneously",
-                        "II. Vanish - 2 times/day",
-                        "JJ. Vision - 1 time/day",
-                        "KK. Wish - 1 time/day",
-                        "LL. Youth restored to creature touched [see Table B127] - 1 time/month"
-                    )
-                    val typeVList = arrayListOf<Int>()
-
-                    flatNotesList.add("Artifact particulars" to "[ V. PRIME POWER " +
-                                "${if (template.vPower > 1)"S" else ""} ]")
-
-                    repeat (template.vPower) {
-
-                        var newEffect = -1
-
-                        // Roll effect, re-rolling duplicates
-                        do {
-
-                            when (Random.nextInt(1,101)){
-
-                                in 1..2     -> newEffect = 0
-                                in 3..5     -> newEffect = 1
-                                in 6..7     -> newEffect = 2
-                                in 8..10    -> newEffect = 3
-                                in 11..12   -> newEffect = 4
-                                in 13..15   -> newEffect = 5
-                                in 16..17   -> newEffect = 6
-                                in 18..20   -> newEffect = 7
-                                in 21..22   -> newEffect = 8
-                                in 23..25   -> newEffect = 9
-                                in 26..27   -> newEffect = 10
-                                in 28..29   -> newEffect = 11
-                                in 30..32   -> newEffect = 12
-                                in 33..35   -> newEffect = 13
-                                in 36..38   -> newEffect = 14
-                                in 39..41   -> newEffect = 15
-                                in 42..44   -> newEffect = 16
-                                in 45..46   -> newEffect = 17
-                                in 47..48   -> newEffect = 18
-                                in 49..50   -> newEffect = 19
-                                in 51..53   -> newEffect = 20
-                                in 54..55   -> newEffect = 21
-                                in 56..58   -> newEffect = 22
-                                in 59..60   -> newEffect = 23
-                                in 61..62   -> newEffect = 24
-                                in 63..65   -> newEffect = 25
-                                in 66..68   -> newEffect = 26
-                                in 69..71   -> newEffect = 27
-                                in 72..73   -> newEffect = 28
-                                in 74..76   -> newEffect = 29
-                                in 77..79   -> newEffect = 30
-                                in 80..82   -> newEffect = 31
-                                in 83..85   -> newEffect = 32
-                                in 86..89   -> {
-
-                                    when (Random.nextInt(1,5)){
-
-                                        1   -> newEffect = 33
-                                        2   -> newEffect = 34
-                                        3   -> newEffect = 35
-                                        4   -> newEffect = 36
-                                    }
-                                }
-                                in 90..92   -> newEffect = 37
-                                in 93..95   -> newEffect = 38
-                                in 96..97   -> newEffect = 39
-                                in 98..100  -> newEffect = 40
-                            }
-
-                        } while ((typeVList.contains(newEffect))||(newEffect < 0))
-
-                        // Add unique effect to list
-                        typeVList.add(newEffect)
-                    }
-
-                    // Add effects once all are generated
-                    typeVList.forEachIndexed {index, entry ->
-                        flatNotesList.add("Artifact particulars" to
-                                "${index + 1}) ${primePowers[entry]}")
-                    }
-                }
-                //endregion
-
-                // region ( Roll side effects )
-                if (template.viPower in 1..18){
-
-                    val sideEffects = listOf(
-                        "A. Alignment of possessor permanently changed to that of of item",
-                        "B. Charisma of possessor reduced to 3 as long as item is owned",
-                        "C. Fear reaction possible in any creature within 20 feet of the item whenever a major or primary power is used; all, including the possessor, must save versus spells or flee in panic",
-                        "D. Fumble reaction possible in any creature within 20 feet of the item whenever a major or primary power is used; all, including the possessor, must save versus spells or be affected as the spell",
-                        "E. Greed and covetousness reaction in all intelligent creatures viewing the item [see Table B128]",
-                        "F. Lycanthropy inflicted upon the possessor, type according to the alignment of item, change to animal form involuntary and 50% likely (1 check only) whenever confronted and attacked by an enemy",
-                        "G. Treasure within five-foot radius of mineral nature (metal or gems) of nonmagical type is reduced by 20%-80% as item consumes it to sustain its power",
-                        "H. User becomes ethereal whenever major or primary power of the item is activated [see Table B128]",
-                        "I. User becomes fantastically strong (19, or +1 if already 19) but ver clumsy [see Table B128]",
-                        "J. User cannot touch or be touched by any (even magical) metal; metal simply passes through his body as if it did not exist and has no effect",
-                        "K. User has a poison touch which requires that humans and man-sized humanoids (but not undead) save versus poison or die whenever touched",
-                        "L. User has limited omniscience and may request the GM to answer 1 question per game day [see Table B128]",
-                        "M. User has short-duration charismatic effect upon creatures of similar alignment [see Table B128]",
-                        "N. Whenever any power of the item is used, temperature within a 60-foot radius is raised 20-50 degrees Fahrenheit for 2-12 turns (moves with item)",
-                        "O. Whenever the major or prime power of the item is used, temperature within a 6-foot radius is lowered 20-80 degrees Fahrenheit for 2-12 turns (moves with item)",
-                        "P. Whenever the prime power is used the possessor must save versus spells or lose 1 level of experience",
-                        "Q. Whenever the prime power is used, those creatures friendly to the user within 20 feet, excluding the user, will sustain 5-20 points of damage",
-                        "R. Whenever this item is used as a weapon to strike an enemy, it does double normal damage to the opponent but the wielder takes (normal) damage just as if he had been struck by the item"
-                    )
-                    val typeVIList = arrayListOf<Int>()
-
-                    flatNotesList.add("Artifact particulars" to "[ VI. SIDE EFFECT " +
-                                "${if (template.vPower > 1)"S" else ""} ]")
-
-                    repeat (template.viPower) {
-
-                        var newEffect : Int
-
-                        // Roll effect, re-rolling duplicates
-                        do {
-
-                            newEffect = when (Random.nextInt(1,101)){
-
-                                in 1..5     -> 0
-                                in 6..11    -> 1
-                                in 12..16   -> 2
-                                in 17..21   -> 3
-                                in 22..27   -> 4
-                                in 28..32   -> 5
-                                in 33..38   -> 6
-                                in 39..43   -> 7
-                                in 44..48   -> 8
-                                in 49..54   -> 9
-                                in 55..60   -> 10
-                                in 61..66   -> 11
-                                in 67..71   -> 12
-                                in 72..77   -> 13
-                                in 78..82   -> 14
-                                in 83..88   -> 15
-                                in 89..94   -> 16
-                                in 95..100  -> 17
-                                else        -> -1
-                            }
-
-                        } while ((typeVIList.contains(newEffect))||(newEffect < 0))
-
-                        // Add unique effect to list
-                        typeVIList.add(newEffect)
-                    }
-
-                    // Add effects once all are generated
-                    typeVIList.forEachIndexed {index, entry ->
-                        flatNotesList.add("Artifact particulars" to
-                                "${index + 1}) ${sideEffects[entry]}")
-                    }
-                }
-                // endregion
-
-                // Add footnote if artifact has any additional effects whatsoever
-                if ((template.iPower > 0)||(template.iiPower > 0)||(template.iiiPower > 0)||
-                    (template.ivPower > 0)||(template.vPower > 0)||(template.viPower > 0)) {
-
-                    flatNotesList.add("Artifact particulars" to
-                            "For more information, see GMG pages 284-286")
-                }
+                flatNotesList.addAll(generateArtifactParticulars(template))
             }
             // endregion
 
@@ -3655,29 +1998,10 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             val nestedList = ArrayList<Pair<String,List<String>>>()
             val tableNames = flatNotesList.distinctBy { it.first }.map { it.first }
 
-            flatNotesList.forEachIndexed { index, (title, entry) ->
-                Log.d("convertNotes() | flatNotesList","#${index+1}) \"$title\" to " +
-                        "\"$entry\"")
-            }
-
-            // 1) Split into sublist of same first() value TODO
-
-            // 2) Capture first() value of sublist[0] to serve as table name TODO
-
-            // 3) Map sublist into single-string list of second() values TODO
-
             tableNames.forEach { tableName ->
                 val noteList = flatNotesList.filter { it.first == tableName }.map{ it.second }
 
                 nestedList.add(tableName to noteList)
-            }
-
-            nestedList.forEach { (listLabel, detailList) ->
-                Log.d("convertNotes()","[${listLabel}] has ${detailList.size}" +
-                    if (detailList.size == 1) "entry." else "entries.")
-                detailList.forEach { listedDetail ->
-                    Log.d("convertNotes() | \"$listLabel\"","\"$listedDetail\"")
-                }
             }
 
             return nestedList.toList()
@@ -3758,6 +2082,1778 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 potionColors.toList(),
                 originalName = mName),
             specialItemOrder, gemOrder)
+    }
+
+    private suspend fun getChildForTuple(baseTemplate : MagicItemTemplate,
+                                         restrictions: MagicItemRestrictions): MagicItemTemplate {
+
+        fun getWeightedItemMap(limTemplates: List<Pair<Int,Int>>): List<Pair<IntRange, Int>> {
+
+            val listBuilder = arrayListOf<Pair<IntRange,Int>>()
+            var lastMax     = 0
+            var weight      : Int
+
+            limTemplates.forEach { (primaryKey, itemWeight) ->
+
+                weight = itemWeight
+
+                if ( weight > 0 ) {
+
+                    listBuilder.add(Pair(IntRange(lastMax+1, lastMax + weight), primaryKey))
+                }
+
+                lastMax += weight
+            }
+
+            return listBuilder.toList()
+        }
+
+        val childTemplateList = repository.getChildLimItemTempsByParent(
+            baseTemplate.refId, restrictions.allowCursedItems
+        )
+
+        if (childTemplateList.isNotEmpty()) {
+
+            val childItemTable = getWeightedItemMap(childTemplateList)
+
+            val currentRoll = Random.nextInt(childItemTable.first().first.first,
+                childItemTable.last().first.last + 1)
+
+            val childTemplateID = childItemTable[
+                    childItemTable.indexOfFirst { it.first.contains(currentRoll) }
+            ].second
+
+            return repository.getMagicItemTemplate(childTemplateID).takeIf{
+                it != null } ?: baseTemplate.copy(hasChild = 0)
+
+        } else {
+
+            return baseTemplate.copy(hasChild = 0)
+        }
+    }
+
+    /**
+     * Second in triple is remaining dose count and gpValue mod, Third is mIconID
+     */
+    private fun generatePotionDetails(
+        _mIconID: String,_itemCharges: Int
+    ): Triple<Pair<List<Pair<String,String>>,List<String>>,Pair<Int,Double>,String>{
+
+        val flatNotesList = ArrayList<Pair<String,String>>()
+        val potionColors = ArrayList<String>()
+        var mGpValue = 0.0
+        var itemCharges = _itemCharges
+        var mIconID = _mIconID
+
+        val colors = listOf(
+            "amber",
+            "amethyst",
+            "apricot",
+            "aquamarine",
+            "auburn",
+            "azure blue",
+            "black",
+            "blue",
+            "bone",
+            "bronze",
+            "brass",
+            "brown",
+            "buff",
+            "carmine",
+            "cerise",
+            "cerulean",
+            "cherry",
+            "chestnut",
+            "chocolate",
+            "cinnabar",
+            "citrine",
+            "colorless",
+            "copper",
+            "coral",
+            "cream",
+            "crimson",
+            "dove",
+            "dun",
+            "ebony",
+            "ecru",
+            "emerald",
+            "fallow brown",
+            "fawn",
+            "flame",
+            "flaxen",
+            "fog",
+            "fuchsia",
+            "ginger",
+            "gold",
+            "golden",
+            "grassy",
+            "gray",
+            "green",
+            "heliotrope",
+            "henna",
+            "indigo",
+            "inky",
+            "iron",
+            "ivory",
+            "jade",
+            "lake",
+            "lavender",
+            "lilac",
+            "lime",
+            "madder",
+            "magenta",
+            "mahawgany",
+            "maroon",
+            "mauve",
+            "neutral",
+            "ochre",
+            "olive",
+            "orange",
+            "parchment",
+            "peach",
+            "pearl",
+            "pewter",
+            "pink",
+            "pitch black",
+            "plum",
+            "purple",
+            "purple",
+            "red",
+            "rose",
+            "ruby",
+            "russet",
+            "rust",
+            "sable",
+            "saffron",
+            "salmon",
+            "sand",
+            "sanguine",
+            "sapphire",
+            "scarlet",
+            "silver",
+            "sky",
+            "soot",
+            "sorrel",
+            "steel",
+            "straw",
+            "tan",
+            "tawny",
+            "teal",
+            "terra cotta",
+            "turquoise",
+            "ultramarine",
+            "vermilion",
+            "white",
+            "woolen",
+            "yellow"
+        )
+
+        var isRoundBulb = false
+        val material =   if (Random.nextInt(1,11) <= 4) { "Crystal" }
+        else { "Glass" }
+        var isSealed = false
+
+        fun checkIfNullified(chance: Int): String {
+
+            return if (Random.nextInt(1,101) <= chance) {
+                "FAILED"
+            } else {
+                "PASSED"
+            }
+        }
+
+        fun checkAlreadyQuaffedDoses(): Int {
+
+            val dosesUsed : Int
+
+            if (Random.nextInt(1,101) <= 70) {
+
+                dosesUsed = Random.nextInt(1,4)
+
+                itemCharges -= dosesUsed
+
+                if (itemCharges < 0) itemCharges = 0
+
+            } else {
+
+                dosesUsed = 0
+            }
+
+            return dosesUsed
+        }
+
+        fun getSubstanceColor(): String {
+            val pickedColor = colors.random()
+            potionColors.add(pickedColor)
+            return pickedColor
+        }
+
+        // region ( Roll for potion container )
+
+        when (Random.nextInt(1,101)) {
+
+            in 1..2     -> {
+
+                flatNotesList.add("Potion flavor text" to "Container: Porcelain Jar")
+                if (mIconID == "potion_empty") mIconID = "potion_alabaster"
+            }
+
+            in 3..4     -> {
+                flatNotesList.add("Potion flavor text" to "Container: Alabaster")
+                if (mIconID == "potion_empty") mIconID = "potion_alabaster"
+            }
+
+            in 5..12    -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Round, long container")
+                if (mIconID == "potion_empty") mIconID = "potion_round_long"
+            }
+
+            in 13..14   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Square, long container")
+                if (mIconID == "potion_empty") mIconID = "potion_square_long"
+            }
+
+            in 15..19   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Conical bulb")
+                if (mIconID == "potion_empty") mIconID = "potion_erlenmeyer"
+
+                isRoundBulb = true
+            }
+
+            in 20..48   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Spherical bulb")
+                if (mIconID == "potion_empty") mIconID = "potion_round_short"
+
+                isRoundBulb = true
+            }
+
+            in 49..56   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Oval, 'squashed' bulb")
+                if (mIconID == "potion_empty") mIconID = "potion_squashed"
+
+                isRoundBulb = true
+            }
+
+            in 57..60   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Tapering neck, Conical flask")
+                if (mIconID == "potion_empty") mIconID = "potion_fancy"
+            }
+
+            in 61..65   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Triangular bulb")
+                if (mIconID == "potion_empty") mIconID = "potion_pointy"
+            }
+
+            in 66..69 -> {
+                flatNotesList.add("Potion flavor text" to
+                        "$material - Triangular, long container")
+                if (mIconID == "potion_empty") mIconID = "potion_hexagonal"
+            }
+
+            in 70..73   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "$material - Twisted, almost misshapen neck, small diamond bulb")
+                if (mIconID == "potion_empty") mIconID = "potion_pointy"
+            }
+
+            in 74..76   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Test-tube style")
+                if (mIconID == "potion_empty") mIconID = "potion_tube"
+            }
+
+            in 77..78   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Lone wine bottle (Green glass):")
+                if (mIconID == "potion_empty") mIconID = "potion_winebottle"
+                itemCharges = Random.nextInt(1,4)
+
+                flatNotesList.add("Potion flavor text" to
+                        "This container holds $itemCharges dose(s) of potion - all of " +
+                        "the same type. Liquid color is not immediately discernible. [1]")
+            }
+
+            in 79..80   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Rectangular bulb")
+                if (mIconID == "potion_empty") mIconID = "potion_square_long"
+            }
+
+            in 81..84   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Hexagonal, long container")
+                if (mIconID == "potion_empty") mIconID = "potion_hexagonal"
+            }
+
+            in 85..86   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Curved, swirl bulb")
+                if (mIconID == "potion_empty") mIconID = "potion_fancy"
+
+                isRoundBulb = true
+            }
+
+            in 87..88   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Rectangular, long container")
+                if (mIconID == "potion_empty") mIconID = "potion_square_long"
+            }
+
+            89          -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: $material - Long necked bottle with " +
+                        "${Random.nextInt(2,5)} round bulbs, decreasing in " +
+                        "size as they go up the bottle, all totalling one dose of potion.")
+                if (mIconID == "potion_empty") mIconID = "potion_other"
+
+                itemCharges = 1
+
+                isRoundBulb = true
+            }
+
+            90          -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: Metal - Sealed tankard")
+                flatNotesList.add("Potion flavor text" to
+                        "Unless opened, these containers prevent the potion from " +
+                        "being viewed. [2]")
+                if (mIconID == "potion_empty") mIconID = "potion_tankard"
+            }
+
+            in 91..92   -> {
+                flatNotesList.add("Potion flavor text" to "Container: Metal - Flask")
+
+                flatNotesList.add("Potion flavor text" to
+                        "Unless opened, these containers prevent the potion from being " +
+                        "viewed. [2]")
+
+                if (mIconID == "potion_empty") mIconID = "potion_metal_flask"
+            }
+
+            in 93..95   -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Special - Unusually shaped ${material.lowercase()} (heart, " +
+                        "skull, Apple, Standing Nymph, etc.)")
+                if (mIconID == "potion_empty") mIconID = "potion_unusual"
+            }
+
+            96          -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: Special - Berry Form:")
+
+                flatNotesList.add("Potion flavor text" to
+                        "Imported from the desert Wurld of Hackthas, these sparkling " +
+                        "preserved berries are often found preserved within glass " +
+                        "bottles, and must be fully consumed in order for their magic to " +
+                        "take effect. For some reason, these forms are mainly prunes or " +
+                        "dusty-tasting peach-like fruits. [3]")
+
+                if (mIconID == "potion_empty") mIconID = "potion_berry"
+            }
+
+            97          -> {
+                flatNotesList.add("Potion flavor text" to
+                        "Container: Special - Wooden or ${material.lowercase()} charm " +
+                        "hanging from a chain:")
+
+                if (mIconID == "potion_empty") mIconID = "potion_charm"
+
+                isSealed = true
+
+                flatNotesList.add("Potion flavor text" to
+                        "Aside from the liquid within, these necklaces are non-magical, " +
+                        "but must be snapped in order to access the potion within. Any " +
+                        "number of these may be worn around the neck without " +
+                        "interference with either each other or any other magical " +
+                        "pendants. These types of containers are designed to be worn " +
+                        "around a character’s neck. [4]")
+            }
+
+            else        -> {
+                flatNotesList.add("Potion flavor text" to "Container: GM’s option")
+                if (mIconID == "potion_empty") mIconID = "potion_other"
+            }
+        }
+        // endregion
+
+        // region ( Roll for ridges )
+
+        if (Random.nextInt(1,101) <= 30) {
+
+            flatNotesList.add("Potion flavor text" to "Has " +
+                    "${Random.nextInt(1,7)} ridge(s) incorporated into their " +
+                    "shape – either ribbed as vertical ridges running parallel with one " +
+                    "another, or small, fancy decorative layers on top of the bulb.")
+        }
+        // endregion
+
+        // region ( Roll for potion container sealant )
+
+        when (Random.nextInt(if (isSealed) 12 else 1,101)) {
+
+            1           -> {
+
+                flatNotesList.add("Potion flavor text" to "Sealant: No seal:")
+
+                flatNotesList.add("Potion flavor text" to
+                        "Potions liquid has dried up – the residue can be re-hydrated, " +
+                        "but only for half strength; 30% chance all magic is nullified. " +
+                        "(This one ${checkIfNullified(30)} its check)")
+            }
+
+            in 2..11    -> {
+
+                flatNotesList.add("Potion flavor text" to "Sealant: Seal broken:")
+
+                flatNotesList.add("Potion flavor text" to
+                        "70% chance 1-3 doses of the potion (if the container holds more " +
+                        "than one) have already been quaffed (Result: " +
+                        "${checkAlreadyQuaffedDoses()} already used). 5% chance all " +
+                        "magic is nullified. (This one ${checkIfNullified(5)} its check)")
+            }
+
+            in 12..62   -> {
+
+                flatNotesList.add("Potion flavor text" to "Sealant: Corked")
+            }
+
+            in 63..82   -> {
+
+                flatNotesList.add("Potion flavor text" to "Sealant: Corked and waxed")
+            }
+
+            in 83..88   -> {
+
+                flatNotesList.add("Potion flavor text" to "Sealant: Glass stopper")
+            }
+
+            in 87..93   -> {
+
+                flatNotesList.add("Potion flavor text" to
+                        "Sealant: Corked with a chain that is attached to the bottle")
+            }
+
+            else        -> {
+
+                flatNotesList.add("Potion flavor text" to "Sealant: Sealed $material neck:")
+
+                flatNotesList.add("Potion flavor text" to "Neck must be broken before " +
+                        "use, one-chance only before becoming useless. Characters " +
+                        "drinking straight from a roughly shattered neck suffer 1d3-1 " +
+                        "hit points of damage. Speed Penalty - an extra 2 segments in " +
+                        "combat must be spent opening a bottle like this. (See footnote " +
+                        "for Table HJ21-B)")
+            }
+
+        }
+        //endregion
+
+        // region ( Roll for bottle embellishments )
+
+        if (Random.nextInt(1,101) <= Random.nextInt(10,16)) {
+
+            var currentRoll : Int
+
+            do {
+
+                currentRoll = Random.nextInt(1,21)      // Reroll until applicable embellishment is rolled
+
+            } while ((currentRoll == 16)&&!(isRoundBulb))
+
+            when (currentRoll) {
+
+                1       -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: A minute but detailed etching of a grand " +
+                            "battle runs around the base of the bottle")
+                }
+
+                2       -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: Potion bottle constructed of four parallel, " +
+                            "differently colored glasses")
+                }
+
+                3       -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: All of the bulb/neck, except the base, is " +
+                            "sheathed in fine/once-fine silk held in place with tiny " +
+                            "silver studs")
+                }
+
+                4       -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: ${Random.nextInt(1,9)} fancy " +
+                            "beads hang down an inch from the bottleneck base on golden " +
+                            "threads")
+                }
+
+                5       -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: The ${material.lowercase()} for the bottle " +
+                            "appears spider-webbed with cracks, but is as strong as a " +
+                            "normal ${material.lowercase()} bottle")
+                }
+
+                6       -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: A name and ‘title’ (e.g. Magnuson the " +
+                            "Flamehard) are found etched in the glass in fine cursive " +
+                            "script")
+                }
+
+                7       -> {
+
+                    val addlGems = Random.nextInt(1,5)
+
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: $addlGems 20gp gems are studded into the " +
+                            "bottle in a symmetrical style around it")
+
+                    mGpValue += (addlGems * 20.0)
+                }
+
+                8       -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: Arcane looking (but harmless) runes " +
+                            "encircle the top of the bulb – actually spells out a " +
+                            "domestic, household item in a long-extinct language")
+                }
+
+                9       -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: A series of metallic carved runes strung " +
+                            "together on a silver wire run down 3 parts of the bottle")
+                }
+
+                10      -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: Potion bottle has a small handle in the " +
+                            "shape of a swan between the top of bulb and neck")
+                }
+
+                11      -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: Small wisps of smoke can be constantly seen " +
+                            "emanating from the bottle, which itself is always cold to " +
+                            "the touch with a thin layer of ice on its surface")
+                }
+
+                12      -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: Bottle constructed of extremely bright and " +
+                            "vastly differently psychedelically colored glasses in " +
+                            "swirls, stars and odd patches")
+                }
+
+                13      -> {
+
+                    fun getInitial(): String {
+
+                        val alphabet = listOf("A","B","C","D","E","F","G","H","I","J",
+                            "K","L","M","N","O","P","Q","R","S","T","U","V","W","X",
+                            "Y","Z")
+
+                        return alphabet[Random.nextInt(0,alphabet.size)]
+                    }
+
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: 3 prominent initials molded into the bottle " +
+                            "glass during creation: " +
+                            "\"${getInitial()}.${getInitial()}.${getInitial()}.\"")
+                }
+
+                14      -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: Bottle held within 2 thin bands of gold, " +
+                            "along with small legs at base of bulb")
+                }
+
+                15      -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: A Gawd’s symbol is inscribed within the " +
+                            "glass or pulled out of the glass during creation (most " +
+                            "commonly a key, the symbol of Hokalas)")
+                }
+
+                16      -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: An outline of the continent is etched " +
+                            "around the bulb, with a tiny X somewhere on it.")
+                }
+
+                17      -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: Top of the bottle neck and cork are coated " +
+                            "in a patterned silver metal")
+                }
+
+                18      -> {
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: The potion bottle is actually a test-tube " +
+                            "style one inside the result rolled, the outer one filled " +
+                            "with a liquid of a [potentially] very different color " +
+                            "(${getSubstanceColor()}) to the potion within")
+                }
+
+                19      ->{
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: Bottle has a stopper in the shape of a " +
+                            "butterfly in flight, dragonfly, or similar unusual design")
+                }
+
+                else    -> {
+
+                    val addlGems = 4 + Random.nextInt(1,9)
+
+                    flatNotesList.add("Potion flavor text" to
+                            "Embellishment: $addlGems small gems (10gp ea.) adorn the " +
+                            "bottle on one side in a geometric pattern")
+
+                    mGpValue += (addlGems * 10.0)
+                }
+            }
+        }
+        // endregion
+
+        // region ( Roll potion consistency )
+
+        flatNotesList.add("Potion flavor text" to "Substance consistency: " +
+                when (Random.nextInt(1,101)) {
+                    in 1..19    -> "Bubbling"
+                    in 20..29   -> "Cloudy"
+                    in 30..39   -> "Effervescent"
+                    in 40..49   -> "Fuming"
+                    in 50..54   -> "Oily"
+                    in 55..64   -> "Smoky"
+                    in 65..74   -> "Syrupy"
+                    in 75..79   -> "Vaporous"
+                    in 80..84   -> "Viscous"
+                    else        -> "Watery"
+                }
+        )
+        // endregion
+
+        // region ( Roll potion appearance/color(s) )
+
+        flatNotesList.add("Potion flavor text" to
+                "Appearance (unless entry says otherwise): " +
+                when (Random.nextInt(1,101)) {
+
+                    in 1..29    -> "Clear (transparent)"
+                    in 30..34   -> "Flecked (transparent ${getSubstanceColor()} with " +
+                            "${getSubstanceColor()} flecks)"
+                    in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()})"
+                    in 40..54   -> "Luminous (${getSubstanceColor()}, " +
+                            "~${Random.nextInt(0,21) * 5}% opacity)"
+                    in 55..59   -> "Opaline (glowing)"
+                    in 60..69   -> "Phosphorescent (${getSubstanceColor()}, " +
+                            "~${Random.nextInt(0,21) * 5}% opacity)"
+                    in 70..79   -> "Rainbowed (transparent)"
+                    in 80..84   -> "Ribboned (${getSubstanceColor()}, " +
+                            "~${Random.nextInt(0,21) * 5}% opacity)"
+                    in 85..94   -> "Translucent (${getSubstanceColor()})"
+                    else        -> "Varigated (${getSubstanceColor()}, " +
+                            "${getSubstanceColor()}, and maybe some ${getSubstanceColor()})"
+                } )
+        // endregion
+
+        // region ( Roll potion taste/odor )
+
+        flatNotesList.add("Potion flavor text" to
+                "Taste and/or Odor (unless entry says otherwise): " +
+                when (Random.nextInt(1,101)) {
+
+                    in 1..3     -> "Acidic"
+                    in 4..5     -> "Billious"
+                    in 6..10    -> "Bitter"
+                    in 11..14   -> "Bland"
+                    in 15..16   -> "Burning/biting"
+                    in 17..18   -> "Buttery"
+                    in 19..20   -> "Dusty"
+                    in 21..22   -> "Earthy"
+                    in 23..26   -> "Fiery"
+                    in 27..29   -> "Fishy"
+                    in 30..32   -> "Greasy"
+                    in 33..34   -> "Herbal"
+                    in 35..39   -> "Honeyed"
+                    in 40..42   -> "Lemony"
+                    in 43..46   -> "Meaty"
+                    in 47..49   -> "Metallic"
+                    in 50..51   -> "Milky"
+                    in 52..53   -> "Musty"
+                    in 54..56   -> "Oniony"
+                    in 57..60   -> "Peppery"
+                    in 61..62   -> "Perfumy"
+                    in 63..65   -> "Pickled"
+                    in 66..69   -> "Rotten"
+                    in 70..72   -> "Salty"
+                    in 73..75   -> "Smoked"
+                    in 76..80   -> "Soothing/sugary"
+                    in 81..83   -> "Sour"
+                    in 84..88   -> "Spicy"
+                    in 89..92   -> "Sweet"
+                    in 93..95   -> "Tart"
+                    in 96..97   -> "Vinegary"
+                    in 98..100  -> "Watery"
+                    else        -> "Inscrutable"
+                } )
+        // endregion
+
+        // region ( Add dosages remaining  )
+
+        flatNotesList.add("Potion flavor text" to
+                "Found with $itemCharges dose(s) remaining")
+        //endregion
+
+        return Triple(
+            flatNotesList.toList() to potionColors.toList(),
+            itemCharges to mGpValue, mIconID
+        )
+    }
+
+    private fun generateArtifactParticulars(template : MagicItemTemplate) : List<Pair<String,String>> {
+
+        val flatNotesList = ArrayList<Pair<String,String>>()
+
+        if (template.multiType == 4) {
+            flatNotesList.add("Artifact particulars" to HACKMASTER_CLASS_ITEM_TEXT)
+        }
+
+        // region ( Roll minor benign effects )
+        if (template.iPower in 1..46){
+
+            val minorBenignEffects = listOf(
+                "A. Adds 1 point to possessor’s major attribute",
+                "B. Animate Dead (1 creature by touch) 7 times/week",
+                "C. Audible Glamer upon command 3 times/day",
+                "D. Bless (by touch)",
+                "E. Clairaudience (when touched to ear)",
+                "F. Clairvoyance (when touched to eyes)",
+                "G. Color Spray (3 times/day)",
+                "H. Comprehend Languages when held",
+                "I. Create Food and Water (1 time/day)",
+                "J. Cure Light Wounds (7 times/day)",
+                "K. Darkness (5', 10', or 15' radius) 3 times/day",
+                "L. Detect Charm (3 times/day)",
+                "M. Detect Evil/Good when held or ordered",
+                "N. Detect invisibility when ordered",
+                "O. Detect Magic (3 times/day)",
+                "R. Find Traps (3 times/day)",
+                "S. Fly when held and ordered (1 time/day)",
+                "T. Hypnotic Pattern (when moved) 3 times/day",
+                "U. Infravision when held or worn",
+                "V. Improved invisibility (3 times/day)",
+                "W. Know alignment when held and ordered (1 time/day)",
+                "X. Levitate when held and ordered (3 times/day)",
+                "Y. Light (7 times/day)",
+                "Z. Mind Blank (3 times/day)",
+                "AA. Obscurement (1 time/day)",
+                "BB. Pass without Trace (1 time/day)",
+                "CC. Possessor immune to disease",
+                "DD. Possessor immunne to fear",
+                "EE. Possessor immune to gas of any type",
+                "FF. Possessor need not eat/drink for up to 1 week",
+                "II. Sanctuary when held or worn (1 time/day)",
+                "JJ. Shield, when held or worn (1 time/day)",
+                "KK. Speak with animals (3 times/day)",
+                "LL. Speak to the dead (1 time/day)",
+                "MM. Speak with plants (7 times/week)",
+                "NN. Tongues when held or worn and commanded",
+                "OO. Ultravision when held or worn",
+                "PP. Ventriloquism upon command (3 times/day)",
+                "QQ. Water Breathing upon command",
+                "RR. Water Walk at will",
+                "SS. Wearer immune to Charm and Hold spells",
+                "TT. Wearer immune to Magic Missiles",
+                "UU. Web (1 time/day)",
+                "VV. Wizard Lock (7 times/week)",
+                "WW. Write (1 time/day)",
+                "XX. Zombie Animation (1 time/week)"
+            )
+            val typeIList = arrayListOf<Int>()
+
+            flatNotesList.add("Artifact particulars" to "[ I. MINOR BENIGN EFFECT" +
+                    "${if (template.iPower > 1)"S" else ""} ]")
+
+            repeat (template.iPower) {
+
+                var newEffect: Int
+
+                // Roll effect, re-rolling duplicates
+                do {
+
+                    newEffect = Random.nextInt(minorBenignEffects.size)
+
+                } while ((typeIList.contains(newEffect))||(newEffect < 0))
+
+                // Add unique effect to list
+                typeIList.add(newEffect)
+            }
+
+            // Add effects once all are generated
+            typeIList.forEachIndexed {index, entry ->
+                flatNotesList.add("Artifact particulars" to
+                        "${index + 1}) ${minorBenignEffects[entry]}")
+            }
+        }
+        // endregion
+
+        // region ( Roll major benign effects )
+        if (template.iiPower in 1..50){
+
+            val majorBenignEffects = listOf(
+                "A. Animal Summoning (II or III) 2 times/day",
+                "B. Animate Object upon command (1 time/day)",
+                "C. +2 to AC of possessor or AC 0, whichever is better",
+                "D. Cause Serious Wounds by touch",
+                "E. Charm monster (2 times/day)",
+                "F. Charm person (7 times/week)",
+                "G. Confusion (1 time/day)",
+                "H. Cure-All (1 time/day)",
+                "I. Cure Blindness by touch",
+                "J. Cure Disease by touch",
+                "K. Dimension Door (2 times/day)",
+                "L. Disintegrate (1 time/day)",
+                "M. Dispel Illusions (automatically) upon command (2 times/day)",
+                "N. Dispel Magic upon command (2 times/day)",
+                "O. Double movement speed (on foot)",
+                "P. Emotion (2 times/day)",
+                "Q. Explosive Runes (1 time/month)",
+                "R. Fear by touch or gaze",
+                "S. Fireball (12-15 dice) 2 times/day",
+                "T. Fire Shield (2 times/day)",
+                "U. Giant strength (determine type randomly) for 2 turns 2 times/day",
+                "V. Haste (1 time/day)",
+                "W. Hold Animal (1 time/day)",
+                "X. Hold Monster (1 time/day)",
+                "Y. Hold Person (1 time/day)",
+                "Z. Lightning Bolt (12-15 dice) 2 times/day",
+                "AA. Lyggl’s Cone of Cold (12-15 dice) 2 times/day",
+                "BB. Minor Globe of Invulnerability (1 time/day)",
+                "CC. Paralyzation by touch",
+                "DD. Phantasmal Killer (1 time/day)",
+                "EE. Polymorph Self (7 times/week)",
+                "FF. Regenerate 2 hp/turn (but not if killed)",
+                "GG. Remove Curse by touch (7 times/week)",
+                "HH. Slow (1 time/day)",
+                "II. Speak with Monster (2 times/day)",
+                "JJ. Stone to Flesh (1 time/day)",
+                "KK. Suggestion (2 times/day)",
+                "LL. Telekinesis (100-600 pounds weight) 2 times/day",
+                "MM. Teleport Without Error (2 times/day)",
+                "NN. Transmute Stone to Mud (2 times/day)",
+                "OO. True Seeing (1 time/day)",
+                "PP. Turn Wood (1 time/day)",
+                "QQ. Wall of Fire (2 times/day)",
+                "RR. Wall of Ice (2 times/day)",
+                "SS. Wall of Thorns (2 times/day)",
+                "TT. Wall Passage (2 times/day)",
+                "UU. Weapon damage is +2 per hit",
+                "VV. Wind Walk (1 time/day)",
+                "WW. Wizard Eye (2 times/day)",
+                "XX. Word of Recall (1 time/day)"
+            )
+            val typeIIList = arrayListOf<Int>()
+
+            flatNotesList.add("Artifact particulars" to "[ II. MAJOR BENIGN EFFECT" +
+                    "${if (template.iiPower > 1)"S" else ""} ]")
+
+            repeat (template.iiPower) {
+
+                var newEffect = -1
+
+                // Roll effect, re-rolling duplicates
+                do {
+
+                    newEffect = Random.nextInt(majorBenignEffects.size)
+
+                } while ((typeIIList.contains(newEffect))||(newEffect<0))
+
+                // Add unique effect to list
+                typeIIList.add(newEffect)
+            }
+
+            // Add effects once all are generated
+            typeIIList.forEachIndexed {index, entry ->
+                flatNotesList.add("Artifact particulars" to
+                        "${index + 1}) ${majorBenignEffects[entry]}")
+            }
+        }
+        //endregion
+
+        // region ( Roll minor malevolent effects )
+        if (template.iiiPower in 1..25){
+
+            val minorMalevolentEffects = listOf(
+                "A. Acne on possessor’s face",
+                "B. Blindness for 1-4 rounds when first used against an enemy",
+                "C. Body odor noticeable at distance of ten feet",
+                "D. Deafness for 1-4 turns when first used against an enemy",
+                "E. Gems or jewelry found never increase in value",
+                "F. Holy water within 10' of item becomes polluted",
+                "G. Lose 1-4 points of Charisma for 1-4 days when major power is used",
+                "H. Possessor loses interest in sex",
+                "I. Possessor has satyriasis",
+                "J. Possessor’s hair turns white",
+                "K. Saving throws versus spells are at -1",
+                "L. Saving throw versus poison are at -2",
+                "M. Sense of smell lost for 2-8 hours when used against an enemy",
+                "N. Small fires (torches, et al.) extinguished when major powers are used",
+                "O. Small items of wood rot from possessor’s touch (any item up to normal door size, 1-7 days time)",
+                "P. Touch of possessor kills green plants",
+                "Q. User causes hostility towards himself in all mammals within 60 yards",
+                "R. User loses 1 point of Comeliness permanently",
+                "S. User must eat and drink 6 times the normal amount due to the item’s drain upon him or her",
+                "T. User’s sex changes",
+                "U. Wart appears on possessor’s nose",
+                "V. Weight gain of 10-40 pounds",
+                "W. Weight loss of 5-30 pounds",
+                "X. Yearning for item forces possessor to never be away from it for more than 1 day if at all possible",
+                "Y. Yelling becomes necessary to invoke spells with verbal components"
+            )
+            val typeIIIList = arrayListOf<Int>()
+
+            flatNotesList.add("Artifact particulars" to "[ III. MINOR MALEVOLENT EFFECT" +
+                    "${if (template.iiiPower > 1)"S" else ""} ]")
+
+            repeat (template.iiiPower) {
+
+                var newEffect : Int
+
+                // Roll effect, re-rolling duplicates
+                do {
+
+                    newEffect = Random.nextInt(minorMalevolentEffects.size)
+
+                } while ((typeIIIList.contains(newEffect))||(newEffect<0))
+
+                // Add unique effect to list
+                typeIIIList.add(newEffect)
+            }
+
+            // Add effects once all are generated
+            typeIIIList.forEachIndexed {index, entry ->
+                flatNotesList.add("Artifact particulars" to
+                        "${index + 1}) ${minorMalevolentEffects[entry]}")
+            }
+        }
+        // endregion
+
+        // region ( Roll major malevolent effects )
+        if (template.ivPower in 1..34){
+
+            val majorMalevolentEffects = listOf(
+                "A. Body rot [see Table B126] is 10% likely cumulative whenever a primary power is used, and part of the body is lost permanently",
+                "B. Capricious alignment change each time a primary power is used",
+                "C. Geas/Quest [see Table B126] placed upon possessor",
+                "D. Item contains the life force of a person — after a set number of uses, the possessor’s life force is drawn into it and the former soul is released (see GMG pg 285)",
+                "E. Item has power to affect its possessor when a primary power is used if the character has not followed the alignment of the artifact/relic",
+                "F. Item is a prison for for a powerful being — there is a 1%-4% cumulative chance per usage that it will [see Table B126]",
+                "G. Item is itself a living, sentient being forced to serve; but each usage of a primary power gives it a 1%-3% cumulative chance the spell will be broken and the being will [see Table B126]",
+                "H. Item is powerless against and hates 1-2 species of creatures [see Table B126] — when within 100 feet of any such creatures it forces possessor to attack",
+                "I. Item releases a gas which renders all creatures [see Table B126], within 20 feet, including the wielder, powerless to move for 5-20 rounds",
+                "J. Lose 1 point of Charisma permanently",
+                "K. Lose 1 point of Constitution permanently",
+                "L. Lose 1 point of Dexterity permanently",
+                "M. Lose 1 hit point permanently",
+                "N. Lose 1 point of Intelligence permanently",
+                "O. Lose 1 point of Strength permanently",
+                "P. Lose 1 point of Wisdom permanently",
+                "Q. Magic drained from most powerful magic item (other than artifact or relic) within 20 feet of user",
+                "R. Reverse alignment permanently",
+                "S. Sacrifice a certain animal [see Table B126] to activate item for 1 day",
+                "T. Sacrifice a human or player character to activate item for 1 day",
+                "U. Sacrifice 10,000-60,000 gp worth of gems/jewelry to activate item for 1 day",
+                "V. User becomes berserk and attacks creatures [see Table B126] within 20 feet randomly (check each round) for 5-20 rounds",
+                "W. User goes insane for 1-4 days",
+                "X. User grows 3 inches taller each time primary power is used",
+                "Y. User instantly killed (but may be Raised or Resurrected)",
+                "Z. User loses 1 level of experience",
+                "AA. User receives 2-20 points of damage",
+                "BB. User receives 5-30 points of damage",
+                "CC. User required to slay a certain type of creature [see Table B126] to activate item, and slaying another set type will de-activate item",
+                "DD. User shrinks 3 inches each time primary power is used",
+                "EE. User transformed into a powerful but minor being from another plane [see Table B126]",
+                "FF. User withers and ages 3-30 years [see Table B126] each time primary power is used, eventually the possessor becomes a withered Zombie guardian of the item",
+                "GG. Utterance of a spell causes complete loss of voice for one day",
+                "HH. Yearning to be worshipped is uncontrollable; those failing to bow and scrape to the artifact’s possessor will be subject to instant attack"
+            )
+            val typeIVList = arrayListOf<Int>()
+
+            flatNotesList.add("Artifact particulars" to "[ IV. MAJOR MALEVOLENT EFFECT" +
+                    "${if (template.ivPower > 1)"S" else ""} ]")
+
+            repeat (template.ivPower) {
+
+                var newEffect: Int
+
+                // Roll effect, re-rolling duplicates
+                do {
+
+                    newEffect = when (Random.nextInt(1,101)){
+
+                        in 1..3     -> 0
+                        in 4..6     -> 1
+                        in 7..9     -> 2
+                        in 10..12   -> 3
+                        in 13..15   -> 4
+                        in 16..18   -> 5
+                        in 19..21   -> 6
+                        in 22..24   -> 7
+                        in 25..27   -> 8
+                        in 28..30   -> 9
+                        in 31..33   -> 10
+                        in 34..36   -> 11
+                        in 37..39   -> 12
+                        in 40..42   -> 13
+                        in 43..45   -> 14
+                        in 46..48   -> 15
+                        in 49..51   -> 16
+                        in 52..54   -> 17
+                        in 55..57   -> 18
+                        in 58..60   -> 19
+                        in 61..63   -> 20
+                        in 64..66   -> 21
+                        in 67..69   -> 22
+                        in 70..72   -> 23
+                        in 73..75   -> 24
+                        in 76..78   -> 25
+                        in 79..81   -> 26
+                        in 82..84   -> 27
+                        in 85..87   -> 28
+                        in 88..90   -> 29
+                        in 91..93   -> 30
+                        in 94..96   -> 31
+                        in 97..98   -> 32
+                        in 99..100  -> 33
+                        else        -> -1
+                    }
+
+                } while ((typeIVList.contains(newEffect))||(newEffect < 0))
+
+                // Add unique effect to list
+                typeIVList.add(newEffect)
+            }
+
+            // Add effects once all are generated
+            typeIVList.forEachIndexed {index, entry ->
+                flatNotesList.add("Artifact particulars" to
+                        "${index + 1}) ${majorMalevolentEffects[entry]}")
+            }
+        }
+        // endregion
+
+        // region ( Roll prime powers )
+        if (template.vPower in 1..37){
+
+            val primePowers = listOf(
+                "A. All of possessor’s ability totals permanently raised by 2 points each upon pronouncement of a command word (18 maximum)",
+                "B. All of the possessor’s ability scores are raised to 18 each upon pronouncement of a command word",
+                "C. Bones/exoskeleton/cartilage of opponent turned to jelly - 1 time/day",
+                "D. Cacodemon-like power summons a Demon Lord, Arch-Devil, or Daemon Prince — 1 time/month",
+                "E. Creeping Doom - 1 time/day",
+                "F. Death Ray equal to a Finger of Death with no saving throw - 1 time/day",
+                "G. Death Spell power of 110%-200% effectiveness with respect to number os levels/Hit Dice affected - 1 time/day",
+                "H. Gate spell 1 time/day",
+                "I. Imprisonment spell - 1 time/week",
+                "J. Magic resistance (lasting 12 turns) of 50-75% for possessor upon command word - 1 time/day",
+                "K. Major attribute permanently raised to 19 upon command word",
+                "L. Meteor Swarm - 1 time/day",
+                "M. Monster Summoning VIII - 2 times/day",
+                "N. Plane Shift - 1 time/day",
+                "O. Polymorph Any Object - 1 time/day",
+                "P. Power Word: Blind, Kill, or Stun - 1 time/day",
+                "Q. Premonition of death or serious hard to possessor",
+                "R. Prismatic spray - 1 time/day",
+                "S. Restoration - 1 time/day",
+                "T. Resurrection - 7 times/week",
+                "U. Shades - 2 times/day",
+                "V. Shape Change - 2 times/day",
+                "W. Spell absorption, 19-24 levels - 1 time/week",
+                "X. Summon 1 of each type of elemental, 16 Hit Dice each, automatic control - 1 time/week",
+                "Y. Summon Djinn or Efreet Lord (8 hp/dice, +2 to-hit and +4 to damage) for 1 day of service - 1 time/week",
+                "Z. Super Sleep spell affects double number of creatures plus up to two 5th or 6th and one 7th or 8th level creature",
+                "AA. Temporal Stasis, no saving throw, upon touch - 1 time/month",
+                "BB. The item enables the possessor to Legend Lore, Commune, or Contact Other Plane - 1 time/week",
+                "CC. Time Stop of twice normal duration - 1 time/week",
+                "DD. Total fire/heat resistance for all creatures within 20 feet of the item",
+                "EE. Total immunity to all forms of mental and psionic attacks",
+                "FF. Total immunity to all forms of cold",
+                "GG. Trap the Soul with 90% effectiveness - 1 time/month",
+                "HH. User can cast combination spells (if a spell caster) with no chance of failure or mishap, as follows:" +
+                        "\n1) 1st and 2nd level spells simultaneously",
+                "HH. User can cast combination spells (if a spell caster) with no chance of failure or mishap, as follows:" +
+                        "\n2) 2nd and 3rd level spells simultaneously",
+                "HH. User can cast combination spells (if a spell caster) with no chance of failure or mishap, as follows:" +
+                        "\n3) 3rd and 4th level spells simultaneously",
+                "HH. User can cast combination spells (if a spell caster) with no chance of failure or mishap, as follows:" +
+                        "\n4) 1st, 2nd, and 3rd level spells simultaneously",
+                "II. Vanish - 2 times/day",
+                "JJ. Vision - 1 time/day",
+                "KK. Wish - 1 time/day",
+                "LL. Youth restored to creature touched [see Table B127] - 1 time/month"
+            )
+            val typeVList = arrayListOf<Int>()
+
+            flatNotesList.add("Artifact particulars" to "[ V. PRIME POWER" +
+                    "${if (template.vPower > 1)"S" else ""} ]")
+
+            repeat (template.vPower) {
+
+                var newEffect = -1
+
+                // Roll effect, re-rolling duplicates
+                do {
+
+                    when (Random.nextInt(1,101)){
+
+                        in 1..2     -> newEffect = 0
+                        in 3..5     -> newEffect = 1
+                        in 6..7     -> newEffect = 2
+                        in 8..10    -> newEffect = 3
+                        in 11..12   -> newEffect = 4
+                        in 13..15   -> newEffect = 5
+                        in 16..17   -> newEffect = 6
+                        in 18..20   -> newEffect = 7
+                        in 21..22   -> newEffect = 8
+                        in 23..25   -> newEffect = 9
+                        in 26..27   -> newEffect = 10
+                        in 28..29   -> newEffect = 11
+                        in 30..32   -> newEffect = 12
+                        in 33..35   -> newEffect = 13
+                        in 36..38   -> newEffect = 14
+                        in 39..41   -> newEffect = 15
+                        in 42..44   -> newEffect = 16
+                        in 45..46   -> newEffect = 17
+                        in 47..48   -> newEffect = 18
+                        in 49..50   -> newEffect = 19
+                        in 51..53   -> newEffect = 20
+                        in 54..55   -> newEffect = 21
+                        in 56..58   -> newEffect = 22
+                        in 59..60   -> newEffect = 23
+                        in 61..62   -> newEffect = 24
+                        in 63..65   -> newEffect = 25
+                        in 66..68   -> newEffect = 26
+                        in 69..71   -> newEffect = 27
+                        in 72..73   -> newEffect = 28
+                        in 74..76   -> newEffect = 29
+                        in 77..79   -> newEffect = 30
+                        in 80..82   -> newEffect = 31
+                        in 83..85   -> newEffect = 32
+                        in 86..89   -> {
+
+                            when (Random.nextInt(1,5)){
+
+                                1   -> newEffect = 33
+                                2   -> newEffect = 34
+                                3   -> newEffect = 35
+                                4   -> newEffect = 36
+                            }
+                        }
+                        in 90..92   -> newEffect = 37
+                        in 93..95   -> newEffect = 38
+                        in 96..97   -> newEffect = 39
+                        in 98..100  -> newEffect = 40
+                    }
+
+                } while ((typeVList.contains(newEffect))||(newEffect < 0))
+
+                // Add unique effect to list
+                typeVList.add(newEffect)
+            }
+
+            // Add effects once all are generated
+            typeVList.forEachIndexed {index, entry ->
+                flatNotesList.add("Artifact particulars" to
+                        "${index + 1}) ${primePowers[entry]}")
+            }
+        }
+        //endregion
+
+        // region ( Roll side effects )
+        if (template.viPower in 1..18){
+
+            val sideEffects = listOf(
+                "A. Alignment of possessor permanently changed to that of of item",
+                "B. Charisma of possessor reduced to 3 as long as item is owned",
+                "C. Fear reaction possible in any creature within 20 feet of the item whenever a major or primary power is used; all, including the possessor, must save versus spells or flee in panic",
+                "D. Fumble reaction possible in any creature within 20 feet of the item whenever a major or primary power is used; all, including the possessor, must save versus spells or be affected as the spell",
+                "E. Greed and covetousness reaction in all intelligent creatures viewing the item [see Table B128]",
+                "F. Lycanthropy inflicted upon the possessor, type according to the alignment of item, change to animal form involuntary and 50% likely (1 check only) whenever confronted and attacked by an enemy",
+                "G. Treasure within five-foot radius of mineral nature (metal or gems) of nonmagical type is reduced by 20%-80% as item consumes it to sustain its power",
+                "H. User becomes ethereal whenever major or primary power of the item is activated [see Table B128]",
+                "I. User becomes fantastically strong (19, or +1 if already 19) but ver clumsy [see Table B128]",
+                "J. User cannot touch or be touched by any (even magical) metal; metal simply passes through his body as if it did not exist and has no effect",
+                "K. User has a poison touch which requires that humans and man-sized humanoids (but not undead) save versus poison or die whenever touched",
+                "L. User has limited omniscience and may request the GM to answer 1 question per game day [see Table B128]",
+                "M. User has short-duration charismatic effect upon creatures of similar alignment [see Table B128]",
+                "N. Whenever any power of the item is used, temperature within a 60-foot radius is raised 20-50 degrees Fahrenheit for 2-12 turns (moves with item)",
+                "O. Whenever the major or prime power of the item is used, temperature within a 6-foot radius is lowered 20-80 degrees Fahrenheit for 2-12 turns (moves with item)",
+                "P. Whenever the prime power is used the possessor must save versus spells or lose 1 level of experience",
+                "Q. Whenever the prime power is used, those creatures friendly to the user within 20 feet, excluding the user, will sustain 5-20 points of damage",
+                "R. Whenever this item is used as a weapon to strike an enemy, it does double normal damage to the opponent but the wielder takes (normal) damage just as if he had been struck by the item"
+            )
+            val typeVIList = arrayListOf<Int>()
+
+            flatNotesList.add("Artifact particulars" to "[ VI. SIDE EFFECT" +
+                    "${if (template.vPower > 1)"S" else ""} ]")
+
+            repeat (template.viPower) {
+
+                var newEffect : Int
+
+                // Roll effect, re-rolling duplicates
+                do {
+
+                    newEffect = when (Random.nextInt(1,101)){
+
+                        in 1..5     -> 0
+                        in 6..11    -> 1
+                        in 12..16   -> 2
+                        in 17..21   -> 3
+                        in 22..27   -> 4
+                        in 28..32   -> 5
+                        in 33..38   -> 6
+                        in 39..43   -> 7
+                        in 44..48   -> 8
+                        in 49..54   -> 9
+                        in 55..60   -> 10
+                        in 61..66   -> 11
+                        in 67..71   -> 12
+                        in 72..77   -> 13
+                        in 78..82   -> 14
+                        in 83..88   -> 15
+                        in 89..94   -> 16
+                        in 95..100  -> 17
+                        else        -> -1
+                    }
+
+                } while ((typeVIList.contains(newEffect))||(newEffect < 0))
+
+                // Add unique effect to list
+                typeVIList.add(newEffect)
+            }
+
+            // Add effects once all are generated
+            typeVIList.forEachIndexed {index, entry ->
+                flatNotesList.add("Artifact particulars" to
+                        "${index + 1}) ${sideEffects[entry]}")
+            }
+        }
+        // endregion
+
+        // Add footnote if artifact has any additional effects whatsoever
+        if ((template.iPower > 0)||(template.iiPower > 0)||(template.iiiPower > 0)||
+            (template.ivPower > 0)||(template.vPower > 0)||(template.viPower > 0)) {
+
+            flatNotesList.add("Artifact particulars" to
+                    "For more information, see GMG pages 284-286")
+        }
+
+        return flatNotesList.toList()
+    }
+
+    private fun generateIntelligentWeaponProfile(
+        template : MagicItemTemplate, mAlignment: String) : Pair<List<Pair<String,String>>,String> {
+
+        fun abbrevToAlignment(input: String): String{
+
+            val ALIGNMENT_MAP = mapOf(
+                "CG" to "Chaotic Good",
+                "CN" to "Chaotic Neutral",
+                "CE" to "Chaotic Evil",
+                "NE" to "Neutral Evil",
+                "LE" to "Lawful Evil",
+                "LG" to "Lawful Good",
+                "LN" to "Lawful Neutral",
+                "TN" to "True Neutral",
+                "NG" to "Neutral Good"
+            )
+
+            var result = input
+
+            if (input.isNotBlank()){
+
+                if (input.startsWith('A')) {
+
+                    when (input.last()) {
+
+                        'C'     -> {
+
+                            result = when (Random.nextInt(1,5)){
+
+                                1   -> "CG"
+                                2   -> "CN"
+                                3   -> "CN"
+                                else-> "CE"
+                            }
+                        }
+
+                        'E'     -> {
+
+                            result = when (Random.nextInt(1,4)){
+
+                                1   -> "CE"
+                                2   -> "NE"
+                                else-> "LE"
+                            }
+                        }
+
+                        'G'     -> {
+
+                            result = when (Random.nextInt(1,11)){
+
+                                1   -> "CG"
+                                2   -> "LG"
+                                3   -> "LG"
+                                4   -> "LG"
+                                5   -> "LG"
+                                6   -> "LG"
+                                else-> "NG"
+                            }
+                        }
+
+                        'L'     -> {
+
+                            result = when (Random.nextInt(1,7)){
+
+                                1   -> "LE"
+                                2   -> "LN"
+                                else-> "TN"
+                            }
+                        }
+
+                        'N'     -> {
+
+                            result = when (Random.nextInt(1,13)){
+
+                                1   -> "CN"
+                                2   -> "CN"
+                                3   -> "NE"
+                                4   -> "LN"
+                                5   -> "TN"
+                                6   -> "TN"
+                                7   -> "TN"
+                                8   -> "TN"
+                                else-> "NG"
+                            }
+                        }
+
+                        else    -> {
+
+                            result = when (Random.nextInt(1,101)){
+
+                                in 1..5     -> "CG"
+                                in 6..15    -> "CN"
+                                in 16..20   -> "CE"
+                                in 21..25   -> "NE"
+                                in 26..30   -> "LE"
+                                in 31..55   -> "LG"
+                                in 56..60   -> "LN"
+                                in 61..80   -> "TN"
+                                else        -> "NG"
+                            }
+                        }
+                    }
+                }
+
+                result = if (ALIGNMENT_MAP.keys.contains(result)) {
+
+                    ALIGNMENT_MAP[result]!!
+
+                } else { "" }
+            }
+
+            return result
+        }
+
+        var wIntelligence:          Int
+        val weaponEgo:              Int
+        var wCommLevel              = 0
+        var wLanguagesKnown         = 0
+        var wPrimaryAbilities       = 1
+        var wExtraPrimaryRolls      = 0
+        var wExtraordinaryPowers    = 0
+        var wExtraExtraordinaryRolls= 0
+        var wSpecialPurpose         = ""
+        var wSpecialPurposePower    = ""
+        var wSpecialReadingPower    = ""
+
+        val effectiveWeaponMod : Int = if (template.name.contains("+")) {
+
+            if (template.isCursed == 0) {
+
+                if ((template.notes.isNotBlank())){
+
+                    if (template.notes.contains("+")) {
+
+                        template.notes
+                            .substring(template.name.lastIndexOf("+"))
+                            .toIntOrNull() ?: 1
+
+                    } else {
+
+                        2 * (template.name
+                            .substring(template.name.lastIndexOf("+"))
+                            .toIntOrNull() ?: 1)
+                    }
+
+                } else {
+
+                    2 * (template.name
+                        .substring(template.name.lastIndexOf("+"))
+                        .toIntOrNull() ?: 1)
+                }
+
+            } else {
+
+                template.name
+                    .substring(template.name.lastIndexOf("+"))
+                    .toIntOrNull() ?: 1
+            }
+
+        } else { 0 }
+
+        val primaryAbilityList =    mutableListOf<String>()
+        val extraordinaryPowerList= mutableListOf<String>()
+
+        val COMM_LEVEL_LIST = listOf(
+            "Semi-empathy*","Empathy","Speech**","Speech and Telepathy***"
+        )
+
+        fun setInitialProperties(inputIntelligence:Int) {
+
+            when (inputIntelligence) {
+
+                12      -> {
+                    wIntelligence            = 12
+                    wPrimaryAbilities        = 1
+                    wExtraordinaryPowers     = 0
+                    wCommLevel               = 0
+                }
+
+                13      -> {
+                    wIntelligence            = 13
+                    wPrimaryAbilities        = 2
+                    wExtraordinaryPowers     = 0
+                    wCommLevel               = 1
+                }
+
+                14      -> {
+                    wIntelligence           = 14
+                    wPrimaryAbilities       = 2
+                    wExtraordinaryPowers    = 0
+                    wCommLevel              = 2
+                }
+
+                15      -> {
+                    wIntelligence           = 15
+                    wPrimaryAbilities       = 3
+                    wExtraordinaryPowers    = 0
+                    wCommLevel              = 2
+                }
+
+                16      -> {
+                    wPrimaryAbilities       = 3
+                    wExtraordinaryPowers    = 0
+                    wCommLevel              = 2
+                    wSpecialReadingPower    = "The weapon can also read languages/maps of any non-magical type"
+                }
+
+                else    -> {
+                    wPrimaryAbilities       = 3
+                    wExtraordinaryPowers    = 1
+                    wCommLevel              = 3
+                    wSpecialReadingPower    = "The weapon can read languages as well as magical writings." }
+            }
+        }
+
+        fun getLanguageNumber(firstRoll: Boolean): Int =
+            when (Random.nextInt(1,if (firstRoll) 101 else 100)) {
+
+                in 1..40    -> 1
+                in 41..70   -> 2
+                in 71..85   -> 3
+                in 86..95   -> 4
+                in 96..99   -> 5
+                else        -> 6
+            }
+
+        // region [ Determine intelligence ]
+
+        wIntelligence = when (Random.nextInt(1,101)) {
+
+            in 1..34    -> 12
+            in 35..59   -> 13
+            in 60..79   -> 14
+            in 80..91   -> 15
+            in 92..97   -> 16
+            else        -> 17
+        }
+
+        setInitialProperties(wIntelligence)
+        // endregion
+
+        // region [ Determine alignment ]
+
+        val wAlignment = if (mAlignment.isBlank()){
+
+            abbrevToAlignment( when (Random.nextInt(1,101)){
+
+                in 1..5     -> "CG"
+                in 6..15    -> "CN"
+                in 16..20   -> "CE"
+                in 21..25   -> "NE"
+                in 26..30   -> "LE"
+                in 31..55   -> "LG"
+                in 56..60   -> "LN"
+                in 61..80   -> "TN"
+                else        -> "NG"
+            })
+
+        } else {
+
+            abbrevToAlignment(mAlignment).takeIf{ it.isNotBlank() } ?:
+
+            abbrevToAlignment( when (Random.nextInt(1,101)){
+
+                in 1..5     -> "CG"
+                in 6..15    -> "CN"
+                in 16..20   -> "CE"
+                in 21..25   -> "NE"
+                in 26..30   -> "LE"
+                in 31..55   -> "LG"
+                in 56..60   -> "LN"
+                in 61..80   -> "TN"
+                else        -> "NG"
+            })
+        }
+        // endregion
+
+        // region [ Determine primary abilities ]
+
+        while ((wPrimaryAbilities > 0)||(wExtraPrimaryRolls > 0)) {
+
+            when (Random.nextInt(1, if ( wPrimaryAbilities > 0 ) 101 else 93)) {
+
+                in 1..11    -> primaryAbilityList.add("Detect \"elevator\"/shifting rooms/walls in ten-foot radius")
+                in 12..22   -> primaryAbilityList.add("Detect sloping passages in a ten-foot radius")
+                in 23..33   -> primaryAbilityList.add("Detect traps of large size in a ten-foot radius")
+                in 34..44   -> primaryAbilityList.add("Detect evil or good in a ten-foot radius")
+                in 45..55   -> primaryAbilityList.add("Detect precious metals (type and amount) in a 20-foot radius")
+                in 56..66   -> primaryAbilityList.add("Detect gems (type and number) in a five-foot radius")
+                in 67..77   -> primaryAbilityList.add("Detect Magic in a ten-foot radius")
+                in 78..82   -> primaryAbilityList.add("Detect secret doors in a five-foot radius")
+                in 83..87   -> primaryAbilityList.add("Detect invisible objects in a ten-foot radius")
+                in 88..92   -> primaryAbilityList.add("Locate Object in a 120-foot radius")
+                in 93..94   -> wExtraPrimaryRolls += 2
+                else        -> wExtraordinaryPowers++
+            }
+
+            if (wPrimaryAbilities>0) wPrimaryAbilities -- else wExtraPrimaryRolls --
+        }
+        // endregion
+
+        // region [ Determine extraordinary powers ]
+
+        while ((wExtraordinaryPowers > 0)||(wExtraExtraordinaryRolls > 0)) {
+
+            when (Random.nextInt(1,101)) {
+
+                in 1..7     -> extraordinaryPowerList.add("Charm Person on contact - " +
+                        "three times per day")
+
+                in 8..15    -> extraordinaryPowerList.add("Clairaudience, 30 yards " +
+                        "range - three times per day, one round per use")
+
+                in 16..22   -> extraordinaryPowerList.add("Clairvoyance, 30 yards " +
+                        "range - three times/day, one round per use")
+
+                in 23..28   -> extraordinaryPowerList.add("Determine direction and " +
+                        "depth - twice/day")
+
+                in 29..34   -> extraordinaryPowerList.add("ESP, 30 yards range - " +
+                        "three times per day, one round per use")
+
+                in 35..41   -> extraordinaryPowerList.add("Fly, 120 feet/turn - one " +
+                        "hour/day")
+
+                in 42..47   -> extraordinaryPowerList.add("Cure-All - one time/day")
+
+                in 48..54   -> extraordinaryPowerList.add("Illusion, 120 yards " +
+                        "range - twice/day, as Wand of Illusion")
+
+                in 55..61   -> extraordinaryPowerList.add("Levitation, one-turn " +
+                        "duration - three times/day, as 6th level magic user")
+
+                in 62..67   -> extraordinaryPowerList.add("Strength - one time/day " +
+                        "(upon wielder only)")
+
+                in 68..75   -> extraordinaryPowerList.add("Telekinesis, 250 pounds " +
+                        "maximum - twice/day, one round each per use")
+
+                in 76..81   -> extraordinaryPowerList.add("Telepathy, 60 yards range " +
+                        "- twice/day")
+
+                in 82..88   -> extraordinaryPowerList.add("Teleportation - one " +
+                        "time/day, 600 pounds maximum, casting time two segments")
+
+                in 89..94   -> extraordinaryPowerList.add("X-ray vision, 40 yards " +
+                        "range - twice/day, one turn per use")
+
+                in 95..97   -> wExtraExtraordinaryRolls +=
+                    if ( wExtraordinaryPowers > 0 ) 2 else 1
+
+                in 98..99   -> extraordinaryPowerList.add("GM may choose one power " +
+                        "from Table B114 on GMG pg. 275")
+
+                else        -> {
+
+                    extraordinaryPowerList.add("GM may choose one power from Table " +
+                            "B114 on GMG pg. 275")
+
+                    if (wSpecialPurpose.isBlank()) {wSpecialPurpose = "Roll me"}
+                }
+            }
+
+            if (wExtraordinaryPowers > 0) {wExtraordinaryPowers --} else {wExtraExtraordinaryRolls --}
+        }
+        // endregion
+
+        // region [ Determine special purpose ]
+
+        if (wSpecialPurpose == "Roll me") {
+
+            wSpecialPurpose = when (Random.nextInt(1,101)) {
+
+                in 1..10    -> "Defeat/slay diametrically opposed alignment"
+                in 11..20   -> "Defeat clerics (of a particular type)"
+                in 21..30   -> "Defeat fighters"
+                in 31..40   -> "Defeat magic-users"
+                in 41..50   -> "Defeat thieves"
+                in 51..55   -> "Defeat bards"
+                in 56..65   -> "Overthrow law and/or chaos"
+                in 66..75   -> "Defeat good and/or evil"
+                in 76..95   -> "Defeat nonhuman monsters"
+                else        -> "Other"
+            }
+
+            wSpecialPurposePower = when (Random.nextInt(1,101)) {
+
+                in 1..10    ->  "Blindness for 2d6 rounds (Upon scoring a with w/ " +
+                        "weapon, unless opponent saves vs. Spell)"
+
+                in 11..20   -> "Confusion for 2d6 rounds (Upon scoring a with w/ weapon, " +
+                        "unless opponent saves vs. Spell)"
+
+                in 21..25   -> "Disintegrate (Upon scoring a with w/ weapon, unless " +
+                        "opponent saves vs. Spell)"
+
+                in 26..55   ->  "Fear for 1d4 rounds (Upon scoring a with w/ weapon, " +
+                        "unless opponent saves vs. Spell)"
+
+                in 56..65   -> "Zarba’s Sphere of Insanity for 1d4 rounds (Upon scoring " +
+                        "a with w/ weapon, unless opponent saves vs. Spell)"
+
+                in 66..80   -> "Paralyzation for 1d4 rounds (Upon scoring a with w/ " +
+                        "weapon, unless opponent saves vs. Spell)"
+
+                else        -> "+2 to all wielder’s saving throws, -1 to each die of " +
+                        "damage sustained"
+            }
+        }
+        // endregion
+
+        // region [ Determine languages known ]
+
+        if (wCommLevel > 1) { wLanguagesKnown = getLanguageNumber(true) }
+
+        if ( wLanguagesKnown == 6 ){
+
+            // If max result was rolled, roll twice more on B117, sum them, and take higher result.
+
+            wLanguagesKnown = (getLanguageNumber(false) +
+                    getLanguageNumber(false))
+
+            if (wLanguagesKnown < 6) wLanguagesKnown = 6
+        }
+        // endregion
+
+        // region [ Calculate ego ]
+
+        weaponEgo = effectiveWeaponMod +
+                primaryAbilityList.size +
+                (extraordinaryPowerList.size * 2) +
+                ( if (wSpecialPurpose.isNotEmpty()) {5} else {0} ) +
+                wLanguagesKnown +
+                ( when (wIntelligence) {
+                    16  -> 1
+                    17  -> 4
+                    else-> 0
+                })
+        // endregion
+
+        // region [ Record info on table ]
+
+        val flatNotesList = ArrayList<Pair<String,String>>()
+
+        flatNotesList.add("Intelligent weapon info" to "Ego rating: $weaponEgo")
+
+        flatNotesList.add("Intelligent weapon info" to "Intelligence: $wIntelligence")
+
+        flatNotesList.add("Intelligent weapon info" to "Alignment: $wAlignment")
+
+        flatNotesList.add("Intelligent weapon info" to "Languages known: $wLanguagesKnown")
+
+        flatNotesList.add("Intelligent weapon info" to "Communication mode: ${COMM_LEVEL_LIST[wCommLevel]}")
+
+        if (wSpecialReadingPower.isNotEmpty()) {
+            flatNotesList.add("Intelligent weapon info" to wSpecialReadingPower)
+        }
+
+        flatNotesList.add("Intelligent weapon info" to "Please refer to GMG pgs. 275-276 for more details.")
+
+        if (primaryAbilityList.isNotEmpty()) {
+
+            flatNotesList.add("Intelligent weapon info" to "[ PRIMARY ABILIT" +
+                    "${if (primaryAbilityList.size == 1) "Y" else "IES"} ]")
+
+            primaryAbilityList.forEachIndexed { index, entry ->
+
+                flatNotesList.add("Intelligent weapon info" to "${index + 1}) $entry")
+            }
+        }
+
+        if (extraordinaryPowerList.isNotEmpty()) {
+
+            flatNotesList.add("Intelligent weapon info" to "[ EXTRAORDINARY POWER" +
+                    "${if (extraordinaryPowerList.size == 1) "" else "S"} ]")
+
+            extraordinaryPowerList.forEachIndexed { index, entry ->
+
+                flatNotesList.add("Intelligent weapon info" to "${index + 1}) $entry")
+            }
+        }
+
+        if (wSpecialPurpose.isNotEmpty()) {
+
+            flatNotesList.add("Intelligent weapon info" to "[ SPECIAL PURPOSE INFO ]")
+            flatNotesList.add("Intelligent weapon info" to
+                    "Special purpose: $wSpecialPurpose")
+            flatNotesList.add("Intelligent weapon info" to
+                    "Special purpose power: $wSpecialPurposePower")
+        }
+        // endregion
+
+        return flatNotesList.toList() to wAlignment
     }
 
     /** Generates a treasure map as a [MagicItem], following the rules outlined on GMG pgs 181 and 182 */
@@ -4145,8 +4241,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     /** Converts a [SpellCollectionOrder] into a [SpellCollection], always as a scroll.*/
     suspend fun convertOrderToSpellScroll(parentHoard : Int, order: SpellCollectionOrder): SpellCollection {
 
-        Log.d("convertOrderToSpellScroll | initial","order.spellLvRange = ${order.spellLvRange.joinToString("|")}")
-
         // region < Local extension functions >
 
         fun SpCoGenMethod.fixGenerationMethod(inputType: SpCoDiscipline) : SpCoGenMethod {
@@ -4213,8 +4307,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 }
             }
 
-            Log.d("convertOrderToSpellScroll | fixSpellRange","spellRange = ${IntRange(fixedMinimum,fixedMaximum).joinToString("|")}")
-
             return IntRange(fixedMinimum,fixedMaximum)
         }
 
@@ -4253,15 +4345,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             SpCoGenMethod.TRUE_RANDOM   -> {
 
-                Log.d("convertOrderToSpellScroll()","Picking spells according to " +
-                        "SpCoGenMethod.TRUE_RANDOM.")
-
                 repeat(spellCount) {
 
                     val spellLevel = spellRange.random()
-
-                    Log.d("convertOrderToSpellScroll() | TRUE_RANDOM (${it + 1})",
-                        "spellLevel = $spellRange.random() = $spellLevel")
 
                     spellList.add(getRandomSpell(
                         spellLevel,
@@ -4271,82 +4357,58 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                         order.allowRestricted
                     ))
 
-                    Log.d("convertOrderToSpellScroll() | TRUE_RANDOM (${it + 1})",
-                        "Spell added to spellList (size = ${spellList.size})")
                 }
             }
 
             SpCoGenMethod.BY_THE_BOOK   -> {
 
-                Log.d("convertOrderToSpellScroll()","Picking spells according to " +
-                        "SpCoGenMethod.BY_THE_BOOK.")
-
                 when (spellType) {
 
                     SpCoDiscipline.ARCANE   -> {
-
-                        Log.d("convertOrderToSpellScroll() | BY_THE_BOOK","Rolling " +
-                                "ARCANE spells with getSpellByLevelUp().")
 
                         repeat(spellCount) {
 
                             val spellLevel = spellRange.random()
 
-                            Log.d("convertOrderToSpellScroll() | BY_THE_BOOK (${it + 1})",
-                                "spellLevel = $spellRange.random() = $spellLevel")
-
                             spellList.add(getSpellByLevelUp(spellLevel,null,
                                 order.rerollChoices,order.allowedSources.splatbooksOK))
-
-                            Log.d("convertOrderToSpellScroll() | BY_THE_BOOK (${it + 1})",
-                                "Spell added to spellList (size = ${spellList.size})")
                         }
                     }
 
                     SpCoDiscipline.DIVINE   -> {
 
-                        Log.d("convertOrderToSpellScroll() | BY_THE_BOOK","Rolling " +
-                                "DIVINE spells with getSpellByChosenOneTable().")
+                        repeat(spellCount) {
+
+                            val spellLevel = spellRange.random()
+
+                            spellList.add(getSpellByChosenOneTable(spellLevel,false,
+                                order.allowedSources.splatbooksOK))
+                        }
+                    }
+
+                    else -> {
 
                         repeat(spellCount) {
 
                             val spellLevel = spellRange.random()
 
-                            Log.d("convertOrderToSpellScroll() | BY_THE_BOOK (${it + 1})",
-                                "spellLevel = $spellRange.random() = $spellLevel")
-
-                            spellList.add(getSpellByChosenOneTable(spellLevel,false,
+                            spellList.add(getSpellByChosenOneTable(spellLevel,true,
                                 order.allowedSources.splatbooksOK))
-
-                            Log.d("convertOrderToSpellScroll() | BY_THE_BOOK (${it + 1})",
-                                "Spell added to spellList (size = ${spellList.size})")
                         }
-                    }
-
-                    else -> {
-                        Log.e("convertOrderToSpellScroll($parentHoard, order)",
-                            "Invalid spell type for spell scroll slipped through.\n" +
-                                    "Order has $spellCount spells of range $spellRange.")
                     }
                 }
             }
 
             SpCoGenMethod.CHOSEN_ONE    -> {
                 //TODO Unimplemented
-                Log.e("convertOrderToSpellScroll($parentHoard, order)",
-                    "Unimplemented spell generation method called ($generationMethod).")
             }
 
             SpCoGenMethod.SPELL_BOOK    -> {
                 //TODO Unimplemented
-                Log.e("convertOrderToSpellScroll($parentHoard, order)",
-                    "Unimplemented spell generation method called ($generationMethod).")
             }
 
             SpCoGenMethod.ANY_PHYSICAL  -> {
                 //TODO Unimplemented
-                Log.e("convertOrderToSpellScroll($parentHoard, order)",
-                    "Unimplemented spell generation method called ($generationMethod).")
             }
         }
 
@@ -4538,8 +4600,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             }
 
             else    -> {
-                Log.d("createSpellCollection()",
-                    "Unimplemented generation method passed; defaulting to True Random scroll")
                 createNewScrollOrder(spCoParams,false).convertToScroll(parentHoard)
             }
         }
@@ -4547,19 +4607,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
     fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
 
-        Log.d("createNewScrollOrder | initial",
-            "scrollParams.spellCountRange = ${scrollParams.spellCountRange.joinToString("|")}")
-
         val scrollDiscipline: SpCoDiscipline
         val spellCount = Random.nextInt(scrollParams.spellCountRange.first,
             scrollParams.spellCountRange.last + 1)
         val scrollMethod = if (isByBook &&
             !(scrollParams.allowedDisciplines.natural)) SpCoGenMethod.BY_THE_BOOK
         else SpCoGenMethod.TRUE_RANDOM
-
-        Log.d("createNewScrollOrder",
-            "spellCount = Random.nextInt(${scrollParams.spellCountRange.first},${
-                scrollParams.spellCountRange.last + 1}) = $spellCount")
 
         fun chooseSpCoDiscipline() : SpCoDiscipline {
 
@@ -4573,7 +4626,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 return when (setOfDisciplines.size) {
 
                     0   -> {
-                        Log.e("chooseSpCoDiscipline","No allowed spell collections passed in!")
                         setOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE).random()
                     }
 
@@ -4593,7 +4645,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 when (setOfDisciplines.size) {
 
                     0   -> {
-                        Log.e("chooseSpCoDiscipline","No allowed spell collections passed in!")
                         return SpCoDiscipline.ALL_MAGIC
                     }
 
@@ -4607,9 +4658,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             setOfDisciplines.remove(SpCoDiscipline.NATURAL)
                         }
 
-                        return setOfDisciplines.random().also {
-                            Log.d("chooseSpCoDiscipline","Multiple options entered (picked $it)")
-                        }
+                        return setOfDisciplines.random()
                     }
                 }
             }
@@ -4635,9 +4684,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
                                         sources: SpCoSources, rerollChoices: Boolean = false,
                                         allowRestricted: Boolean): Spell {
-
-        Log.d("getRandomSpell()","rerollChoices = $rerollChoices")
-
 
         val discipline = if (_discipline == SpCoDiscipline.ALL_MAGIC) {
                 listOf(SpCoDiscipline.ARCANE,SpCoDiscipline.DIVINE,SpCoDiscipline.NATURAL).random()
@@ -4676,38 +4722,17 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         while(spellIDs.isNotEmpty() && spellHolder == null) {
 
-            Log.d("getRandomSpell()","Attempting to pick from list. spellIDs.size = ${
-                spellIDs.size}")
-
             val pulledID = spellIDs.random()
 
             spellIDs.remove(pulledID)
 
-            Log.d("getRandomSpell()","Pulled random entry. pulledID = $pulledID")
-
             spellHolder = repository.getSpell(pulledID)
-
-            Log.d("getRandomSpell()","Looked up spell with ID $pulledID. Spell name is ${
-                spellHolder?.name ?: "[ null ]"}")
-
-            // Log if spell fails current reroll criteria
-            if (spellHolder != null && rerollChoices) {
-                if (spellHolder.name.contains(" Choice") && spellHolder.refType.ordinal < 3) {
-                    Log.e("getRandomSpell() | re-roll check","Spell should be re-rolled " +
-                            "under current criteria.")
-                }
-            }
 
             // Check if spell is valid, otherwise clear it
             if ( !( spellHolder.isValid() ) ) {
-                Log.d("getRandomSpell()","Spell failed validation, clearing holder. " +
-                        "spellIDs.size = ${spellIDs.size}")
                 spellHolder = null
             }
         }
-
-        Log.d("getRandomSpell()","Returning ${if (spellHolder != null) "result" 
-            else "fallback spell"}.")
 
         return spellHolder ?: FALLBACK_SPELL
     }
@@ -4947,9 +4972,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     else-> enumValues<SpellSchool>().random()
                 }
             }
-
-        Log.d("getSpellByLevelUp()","school = ${school.name}, enforcedSchool = ${
-            enforcedSchool?.name ?: "null"}.")
 
         fun getSpellName(): String = when (school){
 
@@ -7083,17 +7105,10 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         // Attempt to roll a valid spell
         while (spellHolder == null) {
 
-            Log.d("getSpellByLevelUp()","Attempting to get a Level $inputLevel ${
-                school.name} spell from ${if (useSSG) "SSG table" else "GMG table"}.")
-
             // Get spell name from copied tables
             spellName = getSpellName()
 
-            Log.d("getSpellByLevelUp()","Spell name pulled. spellName = $spellName")
-
             if (spellName.contains("GM Choice")){
-
-                Log.d("getSpellByLevelUp()","Choice spell detected. Appending school.")
 
                 if (useSSG) {
 
@@ -7123,27 +7138,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 }
 
-                Log.d("getSpellByLevelUp()","spellName = $spellName")
-
             }
 
             // Fetch first valid entry from database
             spellHolder = repository.getSpellByName(spellName,0,inputLevel)
 
-            Log.d("getSpellByLevelUp()","Looked up spell with getSpellByName($spellName," +
-                    "0,$inputLevel). Result is ${ if (spellHolder != null) 
-                        "${spellHolder.name} (${spellHolder.spellLevel} " +
-                                "${spellHolder.schools.forEach { "<${it.name}>" }})" else "null"}.")
-
-            if ( !( spellHolder.isValid() ) ) {
-
-                // TODO this is what needs to get fixed most here.
-
-                Log.d("getSpellByLevelUp()","Spell failed validation, clearing holder.")
-                spellHolder = null }
+            if ( !( spellHolder.isValid() ) ) { spellHolder = null }
         }
-
-        Log.d("getSpellByLevelUp()","Returning result.")
 
         return spellHolder
     }
@@ -7648,16 +7649,10 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         while (spellHolder == null) {
 
-            Log.d("getSpellByChosenOneTable()","Attempting to pull a Level $inputLevel " +
-                    "spell (maxCastable = $maxCastable, allowDruid = $allowDruid, useZG = $useZG)")
-
             isDruidic = false
             isFromZG = false
 
             when (inputLevel) {
-
-                // TODO Optimize by grouping like-weighted entries into a list and pulling random
-                //  entry from sublist similar to how M-U level advancement method works.
 
                 1 -> when (Random.nextInt(1,101)) {
 
@@ -8191,36 +8186,20 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 else -> spellName = null
             }
 
-            Log.d("getSpellByChosenOneTable()","Spell name picked. spellName = ${
-                spellName ?: "null"}")
-
             if (
                 !( spellName == null || ( isDruidic && !allowDruid ) || (isFromZG && !useZG) )
             ) {
-
-                Log.d("getSpellByChosenOneTable()","spellName passed validation, " +
-                        "attempting to pull spell.")
 
                 spellHolder =  repository.getSpellByName(
                     spellName,
                     if (isDruidic) 2 else 1,
                     inputLevel)
 
-                Log.d("getSpellByChosenOneTable()","Attempted getSpellByName($spellName,${
-                    if (isDruidic) 2 else 1},$inputLevel). Result is ${ if (spellHolder != null)
-                    "${spellHolder.name} (${spellHolder.spellLevel} " +
-                            "${spellHolder.schools.forEach { "<${it.name}>" }})" else "null"}.")
-
             } else {
-
-                Log.d("getSpellByChosenOneTable()","spellName failed validation, " +
-                        "clearing holder.")
 
                 spellHolder = null
             }
         }
-
-        Log.d("getSpellByChosenOneTable()","Returning result.")
 
         return spellHolder
     }

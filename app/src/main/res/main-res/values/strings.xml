@@ -12,4 +12,54 @@
         <item quantity="one">coin</item>
         <item quantity="other">coins</item>
     </plurals>
+    <string name="ok_affirmative">OK</string>
+    <string name="action_delete_all_hoards_label">Delete all hoards</string>
+    <string name="action_select_all">Select All</string>
+    <string name="action_merge">Merge</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_duplicate">Duplicate</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="merged_hoard_name_label">Merged hoard name</string>
+    <string name="save">Save</string>
+    <string name="keep_current">Keep current</string>
+    <string name="description">Description</string>
+    <string name="add">Add</string>
+    <string name="please_wait">Please wait…</string>
+    <!--Credits-->
+    <string name="kenzerco_hackmaster_link"><html><a href="https://kenzerco.com/hackmaster/">Official HackMaster section</a></html></string>
+    <string name="credits_attribution_kenzerco">HackMaster is © copyright 2001–2022 Kenzer and Company and the HackMaster name, logo and all names and references associated therewith are Trademarks of Kenzer and Company, used here without license.</string>
+    <string name="kenzerco_main_link"><html><a href="https://kenzerco.com/">Kenzer and Company website</a></html></string>
+    <string name="credits_chest_link"><a href="https://iconscout.com/icon/treasure-chest-10">Original icon</a> by Flaticons</string>
+    <string name="credits_iconscout_link"><a href="https://iconscout.com/licenses#iconscout">IconScout Digital License</a></string>
+    <string name="mitch_thanks">My friend and the best GM I\'ve ever had, Mitch.\n\nThis app would not exist if it weren\'t for the fantastic worlds you\'ve forged and stories you\'ve weaved.</string>
+    <string name="friends_thanks">My friends, Zircean and MasaQueen, who have both helped me substantially in overcoming some of the more stubborn technical barriers to this project.</string>
+    <string name="puzwed_challonge"><a href="https://challonge.com/communities/puzzlewednesday">Challonge community</a></string>
+    <string name="puzwed_discord"><a href="https://discord.com/invite/jgEKEtkruJ">Discord server</a></string>
+    <string name="puzwed_youtube"><a href="https://www.youtube.com/channel/UCo46XFE-FZiOGMj3QY-xt9w">YouTube channel</a></string>
+    <string name="puzwed_twitter"><a href="https://twitter.com/PuzzleWednesday">Twitter</a></string>
+    <string name="puzwed_thanks">Everyone (but especially the wonderful staff) over at Puzzle Wednesday, the variety puzzle game community and tournament series.\n\nIf you enjoy playing something as complex as 4th edition HackMaster, there\'s probably something here for you.</string>
+    <string name="fraim_main_link"><a href="http://brosfraim.com/">FraimWorks website</a></string>
+    <string name="fraim_instagram"><a href="https://www.instagram.com/thefraimbrothers/">Instagram</a></string>
+    <string name="poneti_artstation"><a href="https://poneti.artstation.com/">ArtStation</a></string>
+    <string name="akiza_artstation"><a href="https://www.artstation.com/paminori">ArtStation</a></string>
+    <string name="game_icons_cc_link">Provided under <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons 3.0 BY license</a></string>
+    <string name="game_icons_site_link">Available on <a href="https://game-icons.net/">Game-icons website</a></string>
+    <string name="game_icons_contributors">Caro Asercion\nDarkZaitzev\nDelapouite\nLorc\nSkoll\nViscious Speed\nWilldabeast</string>
+    <string name="item_vector_icons">Item Vector Icons (Game-icons.net)</string>
+    <string name="app_version_string">version 1.0.0</string>
+    <string name="app_title_text">Treasure Hacktory</string>
+    <string name="material_icons_apache_link">Provided under the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a></string>
+    <string name="material_icons_library_link"><a href="https://fonts.google.com/icons">Material Icons Library</a></string>
+    <string name="material_icons">Material Icons</string>
+    <string name="material_design_author">Material Design by Google</string>
+    <string name="credits_creator_flaticons"><a href="https://flaticons.co/">Creator\'s website</a></string>
+    <string name="wotc_fan_content_policy"><a href="https://company.wizards.com/en/legal/fancontentpolicy">Fan Content Policy</a></string>
+    <string name="wotc_dnd_link"><a href="https://dnd.wizards.com/">Official D&amp;D website</a></string>
+    <string name="attributions_header">Attributions and Acknowlegements</string>
+    <string name="artwork_header">Artwork and Icons</string>
+    <string name="special_thanks_header">Special Thanks</string>
+    <string name="about_page_description">A fan-made HackMaster 4th edition companion app for treasure generation and management</string>
+    <string name="action_about">About / Credits</string>
+    <string name="max_icons_creator_link"><a href="https://www.flaticon.com/authors/maxicons">Creator\'s profile</a> on flaticon</string>
+
 </resources>

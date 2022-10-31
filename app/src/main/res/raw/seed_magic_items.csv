@@ -2568,7 +2568,7 @@
 2568¤1¤"Helm of Lordship"¤0¤"GameMaster’s Guide"¤281¤4000¤60000¤0¤¤0¤0¤0¤"A24"¤"artifact_helm"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤3¤2¤1¤1¤1¤0
 2569¤2¤"Horn of Change"¤0¤"GameMaster’s Guide"¤281¤3000¤40000¤0¤"Developer’s note: As the effects are randomized every time this item is used, powers are not generated for this item (see GMG pg 285)"¤0¤0¤0¤"A24"¤"music_instrument_brass"¤1¤1¤1¤1¤1¤0¤0¤¤"horn"¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 2570¤2¤"Invulnerable Coat of Karnaac"¤0¤"GameMaster’s Guide"¤281¤4000¤67500¤0¤¤0¤0¤0¤"A24"¤"armor_chain_fancy"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤3¤2¤2¤1¤1¤1
-2571¤2¤"Iron Flask of Steevi the Merciless"¤0¤"GameMaster’s Guide"¤281¤3500¤60000¤0¤¤0¤0¤0¤"A24"¤"potion_flask_metal"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"open;command;seal"¤0¤¤3¤0¤1¤0¤1¤1
+2571¤2¤"Iron Flask of Steevi the Merciless"¤0¤"GameMaster’s Guide"¤281¤3500¤60000¤0¤¤0¤0¤0¤"A24"¤"potion_metal_flask"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"open;command;seal"¤0¤¤3¤0¤1¤0¤1¤1
 2572¤2¤"Jacinth of Inestimable Beauty"¤0¤"GameMaster’s Guide"¤281¤7500¤100000¤0¤¤0¤0¤0¤"A24"¤"gem_jewel_jacinth"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤2¤2¤1¤1¤1¤1
 2573¤2¤"Mace of Burkob"¤0¤"GameMaster’s Guide"¤281¤3000¤55000¤0¤¤0¤0¤0¤"A24"¤"weapon_morning_star_glory"¤0¤0¤1¤0¤0¤0¤0¤¤¤0¤¤0¤"LG"¤3¤2¤0¤0¤0¤1
 2574¤2¤"Machine of Mar-Klem the Mad"¤0¤"GameMaster’s Guide"¤281¤5000¤82500¤0¤¤0¤0¤0¤"A24"¤"artifact_box"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤¤0¤¤15¤15¤10¤10¤15¤15

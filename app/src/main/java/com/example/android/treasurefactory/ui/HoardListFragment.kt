@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.CheckBox
@@ -98,8 +97,6 @@ class HoardListFragment : Fragment() {
         { hoards ->
             hoards?.let {
 
-                Log.i(TAG, "Got ${hoards.size} treasure hoards")
-                //TODO Set new container for selected item positions in ViewModel
                 updateUI(hoards)
 
                 if (hoards.isEmpty()) {
@@ -404,10 +401,8 @@ class HoardListFragment : Fragment() {
         }
 
         fun selectAllHoards() {
-            Log.d("selectAllHoards()","Called")
             if (hoards.isNotEmpty()) {
                 val allHoardIndices = hoards.indices.toList()
-                Log.d("selectAllHoards() | Indices", allHoardIndices.joinToString())
                 setPositions(allHoardIndices,true)
             }
             setActionModeFromCount()
@@ -554,9 +549,6 @@ class HoardListFragment : Fragment() {
 
                                 } else { shouldContinue = true }
 
-                                Log.v("onActionItemClicked | action_delete",
-                                    "Checking if shouldContinue is true.")
-
                                 if (shouldContinue) {
 
                                     // grab target hoards using getSelectedAsHoards()
@@ -612,7 +604,7 @@ class HoardListFragment : Fragment() {
 
                                 hoardListViewModel.mergeSelectedHoards(selectedHoards,
                                     newHoardNameEdittext.text.toString().takeUnless {it.isBlank()},
-                                    keepOriginalCheckbox.isChecked) //TODO remove boolean return; action mode should always be exited due to updateUI() implementation.
+                                    keepOriginalCheckbox.isChecked)
 
                                 mode.finish()
                             })

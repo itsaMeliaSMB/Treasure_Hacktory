@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +35,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import kotlin.io.path.bufferedWriter
+import kotlin.math.roundToInt
 
 class HoardOverviewFragment : Fragment() {
 
@@ -167,9 +167,6 @@ class HoardOverviewFragment : Fragment() {
             val oldXPTotal = totalXPValue
 
             totalXPValue = liveXPTotal
-
-            Log.d("HoardOverviewFragment | hoardTotalXPLiveData observer","totalXPValue " +
-                    "change observed from $oldXPTotal to $totalXPValue.")
 
             // Update value in detail view
             (NumberFormat.getNumberInstance().format(totalXPValue) +
@@ -730,7 +727,7 @@ class HoardOverviewFragment : Fragment() {
                         hoard.cp + hoard.sp + hoard.ep + hoard.gp + hoard.hsp + hoard.pp
                     val outputList = arrayListOf(
                         listOf(
-                            "Taken",
+                            "Abbrev.",
                             "Coinage by denomination",
                             "Total in GP",
                             "Total in XP",
@@ -742,11 +739,11 @@ class HoardOverviewFragment : Fragment() {
                     )
 
                     fun addCoinCountToRowList(type: CoinType, count: Int) {
-                        val coinList = arrayListOf("")
+                        val coinList = arrayListOf(type.name.lowercase())
                         val subGpTotal = count * type.gpValue
                         val subXpTotal = (subGpTotal / hoard.effortRating).toInt()
 
-                        coinList.add(type.longName + " (${type.name.lowercase()})")
+                        coinList.add(type.longName)
                         coinList.add(
                             DecimalFormat("#,##0.0#")
                                 .format(subGpTotal)
@@ -755,11 +752,14 @@ class HoardOverviewFragment : Fragment() {
                         coinList.add(NumberFormat.getNumberInstance().format(subXpTotal))
                         coinList.add(NumberFormat.getNumberInstance().format(count))
                         coinList.add(
-                            ("${
-                                DecimalFormat("#,##0.0#")
-                                    .format(count / 10.0)
-                                    .removeSuffix(".0")
-                            } ib")
+                            (DecimalFormat("#,##0.0#")
+                                .format(count / 10.0)
+                                .removeSuffix(".0")) + " lb (~" +
+                                    (DecimalFormat("#,##0.0#")
+                                        .format(((count / 4.5359237) * 100.00)
+                                            .roundToInt() / 100.00)
+                                        .removeSuffix(".0"))
+                                    + " kg)"
                         )
                         coinList.add(
                             ("${
@@ -847,8 +847,8 @@ class HoardOverviewFragment : Fragment() {
                     var xpTotal = 0
                     val outputList = arrayListOf(
                         listOf(
-                            "Taken",
-                            "Gem [and id]",
+                            "ID",
+                            "Gemstone / Jewel",
                             "GP Value",
                             "XP Value",
                             "Stone Type",
@@ -859,10 +859,10 @@ class HoardOverviewFragment : Fragment() {
                     )
 
                     this.forEach { item ->
-                        val itemList = arrayListOf("")
+                        val itemList = arrayListOf(item.gemID.toString())
 
                         itemList.add(
-                            item.name + " [id:${item.gemID}]"
+                            item.name
                         )
                         item.currentGPValue.let { itemGPV ->
                             gpTotal += itemGPV
@@ -910,8 +910,8 @@ class HoardOverviewFragment : Fragment() {
                     var xpTotal = 0
                     val outputList = arrayListOf(
                         listOf(
-                            "Taken",
-                            "Art Object [and id]",
+                            "ID",
+                            "Art Object",
                             "GP Value",
                             "XP Value",
                             "Medium",
@@ -922,10 +922,10 @@ class HoardOverviewFragment : Fragment() {
                     )
 
                     this.forEach { item ->
-                        val itemList = arrayListOf("")
+                        val itemList = arrayListOf(item.artID.toString())
 
                         itemList.add(
-                            item.name + " [id:${item.artID}]"
+                            item.name
                         )
                         item.gpValue.let { itemGPV ->
                             gpTotal += itemGPV
@@ -969,8 +969,8 @@ class HoardOverviewFragment : Fragment() {
                     var xpTotal = 0
                     val outputList = arrayListOf(
                         listOf(
-                            "Taken",
-                            "Magic Item [and id]",
+                            "ID",
+                            "Magic Item",
                             "GP Value",
                             "XP Value",
                             "Table Type",
@@ -981,10 +981,10 @@ class HoardOverviewFragment : Fragment() {
                     )
 
                     this.forEach { item ->
-                        val itemList = arrayListOf("")
+                        val itemList = arrayListOf(item.mItemID.toString())
 
                         itemList.add(
-                            item.name + " [id:${item.mItemID}]"
+                            item.name
                         )
                         item.gpValue.let { itemGPV ->
                             gpTotal += itemGPV
@@ -1028,8 +1028,8 @@ class HoardOverviewFragment : Fragment() {
                     var xpTotal = 0
                     val outputList = arrayListOf(
                         listOf(
-                            "Taken",
-                            "Spell Collection [and id]",
+                            "ID",
+                            "Spell Collection",
                             "GP Value",
                             "XP Value",
                             "Collection Type",
@@ -1040,10 +1040,10 @@ class HoardOverviewFragment : Fragment() {
                     )
 
                     this.forEach { item ->
-                        val itemList = arrayListOf("")
+                        val itemList = arrayListOf(item.sCollectID.toString())
 
                         itemList.add(
-                            item.name + " [id:${item.sCollectID}]"
+                            item.name
                         )
                         item.gpValue.let { itemGPV ->
                             gpTotal += itemGPV
@@ -1097,7 +1097,9 @@ class HoardOverviewFragment : Fragment() {
                     writeEmptyRow()
                     listOf(
                         "", "Creation date / time:",
-                        SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
+                        SimpleDateFormat("MM/dd/yyyy")
+                            .format(hoard.creationDate),
+                        SimpleDateFormat("hh:mm:ss aaa z")
                             .format(hoard.creationDate)
                     ).writeAsRow()
                     listOf(

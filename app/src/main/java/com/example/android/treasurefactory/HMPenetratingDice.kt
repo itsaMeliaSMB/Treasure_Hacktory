@@ -26,7 +26,6 @@ data class PenDiceRoll(var baseRoll: Int = 0, var baseCount: Int = 0,
     fun getDiceCount() = baseCount + penetrationCount
 }
 
-//TODO Add parameters replacing dieType in this function to get rid of DieType class
 fun rollPenetratingDice(numberOfDice: Int = 1, numberOfSides: Int, dieModifier: Int = 0,
                         highThreshold: Int = 1, lowThreshold: Int = 0,
                         honorModifier: Int = 0, willAutoPenetrate: Boolean = false) : PenDiceRoll{

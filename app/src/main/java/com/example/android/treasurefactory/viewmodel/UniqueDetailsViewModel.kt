@@ -1,7 +1,6 @@
 package com.example.android.treasurefactory.viewmodel
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.treasurefactory.LootGeneratorAsync
 import com.example.android.treasurefactory.LootMutator
@@ -140,14 +139,9 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
             setRunningAsync(true)
 
-            Log.d("fetchSpellForDialog","attempting to pull spell \"${entry.name}\"")
-
             val fetchedSpell = repository.getSpell(entry.spellID)
 
             dialogSpellInfoLiveData.postValue(fetchedSpell to entry)
-
-            Log.d("fetchSpellForDialog","Finished grabbing spell. Result: ${
-                fetchedSpell?.name ?: "null"}")
 
             setRunningAsync(false)
         }
@@ -156,8 +150,6 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
     fun fetchSpellsForDialog(entry: SimpleSpellEntry) {
 
         viewModelScope.launch {
-
-            Log.d("fetchSpellsForDialog()","Beginning fetch for \"${entry.name}\"")
 
             setRunningAsync(true)
 
@@ -169,20 +161,16 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
                         when (entry.name.substringAfter("(").removeSuffix(")")) {
                             "Offensive" -> {
-                                Log.d("fetchSpellsForDialog()","repository.getInitialChoiceSpells(\"O\")")
                                 repository.getInitialChoiceSpells("O")
                             }
                             "Defensive" -> {
-                                Log.d("fetchSpellsForDialog()","")
                                 repository.getInitialChoiceSpells("D")
                             }
                             "Miscellaneous" -> {
-                                Log.d("fetchSpellsForDialog()","")
                                 repository.getInitialChoiceSpells("M")
                             }
                             else -> {
-                                Log.e("fetchSpellsForDialog()","Empty return for Initial SSG")
-                                emptyList<Spell>()
+                                emptyList()
                             }
                         }
                     }
@@ -190,43 +178,30 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
                         when (entry.name.substringAfter("(").removeSuffix(")")) {
                             "Offensive" -> {
-                                Log.d("fetchSpellsForDialog()","repository.getInitialChoiceSpells(\"o\")")
                                 repository.getInitialChoiceSpells("o")
                             }
                             "Defensive" -> {
-                                Log.d("fetchSpellsForDialog()","repository.getInitialChoiceSpells(\"d\")")
                                 repository.getInitialChoiceSpells("d")
                             }
                             "Miscellaneous" -> {
-                                Log.d("fetchSpellsForDialog()","repository.getInitialChoiceSpells(\"m\")")
                                 repository.getInitialChoiceSpells("m")
                             }
                             else -> {
-                                Log.e("fetchSpellsForDialog()","Empty return for Initial GMG")
-                                emptyList<Spell>()
+                                emptyList()
                             }
                         }
                     }
                     else -> {
-                        Log.e("fetchSpellsForDialog()","Empty return for Initial (else branch)")
                         emptyList()
                     }
                 }
-
-                Log.d("fetchSpellsForDialog()","result.size = ${result.size}")
 
                 dialogSpellsInfoLiveData.postValue(result to entry)
 
             } else {
 
-                Log.d("fetchSpellsForDialog()","repository.getLevelChoiceSpells(${
-                    entry.level}, ${entry.schools.first()}, ${(entry.name.contains("GMG"))
-                    }) to entry[name:${entry.name}])")
-
                 val result = repository.getLevelChoiceSpells(entry.level,entry.schools.first(),
                         (entry.name.contains("SSG")))
-
-                Log.d("fetchSpellsForDialog()","result.size = ${result.size}")
 
                 dialogSpellsInfoLiveData.postValue(result to entry)
             }
@@ -437,9 +412,12 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                 timestamp = System.currentTimeMillis(),
                 description = "\"${convertedArt.name}\" [id:${convertedArt.artID}] was " +
                         "marked as " + (if (convertedArt.isForgery) {
-                    "a worthless forgery" } else { "the genuine article" }) + ", changing its" +
-                        "estimated value to " + DecimalFormat("#,##0.0#")
-                    .format(convertedArt.gpValue).removeSuffix(".0") + "gp.",
+                    "a worthless forgery" } else { "the genuine article" }) + ", changing its " +
+                        "estimated value from to " +
+                        DecimalFormat("#,##0.0#").format(targetArt.gpValue)
+                            .removeSuffix(".0") + " gp to " +
+                        DecimalFormat("#,##0.0#")
+                            .format(convertedArt.gpValue).removeSuffix(".0") + " gp.",
                 tag = "modification|art-object"
             )
 

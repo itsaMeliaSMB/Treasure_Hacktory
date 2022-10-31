@@ -329,7 +329,8 @@ data class ArtObject(
                     "side table",
                     "table",
                     "table",
-                    "throne"
+                    "throne",
+                    "trunk"
                 ).random()
 
                 3 -> listOf( // Painting

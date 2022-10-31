@@ -8,7 +8,6 @@ import android.content.ClipboardManager
 import android.content.res.Resources
 import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.Gravity.CENTER
@@ -224,8 +223,6 @@ class UniqueDetailsFragment() : Fragment() {
 
             dialogSpellInfoLiveData.observe(viewLifecycleOwner) { spellPair ->
 
-                Log.d("dialogSpellInfoLiveData observer", "spellPair update observed")
-
                 if (spellPair != null){
 
                     spellPair.let{ (spell, entry) ->
@@ -249,8 +246,6 @@ class UniqueDetailsFragment() : Fragment() {
             dialogSpellsInfoLiveData.observe(viewLifecycleOwner) { spellsPair ->
 
                 if (spellsPair != null){
-
-                    Log.d("dialogSpellsInfoLiveData.observe()","Non-null spellsPair observed.")
 
                     spellsPair.let{ (spells, entry) ->
 
@@ -319,6 +314,13 @@ class UniqueDetailsFragment() : Fragment() {
 
                         true
                     }
+                    
+                    R.id.action_copy_item_clipboard -> {
+
+                        copyItemTextToClipboard()
+                        
+                        true
+                    }
 
                     R.id.action_set_hoard_icon  -> {
 
@@ -364,7 +366,7 @@ class UniqueDetailsFragment() : Fragment() {
                                 }
                                 dialog.dismiss()
                             }
-                            .setNeutralButton("Restore") { dialog, _ ->
+                            .setNeutralButton(context.getString(R.string.restore_original_value_label)) { dialog, _ ->
                                 if (viewedItem.name != viewedItem.originalName){
 
                                     uniqueDetailsViewModel.renameItem(viewedItem, parentHoard,
@@ -1216,12 +1218,10 @@ class UniqueDetailsFragment() : Fragment() {
             selectedID = selectedTemplateID
 
             if (selectedPos in itemTemplates.indices) {
-                Log.d("updateSelectedItem($selectedPos, $selectedTemplateID)", "Notifying change at position $selectionPos")
                 notifyItemChanged(selectedPos)
             }
 
             if (lastSelectedPos in itemTemplates.indices) {
-                Log.d("updateSelectedItem($selectedPos, $selectedTemplateID)", "Notifying change at position $lastSelectedPos")
                 notifyItemChanged(lastSelectedPos)
             }
         }
@@ -1615,11 +1615,9 @@ class UniqueDetailsFragment() : Fragment() {
             selectedPos = selectionPos
 
             if (selectedPos in spells.indices) {
-                Log.d("updateSelectedItem($selectedPos)", "Notifying change at position $selectionPos")
                 notifyItemChanged(selectedPos)
             }
             if (lastSelectedPos in spells.indices) {
-                Log.d("updateSelectedItem($selectedPos)", "Notifying change at position $lastSelectedPos")
                 notifyItemChanged(lastSelectedPos)
             }
         }
@@ -2098,8 +2096,6 @@ class UniqueDetailsFragment() : Fragment() {
                 uniqueDetailsRecycler.visibility = View.GONE
             }
 
-            Log.d("updateUI()","About to reveal viewable group")
-
             // Reveal viewable group only after UI fully updated
             uniqueDetailsWhenemptyGroup.visibility = View.GONE
             uniqueDetailsViewableGroup.visibility = View.VISIBLE
@@ -2112,7 +2108,6 @@ class UniqueDetailsFragment() : Fragment() {
             uniqueDetailsViewableGroup.visibility = View.GONE
             uniqueDetailsWhenemptyGroup.visibility = View.VISIBLE
         }
-        Log.d("setNullUI()","nullUI set.")
     }
 
     private fun fadeOutWaitingCard() {
@@ -2581,6 +2576,50 @@ class UniqueDetailsFragment() : Fragment() {
             }
 
         dialog.show()
+    }
+    
+    private fun copyItemTextToClipboard() {
+
+        fun getViewedItemAsClipboardText(): String {
+            
+                val result = StringBuilder()
+
+                (viewedItem.name + " [id:${viewedItem.itemID}]").let {
+                    result.append(it)
+                    result.append("\n")
+                    result.append("-".repeat(it.length))
+                    result.append("\n")
+                }
+
+                result.append(viewedItem.subtitle.capitalized() + "\n")
+
+                result.append("Source: ${viewedItem.source}, pg ${viewedItem.sourcePage}\n")
+
+                result.append("Worth ${
+                    DecimalFormat("#,##0.0#")
+                        .format(viewedItem.gpValue)
+                        .removeSuffix(".0")} gp and " +
+                        NumberFormat.getNumberInstance()
+                            .format(viewedItem.xpValue) + " xp (when reported)\n"
+                )
+
+                if (viewedItem.originalName != viewedItem.name){
+                    result.append("Originally: " + viewedItem.originalName + "\n")
+                }
+
+                result.append("Parent Hoard: " + parentHoard.name + "[id:" +
+                        parentHoard.hoardID + "]")
+                result.toString()
+
+                return result.toString()
+        }
+        
+        val textToCopy = getViewedItemAsClipboardText()
+        val clipboardManager = requireContext().getSystemService(ClipboardManager::class.java)
+        val clipData = ClipData.newPlainText("text", textToCopy)
+
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(requireContext(), "Item information copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
     // endregion

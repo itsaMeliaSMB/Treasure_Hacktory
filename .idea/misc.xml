@@ -189,6 +189,16 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/menu/add_hoard_event_menu.xml" value="0.22667792317433516" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/menu/list_toolbar_menu.xml" value="0.27314814814814814" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/menu/master_list_action_menu.xml" value="0.22667792317433516" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_archived.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_artwork.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_broken.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_chest.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_cleric.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_coinage.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_construct.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_copied.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_dragon.xml" value="0.1775" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/badge_hoard_dwarf.xml" value="0.1775" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_add_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_amphora_vector_icon.xml" value="0.1315" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_anvil_vector_icon.xml" value="0.125" />

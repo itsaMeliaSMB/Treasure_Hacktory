@@ -30,6 +30,11 @@
         tools:visible="true"
         tools:enabled="true"/>
     <item
+        android:id="@+id/action_copy_item_clipboard"
+        android:title="@string/action_copy_item_clipboard"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/clipart_clipboard_vector_icon"/>
+    <item
         android:id="@+id/action_reroll_item"
         android:title="@string/action_reroll_item"
         android:titleCondensed="@string/action_reroll_item_condensed"

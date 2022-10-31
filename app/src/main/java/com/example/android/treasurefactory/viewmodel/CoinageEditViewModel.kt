@@ -1,6 +1,5 @@
 package com.example.android.treasurefactory.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.treasurefactory.model.CoinType
 import com.example.android.treasurefactory.model.Hoard
@@ -113,10 +112,6 @@ class CoinageEditViewModel(private val repository: HMRepository): ViewModel() {
         val hspQty = newHspLiveData.value!!
         val ppQty = newPpLiveData.value!!
 
-        Log.d("getCoinTotalQty()","[ $cpQty cp ] [ $spQty sp ] [ $epQty ep] " +
-                "[ $gpQty gp ] [ $hspQty hsp ] [ $ppQty pp ] " +
-                "{ ${cpQty + spQty + epQty + gpQty + hspQty + ppQty} coins total }")
-
         return cpQty + spQty + epQty + gpQty + hspQty + ppQty
     }
 
@@ -130,10 +125,6 @@ class CoinageEditViewModel(private val repository: HMRepository): ViewModel() {
         val ppValue = newPpLiveData.value!!.asGpValue(CoinType.PP)
 
         val valueTotal = cpValue + spValue + epValue + gpValue + hspValue + ppValue
-
-        Log.d("getCoinTotalQty()","(cp: $cpValue) (sp: $spValue) (ep: $epValue) " +
-                "(gp: $gpValue) (hsp: $hspValue) (pp: $ppValue) " +
-                "{ $valueTotal in gp, total }")
 
         return valueTotal
     }
@@ -187,10 +178,6 @@ class CoinageEditViewModel(private val repository: HMRepository): ViewModel() {
                 else -> errorString
             }
 
-        } else {
-
-            Log.e("setValueFromEditText | validateAsInt",
-                "No parsable integer in string. No value changed.")
         }
 
         return errorString

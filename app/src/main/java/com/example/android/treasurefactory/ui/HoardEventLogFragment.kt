@@ -81,6 +81,11 @@ class HoardEventLogFragment : Fragment() {
         hoardEventLogViewModel.eventsLiveData.observe(viewLifecycleOwner) { events ->
             updateUI(events)
         }
+        hoardEventLogViewModel.hoardNameLiveData.observe(viewLifecycleOwner) { hoardName ->
+            if (hoardName.isNotBlank()) {
+                binding.hoardEventLogToolbar.subtitle = hoardName
+            }
+        }
 
         // Set up toolbar
         binding.hoardEventLogToolbar.apply{
@@ -92,7 +97,6 @@ class HoardEventLogFragment : Fragment() {
 
             inflateMenu(R.menu.event_log_toolbar_menu)
             title = getString(R.string.hoard_event_log_fragment_title)
-            subtitle = hoardEventLogViewModel.hoardNameLiveData.value
             setTitleTextColor(colorOnPrimary)
             setSubtitleTextColor(colorOnPrimary)
             setNavigationIcon(R.drawable.clipart_back_vector_icon)

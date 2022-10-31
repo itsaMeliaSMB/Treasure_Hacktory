@@ -1,6 +1,5 @@
 package com.example.android.treasurefactory
 
-import android.util.Log
 import com.example.android.treasurefactory.model.*
 import com.example.android.treasurefactory.repository.HMRepository
 import com.example.android.treasurefactory.viewmodel.MAXIMUM_COINAGE_AMOUNT
@@ -275,7 +274,7 @@ class MultihoardProcessor(private val repository: HMRepository) {
 
                     val description = StringBuilder().apply{
                         append("The following items were moved from this hoard to \"" +
-                                originalAcceptor?.name + " [id:$acceptorHoardID] :\n\n")
+                                originalAcceptor?.name + "\" [id:$acceptorHoardID] :\n\n")
                     }
                     val tags = StringBuilder().apply{
                         append("merge")
@@ -286,22 +285,22 @@ class MultihoardProcessor(private val repository: HMRepository) {
                             UniqueItemType.GEM -> {
                                 gemList.add("${
                                     if (it.second.length > 25) it.second.take(25) + "..." 
-                                    else {it.second} } [id:$${it.third}]")
+                                    else {it.second} } [id:${it.third}]")
                             }
                             UniqueItemType.ART_OBJECT -> {
                                 artList.add("${
                                     if (it.second.length > 25) it.second.take(25) + "..."
-                                    else {it.second} } [id:$${it.third}]")
+                                    else {it.second} } [id:${it.third}]")
                             }
                             UniqueItemType.MAGIC_ITEM -> {
                                 itemList.add("${
                                     if (it.second.length > 25) it.second.take(25) + "..."
-                                    else {it.second} } [id:$${it.third}]")
+                                    else {it.second} } [id:${it.third}]")
                             }
                             UniqueItemType.SPELL_COLLECTION -> {
                                 spCoList.add("${
                                     if (it.second.length > 25) it.second.take(25) + "..."
-                                    else {it.second} } [id:$${it.third}]")
+                                    else {it.second} } [id:${it.third}]")
                             }
                         }
                     }
@@ -344,7 +343,7 @@ class MultihoardProcessor(private val repository: HMRepository) {
                             }
                             description.append("\t...And ${itemList.size - maxSize} more.\n")
                         } else {
-                            artList.forEachIndexed { index, entry ->
+                            itemList.forEachIndexed { index, entry ->
                                 description.append("\t[#${index+1}] $entry\n")
                             }
                         }
@@ -353,13 +352,13 @@ class MultihoardProcessor(private val repository: HMRepository) {
 
                     if (spCoList.size > 0) {
                         description.append("< Spell Collection(s) >\n")
-                        if (itemList.size > maxSize) {
-                            itemList.take(maxSize).forEachIndexed { index, entry ->
+                        if (spCoList.size > maxSize) {
+                            spCoList.take(maxSize).forEachIndexed { index, entry ->
                                 description.append("\t[#${index+1}] $entry\n")
                             }
-                            description.append("\t...And ${itemList.size - maxSize} more.\n")
+                            description.append("\t...And ${spCoList.size - maxSize} more.\n")
                         } else {
-                            artList.forEachIndexed { index, entry ->
+                            spCoList.forEachIndexed { index, entry ->
                                 description.append("\t[#${index+1}] $entry\n")
                             }
                         }
@@ -609,8 +608,6 @@ class MultihoardProcessor(private val repository: HMRepository) {
                             mergedItemPile, mergedSpellPile)
                     )
                     repository.updateHoard(updatedHoard.copy(iconID = updatedIconString))
-                } else {
-                    Log.e("updateItemDetails()","updatedHoard is null.")
                 }
             }
 
@@ -842,8 +839,6 @@ class MultihoardProcessor(private val repository: HMRepository) {
 
                     if (updatedHoard != null) {
                         repository.updateHoard(updatedHoard)
-                    } else {
-                        Log.e("updateItemCounts()","updatedHoard is null.")
                     }
                 }
 

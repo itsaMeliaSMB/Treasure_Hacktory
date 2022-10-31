@@ -5,27 +5,6 @@
     <string name="hoard_name_entry_hint">Enter name of hoard or leave blank</string>
     <string name="lair_treasures_cardview_header">Lair Treasures</string>
     <string name="small_treasures_cardview_header">Individual / Small Lair Treasures</string>
-    <string-array name="dropdown_gem_values">
-        <item>Don\'t care</item> <!--TODO remove when implementing slider-->
-        <item>1 sp</item>
-        <item>5 sp</item>
-        <item>10 sp</item>
-        <item>1 gp</item>
-        <item>5 gp</item>
-        <item>10 gp</item>
-        <item>50 gp</item>
-        <item>100 gp</item>
-        <item>500 gp</item>
-        <item>1,000 gp</item>
-        <item>5,000 gp</item>
-        <item>10,000 gp</item>
-        <item>25,000 gp</item>
-        <item>50,000 gp</item>
-        <item>100,000 gp</item>
-        <item>250,000 gp</item>
-        <item>500,000 gp</item>
-        <item>1,000,000 gp</item>
-    </string-array>
     <string-array name="range_slider_gem_label">
         <item>1 sp</item>
         <item>5 sp</item>
@@ -99,77 +78,6 @@
         <item>800,000 gp</item>
         <item>1,000,000 gp</item>
     </string-array>
-    <string-array name="dropdown_art_values">
-        <item>Don\'t care</item>
-        <item>1 gp</item>
-        <item>10 gp</item>
-        <item>20 gp</item>
-        <item>30 gp</item>
-        <item>40 gp</item>
-        <item>50 gp</item>
-        <item>60 gp</item>
-        <item>70 gp</item>
-        <item>85 gp</item>
-        <item>100 gp</item>
-        <item>125 gp</item>
-        <item>150 gp</item>
-        <item>200 gp</item>
-        <item>250 gp</item>
-        <item>325 gp</item>
-        <item>400 gp</item>
-        <item>500 gp</item>
-        <item>650 gp</item>
-        <item>800 gp</item>
-        <item>1,000 gp</item>
-        <item>1,250 gp</item>
-        <item>1,500 gp</item>
-        <item>2,000 gp</item>
-        <item>2,500 gp</item>
-        <item>3,000 gp</item>
-        <item>4,000 gp</item>
-        <item>5,000 gp</item>
-        <item>6,000 gp</item>
-        <item>7,500 gp</item>
-        <item>10,000 gp</item>
-        <item>12,500 gp</item>
-        <item>15,000 gp</item>
-        <item>20,000 gp</item>
-        <item>25,000 gp</item>
-        <item>30,000 gp</item>
-        <item>40,000 gp</item>
-        <item>50,000 gp</item>
-        <item>60,000 gp</item>
-        <item>70,000 gp</item>
-        <item>85,000 gp</item>
-        <item>100,000 gp</item>
-        <item>125,000 gp</item>
-        <item>150,000 gp</item>
-        <item>200,000 gp</item>
-        <item>250,000 gp</item>
-        <item>300,000 gp</item>
-        <item>400,000 gp</item>
-        <item>500,000 gp</item>
-        <item>650,000 gp</item>
-        <item>800,000 gp</item>
-        <item>1,000,000 gp</item>
-    </string-array>
-    <string-array name="dropdown_spell_disciplines">
-        <item>Arcane or Divine</item>
-        <item>Arcane only</item>
-        <item>Divine only</item>
-    </string-array>
-    <string-array name="dropdown_spell_levels">
-        <item>Cantrips (CL 1)</item>
-        <item>Level 1</item>
-        <item>Level 2</item>
-        <item>Level 3</item>
-        <item>Level 4</item>
-        <item>Level 5</item>
-        <item>Level 6</item>
-        <item>Level 7</item>
-        <item>Level 8 (CL 7)</item>
-        <item>Level 9 (CL 7)</item>
-    </string-array>
     <string-array name="spell_level_labels">
         <item>Cantrip (Arcane)\n1st  (Divine)</item>
         <item>1st (Arcane)\n1st  (Divine)</item>
@@ -194,18 +102,60 @@
         <item>8th / 7th</item>
         <item>9th / 7th</item>
     </string-array>
-    <string-array name="dropdown_spell_types">
-        <item>Random\n(as Spell Scroll)</item>
-        <item>By-the-Book\n(as Spell Scroll)</item>
-        <item>Chosen One\'s spell allotment</item>
-        <item>M-U Creation\n(as Spell Book)</item>
-        <item>Any method\n(as any physical)</item>
-    </string-array>
-    <string-array name="dropdown_spell_curses">
-        <item>GMG curses only</item>
-        <item>Official only</item>
-        <item>Anything goes</item>
-        <item>None (ignore)</item>
-    </string-array>
+    <string name="reset">Reset</string>
+    <string name="generate">Generate</string>
+    <string name="specific_coinage_cardview_header">Hard coinage</string>
+    <string name="generator_coinage_range_label">Range of hard coinage:</string>
+    <string name="hint_minimum">Minimum</string>
+    <string name="hint_maximum">Maximum</string>
+    <string name="generator_coinage_allowed_label">Include these denominations:</string>
+    <string name="specific_gem_cardview_header">Jewels and Gemstones</string>
+    <string name="generator_qty_to_gen_label">Quantity to generate:</string>
+    <string name="generator_gem_bias_label">Value bias range:</string>
+    <string name="generator_coinage_minimum_input_hint">Minimum (in gp)</string>
+    <string name="specific_art_cardview_header">Art Objects</string>
+    <string name="maps_can_replace_paper_art">Treasure maps can replace paper art</string>
+    <string name="specific_magic_cardview_header">Magic Items</string>
+    <string name="specific_spell_cardview_header">Spell collections</string>
+    <string name="hint_magical_discipline">Magical discipline</string>
+    <string name="hint_collection_type">Collection type</string>
+    <string name="hint_generation_method">Generation method</string>
+    <string name="generator_coinage_maximum_input_hint">Maximum (in gp)</string>
+    <string name="generator_choice_reroll_switch_label">Re-roll \"GM/Player\'s Choice\" results</string>
+    <string name="generator_restricted_switch_label">Include specialty-restricted spells</string>
+    <string name="generator_waiting_text_string">Please wait…</string>
+    <string name="action_view_new_hoard">View new hoard</string>
+    <string name="odds_ref_treasure_type">Treasure Type</string>
+    <string name="odds_ref_of_divider">of generating</string>
+    <string name="percent_chance">% chance</string>
+    <string name="generator_label_potions">Potions, Oils, Etc.</string>
+    <string name="generator_label_scrolls">Scrolls</string>
+    <string name="generator_label_armor_weapons">Armor / Weapons</string>
+    <string name="generator_label_except_weapons">Any (Except weapons)</string>
+    <string name="generator_label_any_magic">Any Magic Items</string>
+    <string name="odds_ref_magic_qualifier_start">«</string>
+    <string name="odds_ref_magic_qualifier_end">»</string>
+    <string name="extra_potion_label">+ 1 Potion</string>
+    <string name="extra_scroll_label">+ 1 Scroll</string>
+    <string name="odds_ref_magic_noun">Magic item(s)</string>
+    <string name="dialog_letter_qty_message">Set quantity for treasure type</string>
+    <string name="letter_qty_picker_dialog_message">Select new quantity of treasure type</string>
+    <string name="action_submit_qty_update">Update</string>
+    <string name="new_qty_title">New quantity</string>
+    <string name="new_hoard_generated_msg_template">New hoard "=" successfully generated. Would you like to view this hoard?</string>
+    <string name="generator_option_magic_item_error">At least one type of magic item must be enabled.</string>
+    <string name="value_bias_range_tooltip">Generator will re-roll results outside this range, up to a point.</string>
+    <string name="allowed_scroll_tooltip">If a scroll is indicated on table A1, allow these scrolls.</string>
+    <string name="allow_magic_item_types_tooltip">If no picked types overlap with a rolled treasure type (e.g. type F), this list is ignored.</string>
+    <string name="allowed_sources_tooltip">If checked, magic items and spells from these sources may also be picked.</string>
+    <string name="allowed_disciplines_tooltip">If Arcane/Divine, both types can be SEPARATELY generated.\nNOTE: Druid scrolls are unofficial.</string>
+    <string name="spell_curse_tooltip">What curses may be applied to any cursed spell collections generated.</string>
+    <string name="generation_options">Generation options</string>
+    <string name="spell_method_random_radio_label">Unweighted, random picks</string>
+    <string name="spell_method_book_radio_label">Book-defined methods</string>
+    <string name="reference_splatbook_label">Splatbooks (i.e. Spellslinger\'s Guide and Zealot\'s Guide)</string>
+    <string name="reference_hackjournal_label">HackJournals</string>
+    <string name="reference_modules_etc_label"><![CDATA[Other official Kenzer & Company-published material (i.e. modules)]]></string>
+    <string name="generator_spell_curse_disclaimer">Please note that if \"Allow cursed magic items\" is enabled, all scrolls ordered from this section will automatically have a curse applied to them!</string>
 
 </resources>

@@ -153,12 +153,10 @@ class HoardGeneratorFragment : Fragment() {
 
             lairListLiveData.observe(viewLifecycleOwner) { newLairList ->
                 lairAdapter.submitList(newLairList)
-                Log.d("HoardGeneratorFragment","lairListLiveData on ViewModel observed.")
             }
 
             smallListLiveData.observe(viewLifecycleOwner) { newSmallList ->
                 smallAdapter.submitList(newSmallList)
-                Log.d("HoardGeneratorFragment","smallListLiveData on ViewModel observed.")
             }
 
             isRunningAsyncLiveData.observe(viewLifecycleOwner) { isRunningAsync ->
@@ -675,23 +673,30 @@ class HoardGeneratorFragment : Fragment() {
                                 }
                             }
                             generatorOptionArmorCheckbox.apply {
-                                isChecked = checkedItemTypes.contains(MagicItemType.A18)
+                                isChecked = checkedItemTypes.contains(MagicItemType.A18) &&
+                                        checkedItemTypes.contains(MagicItemType.A20)
+
                                 setOnCheckedChangeListener { _, isChecked ->
                                     if (isChecked) {
                                         checkedItemTypes.add(MagicItemType.A18)
+                                        checkedItemTypes.add(MagicItemType.A20)
                                     } else {
                                         checkedItemTypes.remove(MagicItemType.A18)
+                                        checkedItemTypes.remove(MagicItemType.A20)
                                     }
                                     setMagicErrorVisibility()
                                 }
                             }
                             generatorOptionWeaponCheckbox.apply {
-                                isChecked = checkedItemTypes.contains(MagicItemType.A21)
+                                isChecked = checkedItemTypes.contains(MagicItemType.A21) &&
+                                        checkedItemTypes.contains(MagicItemType.A23)
                                 setOnCheckedChangeListener { _, isChecked ->
                                     if (isChecked) {
                                         checkedItemTypes.add(MagicItemType.A21)
+                                        checkedItemTypes.add(MagicItemType.A23)
                                     } else {
                                         checkedItemTypes.remove(MagicItemType.A21)
+                                        checkedItemTypes.remove(MagicItemType.A23)
                                     }
                                     setMagicErrorVisibility()
                                 }
@@ -894,39 +899,14 @@ class HoardGeneratorFragment : Fragment() {
 
                     binding.generatorAnimatorFrame.displayedChild = 0
 
-                    Log.d("generatorMethodGroup", "By-letter method activated.")
-
-                    /*if (binding.generatorAnimatorFrame.displayedChild != 0){
-
-                        binding.generatorAnimatorFrame.displayedChild = 0
-                        // TODO + If it doesn't do so, animate transition
-                        // TODO + Disable Viewgroups during animation
-                        Log.d("generatorMethodGroup", "By-letter method activated.")
-                    } else {
-                        Log.d("generatorMethodGroup", "By-letter method was already set.")
-                    }*/
                 }
 
                 R.id.generator_method_specific  -> {
 
                     binding.generatorAnimatorFrame.displayedChild = 1
-
-                    Log.d("generatorMethodGroup", "Specific-quantity method activated.")
-
-                    /*if (binding.generatorAnimatorFrame.displayedChild != 1){
-
-                        binding.generatorAnimatorFrame.displayedChild = 1
-                        // + If it doesn't do so, animate transition
-                        // + Disable Viewgroups during animation
-                        Log.d("generatorMethodGroup", "Specific-quantity method activated.")
-                    } else {
-                        Log.d("generatorMethodGroup", "Specific-quantity method was already set.")
-                    }*/
                 }
 
-                else -> {
-                    Log.d("generatorMethodGroup","No active method set.")
-                }
+                else -> {}
             }
 
             generatorViewModel
@@ -1775,10 +1755,6 @@ class HoardGeneratorFragment : Fragment() {
                         if (intValues.second in spLvlRangeLongLabels.indices) {
                             spLvlRangeLongLabels[intValues.second]
                         } else "???"
-                    Log.d("generatorSpellLevelSlider | OnChangeListener",
-                        "values = ${values.joinToString("|")}")
-                    Log.d("generatorSpellLevelSlider | OnChangeListener",
-                        "generatorViewModel.spellLevelRange = ${generatorViewModel.spellLevelRange.joinToString("|")}")
                 }
 
                 binding.generatorSpellLevelMinValue.text =
@@ -1807,10 +1783,6 @@ class HoardGeneratorFragment : Fragment() {
                         intValues.first.toString()
                     binding.generatorSpellPerQtyMaxValue.text =
                         intValues.second.toString()
-                    Log.d("generatorSpellPerQtySlider | OnChangeListener",
-                        "values = ${values.joinToString("|")}")
-                    Log.d("generatorSpellPerQtySlider | OnChangeListener",
-                        "generatorViewModel.spellLevelRange = ${generatorViewModel.spellsPerRange.joinToString("|")}")
                 }
 
                 binding.generatorSpellPerQtyMinValue.text =
@@ -1846,8 +1818,6 @@ class HoardGeneratorFragment : Fragment() {
 
                 R.id.generator_method_lettercode-> {
 
-                    Log.d("generatorGenerateButton","Procedure for generating hoard order by letter method called.")
-
                     if (generatorViewModel.validateLetterCodeValues()){
 
                        generatorViewModel.generateHoard(true, appVersion)
@@ -1858,8 +1828,6 @@ class HoardGeneratorFragment : Fragment() {
                     }
                 }
                 R.id.generator_method_specific  ->{
-
-                    Log.d("generatorGenerateButton","Procedure for generating hoard order by specific method called.")
 
                     if (validateSpecificQtyValues()){
 
@@ -1872,7 +1840,6 @@ class HoardGeneratorFragment : Fragment() {
                 }
                 else -> {
                     Toast.makeText(context,"Generator button pressed (No method?)",Toast.LENGTH_SHORT).show()
-                    Log.d("generatorGenerateButton","No method specified.")
                 }
             }
 
@@ -1992,26 +1959,17 @@ class HoardGeneratorFragment : Fragment() {
                 (binding.generatorCoinageMinimumEdit.error != null)||
                 (generatorViewModel.validateCoinageMaximum() != null)) {
 
-            Log.d("validateSpecificQtyValues",
-                "Failed validation at coinage check")
-
             return false
         }
 
         // Check for errors on gem fields
         if (binding.generatorGemQtyAuto.error != null) {
 
-            Log.d("validateSpecificQtyValues",
-                "Failed validation at gem check")
-
             return false
         }
 
         // Check for errors on art fields
         if (binding.generatorArtQtyEdit.error != null) {
-
-            Log.d("validateSpecificQtyValues",
-                "Failed validation at art object check")
 
             return false
         }
@@ -2026,23 +1984,14 @@ class HoardGeneratorFragment : Fragment() {
             (binding.generatorMagicNonweaponQtyEdit.error != null)||
             (binding.generatorMagicAnyQtyEdit.error != null)) {
 
-            Log.d("validateSpecificQtyValues",
-                "Failed validation at magic item check")
-
             return false
         }
 
         // Check for errors on spell collection fields
         if (binding.generatorSpellQtyEdit.error != null) {
 
-            Log.d("validateSpecificQtyValues",
-                "Failed validation at spell collection check")
-
             return false
         }
-
-        Log.d("validateSpecificQtyValues",
-            "Passed validation")
 
         return true
     }
@@ -2060,8 +2009,6 @@ class HoardGeneratorFragment : Fragment() {
                         (if (binding.generatorCoinageAllowedGp.isChecked) 1.0 else 0.0) +
                         (if (binding.generatorCoinageAllowedHsp.isChecked) 2.0 else 0.0) +
                         (if (binding.generatorCoinageAllowedPp.isChecked) 5.0 else 0.0)
-
-            Log.d("validateCoinMinAndCheckboxes.denominationsSum", "= $denominationsSum")
 
             binding.generatorCoinageMinimumEdit.error = if (coinMinimum > 0.00) {
 

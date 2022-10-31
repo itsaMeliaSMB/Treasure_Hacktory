@@ -1,7 +1,6 @@
 package com.example.android.treasurefactory.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,8 +62,6 @@ class AddHoardEventDialog() : DialogFragment() {
                     R.id.action_add_event   -> {
 
                         val descString = binding.addEventDescEdit.text.toString()
-
-                        Log.d("AddHoardEventDialog() | menu","descString = $descString")
 
                         if (descString.isNotBlank()) {
 

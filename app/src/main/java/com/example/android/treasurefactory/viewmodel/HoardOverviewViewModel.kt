@@ -1,6 +1,5 @@
 package com.example.android.treasurefactory.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.android.treasurefactory.model.Hoard
 import com.example.android.treasurefactory.model.HoardEvent
@@ -70,8 +69,6 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
             }
 
             (dependentJob.await() + independentJob.await()).let { xpTotal ->
-                Log.d("updateXPTotal($hoardID)","dependentJob.await() + " +
-                        "independentJob.await() = $xpTotal")
                 hoardTotalXPLiveData.postValue(xpTotal)
             }
         }
@@ -83,7 +80,6 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
 
         viewModelScope.launch{
 
-            //TODO add running async to this fragment/viewmodel
             try {
 
                 val hoard = repository.getHoardOnce(hoardID)
@@ -101,7 +97,7 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
                 }
 
             } catch(e: Exception){
-                Log.e("fetchReportInfo($hoardID)", e.message.toString())
+                e.printStackTrace()
             }
         }
     }

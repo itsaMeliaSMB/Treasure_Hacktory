@@ -101,9 +101,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
     fun setGeneratorMethodPos(newViewGroupIndex: Int){
         if (newViewGroupIndex in 0..1) {
             generationMethodPos = newViewGroupIndex
-            Log.d("generatorViewModel","Value updated for generationMethodPos. [generationMethodPos = $generationMethodPos]")
-        } else {
-            Log.d("generatorViewModel","Out of bounds new value for generationMethodPos. [generationMethodPos = $generationMethodPos]")
         }
     }
 
@@ -238,8 +235,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                         spCoQty = parsedValue
                     }
 
-                    else -> Log.e("setValueFromEditText | validateAsInt",
-                        "Invalid GenEditTextTag entered. No value was changed.")
+                    else -> {}
                 }
 
                 errorString = when {
@@ -249,10 +245,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                     else -> errorString
                 }
 
-            } else {
-
-                Log.e("setValueFromEditText | validateAsInt",
-                    "No parsable integer in string. No value changed.")
             }
 
             return errorString
@@ -297,13 +289,8 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                         }
                     }
 
-                    else -> Log.e("setValueFromEditText | validateAsDouble",
-                        "Invalid GenEditTextTag entered. No value was changed.")
+                    else -> {}
                 }
-            } else {
-
-                Log.e("setValueFromEditText | validateAsDouble",
-                    "No parsable double in string. No value changed.")
             }
         }
 
@@ -373,7 +360,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
             val letterCode = try {
                 repository.getLetterCodeOnce(letterKey)
             } catch(e: Exception){
-                Log.e("compileLetterHoardOrder()","Could not find entry for \"$letterKey\".")
                 null
             }
 
@@ -627,8 +613,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
 
             val newHoardId = lootGenerator.createHoardFromOrder(hoardOrder, appVersion)
 
-            Log.d("generateHoard()","newHoardId = $newHoardId")
-
             setRunningAsync(false)
 
             generatedHoardLiveData.postValue(repository.getHoardOnce(newHoardId))
@@ -750,66 +734,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         }
 
         return newCoinageMap
-    }
-
-    private fun reportHoardOrderToDebug(order: HoardOrder) {
-        Log.d("convertLetterToHoardOrder","Received name: ${order.hoardName}")
-        Log.d("convertLetterToHoardOrder",order.creationDescription)
-        Log.d("convertLetterToHoardOrder","\n- - - QUANTITIES - - -")
-        Log.d("convertLetterToHoardOrder","> COINAGE:")
-        Log.d("convertLetterToHoardOrder","${order.copperPieces} cp, " +
-                "${order.silverPieces} sp, " + "${order.electrumPieces} ep, " +
-                "${order.goldPieces} gp, " + "${order.hardSilverPieces} hsp, " +
-                "and ${order.platinumPieces} pp")
-        Log.d("convertLetterToHoardOrder","> ART OBJECTS:")
-        Log.d("convertLetterToHoardOrder","${order.gems} gems and " +
-                "${order.artObjects} pieces of artwork")
-        Log.d("convertLetterToHoardOrder","> MAGIC ITEMS:")
-        Log.d("convertLetterToHoardOrder","${order.potions} potions, " +
-                "${order.scrolls} scrolls, ${order.armorOrWeapons} armor/weapons, " +
-                "${order.anyButWeapons} magic items (non-weapon), and " +
-                "${order.anyMagicItems} magic items of any type")
-        Log.d("convertLetterToHoardOrder", "> SPELL COLLECTIONS:")
-        Log.d("convertLetterToHoardOrder","${order.extraSpellCols} explicitly- generated" +
-                "spell collections")
-        Log.d("convertLetterToHoardOrder.genParameters","\n- - - PARAMETERS - - -")
-        Log.d("convertLetterToHoardOrder.genParameters","> GEM PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters","Value bias range: " +
-                "${order.genParams.gemParams._minLvl}-${order.genParams.gemParams._maxLvl} (" +
-                order.genParams.gemParams.levelRange.toString() + ")")
-        Log.d("convertLetterToHoardOrder.genParameters","> ART PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters","Value bias range: " +
-                "${order.genParams.artParams._minLvl}-${order.genParams.artParams._maxLvl} (" +
-                order.genParams.artParams.levelRange.toString() + "), Paper map chance: " +
-                order.genParams.artParams.paperMapChance.toString() + "%")
-        Log.d("convertLetterToHoardOrder.genParameters","> MAGIC ITEM PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters",
-            "Allow spell scrolls [${order.genParams.magicParams.spellScrollEnabled}], " +
-                    "Allow non-spell scrolls [${order.genParams.magicParams.nonScrollEnabled}], " +
-                    "Scroll map chance: ${order.genParams.magicParams.scrollMapChance}%, " +
-                    "Allow cursed [${order.genParams.magicParams.allowCursedItems}], " +
-                    "Allow int. weapons [${order.genParams.magicParams.allowIntWeapons}], " +
-                    "Allow artifacts [${order.genParams.magicParams.allowCursedItems}]"
-        )
-        Log.d("convertLetterToHoardOrder.genParameters","> SPELL CO PARAMS:")
-        Log.d("convertLetterToHoardOrder.genParameters","Level range: ${
-            order.genParams.magicParams.spellCoRestrictions._minLvl}-${
-            order.genParams.magicParams.spellCoRestrictions._maxLvl
-        } (" + order.genParams.magicParams.spellCoRestrictions.levelRange.toString() +
-                "), Allowed disciplines: ${
-                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.arcane)
-                        "<arcane>" else "<>"} ${
-                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.divine)
-                        "<divine>" else "<>"} ${
-                    if (order.genParams.magicParams.spellCoRestrictions.allowedDisciplines.natural)
-                        "<natural>" else "<>"}, Max spell count: " +
-                order.genParams.magicParams.spellCoRestrictions.spellCountRange.toString() +
-                ", sources: " + order.genParams.magicParams.spellCoRestrictions.spellSources.toString() +
-                ", Allow restricted [${order.genParams.magicParams.spellCoRestrictions.allowRestricted}]" +
-                ", Re-roll choices [${order.genParams.magicParams.spellCoRestrictions.rerollChoice}]" +
-                ", Allow cursed [${order.genParams.magicParams.spellCoRestrictions.allowCurse}]" +
-                ", Allowed curses <${order.genParams.magicParams.spellCoRestrictions.allowedCurses}>" +
-                ", Generation method: ${order.genParams.magicParams.spellCoRestrictions.genMethod}\n")
     }
 
     fun Double.roundToTwoDecimal():Double = (this * 100.00).roundToInt() / 100.00

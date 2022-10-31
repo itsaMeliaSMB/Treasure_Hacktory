@@ -1,7 +1,6 @@
 package com.example.android.treasurefactory.database
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -140,8 +139,6 @@ abstract class TreasureDatabase : RoomDatabase() {
                     iterationCount ++
                 }
 
-            Log.d("InitialPopulationCallback","Letter code addition by CSV ran. " +
-                    "[ Iteration count = $iterationCount ]")
         }
 
         /** Populates gem template table using hardcoded CSV file. */
@@ -185,8 +182,6 @@ abstract class TreasureDatabase : RoomDatabase() {
                     iterationCount ++
                 }
 
-            Log.d("InitialPopulationCallback","Gem template addition by CSV ran. " +
-                    "[ Iteration count = $iterationCount ]")
         }
 
         /** Populates magic item template table using hardcoded CSV file. */
@@ -282,8 +277,6 @@ abstract class TreasureDatabase : RoomDatabase() {
                     iterationCount ++
                 }
 
-            Log.d("InitialPopulationCallback","Magic item template addition by CSV ran. " +
-                    "[ Iteration count = $iterationCount ]")
         }
 
         /** Populates spell table using hardcoded CSV file. */
@@ -438,8 +431,6 @@ abstract class TreasureDatabase : RoomDatabase() {
                     iterationCount ++
                 }
 
-            Log.d("InitialPopulationCallback","Spell addition by CSV ran. " +
-                    "[ Iteration count = $iterationCount ]")
         }
 
         suspend fun populateCommandWords(spellDao: SpellCollectionDao) {
@@ -468,8 +459,6 @@ abstract class TreasureDatabase : RoomDatabase() {
                     iterationCount ++
                 }
 
-            Log.d("InitialPopulationCallback","Command word addition by TXT ran. " +
-                    "[ Iteration count = $iterationCount ]")
         }
     }
 

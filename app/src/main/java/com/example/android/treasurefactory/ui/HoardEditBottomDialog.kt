@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -193,9 +192,6 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
 
                 if (hoardEditGpEdit.error == null) {
                     hoardEditViewModel.newEffortValue = roundedValue
-                    Log.d("hoardEditGpEdit.addTextChangedListener",
-                        "hoardEditViewModel.newEffortValue = $oldEffortRating -> " +
-                                "${hoardEditViewModel.newEffortValue}")
                 }
             }
 
@@ -242,13 +238,8 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                             eventStringBuilder.append("\n\t- Difficulty ratio changed from " +
                                     "${activeHoard.effortRating} gp = 1 xp to " +
                                     "$newEffortValue gp = 1 xp")
-                            Log.d("hoardEditSaveButton.setOnClickListener",
-                                "activeHoard.effortRating = ${activeHoard.effortRating}, " +
-                                        "newEffortValue = $newEffortValue")
                         } else {
                             newEffortValue = activeHoard.effortRating
-                            Log.d("hoardEditSaveButton.setOnClickListener",
-                                "No change in effortRating detected, or an error prevented it.")
                         }
 
                         val editEvent = HoardEvent(
@@ -301,8 +292,6 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                 BooleanArray(values.size) { true }
             }
 
-        fun getSelectedPosition() = selectedPosition
-
         fun setSelectedPosition(newPosition: Int) {
 
             if ((newPosition in values.indices) && (selectedPosition != newPosition)) {
@@ -311,27 +300,10 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
             }
         }
 
-        fun getEnabledItemsArray() = enabledItemsArray
-
-        fun getSelectedItem() = values[selectedPosition]
-
         override fun getFilter(): Filter = emptyFilter
 
         override fun isEnabled(position: Int): Boolean {
             return enabledItemsArray[position]
-        }
-
-        fun setEnabled(position: Int, newValue: Boolean) {
-
-            if (position in values.indices){
-
-                enabledItemsArray[position] = newValue
-                notifyDataSetChanged()
-
-            } else {
-
-                Log.e("DropdownAdapter","Position $position is out of bounds, cannot set to $newValue.")
-            }
         }
 
         fun setEnabledByArray(newValueArray: BooleanArray?) {

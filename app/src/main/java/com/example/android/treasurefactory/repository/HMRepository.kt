@@ -1,6 +1,5 @@
 package com.example.android.treasurefactory.repository
 
-import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -298,7 +297,6 @@ class HMRepository (
 
     suspend fun getLevelChoiceSpells(level: Int, school: SpellSchool,
                                        useSplat: Boolean): List<Spell> {
-        Log.d("repository.getSpellChoiceLevels()", "useSplat = $useSplat")
        return spellCollectionDao
            .getLevelChoiceSpells(level,school.ordinal.toString(), if (useSplat) "S" else "s")
            .filter { spell -> spell.choiceString.contains(if(useSplat) 'S' else 's') }
