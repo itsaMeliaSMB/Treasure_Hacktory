@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/hoardListFragment"
-        android:name="com.example.android.treasurefactory.ui.HoardListFragment"
+        android:name="com.treasurehacktory.ui.HoardListFragment"
         android:label="HoardListFragment"
         tools:layout="@layout/layout_hoard_list">
         <action
@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/hoardGeneratorFragment"
-        android:name="com.example.android.treasurefactory.ui.HoardGeneratorFragment"
+        android:name="com.treasurehacktory.ui.HoardGeneratorFragment"
         android:label="HoardGeneratorFragment"
         tools:layout="@layout/layout_generator_fragment">
         <action
@@ -41,7 +41,7 @@
 
     <fragment
         android:id="@+id/hoardOverviewFragment"
-        android:name="com.example.android.treasurefactory.ui.HoardOverviewFragment"
+        android:name="com.treasurehacktory.ui.HoardOverviewFragment"
         android:label="HoardViewerFragment"
         tools:layout="@layout/layout_hoard_overview">
         <argument
@@ -78,12 +78,12 @@
                 app:argType="integer" />
             <argument
                 android:name="listType"
-                app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
+                app:argType="com.treasurehacktory.model.UniqueItemType" />
         </action>
     </fragment>
     <fragment
         android:id="@+id/hoardEventLogFragment"
-        android:name="com.example.android.treasurefactory.ui.HoardEventLogFragment"
+        android:name="com.treasurehacktory.ui.HoardEventLogFragment"
         android:label="HoardEventLogFragment"
         tools:layout="@layout/layout_hoard_event_log">
         <argument
@@ -100,13 +100,13 @@
 
     <fragment
         android:id="@+id/aboutFragment"
-        android:name="com.example.android.treasurefactory.ui.AboutFragment"
+        android:name="com.treasurehacktory.ui.AboutFragment"
         android:label="AboutFragment"
         tools:layout="@layout/layout_about_page"/>
 
     <fragment
         android:id="@+id/coinageEditDialog"
-        android:name="com.example.android.treasurefactory.ui.CoinageEditDialog"
+        android:name="com.treasurehacktory.ui.CoinageEditDialog"
         android:label="CoinageEditDialog"
         tools:layout="@layout/dialog_coinage_edit">
         <argument
@@ -116,7 +116,7 @@
 
     <dialog
         android:id="@+id/hoardEditBottomDialog"
-        android:name="com.example.android.treasurefactory.ui.HoardEditBottomDialog"
+        android:name="com.treasurehacktory.ui.HoardEditBottomDialog"
         android:label="HoardEditBottomDialog"
         tools:layout="@layout/dialog_bottom_hoard_info_edit" >
         <argument
@@ -126,7 +126,7 @@
 
     <fragment
         android:id="@+id/addHoardEventDialog"
-        android:name="com.example.android.treasurefactory.ui.AddHoardEventDialog"
+        android:name="com.treasurehacktory.ui.AddHoardEventDialog"
         android:label="AddHoardEventDialog"
         tools:layout="@layout/dialog_add_event">
         <argument
@@ -135,7 +135,7 @@
     </fragment>
     <fragment
         android:id="@+id/uniqueListFragment"
-        android:name="com.example.android.treasurefactory.ui.UniqueListFragment"
+        android:name="com.treasurehacktory.ui.UniqueListFragment"
         android:label="UniqueListFragment"
         tools:layout="@layout/layout_unique_list" >
         <argument
@@ -143,7 +143,7 @@
             app:argType="integer" />
         <argument
             android:name="listType"
-            app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
+            app:argType="com.treasurehacktory.model.UniqueItemType" />
         <action
             android:id="@+id/unique_list_to_details_action"
             app:destination="@id/uniqueDetailsFragment">
@@ -152,7 +152,7 @@
                 app:argType="integer" />
             <argument
                 android:name="itemType"
-                app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
+                app:argType="com.treasurehacktory.model.UniqueItemType" />
             <argument
                 android:name="hoardID"
                 app:argType="integer" />
@@ -160,7 +160,7 @@
     </fragment>
     <fragment
         android:id="@+id/uniqueDetailsFragment"
-        android:name="com.example.android.treasurefactory.ui.UniqueDetailsFragment"
+        android:name="com.treasurehacktory.ui.UniqueDetailsFragment"
         android:label="UniqueDetailsFragment"
         tools:layout="@layout/layout_unique_details">
         <argument
@@ -168,7 +168,7 @@
             app:argType="integer" />
         <argument
             android:name="itemType"
-            app:argType="com.example.android.treasurefactory.model.UniqueItemType" />
+            app:argType="com.treasurehacktory.model.UniqueItemType" />
         <argument
             android:name="hoardID"
             app:argType="integer" />

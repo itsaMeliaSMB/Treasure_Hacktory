@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.TreasureFactory" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.TreasureHacktory" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary colors -->
         <item name="windowActionModeOverlay">true</item>
         <item name="colorPrimary">@color/defaultPrimary</item>
@@ -36,7 +36,7 @@
         <item name="background">@color/actionModePrimary</item>
     </style>
 
-    <style name="GemSubStyle" parent="Theme.TreasureFactory">
+    <style name="GemSubStyle" parent="Theme.TreasureHacktory">
         <!--TODO pick out the 12 colors-->
         <!--TODO extend with a night/dark theme-->
         <!--Primary colors-->
@@ -59,7 +59,7 @@
         <item name="android:statusBarColor">@color/gemPrimaryDark</item>
     </style>
 
-    <style name="ArtObjectSubStyle" parent="Theme.TreasureFactory">
+    <style name="ArtObjectSubStyle" parent="Theme.TreasureHacktory">
         <!--TODO pick out the 12 colors-->
         <!--TODO extend with a night/dark theme-->
         <!--Primary colors-->
@@ -82,7 +82,7 @@
         <item name="android:statusBarColor">@color/artPrimaryDark</item>
     </style>
 
-    <style name="MagicItemSubStyle" parent="Theme.TreasureFactory">
+    <style name="MagicItemSubStyle" parent="Theme.TreasureHacktory">
         <!--TODO pick out the 12 colors-->
         <!--TODO extend with a night/dark theme-->
         <!--Primary colors-->
@@ -105,7 +105,7 @@
         <item name="android:statusBarColor">@color/magicPrimaryDark</item>
     </style>
 
-    <style name="SpellCollectionSubStyle" parent="Theme.TreasureFactory">
+    <style name="SpellCollectionSubStyle" parent="Theme.TreasureHacktory">
         <!--TODO pick out the 12 colors-->
         <!--TODO extend with a night/dark theme-->
         <!--Primary colors-->

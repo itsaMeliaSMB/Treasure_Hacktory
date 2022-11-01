@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.treasurefactory" >
+    package="com.treasurehacktory" >
 
     <application
-        android:name=".TreasureHacktoryApplication"
+        android:name="com.treasurehacktory.TreasureHacktoryApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TreasureFactory" >
+        android:theme="@style/Theme.TreasureHacktory" >
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.treasurehacktory.ui.MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <provider
-            android:authorities="com.example.android.treasurefactory.fileprovider"
+            android:authorities="com.treasurefactory.fileprovider"
             android:name="androidx.core.content.FileProvider"
             android:grantUriPermissions="true"
             android:exported="false">

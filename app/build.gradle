@@ -9,7 +9,7 @@ android {
     compileSdkVersion 31
 
     defaultConfig {
-        applicationId "com.example.android.treasurefactory"
+        applicationId 'com.treasurehacktory'
         minSdk 28
         targetSdkVersion 31
         versionCode 1
@@ -57,14 +57,13 @@ android {
                             'src/main/res']
         }
     }
-    namespace 'com.example.android.treasurefactory'
+    namespace 'com.treasurehacktory'
 }
 
 dependencies {
 
     testImplementation 'junit:junit:4.12'
     def nav_version = "2.4.1"
-    def work_version = "2.7.1"
     
     // Kotlin
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -88,11 +87,7 @@ dependencies {
     // UI
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'com.google.android.flexbox:flexbox:3.0.0' //TODO attribute creator
-
-    // Worker
-    implementation("androidx.work:work-runtime-ktx:$work_version")
-    implementation "androidx.work:work-multiprocess:$work_version"
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
     // Lifecycle
     implementation "androidx.fragment:fragment-ktx:1.4.1"

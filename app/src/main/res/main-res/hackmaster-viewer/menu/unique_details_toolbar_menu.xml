@@ -48,6 +48,14 @@
         tools:visible="true"
         tools:enabled="true"/>
     <item
+        android:id="@+id/action_reroll_art_name"
+        android:title="@string/action_reroll_art_name"
+        android:visible="false"
+        android:enabled="false"
+        app:showAsAction="never"
+        tools:visible="true"
+        tools:enabled="true"/>
+    <item
         android:id="@+id/action_rename_item"
         android:title="@string/action_rename_item"
         app:showAsAction="never" />
