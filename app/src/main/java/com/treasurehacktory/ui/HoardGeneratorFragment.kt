@@ -24,17 +24,18 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.treasurehacktory.R
+import com.treasurehacktory.TreasureHacktoryApplication
+import com.treasurehacktory.database.LetterCode
 import com.treasurehacktory.databinding.DialogGenerationOptionsBinding
 import com.treasurehacktory.databinding.LayoutGeneratorFragmentBinding
 import com.treasurehacktory.databinding.LetterRecyclerItemBinding
 import com.treasurehacktory.model.*
-import com.google.android.material.card.MaterialCardView
-import com.treasurehacktory.TreasureHacktoryApplication
-import com.treasurehacktory.database.LetterCode
-import com.treasurehacktory.model.*
 import com.treasurehacktory.viewmodel.HoardGeneratorViewModel
 import com.treasurehacktory.viewmodel.HoardGeneratorViewModelFactory
+import com.treasurehacktory.viewmodel.MAXIMUM_LETTER_QTY
+import com.treasurehacktory.viewmodel.MINIMUM_LETTER_QTY
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -1912,8 +1913,8 @@ class HoardGeneratorFragment : Fragment() {
                             dialogString
                         val qtyPicker = qtyDialogView
                             .findViewById<NumberPicker>(R.id.dialog_letter_qty_picker).apply{
-                                minValue = 0
-                                maxValue = 20
+                                minValue = MINIMUM_LETTER_QTY
+                                maxValue = MAXIMUM_LETTER_QTY
                                 value = entry.second
                                 wrapSelectorWheel = false
                             }

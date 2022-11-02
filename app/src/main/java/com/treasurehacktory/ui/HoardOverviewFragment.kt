@@ -680,18 +680,25 @@ class HoardOverviewFragment : Fragment() {
     fun sendCSVReport(hoardBundle: Triple<Hoard, HoardUniqueItemBundle,List<HoardEvent>>,
                       fileName: String = "hoard_report") {
 
-        val fileExtension: String = "csv"
-        val fileUri = generateCSVFile(hoardBundle,fileName,fileExtension)
+        try {
 
-        if (fileUri != null) {
-            val shareIntent = Intent().apply{
-                action = Intent.ACTION_SEND
-                setTypeAndNormalize("text/csv")
-                putExtra(Intent.EXTRA_STREAM, fileUri)
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            val fileExtension = "csv"
+            val fileUri = generateCSVFile(hoardBundle,fileName,fileExtension)
+
+            if (fileUri != null) {
+
+                val shareIntent = Intent().apply{
+                    action = Intent.ACTION_SEND
+                    setTypeAndNormalize("text/csv")
+                    putExtra(Intent.EXTRA_STREAM, fileUri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+
+                startActivity(Intent.createChooser(shareIntent,"Share report using:"))
             }
 
-            startActivity(Intent.createChooser(shareIntent,"Share report using:"))
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -734,6 +741,24 @@ class HoardOverviewFragment : Fragment() {
 
                 var grandGPTotal = 0.0
                 var grandXPTotal = 0
+
+                fun getDifficultyAsString() : String = when {
+                    hoard.effortRating < 0.10  -> getString(R.string.difficulty_high_6)
+                    hoard.effortRating >= 0.10 && hoard.effortRating < 1.00  -> getString(R.string.difficulty_high_5)
+                    hoard.effortRating >= 1.00 && hoard.effortRating < 2.00  -> getString(R.string.difficulty_high_4)
+                    hoard.effortRating >= 2.00 && hoard.effortRating < 3.00  -> getString(R.string.difficulty_high_3)
+                    hoard.effortRating >= 3.00 && hoard.effortRating < 4.00  -> getString(R.string.difficulty_high_2)
+                    hoard.effortRating >= 4.00 && hoard.effortRating < 5.00  -> getString(R.string.difficulty_high_1)
+                    hoard.effortRating == 5.00  -> getString(R.string.difficulty_average)
+                    hoard.effortRating > 5.00 && hoard.effortRating < 6.00  -> getString(R.string.difficulty_low_1)
+                    hoard.effortRating >= 6.00 && hoard.effortRating < 7.00  -> getString(R.string.difficulty_low_2)
+                    hoard.effortRating >= 7.00 && hoard.effortRating < 8.00  -> getString(R.string.difficulty_low_3)
+                    hoard.effortRating >= 8.00 && hoard.effortRating < 10.00  -> getString(R.string.difficulty_low_4)
+                    hoard.effortRating >= 10.00 && hoard.effortRating < 15.00  -> getString(R.string.difficulty_low_5)
+                    hoard.effortRating >= 15.00 && hoard.effortRating < 20.00  -> getString(R.string.difficulty_low_6)
+                    hoard.effortRating >= 7.00 && hoard.effortRating < 8.00  -> getString(R.string.difficulty_low_7)
+                    else -> "???"
+                }
 
                 // region [ Treasure category compiling functions ]
                 fun compileCoinageForCSV(): List<List<String>> {
@@ -1109,7 +1134,7 @@ class HoardOverviewFragment : Fragment() {
                 // Write the temp file
                 writer.use {
 
-                    listOf("", hoard.name + " [id:${hoard.hoardID}]").writeAsRow()
+                    listOf("", hoard.name, "[id:${hoard.hoardID}]").writeAsRow()
                     writeEmptyRow()
                     listOf(
                         "", "Creation date / time:",
@@ -1119,8 +1144,11 @@ class HoardOverviewFragment : Fragment() {
                             .format(hoard.creationDate)
                     ).writeAsRow()
                     listOf(
-                        "", "Difficulty ratio:", String.format("%.2f", hoard.effortRating),
+                        "", "Acquisition difficulty:", String.format("%.2f", hoard.effortRating),
                         "gp to 1 xp"
+                    ).writeAsRow()
+                    listOf(
+                        "","",getDifficultyAsString()
                     ).writeAsRow()
                     writeEmptyRow()
                     listOf("[ ! ]", "PLEASE NOTE:").writeAsRow()
@@ -1171,7 +1199,7 @@ class HoardOverviewFragment : Fragment() {
             val newFile = filePath.toFile()
 
             return FileProvider.getUriForFile(requireContext(),
-                "com.example.android.treasurefactory.fileprovider", newFile)
+                "com.treasurehacktory.fileprovider", newFile)
 
         } catch (e: IOException) {
             Toast.makeText(

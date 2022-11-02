@@ -373,6 +373,8 @@ class UniqueListFragment : Fragment() {
                     }
                 }
 
+                uniqueListItemThumbnail.tooltipText = "Item ID: ${uniqueItem.id}"
+
                 uniqueListItemName.text = uniqueItem.name
 
                 ("${

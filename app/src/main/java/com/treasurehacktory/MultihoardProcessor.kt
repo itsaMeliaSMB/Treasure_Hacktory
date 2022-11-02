@@ -549,7 +549,7 @@ class MultihoardProcessor(private val repository: HMRepository) {
                         ep =  mergedCoinPile[2], gp = mergedCoinPile[3],
                         hsp =  mergedCoinPile[4], pp = mergedCoinPile[5]
                     )
-                )) // TODO get app version when making new hoard
+                ))
 
             // Compile all unique objects within all targeted hoards
             hoardsToMerge.forEach { subHoard ->
@@ -594,6 +594,12 @@ class MultihoardProcessor(private val repository: HMRepository) {
                         (repository.getSpellCollectionValueTotalOnce(mergedHoardID))
 
                 val updatedHoard = repository.getHoardOnce(mergedHoardID).takeIf { it != null }?.copy(
+                    cp = mergedCoinPile[0],
+                    sp = mergedCoinPile[1],
+                    ep = mergedCoinPile[2],
+                    gp = mergedCoinPile[3],
+                    hsp = mergedCoinPile[4],
+                    pp = mergedCoinPile[5],
                     gpTotal = gpTotal,
                     badge = HoardBadge.MERGED,
                     gemCount = gemCount,

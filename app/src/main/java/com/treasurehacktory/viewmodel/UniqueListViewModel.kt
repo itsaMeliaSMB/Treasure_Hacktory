@@ -44,12 +44,6 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
         combinedHoardLiveData.value = hoardID to itemType
     }
 
-    fun saveUniqueItems(itemsToUpdate: List<ListableItem>, parentHoard: Hoard) {
-        //TODO determine what unique items are being held
-        //TODO use that information to convert list to room entity list
-        //TODO call repository function for updating list of items.
-    }
-
     fun updateUniqueItems(hoardID: Int, itemType: UniqueItemType) {
 
         viewModelScope.launch{

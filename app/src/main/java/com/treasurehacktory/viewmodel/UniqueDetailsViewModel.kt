@@ -212,9 +212,57 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
     fun fetchItemTemplatesForDialog(tableType: MagicItemType) {
 
+        fun getSpecialTableTemplates() : List<MagicItemTemplate> {
+            return when (tableType) {
+                MagicItemType.A18 -> listOf(
+                    MagicItemTemplate( // Special Armor
+                        -1,1,"[Converted] GM's Choice", ReferenceType.CORE,
+                        "GameMaster's Guide",218,0,0,0,"",
+                        0,0,0,"A20","container_chest",
+                        1,1,1,1,1,0,0,
+                        "",0,"",0,"",
+                        0,0,0,0,0,0
+                    )
+                )
+                MagicItemType.A20 -> listOf(
+                    MagicItemTemplate( // Standard Armor
+                        -1,1,"[Converted] GM's Choice", ReferenceType.CORE,
+                        "GameMaster's Guide",218,0,0,0,"",
+                        0,0,0,"A18","container_chest",
+                        1,1,1,1,1,0,0,
+                        "",0,"",0,"",
+                        0,0,0,0,0,0
+                    )
+                )
+                MagicItemType.A21 -> listOf(
+                    MagicItemTemplate( // Special Weapon
+                        -1,1,"[Converted] GM's Choice", ReferenceType.CORE,
+                        "GameMaster's Guide",218,0,0,0,"",
+                        0,0,0,"A23","container_chest",
+                        1,1,1,1,1,0,0,
+                        "",0,"",0,"",
+                        0,0,0,0,0,0
+                    )
+                )
+                MagicItemType.A23 -> listOf(
+                    MagicItemTemplate( // Standard Weapon
+                        -1,1,"[Converted] GM's Choice", ReferenceType.CORE,
+                        "GameMaster's Guide",218,0,0,0,"",
+                        0,0,0,"A21","container_chest",
+                        1,1,1,1,1,0,0,
+                        "",0,"",0,"",
+                        0,0,0,0,0,0
+                    )
+                )
+                else -> emptyList()
+            }
+        }
+
         viewModelScope.launch {
 
-            val templates = repository.getBaseItemTempsByType(tableType)
+            val templates = listOf(repository.getBaseItemTempsByType(tableType),
+                getSpecialTableTemplates()
+            ).flatten()
 
             dialogItemTemplatesInfoLiveData.postValue(templates)
         }

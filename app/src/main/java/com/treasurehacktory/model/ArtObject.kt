@@ -1706,32 +1706,35 @@ data class ArtObject(
 
                 4 -> { // Wealthy/noble subject matter
 
-                    if (Random.nextInt(1,101) <= 5) {
+                    if (Random.nextInt(1,11) == 1) {
 
-                        val specificPerson = if (Random.nextInt(1,4) == 1) {
+                        val specificPerson = if (Random.nextInt(1,5) == 1) {
                                 // Favorite personal characters of developer and her friends
                                 listOf(
                                     "BattleMage Frank Battleforge, the Dwarven, Unbathed " +
                                             "Aficionado of Elven Culture",
                                     "Bladesinger Alaran Lodestar, the Slayer of the Dracolich",
+                                    "Blood Lord Aspor Hundolfr, the Ambitious Revenant",
                                     "Cavalier Commander Gunner Calahander, the Undying",
                                     "Centaurian Dancer Yosoti, the Unforgettable",
                                     "Chairman of the Horde Leitric, the Book-burner",
                                     "Contender Rebel the Goblin, Fire Giant of Opera City",
                                     "Divinist Ambrose, the Prophet of Possibility",
-                                    "Dr. Joan Snow, Esq., the Arcane Anatomist / Psychic Surgeon",
+                                    "Dr. Anselm Giger, the Mad Alchemist",
+                                    "Dr. Joan Snow, Esq., the Arcane Anatomist and Psychic Surgeon",
                                     "Eldritch Barbarian Clodagh Grenawich, the Hagblood Halberd",
                                     "Espion Aminah Abadaan, the Honest Hand",
                                     "Gawdfather Kane Freeman, the Shadow Governor",
-                                    "Griftmaster Aminah Abadaan, the Honest Hand",
                                     "Initiate Piperine Scoville, the Flame of Knowledge",
-                                    "Myrmidon Aspor Hundolfr, the Ambitious Revenant",
                                     "Necromancer Ivanka, the Fallen Angel of Elturel",
                                     "Sorceress Unioos Bugulnoz, Madame of the Glitzy Pixie",
+                                    "Spoiled Princess Minnie, the Fisher Queen",
                                     "Sr. Researcher Theodore Webster, " +
                                             "the Unintentionally-Calamitous",
                                     "Warlock Lugh Quicksmile, Son of Fey but Bastard to All",
-                                    "Yakuza Lord Ragna Vel, the Inauspicious Assassin"
+                                    "Wordsmith Kopy-Copy, the Country Couturier",
+                                    "Yakuza Lord Ragna Vel, the Inauspicious Assassin",
+                                    "Zealous Inquisitor Agathokles Diodotus, the Avatar of Zelaur"
                                 ).random()
                             } else {
                                 // Canonical HackMaster 4e characters
@@ -1750,6 +1753,7 @@ data class ArtObject(
                                             "head of the Shadow Heart Battalion",
                                     "Grand Theocrat Hanzdor Warforge, " +
                                             "superior of the Holy Dwarven Theocracy",
+                                    "HackFighter/HackSassin Sturm Pyre, the Growler",
                                     "Headmistress Drusilla Wystan, " +
                                             "dean of the University of Tilan",
                                     "Holy Knight Sir Lyran Daws, " +
@@ -1761,7 +1765,8 @@ data class ArtObject(
                                             "Advancement of Swordplay",
                                     "Lonnya Grasswillow, " +
                                             "Artistic Director of the Five City Minstrel Society",
-                                    "Lord Flataroy, the Mighty Champion",
+                                    "Lord Gilead, Ruler of Fangaerie",
+                                    "Shining Knight Sir Ja'en Garnet, the Silver Defender",
                                     "Supreme Arch Transmuter Elenwyd Sesuliad, " +
                                             "the High Transmuter of Whisperydown",
                                     "Supreme Grand Merchant Wencelan Druffin, " +

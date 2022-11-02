@@ -2578,10 +2578,42 @@ class UniqueDetailsFragment() : Fragment() {
                                 val templateID = (dialogRecycler.adapter as MagicItemChoiceAdapter)
                                     .selectedID
 
-                                if (viewedItem is ViewableMagicItem &&
-                                        templateID > 0){
-                                    uniqueDetailsViewModel.replaceItemFromTemplateID(templateID,
-                                        (viewedItem as ViewableMagicItem))
+                                if (viewedItem is ViewableMagicItem){
+
+                                    if (templateID > 0) {
+                                        uniqueDetailsViewModel.replaceItemFromTemplateID(
+                                            templateID,
+                                            (viewedItem as ViewableMagicItem)
+                                        )
+                                    } else {
+                                        // Convert between special and standard tables
+                                        uniqueDetailsViewModel.replaceItemAsGMChoice(
+
+                                            (viewedItem as ViewableMagicItem).toMagicItem()
+                                                .copy(
+                                                    name= viewedItem.name + if (
+                                                        (viewedItem as ViewableMagicItem)
+                                                            .mgcItemType.ordinal in 16..19
+                                                    ) "(true table: ${
+                                                        (viewedItem as ViewableMagicItem)
+                                                            .mgcItemType.name
+                                                    })" else "",
+                                                    typeOfItem = when(
+                                                        (viewedItem as ViewableMagicItem)
+                                                            .mgcItemType){
+
+                                                        MagicItemType.A18 -> MagicItemType.A20
+                                                        MagicItemType.A20 -> MagicItemType.A18
+                                                        MagicItemType.A21 -> MagicItemType.A23
+                                                        MagicItemType.A23 -> MagicItemType.A21
+                                                        else -> {
+                                                            (viewedItem as ViewableMagicItem)
+                                                                .mgcItemType
+                                                        }
+                                                    }
+                                                ).toViewableMagicItem()
+                                        )
+                                    }
                                 }
 
                                 dialog.dismiss()

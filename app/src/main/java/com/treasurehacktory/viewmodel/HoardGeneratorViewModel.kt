@@ -17,13 +17,13 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 const val MINIMUM_LETTER_QTY = 0
-const val MAXIMUM_LETTER_QTY = 20
+const val MAXIMUM_LETTER_QTY = 30
 
-const val MAXIMUM_UNIQUE_QTY = 150
+const val MAXIMUM_UNIQUE_QTY = 300
 const val MAXIMUM_SPELLS_PER_SCROLL = 20
-const val MAXIMUM_SPELL_COLLECTION_QTY = 75
+const val MAXIMUM_SPELL_COLLECTION_QTY = 100
 
-const val MAXIMUM_HOARD_VALUE = 9999999999.99
+const val MAXIMUM_HOARD_VALUE = 999999999999.99
 const val MAXIMUM_COINAGE_AMOUNT = 999999999.99
 
 class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel() {
@@ -162,7 +162,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         ppChecked = false
 
         gemQty = 0
-
         artQty = 0
         potionQty = 0
         scrollQty = 0
