@@ -280,6 +280,7 @@ data class ArtObject(
                 0 -> listOf( // Paper artwork types
                     "calligraphy",
                     "charcoal sketch",
+                    "folding hand fan",
                     "illuminated manuscript",
                     "illustration",
                     "journal",
@@ -298,19 +299,23 @@ data class ArtObject(
                 1 -> listOf( // Fabric artwork types
                     "arras",
                     "bathrobe",
+                    "brocade",
                     "cape",
                     "curtains",
                     "cushion",
+                    "designer clothing",
                     "embroidery",
+                    "handkerchief",
                     "kilim",
+                    "leather embossing",
                     "pillowcase",
                     "plush doll",
                     "quilt",
+                    "stage costume",
                     "tablecloth",
                     "tapestry",
                     "textile",
-                    "vestments",
-                    "vintage clothing"
+                    "vestments"
                 ).random()
 
                 2 -> listOf( // Furnishing types
@@ -357,7 +362,9 @@ data class ArtObject(
                     "intarsia",
                     "jewelry box",
                     "marquetry",
+                    "mask",
                     "scroll tube",
+                    "skateboard",
                     "soap carving",
                     "woodburning",
                     "wooden bucket",
@@ -387,12 +394,14 @@ data class ArtObject(
                     "blown-glass sculpture",
                     "chandelier",
                     "decanter",
+                    "designer sunglasses",
                     "fused-glass art",
                     "glass bottle",
                     "glass bowl",
                     "goblet",
                     "hourglass",
                     "ornate bottle",
+                    "reading glasses",
                     "sculpture-in-a-bottle",
                     "shattered glass pile",
                     "snow globe",
@@ -401,6 +410,7 @@ data class ArtObject(
 
                 7 -> listOf( // Stonework types
                     "birdbath",
+                    "carved tablet",
                     "dias",
                     "marble bookend",
                     "marble chess set",
@@ -417,10 +427,12 @@ data class ArtObject(
 
                 8 -> listOf( // Metalwork types
                     "antique armor",
+                    "bi-metal yo-yo",
                     "brass relief",
                     "bronze bust",
                     "bronze sculpture",
                     "chimes",
+                    "commemorative coin",
                     "engraved bell",
                     "Fabergé egg",
                     "gilded utensil",
@@ -899,6 +911,7 @@ data class ArtObject(
                         "defeated",
                         "defending",
                         "devastated",
+                        "doing sick tricks",
                         "drinking",
                         "eating",
                         "eating a book",
@@ -1727,6 +1740,7 @@ data class ArtObject(
                                     "Gawdfather Kane Freeman, the Shadow Governor",
                                     "Initiate Piperine Scoville, the Flame of Knowledge",
                                     "Necromancer Ivanka, the Fallen Angel of Elturel",
+                                    "SkateboarLock Pavimentum Shredz, the Bodaciously Radical",
                                     "Sorceress Unioos Bugulnoz, Madame of the Glitzy Pixie",
                                     "Spoiled Princess Minnie, the Fisher Queen",
                                     "Sr. Researcher Theodore Webster, " +
@@ -1753,6 +1767,7 @@ data class ArtObject(
                                             "head of the Shadow Heart Battalion",
                                     "Grand Theocrat Hanzdor Warforge, " +
                                             "superior of the Holy Dwarven Theocracy",
+                                    "Griftmaster Jonid Coincrawler, the Scourge of the Bag World",
                                     "HackFighter/HackSassin Sturm Pyre, the Growler",
                                     "Headmistress Drusilla Wystan, " +
                                             "dean of the University of Tilan",
@@ -1760,7 +1775,6 @@ data class ArtObject(
                                             "master of the Holy Order of Luvia",
                                     "Iron General Frizdan Grazlyte, " +
                                             "head of the Iron Axes of Praxter",
-                                    "Jonid Coincrawler, the Scourge of the Bag World",
                                     "Lady Martaney Amaran, heir to Lady Amaran's Society for the " +
                                             "Advancement of Swordplay",
                                     "Lonnya Grasswillow, " +
