@@ -670,11 +670,11 @@
 670¤3¤"Bracers of Giant Strength"¤0¤"GameMaster’s Guide"¤245¤2000¤25000¤0¤"Bestows Fire Giant strength (Str 22)"¤0¤0¤0¤"A11"¤"bracers_metal"¤1¤1¤1¤1¤1¤0¤626¤"Bracers of Giant Strength"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 671¤2¤"Bracers of Giant Strength"¤0¤"GameMaster’s Guide"¤245¤2000¤25000¤0¤"Bestows Cloud Giant strength (Str 23)"¤0¤0¤0¤"A11"¤"bracers_metal"¤1¤1¤1¤1¤1¤0¤626¤"Bracers of Giant Strength"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 672¤1¤"Bracers of Giant Strength"¤0¤"GameMaster’s Guide"¤245¤2000¤25000¤0¤"Bestows Storm Giant strength (Str 24)"¤0¤0¤0¤"A11"¤"bracers_metal"¤1¤1¤1¤1¤1¤0¤626¤"Bracers of Giant Strength"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-673¤35¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤1000¤20000¤0¤"Base model"¤0¤0¤0¤"A11"¤"gauntlets_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-674¤12¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤1200¤20000¤0¤"Dwarven model (see GMG 246)"¤0¤0¤0¤"A11"¤"gauntlets_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-675¤1¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤2000¤20000¤0¤"Extremely-rare Circle of Sequestered Magicks Anniversary Edition model (see GMG 246)"¤0¤0¤0¤"A11"¤"gauntlets_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-676¤8¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤2000¤20000¤0¤"Mapsense/Heat-Seeking model (see GMG 246)"¤0¤0¤0¤"A11"¤"gauntlets_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
-677¤4¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤2500¤20000¤0¤"Survivalist model (see GMG 246)"¤0¤0¤0¤"A11"¤"gauntlets_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+673¤35¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤1000¤20000¤0¤"Base model"¤0¤0¤0¤"A11"¤"bracers_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+674¤12¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤1200¤20000¤0¤"Dwarven model (see GMG 246)"¤0¤0¤0¤"A11"¤"bracers_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+675¤1¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤2000¤20000¤0¤"Extremely-rare Circle of Sequestered Magicks Anniversary Edition model (see GMG 246)"¤0¤0¤0¤"A11"¤"bracers_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+676¤8¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤2000¤20000¤0¤"Mapsense/Heat-Seeking model (see GMG 246)"¤0¤0¤0¤"A11"¤"bracers_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
+677¤4¤"Bracers of Mapsense"¤0¤"GameMaster’s Guide"¤246¤2500¤20000¤0¤"Survivalist model (see GMG 246)"¤0¤0¤0¤"A11"¤"bracers_hitech"¤1¤1¤1¤1¤1¤0¤629¤"Bracers of Mapsense"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
 678¤1¤"Gauntlets of Fumbling"¤0¤"GameMaster’s Guide"¤253¤0¤5000¤0¤"Appears to be Gauntlets of Dexterity (see GMG 253)"¤0¤0¤0¤"A11"¤"gauntlets_light"¤1¤1¤1¤1¤1¤0¤631¤"Gauntlets of Fumbling"¤¤1¤¤0¤¤0¤0¤0¤0¤0¤0
 679¤1¤"Gauntlets of Fumbling"¤0¤"GameMaster’s Guide"¤253¤0¤5000¤0¤"Appears to be Gauntlets of Ogre Strength (see GMG 253)"¤0¤0¤0¤"A11"¤"gauntlets_armor"¤1¤1¤1¤1¤1¤0¤631¤"Gauntlets of Fumbling"¤¤1¤¤0¤¤0¤0¤0¤0¤0¤0
 680¤7¤"Hipwaders of Protection +1"¤0¤"GameMaster’s Guide"¤256¤1000¤15000¤0¤¤0¤0¤0¤"A11"¤"clothing_overalls"¤1¤1¤1¤1¤1¤0¤639¤"Hipwaders of Protection"¤¤0¤¤0¤¤0¤0¤0¤0¤0¤0
