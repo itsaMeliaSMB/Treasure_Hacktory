@@ -286,14 +286,17 @@ data class ArtObject(
                     "journal",
                     "napkin sketch",
                     "origami",
+                    "ornate bookmark",
                     "papercraft",
                     "paper collage",
                     "paper print",
                     "papyrus art",
                     "parchment",
+                    "poetry scroll",
                     "political cartoon",
                     "sketch",
-                    "sketchbook"
+                    "sketchbook",
+                    "talisman"
                 ).random()
 
                 1 -> listOf( // Fabric artwork types
@@ -324,6 +327,7 @@ data class ArtObject(
                     "bed",
                     "cabinet",
                     "candelabra",
+                    "candle holder",
                     "candle snuffer",
                     "chair",
                     "desk",
@@ -340,7 +344,9 @@ data class ArtObject(
 
                 3 -> listOf( // Painting
                     "acrylic painting",
+                    "dimensional painting",
                     "enamel painting",
+                    "fingerpaint",
                     "fresco",
                     "landscape",
                     "mixed-media painting",
@@ -348,6 +354,7 @@ data class ArtObject(
                     "oil painting",
                     "painting",
                     "portrait",
+                    "tempera painting",
                     "watercolor painting"
                 ).random()
 
@@ -357,6 +364,7 @@ data class ArtObject(
                     "carved ivory",
                     "carved walking staff",
                     "carving",
+                    "chest",
                     "comb",
                     "game board",
                     "intarsia",
@@ -378,6 +386,7 @@ data class ArtObject(
                     "ceramic idol",
                     "ceramic statue",
                     "clay pot",
+                    "flower pot",
                     "offectory container",
                     "ornate crucible",
                     "porcelain dishware",
@@ -395,12 +404,15 @@ data class ArtObject(
                     "chandelier",
                     "decanter",
                     "designer sunglasses",
+                    "enamelled glass",
                     "fused-glass art",
                     "glass bottle",
                     "glass bowl",
                     "goblet",
+                    "harrach",
                     "hourglass",
                     "ornate bottle",
+                    "prism",
                     "reading glasses",
                     "sculpture-in-a-bottle",
                     "shattered glass pile",
@@ -411,11 +423,14 @@ data class ArtObject(
                 7 -> listOf( // Stonework types
                     "birdbath",
                     "carved tablet",
+                    "colored cement sculpture",
                     "dias",
+                    "granite slab",
                     "marble bookend",
                     "marble chess set",
                     "marble statue",
                     "painted rock",
+                    "polished tile",
                     "sarcophagus",
                     "stone carving",
                     "stone column",
@@ -433,8 +448,10 @@ data class ArtObject(
                     "bronze sculpture",
                     "chimes",
                     "commemorative coin",
+                    "decorative anvil",
                     "engraved bell",
                     "Fabergé egg",
+                    "fountain pen",
                     "gilded utensil",
                     "golden idol",
                     "hand mirror",
@@ -445,10 +462,12 @@ data class ArtObject(
                     "reliquary",
                     "silver tea set",
                     "tin inkwell",
+                    "trophy",
                     "wall mirror"
                 ).random()
 
                 9 -> listOf( // Magical artwork types
+                    "animated painting",
                     "animated statue",
                     "animation",
                     "arcane circle",
@@ -572,7 +591,6 @@ data class ArtObject(
                         "peace",
                         "petrichor",
                         "philosophy",
-                        "prisencolinensinainciusol",
                         "prophecy",
                         "purple",
                         "serendipity",
@@ -1188,6 +1206,7 @@ data class ArtObject(
                                 "bramble" to "brambles",
                                 "carcass" to "carcasses",
                                 "corn cob" to "corn cobs",
+                                "cosmos" to "cosmoses",
                                 "daisy" to "daisies",
                                 "feather" to "feathers",
                                 "flower" to "flowers",
@@ -1209,6 +1228,7 @@ data class ArtObject(
                                 "rose" to "roses",
                                 "shrubbery" to "shrubs",
                                 "snow drift" to "snowdrifts",
+                                "soldam" to "soldams",
                                 "tree" to "trees",
                                 "vine" to "vines",
                                 "weeping willow" to "weeping willows"
@@ -1949,13 +1969,12 @@ data class ArtObject(
                             "", "", "", "", "", "",
                             " Sr.",
                             " Jr."," Jr.",
-                            " II",
-                            " II",
+                            " II", " II",
                             " III",
                             " IV",
                             " V",
                             " VI",
-                            "X"
+                            " X"
                         ).random()
 
                         val nobleNickname = listOf(
