@@ -12,6 +12,7 @@ interface Listable{
     val gpValue: Double
     val endIconStr: String
     val endLabel: String
+    val hasNickname: Boolean
 }
 
 sealed class ListableItem() : Listable
@@ -20,24 +21,27 @@ sealed class ListableItem() : Listable
 class ListableGem(override val id: Int, override val name: String,
                   override val iconStr: String, override val iFrameFlavor: ItemFrameFlavor,
                   override val gpValue: Double, override val endIconStr: String,
-                  override val endLabel: String) : ListableItem()
+                  override val endLabel: String, override val hasNickname: Boolean) : ListableItem()
 
 class ListableArtObject(override val id: Int, override val name: String,
                         override val iconStr: String, override val iFrameFlavor: ItemFrameFlavor,
                         override val gpValue: Double, override val endIconStr: String,
-                        override val endLabel: String, val badgeStr: String) : ListableItem()
+                        override val endLabel: String, override val hasNickname: Boolean,
+                        val badgeStr: String) : ListableItem()
 
 class ListableMagicItem(override val id: Int, override val name: String,
                         override val iconStr: String, override val iFrameFlavor: ItemFrameFlavor,
                         override val gpValue: Double, override val endIconStr: String,
-                        override val endLabel: String, val xpValue: Int) : ListableItem()
+                        override val endLabel: String, override val hasNickname: Boolean,
+                        val xpValue: Int) : ListableItem()
 
 class ListableSpellCollection(
     override val id: Int, override val name: String,
     override val iconStr: String,
     override val iFrameFlavor: ItemFrameFlavor,
     override val gpValue: Double, override val endIconStr: String,
-    override val endLabel: String, val xpValue: Int, val discipline: SpCoDiscipline
+    override val endLabel: String, override val hasNickname: Boolean,
+    val xpValue: Int, val discipline: SpCoDiscipline
 ) : ListableItem()
 // endregion
 

@@ -292,6 +292,9 @@ class HMRepository (
     suspend fun getSpellByName(spellName: String, discipline: Int, level: Int): Spell? =
         spellCollectionDao.getSpellByNmDsLv(spellName, discipline, level)
 
+    suspend fun getSpellsByDiscipline(discipline: Int, level: Int): List<Spell> =
+        spellCollectionDao.getSpellsByDsLv(discipline, level)
+
     suspend fun getSpellIDs(discipline: Int, level: Int): List<Int> =
         spellCollectionDao.getSpellIDs(discipline, level)
 

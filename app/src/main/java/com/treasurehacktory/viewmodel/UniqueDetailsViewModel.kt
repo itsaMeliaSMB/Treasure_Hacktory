@@ -147,61 +147,73 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
         }
     }
 
-    fun fetchSpellsForDialog(entry: SimpleSpellEntry) {
+    fun fetchSpellsForDialog(entry: SimpleSpellEntry, isChoice: Boolean) {
 
         viewModelScope.launch {
 
             setRunningAsync(true)
 
-            if (entry.schools.isEmpty()) {
+            if (isChoice) {
 
-                val result = when {
+                if (entry.schools.isEmpty()) {
 
-                    entry.name.contains("SSG") -> {
+                    val result = when {
 
-                        when (entry.name.substringAfter("(").removeSuffix(")")) {
-                            "Offensive" -> {
-                                repository.getInitialChoiceSpells("O")
-                            }
-                            "Defensive" -> {
-                                repository.getInitialChoiceSpells("D")
-                            }
-                            "Miscellaneous" -> {
-                                repository.getInitialChoiceSpells("M")
-                            }
-                            else -> {
-                                emptyList()
+                        entry.name.contains("SSG") -> {
+
+                            when (entry.name.substringAfter("(").removeSuffix(")")) {
+                                "Offensive" -> {
+                                    repository.getInitialChoiceSpells("O")
+                                }
+                                "Defensive" -> {
+                                    repository.getInitialChoiceSpells("D")
+                                }
+                                "Miscellaneous" -> {
+                                    repository.getInitialChoiceSpells("M")
+                                }
+                                else -> {
+                                    emptyList()
+                                }
                             }
                         }
-                    }
-                    entry.name.contains("GMG") -> {
+                        entry.name.contains("GMG") -> {
 
-                        when (entry.name.substringAfter("(").removeSuffix(")")) {
-                            "Offensive" -> {
-                                repository.getInitialChoiceSpells("o")
-                            }
-                            "Defensive" -> {
-                                repository.getInitialChoiceSpells("d")
-                            }
-                            "Miscellaneous" -> {
-                                repository.getInitialChoiceSpells("m")
-                            }
-                            else -> {
-                                emptyList()
+                            when (entry.name.substringAfter("(").removeSuffix(")")) {
+                                "Offensive" -> {
+                                    repository.getInitialChoiceSpells("o")
+                                }
+                                "Defensive" -> {
+                                    repository.getInitialChoiceSpells("d")
+                                }
+                                "Miscellaneous" -> {
+                                    repository.getInitialChoiceSpells("m")
+                                }
+                                else -> {
+                                    emptyList()
+                                }
                             }
                         }
+                        else -> {
+                            emptyList()
+                        }
                     }
-                    else -> {
-                        emptyList()
-                    }
+
+                    dialogSpellsInfoLiveData.postValue(result to entry)
+
+                } else {
+
+                    val result = repository.getLevelChoiceSpells(
+                        entry.level, entry.schools.first(),
+                        (entry.name.contains("SSG"))
+                    )
+
+                    dialogSpellsInfoLiveData.postValue(result to entry)
                 }
-
-                dialogSpellsInfoLiveData.postValue(result to entry)
-
             } else {
 
-                val result = repository.getLevelChoiceSpells(entry.level,entry.schools.first(),
-                        (entry.name.contains("SSG")))
+                val result = repository.getSpellsByDiscipline(
+                    entry.discipline.ordinal.coerceIn(0,2),entry.level
+                )
 
                 dialogSpellsInfoLiveData.postValue(result to entry)
             }

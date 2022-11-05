@@ -37,7 +37,6 @@
         android:layout_marginHorizontal="1dp"
         android:layout_marginBottom="4dp"
         android:visibility="gone"
-        app:cardBackgroundColor="@color/lake"
         app:cardCornerRadius="8dp"
         app:cardElevation="1dp"
         app:layout_constraintBottom_toBottomOf="parent"

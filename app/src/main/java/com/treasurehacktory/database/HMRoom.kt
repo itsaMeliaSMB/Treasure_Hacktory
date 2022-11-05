@@ -862,6 +862,9 @@ interface SpellCollectionDao{
     @Query("SELECT * FROM hackmaster_spell_table WHERE name=(:spellName) AND type=(:discipline) AND spellLevel=(:level)")
     suspend fun getSpellByNmDsLv(spellName: String, discipline: Int, level: Int): Spell?
 
+    @Query("SELECT * FROM hackmaster_spell_table WHERE type=(:discipline) AND spellLevel=(:level)")
+    suspend fun getSpellsByDsLv(discipline: Int, level: Int): List<Spell>
+
     @Query("SELECT spell_id FROM hackmaster_spell_table WHERE type=(:discipline) " +
             "AND spellLevel=(:level)")
     suspend fun getSpellIDs(discipline: Int, level: Int): List<Int>

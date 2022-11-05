@@ -62,7 +62,8 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                                 else                            -> ItemFrameFlavor.NORMAL },
                             gem.currentGPValue,
                             gem.getEndIconStr(),
-                            gem.getEndLabel()
+                            gem.getEndLabel(),
+                            (gem.name != gem.originalName)
                         )
                     }
                 }
@@ -78,6 +79,7 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                             art.gpValue,
                             art.getEndIconStr(),
                             art.getEndLabel(),
+                            (art.name != art.originalName),
                             art.getBadgeIconStr()
                         )
                     }
@@ -95,6 +97,7 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                             item.gpValue,
                             item.getEndIconStr(),
                             item.getEndLabel(),
+                            (item.name != item.originalName),
                             item.xpValue
                         )
                     }
@@ -111,6 +114,7 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                             spCo.gpValue,
                             spCo.getEndIconStr(),
                             spCo.getEndLabel(),
+                            (spCo.name != spCo.originalName),
                             spCo.xpValue,
                             spCo.discipline
                         )
@@ -745,7 +749,7 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
 
     private fun SpellCollection.getEndLabel() : String {
         val spellCount = this.spells.size
-        return "$spellCount Spell" + (if (spellCount != 0) "s" else "")
+        return "$spellCount Spell" + (if (spellCount != 1) "s" else "")
     }
 
     // endregion

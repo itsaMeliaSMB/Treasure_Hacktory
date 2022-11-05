@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/spell_dialog_school_card_1"
@@ -99,6 +98,7 @@
             android:alpha="0.75"
             android:fontFeatureSettings="smcp"
             android:gravity="center_horizontal"
+            android:text="@string/flagged_as_used"
             android:textColor="?attr/colorError"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -106,22 +106,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spell_dialog_name"
-            android:text="@string/flagged_as_used"
             tools:visibility="visible" />
 
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/spell_dialog_choose_button"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_marginHorizontal="32dp"
-            android:layout_marginTop="8dp"
-            android:elevation="4dp"
-            android:text="@string/choose_spell_button"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spell_dialog_used_label"/>
 
         <TextView
             android:id="@+id/spell_dialog_reversible"
@@ -147,7 +133,7 @@
             android:background="?attr/colorOnSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spell_dialog_choose_button" />
+            app:layout_constraintTop_toBottomOf="@id/spell_dialog_used_label" />
 
         <TextView
             android:id="@+id/spell_dialog_leveltype"
@@ -174,13 +160,16 @@
 
         <TextView
             android:id="@+id/spell_dialog_source_value"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:textSize="16sp"
             android:textStyle="italic"
+            android:gravity="end"
             app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_source_label"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/spell_dialog_label_barrier"
             app:layout_constraintTop_toBottomOf="@id/spell_dialog_leveltype"
             tools:text="HackJournal #19" />
 
@@ -319,13 +308,15 @@
 
         <TextView
             android:id="@+id/spell_dialog_restrictions_value"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:lineSpacingExtra="5sp"
-            android:textAlignment="viewEnd"
+            android:gravity="end"
             android:textSize="16sp"
             android:textStyle="italic"
+            app:layout_constraintStart_toEndOf="@id/spell_dialog_label_barrier"
             app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_restrictions_label"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="- Wild Mage\n- (fake)\n- (also fake)" />
@@ -352,15 +343,8 @@
             android:textStyle="italic"
             app:layout_constraintBaseline_toBaselineOf="@id/spell_dialog_note_label"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/spell_dialog_barrier_note"
+            app:layout_constraintStart_toEndOf="@id/spell_dialog_label_barrier"
             tools:text="Something about an errata idk Lorem Ipsum or some nonsense blah blah blah Petal Crash" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/spell_dialog_barrier_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="end"
-            app:constraint_referenced_ids="spell_dialog_note_label" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/spell_dialog_button_guideline"
@@ -373,10 +357,10 @@
             android:id="@+id/spell_dialog_clipboard_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="32dp"
             android:minHeight="56dp"
-            android:paddingHorizontal="32dp"
+            android:paddingHorizontal="16dp"
             android:text="@string/copy_to_clipboard_button"
             app:icon="@drawable/clipart_clipboard_vector_icon"
             app:layout_constraintEnd_toStartOf="@id/spell_dialog_button_guideline"
@@ -384,17 +368,31 @@
             app:layout_constraintTop_toBottomOf="@id/spell_dialog_note_value" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/spell_dialog_choose_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:minHeight="56dp"
+            android:paddingHorizontal="16dp"
+            android:text="@string/choose_spell_button"
+            app:icon="@drawable/clipart_list_choice_vector_icon"
+            app:layout_constraintEnd_toStartOf="@id/spell_dialog_button_guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/spell_dialog_clipboard_button"
+            tools:text="@string/button_resolve_spell_choice" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/spell_dialog_flag_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:minHeight="56dp"
-            android:paddingHorizontal="32dp"
+            android:paddingHorizontal="16dp"
             android:text="@string/flag_as_used_button"
             app:icon="@drawable/clipart_flag_vector_icon"
             app:layout_constraintEnd_toStartOf="@id/spell_dialog_button_guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/spell_dialog_clipboard_button" />
+            app:layout_constraintTop_toBottomOf="@id/spell_dialog_choose_button" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/spell_dialog_close_button"
@@ -402,10 +400,17 @@
             android:layout_height="0dp"
             android:layout_marginHorizontal="8dp"
             android:text="Close"
+            app:layout_constraintBottom_toBottomOf="@id/spell_dialog_flag_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/spell_dialog_button_guideline"
-            app:layout_constraintTop_toTopOf="@id/spell_dialog_clipboard_button"
-            app:layout_constraintBottom_toBottomOf="@id/spell_dialog_flag_button"/>
+            app:layout_constraintTop_toTopOf="@id/spell_dialog_clipboard_button" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/spell_dialog_label_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="spell_dialog_note_label,spell_dialog_restrictions_label,spell_dialog_subclass_label,spell_dialog_source_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -621,6 +621,7 @@ class UniqueDetailsFragment() : Fragment() {
                         }
 
                         when (entry.subclass) {
+
                             "Vengeance" -> {
                                 spellItemSubclassCard.setCardBackgroundColor(
                                         resources.getColor(R.color.sanguine,
@@ -671,6 +672,15 @@ class UniqueDetailsFragment() : Fragment() {
                                             context?.theme))
                                     typeface = DEFAULT_BOLD
                                 }
+                            }
+                            else -> {
+                                spellItemSubclassCard
+                                    .setCardBackgroundColor(
+                                        resources.getColor(R.color.defaultSecondary,
+                                            context?.theme))
+                                spellItemSubclassText.setTextColor(
+                                        resources.getColor(R.color.defaultOnSecondary,
+                                            context?.theme))
                             }
                         }
 
@@ -1291,7 +1301,10 @@ class UniqueDetailsFragment() : Fragment() {
                     if (spell.subclass.isNotBlank()) {
 
                         spellItemSubclassCard.visibility = View.VISIBLE
-                        spellItemSubclassText.visibility = View.VISIBLE
+                        spellItemSubclassText.apply {
+                            visibility = View.VISIBLE
+                            text = spell.subclass
+                        }
 
                         when (spell.subclass) {
                             "Vengeance" -> {
@@ -1345,7 +1358,21 @@ class UniqueDetailsFragment() : Fragment() {
                                     typeface = DEFAULT_BOLD
                                 }
                             }
+                            else -> {
+                                spellItemSubclassCard
+                                    .setCardBackgroundColor(
+                                        resources.getColor(R.color.defaultSecondary,
+                                            context?.theme))
+                                spellItemSubclassText.setTextColor(
+                                    resources.getColor(R.color.defaultOnSecondary,
+                                        context?.theme))
+                            }
                         }
+
+                    } else {
+
+                        spellItemSubclassCard.visibility = View.GONE
+                        spellItemSubclassText.visibility = View.GONE
                     }
 
                     spellItemTypeBackdrop.apply{
@@ -1961,6 +1988,9 @@ class UniqueDetailsFragment() : Fragment() {
 
                         uniqueDetailsColorPreview3.visibility = View.GONE
                         uniqueDetailsColorOutline3.visibility = View.GONE
+
+                        uniqueDetailsColorPreview4.visibility = View.GONE
+                        uniqueDetailsColorOutline4.visibility = View.GONE
                     }
 
                     1   -> {
@@ -1987,6 +2017,9 @@ class UniqueDetailsFragment() : Fragment() {
 
                         uniqueDetailsColorPreview3.visibility = View.GONE
                         uniqueDetailsColorOutline3.visibility = View.GONE
+
+                        uniqueDetailsColorPreview4.visibility = View.GONE
+                        uniqueDetailsColorOutline4.visibility = View.GONE
                     }
                     2   -> {
                         uniqueDetailsColorLabel.visibility = View.VISIBLE
@@ -2025,6 +2058,64 @@ class UniqueDetailsFragment() : Fragment() {
 
                         uniqueDetailsColorPreview3.visibility = View.GONE
                         uniqueDetailsColorOutline3.visibility = View.GONE
+
+                        uniqueDetailsColorPreview4.visibility = View.GONE
+                        uniqueDetailsColorOutline4.visibility = View.GONE
+                    }
+
+                    3   -> {
+                        uniqueDetailsColorLabel.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview1.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[0].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[0].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline1.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview2.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[1].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[1].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline2.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview3.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[2].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[2].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline3.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview4.visibility = View.GONE
+                        uniqueDetailsColorOutline4.visibility = View.GONE
                     }
 
                     else-> {
@@ -2077,6 +2168,22 @@ class UniqueDetailsFragment() : Fragment() {
                             }
                         }
                         uniqueDetailsColorOutline3.visibility = View.VISIBLE
+
+                        uniqueDetailsColorPreview4.apply{
+                            visibility = View.VISIBLE
+                            tooltipText = (viewedItem as ViewableMagicItem).mgcPotionColors[3].capitalized()
+                            try {
+                                @ColorInt
+                                val newColor = resources.getColor(resources.getIdentifier(
+                                    (viewedItem as ViewableMagicItem).mgcPotionColors[3].replace(" ","_"),
+                                    "color",view?.context?.packageName),null)
+
+                                setColorFilter(newColor)
+                            } catch (e: Resources.NotFoundException){
+                                e.printStackTrace()
+                            }
+                        }
+                        uniqueDetailsColorOutline4.visibility = View.VISIBLE
                     }
                 }
 
@@ -2092,6 +2199,9 @@ class UniqueDetailsFragment() : Fragment() {
 
                 uniqueDetailsColorPreview3.visibility = View.GONE
                 uniqueDetailsColorOutline3.visibility = View.GONE
+
+                uniqueDetailsColorPreview4.visibility = View.GONE
+                uniqueDetailsColorOutline4.visibility = View.GONE
             }
 
             // Item detail group
@@ -2181,6 +2291,8 @@ class UniqueDetailsFragment() : Fragment() {
         val dialogBinding: DialogSpellDetailsBinding =
             DialogSpellDetailsBinding.inflate(layoutInflater)
 
+        val isChoiceSlot : Boolean
+
         dialogBinding.apply {
 
             // Spell school icons
@@ -2265,9 +2377,13 @@ class UniqueDetailsFragment() : Fragment() {
                 spellDialogUsedLabel.visibility = View.GONE
             }
 
-            spellDialogChooseButton.visibility = if (spell.name.contains(" Choice ")) {
-                View. VISIBLE
-            } else { View.GONE }
+            spellDialogChooseButton.text = if (spell.name.contains(" Choice ")) {
+                isChoiceSlot = true
+                getString(R.string.button_resolve_spell_choice)
+            } else {
+                isChoiceSlot = false
+                getString(R.string.choose_spell_button)
+            }
 
             spellDialogLeveltype.text= when (spell.spellLevel) {
                 0   -> "Magic-User Cantrip"
@@ -2311,6 +2427,7 @@ class UniqueDetailsFragment() : Fragment() {
                     visibility = View.VISIBLE
                 }
                 View.VISIBLE
+
             } else {
 
                 spellDialogSubclassValue.visibility = View.GONE
@@ -2493,7 +2610,7 @@ class UniqueDetailsFragment() : Fragment() {
             }
 
             spellDialogChooseButton.setOnClickListener{
-                uniqueDetailsViewModel.fetchSpellsForDialog(entry)
+                uniqueDetailsViewModel.fetchSpellsForDialog(entry,isChoiceSlot)
                 spellDialog.dismiss()
             }
 

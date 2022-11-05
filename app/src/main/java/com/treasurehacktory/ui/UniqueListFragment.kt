@@ -12,6 +12,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -373,9 +374,40 @@ class UniqueListFragment : Fragment() {
                     }
                 }
 
-                uniqueListItemThumbnail.tooltipText = "Item ID: ${uniqueItem.id}"
+                uniqueListItemThumbnail.tooltipText = "Position: #${adapterPosition+1}\n" +
+                        "Item ID: ${uniqueItem.id}"
 
-                uniqueListItemName.text = uniqueItem.name
+                uniqueListItemName.apply {
+                    text = uniqueItem.name
+
+                    if (uniqueItem.hasNickname) {
+
+                        @ColorInt
+                        val nicknameColor = when (uniqueItem){
+                            is ListableGem -> ResourcesCompat.getColor(
+                                resources,
+                                R.color.gemSecondaryDark,
+                                null
+                            )
+                            is ListableArtObject -> ResourcesCompat.getColor(
+                                resources,
+                                R.color.artSecondaryDark,
+                                null
+                            )
+                            is ListableMagicItem -> ResourcesCompat.getColor(
+                                resources,
+                                R.color.magicSecondaryDark,
+                                null
+                            )
+                            is ListableSpellCollection -> ResourcesCompat.getColor(
+                                resources,
+                                R.color.spellSecondaryDark,
+                                null
+                            )
+                        }
+                        setTextColor(nicknameColor)
+                    }
+                }
 
                 ("${
                     DecimalFormat("#,##0.0#")

@@ -57,11 +57,13 @@ data class SpellCollection(
         result.append(" of ${spells.size} ")
 
         when (discipline){
-            SpCoDiscipline.ARCANE -> result.append("arcane spells")
-            SpCoDiscipline.DIVINE -> result.append("divine spells")
-            SpCoDiscipline.NATURAL -> result.append("druidic spells (non-standard)")
-            SpCoDiscipline.ALL_MAGIC -> result.append("varied spells")
+            SpCoDiscipline.ARCANE -> result.append("arcane spell")
+            SpCoDiscipline.DIVINE -> result.append("divine spell")
+            SpCoDiscipline.NATURAL -> result.append("druidic spell (non-standard)")
+            SpCoDiscipline.ALL_MAGIC -> result.append("varied spell")
         }
+
+        if (spells.size > 1) { result.append("s") }
 
         return result.toString().capitalized()
     }

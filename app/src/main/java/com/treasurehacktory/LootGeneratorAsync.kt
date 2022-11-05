@@ -1887,13 +1887,19 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
             if (itemType == "A2") {
 
-                val potionInfo = generatePotionDetails(mIconID,itemCharges)
+                val potionInfo = generatePotionDetails(mIconID,itemCharges,allowFalseMaps)
 
                 flatNotesList.addAll(potionInfo.first.first)
                 potionColors.addAll(potionInfo.first.second)
                 itemCharges = potionInfo.second.first
+                if (itemCharges  == 0) {
+                    // Make potion useless if there's no doses remaining
+                    mGpValue = 0.0
+                    mXpValue = 0
+                }
                 mGpValue += potionInfo.second.second
                 mIconID = potionInfo.third
+
             }
             // endregion
 
@@ -2142,10 +2148,14 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     }
 
     /**
-     * Second in triple is remaining dose count and gpValue mod, Third is mIconID
+     * Generates all the information needed to add potion flavor text to an item generated using
+     * createMagicItemTuple().
+     *
+     * @return Triple of a the entries in the format used by createMagicItemTuple(), pair of
+     * remaining dose count and gpValue mod, and the string for the mIconID.
      */
     private fun generatePotionDetails(
-        _mIconID: String,_itemCharges: Int
+        _mIconID: String, _itemCharges: Int, allowFalseMaps : Boolean
     ): Triple<Pair<List<Pair<String,String>>,List<String>>,Pair<Int,Double>,String>{
 
         val flatNotesList = ArrayList<Pair<String,String>>()
@@ -2571,8 +2581,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             var currentRoll : Int
 
             do {
-
-                currentRoll = Random.nextInt(1,21)      // Reroll until applicable embellishment is rolled
+                currentRoll = Random.nextInt(1,21)
 
             } while ((currentRoll == 16)&&!(isRoundBulb))
 
@@ -2593,8 +2602,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 3       -> {
                     flatNotesList.add("Potion flavor text" to
                             "Embellishment: All of the bulb/neck, except the base, is " +
-                            "sheathed in fine/once-fine silk held in place with tiny " +
-                            "silver studs")
+                            "sheathed in fine/once-fine silk (${getSubstanceColor()
+                            }) held in place with tiny silver studs")
                 }
 
                 4       -> {
@@ -2612,17 +2621,257 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 }
 
                 6       -> {
+
+                    val pickedName = if (Random.nextInt(1,101) == 1) {
+
+                        listOf(
+                            "Frank Battleforge, the Dweeb",
+                            "Alaran Lodestar the Dracolich-Slayer",
+                            "Aspor Hundolfr the Ambitious Revenant",
+                            "Gunner Calahander the Undying",
+                            "Yosoti the Unforgettable",
+                            "Leitric the Book-burner",
+                            "Rebel the Goblin",
+                            "Ambrose the Prophet of Possibility",
+                            "Dr. Anselm Giger the Mad Alchemist",
+                            "Dr. Joan Snow the Arcane Anatomist",
+                            "Clodagh Grenawich the Hagblood Halberd",
+                            "Aminah Abadaan the Honest Hand",
+                            "Kane Freeman the Shadow Governor",
+                            "Piperine Scoville the Flame of Knowledge",
+                            "Ivanka the Fallen Angel of Elturel",
+                            "Pavimentum Shredz the Bodaciously Radical",
+                            "Unioos Bugulnoz Madame of the Glitzy Pixie",
+                            "Minnie the Fisher Queen",
+                            "Theodore Webster the Unintentionally-Calamitous",
+                            "Lugh Quicksmile, Son of Fey but Bastard to All",
+                            "Kopy-Copy the Country Couturier",
+                            "Ragna Vel the Inauspicious Assassin",
+                            "Agathokles Diodotus the Avatar of Zelaur"
+                        ).random()
+
+                    } else {
+
+                        val randomName = listOf(
+                            "Albert",
+                            "Alexander",
+                            "Alfred",
+                            "Alice",
+                            "Amelia",
+                            "Anastasia",
+                            "Anne",
+                            "Arthur",
+                            "Augustus",
+                            "Bart",
+                            "Beatrice",
+                            "Blanche",
+                            "Boris",
+                            "Catherine",
+                            "Cecilla",
+                            "Charles",
+                            "Charlotte",
+                            "Cyrus",
+                            "David",
+                            "Diana",
+                            "Edmund",
+                            "Edward",
+                            "Eleanor",
+                            "Elizabeth",
+                            "Eric",
+                            "Franklin",
+                            "Frederick",
+                            "George",
+                            "Giovanni",
+                            "Gloria",
+                            "Harald",
+                            "Harry",
+                            "Helen",
+                            "Igor",
+                            "Isabella",
+                            "James",
+                            "Joan",
+                            "John",
+                            "João",
+                            "Julia",
+                            "Kristina",
+                            "Leopold",
+                            "Lidelle",
+                            "Lisa",
+                            "Louis",
+                            "Luigi",
+                            "Madeleine",
+                            "Magnuson",
+                            "Marcus",
+                            "Mario",
+                            "Mary",
+                            "Matthias",
+                            "Natalia",
+                            "Nicholas",
+                            "Odelia",
+                            "Olga",
+                            "Patrick",
+                            "Pedro",
+                            "Persephone",
+                            "Peter",
+                            "Ringo",
+                            "Robert",
+                            "Robyn",
+                            "Rosalia",
+                            "Simón",
+                            "Sophia",
+                            "Theodore",
+                            "Tiffany",
+                            "Usidore",
+                            "Victoria",
+                            "Vladimir",
+                            "Wilfrid",
+                            "Wilhelmina",
+                            "William",
+                            "Yvette"
+                        ).random()
+
+                        val randomTitle = listOf(
+                            "Administrator",
+                            "Affable",
+                            "Ambitious",
+                            "Anointed",
+                            "Architect",
+                            "Artist",
+                            "August",
+                            "Avaricious",
+                            "Avatar",
+                            "Awesome",
+                            "Barbarian",
+                            "Beautiful",
+                            "Benevolent",
+                            "Blue",
+                            "Bossy",
+                            "Brave",
+                            "Brilliant",
+                            "Charming",
+                            "Chosen One",
+                            "Chronicler",
+                            "Civilized",
+                            "Club-footed",
+                            "Conqueror",
+                            "Courageous",
+                            "Crow",
+                            "Crusader",
+                            "Curious",
+                            "Cynical",
+                            "Diligent",
+                            "Diplomat",
+                            "Dogmatic",
+                            "Earnest",
+                            "Elegant",
+                            "Enabler",
+                            "Enlightened",
+                            "Enlightened",
+                            "Flamehard",
+                            "Flexible",
+                            "Four-eyed",
+                            "Gallant",
+                            "Generous",
+                            "Green-haired",
+                            "Guardian",
+                            "HackFighter",
+                            "HacKleric",
+                            "HackMage",
+                            "HackSassian",
+                            "Hard Ruler",
+                            "Healer",
+                            "Heretic",
+                            "Historian",
+                            "Honorable",
+                            "Hypocrite",
+                            "Ill-fated",
+                            "Ill-informed",
+                            "Impaler",
+                            "Industrious",
+                            "Inquisitor",
+                            "Inspired",
+                            "Just",
+                            "Kind",
+                            "Lawgiver",
+                            "Logistician",
+                            "Lowborn",
+                            "Magnanimous",
+                            "Magnificent",
+                            "Martyr",
+                            "Melancholic",
+                            "Mesmerizing",
+                            "Messenger",
+                            "Missionary",
+                            "Motivator",
+                            "Noble",
+                            "Orator",
+                            "Organizer",
+                            "Outlaw",
+                            "Overseer",
+                            "Pacifist",
+                            "Painter",
+                            "Paranoid",
+                            "Peacemaker",
+                            "Pensive",
+                            "Philosopher",
+                            "Pilgrim",
+                            "Pious",
+                            "Plump",
+                            "Politician",
+                            "Proselytizer",
+                            "Puritanical",
+                            "Rowdy",
+                            "Sagacious",
+                            "Sage",
+                            "Salty",
+                            "Savage",
+                            "Savior",
+                            "Schemer",
+                            "Scholar",
+                            "Sculptor",
+                            "Seducer",
+                            "Shadow",
+                            "Shepherd",
+                            "Sly",
+                            "Snorer",
+                            "Spider",
+                            "Strategist",
+                            "Super",
+                            "Tactician",
+                            "Templebuilder",
+                            "Theologian",
+                            "Thrifty",
+                            "Torturer",
+                            "Translator",
+                            "Truthseeker",
+                            "Undead Slayer",
+                            "Unready",
+                            "Unrestrained",
+                            "Valiant",
+                            "Vengeful",
+                            "Well-endowed",
+                            "Whisperer",
+                            "Whole of Body",
+                            "Wicked",
+                            "Wise",
+                            "Wunderkind"
+                        ).random()
+
+                        "$randomName the $randomTitle"
+                    }
+
                     flatNotesList.add("Potion flavor text" to
                             "Embellishment: A name and ‘title’ (e.g. Magnuson the " +
                             "Flamehard) are found etched in the glass in fine cursive " +
-                            "script")
+                            "script " +
+                            "(Randomly-picked suggestion: \"$pickedName\")")
                 }
 
                 7       -> {
 
                     val addlGems = Random.nextInt(1,5)
 
-                    flatNotesList.add("Potion flavor text" to
+                    listOf("Potion flavor text" to
                             "Embellishment: $addlGems 20gp gems are studded into the " +
                             "bottle in a symmetrical style around it")
 
@@ -2686,16 +2935,184 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 }
 
                 15      -> {
+
+                    val randomDeity = listOf(
+                        "Aknar, Gawd of Stealth and Wolves",
+                        "Alu the Locust Lord, Gawd of Famine",
+                        "Arnuya, Gawd of Vengence",
+                        "Athena, Gawdess of Wisdom and Combat",
+                        "Bast, Gawdess of Felines",
+                        "Benyar, Gawd of Empire",
+                        "Camaxtli, Gawd of Fate",
+                        "Corellon Larethian, Gawd of Elves, Music, Poetry, and Magic",
+                        "Coyote, Gawd of Arts, Crafts, Fire, and Thieves",
+                        "Denier, Gawd of Art and Literature",
+                        "Dionysus, Gawd of Wine",
+                        "Draper, Gawd of Stealth and Cunning",
+                        "Druga, Gawd of Devils and Oppressive Contracts",
+                        "Eilistraee, Demi-Gawdess of Moonlight, Beauty, etc.",
+                        "Enlil, Gawd of Air and War",
+                        "Fracor'Dieus, Gawd of Earth",
+                        "Garl Glittergold, Gawd of Dwarves",
+                        "Grawdyng, Gawd of Death",
+                        "Gronyfr, Gawd of War and Grevans",
+                        "Gruumsh, Gawd of Orcs",
+                        "Hanili Celanil, Gawdess of Love, Romance, Beauty, & Fine Arts",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Hokalas the RiftMaster, Gawd of Magic",
+                        "Ikka Putaang, Gawd of Nature",
+                        "Kazaar-Freem, Gawd of Peace and Tranquility",
+                        "Kishijoten, Gawdess of Luck",
+                        "Kuchooloo, Gawd of Wanton Destruction",
+                        "Laduguer, Gawd of Gray Dwarves and Skilled Artisans",
+                        "Laerme, Gawdess of Fire, Art, and Love",
+                        "Lathander, Gawd of the Spring/Beginnings",
+                        "Loviatar, Gawdess of Pain and Torment",
+                        "Luvia, Gawd of Justice",
+                        "Mangrus, Gawd of Disease",
+                        "Markovia, Gawd of Oceans",
+                        "Marlog, Gawd of Sailing and Sailors",
+                        "Moradin, Gawd of Dwarves",
+                        "Navinger, Gawd of Love and Eunuchs",
+                        "Nephthys, Gawdess of Tombs",
+                        "Nudor, Gawd of Healing",
+                        "Odin, Gawd of War",
+                        "Oghma, Gawd of Knowledge",
+                        "P'Rakeke, Emporer of Scorn, Gawd of Bigotry and Hate",
+                        "Pangrus, gnomish Gawd of War",
+                        "Par'Kyrus, Gawd of Wind",
+                        "Pinini the Raconteur, Gawd of the Arts",
+                        "Pyremius, Gawd of Fire, Poison, and Disease",
+                        "Quetzalcoatl, Gawd of Arts and Air",
+                        "Rotovi the Mule, Gawd of Mathematics, Science, et al.",
+                        "Set, Gawd of the Night",
+                        "Shang-Ti, Gawd of Sky and Agriculture",
+                        "Shona, Gawdess of Games and Ritual Combat",
+                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Skraad, Gawd of Blacksmiths and Fate",
+                        "Sumar-Fareen, Gawdess of Birth and Love",
+                        "The Confuser of Ways, Gawd of Lies, Deceit, and Mischief",
+                        "The Feeble Gawd, Gawd of Mysteries",
+                        "Thor, Gawd of Thunder",
+                        "Thrain, Gawd of Wisdom and Mountaineering",
+                        "Tobadzistini, Gawd of Warriors",
+                        "Yi'Gor, Gawd of Treachery",
+                        "Yiders, Gawd of Strength",
+                        "Yondalla, Gawdess of Halflings and Fertility",
+                        "Zelaur, Gawd of Honor",
+                        "Zeus the Diminished, Gawd of Lightning"
+                    ).random()
+
                     flatNotesList.add("Potion flavor text" to
                             "Embellishment: A Gawd’s symbol is inscribed within the " +
                             "glass or pulled out of the glass during creation (most " +
-                            "commonly a key, the symbol of Hokalas)")
+                            "commonly a key, the symbol of Hokalas) " +
+                            "(Randomly-suggested deity: $randomDeity)")
                 }
 
                 16      -> {
                     flatNotesList.add("Potion flavor text" to
                             "Embellishment: An outline of the continent is etched " +
-                            "around the bulb, with a tiny X somewhere on it.")
+                            "around the bulb, with a tiny X somewhere on it")
+
+                    // Add treasure map
+                    val isRealMap: Boolean
+                    val distanceRoll= Random.nextInt(1,21)
+
+                    // Roll type of map
+                    when (Random.nextInt(if (allowFalseMaps) 1 else 2,11)) {
+
+                        1       -> {
+                            isRealMap = false
+                            flatNotesList.add("Map details" to
+                                    "False map " + "(No treasure or already looted)")
+                        }
+
+                        in 2..7 -> {
+                            isRealMap = true
+                            flatNotesList.add("Map details" to "Map to monetary treasure " +
+                                    "(0% chance of art objects or magic items)")
+                        }
+
+                        in 8..9 -> {
+                            isRealMap = true
+                            flatNotesList.add("Map details" to
+                                    "Map to magical treasure (0% chance of coin)")
+                        }
+
+                        else    -> {
+                            isRealMap = true
+                            flatNotesList.add("Map details" to "Map to combined treasure")
+                        }
+                    }
+
+                    // Roll direction of treasure location
+                    when (Random.nextInt(1,9)){
+                        1 -> flatNotesList.add("Map details" to "Located north")
+                        2 -> flatNotesList.add("Map details" to "Located northeast")
+                        3 -> flatNotesList.add("Map details" to "Located east")
+                        4 -> flatNotesList.add("Map details" to "Located southeast")
+                        5 -> flatNotesList.add("Map details" to "Located south")
+                        6 -> flatNotesList.add("Map details" to "Located southwest")
+                        7 -> flatNotesList.add("Map details" to "Located west")
+                        8 -> flatNotesList.add("Map details" to "Located northwest")
+                    }
+
+                    // Roll distance of treasure
+                    when (distanceRoll) {
+
+                        in 1..2 -> flatNotesList.add("Map details" to "Hoard located in " +
+                                "labyrinth of caves found in lair")
+
+                        in 3..6 -> flatNotesList.add("Map details" to "Hoard located " +
+                                "outdoors, 5-8 miles distant")
+
+                        in 7..9 -> flatNotesList.add("Map details" to "Hoard located " +
+                                "outdoors, 10-40 miles distant")
+
+                        else    -> flatNotesList.add("Map details" to "Hoard located " +
+                                "outdoors, 50-500 miles distant")
+                    }
+
+                    if (distanceRoll > 2) {
+
+                        when (Random.nextInt(1,11)) {
+
+                            1       -> flatNotesList.add("Map details" to "Treasure shown " +
+                                    "buried and unguarded")
+                            2       -> flatNotesList.add("Map details" to "Treasure shown " +
+                                    "hidden in water")
+                            in 3..7 -> flatNotesList.add("Map details" to "Treasure shown " +
+                                    "guarded in a lair")
+                            8       -> flatNotesList.add("Map details" to "Treasure shown " +
+                                    "somewhere in ruins")
+                            9       -> flatNotesList.add("Map details" to "Treasure shown " +
+                                    "in a burial crypt")
+                            else    -> flatNotesList.add("Map details" to "Treasure shown " +
+                                    "secreted in a town")
+                        }
+                    }
+
+                    // Roll type of treasure
+                    if (isRealMap)
+                        flatNotesList.add("Map details" to "Treasure present: " +
+                                listOf("I","G","H","F","A","B","C","D","E","Z","A and Z","A and H")
+                                    .random())
+
+                    flatNotesList.add("Map details" to "This is the map engraved on the potion " +
+                            "bottle, should the GM wish to treat it as a proper treasure map.")
                 }
 
                 17      -> {
@@ -2761,13 +3178,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             "${getSubstanceColor()} flecks)"
                     in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()})"
                     in 40..54   -> "Luminous (${getSubstanceColor()}, " +
-                            "~${Random.nextInt(0,21) * 5}% opacity)"
+                            "~${Random.nextInt(1,21) * 5}% opacity)"
                     in 55..59   -> "Opaline (glowing)"
                     in 60..69   -> "Phosphorescent (${getSubstanceColor()}, " +
-                            "~${Random.nextInt(0,21) * 5}% opacity)"
+                            "~${Random.nextInt(1,21) * 5}% opacity)"
                     in 70..79   -> "Rainbowed (transparent)"
                     in 80..84   -> "Ribboned (${getSubstanceColor()}, " +
-                            "~${Random.nextInt(0,21) * 5}% opacity)"
+                            "~${Random.nextInt(1,21) * 5}% opacity)"
                     in 85..94   -> "Translucent (${getSubstanceColor()})"
                     else        -> "Varigated (${getSubstanceColor()}, " +
                             "${getSubstanceColor()}, and maybe some ${getSubstanceColor()})"

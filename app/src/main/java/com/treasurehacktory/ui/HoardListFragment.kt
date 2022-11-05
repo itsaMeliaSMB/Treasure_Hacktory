@@ -326,7 +326,8 @@ class HoardListFragment : Fragment() {
                     .setImageResource(R.drawable.clipart_default_image)
             }
 
-            binding.hoardListItemListIcon.tooltipText = "Hoard ID: ${hoard.hoardID}"
+            binding.hoardListItemListIcon.tooltipText = "Position: #${adapterPosition+1}\n" +
+                    "Hoard ID: ${hoard.hoardID}"
 
             // Set filled status of favorite star icon
             binding.hoardListItemFavorited.setImageResource(

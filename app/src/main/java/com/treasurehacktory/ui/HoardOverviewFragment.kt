@@ -398,7 +398,7 @@ class HoardOverviewFragment : Fragment() {
             ("${
                 DecimalFormat("#,##0.0#")
                     .format(coinCount / 10.0)
-                    .removeSuffix(".0")} ib")
+                    .removeSuffix(".0")} lb")
                 .also { binding.hoardOverviewCoinageItemColumnWt.text = it }
 
             // Set text for coin value
@@ -492,7 +492,7 @@ class HoardOverviewFragment : Fragment() {
                     ("x${DecimalFormat("#,##0").format(totalCoins)}")
                         .also { hoardOverviewCoinageFooterColumnQty.text = it }
                     ("${DecimalFormat("#,##0.0#").format(totalCoins/ 10.0)
-                        .removeSuffix(".0")} ib")
+                        .removeSuffix(".0")} lb")
                         .also { hoardOverviewCoinageFooterColumnWt.text = it }
                     ("${
                         DecimalFormat("#,##0.0#")

@@ -436,11 +436,23 @@
                     android:id="@+id/unique_details_color_preview_3"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_goneMarginEnd="0dp"
+                    android:src="@drawable/clipart_potion_vector_icon"
+                    app:layout_constraintEnd_toStartOf="@id/unique_details_color_preview_4"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
+                    app:tint="?attr/backgroundColor"
+                    tools:tint="@color/blue"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_preview_4"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/clipart_potion_vector_icon"
                     app:layout_constraintEnd_toEndOf="@id/unique_details_druid"
                     app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
                     app:tint="?attr/backgroundColor"
-                    tools:tint="@color/blue"/>
+                    tools:tint="@color/yellow"/>
 
                 <ImageView
                     android:id="@+id/unique_details_color_outline_1"
@@ -474,6 +486,17 @@
                     app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_3"
                     app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_3"
                     app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_3"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_outline_4"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_stroke_vector_icon"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_color_preview_4"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_4"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_4"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_4"/>
 
 
                 <androidx.constraintlayout.widget.Barrier
