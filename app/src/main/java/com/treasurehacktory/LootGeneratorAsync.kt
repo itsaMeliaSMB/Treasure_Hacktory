@@ -56,7 +56,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     @WorkerThread
     suspend fun createHoardFromOrder(hoardOrder: HoardOrder, appVersion: Int): Int {
 
-        val maxRerolls = 1500
+        val maxRerolls = 5000
 
         val newHoardID: Int
 

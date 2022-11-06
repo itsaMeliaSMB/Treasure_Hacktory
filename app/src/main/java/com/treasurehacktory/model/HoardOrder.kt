@@ -60,7 +60,6 @@ data class MagicItemRestrictions(
         SpellCoRestrictions(
             allowCurse = allowCursedItems
         )
-    //TODO Add val itemSources: SpCoSources when magic items beyond GMG are added
 )
 
 data class SpellCoRestrictions(

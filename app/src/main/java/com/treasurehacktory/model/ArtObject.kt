@@ -1537,29 +1537,31 @@ data class ArtObject(
                             }
 
                             val personLineage = listOf(
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
+                                "", "", "", "", "", "",
                                 " I",
-                                " II",
-                                " II",
-                                " III",
+                                " II", " II", " II",
+                                " III", " III",
                                 " VI",
-                                " V"
+                                " V",
+                                " VI",
+                                " VII",
+                                " X",
+                                " XIV",
                             ).random()
 
                             val personNickname = listOf(
                                 "Anointed",
+                                "Artist",
                                 "Avatar",
                                 "Barbarian",
                                 "Beautiful",
                                 "Chosen One",
                                 "Civilized",
                                 "Club-footed",
+                                "Condemned",
                                 "Courageous",
                                 "Crusader",
+                                "Devoted",
                                 "Diplomat",
                                 "Dogmatic",
                                 "Earnest",
@@ -1587,9 +1589,11 @@ data class ArtObject(
                                 "Orator",
                                 "Outlaw",
                                 "Pacifist",
+                                "Petite",
                                 "Philosopher",
                                 "Pilgrim",
                                 "Pious",
+                                "Plucky",
                                 "Plump",
                                 "Politician",
                                 "Proselytizer",
@@ -1602,6 +1606,7 @@ data class ArtObject(
                                 "Super",
                                 "Templebuilder",
                                 "Theologian",
+                                "Towering",
                                 "Translator",
                                 "Undead Slayer",
                                 "Unrestrained",
@@ -1744,6 +1749,7 @@ data class ArtObject(
                         val specificPerson = if (Random.nextInt(1,5) == 1) {
                                 // Favorite personal characters of developer and her friends
                                 listOf(
+                                    "Annihilator Bloody Howling, the Wanderer",
                                     "BattleMage Frank Battleforge, the Dwarven, Unbathed " +
                                             "Aficionado of Elven Culture",
                                     "Bladesinger Alaran Lodestar, the Slayer of the Dracolich",
