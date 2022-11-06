@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sort_by_gp_value_descending">Sort by GP Value (descending)</string>
+    <string name="sort_by_gp_value_descending_cond">Re-sort (GP)</string>
+    <string name="sort_by_item_id_ascending">Sort by Item ID (ascending)</string>
+    <string name="sort_by_item_id_ascending_cond">Re-sort (ID)</string>
+</resources>

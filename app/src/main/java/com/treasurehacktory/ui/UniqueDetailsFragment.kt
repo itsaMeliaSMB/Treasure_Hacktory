@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.res.Resources
+import android.graphics.Typeface.DEFAULT
 import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
 import android.util.TypedValue
@@ -1311,18 +1312,20 @@ class UniqueDetailsFragment() : Fragment() {
                                 spellItemSubclassCard.setCardBackgroundColor(
                                     resources.getColor(R.color.sanguine,
                                         context?.theme))
-                                spellItemSubclassText.setTextColor(
-                                    resources.getColor(R.color.white,
-                                        context?.theme))
+                                spellItemSubclassText.apply{
+                                    setTextColor(resources.getColor(R.color.white, context?.theme))
+                                    typeface = DEFAULT
+                                }
                             }
                             "Woeful" -> {
                                 spellItemSubclassCard
                                     .setCardBackgroundColor(
                                         resources.getColor(R.color.rust,
                                             context?.theme))
-                                spellItemSubclassText.setTextColor(
-                                    resources.getColor(R.color.white,
-                                        context?.theme))
+                                spellItemSubclassText.apply{
+                                    setTextColor(resources.getColor(R.color.white, context?.theme) )
+                                    typeface = DEFAULT
+                                }
                             }
                             "Choice" -> {
 
@@ -1332,18 +1335,22 @@ class UniqueDetailsFragment() : Fragment() {
                                         .setCardBackgroundColor(
                                             resources.getColor(R.color.ultramarine,
                                                 context?.theme))
-                                    spellItemSubclassText.setTextColor(
-                                        resources.getColor(R.color.white,
-                                            context?.theme))
+                                    spellItemSubclassText.apply {
+                                        setTextColor(resources.getColor(R.color.white, context?.theme))
+                                        typeface = DEFAULT
+                                    }
 
                                 } else {
+
                                     spellItemSubclassCard
                                         .setCardBackgroundColor(
                                             resources.getColor(R.color.teal,
                                                 context?.theme))
-                                    spellItemSubclassText.setTextColor(
-                                        resources.getColor(R.color.white,
+                                    spellItemSubclassText.apply{
+                                        setTextColor(resources.getColor(R.color.white,
                                             context?.theme))
+                                        typeface = DEFAULT
+                                    }
                                 }
                             }
                             "Wild" -> {
@@ -1363,9 +1370,11 @@ class UniqueDetailsFragment() : Fragment() {
                                     .setCardBackgroundColor(
                                         resources.getColor(R.color.defaultSecondary,
                                             context?.theme))
-                                spellItemSubclassText.setTextColor(
-                                    resources.getColor(R.color.defaultOnSecondary,
+                                spellItemSubclassText.apply{
+                                    setTextColor(resources.getColor(R.color.defaultOnSecondary,
                                         context?.theme))
+                                    typeface = DEFAULT
+                                }
                             }
                         }
 

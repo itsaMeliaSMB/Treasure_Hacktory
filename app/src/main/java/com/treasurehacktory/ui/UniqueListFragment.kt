@@ -72,6 +72,8 @@ class UniqueListFragment : Fragment() {
     private var _binding: LayoutUniqueListBinding? = null
     private val binding get() = _binding!!
 
+    private var sortByValue = false
+
     private var uniqueAdapter: UniqueAdapter? = UniqueAdapter(emptyList())
 
     private val uniqueListViewModel: UniqueListViewModel by viewModels {
@@ -168,7 +170,7 @@ class UniqueListFragment : Fragment() {
                     val hoardID: Int = safeArgs.hoardID
                     val itemType: UniqueItemType = safeArgs.listType
 
-                    uniqueListViewModel.updateUniqueItems(hoardID, itemType)
+                    uniqueListViewModel.updateUniqueItems(hoardID, itemType, sortByValue)
                 }
             }
 
@@ -277,6 +279,17 @@ class UniqueListFragment : Fragment() {
             overflowIcon?.apply{
                 setTint(colorOnPrimary)
             }
+            menu.findItem(R.id.action_resort_unique_items).apply {
+                menu.findItem(R.id.action_resort_unique_items).apply{
+                    if (sortByValue) {
+                        title = getString(R.string.sort_by_item_id_ascending)
+                        titleCondensed = getString(R.string.sort_by_item_id_ascending_cond)
+                    } else {
+                        title = getString(R.string.sort_by_gp_value_descending)
+                        titleCondensed = getString(R.string.sort_by_gp_value_descending_cond)
+                    }
+                }
+            }
             setNavigationOnClickListener {
 
                 if (uniqueListViewModel.isRunningAsyncLiveData.value != true) {
@@ -299,6 +312,15 @@ class UniqueListFragment : Fragment() {
                     R.id.action_select_all_unique  -> {
 
                         (binding.uniqueListRecycler.adapter as UniqueAdapter).selectAllItems()
+
+                        true
+                    }
+
+                    R.id.action_resort_unique_items -> {
+
+                        sortByValue = sortByValue.not()
+
+                        uniqueListViewModel.updateUniqueItems(parentHoard.hoardID,itemType,sortByValue)
 
                         true
                     }
@@ -852,7 +874,18 @@ class UniqueListFragment : Fragment() {
     private fun updateUI(listables: List<ListableItem>) {
         uniqueAdapter = UniqueAdapter(listables)
         binding.uniqueListRecycler.adapter = uniqueAdapter
-        binding.uniqueListToolbar.subtitle = parentHoard.name
+        binding.uniqueListToolbar.apply{
+            subtitle = parentHoard.name
+            menu.findItem(R.id.action_resort_unique_items).apply{
+                if (sortByValue) {
+                    title = getString(R.string.sort_by_item_id_ascending)
+                    titleCondensed = getString(R.string.sort_by_item_id_ascending_cond)
+                } else {
+                    title = getString(R.string.sort_by_gp_value_descending)
+                    titleCondensed = getString(R.string.sort_by_gp_value_descending_cond)
+                }
+            }
+        }
     }
 
     private fun fadeOutWaitingCard() {

@@ -61,6 +61,37 @@ class AddHoardEventDialog() : DialogFragment() {
                 when (item.itemId){
                     R.id.action_add_event   -> {
 
+                        fun String.reduceNewLines() : String {
+
+                            val maxNewLines = 20
+                            val newLineReplacement = "—"
+
+                            val splitString = this.split("\n")
+
+                            if (splitString.size > maxNewLines - 1) {
+
+                                val recombinedString = StringBuilder()
+
+                                splitString.forEachIndexed { index, substring ->
+                                    // If not the last or only entry
+                                    if (splitString.size > 1 && index < splitString.lastIndex) {
+                                        // If within the maximum quota of new lines,
+                                        if (index < maxNewLines - 1) {
+                                            recombinedString.append(substring + "\n")
+                                        } else {
+                                            recombinedString.append(substring + newLineReplacement)
+                                        }
+                                    } else {
+                                        // Otherwise, add substring by itself to the end.
+                                        recombinedString.append(substring)
+                                    }
+                                }
+
+                                return recombinedString.toString()
+
+                            } else { return this }
+                        }
+
                         val descString = binding.addEventDescEdit.text.toString()
 
                         if (descString.isNotBlank()) {
@@ -92,6 +123,9 @@ class AddHoardEventDialog() : DialogFragment() {
                                 if (this.userTagMagicItem.isChecked) {
                                     tagBuilder.append("|magic-item")
                                 }
+                                if (this.userTagMap.isChecked) {
+                                    tagBuilder.append("|map")
+                                }
                                 if (this.userTagMerge.isChecked) {
                                     tagBuilder.append("|merge")
                                 }
@@ -100,6 +134,9 @@ class AddHoardEventDialog() : DialogFragment() {
                                 }
                                 if (this.userTagNote.isChecked) {
                                     tagBuilder.append("|note")
+                                }
+                                if (this.userTagReroll.isChecked) {
+                                    tagBuilder.append("|reroll")
                                 }
                                 if (this.userTagSale.isChecked) {
                                     tagBuilder.append("|sale")
@@ -115,7 +152,7 @@ class AddHoardEventDialog() : DialogFragment() {
                             val userEvent = HoardEvent(
                                 hoardID = targetHoardID,
                                 timestamp = System.currentTimeMillis(),
-                                description = descString,
+                                description = descString.reduceNewLines(),
                                 tag = "user$tagBuilder"
                             )
 

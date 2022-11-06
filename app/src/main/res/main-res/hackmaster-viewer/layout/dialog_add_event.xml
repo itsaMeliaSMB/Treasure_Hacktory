@@ -58,7 +58,7 @@
                     android:breakStrategy="balanced"
                     android:minHeight="160dp"
                     android:hint="@string/description"
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine|textCapSentences"
                     android:maxLength="280" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:rowOrderPreserved="false"
-                android:rowCount="7"
+                android:rowCount="8"
                 android:layout_gravity="center_horizontal"
                 >
 
@@ -173,8 +173,6 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:alpha="0.65"/>
-
-
 
                 </LinearLayout>
 
@@ -347,6 +345,39 @@
                     android:gravity="center_vertical">
 
                     <CheckBox
+                        android:id="@+id/user_tag_map"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="0dp"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="4dp"
+                        android:scaleType="fitCenter"
+                        app:tint="?attr/colorOnBackground"
+                        android:src="@drawable/clipart_map_vector_icon"
+                        android:alpha="0.65"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:text="Map"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:alpha="0.65"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <CheckBox
                         android:id="@+id/user_tag_merge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -433,6 +464,39 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
                         android:text="Note"
+                        android:textColor="?attr/colorOnBackground"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:alpha="0.65"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <CheckBox
+                        android:id="@+id/user_tag_reroll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="0dp"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="4dp"
+                        android:scaleType="fitCenter"
+                        app:tint="?attr/colorOnBackground"
+                        android:src="@drawable/clipart_rolling_dice_vector_icon"
+                        android:alpha="0.65"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:text="Reroll"
                         android:textColor="?attr/colorOnBackground"
                         android:textSize="16sp"
                         android:textStyle="bold"

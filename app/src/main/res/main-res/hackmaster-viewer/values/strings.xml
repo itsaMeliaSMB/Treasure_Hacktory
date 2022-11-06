@@ -94,5 +94,8 @@
     <string name="csv_no_detail_note">CSV is intended as a quick reference of hoard composition for distributing spoils. For a more detailed information, check the record on the app.</string>
     <string name="action_csv_report">Share CSV report</string>
     <string name="action_rename_item">Re-name this item</string>
+    <string name="hoard_event_log_filter_excluding_label">Excluding:</string>
+    <string name="hoard_event_log_filter_including_label">Including:</string>
+    <string name="action_filter_events">Filter shown events</string>
 
 </resources>

@@ -44,7 +44,7 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
         combinedHoardLiveData.value = hoardID to itemType
     }
 
-    fun updateUniqueItems(hoardID: Int, itemType: UniqueItemType) {
+    fun updateUniqueItems(hoardID: Int, itemType: UniqueItemType, sortByValue: Boolean) {
 
         viewModelScope.launch{
 
@@ -122,7 +122,12 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                 }
             }
 
-            uniqueItemsLiveData.postValue(listables)
+            uniqueItemsLiveData.postValue(
+                if (sortByValue) {
+                    listables.sortedWith (compareByDescending<ListableItem> { it.gpValue }
+                        .thenBy { it.id })
+                } else { listables }
+            )
 
             delay(500L)
 
@@ -355,7 +360,7 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
             val spCosToSell = ArrayList<SpellCollection>()
 
             val maxSize = 25
-            val maxLength = 20
+            val maxLength = 30
 
             val removalDesc = StringBuilder().apply{
                 append("The following item(s) from this hoard " +

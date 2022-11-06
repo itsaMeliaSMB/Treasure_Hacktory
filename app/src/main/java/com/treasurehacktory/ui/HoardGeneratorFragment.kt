@@ -1444,10 +1444,10 @@ class HoardGeneratorFragment : Fragment() {
                         )
                         binding.generatorGemLayout.visibility = View.GONE
                     }
-                    (binding.generatorMagicLayout.visibility == View.VISIBLE) -> {
+                    (binding.generatorArtLayout.visibility == View.VISIBLE) -> {
 
                         val collapseAnimator = ObjectAnimator.ofFloat(
-                            binding.generatorMagicIndicator,
+                            binding.generatorArtIndicator,
                             View.ROTATION,
                             90f,
                             0f
@@ -1456,16 +1456,16 @@ class HoardGeneratorFragment : Fragment() {
                         // Rotate the indicator
                         collapseAnimator.apply {
                             duration = 250
-                            disableViewDuringAnimation(binding.generatorMagicIndicator)
+                            disableViewDuringAnimation(binding.generatorArtIndicator)
                             start()
                         }
 
                         // Hide the magic layout
                         TransitionManager.beginDelayedTransition(
-                            binding.generatorMagicCard,
+                            binding.generatorArtCard,
                             AutoTransition()
                         )
-                        binding.generatorMagicLayout.visibility = View.GONE
+                        binding.generatorArtLayout.visibility = View.GONE
                     }
                     (binding.generatorSpellLayout.visibility == View.VISIBLE) -> {
 
@@ -2444,10 +2444,6 @@ class HoardGeneratorFragment : Fragment() {
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
-
-        // This extension method listens for start/end events on an animation and disables
-        // the given view for the entirety of that animation.
-        // Taken from https://developer.android.com/codelabs/advanced-android-kotlin-training-property-animation
 
         addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(animation: Animator?) {

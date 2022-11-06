@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:title="@string/action_add_user_event"
+    <item
+        android:id="@+id/action_filter_events"
+        android:title="@string/action_filter_events"
+        android:icon="@drawable/clipart_filter_vector_icon"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/action_add_user_event"
+        android:title="@string/action_add_user_event"
         app:showAsAction="never"/>
 
 </menu>

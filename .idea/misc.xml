@@ -24,6 +24,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_edit_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_extranotes_vector_icon.xml" value="0.19444444444444445" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_filledstar_vector_icon.xml" value="0.19444444444444445" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_filter_vector_icon.xml" value="0.161" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_flag_vector_icon.xml" value="0.1345" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_heart_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/drawable/clipart_house_vector_icon.xml" value="0.2805" />
@@ -138,6 +139,9 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_add_event.xml" value="0.22958529286019666" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_bottom_hoard_info_edit.xml" value="0.209765625" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_coinage_edit.xml" value="0.165" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_event_tag_filter.xml" value="0.13601823708206687" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_event_tag_filter_header.xml" value="0.209765625" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_event_tag_filter_row.xml" value="0.209765625" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_potion_color_examples.xml" value="0.25" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_rename_item.xml" value="0.22667792317433516" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/hackmaster-viewer/layout/dialog_spell_details.xml" value="0.165" />
@@ -255,6 +259,7 @@
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_ring_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_robe_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_rod_vector_icon.xml" value="0.125" />
+        <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_rolling_dice_vector_icon.xml" value="0.161" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_scroll_vector_icon.xml" value="0.125" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_spellbook_vector_icon.xml" value="0.2361111111111111" />
         <entry key="..\:/Users/Jacob/AndroidStudioProjects/TreasureFactory/app/src/main/res/main-res/vector-drawable/drawable/clipart_staff_vector_icon.xml" value="0.125" />
