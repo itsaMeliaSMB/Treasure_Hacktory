@@ -398,7 +398,7 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                     hoardID = targetItem.hoardID,
                     timestamp = System.currentTimeMillis(),
                     description = "${targetItem.name} [id: ${targetItem.itemID}|type: ${
-                        targetItem.mgcItemType.name}] was resolved converted into a wildcard " +
+                        targetItem.mgcItemType.name}] was converted into a wildcard " +
                             "entry of type ${newItem.mgcItemType.name} (${
                                 newItem.mgcItemType.tableLabel}).",
                     tag = "modification|magic-item|choice"

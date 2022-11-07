@@ -1749,7 +1749,6 @@ data class ArtObject(
                         val specificPerson = if (Random.nextInt(1,5) == 1) {
                                 // Favorite personal characters of developer and her friends
                                 listOf(
-                                    "Annihilator Bloody Howling, the Wanderer",
                                     "BattleMage Frank Battleforge, the Dwarven, Unbathed " +
                                             "Aficionado of Elven Culture",
                                     "Bladesinger Alaran Lodestar, the Slayer of the Dracolich",
@@ -1765,6 +1764,7 @@ data class ArtObject(
                                     "Espion Aminah Abadaan, the Honest Hand",
                                     "Gawdfather Kane Freeman, the Shadow Governor",
                                     "Initiate Piperine Scoville, the Flame of Knowledge",
+                                    "Master Pyrotechnician Bloody Howling, the Space Cadet",
                                     "Necromancer Ivanka, the Fallen Angel of Elturel",
                                     "SkateboarLock Pavimentum Shredz, the Bodaciously Radical",
                                     "Sorceress Unioos Bugulnoz, Madame of the Glitzy Pixie",
@@ -1794,6 +1794,7 @@ data class ArtObject(
                                     "Grand Theocrat Hanzdor Warforge, " +
                                             "superior of the Holy Dwarven Theocracy",
                                     "Griftmaster Jonid Coincrawler, the Scourge of the Bag World",
+                                    "HackFighter Skraag Fallow, that big guy in Everknights",
                                     "HackFighter/HackSassin Sturm Pyre, the Growler",
                                     "Headmistress Drusilla Wystan, " +
                                             "dean of the University of Tilan",
