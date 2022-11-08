@@ -351,8 +351,8 @@
 351¤4¤"Staff of Weather Control"¤0¤"GameMaster’s Guide"¤237¤2000¤28500¤0¤¤1¤6¤19¤"A6"¤"staff_sun"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"weather"¤0¤¤0¤0¤0¤0¤0¤0
 352¤4¤"Staff of Withering"¤0¤"GameMaster’s Guide"¤238¤4000¤35000¤0¤¤1¤6¤19¤"A6"¤"staff_undead"¤1¤1¤1¤1¤1¤0¤0¤¤¤0¤"wither"¤0¤¤0¤0¤0¤0¤0¤0
 353¤4¤"Staff of the Woodlands"¤0¤"GameMaster’s Guide"¤238¤4000¤35000¤0¤¤1¤6¤19¤"A6"¤"staff_nature"¤0¤0¤0¤0¤1¤1¤0¤¤¤0¤"forest"¤0¤¤0¤0¤0¤0¤0¤0
-354¤6¤"Staff of the Serpent"¤0¤"GameMaster’s Guide"¤237¤3000¤15000¤0¤"Python variant"¤0¤0¤0¤"A6"¤"staff_snake"¤0¤0¤0¤0¤0¤0¤345¤"Staff of the Serpent"¤¤0¤"snake"¤0¤¤0¤0¤0¤0¤0¤0
-355¤4¤"Staff of the Serpent"¤0¤"GameMaster’s Guide"¤237¤3000¤15000¤0¤"Adder variant"¤0¤0¤0¤"A6"¤"staff_snake"¤0¤0¤0¤0¤0¤0¤345¤"Staff of the Serpent"¤¤0¤"snake"¤0¤¤0¤0¤0¤0¤0¤0
+354¤6¤"Staff of the Serpent"¤0¤"GameMaster’s Guide"¤237¤3000¤15000¤0¤"Python variant"¤0¤0¤0¤"A6"¤"wand_snake"¤0¤0¤0¤0¤1¤0¤345¤"Staff of the Serpent"¤¤0¤"snake"¤0¤¤0¤0¤0¤0¤0¤0
+355¤4¤"Staff of the Serpent"¤0¤"GameMaster’s Guide"¤237¤3000¤15000¤0¤"Adder variant"¤0¤0¤0¤"A6"¤"wand_snake"¤0¤0¤0¤0¤1¤0¤345¤"Staff of the Serpent"¤¤0¤"snake"¤0¤¤0¤0¤0¤0¤0¤0
 356¤6¤"Spear-Staff +1"¤0¤"GameMaster’s Guide"¤237¤1000¤4000¤0¤¤0¤0¤0¤"A6"¤"staff_wood"¤0¤0¤1¤1¤1¤0¤347¤"Spear-Staff"¤¤0¤"spear"¤0¤¤0¤0¤0¤0¤0¤0
 357¤4¤"Spear-Staff +2"¤0¤"GameMaster’s Guide"¤237¤1500¤4000¤0¤¤0¤0¤0¤"A6"¤"staff_wood"¤0¤0¤1¤1¤1¤0¤347¤"Spear-Staff"¤¤0¤"spear"¤0¤¤0¤0¤0¤0¤0¤0
 358¤3¤"Spear-Staff +3"¤0¤"GameMaster’s Guide"¤237¤2000¤4000¤0¤¤0¤0¤0¤"A6"¤"staff_wood"¤0¤0¤1¤1¤1¤0¤347¤"Spear-Staff"¤¤0¤"spear"¤0¤¤0¤0¤0¤0¤0¤0

@@ -1771,6 +1771,7 @@ data class ArtObject(
                                     "Spoiled Princess Minnie, the Fisher Queen",
                                     "Sr. Researcher Theodore Webster, " +
                                             "the Unintentionally-Calamitous",
+                                    "Starry Knight Hallie, the Orange Comet",
                                     "Warlock Lugh Quicksmile, Son of Fey but Bastard to All",
                                     "Wordsmith Kopy-Copy, the Country Couturier",
                                     "Yakuza Lord Ragna Vel, the Inauspicious Assassin",
