@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="48dp">
+
+    <RadioButton
+        android:id="@+id/event_tag_filter_row_include_radio"
+        style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="6dp"
+        android:buttonTint="@color/include_color_state_list"
+        android:checked="false"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/event_tag_filter_row_label_radio_guideline_1"/>
+
+    <RadioButton
+        android:id="@+id/event_tag_filter_row_neutral_radio"
+        style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="6dp"
+        android:buttonTint="@color/neutral_color_state_list"
+        android:checked="true"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/event_tag_filter_row_label_radio_guideline_1"
+        app:layout_constraintEnd_toStartOf="@id/event_tag_filter_row_label_radio_guideline_2"/>
+
+    <RadioButton
+        android:id="@+id/event_tag_filter_row_exclude_radio"
+        style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="6dp"
+        android:buttonTint="@color/exclude_color_state_list"
+        android:checked="false"
+        android:gravity="center"
+        android:minWidth="0dp"
+        android:minHeight="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/event_tag_filter_row_label_radio_guideline_2"
+        app:layout_constraintEnd_toEndOf="@id/event_tag_filter_row_label_guideline"/>
+
+        <ImageView
+            android:id="@+id/event_tag_filter_row_tag_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="8dp"
+            android:alpha="0.65"
+            app:tint="?attr/colorOnSurface"
+            app:layout_constraintStart_toEndOf="@id/event_tag_filter_row_label_guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:src="@drawable/clipart_info_vector_icon" />
+
+        <TextView
+            android:id="@+id/event_tag_filter_row_tag_label"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="8dp"
+            android:alpha="0.65"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/event_tag_filter_row_tag_icon"
+            tools:text="Verbose" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/event_tag_filter_row_label_radio_guideline_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.125" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/event_tag_filter_row_label_radio_guideline_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/event_tag_filter_row_label_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.375" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

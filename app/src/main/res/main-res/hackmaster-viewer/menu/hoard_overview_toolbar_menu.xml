@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:title="@string/action_overview_edit"
+        android:id="@+id/action_edit_hoard"
+        android:icon="@drawable/clipart_edit_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
+        android:iconTintMode="src_atop"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_csv_report"
+        android:title="@string/action_csv_report"
+        android:icon="@drawable/clipart_share_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
+        android:iconTintMode="src_in"
+        app:showAsAction="ifRoom" />
+    <item
+        android:title="@string/view_event_log_hoard"
+        android:id="@+id/action_view_history"/>
+    <item
+        android:title="@string/edit_coinage_values"
+        android:titleCondensed="Edit coins"
+        android:id="@+id/action_edit_coinage"/>
+
+</menu>

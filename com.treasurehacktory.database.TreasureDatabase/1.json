@@ -1,0 +1,1308 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "38e407048749cad4ef6cc35df282f82c",
+    "entities": [
+      {
+        "tableName": "hackmaster_hoard_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`hoardID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `creationDate` INTEGER NOT NULL, `badge` INTEGER NOT NULL, `icon_id` TEXT NOT NULL, `gpTotal` REAL NOT NULL, `effortRating` REAL NOT NULL, `cp` INTEGER NOT NULL, `sp` INTEGER NOT NULL, `ep` INTEGER NOT NULL, `gp` INTEGER NOT NULL, `hsp` INTEGER NOT NULL, `pp` INTEGER NOT NULL, `gemCount` INTEGER NOT NULL, `artCount` INTEGER NOT NULL, `magicCount` INTEGER NOT NULL, `spellsCount` INTEGER NOT NULL, `isFavorite` TEXT NOT NULL, `isNew` TEXT NOT NULL, `successful` TEXT NOT NULL, `appVersion` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "hoardID",
+            "columnName": "hoardID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creationDate",
+            "columnName": "creationDate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "badge",
+            "columnName": "badge",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iconID",
+            "columnName": "icon_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gpTotal",
+            "columnName": "gpTotal",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "effortRating",
+            "columnName": "effortRating",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cp",
+            "columnName": "cp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sp",
+            "columnName": "sp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ep",
+            "columnName": "ep",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gp",
+            "columnName": "gp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hsp",
+            "columnName": "hsp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pp",
+            "columnName": "pp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gemCount",
+            "columnName": "gemCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "artCount",
+            "columnName": "artCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "magicCount",
+            "columnName": "magicCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spellsCount",
+            "columnName": "spellsCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isFavorite",
+            "columnName": "isFavorite",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isNew",
+            "columnName": "isNew",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "successful",
+            "columnName": "successful",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appVersion",
+            "columnName": "appVersion",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "hoardID"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_hackmaster_hoard_table_hoardID",
+            "unique": false,
+            "columnNames": [
+              "hoardID"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_hackmaster_hoard_table_hoardID` ON `${TABLE_NAME}` (`hoardID`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hoard_events_log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`eventID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `hoardID` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `description` TEXT NOT NULL, `tag` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "eventID",
+            "columnName": "eventID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoardID",
+            "columnName": "hoardID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tag",
+            "columnName": "tag",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "eventID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hackmaster_gem_reference",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ref_id` INTEGER NOT NULL, `type` INTEGER NOT NULL, `name` TEXT NOT NULL, `ordinal` INTEGER NOT NULL, `opacity` INTEGER NOT NULL, `description` TEXT NOT NULL, `icon_id` TEXT NOT NULL, PRIMARY KEY(`ref_id`))",
+        "fields": [
+          {
+            "fieldPath": "refId",
+            "columnName": "ref_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ordinal",
+            "columnName": "ordinal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opacity",
+            "columnName": "opacity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iconID",
+            "columnName": "icon_id",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "ref_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hackmaster_magic_item_reference",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ref_id` INTEGER NOT NULL, `wt` INTEGER NOT NULL, `name` TEXT NOT NULL, `ref_type` INTEGER NOT NULL, `source` TEXT NOT NULL, `page` INTEGER NOT NULL, `xp_value` INTEGER NOT NULL, `gp_value` INTEGER NOT NULL, `multiply_xp_gp_by_charge` INTEGER NOT NULL, `notes` TEXT NOT NULL, `die_count` INTEGER NOT NULL, `die_sides` INTEGER NOT NULL, `die_mod` INTEGER NOT NULL, `table_type` TEXT NOT NULL, `icon_ref` TEXT NOT NULL, `f_usable` INTEGER NOT NULL, `t_usable` INTEGER NOT NULL, `c_usable` INTEGER NOT NULL, `m_usable` INTEGER NOT NULL, `d_usable` INTEGER NOT NULL, `has_child` INTEGER NOT NULL, `parent_id` INTEGER NOT NULL, `imitation_keyword` TEXT NOT NULL, `is_cursed` INTEGER NOT NULL, `command_word` TEXT NOT NULL, `intel_chance` INTEGER NOT NULL, `alignment` TEXT NOT NULL, `i_power` INTEGER NOT NULL, `ii_power` INTEGER NOT NULL, `iii_power` INTEGER NOT NULL, `iv_power` INTEGER NOT NULL, `v_power` INTEGER NOT NULL, `vi_power` INTEGER NOT NULL, PRIMARY KEY(`ref_id`))",
+        "fields": [
+          {
+            "fieldPath": "refId",
+            "columnName": "ref_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "wt",
+            "columnName": "wt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "refType",
+            "columnName": "ref_type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "page",
+            "columnName": "page",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "xpValue",
+            "columnName": "xp_value",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gpValue",
+            "columnName": "gp_value",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "multiType",
+            "columnName": "multiply_xp_gp_by_charge",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dieCount",
+            "columnName": "die_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dieSides",
+            "columnName": "die_sides",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dieMod",
+            "columnName": "die_mod",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tableType",
+            "columnName": "table_type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iconRef",
+            "columnName": "icon_ref",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fUsable",
+            "columnName": "f_usable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tUsable",
+            "columnName": "t_usable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cUsable",
+            "columnName": "c_usable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mUsable",
+            "columnName": "m_usable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dUsable",
+            "columnName": "d_usable",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasChild",
+            "columnName": "has_child",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentID",
+            "columnName": "parent_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imitationKeyword",
+            "columnName": "imitation_keyword",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isCursed",
+            "columnName": "is_cursed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "commandWord",
+            "columnName": "command_word",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "intelChance",
+            "columnName": "intel_chance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alignment",
+            "columnName": "alignment",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iPower",
+            "columnName": "i_power",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iiPower",
+            "columnName": "ii_power",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iiiPower",
+            "columnName": "iii_power",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ivPower",
+            "columnName": "iv_power",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vPower",
+            "columnName": "v_power",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "viPower",
+            "columnName": "vi_power",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "ref_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hackmaster_gem_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`gemID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `hoardID` INTEGER NOT NULL, `creationTime` INTEGER NOT NULL, `iconID` TEXT NOT NULL, `type` INTEGER NOT NULL, `size` INTEGER NOT NULL, `quality` INTEGER NOT NULL, `name` TEXT NOT NULL, `opacity` INTEGER NOT NULL, `description` TEXT NOT NULL, `currentGPValue` REAL NOT NULL, `originalName` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "gemID",
+            "columnName": "gemID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoardID",
+            "columnName": "hoardID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creationTime",
+            "columnName": "creationTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iconID",
+            "columnName": "iconID",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "size",
+            "columnName": "size",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quality",
+            "columnName": "quality",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "opacity",
+            "columnName": "opacity",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentGPValue",
+            "columnName": "currentGPValue",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originalName",
+            "columnName": "originalName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "gemID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "gem_evaluations_log",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`evalID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `parentID` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `description` TEXT NOT NULL, `newGpValue` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "evalID",
+            "columnName": "evalID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentID",
+            "columnName": "parentID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "newGpValue",
+            "columnName": "newGpValue",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "evalID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hackmaster_art_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`artID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `hoardID` INTEGER NOT NULL, `creationTime` INTEGER NOT NULL, `name` TEXT NOT NULL, `artType` INTEGER NOT NULL, `renown` INTEGER NOT NULL, `size` INTEGER NOT NULL, `condition` INTEGER NOT NULL, `materials` INTEGER NOT NULL, `quality` INTEGER NOT NULL, `age` INTEGER NOT NULL, `subject` INTEGER NOT NULL, `valueLevel` INTEGER NOT NULL, `gpValue` REAL NOT NULL, `isForgery` TEXT NOT NULL, `originalName` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "artID",
+            "columnName": "artID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoardID",
+            "columnName": "hoardID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creationTime",
+            "columnName": "creationTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "artType",
+            "columnName": "artType",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "renown",
+            "columnName": "renown",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "size",
+            "columnName": "size",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "condition",
+            "columnName": "condition",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "materials",
+            "columnName": "materials",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quality",
+            "columnName": "quality",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "age",
+            "columnName": "age",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subject",
+            "columnName": "subject",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valueLevel",
+            "columnName": "valueLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gpValue",
+            "columnName": "gpValue",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isForgery",
+            "columnName": "isForgery",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originalName",
+            "columnName": "originalName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "artID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hackmaster_magic_item_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mItemID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `templateID` INTEGER NOT NULL, `hoardID` INTEGER NOT NULL, `creationTime` INTEGER NOT NULL, `iconID` TEXT NOT NULL, `typeOfItem` INTEGER NOT NULL, `name` TEXT NOT NULL, `sourceText` TEXT NOT NULL, `sourcePage` INTEGER NOT NULL, `xpValue` INTEGER NOT NULL, `gpValue` REAL NOT NULL, `classUsability` TEXT NOT NULL, `isCursed` TEXT NOT NULL, `alignment` TEXT NOT NULL, `notes` TEXT NOT NULL, `potionColors` TEXT NOT NULL, `originalName` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "mItemID",
+            "columnName": "mItemID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "templateID",
+            "columnName": "templateID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoardID",
+            "columnName": "hoardID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creationTime",
+            "columnName": "creationTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iconID",
+            "columnName": "iconID",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "typeOfItem",
+            "columnName": "typeOfItem",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceText",
+            "columnName": "sourceText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourcePage",
+            "columnName": "sourcePage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "xpValue",
+            "columnName": "xpValue",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gpValue",
+            "columnName": "gpValue",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "classUsability",
+            "columnName": "classUsability",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isCursed",
+            "columnName": "isCursed",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "alignment",
+            "columnName": "alignment",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "potionColors",
+            "columnName": "potionColors",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originalName",
+            "columnName": "originalName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "mItemID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hackmaster_spell_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`spell_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `reverse` TEXT NOT NULL, `refType` INTEGER NOT NULL, `type` INTEGER NOT NULL, `spellLevel` INTEGER NOT NULL, `sourceText` TEXT NOT NULL, `sourcePage` INTEGER NOT NULL, `schools` TEXT NOT NULL, `spheres` TEXT NOT NULL, `subclass` TEXT NOT NULL, `restrictions` TEXT NOT NULL, `note` TEXT NOT NULL, `choiceString` TEXT NOT NULL, PRIMARY KEY(`spell_id`))",
+        "fields": [
+          {
+            "fieldPath": "spellID",
+            "columnName": "spell_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "reverse",
+            "columnName": "reverse",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "refType",
+            "columnName": "refType",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spellLevel",
+            "columnName": "spellLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourceText",
+            "columnName": "sourceText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sourcePage",
+            "columnName": "sourcePage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schools",
+            "columnName": "schools",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spheres",
+            "columnName": "spheres",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subclass",
+            "columnName": "subclass",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "restrictions",
+            "columnName": "restrictions",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "choiceString",
+            "columnName": "choiceString",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "spell_id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hackmaster_spell_collection_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sCollectID` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `hoardID` INTEGER NOT NULL, `creationTime` INTEGER NOT NULL, `iconID` TEXT NOT NULL, `name` TEXT NOT NULL, `type` INTEGER NOT NULL, `discipline` INTEGER NOT NULL, `augmentations` TEXT NOT NULL, `gpValue` REAL NOT NULL, `xpValue` INTEGER NOT NULL, `spells` TEXT NOT NULL, `curse` TEXT NOT NULL, `pageCount` INTEGER NOT NULL, `originalName` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "sCollectID",
+            "columnName": "sCollectID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hoardID",
+            "columnName": "hoardID",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "creationTime",
+            "columnName": "creationTime",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "iconID",
+            "columnName": "iconID",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "discipline",
+            "columnName": "discipline",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "augmentations",
+            "columnName": "augmentations",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gpValue",
+            "columnName": "gpValue",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "xpValue",
+            "columnName": "xpValue",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spells",
+            "columnName": "spells",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "curse",
+            "columnName": "curse",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "pageCount",
+            "columnName": "pageCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "originalName",
+            "columnName": "originalName",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "sCollectID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "command_word_suggestions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`commandWord` TEXT NOT NULL, `themeWord` TEXT NOT NULL, PRIMARY KEY(`commandWord`))",
+        "fields": [
+          {
+            "fieldPath": "commandWord",
+            "columnName": "commandWord",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "themeWord",
+            "columnName": "themeWord",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "commandWord"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "hackmaster_letter_codes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`letterID` TEXT NOT NULL, `cpChance` INTEGER NOT NULL, `cpMin` INTEGER NOT NULL, `cpMax` INTEGER NOT NULL, `spChance` INTEGER NOT NULL, `spMin` INTEGER NOT NULL, `spMax` INTEGER NOT NULL, `epChance` INTEGER NOT NULL, `epMin` INTEGER NOT NULL, `epMax` INTEGER NOT NULL, `gpChance` INTEGER NOT NULL, `gpMin` INTEGER NOT NULL, `gpMax` INTEGER NOT NULL, `hspChance` INTEGER NOT NULL, `hspMin` INTEGER NOT NULL, `hspMax` INTEGER NOT NULL, `ppChance` INTEGER NOT NULL, `ppMin` INTEGER NOT NULL, `ppMax` INTEGER NOT NULL, `gemChance` INTEGER NOT NULL, `gemMin` INTEGER NOT NULL, `gemMax` INTEGER NOT NULL, `artChance` INTEGER NOT NULL, `artMin` INTEGER NOT NULL, `artMax` INTEGER NOT NULL, `potionChance` INTEGER NOT NULL, `potionMin` INTEGER NOT NULL, `potionMax` INTEGER NOT NULL, `scrollChance` INTEGER NOT NULL, `scrollMin` INTEGER NOT NULL, `scrollMax` INTEGER NOT NULL, `weaponChance` INTEGER NOT NULL, `weaponMin` INTEGER NOT NULL, `weaponMax` INTEGER NOT NULL, `noWeaponChance` INTEGER NOT NULL, `noWeaponMin` INTEGER NOT NULL, `noWeaponMax` INTEGER NOT NULL, `anyChance` INTEGER NOT NULL, `anyMin` INTEGER NOT NULL, `anyMax` INTEGER NOT NULL, PRIMARY KEY(`letterID`))",
+        "fields": [
+          {
+            "fieldPath": "letterID",
+            "columnName": "letterID",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cpChance",
+            "columnName": "cpChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cpMin",
+            "columnName": "cpMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cpMax",
+            "columnName": "cpMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spChance",
+            "columnName": "spChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spMin",
+            "columnName": "spMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spMax",
+            "columnName": "spMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epChance",
+            "columnName": "epChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epMin",
+            "columnName": "epMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epMax",
+            "columnName": "epMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gpChance",
+            "columnName": "gpChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gpMin",
+            "columnName": "gpMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gpMax",
+            "columnName": "gpMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hspChance",
+            "columnName": "hspChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hspMin",
+            "columnName": "hspMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hspMax",
+            "columnName": "hspMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ppChance",
+            "columnName": "ppChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ppMin",
+            "columnName": "ppMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ppMax",
+            "columnName": "ppMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gemChance",
+            "columnName": "gemChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gemMin",
+            "columnName": "gemMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gemMax",
+            "columnName": "gemMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "artChance",
+            "columnName": "artChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "artMin",
+            "columnName": "artMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "artMax",
+            "columnName": "artMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "potionChance",
+            "columnName": "potionChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "potionMin",
+            "columnName": "potionMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "potionMax",
+            "columnName": "potionMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scrollChance",
+            "columnName": "scrollChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scrollMin",
+            "columnName": "scrollMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scrollMax",
+            "columnName": "scrollMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weaponChance",
+            "columnName": "weaponChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weaponMin",
+            "columnName": "weaponMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "weaponMax",
+            "columnName": "weaponMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "noWeaponChance",
+            "columnName": "noWeaponChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "noWeaponMin",
+            "columnName": "noWeaponMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "noWeaponMax",
+            "columnName": "noWeaponMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anyChance",
+            "columnName": "anyChance",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anyMin",
+            "columnName": "anyMin",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "anyMax",
+            "columnName": "anyMax",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "letterID"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '38e407048749cad4ef6cc35df282f82c')"
+    ]
+  }
+}

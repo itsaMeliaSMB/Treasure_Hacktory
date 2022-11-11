@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_reevaluate_gems">Re-evaluate gems</string>
+    <string name="action_reroll_art_name">Roll new Art Object name</string>
+</resources>

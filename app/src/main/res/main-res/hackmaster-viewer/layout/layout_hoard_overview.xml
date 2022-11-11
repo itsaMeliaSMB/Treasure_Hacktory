@@ -1,0 +1,731 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/hoard_overview_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbar_height"
+            android:minHeight="4dp"
+            app:layout_scrollFlags="noScroll"
+            app:title="@string/hoard_overview_fragment_title"
+            app:navigationIcon="@drawable/clipart_back_vector_icon"
+            app:buttonGravity="center_vertical"
+            style="@style/Widget.Design.AppBarLayout"
+            tools:menu="@menu/hoard_overview_toolbar_menu"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:background="?attr/backgroundColor">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="16dp">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/list_item_icon_size"
+                    android:layout_height="@dimen/list_item_icon_size">
+
+                    <ImageView
+                        android:id="@+id/hoard_overview_itemframe_foreground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:elevation="2dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/itemframe_foreground" />
+
+                    <ImageView
+                        android:id="@+id/hoard_overview_itemframe_icon"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:elevation="1dp"
+                        android:scaleType="fitCenter"
+                        tools:src="@drawable/loot_treasure_barrels" />
+
+                    <ImageView
+                        android:id="@+id/hoard_overview_itemframe_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:elevation="0dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/itemframe_background_gray" />
+
+                    <ImageView
+                        android:id="@+id/hoard_overview_itemframe_badge"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginEnd="3dp"
+                        android:layout_marginBottom="3dp"
+                        android:elevation="3dp"
+                        android:visibility="invisible"
+                        tools:src="@drawable/badge_hoard_chest"
+                        tools:visibility="visible" />
+
+                </RelativeLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/hoard_overview_name_label"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:gravity="center_vertical"
+                        android:layout_marginVertical="4dp"
+                        android:layout_marginHorizontal="12dp"
+                        android:autoSizeMaxTextSize="28sp"
+                        android:autoSizeMinTextSize="12sp"
+                        android:autoSizeStepGranularity="4sp"
+                        android:autoSizeTextType="uniform"
+                        android:breakStrategy="balanced"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/hoard_overview_fav_barrier"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="[Hoard Name]" />
+
+                    <CheckBox
+                        android:id="@+id/hoard_overview_fav_checkbox"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        android:button="@drawable/toggleable_clipart_star_vector"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/fav_star_colorlist"
+                        tools:checked="true" />
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/hoard_overview_fav_barrier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="start"
+                        app:constraint_referenced_ids="hoard_overview_fav_checkbox" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/hoard_overview_date_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="@string/time_date_gen_label"/>
+
+                <TextView
+                    android:id="@+id/hoard_overview_date_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:textAlignment="textEnd"
+                    android:gravity="end"
+                    android:textStyle="italic"
+                    tools:text="XX/XX/XXXX at XX:XX:XX PM CST"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/hoard_overview_id_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="Hoard ID:"/>
+
+                <TextView
+                    android:id="@+id/hoard_overview_id_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:textAlignment="textEnd"
+                    android:gravity="end"
+                    android:textStyle="italic"
+                    tools:text="# 1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/hoard_overview_value_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="@string/gp_total_label"/>
+
+                <TextView
+                    android:id="@+id/hoard_overview_value_info"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:textAlignment="textEnd"
+                    android:gravity="end"
+                    android:textStyle="italic"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    tools:text="[ . . . ] gp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/hoard_overview_experience_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="@string/xp_total_label"/>
+
+                <TextView
+                    android:id="@+id/hoard_overview_experience_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:textSize="14sp"
+                    android:textAlignment="textEnd"
+                    android:gravity="end"
+                    android:textStyle="italic"
+                    tools:text="[ . . . ] xp"/>
+
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/hoard_overview_difficulty_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:text="@string/acquisition_difficulty_label"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/hoard_overview_experience_ratio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textSize="14sp"
+                        android:textAlignment="textEnd"
+                        android:gravity="end"
+                        android:textStyle="italic"
+                        tools:text="5.00 gp = 1 xp"/>
+
+                    <TextView
+                        android:id="@+id/hoard_overview_experience_difficulty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:paddingHorizontal="4dp"
+                        android:layout_marginStart="8dp"
+                        android:textSize="14sp"
+                        android:textAlignment="textEnd"
+                        android:fontFeatureSettings="smcp"
+                        android:gravity="end"
+                        android:textStyle="italic|bold"
+                        tools:text="@string/difficulty_average"
+                        android:textColor="@color/emerald"
+                        android:shadowColor="?attr/colorOnSurface"
+                        android:shadowRadius="0.5"
+                        android:alpha="0.8"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Coinage group -->
+
+            <LinearLayout
+                android:id="@+id/hoard_overview_coinage_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="4dp">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="4dp"
+                    android:background="?attr/colorOnSurface"
+                    android:layout_marginHorizontal="96dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="16dp"
+                    android:paddingVertical="12dp"
+                    android:text="@string/coinage_overview"
+                    android:textSize="16sp"
+                    android:textAllCaps="true"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/hoard_overview_coinage_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="4dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/hoard_overview_coinage_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            tools:itemCount="7"
+                            tools:listitem="@layout/hoard_overview_coinage_list_item" />
+
+                        <include layout="@layout/hoard_overview_coinage_footer"
+                            android:id="@+id/hoard_overview_coinage_footer"/>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+
+            </LinearLayout>
+
+            <!-- Unique Objects -->
+
+        <LinearLayout
+            android:id="@+id/hoard_overview_unique_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/colorOnSurface"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="96dp"
+                android:layout_marginBottom="4dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingVertical="12dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_gravity="center"
+                android:textSize="16sp"
+                android:text="@string/unique_object_overview"
+                android:textAllCaps="true"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="4dp"
+                android:layout_marginHorizontal="8dp"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/hoard_overview_gem_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:id="@+id/hoard_overview_gem_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@color/gemPrimary">
+
+                        <ImageView
+                            android:id="@+id/hoard_overview_gem_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="16dp"
+                            android:src="@drawable/clipart_gem_vector_icon"
+                            app:tint="@color/gemOnPrimary"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"
+                                android:breakStrategy="simple"
+                                android:textSize="14sp"
+                                android:textColor="@color/gemOnPrimary"
+                                android:text="@string/viewer_gem_card_title"/>
+
+                            <TextView
+                                android:id="@+id/hoard_overview_gem_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:breakStrategy="simple"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginStart="8dp"
+                                android:textStyle="italic"
+                                android:textSize="12sp"
+                                android:textColor="@color/gemOnPrimary"
+                                tools:text="Total value: ???.?? gp"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/gemOnPrimary"
+                            android:alpha="0.5"/>
+
+                        <TextView
+                            android:id="@+id/hoard_overview_gem_qty"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="16dp"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/gemOnPrimary"
+                            tools:text="0" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/hoard_overview_art_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:id="@+id/hoard_overview_art_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@color/artPrimary">
+
+                        <ImageView
+                            android:id="@+id/hoard_overview_art_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="16dp"
+                            android:src="@drawable/clipart_painting_vector_icon"
+                            app:tint="@color/artOnPrimary"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"
+                                android:breakStrategy="simple"
+                                android:textSize="14sp"
+                                android:textColor="@color/artOnPrimary"
+                                android:text="@string/viewer_art_object_cart_title"/>
+
+                            <TextView
+                                android:id="@+id/hoard_overview_art_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:breakStrategy="simple"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginStart="8dp"
+                                android:textStyle="italic"
+                                android:textSize="12sp"
+                                android:textColor="@color/artOnPrimary"
+                                tools:text="Total value: ???.?? gp"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/artOnPrimary"
+                            android:alpha="0.5"/>
+
+                        <TextView
+                            android:id="@+id/hoard_overview_art_qty"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="16dp"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/gemOnPrimary"
+                            tools:text="10" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/hoard_overview_magic_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:id="@+id/hoard_overview_magic_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@color/magicPrimary">
+
+                        <ImageView
+                            android:id="@+id/hoard_overview_magic_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="16dp"
+                            android:src="@drawable/clipart_magicwand_vector_icon"
+                            app:tint="@color/magicOnPrimary"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"
+                                android:breakStrategy="simple"
+                                android:textSize="14sp"
+                                android:textColor="@color/magicOnPrimary"
+                                android:text="@string/viewer_magic_item_card_title"/>
+
+                            <TextView
+                                android:id="@+id/hoard_overview_magic_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:breakStrategy="simple"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginStart="8dp"
+                                android:textStyle="italic"
+                                android:textSize="12sp"
+                                android:textColor="@color/magicOnPrimary"
+                                tools:text="Total value: ???.?? gp"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/magicOnPrimary"
+                            android:alpha="0.5"/>
+
+                        <TextView
+                            android:id="@+id/hoard_overview_magic_qty"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="16dp"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/magicOnPrimary"
+                            tools:text="10" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/hoard_overview_spells_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="90dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:id="@+id/hoard_overview_spells_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@color/spellPrimary">
+
+                        <ImageView
+                            android:id="@+id/hoard_overview_spells_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="16dp"
+                            android:src="@drawable/clipart_spellbook_vector_icon"
+                            app:tint="@color/spellOnPrimary"/>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginHorizontal="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAllCaps="true"
+                                android:textStyle="bold"
+                                android:gravity="center_vertical"
+                                android:breakStrategy="simple"
+                                android:textSize="14sp"
+                                android:textColor="@color/spellOnPrimary"
+                                android:text="@string/viewer_spell_collections_card_title"/>
+
+                            <TextView
+                                android:id="@+id/hoard_overview_spells_value"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:breakStrategy="simple"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginStart="8dp"
+                                android:textStyle="italic"
+                                android:textSize="12sp"
+                                android:textColor="@color/spellOnPrimary"
+                                tools:text="Total value: ???.?? gp"/>
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@color/spellOnPrimary"
+                            android:alpha="0.5"/>
+
+                        <TextView
+                            android:id="@+id/hoard_overview_spells_qty"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="16dp"
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            android:gravity="end"
+                            android:textColor="@color/spellOnPrimary"
+                            tools:text="10" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

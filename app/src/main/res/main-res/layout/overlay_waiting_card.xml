@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/waiting_card"
+    android:layout_width="224dp"
+    android:layout_height="224dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    android:elevation="16dp"
+    android:layout_gravity="center">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/waiting_card_progress_indicator"
+            android:layout_width="128dp"
+            android:layout_height="128dp"
+
+            android:indeterminateOnly="true"
+            android:indeterminateTint="?attr/colorSecondary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/waiting_card_progress_label"/>
+
+        <TextView
+            android:id="@+id/waiting_card_progress_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/waiting_card_progress_indicator"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:text="@string/please_wait"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

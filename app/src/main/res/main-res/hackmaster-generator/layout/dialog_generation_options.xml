@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        tools:padding="48dp">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/generator_option_halfway_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/generator_option_gem_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_gem_vector_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnSurface"/>
+
+        <TextView
+            android:id="@+id/generator_option_gem_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Gem value bias range:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_gem_icon"
+            app:layout_constraintStart_toEndOf="@id/generator_option_gem_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_gem_icon" />
+
+        <ImageView
+            android:id="@+id/generator_option_gem_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_gem_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/generator_option_gem_icon"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="@string/value_bias_range_tooltip"/>
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/generator_option_gem_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_gem_label" />
+
+        <TextView
+            android:id="@+id/generator_option_gem_min_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Minimum:"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@id/generator_option_gem_slider"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_gem_slider" />
+
+        <TextView
+            android:id="@+id/generator_option_gem_min_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textAlignment="textEnd"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_gem_min_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_halfway_barrier"
+            app:layout_constraintStart_toEndOf="@id/generator_option_gem_min_label"
+            tools:text="1,000,000 gp" />
+
+        <TextView
+            android:id="@+id/generator_option_gem_div_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="|"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/generator_option_halfway_barrier"
+            app:layout_constraintStart_toStartOf="@id/generator_option_halfway_barrier"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_gem_slider" />
+
+        <TextView
+            android:id="@+id/generator_option_gem_max_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Maximum:"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_gem_max_value"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_gem_max_value"
+            app:layout_constraintStart_toEndOf="@id/generator_option_halfway_barrier" />
+
+        <TextView
+            android:id="@+id/generator_option_gem_max_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/generator_option_gem_max_label"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_gem_slider"
+            tools:text="1,000,000 gp" />
+
+        <ImageView
+            android:id="@+id/generator_option_art_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_painting_vector_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_gem_div_label"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/generator_option_art_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Art object value bias range:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_art_icon"
+            app:layout_constraintStart_toEndOf="@id/generator_option_art_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_art_icon" />
+
+        <ImageView
+            android:id="@+id/generator_option_art_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_art_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_art_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="@string/value_bias_range_tooltip"/>
+
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/generator_option_art_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_art_label" />
+
+        <TextView
+            android:id="@+id/generator_option_art_min_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Minimum:"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@id/generator_option_art_slider"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_art_slider" />
+
+        <TextView
+            android:id="@+id/generator_option_art_min_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:textAlignment="textEnd"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_art_min_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_halfway_barrier"
+            app:layout_constraintStart_toEndOf="@id/generator_option_art_min_label"
+            tools:text="1,000,000 gp" />
+
+        <TextView
+            android:id="@+id/generator_option_art_div_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="|"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/generator_option_halfway_barrier"
+            app:layout_constraintStart_toStartOf="@id/generator_option_halfway_barrier"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_art_slider" />
+
+        <TextView
+            android:id="@+id/generator_option_art_max_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Maximum:"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_art_max_value"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_art_max_value"
+            app:layout_constraintStart_toEndOf="@id/generator_option_halfway_barrier" />
+
+        <TextView
+            android:id="@+id/generator_option_art_max_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="textEnd"
+            android:textSize="13sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/generator_option_art_max_label"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_art_slider"
+            tools:text="1,000,000 gp" />
+
+        <ImageView
+            android:id="@+id/generator_option_map_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_map_vector_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_art_div_label"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/generator_option_map_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Treasure map probability:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_map_icon"
+            app:layout_constraintStart_toEndOf="@id/generator_option_map_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_map_icon" />
+
+        <ImageView
+            android:id="@+id/generator_option_map_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_map_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_map_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="In Letter code mode, chance per code is rolled for every letter ordered."/>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/generator_option_map_guideline_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.333" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/generator_option_map_guideline_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.666" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/generator_option_map_raw_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_map_guideline_1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_map_label"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/generator_option_map_raw_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="0 %"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                tools:text="100" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/generator_option_map_paper_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_map_guideline_2"
+            app:layout_constraintStart_toEndOf="@id/generator_option_map_guideline_1"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_map_label"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/generator_option_map_paper_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="0 %"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                tools:text="0" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/generator_option_map_scroll_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/generator_option_map_guideline_2"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_map_label"
+            app:suffixText="%">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/generator_option_map_scroll_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="0 %"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                tools:text="100" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/generator_option_map_raw_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="4dp"
+            android:drawablePadding="4dp"
+            android:drawableTint="?attr/colorOnSurface"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_horizontal"
+            android:lines="3"
+            android:text="chance per hoard/code for map"
+            android:textSize="14sp"
+            app:drawableBottomCompat="@drawable/clipart_map_vector_icon"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_map_guideline_1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_map_raw_input" />
+
+        <TextView
+            android:id="@+id/generator_option_map_paper_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="4dp"
+            android:drawablePadding="4dp"
+            android:drawableTint="?attr/colorOnSurface"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_horizontal"
+            android:lines="3"
+            android:text="chance to replace paper art objects"
+            android:textSize="14sp"
+            app:drawableBottomCompat="@drawable/clipart_origami_vector_icon"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_map_guideline_2"
+            app:layout_constraintStart_toEndOf="@id/generator_option_map_guideline_1"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_map_paper_input" />
+
+        <TextView
+            android:id="@+id/generator_option_map_scroll_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="4dp"
+            android:drawablePadding="4dp"
+            android:drawableTint="?attr/colorOnSurface"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_horizontal"
+            android:lines="3"
+            android:text="chance to replace magic scrolls"
+            android:textSize="14sp"
+            app:drawableBottomCompat="@drawable/clipart_scroll_vector_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/generator_option_map_paper_label"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_map_scroll_input" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/generator_option_map_label_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="generator_option_map_raw_label,generator_option_map_paper_label,generator_option_map_scroll_label" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/generator_option_map_false_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Allow false maps"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_map_label_barrier" />
+
+        <ImageView
+            android:id="@+id/generator_option_allowed_scroll_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_scroll_vector_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_map_false_switch"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/generator_option_allowed_scroll_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Allowed scroll results:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_allowed_scroll_icon"
+            app:layout_constraintStart_toEndOf="@id/generator_option_allowed_scroll_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_allowed_scroll_icon" />
+
+        <ImageView
+            android:id="@+id/generator_option_allowed_scroll_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_allowed_scroll_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_allowed_scroll_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="@string/allowed_scroll_tooltip"/>
+
+        <TextView
+            android:id="@+id/generator_option_allowed_scroll_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="At least one scroll result must be enabled (or scroll map chance must be >0%)."
+            android:textColor="?attr/colorError"
+            android:fontFamily="sans-serif-condensed"
+            app:drawableEndCompat="@drawable/clipart_warning_vector_icon"
+            app:drawableStartCompat="@drawable/clipart_warning_vector_icon"
+            app:drawableTint="?attr/colorError"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_allowed_scroll_icon"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:alpha="0.5"/>
+
+        <CheckBox
+            android:id="@+id/generator_option_spell_scroll_checkbox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Spell scrolls"
+            android:checked="true"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_allowed_scroll_error"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_halfway_barrier"/>
+
+        <CheckBox
+            android:id="@+id/generator_option_utility_scroll_checkbox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Utility scrolls"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_allowed_scroll_error"
+            app:layout_constraintStart_toEndOf="@id/generator_option_halfway_barrier"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/generator_option_magic_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_magicwand_vector_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_scroll_checkbox"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/generator_option_magic_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Allowed magic item types:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_magic_icon"
+            app:layout_constraintStart_toEndOf="@id/generator_option_magic_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_magic_icon"/>
+
+        <ImageView
+            android:id="@+id/generator_option_magic_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_magic_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_magic_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="@string/allow_magic_item_types_tooltip"/>
+
+        <TextView
+            android:id="@+id/generator_option_magic_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/generator_option_magic_item_error"
+            android:textColor="?attr/colorError"
+            app:drawableEndCompat="@drawable/clipart_warning_vector_icon"
+            app:drawableStartCompat="@drawable/clipart_warning_vector_icon"
+            app:drawableTint="?attr/colorError"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_magic_icon"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:alpha="0.5"/>
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/generator_option_checkbox_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:flexDirection="row"
+            app:flexWrap="wrap"
+            app:justifyContent="space_between"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_magic_error">
+
+            <CheckBox
+                android:id="@+id/generator_option_potion_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_potion_vector_icon"
+                android:text="@string/table_a2_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_scroll_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_scroll_vector_icon"
+                android:text="@string/table_a3_label"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_ring_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_ring_vector_icon"
+                android:text="@string/table_a4_label"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_rod_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_rod_vector_icon"
+                android:text="@string/table_a5_label"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_staff_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_staff_vector_icon"
+                android:text="@string/table_a6_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_wand_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_wand_vector_icon"
+                android:text="@string/table_a7_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_book_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_book_vector_icon"
+                android:text="@string/table_a8_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_jewelry_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_jewelry_vector_icon"
+                android:text="@string/table_a9_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_robe_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_robe_vector_icon"
+                android:text="@string/table_a10_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_boot_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_boot_vector_icon"
+                android:text="@string/table_a11_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_belt_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_belt_hat_vector_icon"
+                android:text="@string/table_a12_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_container_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_bag_vector_icon"
+                android:text="@string/table_a13_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_dust_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_dust_vector_icon"
+                android:text="@string/table_a14_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_household_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_toolbox_vector_icon"
+                android:text="@string/table_a15_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_music_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_lyre_vector_icon"
+                android:text="@string/table_a16_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_weird_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_crystal_ball_vector_icon"
+                android:text="@string/table_a17_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_armor_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_cape_armor_vector_icon"
+                android:text="@string/tables_a18_a20_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_weapon_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_axe_sword_vector_icon"
+                android:text="@string/tables_a21_a23_title"
+                android:checked="true"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_artifact_checkbox"
+                style="@style/generator_option_magic_item_checkbox"
+                android:drawableStart="@drawable/clipart_artifact_crown_vector_icon"
+                android:text="@string/table_a24_title"
+                android:checked="true"/>
+
+        </com.google.android.flexbox.FlexboxLayout>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/generator_option_cursed_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Allow cursed magic items"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_checkbox_layout" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/generator_option_intelligent_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:checked="true"
+            android:text="Allow intelligent weapons"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_cursed_switch" />
+
+        <ImageView
+            android:id="@+id/generator_option_spell_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_spellbook_vector_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_intelligent_switch"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/generator_option_spell_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Spell collection parameters:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_spell_icon"
+            app:layout_constraintStart_toEndOf="@id/generator_option_spell_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_spell_icon" />
+
+        <TextView
+            android:id="@+id/generator_option_spell_discipline_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Spell discipline:"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_icon" />
+
+        <ImageView
+            android:id="@+id/generator_option_spell_discipline_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_spell_discipline_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="@string/allowed_disciplines_tooltip"/>
+
+        <RadioGroup
+            android:id="@+id/generator_option_spell_discipline_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_label">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/generator_option_first_quarter_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="74dp" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/generator_option_second_quarter_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/generator_option_third_quarter_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.75" />
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/generator_option_spell_discipline_arcane_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_first_quarter_barrier"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/generator_option_spell_discipline_divine_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_second_quarter_barrier"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/generator_option_spell_discipline_natural_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_third_quarter_barrier"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/generator_option_spell_discipline_all_radio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:checked="true"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_third_quarter_barrier"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ImageView
+                    android:id="@+id/generator_option_spell_discipline_arcane_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_first_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio"
+                    android:src="@drawable/class_magic_user_colored"/>
+
+                <ImageView
+                    android:id="@+id/generator_option_spell_discipline_divine_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_second_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_radio"
+                    android:src="@drawable/class_cleric_colored"/>
+
+                <ImageView
+                    android:id="@+id/generator_option_spell_discipline_natural_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_third_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_radio"
+                    android:src="@drawable/class_druid_colored"/>
+
+                <ImageView
+                    android:id="@+id/generator_option_spell_discipline_all_image_1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="6dp"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_third_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio"
+                    android:src="@drawable/class_magic_user_colored"/>
+
+                <ImageView
+                    android:id="@+id/generator_option_spell_discipline_all_image_2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="6dp"
+                    android:elevation="2dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio"
+                    android:src="@drawable/class_cleric_colored"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_first_quarter_barrier"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Arcane\n(Magic-Users\n&amp; Specialists)"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_second_quarter_barrier"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Divine\n(Clerics &amp;\nZealots)"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_natural_image"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
+                    app:layout_constraintEnd_toStartOf="@id/generator_option_third_quarter_barrier"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:text="Natural\n(Druids)\n[Atypical]"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_all_image_1"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_third_quarter_barrier"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:text="Arcane/Divine\n(Default)"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/generator_option_spell_method_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Spell generation method:"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_group" />
+
+        <ImageView
+            android:id="@+id/generator_option_spell_method_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_spell_method_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="If book-defined methods are indicated, use level-up spell acquisition and Chosen One spell allotment tables to pick spells."/>
+
+        <RadioGroup
+            android:id="@+id/generator_option_spell_method_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_method_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/generator_option_spell_method_random_radio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:checked="true"
+                android:text="@string/spell_method_random_radio_label"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/generator_option_spell_method_book_radio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:text="@string/spell_method_book_radio_label"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/generator_option_spell_curse_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Pull potential curses from:"
+            android:textSize="16sp"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_method_group" />
+
+        <ImageView
+            android:id="@+id/generator_option_spell_curse_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_spell_curse_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="@string/spell_curse_tooltip"/>
+
+        <RadioGroup
+            android:id="@+id/generator_option_spell_curse_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_curse_label">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/generator_option_spell_curse_example_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:textSize="14sp"
+                android:text="Example curses from GMG"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/generator_option_spell_curse_official_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Above + Official curses"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/generator_option_spell_curse_homebrew_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="Above + Homebrew curses"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/generator_option_spell_curse_none_radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="None (ignore curses on spell collections)"/>
+
+        </RadioGroup>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/generator_option_reroll_choice_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:checked="true"
+            android:text="Re-roll GM/Player Choice results"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_curse_group" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/generator_option_specialist_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:checked="false"
+            android:text="Include specialist-restricted spells"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_reroll_choice_switch" />
+
+        <ImageView
+            android:id="@+id/generator_option_reference_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_book_vector_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_specialist_switch"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:id="@+id/generator_option_reference_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="Permitted sources beyond core:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_reference_icon"
+            app:layout_constraintStart_toEndOf="@id/generator_option_reference_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_reference_icon" />
+
+        <ImageView
+            android:id="@+id/generator_option_reference_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_reference_icon"
+            app:layout_constraintTop_toTopOf="@id/generator_option_reference_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="?attr/colorSecondaryVariant"
+            android:tooltipText="@string/allowed_sources_tooltip"/>
+
+        <LinearLayout
+            android:id="@+id/generator_option_reference_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_reference_icon">
+
+            <CheckBox
+                android:id="@+id/generator_option_reference_splatbook_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif-condensed"
+                android:checked="true"
+                android:text="@string/reference_splatbook_label"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_reference_hackjournal_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/reference_hackjournal_label"/>
+
+            <CheckBox
+                android:id="@+id/generator_option_reference_modules_checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/reference_modules_etc_label"/>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
+

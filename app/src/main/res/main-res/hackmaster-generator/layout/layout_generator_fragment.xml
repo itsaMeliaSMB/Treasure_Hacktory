@@ -1,0 +1,1218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/hoard_generator_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbar_height"
+            app:title="@string/hoard_generator_fragment_title"
+            app:navigationIcon="@drawable/clipart_back_vector_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_scrollFlags="noScroll"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/generator_nested_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/generator_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hoard_name_label"
+                android:fontFeatureSettings="smcp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/generator_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:counterEnabled="true"
+                app:counterMaxLength="50"
+                app:hintEnabled="false"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/generator_name_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLength="50"
+                    android:maxLines="1"
+                    android:hint="@string/hoard_name_entry_hint"
+                    tools:text="Blorkby's Stash" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/generator_method_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/hoard_gen_label"
+                android:fontFeatureSettings="smcp" />
+
+            <RadioGroup
+                android:id="@+id/generator_method_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/generator_method_lettercode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:checked="true"
+                    android:paddingStart="8dp"
+                    android:text="@string/gen_method_letter_label"
+                    android:textAllCaps="true" />
+
+                <RadioButton
+                    android:id="@+id/generator_method_specific"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:checked="false"
+                    android:paddingStart="8dp"
+                    android:text="@string/gen_method_specific_label"
+                    android:textAllCaps="true"/>
+
+            </RadioGroup>
+
+            <ViewAnimator
+                android:id="@+id/generator_animator_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
+                android:inAnimation="@anim/nav_default_enter_anim"
+                android:outAnimation="@anim/nav_default_exit_anim">
+
+                <LinearLayout
+                    android:id="@+id/generator_lettercode_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_lair_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_lair_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_lair_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_lair_indicator"
+                                    android:layout_alignBottom="@id/generator_lair_indicator"
+                                    android:layout_toEndOf="@id/generator_lair_indicator"
+                                    android:text="@string/lair_treasures_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_fortress_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/generator_lair_recyclerview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                tools:itemCount="8"
+                                tools:listitem="@layout/letter_recycler_item" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_small_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_small_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_small_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_small_indicator"
+                                    android:layout_alignBottom="@id/generator_small_indicator"
+                                    android:layout_toEndOf="@id/generator_small_indicator"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="@string/small_treasures_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_orc_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/generator_small_recyclerview"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"
+                                tools:itemCount="10"
+                                tools:listitem="@layout/letter_recycler_item"/>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/generator_specific_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_coinage_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_coinage_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_coinage_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_coinage_indicator"
+                                    android:layout_alignBottom="@id/generator_coinage_indicator"
+                                    android:layout_toEndOf="@id/generator_coinage_indicator"
+                                    android:text="@string/specific_coinage_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_coinbag_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/generator_coinage_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/generator_coinage_range_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_coinage_range_label"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintBaseline_toBaselineOf="@id/generator_coinage_minimum_input" />
+
+                                <androidx.constraintlayout.widget.Barrier
+                                    android:id="@+id/generator_coinage_barrier"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:barrierDirection="end"
+                                    app:constraint_referenced_ids="generator_coinage_range_label" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_coinage_minimum_input"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/generator_coinage_barrier"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginHorizontal="8dp"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:hint="@string/generator_coinage_minimum_input_hint">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_coinage_minimum_edit"
+                                        android:inputType="numberDecimal"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:textAlignment="viewEnd"
+                                        android:text="0.00" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_coinage_maximum_input"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_coinage_minimum_input"
+                                    app:layout_constraintStart_toEndOf="@id/generator_coinage_barrier"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginHorizontal="8dp"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:hint="@string/generator_coinage_maximum_input_hint">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_coinage_maximum_edit"
+                                        android:inputType="numberDecimal"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:textAlignment="viewEnd"
+                                        android:text="0.00" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <TextView
+                                    android:id="@+id/generator_coinage_allowed_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    android:text="@string/generator_coinage_allowed_label"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_coinage_maximum_input" />
+
+                                <CheckBox
+                                    android:id="@+id/generator_coinage_allowed_cp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:text="cp"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toStartOf="@+id/generator_coinage_allowed_sp"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintHorizontal_chainStyle="packed"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_coinage_allowed_label" />
+
+                                <CheckBox
+                                    android:id="@+id/generator_coinage_allowed_sp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:text="sp"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toStartOf="@+id/generator_coinage_allowed_ep"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/generator_coinage_allowed_cp"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_coinage_allowed_label" />
+
+                                <CheckBox
+                                    android:id="@+id/generator_coinage_allowed_ep"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:text="ep"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toStartOf="@+id/generator_coinage_allowed_gp"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/generator_coinage_allowed_sp"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_coinage_allowed_label" />
+
+                                <CheckBox
+                                    android:id="@+id/generator_coinage_allowed_gp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:text="gp"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toStartOf="@+id/generator_coinage_allowed_hsp"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/generator_coinage_allowed_ep"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_coinage_allowed_label" />
+
+                                <CheckBox
+                                    android:id="@+id/generator_coinage_allowed_hsp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:text="hsp"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toStartOf="@+id/generator_coinage_allowed_pp"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/generator_coinage_allowed_gp"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_coinage_allowed_label" />
+
+                                <CheckBox
+                                    android:id="@+id/generator_coinage_allowed_pp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:text="pp"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintHorizontal_bias="0.5"
+                                    app:layout_constraintStart_toEndOf="@+id/generator_coinage_allowed_hsp"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_coinage_allowed_label" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_gem_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_gem_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_gem_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_gem_indicator"
+                                    android:layout_alignBottom="@id/generator_gem_indicator"
+                                    android:layout_toEndOf="@id/generator_gem_indicator"
+                                    android:text="@string/specific_gem_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_gem_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/generator_gem_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="16dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/generator_gem_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_qty_to_gen_label"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBaseline_toBaselineOf="@id/generator_gem_qty_input"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_gem_qty_input"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginEnd="8dp"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_gem_qty_auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:inputType="number"
+                                        android:textSize="18sp"
+                                        android:textAlignment="center"
+                                        android:text="0" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_art_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_art_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_art_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_art_indicator"
+                                    android:layout_alignBottom="@id/generator_art_indicator"
+                                    android:layout_toEndOf="@id/generator_art_indicator"
+                                    android:text="@string/specific_art_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_painting_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/generator_art_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="16dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/generator_art_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_qty_to_gen_label"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBaseline_toBaselineOf="@id/generator_art_qty_input"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_art_qty_input"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginEnd="8dp"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_art_qty_edit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:inputType="number"
+                                        android:textSize="18sp"
+                                        android:textAlignment="center"
+                                        android:text="0" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_magic_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_magic_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_magic_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_magic_indicator"
+                                    android:layout_alignBottom="@id/generator_magic_indicator"
+                                    android:layout_toEndOf="@id/generator_magic_indicator"
+                                    android:text="@string/specific_magic_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_magicwand_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/generator_magic_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="16dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/generator_magic_potion_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_label_potions"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_potion_qty_input"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_magic_potion_qty_input"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:layout_marginTop="16dp"
+                                    android:layout_marginEnd="8dp"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_magic_potion_qty_edit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:inputType="number"
+                                        android:textSize="18sp"
+                                        android:textAlignment="center"
+                                        android:text="0" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <TextView
+                                    android:id="@+id/generator_magic_scroll_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_label_scrolls"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_scroll_qty_input"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_magic_scroll_qty_input"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_magic_potion_qty_input"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_magic_scroll_qty_edit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:inputType="number"
+                                        android:textSize="18sp"
+                                        android:textAlignment="center"
+                                        android:text="0" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <TextView
+                                    android:id="@+id/generator_magic_weapon_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_label_armor_weapons"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_weapon_qty_input"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_magic_weapon_qty_input"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_magic_scroll_qty_input"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:layout_marginEnd="8dp"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_magic_weapon_qty_edit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+
+                                        android:inputType="number"
+                                        android:textSize="18sp"
+                                        android:textAlignment="center"
+                                        android:text="0" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <TextView
+                                    android:id="@+id/generator_magic_nonweapon_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_label_except_weapons"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_nonweapon_qty_input"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_magic_nonweapon_qty_input"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_magic_weapon_qty_input">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_magic_nonweapon_qty_edit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:inputType="number"
+                                        android:text="0"
+                                        android:textAlignment="center"
+                                        android:textSize="18sp" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <TextView
+                                    android:id="@+id/generator_magic_any_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_label_any_magic"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBaseline_toBaselineOf="@+id/generator_magic_any_qty_input"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_magic_any_qty_input"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/generator_magic_nonweapon_qty_input">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_magic_any_qty_edit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:inputType="number"
+                                        android:text="0"
+                                        android:textAlignment="center"
+                                        android:textSize="18sp" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/generator_spell_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="8dp"
+                        app:cardElevation="4dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <!-- Top of cardview (always visible) -->
+                            <RelativeLayout
+                                android:id="@+id/generator_spell_header"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="?attr/colorPrimary"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:padding="12dp">
+
+                                <ImageView
+                                    android:id="@+id/generator_spell_indicator"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentStart="true"
+                                    android:src="@drawable/clipart_indicator_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                                <TextView
+                                    style="@style/generator_letter_cardview_header"
+                                    android:layout_alignTop="@id/generator_spell_indicator"
+                                    android:layout_alignBottom="@id/generator_spell_indicator"
+                                    android:layout_toEndOf="@id/generator_spell_indicator"
+                                    android:text="@string/specific_spell_cardview_header" />
+
+                                <ImageView
+                                    style="@style/generator_cardview_letter_header_icon"
+                                    android:src="@drawable/clipart_spellbook_vector_icon"
+                                    app:tint="?attr/colorOnPrimary" />
+
+                            </RelativeLayout>
+
+                            <!-- Expandable portion of cardview -->
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/generator_spell_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="16dp"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:id="@+id/generator_spell_curse_disclaimer"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="8dp"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:gravity="center"
+                                    android:textStyle="italic"
+                                    android:text="@string/generator_spell_curse_disclaimer"/>
+
+                                <TextView
+                                    android:id="@+id/generator_spell_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:text="@string/generator_qty_to_gen_label"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintBaseline_toBaselineOf="@id/generator_spell_qty_input"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/generator_spell_qty_input"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                    android:layout_width="72dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_curse_disclaimer">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/generator_spell_qty_edit"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:inputType="number"
+                                        android:text="0"
+                                        android:textAlignment="center"
+                                        android:textSize="18sp" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <androidx.constraintlayout.widget.Guideline
+                                    android:id="@+id/generator_spell_halfway_barrier"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    app:layout_constraintGuide_percent="0.5" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_level_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Spell level range:"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_qty_input" />
+
+                                <com.google.android.material.slider.RangeSlider
+                                    android:id="@+id/generator_spell_level_slider"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginHorizontal="8dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_level_label" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_level_min_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="Minimum:"
+                                    android:textSize="13sp"
+                                    android:textStyle="italic"
+                                    app:layout_constraintStart_toStartOf="@id/generator_spell_level_slider"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_level_slider" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_level_min_value"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="6dp"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold|italic"
+                                    app:layout_constraintEnd_toStartOf="@id/generator_spell_halfway_barrier"
+                                    app:layout_constraintStart_toEndOf="@id/generator_spell_level_min_label"
+                                    app:layout_constraintTop_toTopOf="@id/generator_spell_level_min_label"
+                                    tools:text="Cantrip (Arcane)\n1st  (Divine)" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_level_div_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="|"
+                                    android:textSize="24sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_level_slider"
+                                    app:layout_constraintBottom_toTopOf="@id/generator_spell_level_value_barrier"/>
+
+                                <TextView
+                                    android:id="@+id/generator_spell_level_max_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="Maximum:"
+                                    android:textSize="13sp"
+                                    android:textStyle="italic"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_level_slider"
+                                    app:layout_constraintEnd_toStartOf="@id/generator_spell_level_max_value"
+                                    app:layout_constraintStart_toEndOf="@id/generator_spell_halfway_barrier" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_level_max_value"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="6dp"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="16sp"
+                                    android:textStyle="italic|bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/generator_spell_level_max_label"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_level_slider"
+                                    tools:text="9th (Arcane)\n7th  (Divine)" />
+
+                                <androidx.constraintlayout.widget.Barrier
+                                    android:id="@+id/generator_spell_level_value_barrier"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    app:barrierDirection="bottom"
+                                    app:constraint_referenced_ids="generator_spell_level_min_value,generator_spell_level_max_value" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_per_qty_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Spells per collection:"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_level_value_barrier"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                                <com.google.android.material.slider.RangeSlider
+                                    android:id="@+id/generator_spell_per_qty_slider"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginHorizontal="8dp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_per_qty_label" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_per_qty_min_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="Minimum:"
+                                    android:textSize="13sp"
+                                    android:textStyle="italic"
+                                    app:layout_constraintStart_toStartOf="@id/generator_spell_per_qty_slider"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_per_qty_slider" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_per_qty_min_value"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="6dp"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="20sp"
+                                    android:textStyle="bold|italic"
+                                    app:layout_constraintEnd_toStartOf="@id/generator_spell_halfway_barrier"
+                                    app:layout_constraintStart_toEndOf="@id/generator_spell_per_qty_min_label"
+                                    app:layout_constraintTop_toTopOf="@id/generator_spell_per_qty_min_label"
+                                    tools:text="1" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_per_qty_div_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="|"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_per_qty_slider" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_per_qty_max_label"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:text="Maximum:"
+                                    android:textSize="13sp"
+                                    android:textStyle="italic"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_per_qty_slider"
+                                    app:layout_constraintEnd_toStartOf="@id/generator_spell_per_qty_max_value"
+                                    app:layout_constraintStart_toEndOf="@id/generator_spell_halfway_barrier" />
+
+                                <TextView
+                                    android:id="@+id/generator_spell_per_qty_max_value"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="6dp"
+                                    android:textAlignment="textEnd"
+                                    android:textSize="20sp"
+                                    android:textStyle="italic|bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@id/generator_spell_per_qty_max_label"
+                                    app:layout_constraintTop_toBottomOf="@id/generator_spell_per_qty_slider"
+                                    tools:text="20" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+            </ViewAnimator>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="64dp"
+                android:layout_gravity="bottom"
+                android:paddingBottom="16dp">
+
+                <LinearLayout
+                    android:id="@+id/generator_bottom_button_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:minHeight="64dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/generator_reset_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="24dp"
+                        android:backgroundTint="?attr/colorPrimaryDark"
+                        android:textColor="?attr/colorOnPrimarySurface"
+                        android:padding="8dp"
+                        android:text="@string/reset"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/generator_generate_button"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:padding="8dp"
+                        android:text="@string/generate"
+                        android:textAllCaps="true"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/generator_bottom_waiting_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:id="@+id/generator_waiting_progress"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:indeterminateOnly="true"
+                        android:layout_marginVertical="8dp"
+                        android:layout_marginEnd="16dp" />
+
+                    <TextView
+                        android:id="@+id/generator_waiting_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/generator_waiting_text_string"
+                        android:textSize="20sp"
+                        android:layout_gravity="center_vertical" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/unique_details_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbar_height"
+            android:minHeight="4dp"
+            app:layout_scrollFlags="noScroll"
+            app:title="Item Overview"
+            app:subtitleTextAppearance="@style/TextAppearance.Material3.TitleSmall"
+            tools:subtitle="Combination Ring of Invisibility and Demon Spawn Slaying"
+            app:navigationIcon="@drawable/clipart_back_vector_icon"
+            app:buttonGravity="center_vertical"
+            style="@style/Widget.Design.AppBarLayout"
+            tools:menu="@menu/unique_details_toolbar_menu"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:id="@+id/unique_details_content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/unique_details_viewable_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="16dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/unique_details_frame_foreground"
+                    android:layout_width="@dimen/unique_detail_thumbnail_side_length"
+                    android:layout_height="@dimen/unique_detail_thumbnail_side_length"
+                    android:elevation="2dp"
+                    android:src="@drawable/itemframe_foreground"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_thumbnail"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_thumbnail"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_thumbnail"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_thumbnail" />
+
+                <ImageView
+                    android:id="@+id/unique_details_thumbnail"
+                    android:layout_width="@dimen/unique_detail_thumbnail_side_length"
+                    android:layout_height="@dimen/unique_detail_thumbnail_side_length"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_standard_margin"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ring_gold" />
+
+                <ImageView
+                    android:id="@+id/unique_details_frame_background"
+                    android:layout_width="@dimen/unique_detail_thumbnail_side_length"
+                    android:layout_height="@dimen/unique_detail_thumbnail_side_length"
+                    android:elevation="0dp"
+                    android:src="@drawable/itemframe_background_gray"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_thumbnail"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_thumbnail"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_thumbnail"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_thumbnail" />
+
+                <TextView
+                    android:id="@+id/unique_details_name_label"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginHorizontal="@dimen/unique_details_standard_margin"
+                    android:autoSizeMaxTextSize="20sp"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:autoSizeTextType="uniform"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    app:layout_constraintBottom_toTopOf="@+id/unique_details_subtitle"
+                    app:layout_constraintEnd_toStartOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_thumbnail"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_header_top_barrier"
+                    app:layout_constraintVertical_chainStyle="spread"
+                    tools:text="Combination Ring of Invisibility and Demon Spawn Slaying" />
+
+                <TextView
+                    android:id="@+id/unique_details_subtitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:maxLines="1"
+                    android:ellipsize="middle"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:focusable="auto"
+                    android:textSize="13sp"
+                    android:textStyle="italic"
+                    android:fontFamily="sans-serif-condensed"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_header_bottom_barrier"
+                    app:layout_constraintEnd_toStartOf="@id/unique_details_end_barrier"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_thumbnail"
+                    app:layout_constraintTop_toBottomOf="@+id/unique_details_name_label"
+                    tools:text="Rings (A3)" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/unique_details_end_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="start"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/unique_details_header_top_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="unique_details_thumbnail"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_thumbnail" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/unique_details_header_bottom_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="top"
+                    app:constraint_referenced_ids="unique_details_thumbnail"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_thumbnail" />
+
+                <TextView
+                    android:id="@+id/unique_details_full_name_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_standard_margin"
+                    android:text="@string/unique_details_full_name_label"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_thumbnail" />
+
+                <TextView
+                    android:id="@+id/unique_details_full_name_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_full_name_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="Combination Ring of Invisibility and Demon Spawn Slaying" />
+
+                <TextView
+                    android:id="@+id/unique_details_original_name_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="Original name:"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_full_name_value" />
+
+                <TextView
+                    android:id="@+id/unique_details_original_name_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_original_name_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="Combination Ring of Invisibility and Demon Spawn Slaying" />
+
+                <TextView
+                    android:id="@+id/unique_details_id_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="Instance ID:"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_original_name_value" />
+
+                <TextView
+                    android:id="@+id/unique_details_id_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    android:lines="1"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_id_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="# 1" />
+
+                <TextView
+                    android:id="@+id/unique_details_creation_date_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="@string/unique_details_creation_date_label"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_id_value" />
+
+                <TextView
+                    android:id="@+id/unique_details_creation_date_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    android:lines="1"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_creation_date_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="XX-XX-XXXX at XX:XX:XX PM XST" />
+
+                <TextView
+                    android:id="@+id/unique_details_source_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="@string/unique_details_source_label"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_creation_date_value"
+                    app:layout_goneMarginTop="@dimen/unique_details_standard_margin" />
+
+                <TextView
+                    android:id="@+id/unique_details_source_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    android:textStyle="italic"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_source_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="GameMaster's Guide" />
+
+                <TextView
+                    android:id="@+id/unique_details_source_page"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:textSize="12sp"
+                    android:textStyle="italic"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_source_value"
+                    tools:text="Page 227" />
+
+                <TextView
+                    android:id="@+id/unique_details_xp_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="@string/unique_details_experience_value_label"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_source_page" />
+
+                <TextView
+                    android:id="@+id/unique_details_xp_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_xp_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="3,000 xp" />
+
+                <TextView
+                    android:id="@+id/unique_details_gp_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="@string/unique_details_coinage_value_label"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_xp_label" />
+
+                <!-- Usable by section here -->
+
+                <TextView
+                    android:id="@+id/unique_details_gp_value"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/unique_details_standard_margin"
+                    android:gravity="end"
+                    android:textSize="14sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/unique_details_gp_label"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_end_barrier"
+                    app:layout_constraintStart_toEndOf="@id/unique_details_label_barrier"
+                    tools:text="20,000.00 gp" />
+
+                <TextView
+                    android:id="@+id/unique_details_usable_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="@string/unique_details_usable_by_label"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_gp_label" />
+
+                <ImageView
+                    android:id="@+id/unique_details_fighter"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_constraintEnd_toStartOf="@+id/unique_details_magic_user"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_usable_label"
+                    tools:src="@drawable/class_fighter_colored"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_magic_user"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_constraintEnd_toStartOf="@+id/unique_details_thief"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_usable_label"
+                    tools:src="@drawable/class_magic_user_colored" />
+
+                <ImageView
+                    android:id="@+id/unique_details_thief"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_constraintEnd_toStartOf="@+id/unique_details_cleric"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_usable_label"
+                    tools:src="@drawable/class_thief_colored"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_cleric"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_constraintEnd_toStartOf="@+id/unique_details_druid"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_usable_label"
+                    tools:src="@drawable/class_cleric_colored" />
+
+                <ImageView
+                    android:id="@+id/unique_details_druid"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_gp_value"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_usable_label"
+                    tools:src="@drawable/class_druid_colored" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/unique_details_label_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="end"
+                    app:barrierMargin="8dp"
+                    app:constraint_referenced_ids="unique_details_gp_label,unique_details_xp_label,unique_details_source_label,unique_details_full_name_label,unique_details_creation_date_label,unique_details_usable_label" />
+
+                <TextView
+                    android:id="@+id/unique_details_color_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/unique_details_standard_margin"
+                    android:layout_marginTop="@dimen/unique_details_short_margin"
+                    android:text="Color example(s):"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_druid" />
+
+                <ImageView
+                    android:id="@+id/unique_details_color_preview_1"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_goneMarginEnd="0dp"
+                    android:src="@drawable/clipart_potion_vector_icon"
+                    app:layout_constraintEnd_toStartOf="@id/unique_details_color_preview_2"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
+                    app:tint="?attr/backgroundColor"
+                    tools:tint="@color/red"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_preview_2"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_goneMarginEnd="0dp"
+                    android:src="@drawable/clipart_potion_vector_icon"
+                    app:layout_constraintEnd_toStartOf="@id/unique_details_color_preview_3"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
+                    app:tint="?attr/backgroundColor"
+                    tools:tint="@color/green"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_preview_3"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="4dp"
+                    app:layout_goneMarginEnd="0dp"
+                    android:src="@drawable/clipart_potion_vector_icon"
+                    app:layout_constraintEnd_toStartOf="@id/unique_details_color_preview_4"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
+                    app:tint="?attr/backgroundColor"
+                    tools:tint="@color/blue"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_preview_4"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_vector_icon"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_druid"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_label"
+                    app:tint="?attr/backgroundColor"
+                    tools:tint="@color/yellow"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_outline_1"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_stroke_vector_icon"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_color_preview_1"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_1"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_1"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_1"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_outline_2"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_stroke_vector_icon"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_color_preview_2"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_2"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_2"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_2"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_outline_3"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_stroke_vector_icon"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_color_preview_3"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_3"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_3"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_3"/>
+
+                <ImageView
+                    android:id="@+id/unique_details_color_outline_4"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/clipart_potion_stroke_vector_icon"
+                    android:elevation="1dp"
+                    app:layout_constraintStart_toStartOf="@id/unique_details_color_preview_4"
+                    app:layout_constraintTop_toTopOf="@id/unique_details_color_preview_4"
+                    app:layout_constraintEnd_toEndOf="@id/unique_details_color_preview_4"
+                    app:layout_constraintBottom_toBottomOf="@id/unique_details_color_preview_4"/>
+
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/class_icons_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="unique_details_fighter,unique_details_magic_user,unique_details_thief,unique_details_cleric,unique_details_druid,unique_details_color_preview_1,unique_details_color_preview_2,unique_details_color_preview_3" />
+
+                <View
+                    android:id="@+id/unique_details_divider"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginHorizontal="64dp"
+                    android:layout_marginTop="@dimen/unique_details_standard_margin"
+                    android:alpha="0.6"
+                    android:background="?attr/colorOnSurface"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/class_icons_barrier" />
+
+                <TextView
+                    android:id="@+id/unique_details_list_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/unique_details_standard_margin"
+                    android:text="@string/item_details"
+                    android:textAllCaps="true"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_divider" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/unique_details_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_list_label"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginHorizontal="4dp"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/unique_details_item_parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/unique_details_whenempty_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?backgroundColor"
+                android:visibility="visible"
+                tools:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/unique_details_whenempty_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0.5"
+                    android:src="@drawable/badge_hoard_mimic"
+                    app:layout_constraintBottom_toTopOf="@id/unique_details_whenempty_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    app:tint="?attr/colorOnBackground" />
+
+                <TextView
+                    android:id="@+id/unique_details_whenempty_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="64dp"
+                    android:text="@string/unique_details_whenempty_message"
+                    android:textAlignment="center"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/unique_details_whenempty_image" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </FrameLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <include layout="@layout/overlay_waiting_card"
+        android:id="@+id/unique_details_waiting_card"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

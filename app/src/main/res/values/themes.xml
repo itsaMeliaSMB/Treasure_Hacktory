@@ -1,16 +1,127 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.TreasureFactory" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/fuchsia</item>
-        <item name="colorPrimaryVariant">@color/fuchsia</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/jade</item>
-        <item name="colorSecondaryVariant">@color/jade</item>
-        <item name="colorOnSecondary">@color/black</item>
-        <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+    <style name="Theme.TreasureHacktory" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary colors -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorPrimary">@color/defaultPrimary</item>
+        <item name="colorPrimaryDark">@color/defaultPrimaryDark</item>
+        <item name="colorPrimaryContainer">@color/defaultPrimaryLight</item>
+        <item name="colorOnPrimary">@color/defaultOnPrimary</item>
+        <!-- Secondary colors -->
+        <item name="colorSecondary">@color/defaultSecondary</item>
+        <item name="colorSecondaryVariant">@color/defaultSecondaryDark</item>
+        <item name="colorSecondaryContainer">@color/defaultSecondaryLight</item>
+        <item name="colorOnSecondary">@color/defaultOnSecondary</item>
+        <!--Tertiary colors-->
+        <item name="colorAccent">@color/defaultAccent</item>
+        <item name="colorTertiary">@color/defaultTertiary</item>
+        <item name="colorTertiaryContainer">@color/defaultTertiaryLight</item>
+        <item name="colorOnTertiary">@color/defaultOnTertiary</item>
+        <!--Other colors-->
+        <item name="backgroundColor">@color/lightModeBackground</item>
+        <!-- Customizations -->
+        <item name="actionModeStyle">@style/MainActionBarStyle</item>
+        <item name="actionBarSize">@dimen/appbar_height</item>
     </style>
+
+    <style name="MainActionBarStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/actionModePrimaryDark</item>
+        <item name="android:titleTextStyle">@style/Widget.MaterialComponents.Toolbar</item>
+        <item name="android:icon">@drawable/clipart_close_vector_icon</item>
+        <item name="actionMenuTextColor">@color/actionModeOnPrimary</item>
+        <item name="android:textAppearance">?attr/textAppearanceTitleLarge</item>
+        <item name="height">?attr/actionBarSize</item>
+        <item name="background">@color/actionModePrimary</item>
+    </style>
+
+    <style name="GemSubStyle" parent="Theme.TreasureHacktory">
+        <!--Primary colors-->
+        <item name="colorPrimary">@color/gemPrimary</item>
+        <item name="colorPrimaryDark">@color/gemPrimaryDark</item>
+        <item name="colorPrimaryContainer">@color/gemPrimaryLight</item>
+        <item name="colorOnPrimary">@color/gemOnPrimary</item>
+        <!--Secondary colors-->
+        <item name="colorSecondary">@color/gemSecondary</item>
+        <item name="colorSecondaryVariant">@color/gemSecondaryDark</item>
+        <item name="colorSecondaryContainer">@color/gemSecondaryLight</item>
+        <item name="colorOnSecondary">@color/gemOnSecondary</item>
+        <!--Tertiary colors-->
+        <item name="colorAccent">@color/gemTertiary</item>
+        <item name="colorTertiary">@color/gemTertiary</item>
+        <item name="colorTertiaryContainer">@color/gemTertiaryLight</item>
+        <item name="colorOnTertiary">@color/gemOnTertiary</item>
+        <!--Status bar coloring-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/gemPrimaryDark</item>
+    </style>
+
+    <style name="ArtObjectSubStyle" parent="Theme.TreasureHacktory">
+        <!--Primary colors-->
+        <item name="colorPrimary">@color/artPrimary</item>
+        <item name="colorPrimaryDark">@color/artPrimaryDark</item>
+        <item name="colorPrimaryContainer">@color/artPrimaryLight</item>
+        <item name="colorOnPrimary">@color/artOnPrimary</item>
+        <!--Secondary colors-->
+        <item name="colorSecondary">@color/artSecondary</item>
+        <item name="colorSecondaryVariant">@color/artSecondaryDark</item>
+        <item name="colorSecondaryContainer">@color/artSecondaryLight</item>
+        <item name="colorOnSecondary">@color/artOnSecondary</item>
+        <!--Tertiary colors-->
+        <item name="colorAccent">@color/artTertiary</item>
+        <item name="colorTertiary">@color/artTertiary</item>
+        <item name="colorTertiaryContainer">@color/artTertiaryLight</item>
+        <item name="colorOnTertiary">@color/artOnTertiary</item>
+        <!--Status bar coloring-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/artPrimaryDark</item>
+    </style>
+
+    <style name="MagicItemSubStyle" parent="Theme.TreasureHacktory">
+        <!--Primary colors-->
+        <item name="colorPrimary">@color/magicPrimary</item>
+        <item name="colorPrimaryDark">@color/magicPrimaryDark</item>
+        <item name="colorPrimaryContainer">@color/magicPrimaryLight</item>
+        <item name="colorOnPrimary">@color/magicOnPrimary</item>
+        <!--Secondary colors-->
+        <item name="colorSecondary">@color/magicSecondary</item>
+        <item name="colorSecondaryVariant">@color/magicSecondaryDark</item>
+        <item name="colorSecondaryContainer">@color/magicSecondaryLight</item>
+        <item name="colorOnSecondary">@color/magicOnSecondary</item>
+        <!--Tertiary colors-->
+        <item name="colorAccent">@color/magicTertiary</item>
+        <item name="colorTertiary">@color/magicTertiary</item>
+        <item name="colorTertiaryContainer">@color/magicTertiaryLight</item>
+        <item name="colorOnTertiary">@color/magicOnTertiary</item>
+        <!--Status bar coloring-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/magicPrimaryDark</item>
+    </style>
+
+    <style name="SpellCollectionSubStyle" parent="Theme.TreasureHacktory">
+        <!--Primary colors-->
+        <item name="colorPrimary">@color/spellPrimary</item>
+        <item name="colorPrimaryDark">@color/spellPrimaryDark</item>
+        <item name="colorPrimaryContainer">@color/spellPrimaryLight</item>
+        <item name="colorOnPrimary">@color/spellOnPrimary</item>
+        <!--Secondary colors-->
+        <item name="colorSecondary">@color/spellSecondary</item>
+        <item name="colorSecondaryVariant">@color/spellSecondaryDark</item>
+        <item name="colorSecondaryContainer">@color/spellSecondaryLight</item>
+        <item name="colorOnSecondary">@color/spellOnSecondary</item>
+        <!--Tertiary colors-->
+        <item name="colorAccent">@color/spellTertiary</item>
+        <item name="colorTertiary">@color/spellTertiary</item>
+        <item name="colorTertiaryContainer">@color/spellTertiaryLight</item>
+        <item name="colorOnTertiary">@color/spellOnTertiary</item>
+        <!--Status bar coloring-->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/spellPrimaryDark</item>
+    </style>
+
+    <!--
+    <item name="colorPrimary"></item>
+    <item name="colorPrimaryDark"></item>
+    <item name="colorPrimarySurface"></item>-->
 </resources>

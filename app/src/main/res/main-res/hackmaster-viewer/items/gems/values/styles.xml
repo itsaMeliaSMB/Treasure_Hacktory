@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="style_unique_list_item_label">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/list_item_element_margin</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="style_generator_scroll_checkbox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:textAlignment">viewEnd</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="credits_header_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginVertical">8dp</item>
+    </style>
+
+    <style name="credits_attribution_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+    </style>
+
+    <style name="credits_link_icon_style">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginVertical">16dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+    </style>
+
+    <style name="credits_link_text_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">16dp</item>
+        <item name="android:layout_marginVertical">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:autoLink">web</item>
+        <item name="android:linksClickable">true</item>
+    </style>
+
+    <style name="generator_option_magic_item_checkbox">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxHeight">48dp</item>
+        <item name="android:drawableTint">?attr/colorOnSurface</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">sans-serif-condensed</item>
+    </style>
+</resources>

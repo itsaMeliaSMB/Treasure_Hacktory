@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--HackMaster colors-->
     <color name="amber">#ffbf00</color>
     <color name="amethyst">#9966cc</color>
     <color name="apricot">#fbceb1</color>
@@ -99,4 +100,82 @@
     <color name="white">#ffffff</color>
     <color name="woolen">#e6ddd4</color>
     <color name="yellow">#ffff00</color>
+    <!--UI colors-->
+    <color name="lightModeBackground">#f0f0f0</color>
+    <color name="darkModeBackground">#0f0f0f</color>
+    <!--Main theme colors-->
+    <color name="defaultPrimary">#c4443b</color>
+    <color name="defaultPrimaryDark">#8d0914</color>
+    <color name="defaultPrimaryLight">#fc7566</color>
+    <color name="defaultOnPrimary">@color/white</color>
+    <color name="defaultSecondary">#d9b646</color>
+    <color name="defaultSecondaryDark">#a4870f</color>
+    <color name="defaultSecondaryLight">#ffe876</color>
+    <color name="defaultOnSecondary">@color/pitch_black</color>
+    <color name="defaultTertiary">#a5b1a5</color>
+    <color name="defaultTertiaryDark">#768276</color>
+    <color name="defaultTertiaryLight">#d6e3d6</color>
+    <color name="defaultOnTertiary">@color/pitch_black</color>
+    <color name="defaultAccent">#3bbbc4</color>
+    <!--Gem theme colors-->
+    <color name="gemPrimary">#e91e63</color>
+    <color name="gemPrimaryDark">#b4004e</color>
+    <color name="gemPrimaryLight">#ff77a9</color>
+    <color name="gemPrimaryDesaturated">#797979</color>
+    <color name="gemOnPrimary">@color/pitch_black</color>
+    <color name="gemSecondary">#1ee9a5</color>
+    <color name="gemSecondaryDark">#00b676</color>
+    <color name="gemSecondaryLight">#6dffd7</color>
+    <color name="gemOnSecondary">@color/pitch_black</color>
+    <color name="gemTertiary">#e91ec7</color>
+    <color name="gemTertiaryDark">#b20096</color>
+    <color name="gemTertiaryLight">#ff64fa</color>
+    <color name="gemOnTertiary">@color/pitch_black</color>
+    <!--Art object theme colors-->
+    <color name="artPrimary">#ffc107</color>
+    <color name="artPrimaryDark">#c79100</color>
+    <color name="artPrimaryLight">#fff350</color>
+    <color name="artPrimaryDesaturated">#989898</color>
+    <color name="artOnPrimary">@color/pitch_black</color>
+    <color name="artSecondary">#29b6f6</color>
+    <color name="artSecondaryDark">#0086c3</color>
+    <color name="artSecondaryLight">#73e8ff</color>
+    <color name="artOnSecondary">@color/pitch_black</color>
+    <color name="artTertiary">#f13d00</color>
+    <color name="artTertiaryDark">#b60000</color>
+    <color name="artTertiaryLight">#ff7338</color>
+    <color name="artOnTertiary">@color/pitch_black</color>
+    <!--Magic Item theme colors-->
+    <color name="magicPrimary">#009688</color>
+    <color name="magicPrimaryDark">#00675b</color>
+    <color name="magicPrimaryLight">#52c7b8</color>
+    <color name="magicPrimaryDesaturated">#989898</color>
+    <color name="magicOnPrimary">@color/pitch_black</color>
+    <color name="magicSecondary">#870096</color>
+    <color name="magicSecondaryDark">#550067</color>
+    <color name="magicSecondaryLight">#ba46c7</color>
+    <color name="magicOnSecondary">@color/pitch_black</color>
+    <color name="magicTertiary">#000f96</color>
+    <color name="magicTertiaryDark">#000067</color>
+    <color name="magicTertiaryLight">#523bc8</color>
+    <color name="magicOnTertiary">@color/white</color>
+    <!--Spell collection theme colors-->
+    <color name="spellPrimary">#5c6bc0</color>
+    <color name="spellPrimaryDark">#26418f</color>
+    <color name="spellPrimaryLight">#8e99f3</color>
+    <color name="spellPrimaryDesaturated">#828282</color>
+    <color name="spellOnPrimary">@color/white</color>
+    <color name="spellSecondary">#b15cc0</color>
+    <color name="spellSecondaryDark">#7f2d8f</color>
+    <color name="spellSecondaryLight">#e58cf3</color>
+    <color name="spellOnSecondary">@color/pitch_black</color>
+    <color name="spellTertiary">#c05c6b</color>
+    <color name="spellTertiaryDark">#8c2e40</color>
+    <color name="spellTertiaryLight">#f58c99</color>
+    <color name="spellOnTertiary">@color/pitch_black</color>
+    <!--Action mode colors-->
+    <color name="actionModePrimary">#a1887f</color>
+    <color name="actionModePrimaryDark">#725b53</color>
+    <color name="actionModePrimaryLight">#d3b8ae</color>
+    <color name="actionModeOnPrimary">@color/pitch_black</color>
 </resources>

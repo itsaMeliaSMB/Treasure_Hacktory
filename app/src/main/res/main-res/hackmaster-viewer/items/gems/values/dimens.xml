@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="unique_detail_thumbnail_side_length">64dp</dimen>
+    <dimen name="unique_details_standard_margin">16dp</dimen>
+    <dimen name="unique_details_short_margin">8dp</dimen>
+    <dimen name="horizontal_coin_edit_field_margin">24dp</dimen>
+    <dimen name="coinage_edit_text_input_width">112dp</dimen>
+    <dimen name="hoard_edit_item_preview_dimen">124dp</dimen>
+    <dimen name="odds_table_item_column_width">72dp</dimen>
+    <dimen name="odds_ref_layout_width">112dp</dimen>
+    <dimen name="odds_ref_layout_height">108dp</dimen>
+    <dimen name="spell_item_height">72dp</dimen>
+</resources>

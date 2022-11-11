@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_select_all_unique"
+        android:title="@string/action_select_all"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_resort_unique_items"
+        android:title="@string/sort_by_gp_value_descending"
+        android:titleCondensed="@string/sort_by_gp_value_descending_cond"
+        app:showAsAction="never"
+        />
+
+</menu>
