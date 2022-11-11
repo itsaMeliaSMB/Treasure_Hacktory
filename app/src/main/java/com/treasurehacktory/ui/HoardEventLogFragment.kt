@@ -1,5 +1,6 @@
 package com.treasurehacktory.ui
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
@@ -32,7 +33,7 @@ private const val ARG_HOARD_ID = "hoard_id"
 
 class HoardEventLogFragment : Fragment() {
 
-    val safeArgs : HoardEventLogFragmentArgs by navArgs()
+    private val safeArgs : HoardEventLogFragmentArgs by navArgs()
 
     private var _binding: LayoutHoardEventLogBinding? = null
     private val binding get() = _binding!!
@@ -319,7 +320,7 @@ class HoardEventLogFragment : Fragment() {
                     "spell-collection"->    R.color.spellOnPrimary
                     "system" ->             R.color.white
                     "user" ->               R.color.white
-                    "verbose" ->            R.color.iron
+                    "verbose" ->            R.color.black
                     else ->                 R.color.defaultOnSecondary
                 }
             }
@@ -349,11 +350,12 @@ class HoardEventLogFragment : Fragment() {
 
             private lateinit var event : HoardEvent
 
+            @SuppressLint("SimpleDateFormat")
             fun bind(newEvent: HoardEvent){
 
                 event = newEvent
 
-                val tagLayoutManager = FlexboxLayoutManager(context).apply { // alt context = this.binding.hoardEventTagRecyclerView.context TODO
+                val tagLayoutManager = FlexboxLayoutManager(context).apply {
                     flexDirection = FlexDirection.ROW
                     alignItems = AlignItems.FLEX_START
                     flexWrap = FlexWrap.WRAP
@@ -365,7 +367,7 @@ class HoardEventLogFragment : Fragment() {
                     setOrientation(FlexboxItemDecoration.BOTH)
                 }
 
-                binding.hoardEventListPosition.text = "# ${adapterPosition + 1}"
+                "# ${adapterPosition + 1}".also { binding.hoardEventListPosition.text = it }
                 binding.hoardEventTimestamp.text = SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
                     .format(Date(event.timestamp))
                 binding.hoardEventDescription.text = event.description
@@ -373,7 +375,6 @@ class HoardEventLogFragment : Fragment() {
                     layoutManager = tagLayoutManager
                     adapter = TagAdapter(event.tag.getRawTags())
                     addItemDecoration(tagSpacingDecoration)
-                    //(layoutParams as FlexboxLayoutManager.LayoutParams).flexGrow = 0.1f TODO
                 }
             }
 
@@ -401,11 +402,11 @@ class HoardEventLogFragment : Fragment() {
 
         override fun getItemCount(): Int = rawTags.size
 
-        inner class TagFilterHolder(val binding: DialogEventTagFilterRowBinding) : RecyclerView.ViewHolder(binding.root) {
+        inner class TagFilterHolder(
+            val binding: DialogEventTagFilterRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
             lateinit var rawTag : String
                 private set
-
 
             fun bind(newRawTag: String, position: Int) {
 
@@ -455,6 +456,7 @@ class HoardEventLogFragment : Fragment() {
                 }
             }
         }
+
     }
     // endregion
 

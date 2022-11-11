@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +15,10 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import com.treasurehacktory.R
-import com.treasurehacktory.databinding.DialogBottomHoardInfoEditBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.treasurehacktory.R
 import com.treasurehacktory.TreasureHacktoryApplication
+import com.treasurehacktory.databinding.DialogBottomHoardInfoEditBinding
 import com.treasurehacktory.model.Hoard
 import com.treasurehacktory.model.HoardBadge
 import com.treasurehacktory.model.HoardEvent
@@ -27,20 +26,11 @@ import com.treasurehacktory.viewmodel.HoardEditViewModel
 import com.treasurehacktory.viewmodel.HoardEditViewModelFactory
 import kotlin.math.roundToInt
 
-class HoardEditBottomDialog() : BottomSheetDialogFragment() {
-
-    // TODO https://medium.com/androiddevelopers/navigation-component-dialog-destinations-bfeb8b022759
+class HoardEditBottomDialog : BottomSheetDialogFragment() {
 
     private lateinit var activeHoard: Hoard
 
-    private val labelDrawableDPDimen = 24f
-
-    private val labelDrawablePxDimen by lazy {
-        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-            labelDrawableDPDimen, resources.displayMetrics).toInt()
-    }
-
-    val safeArgs : HoardEditBottomDialogArgs by navArgs()
+    private val safeArgs : HoardEditBottomDialogArgs by navArgs()
 
     private val hoardEditViewModel: HoardEditViewModel by viewModels {
         HoardEditViewModelFactory((activity?.application as TreasureHacktoryApplication).repository)
@@ -49,11 +39,11 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
     private var _binding: DialogBottomHoardInfoEditBinding? = null
     private val binding get() = _binding!!
 
-    private var iconDropdownArray = Array<SelectableItemData>(1) {
+    private var iconDropdownArray = Array(1) {
         SelectableItemData("Loading...",false,
             null,"clipart_default_vector_icon")
     }
-    private var badgeDropdownArray = Array<SelectableItemData>(1) {
+    private var badgeDropdownArray = Array(1) {
         SelectableItemData("Loading...",false,
             null,"clipart_default_vector_icon")
     }
@@ -179,8 +169,6 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
 
             hoardEditGpEdit.addTextChangedListener { input ->
 
-                val oldEffortRating = hoardEditViewModel.newEffortValue
-
                 val roundedValue = (100 * (input.toString().toDoubleOrNull() ?: 0.00)).roundToInt() / 100.00
 
                 // Set error message if applicable
@@ -191,6 +179,7 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                 }
 
                 if (hoardEditGpEdit.error == null) {
+                    // Update the effort rating if input is validated.
                     hoardEditViewModel.newEffortValue = roundedValue
                 }
             }
@@ -203,13 +192,16 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
 
                 if (hoardEditViewModel.iconsReadyLiveData.value == true) {
 
+                    // region ( Get new values from user inputs )
                     val newHoardName = hoardEditNameEdit.text.toString()
                         .takeIf{ it.isNotBlank() } ?: activeHoard.name
                     val newHoardIconString = iconDropdownArray[hoardEditViewModel.iconDropdownPos]
                         .imageString
                     val newHoardBadge = HoardBadge.values()[hoardEditViewModel.badgeDropdownPos]
                     var newEffortValue = hoardEditViewModel.newEffortValue
+                    // endregion
 
+                    // region ( Log modifications in a HoardEvent )
                     if (newHoardName != activeHoard.name ||
                         newHoardIconString != activeHoard.iconID ||
                         newHoardBadge != activeHoard.badge ||
@@ -253,6 +245,8 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                             iconID = newHoardIconString, badge = newHoardBadge,
                             effortRating = newEffortValue), editEvent)
                     }
+                    // endregion
+
                     dialog?.dismiss()
                 }
             }
@@ -266,8 +260,6 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
                                                 var values: Array<String>,
                                                 _enabledItemsArray: BooleanArray?) :
         ArrayAdapter<String>(context, layout, values) {
-
-        //https://rmirabelle.medium.com/there-is-no-material-design-spinner-for-android-3261b7c77da8
 
         private val emptyFilter = object : Filter() {
 
@@ -517,17 +509,6 @@ class HoardEditBottomDialog() : BottomSheetDialogFragment() {
         if (enabledArray != null ) {
             (adapter as DropdownAdapter<*>).setEnabledByArray(enabledArray.toBooleanArray())
         }
-    }
-
-    /** Sets the bounds of the provided drawable so that it can be used as a compound drawable. */
-    private fun Drawable?.boundForLabel() : Drawable? {
-        return if (this != null) {
-            val newDrawable = this
-
-            newDrawable.setBounds(0,0,labelDrawablePxDimen,labelDrawablePxDimen)
-
-            newDrawable
-        } else this
     }
 
     // endregion

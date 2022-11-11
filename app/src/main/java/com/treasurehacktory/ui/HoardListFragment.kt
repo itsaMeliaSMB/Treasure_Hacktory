@@ -2,6 +2,7 @@ package com.treasurehacktory.ui
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -30,13 +31,8 @@ import com.treasurehacktory.viewmodel.HoardListViewModelFactory
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
-private const val TAG = "HoardListFragment"
-
 class HoardListFragment : Fragment() {
 
-    /**
-    * Required interface for the hosting activities, allows callbacks to hosting activity.
-    */
     interface Callbacks{
         fun onHoardSelected(view: View, hoardID: Int)
     }
@@ -92,9 +88,8 @@ class HoardListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view,savedInstanceState)
 
-        hoardListViewModel.hoardListLiveData.observe(viewLifecycleOwner
-        ) //Updates whenever the list of hoards is updated per BNR 238
-        { hoards ->
+        hoardListViewModel.hoardListLiveData.observe(viewLifecycleOwner) { hoards ->
+
             hoards?.let {
 
                 updateUI(hoards)
@@ -177,7 +172,6 @@ class HoardListFragment : Fragment() {
             }
             setOnMenuItemClickListener { item ->
 
-                // https://developer.android.com/guide/fragments/appbar#fragment-click
                 when (item.itemId){
 
                     R.id.action_new_hoard   -> {
@@ -223,15 +217,12 @@ class HoardListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null //TODO copied from Generator fragment. remove if causes issues with dialogs
+        _binding = null
     }
 
     // endregion
 
     // region [ Inner classes ]
-
-    // For list item selection:
-    // https://developer.android.com/guide/topics/ui/layout/recyclerview-custom#select
 
     private inner class HoardViewHolder(val binding: HoardListItemBinding)
         : RecyclerView.ViewHolder(binding.root), View.OnClickListener, View.OnLongClickListener {
@@ -243,6 +234,7 @@ class HoardListFragment : Fragment() {
             itemView.setOnLongClickListener(this)
         }
 
+        @SuppressLint("SimpleDateFormat")
         fun bind(newHoard: Hoard, selected: Boolean) {
 
             hoard = newHoard
@@ -293,14 +285,16 @@ class HoardListFragment : Fragment() {
             binding.hoardListItemName.apply {
                 text = hoard.name
                 if (hoard.isNew) {
-                    setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.clipart_new_vector_icon,0,0,0)
+                    setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        R.drawable.clipart_new_vector_icon,0,0,0)
                 } else {
                     setCompoundDrawablesRelativeWithIntrinsicBounds(0,0,0,0)
                 }
             }
 
             // Set hoard date
-            binding.hoardListItemDate.text = SimpleDateFormat("MM/dd/yyyy").format(hoard.creationDate)
+            binding.hoardListItemDate.text =
+                SimpleDateFormat("MM/dd/yyyy").format(hoard.creationDate)
 
             // Set text for gp value counter
             ("Worth ${DecimalFormat("#,##0.0#")
@@ -379,7 +373,6 @@ class HoardListFragment : Fragment() {
 
         override fun getItemCount() = hoards.size
 
-        // BNR says always be efficient with this for scrolling smoothness
         override fun onBindViewHolder(viewHolder: HoardViewHolder, position: Int) {
 
             val hoard = hoards[position]
@@ -448,12 +441,10 @@ class HoardListFragment : Fragment() {
         }
     }
 
-    private inner class ActionModeCallback() : ActionMode.Callback {
-
-        // https://stackoverflow.com/questions/30814558/problems-with-implementing-contextual-action-mode-in-recyclerview-fragment TODO
-        // https://enoent.fr/posts/recyclerview-basics/ TODO
+    private inner class ActionModeCallback : ActionMode.Callback {
 
         override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
+
             // Inflate menu
             mode.menuInflater.inflate(R.menu.master_list_action_menu,menu)
 
@@ -472,21 +463,21 @@ class HoardListFragment : Fragment() {
 
         override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
 
-            //if there's only one selected item, disable merge
-            return if ((binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter).selectedCount < 2){
+            // If there's only one selected item, disable merge
+            return if ((binding.hoardListRecycler.adapter as MultiselectRecyclerAdapter)
+                    .selectedCount < 2){
+
                 if (menu.findItem(R.id.action_merge).isEnabled) {
                     menu.findItem(R.id.action_merge).isEnabled = false
                     true
-                } else {
-                    false
-                }
+                } else { false }
+
             } else {
+
                 if (!(menu.findItem(R.id.action_merge).isEnabled)) {
                     menu.findItem(R.id.action_merge).isEnabled = true
                     true
-                } else {
-                    false
-                }
+                } else { false }
             }
         }
 
@@ -505,7 +496,7 @@ class HoardListFragment : Fragment() {
                     // Show dialog confirming user wants to delete hoards
                     val deleteConfirmBuilder = AlertDialog.Builder(context)
 
-                    var shouldContinue = false // flag for process not being cancelled (via negative button or normal cancellation) TODO add OnCancelListener
+                    var shouldContinue = false
 
                     deleteConfirmBuilder
                         .setTitle("Confirm Deletion")
@@ -514,61 +505,60 @@ class HoardListFragment : Fragment() {
                                 (if (selectedCount != 1) "all $selectedCount hoards" else
                                     "this hoard") +
                             "? This cannot be undone!")
-                        .setPositiveButton(R.string.action_delete,
-                            DialogInterface.OnClickListener { _, _ ->
+                        .setPositiveButton(R.string.action_delete) { _, _ ->
 
-                                // Check if selection contains favorites
-                                val selectedHasFavorites =
+                            // Check if selection contains favorites
+                            val selectedHasFavorites =
+                                (binding.hoardListRecycler.adapter as HoardAdapter)
+                                    .selectedContainsFavorites()
+
+                            if (selectedHasFavorites) {
+
+                                // Warn user and offer a second chance to back out.
+                                val hasFavoritesBuilder = AlertDialog.Builder(context)
+
+                                hasFavoritesBuilder
+                                    .setTitle("Confirm Deletion")
+                                    .setIcon(R.drawable.clipart_warning_vector_icon)
+                                    .setMessage(
+                                        "At least one of the selected hoards is " +
+                                                "marked as a favorite. Are you absolutely sure you " +
+                                                "want to delete?"
+                                    )
+                                    .setPositiveButton(getString(R.string.button_delete_even_favorites)) { _, _ ->
+                                        shouldContinue = true
+                                    }
+                                    .setNegativeButton(getString(R.string.action_cancel)) { _, _ ->
+                                        shouldContinue = false
+                                        cancelToast.show()
+                                    }
+                                    .setCancelable(true)
+                                    .setOnCancelListener {
+                                        DialogInterface.OnCancelListener { shouldContinue = false }
+                                    }
+                                    .show()
+
+                            } else {
+                                shouldContinue = true
+                            }
+
+                            if (shouldContinue) {
+
+                                // Grab target hoards
+                                val targetHoards =
                                     (binding.hoardListRecycler.adapter as HoardAdapter)
-                                        .selectedContainsFavorites()
+                                        .getSelectedAsHoards()
 
-                                if (selectedHasFavorites) {
+                                // Delete using a vararg DAO function DeleteHoardsWithChildren
+                                hoardListViewModel.deleteSelectedHoards(targetHoards)
 
-                                    // Warn user and offer a second chance to back out.
-                                    val hasFavoritesBuilder = AlertDialog.Builder(context)
-
-                                    hasFavoritesBuilder
-                                        .setTitle("Confirm Deletion")
-                                        .setIcon(R.drawable.clipart_warning_vector_icon)
-                                        .setMessage(
-                                            "At least one of the selected hoards is " +
-                                                    "marked as a favorite. Are you absolutely sure you " +
-                                                    "want to delete?"
-                                        )
-                                        .setPositiveButton("Yes, delete even marked favorites.",
-                                            DialogInterface.OnClickListener { _, _ ->
-                                                shouldContinue = true
-                                            })
-                                        .setNegativeButton("Cancel",
-                                            DialogInterface.OnClickListener { _, _ ->
-                                                shouldContinue = false
-                                                cancelToast.show()
-                                            })
-                                        .setCancelable(true)
-                                        .setOnCancelListener {
-                                            DialogInterface.OnCancelListener { shouldContinue = false }
-                                            }
-                                        .show()
-
-                                } else { shouldContinue = true }
-
-                                if (shouldContinue) {
-
-                                    // grab target hoards using getSelectedAsHoards()
-                                    val targetHoards =
-                                        (binding.hoardListRecycler.adapter as HoardAdapter)
-                                            .getSelectedAsHoards()
-
-                                    // delete using a vararg DAO function DeleteHoardsWithChildren
-                                    hoardListViewModel.deleteSelectedHoards(targetHoards)
-
-                                    // call update
-                                    mode.finish()
-                                }
-                        })
-                        .setNegativeButton(R.string.action_cancel, DialogInterface.OnClickListener { dialog, _ ->
+                                // Call update
+                                mode.finish()
+                            }
+                        }
+                        .setNegativeButton(R.string.action_cancel) { dialog, _ ->
                             dialog.cancel()
-                        })
+                        }
                         .show()
 
                     true
@@ -598,23 +588,23 @@ class HoardListFragment : Fragment() {
 
                     mergeInputBuilder.setTitle("Enter merger details")
                         .setIcon(R.drawable.clipart_merge_vector_icon)
-                        .setPositiveButton(R.string.action_merge,
-                            DialogInterface.OnClickListener { _, _ ->
+                        .setPositiveButton(R.string.action_merge) { _, _ ->
 
-                                val selectedHoards =
-                                    (binding.hoardListRecycler.adapter as HoardAdapter)
-                                        .getSelectedAsHoards()
+                            val selectedHoards =
+                                (binding.hoardListRecycler.adapter as HoardAdapter)
+                                    .getSelectedAsHoards()
 
-                                hoardListViewModel.mergeSelectedHoards(selectedHoards,
-                                    newHoardNameEdittext.text.toString().takeUnless {it.isBlank()},
-                                    keepOriginalCheckbox.isChecked)
+                            hoardListViewModel.mergeSelectedHoards(
+                                selectedHoards,
+                                newHoardNameEdittext.text.toString().takeUnless { it.isBlank() },
+                                keepOriginalCheckbox.isChecked
+                            )
 
-                                mode.finish()
-                            })
-                        .setNegativeButton(R.string.action_cancel,
-                            DialogInterface.OnClickListener { dialog, _ ->
-                                dialog.cancel()
-                            })
+                            mode.finish()
+                        }
+                        .setNegativeButton(R.string.action_cancel) { dialog, _ ->
+                            dialog.cancel()
+                        }
                         .show()
 
                     true
@@ -726,23 +716,6 @@ class HoardListFragment : Fragment() {
                 })
         }
     }
-
-    private fun getSelectedHoards() : List<Hoard> {
-
-        val targetHoards = arrayListOf<Hoard>()
-
-        val indices = (binding.hoardListRecycler.adapter as HoardAdapter).getSelectedPositions()
-
-        indices.forEach { index ->
-
-            (binding.hoardListRecycler.adapter as HoardAdapter).hoards.getOrNull(index).let{
-                if (it != null) targetHoards.add(it)
-            }
-        }
-
-        return targetHoards.toList()
-    }
-
     // endregion
 
     companion object{

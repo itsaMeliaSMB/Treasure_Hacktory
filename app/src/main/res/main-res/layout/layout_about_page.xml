@@ -230,14 +230,11 @@
                 app:cardUseCompatPadding="true"
                 android:visibility="gone">
 
-                <!--TODO Made invisible due to ambiguity of wotc mention. Left in for now since coding in in place anyway.-->
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <!--TODO Edit attribution after hearing back from WotC-->
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -311,9 +308,6 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-
-            <!--TODO contact Wizards of the Coast and similarly seek permission-->
-            <!--https://company.wizards.com/en/legal/fancontentpolicy-->
 
         </LinearLayout>
 

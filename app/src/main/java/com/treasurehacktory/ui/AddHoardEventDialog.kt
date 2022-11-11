@@ -96,7 +96,7 @@ class AddHoardEventDialog() : DialogFragment() {
 
                         if (descString.isNotBlank()) {
 
-                            // Collate tags
+                            // Collate tags to include
                             val tagBuilder = StringBuilder()
                             binding.run {
                                 if (this.userTagArtObject.isChecked) {
@@ -179,5 +179,4 @@ class AddHoardEventDialog() : DialogFragment() {
     }
 
     // endregion
-
 }

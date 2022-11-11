@@ -61,5 +61,6 @@
     <string name="about_page_description">A fan-made HackMaster 4th edition companion app for treasure generation and management</string>
     <string name="action_about">About / Credits</string>
     <string name="max_icons_creator_link"><a href="https://www.flaticon.com/authors/maxicons">Creator\'s profile</a> on flaticon</string>
+    <string name="keep_originals_after_merging">Keep originals after merging</string>
 
 </resources>

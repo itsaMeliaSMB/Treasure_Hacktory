@@ -26,6 +26,16 @@ data class PenDiceRoll(var baseRoll: Int = 0, var baseCount: Int = 0,
     fun getDiceCount() = baseCount + penetrationCount
 }
 
+/**
+ * Rolls dice using the penetrating dice rules of HackMaster 4e.
+ *
+ * @param highThreshold How many values, starting at and including, the maximum rollable value will
+ * trigger an upwards penetration if rolled.
+ * @param lowThreshold How many values, starting at and including, the minimum rollable value will
+ * trigger an downwards penetration if rolled.
+ * @param honorModifier Penalty/bonus to apply to every die roll due to an affected entity's honor.
+ * @param willAutoPenetrate Whether or not the first die should automatically be counted as a penetration.
+ */
 fun rollPenetratingDice(numberOfDice: Int = 1, numberOfSides: Int, dieModifier: Int = 0,
                         highThreshold: Int = 1, lowThreshold: Int = 0,
                         honorModifier: Int = 0, willAutoPenetrate: Boolean = false) : PenDiceRoll {
@@ -42,10 +52,10 @@ fun rollPenetratingDice(numberOfDice: Int = 1, numberOfSides: Int, dieModifier: 
         currentRoll = Random.nextInt(1,numberOfSides + 1)   // Get actual roll
 
         roll.baseRoll += currentRoll + honorModifier               // Add to total value w/ HON mod
-        roll.baseCount ++                                           // Increment dice counter
-        remainingRolls --                                           // Decrement remaining base rolls
+        roll.baseCount ++                                          // Increment dice counter
+        remainingRolls --                                          // Decrement remaining base rolls
 
-        // *** Determine penetration direction and applicability***
+        // *** Determine penetration direction and applicability ***
 
         if (numberOfSides >= 4) {
 

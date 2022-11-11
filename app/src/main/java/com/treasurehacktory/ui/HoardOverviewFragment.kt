@@ -35,7 +35,6 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import kotlin.io.path.bufferedWriter
-import kotlin.math.roundToInt
 
 class HoardOverviewFragment : Fragment() {
 
@@ -63,6 +62,7 @@ class HoardOverviewFragment : Fragment() {
     // endregion
 
     // region [ Overridden functions ]
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -89,7 +89,7 @@ class HoardOverviewFragment : Fragment() {
             statusBarColor = newStatusBarColor
         }
 
-        // Give RecyclerView a Layout manager [required]
+        // Prepare the recycler view
         binding.hoardOverviewCoinageList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = coinAdapter
@@ -163,8 +163,6 @@ class HoardOverviewFragment : Fragment() {
         }
 
         hoardOverviewViewModel.hoardTotalXPLiveData.observe(viewLifecycleOwner) { liveXPTotal ->
-
-            val oldXPTotal = totalXPValue
 
             totalXPValue = liveXPTotal
 
@@ -282,7 +280,7 @@ class HoardOverviewFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        binding.hoardOverviewFavCheckbox.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.hoardOverviewFavCheckbox.setOnCheckedChangeListener { _, isChecked ->
 
             isNowFavorite = isChecked
         }
@@ -327,7 +325,6 @@ class HoardOverviewFragment : Fragment() {
         }
     }
 
-    // NOTE TO SELF: Runs when back button is pressed or app is removed from active view
     override fun onStop() {
         super.onStop()
         hoardOverviewViewModel.saveHoard(activeHoard.copy(isFavorite = isNowFavorite))
@@ -337,20 +334,6 @@ class HoardOverviewFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-    /* TODO override fun onDestroy() {
-        super.onDestroy()
-
-        val tempDir = requireContext().cacheDir
-
-        // Delete any temp files in directory first
-        tempDir.listFiles()?.forEach { file ->
-            if (file.isFile) {
-                file.delete()
-            }
-        }
-    }*/
-
     // endregion
 
     // region [ Inner classes ]
@@ -433,8 +416,7 @@ class HoardOverviewFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     fun updateUI() {
 
-        // Update header information
-        // Set icon for hoard
+        // Set icon for hoard thumbnail
         try {
 
             binding.hoardOverviewItemframeIcon
@@ -447,6 +429,7 @@ class HoardOverviewFragment : Fragment() {
                 .setImageResource(R.drawable.clipart_default_image)
         }
 
+        // Set badge on hoard thumbnail
         if (activeHoard.badge != HoardBadge.NONE) {
             try{
                 binding.hoardOverviewItemframeBadge.apply{
@@ -465,12 +448,13 @@ class HoardOverviewFragment : Fragment() {
             binding.hoardOverviewItemframeBadge.visibility = View.INVISIBLE
         }
 
+        // Update general information
         binding.apply{
 
             hoardOverviewNameLabel.text = activeHoard.name
             hoardOverviewDateInfo.text = SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
                 .format(activeHoard.creationDate)
-            hoardOverviewIdInfo.text = "# ${activeHoard.hoardID}"
+            "# ${activeHoard.hoardID}".also { hoardOverviewIdInfo.text = it }
             ("Worth ${DecimalFormat("#,##0.0#")
                 .format(activeHoard.gpTotal)
                 .removeSuffix(".0")} gp").also { binding.hoardOverviewValueInfo.text = it }
@@ -502,6 +486,7 @@ class HoardOverviewFragment : Fragment() {
                 }
 
                 binding.hoardOverviewCoinageGroup.visibility = View.VISIBLE
+
             } else {
                 // Hide coin group if hoard contains no coins
                 binding.hoardOverviewCoinageGroup.visibility = View.GONE
@@ -510,6 +495,7 @@ class HoardOverviewFragment : Fragment() {
 
         // Update unique item counts
         binding.apply{
+
             hoardOverviewGemQty.text = activeHoard.gemCount.toString()
             if (activeHoard.gemCount == 0) {
 
@@ -654,7 +640,7 @@ class HoardOverviewFragment : Fragment() {
                     text= getString(R.string.difficulty_low_6)
                     setTextColor(resources.getColor(R.color.pewter,context.theme))
                 }
-                effortRating >= 7.00 && effortRating < 8.00  -> {
+                effortRating >= 20.00  -> {
                     text= getString(R.string.difficulty_low_7)
                     setTextColor(resources.getColor(R.color.gray,context.theme))
                 }
@@ -676,6 +662,10 @@ class HoardOverviewFragment : Fragment() {
         return coinArrayList.toList()
     }
 
+    /**
+     * Attempts to generate a csv file that gives an overview of the given hoard and, if successful,
+     * share it via a simple implicit send intent.
+     */
     @SuppressLint("SimpleDateFormat")
     fun sendCSVReport(hoardBundle: Triple<Hoard, HoardUniqueItemBundle,List<HoardEvent>>,
                       fileName: String = "hoard_report") {
@@ -702,6 +692,12 @@ class HoardOverviewFragment : Fragment() {
         }
     }
 
+    /**
+     *  Takes a triple of a [Hoard], its [unique items][HoardUniqueItemBundle], and list of relevant
+     *  [hoard events][HoardEvent], and writes a simple report as temporary csv file.
+     *
+     *  @return The [Uri] of the newly-generated csv file.
+     */
     @SuppressLint("SimpleDateFormat")
     private fun generateCSVFile(hoardBundle: Triple<Hoard, HoardUniqueItemBundle, List<HoardEvent>>,
                                 fileName: String, fileExtension: String): Uri? {
@@ -715,7 +711,7 @@ class HoardOverviewFragment : Fragment() {
             }
         }
 
-        val filePath = kotlin.io.path.createTempFile(tempDir.toPath(), fileName, "." + fileExtension)
+        val filePath = kotlin.io.path.createTempFile(tempDir.toPath(), fileName, ".$fileExtension")
 
         val writer: BufferedWriter?
 
@@ -723,7 +719,7 @@ class HoardOverviewFragment : Fragment() {
 
             writer = filePath.bufferedWriter()
 
-            hoardBundle.let { (hoard, itemBundle, events) ->
+            hoardBundle.let { (hoard, itemBundle, _) ->
 
                 // region [ Simplified write functions ]
                 fun List<String>.writeAsRow() {
@@ -756,11 +752,12 @@ class HoardOverviewFragment : Fragment() {
                     hoard.effortRating >= 8.00 && hoard.effortRating < 10.00  -> getString(R.string.difficulty_low_4)
                     hoard.effortRating >= 10.00 && hoard.effortRating < 15.00  -> getString(R.string.difficulty_low_5)
                     hoard.effortRating >= 15.00 && hoard.effortRating < 20.00  -> getString(R.string.difficulty_low_6)
-                    hoard.effortRating >= 7.00 && hoard.effortRating < 8.00  -> getString(R.string.difficulty_low_7)
+                    hoard.effortRating >= 20.00 -> getString(R.string.difficulty_low_7)
                     else -> "???"
                 }
 
                 // region [ Treasure category compiling functions ]
+
                 fun compileCoinageForCSV(): List<List<String>> {
                     val gpTotal = hoard.getTotalCoinageValue()
                     val xpTotal = (hoard.getTotalCoinageValue() / hoard.effortRating).toInt()
@@ -773,9 +770,9 @@ class HoardOverviewFragment : Fragment() {
                             "Total in GP",
                             "Total in XP",
                             "Count",
-                            "Weight",
-                            "By Value",
-                            "By Count"
+                            "Weight (in lb)",
+                            "% By Value",
+                            "% By Count"
                         )
                     )
 
@@ -795,26 +792,17 @@ class HoardOverviewFragment : Fragment() {
                         coinList.add(
                             (DecimalFormat("#,##0.0#")
                                 .format(count / 10.0)
-                                .removeSuffix(".0")) + " lb (~" +
-                                    (DecimalFormat("#,##0.0#")
-                                        .format(((count / 4.5359237) * 100.00)
-                                            .roundToInt() / 100.00)
-                                        .removeSuffix(".0"))
-                                    + " kg)"
+                                .removeSuffix(".0")) + " lb"
                         )
                         coinList.add(
-                            ("${
-                                DecimalFormat("##0.0#")
-                                    .format((subGpTotal / gpTotal ) * 100.0)
-                                    .removeSuffix(".0")
-                            } %")
+                            (DecimalFormat("##0.0#")
+                                .format((subGpTotal / gpTotal ) * 100.0)
+                                .removeSuffix(".0"))
                         )
                         coinList.add(
-                            ("${
-                                DecimalFormat("##0.0#")
-                                    .format((count.toDouble() / countTotal.toDouble()) * 100.0)
-                                    .removeSuffix(".0")
-                            } %")
+                            (DecimalFormat("##0.0#")
+                                .format((count.toDouble() / countTotal.toDouble()) * 100.0)
+                                .removeSuffix(".0"))
                         )
 
                         outputList.add(coinList.toList())
@@ -1102,7 +1090,7 @@ class HoardOverviewFragment : Fragment() {
                         itemList.add(
                             when (item.type) {
                                 SpCoType.SCROLL -> "Spell Scroll"
-                                SpCoType.BOOK -> "Spellbook"
+                                SpCoType.BOOK -> "Spell Book"
                                 SpCoType.ALLOTMENT -> "Chosen One Allotment"
                                 SpCoType.RING -> "Ring of Spell Storing"
                                 SpCoType.OTHER -> "? ? ?"
@@ -1134,6 +1122,7 @@ class HoardOverviewFragment : Fragment() {
                 // Write the temp file
                 writer.use {
 
+                    writer.appendLine("sep=|")
                     listOf("", hoard.name, "[id:${hoard.hoardID}]").writeAsRow()
                     writeEmptyRow()
                     listOf(

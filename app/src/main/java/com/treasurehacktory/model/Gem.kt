@@ -181,7 +181,7 @@ data class Gem(
             currentGPValue,
             (currentGPValue / effortRating).roundToInt().coerceAtLeast(0),
             UniqueItemType.GEM,
-            listOf(getFlavorTextAsDetailsList()), //TODO add gem evaluation history when implemented
+            listOf(getFlavorTextAsDetailsList()),
             originalName,
             type,
             size,
@@ -199,5 +199,4 @@ data class GemEvaluation(
     val timestamp: Long = System.currentTimeMillis(),
     val description: String = "",
     val newGpValue: Double
-    //TODO add val valueChange: Double
 )

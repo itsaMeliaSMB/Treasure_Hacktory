@@ -22,7 +22,6 @@ class LootReporter(private val context : Context, private val repository: HMRepo
         val hoardSpCos = repository.getSpellCollectionOnce(hoard.hoardID)
         val hoardEvents = repository.getHoardEventsOnce(hoard.hoardID)
 
-        //TODO rename later
         val fileName = "hoardreport.txt"
         val reportFile = File(fileName)
 
@@ -584,11 +583,6 @@ class LootReporter(private val context : Context, private val repository: HMRepo
 
         // region [ Prepare file ] TODO
 
-        // TODO Left off here, but despite that, forget about the plaintext export for now. Instead,
-        //  focus on getting the unit tests for hoard generation set up and going, including test
-        //  implementations of Daos in Room as necessary. Goal is confirming template queries work
-        //  and no exceptions are thrown within possible parameters for orders.
-
         // endregion
 
         // region [ Header block ] TODO
@@ -615,6 +609,6 @@ class LootReporter(private val context : Context, private val repository: HMRepo
         // region [ Export file itself ] TODO
         // endregion
 
-        return "lol" // TODO fix/remove return type
+        return "Unimplemented"
     }
 }

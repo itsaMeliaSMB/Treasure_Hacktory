@@ -108,6 +108,8 @@ class UniqueListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
+
+        // Prepare a context wrapper for modular UI theming based on item type
         @StyleRes
         val itemTheme : Int
         @ColorInt
@@ -144,7 +146,7 @@ class UniqueListFragment : Fragment() {
         _binding = LayoutUniqueListBinding.inflate(localInflater, container, false)
         val view = binding.root
 
-        // Give RecyclerView a Layout manager [required]
+        // Prepare the recycler view
         binding.uniqueListRecycler.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = uniqueAdapter
@@ -194,8 +196,6 @@ class UniqueListFragment : Fragment() {
 
                 if (isRunningAsync) {
 
-                    // binding.uniqueDetailsViewableGroup.isEnabled = false
-
                     if (binding.uniqueListWaitingCard.waitingCard.visibility == View.GONE &&
                         !isWaitingCardAnimating
                     ) {
@@ -209,8 +209,6 @@ class UniqueListFragment : Fragment() {
                     }
 
                 } else {
-
-                    //binding.uniqueDetailsViewableGroup.isEnabled = true
 
                     if (binding.uniqueListWaitingCard.waitingCard.visibility == View.VISIBLE &&
                         !isWaitingCardAnimating
@@ -306,7 +304,6 @@ class UniqueListFragment : Fragment() {
             }
             setOnMenuItemClickListener { item ->
 
-                // https://developer.android.com/guide/fragments/appbar#fragment-click
                 when (item.itemId){
 
                     R.id.action_select_all_unique  -> {
@@ -601,8 +598,7 @@ class UniqueListFragment : Fragment() {
          * Returns a list of all ListableItems currently selected in the adapter.
          */
         fun getSelectedAsListableItems(): List<ListableItem> {
-            // May be more resource-intensive to grab from adapter, but this ensures intended
-            // items are affected.
+
             return items.filterIndexed { index, _ -> getSelectedPositions().contains(index) }
         }
 
@@ -773,7 +769,6 @@ class UniqueListFragment : Fragment() {
 
         override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
             return when (item.itemId) {
-
 
                 R.id.action_move_items -> {
 

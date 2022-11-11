@@ -175,9 +175,8 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
     }
 
     /**
-     * Sets value of GeneratorViewModel field from data passed from an <<<LISTENER>>>
-     * from GeneratorHoardFragment. Returns a string to be set as the calling view's error message
-     * if it fails validation.
+     * Sets value of GeneratorViewModel field from data passed from GeneratorHoardFragment. Returns
+     * a string to be set as the calling view's error message if it fails validation.
      */
     fun setValueFromEditText(sourceViewTag: GenEditTextTag, capturedString: String) : String? {
 
@@ -237,7 +236,9 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                         spCoQty = parsedValue
                     }
 
-                    else -> {}
+                    else -> {
+                        // Do nothing, only added for exhaustive when statement
+                    }
                 }
 
                 errorString = when {
@@ -596,8 +597,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
 
     fun generateHoard(isLetterCodeMethod: Boolean, appVersion: Int) {
 
-        //https://developer.android.com/kotlin/coroutines
-
         viewModelScope.launch {
 
             setRunningAsync(true)
@@ -674,7 +673,6 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         val sortedDenomList = getSortedDenominations()
         val minimumTotal: Double
         val maximumTotal: Double
-        val targetGpTotal: Double
         var runningGpTotal = 0.0
 
         // region [ Determine range of total value of coinage to generate ]
@@ -686,7 +684,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
             maximumTotal = 0.0
         }
 
-        targetGpTotal = if (minimumTotal == maximumTotal) {
+        val targetGpTotal: Double = if (minimumTotal == maximumTotal) {
             minimumTotal
         } else {
             Random.nextDouble(minimumTotal,maximumTotal + 0.01).roundToTwoDecimal()
@@ -738,7 +736,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
         return newCoinageMap
     }
 
-    fun Double.roundToTwoDecimal():Double = (this * 100.00).roundToInt() / 100.00
+    private fun Double.roundToTwoDecimal():Double = (this * 100.00).roundToInt() / 100.00
 
     // endregion
 }

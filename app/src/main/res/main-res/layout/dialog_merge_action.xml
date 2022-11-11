@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Keep originals after merging"
+        android:text="@string/keep_originals_after_merging"
         app:layout_constraintBaseline_toBaselineOf="@id/merge_dialog_checkbox"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -335,7 +335,8 @@ class LootMutator() {
         if (itemPile.isNotEmpty()) {
             bestItem = itemPile.sortedWith( compareByDescending<MagicItem> { it.gpValue }
                 .thenByDescending { it.xpValue }
-                .thenByDescending { it.typeOfItem.ordinal.takeUnless { it > 20 } ?: -1}
+                .thenByDescending { magicItem -> magicItem.typeOfItem.ordinal
+                    .takeUnless { it > 20 } ?: -1 }
                 .thenBy { it.mItemID })
                 .first()
         }
@@ -496,7 +497,6 @@ class LootMutator() {
     }
 }
 
-//TODO move to Util class
 fun String.capitalized(): String {
     return this.replaceFirstChar {
 

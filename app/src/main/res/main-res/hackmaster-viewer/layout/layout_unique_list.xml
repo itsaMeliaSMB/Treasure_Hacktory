@@ -5,9 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--https://developer.android.com/guide/fragments/appbar#fragment-->
-    <!--https://developer.android.com/guide/navigation/navigation-ui-->
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"

@@ -9,5 +9,4 @@
     android:minHeight="48dp"
     android:textSize="14sp"
     android:gravity="center_vertical"
-
     tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>

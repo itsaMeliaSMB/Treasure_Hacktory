@@ -17,10 +17,6 @@ class HoardEventLogViewModel(private val repository: HMRepository) : ViewModel()
 
     // region [ Helper functions ]
 
-    fun updateHoardID(hoardID: Int) {
-        hoardIDLiveData.value = hoardID
-    }
-
     fun updateEventsNormally(hoardID: Int) {
         viewModelScope.launch{
             eventsLiveData.postValue(repository.getHoardEventsOnce(hoardID))

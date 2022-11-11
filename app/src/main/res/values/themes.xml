@@ -37,8 +37,6 @@
     </style>
 
     <style name="GemSubStyle" parent="Theme.TreasureHacktory">
-        <!--TODO pick out the 12 colors-->
-        <!--TODO extend with a night/dark theme-->
         <!--Primary colors-->
         <item name="colorPrimary">@color/gemPrimary</item>
         <item name="colorPrimaryDark">@color/gemPrimaryDark</item>
@@ -60,8 +58,6 @@
     </style>
 
     <style name="ArtObjectSubStyle" parent="Theme.TreasureHacktory">
-        <!--TODO pick out the 12 colors-->
-        <!--TODO extend with a night/dark theme-->
         <!--Primary colors-->
         <item name="colorPrimary">@color/artPrimary</item>
         <item name="colorPrimaryDark">@color/artPrimaryDark</item>
@@ -83,8 +79,6 @@
     </style>
 
     <style name="MagicItemSubStyle" parent="Theme.TreasureHacktory">
-        <!--TODO pick out the 12 colors-->
-        <!--TODO extend with a night/dark theme-->
         <!--Primary colors-->
         <item name="colorPrimary">@color/magicPrimary</item>
         <item name="colorPrimaryDark">@color/magicPrimaryDark</item>
@@ -106,8 +100,6 @@
     </style>
 
     <style name="SpellCollectionSubStyle" parent="Theme.TreasureHacktory">
-        <!--TODO pick out the 12 colors-->
-        <!--TODO extend with a night/dark theme-->
         <!--Primary colors-->
         <item name="colorPrimary">@color/spellPrimary</item>
         <item name="colorPrimaryDark">@color/spellPrimaryDark</item>

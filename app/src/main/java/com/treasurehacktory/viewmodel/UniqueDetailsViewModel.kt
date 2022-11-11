@@ -55,7 +55,7 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
         itemArgsLiveData.value = Triple(itemID,type,hoardID)
     }
 
-    fun saveViewedItem(itemToUpdate: ViewableItem, parentHoard: Hoard, event: HoardEvent?) {
+    private fun saveViewedItem(itemToUpdate: ViewableItem, parentHoard: Hoard, event: HoardEvent?) {
 
         viewModelScope.launch {
 

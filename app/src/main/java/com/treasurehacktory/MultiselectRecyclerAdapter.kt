@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class MultiselectRecyclerAdapter<VH: RecyclerView.ViewHolder> :
     RecyclerView.Adapter<VH>() {
 
-    //https://enoent.fr/posts/recyclerview-basics/ TODO remove when fully tested
-
     private val selectedItems = SparseBooleanArray()
 
     var selectedCount: Int = selectedItems.size

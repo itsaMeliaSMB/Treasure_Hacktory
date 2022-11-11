@@ -368,9 +368,10 @@ class AboutFragment : Fragment() {
                 }
             }
 
-            //endregion
+            // endregion
 
             // region ( Make links clickable )
+
             kenzercoMainLink.movementMethod = LinkMovementMethod.getInstance()
             kenzercoHackmasterLink.movementMethod = LinkMovementMethod.getInstance()
             wotcPolicyLink.movementMethod = LinkMovementMethod.getInstance()
@@ -391,7 +392,7 @@ class AboutFragment : Fragment() {
             puzwedChallongeLink.movementMethod = LinkMovementMethod.getInstance()
             puzwedTwitterLink.movementMethod = LinkMovementMethod.getInstance()
             puzwedYoutubeLink.movementMethod = LinkMovementMethod.getInstance()
-            //endregion
+            // endregion
         }
 
     }

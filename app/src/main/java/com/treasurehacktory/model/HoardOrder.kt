@@ -2,8 +2,6 @@ package com.treasurehacktory.model
 
 import com.treasurehacktory.viewmodel.MAXIMUM_SPELLS_PER_SCROLL
 
-const val DEFAULT_MAX_SPELLS_PER_SCROLL = 7
-
 data class HoardOrder(
     var hoardName: String = "Untitled Hoard",
     var creationDescription: String = "",

@@ -37,7 +37,7 @@
             android:layout_gravity="center"
             android:gravity="center_vertical"
             android:layout_marginHorizontal="4dp"
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:textStyle="bold"
             android:fontFamily="sans-serif-condensed"
             android:text="@string/coinage_totals_label"/>

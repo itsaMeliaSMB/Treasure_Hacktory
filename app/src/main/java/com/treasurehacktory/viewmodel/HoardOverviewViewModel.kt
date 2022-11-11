@@ -30,10 +30,11 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
     var spellValueLiveData = Transformations.switchMap(hoardIDLiveData) { hoardID ->
         repository.getSpellCollectionValueTotal(hoardID)
     }
+    /** Calculated separately from item lists due to variable hoard effort ratings. */
     var hoardTotalXPLiveData = MutableLiveData(0)
         private set
 
-    /** Bundle of data observed to generate a hoard report. */
+    /** Bundle of data observed to generate an exported hoard report. */
     val reportInfoLiveData = MutableLiveData<Triple<Hoard, HoardUniqueItemBundle,List<HoardEvent>>?>(null)
     // endregion
 
@@ -48,6 +49,10 @@ class HoardOverviewViewModel(private val repository: HMRepository): ViewModel() 
         viewModelScope.launch { repository.updateHoard(hoard) }
     }
 
+    /**
+     * Calculates total experience value for all items with the given parent hoard ID and updates
+     * hoardTotalXPLiveData with result.
+     * */
     fun updateXPTotal(hoardID: Int) {
 
         viewModelScope.launch{

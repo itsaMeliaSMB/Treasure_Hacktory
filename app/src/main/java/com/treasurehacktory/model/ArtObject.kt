@@ -159,10 +159,7 @@ data class ArtObject(
     }
 
     @Ignore
-    fun getAgeAsString(): String {
-        val ageRank = getAgeInYearsAsRank()
-        return "~$age years old"
-    }
+    fun getAgeAsString(): String = "~$age years old"
 
     @Ignore
     fun getConditionAsString() : String {
@@ -613,7 +610,7 @@ data class ArtObject(
                     nameBuilder.append("the $abstractQuality of $abstractTopic")
                 }
 
-                -1 -> { //Monster subjects
+                -1 -> { // Monster subjects
 
                     val monsterAdjective = listOf(
                         "angry",
@@ -623,9 +620,12 @@ data class ArtObject(
                         "comely",
                         "confused",
                         "crazed",
+                        "cute",
                         "depraved",
                         "devious",
+                        "dread",
                         "enlightened",
+                        "flaming",
                         "funny",
                         "greasy",
                         "grotesque",
@@ -638,8 +638,10 @@ data class ArtObject(
                         "lonely",
                         "magical",
                         "oily",
+                        "pristine",
                         "purple",
                         "sad",
+                        "shadowy",
                         "sloven",
                         "smelly",
                         "sneaky",
@@ -652,31 +654,44 @@ data class ArtObject(
                     ).random()
 
                     val monsterRace = listOf(
+                        "adapter",
                         "basilisk",
                         "centaur",
                         "dragon",
                         "dungeon cat",
+                        "elemental",
                         "gargoyle",
                         "ghoul",
                         "giant",
                         "gnoll",
+                        "golem",
                         "hobgoblin",
                         "kobold",
+                        "lich",
+                        "lycanthrope",
                         "manticore",
+                        "medusa",
                         "minotaur",
                         "ogre",
                         "orc",
+                        "owlbear",
+                        "sedusa",
                         "skeleton",
                         "slobgoblin",
+                        "slime",
                         "troll",
                         "vampire",
+                        "wyrm",
                         "zombie"
                     ).random()
 
                     val monsterActivity = listOf(
                         "arguing",
                         "at it again",
+                        "bearing teeth",
                         "counting treasure",
+                        "defending territory",
+                        "dueling",
                         "eating lunch",
                         "feasting",
                         "frowning",
@@ -688,6 +703,7 @@ data class ArtObject(
                         "in contemplation",
                         "in retreat",
                         "just vibing",
+                        "looking at you",
                         "on death's doorstep",
                         "on the hunt",
                         "playing cards",
@@ -772,19 +788,24 @@ data class ArtObject(
                         "militaristic",
                         "modest",
                         "morose",
+                        "mystical",
                         "neurotic",
+                        "new age",
                         "non-binary",
                         "old",
                         "pious",
+                        "pristine",
                         "purple",
                         "rough",
                         "rude",
                         "scheming",
                         "secretive",
                         "servile",
+                        "sickly",
                         "studious",
                         "stupid",
                         "suspicious",
+                        "traditional",
                         "ugly",
                         "vengeful",
                         "violent",
@@ -923,6 +944,7 @@ data class ArtObject(
                         "building/creating",
                         "celebrating",
                         "cleaning up",
+                        "collaborating",
                         "contemplating",
                         "conversing",
                         "creating art",
@@ -934,8 +956,9 @@ data class ArtObject(
                         "eating",
                         "eating a book",
                         "engrossed",
-                        "enjoying fine Kenzer & Company products",
+                        "enjoying fine Kenzer and Company products",
                         "fighting",
+                        "flirting",
                         "haggling",
                         "getting drunk",
                         "hanging out",
@@ -953,6 +976,8 @@ data class ArtObject(
                         "laughing",
                         "looking really cool",
                         "on alert",
+                        "paying respect",
+                        "performing a ritual",
                         "performing live",
                         "pining",
                         "playing chess",
@@ -960,9 +985,11 @@ data class ArtObject(
                         "preparing for battle",
                         "questioning",
                         "reading a book",
+                        "rushing into combat",
                         "showing off",
                         "sitting still",
                         "slacking off",
+                        "smooching",
                         "solving a puzzle",
                         "striking a pose",
                         "studying",
@@ -970,7 +997,8 @@ data class ArtObject(
                         "up to no good",
                         "victorious",
                         "waking up",
-                        "waltzing"
+                        "waltzing",
+                        "worshipping"
                     ).random()
 
                     val humanCount = Random.nextInt(1,13) - 6
@@ -1135,12 +1163,12 @@ data class ArtObject(
                                 "investigating",
                                 "just vibin'",
                                 "looking hella sweet",
-                                "mating",
                                 "on lookout",
                                 "on the hunt",
                                 "playing cards",
                                 "resting",
                                 "sleeping",
+                                "slinking around",
                                 "staring blankly",
                                 "up to no good",
                                 "waking up",
@@ -1227,7 +1255,7 @@ data class ArtObject(
                                 "pine tree" to "pine trees",
                                 "rose" to "roses",
                                 "shrubbery" to "shrubs",
-                                "snow drift" to "snowdrifts",
+                                "snow drift" to "snow drifts",
                                 "soldam" to "soldams",
                                 "tree" to "trees",
                                 "vine" to "vines",
@@ -1247,7 +1275,7 @@ data class ArtObject(
                                 "abandoned",
                                 "amber",
                                 "breezy",
-                                "calamitious",
+                                "calamitous",
                                 "calm",
                                 "clear",
                                 "cold",
@@ -1282,7 +1310,7 @@ data class ArtObject(
                                 "violent",
                                 "warm",
                                 "wet",
-                                "wonderous"
+                                "wondrous"
                             ).random()
 
                             val phenomObject = listOf(
@@ -1335,6 +1363,7 @@ data class ArtObject(
                                 "in twilight",
                                 "after dark",
                                 "at night",
+                                "during an eclipse",
                                 "in summer",
                                 "in autumn",
                                 "in winter",
@@ -1374,6 +1403,7 @@ data class ArtObject(
                         "establishment of a colony",
                         "first contact",
                         "first meeting of two cultures",
+                        "forging of dwarven artifact",
                         "founding of academy",
                         "founding of city",
                         "founding of guild",
@@ -1505,6 +1535,7 @@ data class ArtObject(
                                 ).random()
                             } else {
                                 listOf(
+                                    "Abigail",
                                     "Agatha",
                                     "Amy",
                                     "Annie",
@@ -1554,7 +1585,9 @@ data class ArtObject(
                                 "Artist",
                                 "Avatar",
                                 "Barbarian",
+                                "Battle-harded",
                                 "Beautiful",
+                                "Bookworm",
                                 "Chosen One",
                                 "Civilized",
                                 "Club-footed",
@@ -1570,6 +1603,7 @@ data class ArtObject(
                                 "Four-eyed",
                                 "Generous",
                                 "Green-haired",
+                                "Grizzled",
                                 "HacKleric",
                                 "Healer",
                                 "Heretic",
@@ -1736,7 +1770,11 @@ data class ArtObject(
                                 "Yondalla, Gawdess of Halflings and Fertility",
                                 "Quetzalcoatl, Gawd of Arts and Air",
                                 "The Confuser of Ways, Gawd of Lies, Deceit, and Mischief",
-                                "Rotovi the Mule, Gawd of Mathematics, Science, et al."
+                                "Rotovi the Mule, Gawd of Mathematics, Science, et al.",
+                                "Skoraeus Stonebones, Gawd of Stone Giants",
+                                "Tiamat, Gawdess of Evil Dragons",
+                                "Bahamut, Gawd of Good Dragons",
+                                "The Faceless Gawd, Gawd of Yaks and Yak-Like Creatures"
                             ).random().also { nameBuilder.append(it) }
                         }
                     }
@@ -1812,7 +1850,9 @@ data class ArtObject(
                                     "Supreme Arch Transmuter Elenwyd Sesuliad, " +
                                             "the High Transmuter of Whisperydown",
                                     "Supreme Grand Merchant Wencelan Druffin, " +
-                                            "leader of the Gnomish Syndicate"
+                                            "leader of the Gnomish Syndicate",
+                                    "Swashbuckler Lord Volerdo Mountebank, the Royal Ecologist " +
+                                            "of Fangaerie, and his adoptive daughter, Leona"
                                 ).random()
                             }
 
@@ -1888,7 +1928,7 @@ data class ArtObject(
                                 "Preceptress",
                                 "Professor",
                                 "Sorceress",
-                                "Spymaster",
+                                "Spymistress",
                                 "Stewardess",
                                 "Treasure Huntress",
                                 "Vice President"
@@ -2077,11 +2117,11 @@ data class ArtObject(
                             "Kaiser",
                             "Tsar",
                             "High King",
-                            "King",
+                            "King", "King", "King",
                             "Archduke",
-                            "Duke",
-                            "Crown Prince",
-                            "Prince",
+                            "Duke", "Duke", "Duke",
+                            "Crown Prince", "Crown Prince",
+                            "Prince", "Prince", "Prince",
                             "High Sorcerer"
                         ).random()
                     } else {
@@ -2090,11 +2130,11 @@ data class ArtObject(
                             "Kaiserin",
                             "Tsarina",
                             "High Queen",
-                            "Queen",
+                            "Queen", "Queen", "Queen",
                             "Archduchess",
-                            "Duchess",
+                            "Duchess", "Duchess",
                             "Crown Princess",
-                            "Princess",
+                            "Princess", "Princess", "Princess", "Princess",
                             "High Sorceress"
                         ).random()
                     }

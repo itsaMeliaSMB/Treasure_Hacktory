@@ -397,8 +397,8 @@ class MultihoardProcessor(private val repository: HMRepository) {
         }
     }
 
-    suspend fun ensureHoardCapacity(targetHoardID: Int, newItems: HoardUniqueItemBundle,
-                                    newCoinage: Map<CoinType,Int>) : Pair<Boolean,String> {
+    private suspend fun ensureHoardCapacity(targetHoardID: Int, newItems: HoardUniqueItemBundle,
+                                            newCoinage: Map<CoinType,Int>) : Pair<Boolean,String> {
 
         val originalHoard = repository.getHoardOnce(targetHoardID)
 
@@ -793,7 +793,6 @@ class MultihoardProcessor(private val repository: HMRepository) {
             hoardsToCopy.forEach { originalHoard ->
 
                 val newHoardID : Int
-                val newItemBundle : HoardUniqueItemBundle
                 val cloneHoardName = if (originalHoard.name.endsWith(" [Copy]")) {
                     originalHoard.name
                 } else { originalHoard.name + " [Copy]" }
@@ -805,7 +804,7 @@ class MultihoardProcessor(private val repository: HMRepository) {
                 newHoardID = repository.getHoardIdByRowId(repository.addHoard(newClonedHoard))
 
                 // Copy original hoard's items with scrubbed primary keys
-                newItemBundle = getHoardUniqueItemBundle(originalHoard.hoardID).scrub(newHoardID)
+                val newItemBundle = getHoardUniqueItemBundle(originalHoard.hoardID).scrub(newHoardID)
 
                 // Add copied items to hoard
                 val addGemsJob = launch { newItemBundle.hoardGems.forEach {
@@ -895,7 +894,7 @@ class MultihoardProcessor(private val repository: HMRepository) {
      * Pulls all unique items associated with a given hoard IDm or an empty list if no Hoard
      * corresponds to the provided key.
      */
-    suspend fun getHoardUniqueItemBundle(hoardID: Int): HoardUniqueItemBundle {
+    private suspend fun getHoardUniqueItemBundle(hoardID: Int): HoardUniqueItemBundle {
 
         val hoardGemList :  List<Gem>
         val hoardArtList :  List<ArtObject>
@@ -929,7 +928,7 @@ class MultihoardProcessor(private val repository: HMRepository) {
      * Returns a copy of this HoardUniqueItemBundle with all unique item IDs replaced with zero and
      * the new parent hoard applied, if provided ID is valid.
      */
-    suspend fun HoardUniqueItemBundle.scrub(newParentID: Int): HoardUniqueItemBundle {
+    private suspend fun HoardUniqueItemBundle.scrub(newParentID: Int): HoardUniqueItemBundle {
 
         return if (newParentID < 1 || repository.getHoardOnce(newParentID) == null) {
             HoardUniqueItemBundle(

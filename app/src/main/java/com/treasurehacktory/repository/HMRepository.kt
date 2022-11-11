@@ -33,9 +33,7 @@ class HMRepository (
     suspend fun getHoardEffortRatingOnce(hoardID: Int): Double =
         hoardDao.getHoardEffortRatingOnce(hoardID) ?: 5.0
 
-    suspend fun addHoard(hoard: Hoard) : Long {
-        return hoardDao.addHoard(hoard)
-    }
+    suspend fun addHoard(hoard: Hoard) : Long = hoardDao.addHoard(hoard)
 
     suspend fun updateHoard(hoardToUpdate: Hoard) = hoardDao.updateHoard(hoardToUpdate)
 
@@ -98,8 +96,6 @@ class HMRepository (
     fun getGems(hoardId: Int): LiveData<List<Gem>> = gemDao.getGems(hoardId)
 
     suspend fun getGemsOnce(hoardID: Int): List<Gem> = gemDao.getGemsOnce(hoardID)
-
-    fun getGem(gemId: Int): LiveData<Gem?> = gemDao.getGem(gemId)
 
     suspend fun getGemOnce(gemId: Int): Gem? = gemDao.getGemOnce(gemId)
 
@@ -368,8 +364,6 @@ class HMRepository (
     }
     // endregion
 
-
-
     // region ( CommandWord )
     suspend fun getThemedCommandWords(theme: String): List<String> =
         spellCollectionDao.getThemedCommandWords(theme)
@@ -379,32 +373,6 @@ class HMRepository (
 
     suspend fun addCommandWord(wordToAdd: CommandWord) =
         spellCollectionDao.addCommandWord(wordToAdd)
-    // endregion
-
-    // region [ Unique item functions ]
-
-    /*fun getListableItems(hoardID: Int, itemType: UniqueItemType) : LiveData<List<Listable>> {
-
-        when (itemType) {
-
-            UniqueItemType.GEM              -> {
-
-            }
-            UniqueItemType.ART_OBJECT       -> {
-
-            }
-            UniqueItemType.MAGIC_ITEM       -> {
-
-            }
-            UniqueItemType.SPELL_COLLECTION -> {
-
-            }
-        }
-
-        return LiveData<Listable>(emptyList<ListableGem>())
-    }
-    */
-
     // endregion
 
     // endregion

@@ -7,8 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--https://stackoverflow.com/questions/67136040/how-to-use-view-binding-in-custom-dialog-box-layout-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -227,8 +225,6 @@
             app:layout_constraintStart_toEndOf="@id/generator_option_art_max_label"
             app:layout_constraintTop_toBottomOf="@id/generator_option_art_slider"
             tools:text="1,000,000 gp" />
-
-        <!--TODO add filter checkboxes for allowed scroll results here-->
 
         <ImageView
             android:id="@+id/generator_option_map_icon"
@@ -536,8 +532,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="?attr/colorSecondaryVariant"
             android:tooltipText="@string/allow_magic_item_types_tooltip"/>
-
-        <!--TODO test multiline tooltips-->
 
         <TextView
             android:id="@+id/generator_option_magic_error"
@@ -1070,8 +1064,6 @@
             android:text="Re-roll GM/Player Choice results"
             android:textStyle="italic"
             app:layout_constraintTop_toBottomOf="@id/generator_option_spell_curse_group" />
-
-        <!--TODO: in later builds, make this a checklist, not a single item.-->
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/generator_option_specialist_switch"

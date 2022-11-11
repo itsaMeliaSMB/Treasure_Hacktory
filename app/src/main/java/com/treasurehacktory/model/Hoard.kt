@@ -5,8 +5,6 @@ import org.jetbrains.annotations.NotNull
 import java.util.*
 import kotlin.math.roundToInt
 
-// https://stackoverflow.com/questions/64823212/use-android-room-without-breaking-encapsulation
-
 /**
  * Parent class for distinct treasure hoard with it's own items.
  *

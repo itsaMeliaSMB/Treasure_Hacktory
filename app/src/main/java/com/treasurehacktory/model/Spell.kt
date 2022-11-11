@@ -36,7 +36,6 @@ enum class SpellSchool(val resName: String){
         }
     }
 
-
     @Ignore
     fun getLongName(context: Context): String {
 
@@ -47,9 +46,7 @@ enum class SpellSchool(val resName: String){
                     "${resName}_l", "string", context.packageName
                 )
             )
-        } catch (e: Resources.NotFoundException) {
-            "<School not found>"
-        }
+        } catch (e: Resources.NotFoundException) { "<School not found>" }
     }
 
     @Ignore
@@ -57,11 +54,8 @@ enum class SpellSchool(val resName: String){
     fun getDrawableResID(context: Context): Int {
 
         return try {
-
             context.resources.getIdentifier(resName,"drawable",context.packageName)
-        } catch (e: Resources.NotFoundException) {
-            R.drawable.rounded_rectangle_border_bg
-        }
+        } catch (e: Resources.NotFoundException) { R.drawable.rounded_rectangle_border_bg }
     }
 }
 
@@ -96,9 +90,7 @@ enum class ClericalSphere(val resName: String){
                     resName, "string", context.packageName
                 )
             )
-        } catch (e: Resources.NotFoundException) {
-            "String not found."
-        }
+        } catch (e: Resources.NotFoundException) { "String not found." }
     }
 
     @Ignore
@@ -106,11 +98,8 @@ enum class ClericalSphere(val resName: String){
     fun getDrawableResID(context: Context): Int {
 
         return try {
-
             context.resources.getIdentifier(resName,"drawable",context.packageName)
-        } catch (e: Resources.NotFoundException) {
-            R.drawable.rounded_rectangle_border_bg
-        }
+        } catch (e: Resources.NotFoundException) { R.drawable.rounded_rectangle_border_bg }
     }
 }
 
@@ -170,9 +159,7 @@ enum class ArcaneSpecialist(val resName: String){
                     resName, "string", context.packageName
                 )
             )
-        } catch (e: Resources.NotFoundException) {
-            "String not found."
-        }
+        } catch (e: Resources.NotFoundException) { "String not found." }
     }
 }
 
@@ -190,7 +177,10 @@ enum class ReferenceType {
 /**
  * Full description of a magic spell referenced by a [SpellEntry] within a [SpellCollection].
  *
- * @param reverse If true on an [arcane][SpCoDiscipline.ARCANE] spell, marks that spell as "Reversible". Otherwise, marks this spell as the "Reversed" form of another spell.
+ * @param reverse If true on an [arcane][SpCoDiscipline.ARCANE] spell, marks that spell as
+ * "Reversible". Otherwise, marks this spell as the "Reversed" form of another spell.
+ * @param choiceString Used for pulling "Choice" spell tables from the database. Lowercase letters
+ * indicate core spell tables, while uppercase indicate splatbook tables.
  */
 @Entity(tableName = "hackmaster_spell_table")
 data class Spell(
@@ -205,7 +195,7 @@ data class Spell(
     val schools: List<SpellSchool>,
     val spheres: List<ClericalSphere>,
     val subclass: String,
-    val restrictions: List<ArcaneSpecialist> = emptyList<ArcaneSpecialist>(),
+    val restrictions: List<ArcaneSpecialist> = emptyList(),
     val note: String,
     val choiceString: String = ""
 ) {
@@ -240,21 +230,6 @@ data class Spell(
         if (note.isNotBlank()) {result.append("\nNOTE: $note")}
 
         return result.toString()
-    }
-
-    @Ignore
-    fun getRestrictionsString():String {
-
-        val runningList = StringBuilder()
-
-        if (restrictions.isNotEmpty()) {
-
-            restrictions.forEach {
-                runningList.append("• $it\n")
-            }
-        }
-
-        return runningList.toString().trimEnd()
     }
 
     @Ignore

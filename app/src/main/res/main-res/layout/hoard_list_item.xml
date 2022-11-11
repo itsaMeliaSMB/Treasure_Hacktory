@@ -5,8 +5,7 @@
     android:id="@+id/layout_hoard_list_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/hoard_itemview_bg_colorlist"
-    >
+    android:background="@color/hoard_itemview_bg_colorlist">
 
     <ImageView
         android:id="@+id/hoard_list_item_list_frame_foreground"

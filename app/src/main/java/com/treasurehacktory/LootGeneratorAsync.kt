@@ -13,12 +13,10 @@ import java.util.*
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-const val ORDER_LABEL_STRING = "order_details"
-
 const val HACKMASTER_CLASS_ITEM_TEXT = "THIS IS A HACKMASTER-CLASS ITEM!"
 
 const val MAX_SPELLS_PER_SCROLL = 50
-const val MAX_SPELLS_PER_BOOK = 120
+
 
 /**
  * Primary key of first single Ioun stone in database.
@@ -29,9 +27,9 @@ const val FIRST_IOUN_STONE_KEY = 855
 /**
  * Primary key of last (dead) single Ioun stone in database.
  *
- * @since 3/13/2022
+ * @since 11/11/2022
  * */
-const val LAST_IOUN_STONE_KEY = 868
+const val LAST_IOUN_STONE_KEY = 869
 /** Primary key for Gut Stone entry in gem database */
 const val GUT_STONE_KEY = 58
 
@@ -597,8 +595,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     addHoardEvent(itemHoardEvent)
                     addHoardEvent(spellHoardEvent)
                     addHoardEvent(mapHoardEvent)
-                    //TODO add verbose initial composition report event, but only call for it if
-                    // the user requests it.
                 }
             }
 
@@ -617,7 +613,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
     // endregion
 
-    //region [ Item generation functions ]
+    // region [ Item generation functions ]
     /**
      * Returns a [gem][Gem] based on the method laid out on page 178 of the GameMaster’s Guide.
      *
@@ -742,11 +738,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         val condModifier:   Int
 
         val artType:        Int
-        val renown:         Int
-        val size:           Int
-        val condition:      Int
-        val materials:      Int
-        val quality:        Int
         val subject:        Int
 
         // region [ Type of art ]
@@ -809,7 +800,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // region [ Renown of the artist ]
 
-        renown = when (Random.nextInt(1,101)) {
+        val renown = when (Random.nextInt(1,101)) {
 
             in 1..15    -> -3
             in 16..30   -> -2
@@ -825,7 +816,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // region [ Size of artwork ]
 
-        size = when(Random.nextInt(1,101)) {
+        val size = when(Random.nextInt(1,101)) {
 
             in 1..5     -> -3
             in 6..25    -> -2
@@ -842,7 +833,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // region [ Quality of materials used ]
 
-        temporaryRank = when (Random.nextInt(1,101)){ //convert to value rank for modification
+        temporaryRank = when (Random.nextInt(1,101)){ // Convert to value rank for modification
 
             in 1..5     -> 0
             in 6..25    -> 1
@@ -858,13 +849,13 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         if (temporaryRank < 0) { temporaryRank = 0 }
         if (temporaryRank > 8) { temporaryRank = 8 }
 
-        materials = temporaryRank - 3
+        val materials = temporaryRank - 3
 
         // endregion
 
         // region [ Quality of work done ]
 
-        temporaryRank = when (Random.nextInt(1,101)){ //convert to value rank for modification
+        temporaryRank = when (Random.nextInt(1,101)){ // Convert to value rank for modification
 
             in 1..5     -> 0
             in 6..25    -> 1
@@ -880,7 +871,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         if (temporaryRank < 0) { temporaryRank = 0 }
         if (temporaryRank > 8) { temporaryRank = 8 }
 
-        quality = temporaryRank - 3
+        val quality = temporaryRank - 3
 
         // endregion
 
@@ -997,7 +988,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         if (temporaryRank < 0) { temporaryRank = 0 }
         if (temporaryRank > 8) { temporaryRank = 8 }
 
-        condition = temporaryRank - 3
+        val condition = temporaryRank - 3
 
         // endregion
 
@@ -1005,35 +996,35 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         when (Random.nextInt(1,101)) {
 
-            in 1..10    -> {
+            in 1..10    -> {    // Abstract
                 subject = -2
                 subjectRank = -2
             }
-            in 11..20   -> {
+            in 11..20   -> {    // Monstrous
                 subject = -1
                 subjectRank = -1
             }
-            in 21..30   -> {
+            in 21..30   -> {    // Human/demi-human
                 subject = 0
                 subjectRank = 0
             }
-            in 31..50   -> {
+            in 31..50   -> {    // Natural
                 subject = 1
                 subjectRank = 0
             }
-            in 51..70   -> {
+            in 51..70   -> {    // Historical
                 subject = 2
                 subjectRank = 0
             }
-            in 71..90   -> {
+            in 71..90   -> {    // Religious
                 subject = 3
                 subjectRank = 0
             }
-            in 91..99   -> {
+            in 91..99   -> {    // Noble/wealthy
                 subject = 4
                 subjectRank = 1
             }
-            else        -> {
+            else        -> {    // Royalty
                 subject = 5
                 subjectRank = 2
             }
@@ -1043,12 +1034,12 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         // region [ Append treasure map, if indicated ]
 
-        val paperTreasureMap = if ((artType == 0)&&
+        val paperTreasureMap = if (artType == 0 &&
             (Random.nextInt(1,101) <= itemRestrictions.paperMapChance)) {
 
             createTreasureMap(parentHoardID,"paper artwork",allowFalseMaps)
 
-        } else null
+        } else { null }
         // endregion
 
         fun convertValueLevelToGP() : Double {
@@ -1265,6 +1256,10 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             return result
         }
 
+        /**
+         *  Takes a list of item template and item weight pairs and returns a list of continuous
+         *  [ranges][IntRange] paired with the primary keys for a given item candidate.
+         */
         fun getWeightedItemMap(limTemplates: List<Pair<Int,Int>>): List<Pair<IntRange, Int>> {
 
             val listBuilder = arrayListOf<Pair<IntRange,Int>>()
@@ -1340,6 +1335,10 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         fun getItemTypesAsWeightPairs() : List<Pair<Int,Int>> {
 
+            /**
+             * Values are given as percentage change to roll table on Table A1 if all items were
+             * allowed.
+             */
             val tableA1Values = mapOf(
                 2 to 20,
                 3 to 15,
@@ -1392,7 +1391,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             } else {
 
                 itemType = "INVALID"
-                baseTemplateID = -1
             }
         } else {
 
@@ -1482,6 +1480,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             )
         }
 
+        // Roll for cases not covered by hackmaster_magic_item_reference lookups
         when (itemType) {
 
             "A2" -> { if (Random.nextInt(1, 101) == 100) gmChoice = true  }
@@ -1601,7 +1600,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         }
 
         if (gmChoice) {
-            baseTemplateID = -1
             mName = "GM’s Choice"
         }
         // endregion
@@ -1682,7 +1680,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     // Pull primary key of magic item entry
                     val baseItemTable = getWeightedItemMap(baseTemplateList)
 
-                    var currentRoll: Int = Random.nextInt(baseItemTable.first().first.first,
+                    val currentRoll: Int = Random.nextInt(baseItemTable.first().first.first,
                         baseItemTable.last().first.last + 1)
 
                     baseTemplateID = baseItemTable[
@@ -1799,10 +1797,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 keywords.forEach { key ->
 
-                    imitationList.addAll(repository.getNamesToImitate(key))
+                    imitationList.addAll(
+                        repository.getNamesToImitate(key).filter{ it != template.name }
+                    )
                 }
 
-                // keywords[Random.nextInt(0,keywords.size)]
                 val imitationName = imitationList.randomOrNull() ?: ""
 
                 if (imitationName.isNotBlank()) {
@@ -2678,6 +2677,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             "Eleanor",
                             "Elizabeth",
                             "Eric",
+                            "Elvin",
+                            "Frank",
                             "Franklin",
                             "Frederick",
                             "George",
@@ -3175,8 +3176,17 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                     in 1..29    -> "Clear (transparent)"
                     in 30..34   -> "Flecked (transparent ${getSubstanceColor()} with " +
-                            "${getSubstanceColor()} flecks)"
-                    in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()})"
+                            getSubstanceColor() + if (Random.nextInt(1,4) == 3) {
+                                " and ${getSubstanceColor()} flecks)"
+                            } else {
+                                " flecks)"
+                            }
+                    in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()}"+
+                            getSubstanceColor() + if (Random.nextInt(1,4) == 3) {
+                        " to ${getSubstanceColor()})"
+                    } else {
+                        ")"
+                    }
                     in 40..54   -> "Luminous (${getSubstanceColor()}, " +
                             "~${Random.nextInt(1,21) * 5}% opacity)"
                     in 55..59   -> "Opaline (glowing)"
@@ -3186,7 +3196,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                     in 80..84   -> "Ribboned (${getSubstanceColor()}, " +
                             "~${Random.nextInt(1,21) * 5}% opacity)"
                     in 85..94   -> "Translucent (${getSubstanceColor()})"
-                    else        -> "Varigated (${getSubstanceColor()}, " +
+                    else        -> "Variegated (${getSubstanceColor()}, " +
                             "${getSubstanceColor()}, and maybe some ${getSubstanceColor()})"
                 } )
         // endregion
@@ -3284,7 +3294,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "AA. Obscurement (1 time/day)",
                 "BB. Pass without Trace (1 time/day)",
                 "CC. Possessor immune to disease",
-                "DD. Possessor immunne to fear",
+                "DD. Possessor immune to fear",
                 "EE. Possessor immune to gas of any type",
                 "FF. Possessor need not eat/drink for up to 1 week",
                 "II. Sanctuary when held or worn (1 time/day)",
@@ -4554,113 +4564,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 .map { it.toSpellEntry() },originalName = ringName
         )
     }
-
-    /* TODO finish implementing after first shipped build
-    override fun createSpellBook(parentHoard: Int, _effectiveLevel: Int, _extraSpells: Int,
-                        _specialistType: String, extraProperties: Int,
-                        extraSpellMethod: SpCoGenMethod,
-                        useSSG: Boolean,
-                        allowRestricted: Boolean) : SpellCollection {
-
-        var pageType = object {
-            var featureName         = "Parchment"
-            var costPerFourPages    = 3.0   // Given in
-            var timePerFourPages    = 2.0   // Given in hours
-            var pagesPerHalfPound   = 48
-        }
-        var inkType = object {
-            var featureName         = "Standard Ink"
-            var costPerFourPages    = 25.0
-            var timePerFourPages    = 1.0
-        }
-        var bindingType = object {
-            var featureName         = "Standard binding"
-            var time                = 2.0
-            var weight              = 0.5
-        }
-        var coverType = object {
-            var featureName         = "Leather cover"
-            var cost                = 20.0
-            var time                = 2.0
-            var weight : Pair<Double,Double> = 1.5 to 0.75
-        }
-        val enhancements = object{
-            val pageEnhancements = mutableSetOf<Pair<String,Double>>()
-            val inkEnhancements = mutableSetOf<Pair<String,Double>>()
-            val bindingEnhancements = mutableSetOf<Pair<String,Double>>()
-            val coverEnhancements = mutableSetOf<Pair<String,Double>>()
-            val securityEnhancements =  mutableSetOf<Pair<String,Double>>()
-            val carryingEnhancements = mutableSetOf<Pair<String,Double>>()
-        }
-
-        var pageCount   = 64
-        var materialCost= 0.0
-        var prodTime    = 0.0
-        var totalWeight = 0.0
-
-        val effectiveLevel = _effectiveLevel.coerceIn(1..20)
-        val specialistType = if (Spell.mageSpecialistTags.contains(_specialistType)) {
-            _specialistType
-        } else ""
-        var iconID = "book_silverbound"
-        val nameBuilder = StringBuilder()
-
-        val spells = arrayListOf<Spell>()
-        val extraProperties = arrayListOf<Pair<String,Double>>()
-
-        fun convertEnhancementsToList() { // TODO implement
-            }
-        fun getInitialGPValue() : Double {
-
-            var gpTotal: Double = materialCost
-
-            if (extraProperties.isNotEmpty()) {
-                extraProperties.forEach { (_, gpValue) -> gpTotal += gpValue }
-            }
-
-            if (spells.isNotEmpty()) {
-                spells.forEach {
-
-                    gpTotal += if (it.spellLevel == 0) {
-                        75.0
-                    } else {
-                        (300.0 * it.spellLevel)
-                    }
-                }
-            }
-
-            return gpTotal
-        }
-        fun getInitialXpValue() : Int {
-
-            var xpTotal = 0
-
-            if (spells.isNotEmpty()) { spells.forEach {
-
-                xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel) }
-            }
-
-            return xpTotal
-        }
-
-        fun addRandomEnhancement() {
-
-
-            when (Random.nextInt(1,7)){
-                else-> {
-
-                }
-            }
-
-        }
-
-        //TODO Implement specialist-specific spellbooks.
-
-        return SpellCollection(0,parentHoard,iconID,nameBuilder.toString(),
-        SpCoType.BOOK,extraProperties.toList(),getInitialGPValue(),getInitialXpValue(),
-        spells.toList(),"")
-    } */
-
     // endregion
 
     // region [ Spell-related functions ]
@@ -4738,7 +4641,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
         fun SpCoDiscipline.asClassString() : String = when (this) {
 
-            //TODO change to getString() for localization if translations are implemented
             SpCoDiscipline.ARCANE   -> "Magic-User"
             SpCoDiscipline.DIVINE   -> "Cleric"
             SpCoDiscipline.NATURAL  -> "Druid"
@@ -4826,15 +4728,15 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             }
 
             SpCoGenMethod.CHOSEN_ONE    -> {
-                //TODO Unimplemented
+                // Unimplemented
             }
 
             SpCoGenMethod.SPELL_BOOK    -> {
-                //TODO Unimplemented
+                // Unimplemented
             }
 
             SpCoGenMethod.ANY_PHYSICAL  -> {
-                //TODO Unimplemented
+                // Unimplemented
             }
         }
 
@@ -4929,8 +4831,11 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "<TrH> The caster must save vs. Polymorph or have two of their attribute scores swapped (Roll a d8, re-rolling 8).",
                 "<TrH> Any spell cast from this spell inflicts 3 points of damage per spell level on the caster (cantrips inflict 1).",
                 "<TrH> All containers on the caster’s person becomes transparent for 24 hours.",
-                "<TrH> A 30'-radius spherical version of Hiamohr’s Unfortunate Incident immediately takes effect, centered on (and including) the caster.",
-                "<TrH> The caster immediately sheds all hair on their head and body."
+                "<TrH> A 30'-radius spherical version of Hiamohr’s Unfortunate Incident immediately takes effect, centered on (and including) the caster (saving throws allowed).",
+                "<TrH> The caster immediately sheds all hair on their head and body.",
+                "<TrH> Fate conspires to cause a new embarrassing nickname to apply and subsequently catch on the caster.",
+                "<TrH> The caster is fated to encounter an embarrassing, but not necessarily dangerous, slapstick situation in the next 24 hours.",
+                "<TrH> A metal wash basin filled with dirty water manifests 3 feet above the caster's head."
             )
 
             val curseList = when (order.allowedCurses) {
@@ -4970,7 +4875,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             }
 
         } else {
-
             "scroll_cursed"
         }
         // endregion
@@ -5031,7 +4935,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         }
     }
 
-    fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
+    private fun createNewScrollOrder(scrollParams: SpellCoRestrictions, isByBook: Boolean) : SpellCollectionOrder {
 
         val scrollDiscipline: SpCoDiscipline
         val spellCount = Random.nextInt(scrollParams.spellCountRange.first,
@@ -5108,9 +5012,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     }
 
     /** Gets a random spell from allowed sources of the level, discipline, and restriction provided. */
-    suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
-                               sources: SpCoSources, rerollChoices: Boolean = false,
-                               allowRestricted: Boolean): Spell {
+    private suspend fun getRandomSpell(_inputLevel: Int, _discipline: SpCoDiscipline,
+                                       sources: SpCoSources, rerollChoices: Boolean = false,
+                                       allowRestricted: Boolean): Spell {
 
         val discipline = if (_discipline == SpCoDiscipline.ALL_MAGIC) {
                 listOf(SpCoDiscipline.ARCANE, SpCoDiscipline.DIVINE, SpCoDiscipline.NATURAL).random()
@@ -5165,8 +5069,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
     }
 
     /** Returns a magic-user spell as if acquired by leveling up, outlined in the GMG/SSG */
-    suspend fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: SpellSchool?,
-                                  rerollChoices: Boolean, useSSG: Boolean): Spell {
+    private suspend fun getSpellByLevelUp(_inputLevel: Int, enforcedSchool: SpellSchool?,
+                                          rerollChoices: Boolean, useSSG: Boolean): Spell {
 
         val inputLevel = _inputLevel.coerceIn(1..9)
         var spellName: String
@@ -7236,7 +7140,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                                 "Forcecage",
                                 "Hyptor’s Shimmering Sword",
                                 "Limited Wish",
-                                "Merrywether’s Frost Fist", //TODO search for "Merryweather" in other spell names
+                                "Merrywether’s Frost Fist",
                                 "Torment",
                                 "Zarba’s Grasping Hand",
                                 "GM Choice",
@@ -7576,479 +7480,6 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         return spellHolder
     }
 
-    /* TODO Comment out until spellbooks are being implemented
-    override fun getInitialSpellbookSpells(_specialistType: String, useSSG: Boolean): List<Spell> {
-        val NESTED_OFFENSIVE_REROLL = 0
-        val NESTED_DEFENSIVE_REROLL = 1
-        val NESTED_MISC_REROLL = 2
-
-        val specialistType = if (Spell.mageSpecialistTags.contains(_specialistType)) {
-            _specialistType
-        } else ""
-
-        val spellNameList = arrayListOf("Read Magic","Write")
-        var tempHolder: SpellTemplate = SAMPLE_ARCANE_SPELL
-        val spellList = ArrayList<Spell>()
-        var (offensiveRolls,defensiveRolls,miscRolls,schoolRolls) = when (specialistType) {
-            "Battle_Mage"   -> listOf(3,0,0,0)
-            ""              -> listOf(1,1,1,0) // Generalist Magic-User
-            else            -> listOf(0,0,0,3) // Single Specialist
-        }
-        var (offensiveRerolls,defensiveRerolls,miscRerolls) = 0
-
-        val gmgOffensiveSpells = listOf(
-            "Befriend",
-            "Burning Hands",
-            "Charm Person",
-            "Chill Touch",
-            "Chromatic Orb",
-            "Color Spray",
-            "Enlarge",
-            "Fireball, Barrage",
-            "Fireball, Sidewinder Factor 1",
-            "Firewater",
-            "Grease",
-            "Hypnotism",
-            "Light",
-            "Magic Missile",
-            "Minor Sphere of Perturbation",
-            "Phantasmal Fireball",
-            "Shocking Grasp",
-            "Sleep",
-            "Spook",
-            "Taunt"
-        )
-        val gmgDefensiveSpells = listOf(
-            "Affect Normal Fires",
-            "Alarm",
-            "Armor",
-            "Audible Glamer",
-            "Aura of Innocence",
-            "Change Self",
-            "Dancing Lights",
-            "Faerie Phantoms",
-            "Feather Fall",
-            "Flutter Soft",
-            "Gaze Reflection",
-            "Hold Portal",
-            "Jump",
-            "Magic Shield",
-            "Phantom Armor",
-            "Protection from Evil",
-            "Shift Blame",
-            "Smell Immunity",
-            "Spider Climb",
-            "Wall of Fog"
-        )
-        val gmgMiscSpells = listOf(
-            "Bash Door",
-            "Comprehend Languages",
-            "Conjure Mount",
-            "Detect Magic",
-            "Detect Undead",
-            "Erase",
-            "Find Familiar",
-            "Fog Vision",
-            "Gabal’s Magic Aura",
-            "Melt",
-            "Mend",
-            "Merge Coin Pile",
-            "Message",
-            "Phantasmal Force",
-            "Pool Gold",
-            "Precipitation",
-            "Run",
-            "Throw Voice",
-            "Unseen Servant",
-            "Wizard Mark"
-        )
-        val ssgOffensiveSpells = listOf(
-            "Befriend",
-            "Burning Hands",
-            "Charm Person",
-            "Chill Touch",
-            "Chromatic Orb",
-            "Color Spray",
-            "Enlarge",
-            "Fireball, Barrage",
-            "Fireball, Sidewinder Factor 1",
-            "Firewater",
-            "Grease",
-            "Hypnotism",
-            "Icy Blast",
-            "Jack Punch",
-            "Light",
-            "Magic Missile",
-            "Magic Stone",
-            "Minor Sphere of Perturbation",
-            "Phantasmal Fireball",
-            "Power Word: Cartwheel",
-            "Power Word: Moon",
-            "Power Word: Summersault",
-            "Push",
-            "Shocking Grasp",
-            "Sleep",
-            "Spook",
-            "Taunt"
-        )
-        val ssgDefensiveSpells = listOf(
-            "Affect Normal Fires",
-            "Alarm",
-            "Armor",
-            "Audible Glamer",
-            "Aura of Innocence",
-            "Change Self",
-            "Corpse Visage",
-            "Dancing Lights",
-            "Disable Hand",
-            "Faerie Phantoms",
-            "Feather Fall",
-            "Flutter Soft",
-            "Gaze Reflection",
-            "Hold Portal",
-            "Jump",
-            "Magic Shield",
-            "Phantom Armor",
-            "Protection from Evil",
-            "Protection from Sunburn",
-            "Protective Amulet",
-            "Remove Fear",
-            "Resist Cold",
-            "Resist Fire",
-            "Shift Blame",
-            "Smell Immunity",
-            "Spider Climb",
-            "Wall of Fog"
-        )
-        val ssgMiscSpells = listOf(
-            "Animate Dead Animals",
-            "Bash Door",
-            "Comprehend Languages",
-            "Conjure Mount",
-            "Copy",
-            "Detect Disease",
-            "Detect Illusion",
-            "Detect Magic",
-            "Detect Phase",
-            "Detect Undead",
-            "Divining Rod",
-            "Erase",
-            "Find Familiar",
-            "Fog Vision",
-            "Gabal’s Magic Aura",
-            "Melt",
-            "Mend",
-            "Merge Coin Pile",
-            "Message",
-            "Phantasmal Force",
-            "Pool Gold",
-            "Precipitation",
-            "Remove Thirst",
-            "Run",
-            "Throw Voice",
-            "Unseen Servant",
-            "Wizard Mark"
-        )
-
-        fun rollNestedReroll(type: Int, count: Int) {
-            when (type){
-
-                NESTED_OFFENSIVE_REROLL -> {
-
-                    repeat(count){
-                        when (Random.nextInt(1,99)){
-                            in 88..96   -> offensiveRerolls ++
-
-                            97          -> {
-                                offensiveRerolls ++
-                                miscRerolls ++
-                            }
-
-                            98          -> {
-                                offensiveRerolls ++
-                                defensiveRerolls ++
-                            }
-
-                            else        -> offensiveRolls ++
-                        }
-                    }
-                }
-
-                NESTED_DEFENSIVE_REROLL -> {
-
-                    repeat(count){
-                        when (Random.nextInt(1,99)){
-                            in 82..92   -> defensiveRerolls ++
-
-                            in 93..94   -> {
-                                defensiveRerolls ++
-                                miscRerolls ++
-                            }
-
-                            in 95..96   -> {
-                                defensiveRerolls ++
-                                offensiveRerolls ++
-                            }
-
-                            97          -> spellNameList.plus("GM Choice (Defensive)")
-
-                            98          -> spellNameList.plus("Player Choice (Defensive)")
-
-                            else        -> defensiveRolls ++
-                        }
-                    }
-                }
-
-                NESTED_MISC_REROLL -> {
-
-                    repeat(count){
-                        when (Random.nextInt(1,99)){
-                            in 88..96   -> miscRerolls ++
-
-                            97          -> {
-                                miscRerolls ++
-                                defensiveRerolls ++
-                            }
-
-                            98          -> {
-                                miscRerolls ++
-                                offensiveRerolls ++
-                            }
-
-                            else        -> miscRolls ++
-                        }
-                    }
-                }
-            }
-        }
-
-        //TODO implement function for try/catch of querying db for template. Just returns sample spell for now.
-        fun tryTempFetch(spellName: String) : SpellTemplate {
-            return SAMPLE_ARCANE_SPELL //TODO actually query DB using spellName as argument.
-        }
-
-        fun getSpellByName(name: String) : Spell {
-
-            tempHolder = if ((name == "GM Choice (Defensive)") || ( name == "Player Choice (Defensive)")){
-                // Return a custom "Choice" SpellTemplate
-                SpellTemplate(0,name,1,
-                    "Spellslinger’s Guide to Wurld Domination", 6,
-                    0, 1, "Abj", "", "", "", "See errata for updated Table 1A")
-            } else {
-
-                tryTempFetch(name)
-            }
-
-            return convertTemplateToSpell(tempHolder)
-        }
-
-        // First run of checks for rerolls/bonuses (if using SSG)
-        if (useSSG){
-            repeat(offensiveRolls) {
-
-                when (Random.nextInt(1,101)){
-                    in 88..96   -> {
-                        offensiveRolls --
-                        offensiveRerolls ++
-                    }
-
-                    97          -> {
-                        offensiveRolls --
-                        offensiveRerolls ++
-                        defensiveRerolls ++
-                    }
-
-                    98          -> {
-                        offensiveRolls --
-                        offensiveRerolls ++
-                        miscRerolls ++
-                    }
-
-                    99          -> {
-                        offensiveRolls --
-                        rollNestedReroll(NESTED_OFFENSIVE_REROLL,2)
-                    }
-
-                    100         -> {
-                        offensiveRolls --
-                        rollNestedReroll(NESTED_OFFENSIVE_REROLL,3)
-                    }
-                }
-            }
-
-            repeat(defensiveRolls) {
-
-                when (Random.nextInt(1,101)){
-                    in 82..92   -> {
-                        defensiveRolls --
-                        defensiveRerolls ++
-                    }
-
-                    in 93..94   -> {
-                        defensiveRolls --
-                        defensiveRerolls ++
-                        miscRerolls ++
-                    }
-
-                    in 95..96   -> {
-                        defensiveRolls --
-                        defensiveRerolls ++
-                        offensiveRerolls ++
-                    }
-
-                    97          -> {
-                        defensiveRolls --
-                        rollNestedReroll(NESTED_DEFENSIVE_REROLL,2)
-                    }
-
-                    98         -> {
-                        defensiveRolls --
-                        rollNestedReroll(NESTED_DEFENSIVE_REROLL,3)
-                    }
-
-                    99          -> {
-                        defensiveRolls --
-                        spellNameList.plus("GM Choice (Defensive)")
-                    }
-
-                    100         -> {
-                        defensiveRolls --
-                        spellNameList.plus("Player Choice (Defensive)")
-                    }
-                }
-            }
-
-            repeat(miscRolls) {
-
-                when (Random.nextInt(1,101)){
-                    in 88..96   -> {
-                        miscRolls --
-                        miscRerolls ++
-                    }
-
-                    97          -> {
-                        miscRolls --
-                        miscRerolls ++
-                        defensiveRerolls ++
-                    }
-
-                    98          -> {
-                        miscRolls --
-                        miscRerolls ++
-                        offensiveRerolls ++
-                    }
-
-                    99          -> {
-                        miscRolls --
-                        rollNestedReroll(NESTED_MISC_REROLL,2)
-                    }
-
-                    100         -> {
-                        miscRolls --
-                        rollNestedReroll(NESTED_MISC_REROLL,3)
-                    }
-                }
-            }
-        }
-
-        // Reroll as indicated. Resolve all rerolls before spell determination.
-        while ((offensiveRerolls > 0)||(defensiveRerolls > 0)||(miscRerolls > 0)) {
-
-            while (offensiveRerolls > 0) {
-
-                when (Random.nextInt(1,101)){
-
-                    in 1..87    -> {
-                        offensiveRolls ++
-                        offensiveRerolls --
-                    }
-
-                    97          -> defensiveRerolls ++
-
-                    98          -> miscRerolls ++
-
-                    99          -> rollNestedReroll(NESTED_OFFENSIVE_REROLL,2)
-
-                    100         -> rollNestedReroll(NESTED_OFFENSIVE_REROLL,3)
-                }
-            }
-
-            while (defensiveRerolls > 0) {
-
-                when (Random.nextInt(1,101)){
-                    in 1..81   -> {
-                        defensiveRolls ++
-                        defensiveRerolls --
-                    }
-
-                    in 93..94   -> miscRerolls ++
-
-                    in 95..96   -> offensiveRerolls ++
-
-                    97          -> rollNestedReroll(NESTED_DEFENSIVE_REROLL,2)
-
-                    98          -> rollNestedReroll(NESTED_DEFENSIVE_REROLL,3)
-
-                    99          -> {
-                        defensiveRerolls --
-                        spellNameList.plus("GM Choice (Defensive)")
-                    }
-
-                    100         -> {
-                        defensiveRerolls --
-                        spellNameList.plus("Player Choice (Defensive)")
-                    }
-                }
-            }
-
-            while (miscRerolls > 0) {
-
-                when (Random.nextInt(1,101)){
-
-                    in 1..87    -> {
-                        miscRolls ++
-                        miscRerolls --
-                    }
-
-                    97          -> defensiveRerolls ++
-
-                    98          -> offensiveRerolls ++
-
-                    99          -> rollNestedReroll(NESTED_MISC_REROLL,2)
-
-                    100         -> rollNestedReroll(NESTED_MISC_REROLL,3)
-                }
-            }
-
-        }
-
-        // Once all re-rolls are converted to rolls, roll spells.
-        if (useSSG){
-            repeat(offensiveRolls) { spellNameList.plus(ssgOffensiveSpells.random()) }
-            repeat(defensiveRolls) { spellNameList.plus(ssgDefensiveSpells.random()) }
-            repeat(miscRolls) { spellNameList.plus(ssgMiscSpells.random()) }
-            //TODO implement specialist spell lists
-        } else {
-            repeat(offensiveRolls) { spellNameList.plus(gmgOffensiveSpells.random()) }
-            repeat(defensiveRolls) { spellNameList.plus(gmgDefensiveSpells.random()) }
-            repeat(miscRolls) { spellNameList.plus(gmgMiscSpells.random()) }
-            //TODO implement specialist spell lists
-        }
-
-        // Convert names into spells
-        spellNameList.forEach { spellList.add(getSpellByName(it)) }
-
-        return spellList
-    }
-
-    /** Returns a [SpellCollection] of a spellbook following the procedure mentioned on SSG pgs 82-87 */
-    fun createSpellBook(parentHoard: Int, _effectiveLevel: Int, _extraSpells: Int,
-                        _specialistType: String, extraProperties: Int = 0,
-                        extraSpellMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
-                        useSSG: Boolean = true,
-                        allowRestricted: Boolean): SpellCollection
-     */
-
     /**
      * Returns a cleric or druid spell using Appendix E on pgs 132-133 of ZG
      *
@@ -8058,7 +7489,8 @@ class LootGeneratorAsync(private val repository: HMRepository) {
      * @param _maxCastable Highest castable spell level of theoretical caster. If 0, any
      * restrictions (i.e. spell level of Indulgence) regarding spell level are ignored.
      */
-    suspend fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean, useZG: Boolean, _maxCastable: Int = 0) : Spell {
+    private suspend fun getSpellByChosenOneTable(_inputLevel: Int, allowDruid: Boolean,
+                                                 useZG: Boolean, _maxCastable: Int = 0) : Spell {
 
         val inputLevel = _inputLevel.coerceIn(1..7)
         val maxCastable = _maxCastable.coerceIn(0..7)

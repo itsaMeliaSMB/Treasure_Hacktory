@@ -42,7 +42,7 @@ import java.text.SimpleDateFormat
 
 class HoardGeneratorFragment : Fragment() {
 
-    //region [ Property declarations ]
+    // region [ Property declarations ]
     private var appVersion = 0
 
     private var shortAnimationDuration: Int = 0
@@ -60,8 +60,10 @@ class HoardGeneratorFragment : Fragment() {
     private var lairAdapter: LetterAdapter = LetterAdapter(true)
     private var smallAdapter: LetterAdapter = LetterAdapter(false)
 
-    val spLvlRangeShortLabels by lazy { resources.getStringArray(R.array.spell_level_labels_condensed) }
-    val spLvlRangeLongLabels by lazy { resources.getStringArray(R.array.spell_level_labels) }
+    private val spLvlRangeShortLabels: Array<String> by lazy {
+        resources.getStringArray(R.array.spell_level_labels_condensed) }
+    private val spLvlRangeLongLabels: Array<String> by lazy {
+        resources.getStringArray(R.array.spell_level_labels) }
 
     // region [ Callbacks ]
 
@@ -279,7 +281,7 @@ class HoardGeneratorFragment : Fragment() {
 
                         }
 
-                    val dialogBuilder = AlertDialog.Builder(context).setView(dialogView)
+                    AlertDialog.Builder(context).setView(dialogView)
                         .setPositiveButton(R.string.action_view_new_hoard) { _, _ ->
 
                                 val action =
@@ -344,8 +346,6 @@ class HoardGeneratorFragment : Fragment() {
                 when (item.itemId) {
 
                     R.id.action_generator_options   -> {
-
-                        // https://stackoverflow.com/questions/67136040/how-to-use-view-binding-in-custom-dialog-box-layout
 
                         val gemSliderStringValues  = resources.getStringArray(R.array.range_slider_gem_label)
                         val artSliderStringValues = resources.getStringArray(R.array.range_slider_art_label)
@@ -886,7 +886,7 @@ class HoardGeneratorFragment : Fragment() {
             appVersion = requireContext().packageManager
             .getPackageInfo(requireContext().packageName,0).versionCode
         
-        // Apply widget properties
+        // Prepare UI
         binding.generatorNameEdit.addTextChangedListener { input ->
 
             generatorViewModel.hoardName = input.toString()
@@ -906,8 +906,6 @@ class HoardGeneratorFragment : Fragment() {
 
                     binding.generatorAnimatorFrame.displayedChild = 1
                 }
-
-                else -> {}
             }
 
             generatorViewModel
@@ -1804,18 +1802,22 @@ class HoardGeneratorFragment : Fragment() {
          // endregion
         }
         // endregion
+
         // endregion
 
         // region [ Buttons ]
         binding.generatorResetButton.setOnClickListener {
 
                 if (binding.generatorMethodLettercode.isChecked){
+
                     // Zero out type counters
                     generatorViewModel.resetLairCount()
                     generatorViewModel.resetSmallCount()
-                    // Update recyclerviews
+
+                    // Update recycler views
                     binding.generatorLairRecyclerview.adapter?.notifyDataSetChanged()
                     binding.generatorSmallRecyclerview.adapter?.notifyDataSetChanged()
+
                 } else {
                     generatorViewModel.resetSpecificQtyValues()
                     binding.setFieldsFromViewModel()
@@ -1835,7 +1837,9 @@ class HoardGeneratorFragment : Fragment() {
 
                     } else {
 
-                        Toast.makeText(context,"Please indicate at least one treasure type to generate.",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,
+                            "Please indicate at least one treasure type to generate.",
+                            Toast.LENGTH_SHORT).show()
                     }
                 }
                 R.id.generator_method_specific  ->{
@@ -1862,9 +1866,10 @@ class HoardGeneratorFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    //endregion
 
-    //region [ Inner classes ]
+    // endregion
+
+    // region [ Inner classes ]
 
     private inner class LetterAdapter(private val isLairAdapter: Boolean)
         : ListAdapter<Pair<String,Int>, LetterAdapter.LetterHolder>(LetterDiffCallback()) {
@@ -1875,7 +1880,7 @@ class HoardGeneratorFragment : Fragment() {
             return LetterHolder(binding, isLairAdapter)
         }
 
-        override fun onBindViewHolder(holder: LetterHolder, position: Int) { //TODO consider replacing position calls with holder.adapterPosition
+        override fun onBindViewHolder(holder: LetterHolder, position: Int) {
 
             val currentItem = getItem(position)
 
@@ -1890,7 +1895,6 @@ class HoardGeneratorFragment : Fragment() {
                 val typeString = "${getString(R.string.odds_ref_treasure_type)} ${entry.first}"
                 val qtyString = "x ${entry.second}"
 
-                //TODO move OnClickListeners back to OnBindViewHolder if new binding schema fails
                 binding.apply {
 
                     letterItemInfodot.setOnClickListener {
@@ -1921,7 +1925,7 @@ class HoardGeneratorFragment : Fragment() {
                         qtyDialogView.findViewById<TextView>(R.id.dialog_letter_qty_current).text =
                             entry.second.toString()
 
-                                // Build and show dialog
+                            // Build and show dialog
                             AlertDialog.Builder(context).setView(qtyDialogView)
                                 .setTitle(getString(R.string.new_qty_title))
                                 .setPositiveButton(R.string.action_submit_qty_update) { _, _ ->

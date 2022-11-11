@@ -41,8 +41,6 @@ abstract class TreasureDatabase : RoomDatabase() {
         private val scope: CoroutineScope
     ) : RoomDatabase.Callback() {
 
-        // https://developer.android.com/codelabs/android-room-with-a-view-kotlin#13
-
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             INSTANCE?.let { database ->
@@ -57,12 +55,9 @@ abstract class TreasureDatabase : RoomDatabase() {
             }
         }
 
-        // Since it was so hard to find, https://discuss.kotlinlang.org/t/why-would-using-coroutines-be-slower-than-sequential-for-a-big-file/7698/7
-
         /** Populates letter code table using hardcoded CSV file. */
         suspend fun populateLetterCodesByCSV(hoardDao: HoardDao) {
 
-            // val csvFilePath = "src/main/res/raw/seed_lettercode_v01.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
@@ -147,10 +142,6 @@ abstract class TreasureDatabase : RoomDatabase() {
             val inputStream = context.resources.openRawResource(
                 context.resources.getIdentifier("seed_gems","raw",context.packageName))
 
-            /*
-            File(csvFilePath)
-                .inputStream()
-            */
             inputStream
                 .bufferedReader()
                 .lineSequence()
@@ -433,7 +424,6 @@ abstract class TreasureDatabase : RoomDatabase() {
 
         suspend fun populateCommandWords(spellDao: SpellCollectionDao) {
 
-            //val csvFilePath = "src/main/res/raw/seed_command_words.csv"
             var iterationCount = 0
 
             val inputStream = context.resources.openRawResource(
@@ -572,7 +562,6 @@ interface HoardDao {
 
     @Query("DELETE FROM hackmaster_gem_table WHERE hoardID=(:hoardID)")
     suspend fun deleteHoardGems(hoardID: Int)
-    //TODO make into transaction for deleting GemEvaluations
 
     @Query("DELETE FROM hackmaster_art_table WHERE hoardID=(:hoardID)")
     suspend fun deleteHoardArtObjects(hoardID: Int)
@@ -608,8 +597,6 @@ interface HoardDao {
 
 @Dao
 interface GemDao {
-
-    //TODO add GemEvaluation queries
 
     // region ( GemTemplate )
     @Query("SELECT * FROM hackmaster_gem_reference WHERE type=(:type) ORDER BY ordinal")

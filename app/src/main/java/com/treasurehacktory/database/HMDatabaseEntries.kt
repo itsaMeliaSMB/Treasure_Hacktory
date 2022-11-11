@@ -8,8 +8,6 @@ import org.jetbrains.annotations.NotNull
 
 // region [ Read-only template entities ]
 
-//TODO May need to remove column info for template classes
-
 @Entity(tableName = "hackmaster_gem_reference")
 data class GemTemplate(
     @PrimaryKey @ColumnInfo(name="ref_id") val refId: Int,

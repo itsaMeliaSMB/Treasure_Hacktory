@@ -6,7 +6,6 @@ import com.treasurehacktory.LootMutator
 import com.treasurehacktory.MultihoardProcessor
 import com.treasurehacktory.model.*
 import com.treasurehacktory.repository.HMRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.NumberFormat
@@ -128,8 +127,6 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
                         .thenBy { it.id })
                 } else { listables }
             )
-
-            delay(500L)
 
             setRunningAsync(false)
         }
@@ -585,10 +582,6 @@ class UniqueListViewModel(private val repository: HMRepository) : ViewModel() {
 
             setRunningAsync(false)
         }
-    }
-
-    fun duplicateSelectedItems(itemsToCopy: List<ListableItem>) {
-        //TODO Not yet implemented
     }
 
     fun fetchHoardsForDialog(excludedHoardID: Int) {

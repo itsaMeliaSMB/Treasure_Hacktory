@@ -11,7 +11,6 @@ import android.graphics.Typeface.DEFAULT_BOLD
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
-import android.view.Gravity.CENTER
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
@@ -40,10 +39,10 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
-
-class UniqueDetailsFragment() : Fragment() {
+class UniqueDetailsFragment : Fragment() {
 
     // region [ Property declarations ]
+
     private val backCallback = object : OnBackPressedCallback(true) {
 
         override fun handleOnBackPressed() {
@@ -153,8 +152,6 @@ class UniqueDetailsFragment() : Fragment() {
 
                 if (isRunningAsync) {
 
-                   // binding.uniqueDetailsViewableGroup.isEnabled = false
-
                     if (binding.uniqueDetailsWaitingCard.waitingCard.visibility == View.GONE &&
                         !isWaitingCardAnimating) {
 
@@ -167,8 +164,6 @@ class UniqueDetailsFragment() : Fragment() {
                     }
 
                 } else {
-
-                    //binding.uniqueDetailsViewableGroup.isEnabled = true
 
                     if (binding.uniqueDetailsWaitingCard.waitingCard.visibility == View.VISIBLE &&
                         !isWaitingCardAnimating) {
@@ -280,6 +275,7 @@ class UniqueDetailsFragment() : Fragment() {
         // endregion
 
         // region [ Toolbar ]
+
         binding.uniqueDetailsToolbar.apply {
 
             // Get themed color attribute for Toolbar's title
@@ -305,16 +301,6 @@ class UniqueDetailsFragment() : Fragment() {
             setOnMenuItemClickListener { item ->
 
                 when (item.itemId) {
-
-                    R.id.action_edit_item      -> {
-
-                        //TODO implement
-
-                        Toast.makeText(context, "Not yet implemented, sorry!",
-                            Toast.LENGTH_SHORT)
-
-                        true
-                    }
                     
                     R.id.action_copy_item_clipboard -> {
 
@@ -567,13 +553,6 @@ class UniqueDetailsFragment() : Fragment() {
                         (entry.message == HACKMASTER_CLASS_ITEM_TEXT) -> {
                             setTypeface(DEFAULT_BOLD)
                             textSize = 18f
-                            setCompoundDrawablesRelative(
-                                getDrawable(resources,R.drawable.clipart_winged_sword_vector_icon,context?.theme),
-                                null,
-                                getDrawable(resources,R.drawable.clipart_winged_sword_vector_icon,context?.theme),
-                                null
-                            )
-                            gravity = CENTER
                         }
                         else    -> {
                             text = entry.message
@@ -1791,7 +1770,7 @@ class UniqueDetailsFragment() : Fragment() {
                 uniqueDetailsNameLabel.setTextColor(nameColor)
             }
 
-            uniqueDetailsIdValue.text = "# ${ viewedItem.itemID }"
+            "# ${ viewedItem.itemID }".also { uniqueDetailsIdValue.text = it }
 
             uniqueDetailsCreationDateValue.text = SimpleDateFormat("MM/dd/yyyy 'at' hh:mm:ss aaa z")
                 .format(viewedItem.creationTime)
@@ -2418,8 +2397,8 @@ class UniqueDetailsFragment() : Fragment() {
                     } else {
                         getString(R.string.spell_is_reversed)
                     }
-
                     View.VISIBLE
+
                 } else {
                     View.GONE
                 }
@@ -2629,8 +2608,6 @@ class UniqueDetailsFragment() : Fragment() {
         }
 
         spellDialog.show()
-
-        //if (viewedItem is ViewableSpellCollection)
     }
 
     private fun showChoiceSpellDialog(spellList: List<SimpleSpellEntry>, entry: SimpleSpellEntry) {

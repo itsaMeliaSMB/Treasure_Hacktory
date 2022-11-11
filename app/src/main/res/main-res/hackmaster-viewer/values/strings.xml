@@ -97,5 +97,6 @@
     <string name="hoard_event_log_filter_excluding_label">Excluding:</string>
     <string name="hoard_event_log_filter_including_label">Including:</string>
     <string name="action_filter_events">Filter shown events</string>
+    <string name="button_delete_even_favorites">Yes, delete even marked favorites.</string>
 
 </resources>

@@ -21,7 +21,9 @@ data class SpCoAugmentation(
     val gpModifier: Double = 0.0,
     val byPage: Boolean = false
 )
-
+/**
+ * Class for spell scrolls, spell books, and other collections of [spells][Spell].
+ */
 @Entity(tableName = "hackmaster_spell_collection_table")
 data class SpellCollection(
     @PrimaryKey(autoGenerate = true) @NotNull val sCollectID: Int,
@@ -198,9 +200,9 @@ data class SpellCollection(
 
             if (spells.isNotEmpty()) { spells.forEach {
 
-                if (!(it.usedUp)) { xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel) }
+                if (!(it.usedUp)) { xpTotal += if (it.spellLevel == 0) 25 else (100 * it.spellLevel)
 
-            }
+                } }
             }
 
             return xpTotal
