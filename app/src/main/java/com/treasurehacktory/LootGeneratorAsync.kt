@@ -1,5 +1,6 @@
 package com.treasurehacktory
 
+import android.util.Log
 import androidx.annotation.WorkerThread
 import com.treasurehacktory.database.GemTemplate
 import com.treasurehacktory.database.MagicItemTemplate
@@ -500,7 +501,17 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             }] Intelligent weapon generation\n" +
                             "\t\t[${
                                 if (hoardOrder.genParams.magicParams.allowCursedItems) "✓" else " "
-                            }] Cursed magic items/spell collections\n", tag = "creation|magic-item|verbose")
+                            }] Cursed magic items/spell collections\n" +
+                            "\tSources (besides PHB):\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.itemSources.splatbooksOK) "✓" else " "
+                            }] Splatbooks\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.itemSources.hackJournalsOK) "✓" else " "
+                            }] HackJournals\n" +
+                            "\t\t[${
+                                if (hoardOrder.genParams.magicParams.itemSources.modulesOK) "✓" else " "
+                            }] Other published material\n", tag = "creation|magic-item|verbose")
 
                 val spellHoardEvent = HoardEvent(
                     hoardID = newHoardID,
@@ -1292,7 +1303,9 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         // region < Magic item detail holders >
 
         /** Container for primary key of the first template drawn. -1 indicates a template-less item. */
-        var baseTemplateID  : Int
+        val baseTemplateID  : Int
+        val refTypes = itemRestrictions.itemSources.toList()
+
         var itemType        : String
         var itemCharges     = 0
         var gmChoice        = false
@@ -1672,7 +1685,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 // Get list of limited items of given type
                 val baseTemplateList = repository.getBaseLimItemTempsByType(
-                    itemType, itemRestrictions.allowCursedItems
+                    itemType, itemRestrictions.allowCursedItems, refTypes
                 )
 
                 if ( baseTemplateList.isNotEmpty() ) {
@@ -1843,6 +1856,23 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             }
             // endregion
 
+            // region ( Roll for Pixie-kind specialization )
+
+            if (refTypes.contains(ReferenceType.SPLATBOOK)) {
+
+                // Roll for pixie-kind tailoring, if applicable
+                if ((itemType == "A18" || itemType == "A20") &&
+                    template.source == "Adventurer’s Guide to Pixie Fairies" ){
+
+                    if (Random.nextInt(1,11) == 1) {
+                        flatNotesList.add("Additional notes" to
+                                "Specially tailored to fit around wings/antennae")
+                    }
+                }
+            }
+
+            // endregion
+
             // region ( Add command word, if applicable )
             if (template.commandWord.isNotBlank()) {
 
@@ -2002,6 +2032,77 @@ class LootGeneratorAsync(private val repository: HMRepository) {
             "Gut Stones"    -> gemOrder = GemOrder(GUT_STONE_KEY,itemCharges)
 
             "Ioun Stones"    -> specialItemType = SpItType.IOUN_STONES
+
+            "Skin Clothing, Grel", "Tattooed Skin Clothing, Pixie-Kind" -> {
+
+                val tattooResult = rollMagicalSkinInfo()
+
+                when (tattooResult.second) {
+                    "Hat/headdress/cap" -> {
+                        itemType = "A12"
+                        mIconID = "head_beret"
+                    }
+                    "Jerkin/chemise" -> {
+                        itemType = "A11"
+                        mIconID = "armor_jerkin"
+                    }
+                    "Pants" -> {
+                        itemType = "A11"
+                        mIconID = "clothing_pants"
+                    }
+                    "Boots" -> {
+                        itemType = "A11"
+                        mIconID = "boots_short"
+                    }
+                    "Gloves" -> {
+                        itemType = "A11"
+                        mIconID = "gloves_fancy"
+                    }
+                    "Belt"  -> {
+                        itemType = "A12"
+                        mIconID = "belt_simple"
+                    }
+                }
+
+                flatNotesList.add("Additional notes" to "Bestows the effect of the ${
+                    tattooResult.first} tattoo (see Table 5C on page 60)")
+                flatNotesList.add("Additional notes" to tattooResult.second)
+                flatNotesList.add("Additional notes" to "${tattooResult.third.first}-sized garment")
+                if (tattooResult.third.second) {
+                    flatNotesList.add("Additional notes" to
+                            "Specially tailored to fit around wings/antennae")
+                }
+                // Roll to see if tattoo magic is inherently permanent
+                if (mName == "Skin Clothing, Grel" && Random.nextInt(1,11) != 1) {
+                    flatNotesList.add("Additional notes" to "Consumed tattoo magic only " +
+                            "effective for ${rollPenetratingDice(3,4,
+                                10, 0).getRollTotal()} years after " +
+                            "creation unless Permanency is cast")
+                }
+            }
+
+            "Fire Brand" -> {
+
+                val firebrandResults = generateFireBrand()
+
+                mName = firebrandResults.third.first
+                mClassUsability = firebrandResults.third.second
+                mXpValue = firebrandResults.second.first
+                mGpValue = firebrandResults.second.second
+                flatNotesList.addAll(firebrandResults.first)
+            }
+        }
+
+        if ((mName.contains("Volcanithril") || mName.contains("Aizrithil")) &&
+            template.refType == ReferenceType.SPLATBOOK) {
+
+            val cityOfBrassResults = generateCityOfBrassMetalInfo(mName)
+
+            mName = cityOfBrassResults.third.first
+            mClassUsability = cityOfBrassResults.third.second
+            mXpValue = cityOfBrassResults.second.first
+            mGpValue = cityOfBrassResults.second.second
+            flatNotesList.addAll(cityOfBrassResults.first)
         }
         //endregion
 
@@ -2123,8 +2224,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         }
 
         val childTemplateList = repository.getChildLimItemTempsByParent(
-            baseTemplate.refId, restrictions.allowCursedItems
-        )
+            baseTemplate.refId, restrictions.allowCursedItems)
 
         if (childTemplateList.isNotEmpty()) {
 
@@ -2872,7 +2972,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                     val addlGems = Random.nextInt(1,5)
 
-                    listOf("Potion flavor text" to
+                    flatNotesList.add("Potion flavor text" to
                             "Embellishment: $addlGems 20gp gems are studded into the " +
                             "bottle in a symmetrical style around it")
 
@@ -2937,90 +3037,159 @@ class LootGeneratorAsync(private val repository: HMRepository) {
 
                 15      -> {
 
-                    val randomDeity = listOf(
-                        "Aknar, Gawd of Stealth and Wolves",
-                        "Alu the Locust Lord, Gawd of Famine",
-                        "Arnuya, Gawd of Vengence",
-                        "Athena, Gawdess of Wisdom and Combat",
-                        "Bast, Gawdess of Felines",
-                        "Benyar, Gawd of Empire",
-                        "Camaxtli, Gawd of Fate",
-                        "Corellon Larethian, Gawd of Elves, Music, Poetry, and Magic",
-                        "Coyote, Gawd of Arts, Crafts, Fire, and Thieves",
-                        "Denier, Gawd of Art and Literature",
-                        "Dionysus, Gawd of Wine",
-                        "Draper, Gawd of Stealth and Cunning",
-                        "Druga, Gawd of Devils and Oppressive Contracts",
-                        "Eilistraee, Demi-Gawdess of Moonlight, Beauty, etc.",
-                        "Enlil, Gawd of Air and War",
-                        "Fracor'Dieus, Gawd of Earth",
-                        "Garl Glittergold, Gawd of Dwarves",
-                        "Grawdyng, Gawd of Death",
-                        "Gronyfr, Gawd of War and Grevans",
-                        "Gruumsh, Gawd of Orcs",
-                        "Hanili Celanil, Gawdess of Love, Romance, Beauty, & Fine Arts",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Hokalas the RiftMaster, Gawd of Magic",
-                        "Ikka Putaang, Gawd of Nature",
-                        "Kazaar-Freem, Gawd of Peace and Tranquility",
-                        "Kishijoten, Gawdess of Luck",
-                        "Kuchooloo, Gawd of Wanton Destruction",
-                        "Laduguer, Gawd of Gray Dwarves and Skilled Artisans",
-                        "Laerme, Gawdess of Fire, Art, and Love",
-                        "Lathander, Gawd of the Spring/Beginnings",
-                        "Loviatar, Gawdess of Pain and Torment",
-                        "Luvia, Gawd of Justice",
-                        "Mangrus, Gawd of Disease",
-                        "Markovia, Gawd of Oceans",
-                        "Marlog, Gawd of Sailing and Sailors",
-                        "Moradin, Gawd of Dwarves",
-                        "Navinger, Gawd of Love and Eunuchs",
-                        "Nephthys, Gawdess of Tombs",
-                        "Nudor, Gawd of Healing",
-                        "Odin, Gawd of War",
-                        "Oghma, Gawd of Knowledge",
-                        "P'Rakeke, Emporer of Scorn, Gawd of Bigotry and Hate",
-                        "Pangrus, gnomish Gawd of War",
-                        "Par'Kyrus, Gawd of Wind",
-                        "Pinini the Raconteur, Gawd of the Arts",
-                        "Pyremius, Gawd of Fire, Poison, and Disease",
-                        "Quetzalcoatl, Gawd of Arts and Air",
-                        "Rotovi the Mule, Gawd of Mathematics, Science, et al.",
-                        "Set, Gawd of the Night",
-                        "Shang-Ti, Gawd of Sky and Agriculture",
-                        "Shona, Gawdess of Games and Ritual Combat",
-                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
-                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
-                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
-                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
-                        "Sitiri the PowerMaster, Gawd of Strength and Medicine",
-                        "Skraad, Gawd of Blacksmiths and Fate",
-                        "Sumar-Fareen, Gawdess of Birth and Love",
-                        "The Confuser of Ways, Gawd of Lies, Deceit, and Mischief",
-                        "The Feeble Gawd, Gawd of Mysteries",
-                        "Thor, Gawd of Thunder",
-                        "Thrain, Gawd of Wisdom and Mountaineering",
-                        "Tobadzistini, Gawd of Warriors",
-                        "Yi'Gor, Gawd of Treachery",
-                        "Yiders, Gawd of Strength",
-                        "Yondalla, Gawdess of Halflings and Fertility",
-                        "Zelaur, Gawd of Honor",
-                        "Zeus the Diminished, Gawd of Lightning"
+                    val randomSymbolDeityPair = listOf(
+                        "Wolves' teeth strung on human hair" to
+                                "Aknar, Gawd of Stealth and Wolves",
+                        "Heart stabbed with a spear" to
+                                "Arnuya, Gawd of Vengence",
+                        "Owl" to
+                                "Athena, Gawdess of Wisdom and Combat",
+                        "Cat" to
+                                "Bast, Gawdess of Felines",
+                        "Loop-topped cross w/ crossbar made to look like wings" to
+                                "Benyar, Gawd of Empire",
+                        "Human figure holding sun" to
+                                "Camaxtli, Gawd of Fate",
+                        "Quarter moon" to
+                                "Corellon Larethian, Gawd of Elves, Music, Poetry, and Magic",
+                        "Coyote" to
+                                "Coyote, Gawd of Arts, Crafts, Fire, and Thieves",
+                        "Single lit candle w/ eye beneath" to
+                                "Denier, Gawd of Art and Literature",
+                        "Thyrsus" to
+                                "Dionysus, Gawd of Wine",
+                        "Shooting star" to
+                                "Draper, Gawd of Stealth and Cunning",
+                        "Ruby mace" to
+                                "Druga, Gawd of Devils and Oppressive Contracts",
+                        "Long sword set against moon w/ filaments all around (all silver)" to
+                                "Eilistraee, Demi-Gawdess of Moonlight, Beauty, etc.",
+                        "Pickaxe" to
+                                "Enlil, Gawd of Air and War",
+                        "Mining pick" to
+                                "Fracor'Dieus, Gawd of Earth",
+                        "Gold nugget" to
+                                "Garl Glittergold, Gawd of Dwarves",
+                        "Iron ring" to
+                                "Grawdyng, Gawd of Death",
+                        "Shield w/ triangular cut from top, enclosed in circle" to
+                                "Gronyfr, Gawd of War and Grevans",
+                        "Unwinking eye" to
+                                "Gruumsh, Gawd of Orcs",
+                        "Heart of gold" to
+                                "Hanili Celanil, Gawdess of Love, Romance, Beauty, & Fine Arts",
+                        "Caduceus" to
+                                "Hermes, Demi-Gawd of Thieves, Liars, Gamblers, Laywers, and Arbiters",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Key" to "Hokalas the RiftMaster, Gawd of Magic",
+                        "Elm leaf" to
+                                "Ikka Putaang, Gawd of Nature",
+                        "Coconut shell" to
+                                "Kazaar-Freem, Gawd of Peace and Tranquility",
+                        "Diamond" to
+                                "Kishijoten, Gawdess of Luck",
+                        "Octopus head" to
+                                "Kuchooloo, Gawd of Wanton Destruction",
+                        "Shield w/ broken crossbow bolt motif" to
+                                "Laduguer, Gawd of Gray Dwarves and Skilled Artisans",
+                        "Harp against a flame" to
+                                "Laerme, Gawdess of Fire, Art, and Love",
+                        "Wooden disk" to
+                                "Lathander, Gawd of the Spring/Beginnings",
+                        "Dagger held in pallid hand" to
+                                "Loviatar, Gawdess of Pain and Torment",
+                        "Scale" to
+                                "Luvia, Gawd of Justice",
+                        "Rotting, bandaged hand" to
+                                "Mangrus, Gawd of Disease",
+                        "Giant tidal wave" to
+                                "Markovia, Gawd of Oceans",
+                        "Dolphin" to
+                                "Marlog, Gawd of Sailing and Sailors",
+                        "Flame rising from needle" to
+                                "Moradin, Gawd of Dwarves",
+                        "Bow" to
+                                "Navinger, Gawd of Love and Eunuchs",
+                        "Horns around a lunar disk" to
+                                "Nephthys, Gawdess of Tombs",
+                        "Blazing sun" to
+                                "Nudor, Gawd of Healing",
+                        "Blue eye" to
+                                "Odin, Gawd of War",
+                        "Silhouette of hand on background" to
+                                "Oghma, Gawd of Knowledge",
+                        "Scepter on background" to
+                                "P'Rakeke, Emporer of Scorn, Gawd of Bigotry and Hate",
+                        "V-shaped scar" to
+                                "Pangrus, gnomish Gawd of War",
+                        "Tornado" to
+                                "Par'Kyrus, Gawd of Wind",
+                        "Theatrical mask" to
+                                "Pinini the Raconteur, Gawd of the Arts",
+                        "Dagger crossing flame" to
+                                "Pyremius, Gawd of Fire, Poison, and Disease",
+                        "Feathered serpent" to
+                                "Quetzalcoatl, Gawd of Arts and Air",
+                        "Triangle, within a circle, within a square" to
+                                "Rotovi the Mule, Gawd of Mathematics, Science, et al.",
+                        "Coiled cobra" to
+                                "Set, Gawd of the Night",
+                        "Shaft of light in fist" to
+                                "Shang-Ti, Gawd of Sky and Agriculture",
+                        "Three interwoven rings" to
+                                "Shona, Gawdess of Games and Ritual Combat",
+                        "Mountain rising up through a cloud" to
+                                "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Mountain rising up through a cloud" to
+                                "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Mountain rising up through a cloud" to
+                                "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Mountain rising up through a cloud" to
+                                "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Mountain rising up through a cloud" to
+                                "Sitiri the PowerMaster, Gawd of Strength and Medicine",
+                        "Large war hammer" to
+                                "Skraad, Gawd of Blacksmiths and Fate",
+                        "Cupped pair of hands" to
+                                "Sumar-Fareen, Gawdess of Birth and Love",
+                        "Snake head with extended tongue" to
+                                "The Confuser of Ways, Gawd of Lies, Deceit, and Mischief",
+                        "Bony, arthritic hand" to
+                                "The Feeble Gawd, Gawd of Mysteries",
+                        "Hammer" to
+                                "Thor, Gawd of Thunder",
+                        "Crown" to
+                                "Thrain, Gawd of Wisdom and Mountaineering",
+                        "Crossed spear and shield" to
+                                "Tobadzistini, Gawd of Warriors",
+                        "Pair of disembodied eyes" to
+                                "Yi'Gor, Gawd of Treachery",
+                        "Glowing mace" to
+                                "Yiders, Gawd of Strength",
+                        "Shield" to
+                                "Yondalla, Gawdess of Halflings and Fertility",
+                        "Three-pointed flame" to
+                                "Zelaur, Gawd of Honor",
+                        "Fist full of lightning bolts on block background" to
+                                "Zeus the Diminished, Gawd of Lightning"
                     ).random()
 
                     flatNotesList.add("Potion flavor text" to
                             "Embellishment: A Gawd’s symbol is inscribed within the " +
-                            "glass or pulled out of the glass during creation (most " +
-                            "commonly a key, the symbol of Hokalas) " +
-                            "(Randomly-suggested deity: $randomDeity)")
+                            "glass or pulled out of the glass during creation:")
+
+                    flatNotesList.add("Potion flavor text" to
+                            randomSymbolDeityPair.first + "; the symbol of \n" +
+                            randomSymbolDeityPair.second)
+
                 }
 
                 16      -> {
@@ -3181,12 +3350,10 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                             } else {
                                 " flecks)"
                             }
-                    in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()}"+
-                            getSubstanceColor() + if (Random.nextInt(1,4) == 3) {
-                        " to ${getSubstanceColor()})"
-                    } else {
-                        ")"
-                    }
+                    in 35..39   -> "Layered (${getSubstanceColor()} to ${getSubstanceColor()}" +
+                            if (Random.nextInt(1,4) == 3) {
+                                " to ${getSubstanceColor()})"
+                            } else { ")" }
                     in 40..54   -> "Luminous (${getSubstanceColor()}, " +
                             "~${Random.nextInt(1,21) * 5}% opacity)"
                     in 55..59   -> "Opaline (glowing)"
@@ -3726,7 +3893,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "F. Lycanthropy inflicted upon the possessor, type according to the alignment of item, change to animal form involuntary and 50% likely (1 check only) whenever confronted and attacked by an enemy",
                 "G. Treasure within five-foot radius of mineral nature (metal or gems) of nonmagical type is reduced by 20%-80% as item consumes it to sustain its power",
                 "H. User becomes ethereal whenever major or primary power of the item is activated [see Table B128]",
-                "I. User becomes fantastically strong (19, or +1 if already 19) but ver clumsy [see Table B128]",
+                "I. User becomes fantastically strong (19, or +1 if already 19) but very clumsy [see Table B128]",
                 "J. User cannot touch or be touched by any (even magical) metal; metal simply passes through his body as if it did not exist and has no effect",
                 "K. User has a poison touch which requires that humans and man-sized humanoids (but not undead) save versus poison or die whenever touched",
                 "L. User has limited omniscience and may request the GM to answer 1 question per game day [see Table B128]",
@@ -4292,6 +4459,868 @@ class LootGeneratorAsync(private val repository: HMRepository) {
         return flatNotesList.toList() to wAlignment
     }
 
+    private fun generateCityOfBrassMetalInfo(inputName: String) : Triple<List<Pair<String,String>>,
+            Pair<Int,Double>,Pair<String,Map<String,Boolean>>> {
+
+        val flatNotesList = ArrayList<Pair<String,String>>()
+
+        var newName = StringBuilder()
+
+        val isWeapon    = inputName.contains("Weapon")
+        var plusValue   : Int
+        var gpValue     : Double
+        var gpMultiplier= 1.0
+        var xpValue     : Int
+        val usableBy    = mutableMapOf(
+            "Fighter" to true,
+            "Thief" to true,
+            "Cleric" to true,
+            "Magic-user" to true,
+            "Druid" to true)
+        var intelChance = 0
+
+        if (inputName.contains("Volcanithril")){
+            newName.append("Volcanithril ")
+        } else {
+            newName.append("Aizrithil ")
+            flatNotesList.add("Additional notes" to
+                    "Special magical ability given as Volcanthril; invert to appropriate " +
+                    "ice-aspected effect as necessary.")
+        }
+
+        // region ( Determine plus value and item type )
+        plusValue = when(Random.nextInt(1,203)) {
+            in 1..100   -> {
+                if (isWeapon){
+                    xpValue = 500
+                    gpValue = 6500.0
+                } else {
+                    xpValue = 600
+                    gpValue = 7800.0
+                }
+                1
+            }
+            in 101..120 -> {
+                if (isWeapon){
+                    xpValue = 1000
+                    gpValue = 13000.0
+                } else {
+                    xpValue = 1200
+                    gpValue = 15600.0
+                }
+                2
+            }
+            in 121..141 -> {
+                if (isWeapon){
+                    xpValue = 2250
+                    gpValue = 29250.0
+                } else {
+                    xpValue = 2400
+                    gpValue = 31200.0
+                }
+                3
+            }
+            in 141..160 -> {
+                if (isWeapon){
+                    xpValue = 3000
+                    gpValue = 39000.0
+                } else {
+                    xpValue = 3200
+                    gpValue = 41600.0
+                }
+                4
+            }
+            in 161..180 -> {
+                if (isWeapon){
+                    xpValue = 5000
+                    gpValue = 65000.0
+                } else {
+                    xpValue = 5000
+                    gpValue = 65000.0
+                }
+                5
+            }
+            in 181..188 -> {
+                if (isWeapon){
+                    xpValue = 6000
+                    gpValue = 78000.0
+                } else {
+                    xpValue = 6000
+                    gpValue = 78000.0
+
+                }
+                6
+            }
+            in 189..192 -> {
+                if (isWeapon){
+                    xpValue = 8750
+                    gpValue = 113750.0
+                } else {
+                    xpValue = 8400
+                    gpValue = 109200.0
+                }
+                7
+            }
+            in 192..196 -> {
+                if (isWeapon){
+                    xpValue = 10000
+                    gpValue = 130000.0
+                } else {
+                    xpValue = 9600
+                    gpValue = 124800.0
+                }
+                8
+            }
+            in 197..198 -> {
+                if (isWeapon){
+                    xpValue = 11250
+                    gpValue = 146250.0
+                } else {
+                    xpValue = 10800
+                    gpValue = 140400.0
+                }
+                9
+            }
+            in 199..200 -> {
+                if (isWeapon){
+                    xpValue = 12500
+                    gpValue = 162500.0
+                } else {
+                    xpValue = 12000
+                    gpValue = 156000.0
+                }
+                10
+            }
+            201         -> {
+                if (isWeapon){
+                    xpValue = 13750
+                    gpValue = 178750.0
+                } else {
+                    xpValue = 13200
+                    gpValue = 171600.0
+                }
+                11
+            }
+            else        -> {
+                if (isWeapon){
+                    xpValue = 15000
+                    gpValue = 195000.0
+                } else {
+                    xpValue = 14400
+                    gpValue = 187200.0
+                }
+                12
+            }
+        }
+
+        // Select specific armor/weapon/shield
+        newName.append(
+            if (!isWeapon){
+                when (Random.nextInt(1,16)){
+                    1   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Banded Mail"
+                    }
+                    2   -> {
+                        gpMultiplier = 0.85
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Brigadine"
+                    }
+                    3   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Chain Mail"
+                    }
+                    4   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Field Plate"
+                    }
+                    5   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Full Plate"
+                    }
+                    in 6..9 -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Plate Mail"
+                    }
+                    10  -> {
+                        gpMultiplier = 0.85
+                        usableBy.apply{
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Ring Mail"
+                    }
+                    11  -> {
+                        gpMultiplier = 0.85
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Scale Mail"
+                    }
+                    in 12..14  -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                        }
+                        "Shield"
+                    }
+                    else  -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Splint Mail"
+                    }
+                }
+            } else {
+                intelChance = 5
+                when (Random.nextInt(1,67)){
+                    in 1..5 -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Axe"
+                    }
+                    in 6..10 -> {
+                        usableBy.apply{
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Battle Axe"
+                    }
+                    in 11..22   -> {
+                        usableBy.apply{
+                            this["Cleric"] = false
+                        }
+                        "Dagger"
+                    }
+                    in 23..26   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Flail"
+                    }
+                    in 27..31   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Knife"
+                    }
+                    in 32..34   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Lance"
+                    }
+                    in 35..39   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Mace"
+                    }
+                    in 40..42   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Military Pick"
+                    }
+                    in 43..45   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Morning Star"
+                    }
+                    in 46..48   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        listOf(
+                            "Awl pike","Bardiche","Bec de corbin","Bill-guisarme","Fauchard",
+                            "Fauchard-fork","Glaive","Glaive-guisarme", "Guisarme","Guisarme-voulge",
+                            "Halberd","Hook fauchard","Lucern hammer","Military fork","Partisan",
+                            "Ranseur","Spetum","Voulge"
+                        ).random()
+                    }
+                    in 49..51   -> {
+                        intelChance = 25
+                        usableBy.apply{
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                        }
+                        "Scimitar"
+                    }
+                    in 52..55   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                        }
+                        "Spear"
+                    }
+                    in 56..60   -> {
+                        intelChance = 25
+                        when (Random.nextInt()) {
+                            in 1..60    -> {
+                                usableBy.apply{
+                                    this["Cleric"] = false
+                                    this["Magic-user"] = false
+                                    this["Druid"] = false
+                                }
+                                "Long Sword"
+                            }
+                            in 61..80   -> {
+                                usableBy.apply{
+                                    this["Cleric"] = false
+                                    this["Magic-user"] = false
+                                    this["Druid"] = false
+                                }
+                                "Short Sword"
+                            }
+                            in 81..90   -> {
+                                usableBy.apply{
+                                    this["Thief"] = false
+                                    this["Cleric"] = false
+                                    this["Magic-user"] = false
+                                }
+                                "Broad Sword"
+                            }
+                            in 91..95   -> {
+                                usableBy.apply{
+                                    this["Cleric"] = false
+                                    this["Magic-user"] = false
+                                }
+                                "Scimitar"
+                            }
+                            in 96..99   -> {
+                                usableBy.apply{
+                                    this["Thief"] = false
+                                    this["Cleric"] = false
+                                    this["Magic-user"] = false
+                                    this["Druid"] = false
+                                }
+                                "Bastard Sword"
+                            }
+                            else    -> {
+                                usableBy.apply{
+                                    this["Thief"] = false
+                                    this["Cleric"] = false
+                                    this["Magic-user"] = false
+                                    this["Druid"] = false
+                                }
+                                "Two-Handed Sword"
+                            }
+                        }
+                    }
+                    in 61..63   -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Cleric"] = false
+                            this["Magic-user"] = false
+                            this["Druid"] = false
+                        }
+                        "Trident"
+                    }
+                    else -> {
+                        usableBy.apply{
+                            this["Thief"] = false
+                            this["Magic-user"] = false
+                        }
+                        "Warhammer"
+                    }
+                }
+            }
+        )
+
+        newName.append(" +$plusValue")
+
+        // endregion
+
+        // region ( Determine special magical ability )
+        flatNotesList.add("Additional notes" to
+                "[ SPECIAL MAGICAL ABILITY ]")
+
+        flatNotesList.add("Additional notes" to if (!isWeapon){
+
+            when (Random.nextInt(1,9)){
+                1   -> {
+                    xpValue += 1350
+                    gpValue += 17550
+                    "1 – Ice Element Resistance (see CoB pg 109)"
+                }
+                2   -> {
+                    xpValue += 2000
+                    gpValue += 26000
+                    "2 – Volcan's Fortification (see CoB 109)"
+                }
+                3   -> {
+                    xpValue += 4000
+                    gpValue += 52000
+                    "3 – Plasma Burst (see CoB 109)"
+                }
+                4   -> {
+                    xpValue += 1200
+                    gpValue += 15600
+                    "4 – Reflective Force (see CoB 109)"
+                }
+                5   -> {
+                    xpValue += 600
+                    gpValue += 7800
+                    "5 – Energy Resistance (see CoB 109)"
+                }
+                6   -> {
+                    xpValue += 1200
+                    gpValue += 15600
+                    "6 – Invulnerability [${listOf("Fire","Acid","Cold","Gas","Lightning","Ice")
+                        .random()}] (see CoB 110)"
+                }
+                7   -> {
+                    xpValue += 1000
+                    gpValue += 13000
+                    "7 – Magic Resistance [${Random.nextInt(1,4) * 5}%] (see CoB 110)"
+                }
+                8   -> {
+                    xpValue += 5000
+                    gpValue += 65000
+                    "8 – Cone of Defense [${listOf("Red","Orange","Yellow","Green","Blue","Indigo",
+                        "Violet","Black").random()}] (see CoB 110)"
+                }
+                else -> "None"
+            }
+        } else {
+            when (Random.nextInt(1,11)){
+                1   -> {
+                    xpValue += 1000
+                    gpValue += 13000
+                    "1 – Lava's Scintilla (see CoB 110)"
+                }
+                2   -> {
+                    xpValue += 1500
+                    gpValue += 19500
+                    "2 – Volcan's Touch (see CoB 110)"
+                }
+                3   -> {
+                    xpValue += 2000
+                    gpValue += 26000
+                    "3 – Inferno's Fingers (see CoB 110)"
+                }
+                4   -> {
+                    xpValue += 4000
+                    gpValue += 52000
+                    "4 – Fire Charmer (see CoB 110)"
+                }
+                5   -> {
+                    xpValue += 1400
+                    gpValue += 18200
+                    "5 – Eruptive Force (see CoB 110)"
+                }
+                6   -> {
+                    xpValue += 2500
+                    gpValue += 32500
+                    "6 – Heferun's Breath (see CoB 110)"
+                }
+                7   -> {
+                    xpValue += 3500
+                    gpValue += 45500
+                    "7 – Shockwave (see CoB 110)"
+                }
+                8   -> {
+                    xpValue += 2750
+                    gpValue += 35750
+                    "8 – Motewall (see CoB 110)"
+                }
+                9   -> {
+                    xpValue += 4000
+                    gpValue += 52000
+                    "9 – Volcan's Nails (wounding) (see CoB 110)"
+                }
+                10   -> {
+                    xpValue += 2000
+                    gpValue += 26000
+                    "10 – Firemeld (see CoB 111)"
+                }
+                else -> "None"
+            }
+        })
+
+        // endregion
+
+        // region ( Roll for intelligent weapon profile, if applicable )
+        if (isWeapon){
+            if (Random.nextInt(1,101) <= intelChance){
+                val intelWeaponList = generateIntelligentWeaponProfile(
+                    MagicItemTemplate(
+                        1,1,newName.toString(),ReferenceType.SPLATBOOK,
+                        "City of Brass",109, xpValue, gpValue.toInt(),0,
+                        "",0,0,0,"A23","weird_fire",
+                        if (usableBy["Fighter"] == true) 1 else 0,
+                        if (usableBy["Thief"] == true) 1 else 0,
+                        if (usableBy["Cleric"] == true) 1 else 0,
+                        if (usableBy["Magic-user"] == true) 1 else 0,
+                        if (usableBy["Druid"] == true) 1 else 0, 0, 0,
+                        "", 0,"", intelChance,
+                        "",0,0,0,0,0,0
+                    ), ""
+                ).first
+
+                flatNotesList.addAll(intelWeaponList)
+            }
+        }
+
+        // endregion
+
+        // region ( Adjust GP value )
+        gpValue *= gpMultiplier
+        // endregion
+
+        return Triple(
+            flatNotesList.toList(),xpValue to gpValue,
+            newName.toString() to usableBy.toMap()
+        )
+    }
+
+    private fun generateFireBrand() : Triple<List<Pair<String,String>>,
+            Pair<Int,Double>,Pair<String,Map<String,Boolean>>> {
+
+        val flatNotesList = ArrayList<Pair<String,String>>()
+
+        val material    = when (Random.nextInt(1,101)){
+            in 1..80    -> "Steel"
+            in 81..98   -> "Blue Steel"
+            else        -> "Volcanithril"
+        }
+        val plusValue   : Int
+        var gpValue     : Double
+        var xpValue     : Int
+        val usableBy    = mutableMapOf(
+            "Fighter" to true,
+            "Thief" to true,
+            "Cleric" to true,
+            "Magic-user" to true,
+            "Druid" to true)
+
+        // region ( Determine plus value and item type )
+
+
+        plusValue = when(Random.nextInt(
+            when (material){
+                "Blue Steel"    -> 121
+                "Volcanithril"  -> 141
+                else            -> 1
+            },203)) {
+
+            in 1..100   -> {
+
+                xpValue = 500
+                gpValue = 5000.0
+
+                1
+            }
+            in 101..120 -> {
+
+                xpValue = 1000
+                gpValue = 10000.0
+                2
+            }
+            in 121..141 -> {
+
+                xpValue = 2250
+                gpValue = 22500.0
+
+                3
+            }
+            in 141..160 -> {
+
+                xpValue = 3000
+                gpValue = 30000.0
+
+                4
+            }
+            in 161..180 -> {
+
+                xpValue = 5000
+                gpValue = 50000.0
+
+                5
+            }
+            in 181..188 -> {
+
+                xpValue = 6000
+                gpValue = 60000.0
+
+                6
+            }
+            in 189..192 -> {
+
+                xpValue = 8750
+                gpValue = 87500.0
+
+                7
+            }
+            in 192..196 -> {
+
+                xpValue = 10000
+                gpValue = 100000.0
+
+                8
+            }
+            in 197..198 -> {
+
+                xpValue = 11250
+                gpValue = 112500.0
+
+                9
+            }
+            in 199..200 -> {
+
+                xpValue = 12500
+                gpValue = 125000.0
+
+                10
+            }
+            201         -> {
+
+                xpValue = 13750
+                gpValue = 137500.0
+
+                11
+            }
+            else        -> {
+
+                xpValue = 15000
+                gpValue = 150000.0
+
+                12
+            }
+        }
+
+        flatNotesList.add("Additional notes" to material)
+
+        // Select specific sword
+        flatNotesList.add("Additional notes" to
+            when (Random.nextInt(1,21)) {
+                in 1..2   -> {
+                    usableBy.apply{
+                        this["Cleric"] = false
+                        this["Magic-user"] = false
+                        this["Druid"] = false
+                    }
+                    "Short Sword"
+                }
+                in 3..6    -> {
+                    usableBy.apply{
+                        this["Cleric"] = false
+                        this["Magic-user"] = false
+                        this["Druid"] = false
+                    }
+                    "Long Sword"
+                }
+                in 7..9   -> {
+                    usableBy.apply{
+                        this["Thief"] = false
+                        this["Cleric"] = false
+                        this["Magic-user"] = false
+                        this["Druid"] = false
+                    }
+                    "Bastard Sword"
+                }
+
+                in 10..13    -> {
+                    usableBy.apply{
+                        this["Thief"] = false
+                        this["Cleric"] = false
+                        this["Magic-user"] = false
+                        this["Druid"] = false
+                    }
+                    "Two-Handed Sword"
+                }
+
+                else   -> {
+                    usableBy.apply{
+                        this["Cleric"] = false
+                        this["Magic-user"] = false
+                    }
+                    "Scimitar"
+                }
+            } )
+
+        val newName = ("Fire Brand +$plusValue")
+        // endregion
+
+        // region ( Determine essence infusion result )
+        when (Random.nextInt(if (material == "Steel") 1 else 31, 101)) {
+            in 1..30 -> {
+                flatNotesList.add("Additional notes" to "Basic Essence Infusion")
+                xpValue += 6375
+                gpValue += 63750
+            }
+            in 31..60 -> {
+                flatNotesList.add("Additional notes" to "Above Average Essence Infusion")
+                xpValue += 6875
+                gpValue += 68750
+            }
+            in 61..95 -> {
+                flatNotesList.add("Additional notes" to "Advanced Essence Infusion")
+                xpValue += 7375
+                gpValue += 73750
+            }
+            else -> {
+                flatNotesList.add("Additional notes" to "Basic Essence Infusion")
+                xpValue += 8575
+                gpValue += 85750
+            }
+        }
+
+        // endregion
+
+        // region ( Roll for intelligent weapon profile )
+        if (Random.nextInt(1,101) <= 25){
+            val intelWeaponList = generateIntelligentWeaponProfile(
+                MagicItemTemplate(
+                    1,1,newName,ReferenceType.SPLATBOOK,
+                    "City of Brass",110, xpValue, gpValue.toInt(),0,
+                    "",0,0,0,"A23","weird_fire",
+                    if (usableBy["Fighter"] == true) 1 else 0,
+                    if (usableBy["Thief"] == true) 1 else 0,
+                    if (usableBy["Cleric"] == true) 1 else 0,
+                    if (usableBy["Magic-user"] == true) 1 else 0,
+                    if (usableBy["Druid"] == true) 1 else 0, 0, 0,
+                    "", 0,"", 25,
+                    "",0,0,0,0,0,0
+                ), ""
+            ).first
+
+            flatNotesList.addAll(intelWeaponList)
+        }
+
+        // endregion
+
+        // region ( Adjust GP value )
+        gpValue *= when (material){
+            "Blue Steel"    -> 1.15
+            "Volcanithril"  -> 1.3
+            else            -> 1.0
+        }
+        // endregion
+
+        return Triple(
+            flatNotesList.toList(),xpValue to gpValue,
+            newName to usableBy.toMap()
+        )
+    }
+
+    /**
+     * Rolls the effect and size of magical clothing made from grel or pixie-kind skin.
+     *
+     * @return Triple of the effect, type of garment, and pair of size and custom tailoring status of the garment
+     */
+    private fun rollMagicalSkinInfo() : Triple<String,String,Pair<String,Boolean>> {
+
+        val tattooEffect = listOf(
+            "Acckrink",
+            "Ardkrin",
+            "Botakrin",
+            "Carnkrin",
+            "Clikrin",
+            "Clokrin",
+            "Drinkrin",
+            "Durykrin",
+            "Elfkrin",
+            "Emphkrin",
+            "Ecrikrin",
+            "Fakrin",
+            "Feaykrin",
+            "Gawdlikrin",
+            "Glittykrin",
+            "Gorkrink",
+            "Grekrin",
+            "Hurdkrin",
+            "Jukarin",
+            "Krinkrin",
+            "Magkrin",
+            "Merrokrin",
+            "Nekkrin",
+            "Nokrin",
+            "Obfuskrin",
+            "Rinkrin",
+            "Rorkrin",
+            "Shewkrin",
+            "Shunkrin",
+            "Speakrin",
+            "Subakrin",
+            "Tarkrin",
+            "Yiskrin"
+        ).random()
+
+        val itemType = Random.nextInt(0,6)
+
+        val itemSize = when (Random.nextInt(1,365)){
+            1           -> "Gargantuan"
+            in 2..4     -> "Huge"
+            in 5..13    -> "Large"
+            in 14..40   -> "Man"
+            in 41..121  -> "Small"
+            else        -> "Tiny"
+        }
+
+        val isTailored = (itemType < 2 && Random.nextInt(1,11) == 1)
+
+        return Triple(
+            tattooEffect,
+            listOf("Hat/headdress/cap", "Jerkin/chemise", "Pants",
+            "Boots", "Gloves", "Belt")[itemType],
+            itemSize to isTailored
+        )
+    }
+
     /** Generates a treasure map as a [MagicItem], following the rules outlined on GMG pgs 181 and 182 */
     private fun createTreasureMap(parentHoard: Int, sourceDesc: String = "", allowFalseMaps: Boolean = true): MagicItem {
 
@@ -4564,6 +5593,20 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 .map { it.toSpellEntry() },originalName = ringName
         )
     }
+
+    private fun SpCoSources.toList() : List<ReferenceType> {
+
+        val result = arrayListOf(ReferenceType.CORE)
+
+        if (this.splatbooksOK) { result.add(ReferenceType.SPLATBOOK) }
+        if (this.hackJournalsOK) { result.add(ReferenceType.HACKJOURNAL) }
+        if (this.modulesOK) { result.add(ReferenceType.PUBLISHED_MODULE) }
+        if (this.beyondFourthOK) { result.add(ReferenceType.BEYOND_HM4E) }
+        if (this.researchOK) { result.add(ReferenceType.RESEARCHED) }
+        if (this.homebrewOK) { result.add(ReferenceType.OTHER_HOMEBREW) }
+
+        return result.toList()
+    }
     // endregion
 
     // region [ Spell-related functions ]
@@ -4800,6 +5843,7 @@ class LootGeneratorAsync(private val repository: HMRepository) {
                 "[GMG+] The character suffers a spell mishap (see GMG pg 82, Table 7E).",
                 "[GMG+] The character develops some form insanity (see GMG pg 86, Table 7H).",
                 "[GMG+] The character suffers from a minor malevolent effect (see GMG pg 285, Table B125). Re-roll incompatible results.",
+                "[GMG+] The character is subjected to a random effect from the Attributes table (see GMG pg 324, Table E5).",
                 "[SSG] The character suffers the effect of a Witch’s Curse (see SSG pg 49, Table 5C).",
                 "[SSG] The character experiences the effect of a Wild Surge (see SSG pg 38, Table 4L).",
                 "[SSG] The character suffers from the effect of a Tattoo Effect (see SSG pg 35, Table 4G) for 1 week.",

@@ -1382,51 +1382,99 @@ data class ArtObject(
 
                 2 -> { // Historical subject matter
 
-                    nameBuilder.append(listOf(
-                        "a major battle",
-                        "a new technology discovered",
-                        "accomplishment of a great person",
-                        "ancient elven war",
-                        "apotheosis of folk hero",
-                        "army marching to battle",
-                        "ascension of a HackMaster",
-                        "ascension of a protege",
-                        "battle against a great wyrm",
-                        "birth of a hero",
-                        "brave last stand",
-                        "canal opening",
-                        "capital city founding",
-                        "castle under construction",
-                        "coronation of sovereign",
-                        "discovery of natural wonder",
-                        "discovery of new lands",
-                        "establishment of a colony",
-                        "first contact",
-                        "first meeting of two cultures",
-                        "forging of dwarven artifact",
-                        "founding of academy",
-                        "founding of city",
-                        "founding of guild",
-                        "founding of the order",
-                        "general surrendering",
-                        "great evil vanquished",
-                        "historic wedding",
-                        "important assassination",
-                        "infamous massacre",
-                        "knighting ceremony",
-                        "legendary performance",
-                        "liberation of city",
-                        "life of a HackMaster",
-                        "national epic",
-                        "razing of city",
-                        "set piece battle",
-                        "signing of treaty",
-                        "terrible cataclysm",
-                        "the first magic spell",
-                        "the great flood",
-                        "tournament finale",
-                        "world wonder built"
-                    ).random())
+                    nameBuilder.append( when (Random.nextInt(1,21)){
+                        in 1..12    -> { // Generic historical event
+                            listOf(
+                                "a major battle",
+                                "a new technology discovered",
+                                "accomplishment of a great person",
+                                "ancient elven war",
+                                "apotheosis of folk hero",
+                                "army marching to battle",
+                                "ascension of a HackMaster",
+                                "ascension of a protege",
+                                "battle against a great wyrm",
+                                "birth of a hero",
+                                "brave last stand",
+                                "capital city founding",
+                                "castle under construction",
+                                "coronation of sovereign",
+                                "destruction of the dreaded gazebo",
+                                "discovery of natural wonder",
+                                "discovery of new lands",
+                                "establishment of a colony",
+                                "first contact",
+                                "first meeting of two cultures",
+                                "forging of dwarven artifact",
+                                "founding of academy",
+                                "founding of city",
+                                "founding of guild",
+                                "founding of the order",
+                                "general surrendering",
+                                "great evil vanquished",
+                                "historic wedding",
+                                "important assassination",
+                                "infamous massacre",
+                                "knighting ceremony",
+                                "legendary performance",
+                                "liberation of city",
+                                "life of a HackMaster",
+                                "national epic",
+                                "razing of city",
+                                "set piece battle",
+                                "signing of treaty",
+                                "terrible cataclysm",
+                                "the first magic spell",
+                                "the great flood",
+                                "tournament finale",
+                                "world wonder built"
+                            ).random()
+                        }
+                        in 13..19   -> { // Canonical Aldrazaarian events
+                            listOf(
+                                "Lord Flataroy mediating peace between the Dwarves of " +
+                                        "Praxter and the Gnome Houses",
+                                "the Great Council and the adoption of the Tre-Ratoriun " +
+                                        "calendar",
+                                "the Great Reprisal of the Southern Orc League",
+                                "the War of the Three Brothers",
+                                "the Week of Long Shadows",
+                                "the anti-cataclysm of 9,999 FD",
+                                "the completion of the Grod Mondre gladiatorial arena",
+                                "the construction of Frandor's Keep on Prying Eye Island",
+                                "the counterattack of the Fellowship of the Flame",
+                                "the crossing of the River Fargruss by the southern orc tribes",
+                                "the destruction of Kryndinzar",
+                                "the establishment of Gnome Protectorates by the Gnome Titans",
+                                "the establishment of the Center for Monster Studies",
+                                "the exodus of the Oracles of Pathorgia",
+                                "the fall of the Raagan empire",
+                                "the first battle of Hell's Throat",
+                                "the formation of the \"Council of Seven\"",
+                                "the foundation of the City of Brass",
+                                "the founding of the Brethren of the Star",
+                                "the settlement of the Raakoran Islands and the founding of " +
+                                        "the city of Raga",
+                                "the opening of the Skyspike of Jerodskald",
+                                "the storm of 23 TR in Jerodskald",
+                                "the completion of The Colonnades in Grunsch",
+                                "the discovery of Nangrus among the ruins of Gurfa"
+                            ).random()
+                        }
+                        else        -> { // Player events
+                            listOf(
+                                "the siege of Fort Silver",
+                                "the liberation of New Avignon",
+                                "the charge into the Goremunyan exclusion zone",
+                                "the tragic sinking of the swamp castle",
+                                "the noodle incident",
+                                "the Really Bad Wish",
+                                "the construction of the CSS Northumbria",
+                                "the discovery of Smoke Powder"
+                            ).random()
+                        }
+                    }
+                    )
                 }
 
                 3 -> { // Religious subject matter
@@ -1762,7 +1810,8 @@ data class ArtObject(
                                 "Hanili Celanil, Gawdess of Love, Romance, Beauty, & Fine Arts",
                                 "Coyote, Gawd of Arts, Crafts, Fire, and Thieves",
                                 "Pinini the Raconteur, Gawd of the Arts",
-                                "Eilistraee, Demi-Gawdess of Moonlight, Beauty, etc.",
+                                "Eilistraee, Demi-Gawdess of Moonlight, Beauty, Song, Dance, " +
+                                        "Hunting, and Swordwork",
                                 "Moradin, Gawd of Dwarves",
                                 "Corellon Larethian, Gawd of Elves, Music, Poetry, and Magic",
                                 "Garl Glittergold, Gawd of Dwarves",
@@ -1826,14 +1875,19 @@ data class ArtObject(
                                             "head of the Circle of Sequestered Magic",
                                     "Arch-Mage Yargrove Hendrachmin, the Golem Master",
                                     "Arch-Mage Zarba, the Dweomer-Shaper",
+                                    "Burgermeister Meister Berger, mayor of Morosevia",
+                                    "Chancellor Ryldrygar, leader of the Gnome Protectorate",
                                     "Consul Lord Rurrisen, head of the Supreme Council " +
                                             "of the Pan-Elf Union",
+                                    "Count Tahd Vlad\'Neer, the Alchemist",
                                     "Dark Lord of the Pit Sosah Regeloj, " +
                                             "head of the Shadow Heart Battalion",
+                                    "Fingersmith/Phantasmist Jonid Coincrawler, the Scourge of " +
+                                            "the Bag World",
                                     "Grand Theocrat Hanzdor Warforge, " +
                                             "superior of the Holy Dwarven Theocracy",
-                                    "Griftmaster Jonid Coincrawler, the Scourge of the Bag World",
-                                    "HackFighter Skraag Fallow, that big guy in Everknights",
+                                    "Guild Thief Karynndia the Wild, the Devil in a Dress",
+                                    "HackFighter Skraag Fallow, the Anvil-Head",
                                     "HackFighter/HackSassin Sturm Pyre, the Growler",
                                     "Headmistress Drusilla Wystan, " +
                                             "dean of the University of Tilan",
@@ -1843,9 +1897,12 @@ data class ArtObject(
                                             "head of the Iron Axes of Praxter",
                                     "Lady Martaney Amaran, heir to Lady Amaran's Society for the " +
                                             "Advancement of Swordplay",
+                                    "Lady Melanee, the Well-Travelled Beauty",
                                     "Lonnya Grasswillow, " +
                                             "Artistic Director of the Five City Minstrel Society",
-                                    "Lord Gilead, Ruler of Fangaerie",
+                                    "Lord Flataroy, First Chancellor of the Hagaan League",
+                                    "Lord Traetian Sagavaar, Chancellor of the Haagan League",
+                                    "Paladin Jurisanna the Pure, Heaven's Best",
                                     "Shining Knight Sir Ja'en Garnet, the Silver Defender",
                                     "Supreme Arch Transmuter Elenwyd Sesuliad, " +
                                             "the High Transmuter of Whisperydown",
@@ -2109,197 +2166,234 @@ data class ArtObject(
 
                 5 -> { // Royalty subject matter
 
-                    val royalIsMale = Random.nextBoolean()
+                    if (Random.nextInt(1,11) == 1){
 
-                    val royalTitle = if (royalIsMale){
-                        listOf(
-                            "Emperor",
-                            "Kaiser",
-                            "Tsar",
-                            "High King",
-                            "King", "King", "King",
-                            "Archduke",
-                            "Duke", "Duke", "Duke",
-                            "Crown Prince", "Crown Prince",
-                            "Prince", "Prince", "Prince",
-                            "High Sorcerer"
-                        ).random()
+                        nameBuilder.append( // Canonical, named rulers
+                            listOf(
+                                "Chairman Revak Si\'Malan of Da\'Neer",
+                                "Dictator Tintyle Jantess III of Abgreer",
+                                "Emperor Var\'Sageem of Ragea",
+                                "G\'narl Hez (Warchief) Do\'rgar E'elaaga\'h of Gnardor",
+                                "Grand Sultan Fiarz of the City of Brass",
+                                "Great King Sergibold Praxter of the Clans of Praxter",
+                                "High Chieftan Patarumi of the United Clans of Rarkin\'Kaldish",
+                                "High King Orrunkeka II of Kal Dez",
+                                "High Priest Ahk'Tang of the Southern Orc League",
+                                "King Borgram Copperfist of Polst",
+                                "King Dasham Urriad III of Abosoria",
+                                "King Hesmar Bowraven of Shadluria",
+                                "King Lore Spetzwillow of Hazaar",
+                                "King Plavid Sa'Rovan of the Theocracy of Saryn Ar\'Keet",
+                                "King Polwar Dencarlyn II of Barcenora",
+                                "King Ro\'nann IX of the Meletian Kingdom",
+                                "Lord Gilead, Ruler of Fangaerie",
+                                "Lord Karadyn, Emperor of Goremunya",
+                                "Magarch Karnundrus of the Daurkhaud Kingdom",
+                                "Queen Elerinna Sayanna of Maur-Haud\' Freem (the Elvenwood)",
+                                "Queen Maorisa of Fernwickle Isle",
+                                "Queen Sharnis Rynaar of Krandaneer",
+                                "Shaman-King Smym Fyst of Zumbra",
+                                "Sultan Sirius \"Blackfoot\" Argor of Fra\'Neer",
+                                "elven King Therayasha\'laugird of Ara\'Kandeesh",
+                                "human King Salamos II of Ara\'Kandeesh"
+                            ).random()
+                        )
+
                     } else {
-                        listOf(
-                            "Empress",
-                            "Kaiserin",
-                            "Tsarina",
-                            "High Queen",
-                            "Queen", "Queen", "Queen",
-                            "Archduchess",
-                            "Duchess", "Duchess",
-                            "Crown Princess",
-                            "Princess", "Princess", "Princess", "Princess",
-                            "High Sorceress"
+                        val royalIsMale = Random.nextBoolean()
+
+                        val royalTitle = if (royalIsMale) {
+                            listOf(
+                                "Emperor",
+                                "Kaiser",
+                                "Tsar",
+                                "High King",
+                                "King", "King", "King",
+                                "Archduke",
+                                "Duke", "Duke", "Duke",
+                                "Crown Prince", "Crown Prince",
+                                "Prince", "Prince", "Prince",
+                                "High Sorcerer"
+                            ).random()
+                        } else {
+                            listOf(
+                                "Empress",
+                                "Kaiserin",
+                                "Tsarina",
+                                "High Queen",
+                                "Queen", "Queen", "Queen",
+                                "Archduchess",
+                                "Duchess", "Duchess",
+                                "Crown Princess",
+                                "Princess", "Princess", "Princess", "Princess",
+                                "High Sorceress"
+                            ).random()
+                        }
+
+                        val royalName = if (royalIsMale) {
+                            listOf(
+                                "Albert",
+                                "Alexander",
+                                "Alfred",
+                                "Arthur",
+                                "Augustus",
+                                "Boris",
+                                "Charles",
+                                "Cyrus",
+                                "Edmund",
+                                "Edward",
+                                "Franklin",
+                                "Frederick",
+                                "George",
+                                "Giovanni",
+                                "Harald",
+                                "Harry",
+                                "Igor",
+                                "James",
+                                "John",
+                                "João",
+                                "Leopold",
+                                "Louis",
+                                "Marcus",
+                                "Matthias",
+                                "Nicholas",
+                                "Patrick",
+                                "Pedro",
+                                "Peter",
+                                "Robert",
+                                "Simón",
+                                "Theodore",
+                                "Vladimir",
+                                "Wilfrid",
+                                "William"
+                            ).random()
+                        } else {
+                            listOf(
+                                "Alice",
+                                "Amelia",
+                                "Anastasia",
+                                "Anne",
+                                "Beatrice",
+                                "Blanche",
+                                "Catherine",
+                                "Cecilla",
+                                "Charlotte",
+                                "Diana",
+                                "Eleanor",
+                                "Elizabeth",
+                                "Gloria",
+                                "Helen",
+                                "Isabella",
+                                "Julia",
+                                "Kristina",
+                                "Madeleine",
+                                "Mary",
+                                "Natalia",
+                                "Odelia",
+                                "Olga",
+                                "Rozemyne",
+                                "Sophia",
+                                "Tiffany",
+                                "Victoria",
+                                "Wilhelmina"
+                            ).random()
+                        }
+
+                        val royalPlacement = listOf(
+                            "",
+                            "",
+                            "",
+                            "",
+                            " Sr.",
+                            " Jr.",
+                            " II",
+                            " III",
+                            " IV",
+                            " V",
+                            " VI",
+                            " VII"
                         ).random()
+
+                        val royalNickname = listOf(
+                            "Administrator",
+                            "Affable",
+                            "Ambitious",
+                            "Architect",
+                            "August",
+                            "Avaricious",
+                            "Benevolent",
+                            "Bookworm",
+                            "Bossy",
+                            "Brave",
+                            "Brilliant Strategist",
+                            "Charismatic Negotiator",
+                            "Charming",
+                            "Chronicler",
+                            "Conqueror",
+                            "Crow",
+                            "Curious",
+                            "Cynical",
+                            "Diligent",
+                            "Diplomat",
+                            "Elegant",
+                            "Elusive Shadow",
+                            "Enlightened",
+                            "Famous Champion",
+                            "Gallant",
+                            "Generous",
+                            "Great",
+                            "Guardian",
+                            "HacKleric",
+                            "HackFighter",
+                            "HackMage",
+                            "HackMaster",
+                            "Hard Ruler",
+                            "Historian",
+                            "Impaler",
+                            "Industrious",
+                            "Just",
+                            "Kind",
+                            "Lawgiver",
+                            "Legendary",
+                            "Magnanimous",
+                            "Magnificent",
+                            "Mastermind Philosopher",
+                            "Midas Touched",
+                            "Most Serene",
+                            "Noble",
+                            "Overseer",
+                            "Paragon",
+                            "Paranoid",
+                            "Peacemaker",
+                            "Pensive",
+                            "Purple",
+                            "Rowdy",
+                            "Sagacious",
+                            "Schemer",
+                            "Scholar",
+                            "Seducer",
+                            "Shadow",
+                            "Sly",
+                            "Spider",
+                            "Strategist",
+                            "Tactician",
+                            "Terrible",
+                            "Theologian",
+                            "Torturer",
+                            "Truthseeker",
+                            "Uniter",
+                            "Unready",
+                            "Valiant",
+                            "Vengeful",
+                            "Whisperer",
+                            "Whole of Body"
+                        ).random()
+
+                        nameBuilder.append(
+                            "$royalTitle ${royalName}$royalPlacement" +
+                                    " the $royalNickname"
+                        )
                     }
-
-                    val royalName = if (royalIsMale){
-                        listOf(
-                            "Albert",
-                            "Alexander",
-                            "Alfred",
-                            "Arthur",
-                            "Augustus",
-                            "Boris",
-                            "Charles",
-                            "Cyrus",
-                            "Edmund",
-                            "Edward",
-                            "Franklin",
-                            "Frederick",
-                            "George",
-                            "Giovanni",
-                            "Harald",
-                            "Harry",
-                            "Igor",
-                            "James",
-                            "John",
-                            "João",
-                            "Leopold",
-                            "Louis",
-                            "Marcus",
-                            "Matthias",
-                            "Nicholas",
-                            "Patrick",
-                            "Pedro",
-                            "Peter",
-                            "Robert",
-                            "Simón",
-                            "Theodore",
-                            "Vladimir",
-                            "Wilfrid",
-                            "William"
-                        ).random()
-                    } else {
-                        listOf(
-                            "Alice",
-                            "Amelia",
-                            "Anastasia",
-                            "Anne",
-                            "Beatrice",
-                            "Blanche",
-                            "Catherine",
-                            "Cecilla",
-                            "Charlotte",
-                            "Diana",
-                            "Eleanor",
-                            "Elizabeth",
-                            "Gloria",
-                            "Helen",
-                            "Isabella",
-                            "Julia",
-                            "Kristina",
-                            "Madeleine",
-                            "Mary",
-                            "Natalia",
-                            "Odelia",
-                            "Olga",
-                            "Rozemyne",
-                            "Sophia",
-                            "Tiffany",
-                            "Victoria",
-                            "Wilhelmina"
-                        ).random()
-                    }
-
-                    val royalPlacement = listOf(
-                        "",
-                        "",
-                        "",
-                        "",
-                        " Sr.",
-                        " Jr.",
-                        " II",
-                        " III",
-                        " IV",
-                        " V",
-                        " VI",
-                        " VII"
-                    ).random()
-
-                    val royalNickname = listOf(
-                        "Administrator",
-                        "Affable",
-                        "Ambitious",
-                        "Architect",
-                        "August",
-                        "Avaricious",
-                        "Benevolent",
-                        "Bookworm",
-                        "Bossy",
-                        "Brave",
-                        "Brilliant Strategist",
-                        "Charismatic Negotiator",
-                        "Charming",
-                        "Chronicler",
-                        "Conqueror",
-                        "Crow",
-                        "Curious",
-                        "Cynical",
-                        "Diligent",
-                        "Diplomat",
-                        "Elegant",
-                        "Elusive Shadow",
-                        "Enlightened",
-                        "Famous Champion",
-                        "Gallant",
-                        "Generous",
-                        "Great",
-                        "Guardian",
-                        "HacKleric",
-                        "HackFighter",
-                        "HackMage",
-                        "HackMaster",
-                        "Hard Ruler",
-                        "Historian",
-                        "Impaler",
-                        "Industrious",
-                        "Just",
-                        "Kind",
-                        "Lawgiver",
-                        "Legendary",
-                        "Magnanimous",
-                        "Magnificent",
-                        "Mastermind Philosopher",
-                        "Midas Touched",
-                        "Most Serene",
-                        "Noble",
-                        "Overseer",
-                        "Paragon",
-                        "Paranoid",
-                        "Peacemaker",
-                        "Pensive",
-                        "Purple",
-                        "Rowdy",
-                        "Sagacious",
-                        "Schemer",
-                        "Scholar",
-                        "Seducer",
-                        "Shadow",
-                        "Sly",
-                        "Spider",
-                        "Strategist",
-                        "Tactician",
-                        "Terrible",
-                        "Theologian",
-                        "Torturer",
-                        "Truthseeker",
-                        "Uniter",
-                        "Unready",
-                        "Valiant",
-                        "Vengeful",
-                        "Whisperer",
-                        "Whole of Body"
-                    ).random()
-
-                    nameBuilder.append("$royalTitle ${royalName}$royalPlacement" +
-                            " the $royalNickname")
                 }
 
                 else -> nameBuilder.append("something")

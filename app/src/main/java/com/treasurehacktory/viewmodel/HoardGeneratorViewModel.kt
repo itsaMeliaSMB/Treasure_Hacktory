@@ -498,7 +498,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                             2   -> AllowedDisciplines(false,false,true)
                             else-> AllowedDisciplines(true,true,false) },
                         spellsPerRange,
-                        generatorOptions.allowedSources,
+                        generatorOptions.allowedSpellSources,
                         generatorOptions.restrictedOk,
                         generatorOptions.spellReroll,
                         generatorOptions.cursedOk,
@@ -545,6 +545,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                 allowedTables = generatorOptions.allowedMagic,
                 allowCursedItems = generatorOptions.cursedOk,
                 allowIntWeapons = generatorOptions.intelOk,
+                itemSources = generatorOptions.allowedItemSources,
                 spellCoRestrictions = SpellCoRestrictions(
                     spellLevelRange.first,
                     spellLevelRange.last,
@@ -554,7 +555,7 @@ class HoardGeneratorViewModel(private val repository: HMRepository): ViewModel()
                         2   -> AllowedDisciplines(false,false,true)
                         else-> AllowedDisciplines(true,true,false) },
                     spellsPerRange,
-                    generatorOptions.allowedSources,
+                    generatorOptions.allowedSpellSources,
                     generatorOptions.restrictedOk,
                     generatorOptions.spellReroll,
                     generatorOptions.cursedOk,

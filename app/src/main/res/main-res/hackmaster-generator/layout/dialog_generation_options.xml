@@ -28,7 +28,7 @@
             android:src="@drawable/clipart_gem_vector_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/colorOnSurface"/>
+            app:tint="?attr/colorOnSurface" />
 
         <TextView
             android:id="@+id/generator_option_gem_label"
@@ -48,11 +48,11 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/value_bias_range_tooltip"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_gem_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/generator_option_gem_icon"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="@string/value_bias_range_tooltip"/>
+            app:tint="?attr/colorSecondaryVariant" />
 
         <com.google.android.material.slider.RangeSlider
             android:id="@+id/generator_option_gem_slider"
@@ -151,11 +151,11 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/value_bias_range_tooltip"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_art_icon"
-            app:layout_constraintTop_toTopOf="@id/generator_option_art_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="@string/value_bias_range_tooltip"/>
+            app:layout_constraintTop_toTopOf="@id/generator_option_art_icon"
+            app:tint="?attr/colorSecondaryVariant" />
 
 
         <com.google.android.material.slider.RangeSlider
@@ -255,11 +255,11 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
-            app:layout_constraintTop_toTopOf="@id/generator_option_map_icon"
+            android:tooltipText="In Letter code mode, chance per code is rolled for every letter ordered."
             app:layout_constraintBottom_toBottomOf="@id/generator_option_map_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="In Letter code mode, chance per code is rolled for every letter ordered."/>
+            app:layout_constraintTop_toTopOf="@id/generator_option_map_icon"
+            app:tint="?attr/colorSecondaryVariant" />
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -453,40 +453,40 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/allowed_scroll_tooltip"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_allowed_scroll_icon"
-            app:layout_constraintTop_toTopOf="@id/generator_option_allowed_scroll_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="@string/allowed_scroll_tooltip"/>
+            app:layout_constraintTop_toTopOf="@id/generator_option_allowed_scroll_icon"
+            app:tint="?attr/colorSecondaryVariant" />
 
         <TextView
             android:id="@+id/generator_option_allowed_scroll_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-condensed"
             android:gravity="center"
             android:text="At least one scroll result must be enabled (or scroll map chance must be >0%)."
             android:textColor="?attr/colorError"
-            android:fontFamily="sans-serif-condensed"
+            android:visibility="gone"
             app:drawableEndCompat="@drawable/clipart_warning_vector_icon"
             app:drawableStartCompat="@drawable/clipart_warning_vector_icon"
             app:drawableTint="?attr/colorError"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/generator_option_allowed_scroll_icon"
-            android:visibility="gone"
-            tools:visibility="visible"
-            tools:alpha="0.5"/>
+            tools:alpha="0.5"
+            tools:visibility="visible" />
 
         <CheckBox
             android:id="@+id/generator_option_spell_scroll_checkbox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Spell scrolls"
             android:checked="true"
-            app:layout_constraintTop_toBottomOf="@id/generator_option_allowed_scroll_error"
+            android:text="Spell scrolls"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_halfway_barrier"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/generator_option_halfway_barrier"/>
+            app:layout_constraintTop_toBottomOf="@id/generator_option_allowed_scroll_error" />
 
         <CheckBox
             android:id="@+id/generator_option_utility_scroll_checkbox"
@@ -494,9 +494,9 @@
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="Utility scrolls"
-            app:layout_constraintTop_toBottomOf="@id/generator_option_allowed_scroll_error"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/generator_option_halfway_barrier"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/generator_option_allowed_scroll_error" />
 
         <ImageView
             android:id="@+id/generator_option_magic_icon"
@@ -519,7 +519,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_magic_icon"
             app:layout_constraintStart_toEndOf="@id/generator_option_magic_icon"
-            app:layout_constraintTop_toTopOf="@id/generator_option_magic_icon"/>
+            app:layout_constraintTop_toTopOf="@id/generator_option_magic_icon" />
 
         <ImageView
             android:id="@+id/generator_option_magic_info"
@@ -527,11 +527,11 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/allow_magic_item_types_tooltip"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_magic_icon"
-            app:layout_constraintTop_toTopOf="@id/generator_option_magic_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="@string/allow_magic_item_types_tooltip"/>
+            app:layout_constraintTop_toTopOf="@id/generator_option_magic_icon"
+            app:tint="?attr/colorSecondaryVariant" />
 
         <TextView
             android:id="@+id/generator_option_magic_error"
@@ -541,15 +541,15 @@
             android:gravity="center"
             android:text="@string/generator_option_magic_item_error"
             android:textColor="?attr/colorError"
+            android:visibility="gone"
             app:drawableEndCompat="@drawable/clipart_warning_vector_icon"
             app:drawableStartCompat="@drawable/clipart_warning_vector_icon"
             app:drawableTint="?attr/colorError"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/generator_option_magic_icon"
-            android:visibility="gone"
-            tools:visibility="visible"
-            tools:alpha="0.5"/>
+            tools:alpha="0.5"
+            tools:visibility="visible" />
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/generator_option_checkbox_layout"
@@ -561,140 +561,141 @@
             app:justifyContent="space_between"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/generator_option_magic_error">
+            app:layout_constraintTop_toBottomOf="@id/generator_option_magic_error"
+            tools:visibility="gone">
 
             <CheckBox
                 android:id="@+id/generator_option_potion_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_potion_vector_icon"
-                android:text="@string/table_a2_title"
-                android:checked="true"/>
+                android:text="@string/table_a2_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_scroll_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_scroll_vector_icon"
-                android:text="@string/table_a3_label"
-                android:checked="true"/>
+                android:text="@string/table_a3_label" />
 
             <CheckBox
                 android:id="@+id/generator_option_ring_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_ring_vector_icon"
-                android:text="@string/table_a4_label"
-                android:checked="true"/>
+                android:text="@string/table_a4_label" />
 
             <CheckBox
                 android:id="@+id/generator_option_rod_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_rod_vector_icon"
-                android:text="@string/table_a5_label"
-                android:checked="true"/>
+                android:text="@string/table_a5_label" />
 
             <CheckBox
                 android:id="@+id/generator_option_staff_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_staff_vector_icon"
-                android:text="@string/table_a6_title"
-                android:checked="true"/>
+                android:text="@string/table_a6_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_wand_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_wand_vector_icon"
-                android:text="@string/table_a7_title"
-                android:checked="true"/>
+                android:text="@string/table_a7_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_book_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_book_vector_icon"
-                android:text="@string/table_a8_title"
-                android:checked="true"/>
+                android:text="@string/table_a8_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_jewelry_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_jewelry_vector_icon"
-                android:text="@string/table_a9_title"
-                android:checked="true"/>
+                android:text="@string/table_a9_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_robe_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_robe_vector_icon"
-                android:text="@string/table_a10_title"
-                android:checked="true"/>
+                android:text="@string/table_a10_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_boot_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_boot_vector_icon"
-                android:text="@string/table_a11_title"
-                android:checked="true"/>
+                android:text="@string/table_a11_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_belt_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_belt_hat_vector_icon"
-                android:text="@string/table_a12_title"
-                android:checked="true"/>
+                android:text="@string/table_a12_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_container_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_bag_vector_icon"
-                android:text="@string/table_a13_title"
-                android:checked="true"/>
+                android:text="@string/table_a13_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_dust_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_dust_vector_icon"
-                android:text="@string/table_a14_title"
-                android:checked="true"/>
+                android:text="@string/table_a14_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_household_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_toolbox_vector_icon"
-                android:text="@string/table_a15_title"
-                android:checked="true"/>
+                android:text="@string/table_a15_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_music_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_lyre_vector_icon"
-                android:text="@string/table_a16_title"
-                android:checked="true"/>
+                android:text="@string/table_a16_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_weird_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_crystal_ball_vector_icon"
-                android:text="@string/table_a17_title"
-                android:checked="true"/>
+                android:text="@string/table_a17_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_armor_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_cape_armor_vector_icon"
-                android:text="@string/tables_a18_a20_title"
-                android:checked="true"/>
+                android:text="@string/tables_a18_a20_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_weapon_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_axe_sword_vector_icon"
-                android:text="@string/tables_a21_a23_title"
-                android:checked="true"/>
+                android:text="@string/tables_a21_a23_title" />
 
             <CheckBox
                 android:id="@+id/generator_option_artifact_checkbox"
                 style="@style/generator_option_magic_item_checkbox"
+                android:checked="true"
                 android:drawableStart="@drawable/clipart_artifact_crown_vector_icon"
-                android:text="@string/table_a24_title"
-                android:checked="true"/>
+                android:text="@string/table_a24_title" />
 
         </com.google.android.flexbox.FlexboxLayout>
 
@@ -757,17 +758,17 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/allowed_disciplines_tooltip"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_spell_discipline_label"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="@string/allowed_disciplines_tooltip"/>
+            app:tint="?attr/colorSecondaryVariant" />
 
         <RadioGroup
             android:id="@+id/generator_option_spell_discipline_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_label">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -802,9 +803,9 @@
                     android:layout_height="wrap_content"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_first_quarter_barrier"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/generator_option_spell_discipline_divine_radio"
@@ -812,9 +813,9 @@
                     android:layout_height="wrap_content"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_second_quarter_barrier"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/generator_option_spell_discipline_natural_radio"
@@ -822,61 +823,61 @@
                     android:layout_height="wrap_content"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_third_quarter_barrier"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/generator_option_spell_discipline_all_radio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checked="true"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
-                    android:checked="true"
-                    app:layout_constraintStart_toEndOf="@id/generator_option_third_quarter_barrier"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintStart_toEndOf="@id/generator_option_third_quarter_barrier"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/generator_option_spell_discipline_arcane_image"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:src="@drawable/class_magic_user_colored"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_first_quarter_barrier"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio"
-                    android:src="@drawable/class_magic_user_colored"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio" />
 
                 <ImageView
                     android:id="@+id/generator_option_spell_discipline_divine_image"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
+                    android:src="@drawable/class_cleric_colored"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_second_quarter_barrier"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_radio"
-                    android:src="@drawable/class_cleric_colored"/>
+                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_radio" />
 
                 <ImageView
                     android:id="@+id/generator_option_spell_discipline_natural_image"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="4dp"
-                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
+                    android:src="@drawable/class_druid_colored"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_third_quarter_barrier"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_radio"
-                    android:src="@drawable/class_druid_colored"/>
+                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_radio" />
 
                 <ImageView
                     android:id="@+id/generator_option_spell_discipline_all_image_1"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginTop="4dp"
                     android:layout_marginStart="6dp"
+                    android:layout_marginTop="4dp"
                     android:elevation="1dp"
+                    android:src="@drawable/class_magic_user_colored"
                     app:layout_constraintStart_toEndOf="@id/generator_option_third_quarter_barrier"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio"
-                    android:src="@drawable/class_magic_user_colored"/>
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio" />
 
                 <ImageView
                     android:id="@+id/generator_option_spell_discipline_all_image_2"
@@ -885,57 +886,57 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="6dp"
                     android:elevation="2dp"
+                    android:src="@drawable/class_cleric_colored"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio"
-                    android:src="@drawable/class_cleric_colored"/>
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_radio" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_image"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:text="Arcane\n(Magic-Users\n&amp; Specialists)"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_first_quarter_barrier"
-                    android:gravity="center"
-                    android:textSize="12sp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="Arcane\n(Magic-Users\n&amp; Specialists)"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_arcane_image" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_image"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:text="Divine\n(Clerics &amp;\nZealots)"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_second_quarter_barrier"
-                    android:gravity="center"
-                    android:textSize="12sp"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="Divine\n(Clerics &amp;\nZealots)"/>
+                    app:layout_constraintStart_toEndOf="@id/generator_option_first_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_divine_image" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_natural_image"
+                    android:fontFamily="sans-serif-condensed"
+                    android:gravity="center"
+                    android:text="Natural\n(Druids)\n[Atypical]"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
                     app:layout_constraintEnd_toStartOf="@id/generator_option_third_quarter_barrier"
-                    android:fontFamily="sans-serif-condensed"
-                    android:gravity="center"
-                    android:textSize="12sp"
-                    android:text="Natural\n(Druids)\n[Atypical]"/>
+                    app:layout_constraintStart_toEndOf="@id/generator_option_second_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_natural_image" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_all_image_1"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/generator_option_third_quarter_barrier"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:fontFamily="sans-serif-condensed"
                     android:gravity="center"
+                    android:text="Arcane/Divine\n(Default)"
                     android:textSize="12sp"
-                    android:text="Arcane/Divine\n(Default)"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/generator_option_third_quarter_barrier"
+                    app:layout_constraintTop_toBottomOf="@id/generator_option_spell_discipline_all_image_1" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -958,37 +959,37 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="If book-defined methods are indicated, use level-up spell acquisition and Chosen One spell allotment tables to pick spells."
             app:layout_constraintBottom_toBottomOf="@id/generator_option_spell_method_label"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="If book-defined methods are indicated, use level-up spell acquisition and Chosen One spell allotment tables to pick spells."/>
+            app:tint="?attr/colorSecondaryVariant" />
 
         <RadioGroup
             android:id="@+id/generator_option_spell_method_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_method_label"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/generator_option_spell_method_label">
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/generator_option_spell_method_random_radio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="center"
                 android:checked="true"
-                android:text="@string/spell_method_random_radio_label"/>
+                android:text="@string/spell_method_random_radio_label"
+                android:textAlignment="center" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/generator_option_spell_method_book_radio"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="center"
-                android:text="@string/spell_method_book_radio_label"/>
+                android:text="@string/spell_method_book_radio_label"
+                android:textAlignment="center" />
 
         </RadioGroup>
 
@@ -1009,10 +1010,10 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/spell_curse_tooltip"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_spell_curse_label"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="@string/spell_curse_tooltip"/>
+            app:tint="?attr/colorSecondaryVariant" />
 
         <RadioGroup
             android:id="@+id/generator_option_spell_curse_group"
@@ -1020,8 +1021,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/generator_option_spell_curse_label">
 
             <com.google.android.material.radiobutton.MaterialRadioButton
@@ -1029,29 +1030,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:textSize="14sp"
-                android:text="Example curses from GMG"/>
+                android:text="Example curses from GMG"
+                android:textSize="14sp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/generator_option_spell_curse_official_radio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="Above + Official curses"/>
+                android:text="Above + Official curses"
+                android:textSize="14sp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/generator_option_spell_curse_homebrew_radio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="Above + Homebrew curses"/>
+                android:text="Above + Homebrew curses"
+                android:textSize="14sp" />
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/generator_option_spell_curse_none_radio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="None (ignore curses on spell collections)"/>
+                android:text="None (ignore curses on spell collections)"
+                android:textSize="14sp" />
 
         </RadioGroup>
 
@@ -1092,6 +1093,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Permitted sources beyond core:"
+            android:fontFamily="sans-serif-condensed"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_reference_icon"
@@ -1104,42 +1106,207 @@
             android:layout_height="24dp"
             android:alpha="0.65"
             android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/allowed_sources_tooltip"
             app:layout_constraintBottom_toBottomOf="@id/generator_option_reference_icon"
-            app:layout_constraintTop_toTopOf="@id/generator_option_reference_icon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:tint="?attr/colorSecondaryVariant"
-            android:tooltipText="@string/allowed_sources_tooltip"/>
+            app:layout_constraintTop_toTopOf="@id/generator_option_reference_icon"
+            app:tint="?attr/colorSecondaryVariant" />
 
-        <LinearLayout
-            android:id="@+id/generator_option_reference_table"
-            android:layout_width="match_parent"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/generator_option_reference_guideline_checkboxes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="48dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/generator_option_reference_guideline_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="96dp" />
+
+        <TextView
+            android:id="@+id/generator_option_reference_magic_label"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/generator_option_reference_icon">
+            android:gravity="center"
+            android:text="Magic Items"
+            android:textSize="12sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_guideline_checkboxes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_reference_icon" />
 
-            <CheckBox
-                android:id="@+id/generator_option_reference_splatbook_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif-condensed"
-                android:checked="true"
-                android:text="@string/reference_splatbook_label"/>
+        <TextView
+            android:id="@+id/generator_option_reference_spell_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Spells"
+            android:textSize="12sp"
+            android:textStyle="bold|italic"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_reference_magic_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_guideline_label"
+            app:layout_constraintStart_toEndOf="@id/generator_option_reference_guideline_checkboxes"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_reference_icon" />
 
-            <CheckBox
-                android:id="@+id/generator_option_reference_hackjournal_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/reference_hackjournal_label"/>
+        <CheckBox
+            android:id="@+id/generator_option_reference_splatbook_magic_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:buttonTint="@color/magic_item_color_state_list"
+            android:checked="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_reference_splatbook_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_guideline_checkboxes"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <CheckBox
-                android:id="@+id/generator_option_reference_modules_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:fontFamily="sans-serif-condensed"
-                android:text="@string/reference_modules_etc_label"/>
+        <CheckBox
+            android:id="@+id/generator_option_reference_splatbook_spell_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:buttonTint="@color/spell_color_state_list"
+            android:checked="true"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_reference_splatbook_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_guideline_label"
+            app:layout_constraintStart_toEndOf="@id/generator_option_reference_guideline_checkboxes" />
 
-        </LinearLayout>
+        <TextView
+            android:id="@+id/generator_option_reference_splatbook_label"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="4dp"
+            android:gravity="center_vertical"
+            android:text="@string/reference_splatbook_label"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_splatbook_info"
+            app:layout_constraintStart_toEndOf="@id/generator_option_reference_guideline_label"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_reference_header_barrier" />
+
+        <ImageView
+            android:id="@+id/generator_option_reference_splatbook_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/generator_options_splatbook_tooltip"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_reference_splatbook_magic_checkbox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/generator_option_reference_splatbook_magic_checkbox"
+            app:tint="?attr/colorSecondaryVariant" />
+
+        <CheckBox
+            android:id="@+id/generator_option_reference_hackjournal_magic_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:buttonTint="@color/magic_item_color_state_list"
+            android:checked="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_reference_hackjournal_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_guideline_checkboxes"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <CheckBox
+            android:id="@+id/generator_option_reference_hackjournal_spell_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:buttonTint="@color/spell_color_state_list"
+            android:checked="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_reference_hackjournal_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_guideline_label"
+            app:layout_constraintStart_toEndOf="@id/generator_option_reference_guideline_checkboxes" />
+
+        <TextView
+            android:id="@+id/generator_option_reference_hackjournal_label"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="4dp"
+            android:gravity="center_vertical"
+            android:text="@string/reference_hackjournal_label"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_hackjournal_info"
+            app:layout_constraintStart_toEndOf="@id/generator_option_reference_guideline_label"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_reference_splatbook_label" />
+
+        <ImageView
+            android:id="@+id/generator_option_reference_hackjournal_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/generator_options_hackjournal_tooltip"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_reference_hackjournal_magic_checkbox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/generator_option_reference_hackjournal_magic_checkbox"
+            app:tint="?attr/colorSecondaryVariant" />
+
+        <CheckBox
+            android:id="@+id/generator_option_reference_modules_magic_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:buttonTint="@color/magic_item_color_state_list"
+            android:checked="false"
+            android:enabled="false"
+            android:clickable="false"
+            android:visibility="gone"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_reference_modules_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_guideline_checkboxes"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <CheckBox
+            android:id="@+id/generator_option_reference_modules_spell_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:buttonTint="@color/spell_color_state_list"
+            android:checked="false"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/generator_option_reference_modules_label"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_guideline_label"
+            app:layout_constraintStart_toEndOf="@id/generator_option_reference_guideline_checkboxes" />
+
+        <TextView
+            android:id="@+id/generator_option_reference_modules_label"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="4dp"
+            android:gravity="center_vertical"
+            android:text="@string/reference_modules_etc_label"
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/generator_option_reference_modules_info"
+            app:layout_constraintStart_toEndOf="@id/generator_option_reference_guideline_label"
+            app:layout_constraintTop_toBottomOf="@id/generator_option_reference_hackjournal_label" />
+
+        <ImageView
+            android:id="@+id/generator_option_reference_modules_info"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.65"
+            android:src="@drawable/clipart_info_vector_icon"
+            android:tooltipText="@string/generator_options_modules_tooltip"
+            app:layout_constraintBottom_toBottomOf="@id/generator_option_reference_modules_magic_checkbox"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/generator_option_reference_modules_magic_checkbox"
+            app:tint="?attr/colorSecondaryVariant" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/generator_option_reference_header_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="generator_option_reference_magic_label,generator_option_reference_spell_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

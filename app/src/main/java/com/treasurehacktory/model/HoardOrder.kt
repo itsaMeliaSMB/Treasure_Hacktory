@@ -54,6 +54,7 @@ data class MagicItemRestrictions(
     val allowedTables: Set<MagicItemType> = enumValues<MagicItemType>().toSet(),
     val allowCursedItems: Boolean = true,
     val allowIntWeapons: Boolean = true,
+    val itemSources: SpCoSources = SpCoSources(false, false, false),
     val spellCoRestrictions: SpellCoRestrictions =
         SpellCoRestrictions(
             allowCurse = allowCursedItems
@@ -88,9 +89,9 @@ data class AllowedDisciplines(val arcane: Boolean = true, val divine: Boolean = 
  * Data class for holding all user preferences captured from HoardGeneratorFragment's option dialog.
  */
 data class GeneratorOptions(
-    val gemMin: Int = 0, val gemMax: Int = 17, val artMin : Int = -19, val artMax: Int = 31,
-    val mapBase: Int = 0, val mapPaper : Int = 0, val mapScroll : Int = 0,
-    val falseMapsOK : Boolean = true,
+    val gemMin: Int = 0, val gemMax: Int = 17, val artMin: Int = -19, val artMax: Int = 31,
+    val mapBase: Int = 0, val mapPaper: Int = 0, val mapScroll: Int = 0,
+    val falseMapsOK: Boolean = true,
     val allowedMagic: Set<MagicItemType> = setOf(
         MagicItemType.A2,
         MagicItemType.A3,
@@ -114,11 +115,15 @@ data class GeneratorOptions(
         MagicItemType.A23,
         MagicItemType.A24
     ),
-    val spellOk : Boolean = true, val utilityOk : Boolean = true, val cursedOk : Boolean = true,
-    val intelOk : Boolean = true, val spellDisciplinePos: Int = 3,
-    val spellMethod : SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
-    val spellCurses : SpCoCurses = SpCoCurses.STRICT_GMG, val spellReroll : Boolean = true,
-    val restrictedOk : Boolean = false,
-    val allowedSources: SpCoSources = SpCoSources(
-        splatbooksOK = true, hackJournalsOK = false, modulesOK = false)
+    val spellOk: Boolean = true, val utilityOk: Boolean = true, val cursedOk: Boolean = true,
+    val intelOk: Boolean = true, val spellDisciplinePos: Int = 3,
+    val spellMethod: SpCoGenMethod = SpCoGenMethod.TRUE_RANDOM,
+    val spellCurses: SpCoCurses = SpCoCurses.STRICT_GMG, val spellReroll: Boolean = true,
+    val restrictedOk: Boolean = false,
+    val allowedItemSources: SpCoSources = SpCoSources(
+        splatbooksOK = false, hackJournalsOK = false, modulesOK = false
+    ),
+    val allowedSpellSources: SpCoSources = SpCoSources(
+        splatbooksOK = true, hackJournalsOK = false, modulesOK = false
+    )
 )
