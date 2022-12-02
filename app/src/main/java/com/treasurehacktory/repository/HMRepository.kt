@@ -180,13 +180,16 @@ class HMRepository (
      * @param type String to match in table_type column
      * @return Pair of the (1) the primary key of the entry and (2) its probability weight
      */
-    suspend fun getBaseLimItemTempsByType(type: String, allowCursed: Boolean): List<Pair<Int,Int>> =
+    suspend fun getBaseLimItemTempsByType(type: String, allowCursed: Boolean,
+                                          refTypes: List<ReferenceType>): List<Pair<Int,Int>> =
         magicItemDao.getBaseLimItemTempsByType(type)
-            .dropWhile { it.isCursed == 1 && !allowCursed }
-            .map { it.templateID to it.weight }
+                .filter { refTypes.contains(it.sourceCode) }
+                .dropWhile { it.isCursed == 1 && !allowCursed }
+                .map { it.templateID to it.weight }
 
-    suspend fun getBaseItemTempsByType(type: MagicItemType): List<MagicItemTemplate> =
+    suspend fun getBaseItemTempsByType(type: MagicItemType, refTypes: List<ReferenceType>): List<MagicItemTemplate> =
         magicItemDao.getBaseItemTempsByType(type.name)
+            .filter{ refTypes.contains(it.refType) }
 
     /**
      * Pulls all item entries with given ref_id as a LimitedItemTemplate.
@@ -222,7 +225,8 @@ class HMRepository (
         } else { "" }
     }
 
-    suspend fun getNamesToImitate(keyword: String) : List<String> = magicItemDao.getNamesToImitate(keyword)
+    suspend fun getNamesToImitate(keyword: String) : List<String> =
+        magicItemDao.getNamesToImitate(keyword)
     // endregion
 
     // region ( MagicItem )

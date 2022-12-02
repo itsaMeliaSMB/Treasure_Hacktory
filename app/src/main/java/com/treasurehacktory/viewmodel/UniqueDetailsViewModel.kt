@@ -272,7 +272,10 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
 
         viewModelScope.launch {
 
-            val templates = listOf(repository.getBaseItemTempsByType(tableType),
+            val templates = listOf(repository.getBaseItemTempsByType(tableType, listOf(
+                ReferenceType.CORE, ReferenceType.SPLATBOOK, ReferenceType.HACKJOURNAL,
+                ReferenceType.PUBLISHED_MODULE
+            )),
                 getSpecialTableTemplates()
             ).flatten()
 
@@ -401,7 +404,7 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                         targetItem.mgcItemType.name}] was converted into a wildcard " +
                             "entry of type ${newItem.mgcItemType.name} (${
                                 newItem.mgcItemType.tableLabel}).",
-                    tag = "modification|magic-item|choice"
+                    tag = "modification|magic-item|choice|verbose"
                 )
 
                 saveViewedItem(newItem, parentHoard, newHoardEvent)
@@ -515,7 +518,7 @@ class UniqueDetailsViewModel(private val repository: HMRepository) : ViewModel()
                             "(originally\" ${targetArt.originalName}\")"
                         } else { "" } + "[id:${targetArt.itemID}] had " +
                         "its name re-rolled to be $newName.",
-                tag = "modification|art-object|reroll"
+                tag = "modification|art-object|reroll|verbose"
             )
 
             if (parentHoard != null) {

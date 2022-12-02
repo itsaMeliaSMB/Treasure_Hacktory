@@ -784,12 +784,18 @@ class HoardGeneratorFragment : Fragment() {
                             )
                             generatorOptionRerollChoiceSwitch.isChecked = options.spellReroll
                             generatorOptionSpecialistSwitch.isChecked = options.spellReroll
-                            generatorOptionReferenceSplatbookCheckbox.isChecked =
-                                options.allowedSources.splatbooksOK
-                            generatorOptionReferenceHackjournalCheckbox.isChecked =
-                                options.allowedSources.hackJournalsOK
-                            generatorOptionReferenceModulesCheckbox.isChecked =
-                                options.allowedSources.modulesOK
+                            generatorOptionReferenceSplatbookMagicCheckbox.isChecked =
+                                options.allowedItemSources.splatbooksOK
+                            generatorOptionReferenceHackjournalMagicCheckbox.isChecked =
+                                options.allowedItemSources.hackJournalsOK
+                            generatorOptionReferenceModulesMagicCheckbox.isChecked =
+                                options.allowedItemSources.modulesOK
+                            generatorOptionReferenceSplatbookSpellCheckbox.isChecked =
+                                options.allowedSpellSources.splatbooksOK
+                            generatorOptionReferenceHackjournalSpellCheckbox.isChecked =
+                                options.allowedSpellSources.hackJournalsOK
+                            generatorOptionReferenceModulesSpellCheckbox.isChecked =
+                                options.allowedSpellSources.modulesOK
                         }
 
                         val dialog = AlertDialog.Builder(context).setView(dialogBinding.root)
@@ -849,16 +855,20 @@ class HoardGeneratorFragment : Fragment() {
                                                     },
                                                     spellReroll = dialogBinding.generatorOptionRerollChoiceSwitch.isChecked,
                                                     restrictedOk = dialogBinding.generatorOptionSpecialistSwitch.isChecked,
-                                                    allowedSources = SpCoSources(
-                                                        splatbooksOK = dialogBinding.generatorOptionReferenceSplatbookCheckbox.isChecked,
-                                                        hackJournalsOK = dialogBinding.generatorOptionReferenceHackjournalCheckbox.isChecked,
-                                                        modulesOK = dialogBinding.generatorOptionReferenceModulesCheckbox.isChecked
+                                                    allowedItemSources = SpCoSources(
+                                                        splatbooksOK = dialogBinding.generatorOptionReferenceSplatbookMagicCheckbox.isChecked,
+                                                        hackJournalsOK = dialogBinding.generatorOptionReferenceHackjournalMagicCheckbox.isChecked,
+                                                        modulesOK = dialogBinding.generatorOptionReferenceModulesMagicCheckbox.isChecked
+                                                    ),
+                                                    allowedSpellSources = SpCoSources(
+                                                        splatbooksOK = dialogBinding.generatorOptionReferenceSplatbookSpellCheckbox.isChecked,
+                                                        hackJournalsOK = dialogBinding.generatorOptionReferenceHackjournalSpellCheckbox.isChecked,
+                                                        modulesOK = dialogBinding.generatorOptionReferenceModulesSpellCheckbox.isChecked
                                                     )
                                                 )
 
                                                 //Dismiss
                                                 dialog.dismiss()
-
                                             }
                                         }
                                 }
@@ -1938,7 +1948,7 @@ class HoardGeneratorFragment : Fragment() {
                                                 qtyPicker.value)
                                         }
                                     } }
-                                .setNegativeButton(R.string.action_cancel) { dialog, which ->
+                                .setNegativeButton(R.string.action_cancel) { dialog, _ ->
                                     dialog.cancel() }
                                 .setCancelable(true)
                                 .show()

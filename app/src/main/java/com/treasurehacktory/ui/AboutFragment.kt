@@ -390,7 +390,6 @@ class AboutFragment : Fragment() {
             materialIconsApacheLink.movementMethod = LinkMovementMethod.getInstance()
             puzwedDiscordLink.movementMethod = LinkMovementMethod.getInstance()
             puzwedChallongeLink.movementMethod = LinkMovementMethod.getInstance()
-            puzwedTwitterLink.movementMethod = LinkMovementMethod.getInstance()
             puzwedYoutubeLink.movementMethod = LinkMovementMethod.getInstance()
             // endregion
         }

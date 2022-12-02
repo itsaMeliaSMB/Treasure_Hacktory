@@ -551,8 +551,9 @@ class UniqueDetailsFragment : Fragment() {
                             setTypeface(DEFAULT_BOLD)
                         }
                         (entry.message == HACKMASTER_CLASS_ITEM_TEXT) -> {
+                            text = entry.message
+                            setTextColor(resources.getColor(R.color.bronze,null))
                             setTypeface(DEFAULT_BOLD)
-                            textSize = 18f
                         }
                         else    -> {
                             text = entry.message
@@ -1166,6 +1167,50 @@ class UniqueDetailsFragment : Fragment() {
                         }
                     }
 
+                    uniqueListItemframeBadge.apply {
+                        when (template.refType) {
+
+                            ReferenceType.CORE -> {
+                                visibility = View.INVISIBLE
+                            }
+
+                            ReferenceType.SPLATBOOK -> {
+                                setImageResource(R.drawable.reference_badge_splat)
+                                tooltipText = template.source
+                                visibility = View.VISIBLE
+                            }
+
+                            ReferenceType.HACKJOURNAL -> {
+                                setImageResource(R.drawable.reference_badge_hackjournal)
+                                tooltipText = template.source
+                                visibility = View.VISIBLE
+                            }
+
+                            ReferenceType.PUBLISHED_MODULE -> {
+                                setImageResource(R.drawable.reference_badge_module)
+                                visibility = View.VISIBLE
+                            }
+
+                            ReferenceType.BEYOND_HM4E -> {
+                                setImageResource(R.drawable.reference_badge_beyond)
+                                tooltipText = "Beyond HackMaster 4e"
+                                visibility = View.VISIBLE
+                            }
+
+                            ReferenceType.RESEARCHED -> {
+                                setImageResource(R.drawable.reference_badge_researched)
+                                tooltipText = "Researched/created by player characters"
+                                visibility = View.VISIBLE
+                            }
+
+                            ReferenceType.OTHER_HOMEBREW -> {
+                                setImageResource(R.drawable.reference_badge_homebrew)
+                                tooltipText = "Homebrew"
+                                visibility = View.VISIBLE
+                            }
+                        }
+                    }
+
                     "[${template.refId}] ${template.name}".also { uniqueListItemName.text = it }
 
                     uniqueListItemName.apply{
@@ -1208,8 +1253,6 @@ class UniqueDetailsFragment : Fragment() {
 
                     uniqueListItemXp.minWidth = 48
 
-                    // Hide badge
-                    uniqueListItemframeBadge.visibility = View.GONE
                 }
             }
         }

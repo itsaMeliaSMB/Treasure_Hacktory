@@ -741,7 +741,7 @@ interface MagicItemDao {
      *
      * @param type String to match in table_type column
      */
-    @Query("SELECT ref_id, wt, is_cursed FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_id=0")
+    @Query("SELECT ref_id, wt, is_cursed, ref_type FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_id=0")
     suspend fun getBaseLimItemTempsByType(type: String): List<LimitedItemTemplate>
 
     @Query("SELECT * FROM hackmaster_magic_item_reference WHERE table_type=(:type) AND parent_id=0")
@@ -758,7 +758,7 @@ interface MagicItemDao {
      *
      * @param parentID Integer primary key id number of parent entry.
      */
-    @Query("SELECT ref_id, wt, is_cursed FROM hackmaster_magic_item_reference WHERE parent_id=(:parentID)")
+    @Query("SELECT ref_id, wt, is_cursed, ref_type FROM hackmaster_magic_item_reference WHERE parent_id=(:parentID)")
     suspend fun getChildLimItemTempsByParent(parentID: Int): List<LimitedItemTemplate>
 
     /**

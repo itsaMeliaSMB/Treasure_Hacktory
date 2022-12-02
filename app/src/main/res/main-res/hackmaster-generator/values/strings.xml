@@ -147,15 +147,16 @@
     <string name="value_bias_range_tooltip">Generator will re-roll results outside this range, up to a point.</string>
     <string name="allowed_scroll_tooltip">If a scroll is indicated on table A1, allow these scrolls.</string>
     <string name="allow_magic_item_types_tooltip">If no picked types overlap with a rolled treasure type (e.g. type F), this list is ignored.</string>
-    <string name="allowed_sources_tooltip">If checked, magic items and spells from these sources may also be picked.</string>
+    <string name="allowed_sources_tooltip">If checked, magic items and spells from these sources may also be picked. Note that magic item probabilities may be slightly skewed.</string>
     <string name="allowed_disciplines_tooltip">If Arcane/Divine, both types can be SEPARATELY generated.\nNOTE: Druid scrolls are unofficial.</string>
     <string name="spell_curse_tooltip">What curses may be applied to any cursed spell collections generated.</string>
     <string name="generation_options">Generation options</string>
     <string name="spell_method_random_radio_label">Unweighted, random picks</string>
     <string name="spell_method_book_radio_label">Book-defined methods</string>
-    <string name="reference_splatbook_label">Splatbooks (i.e. Spellslinger\'s Guide and Zealot\'s Guide)</string>
+    <string name="reference_splatbook_label">Splatbooks</string>
     <string name="reference_hackjournal_label">HackJournals</string>
-    <string name="reference_modules_etc_label"><![CDATA[Other official Kenzer & Company-published material (i.e. modules)]]></string>
+    <string name="reference_modules_etc_label">Other official sources</string>
     <string name="generator_spell_curse_disclaimer">Please note that if \"Allow cursed magic items\" is enabled, all scrolls ordered from this section will automatically have a curse applied to them!</string>
+    <string name="generator_options_splatbook_tooltip">Class books (e.g. SSG and ZG), as well as HackJammer, AGtPF, and City of Brass</string>
 
 </resources>

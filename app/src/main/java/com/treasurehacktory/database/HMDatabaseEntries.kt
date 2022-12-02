@@ -18,9 +18,12 @@ data class GemTemplate(
     val description: String,
     @ColumnInfo(name ="icon_id") val iconID : String)
 
-data class LimitedItemTemplate(@ColumnInfo(name = "ref_id") val templateID: Int,
-                               @ColumnInfo(name = "wt") val weight: Int,
-                               @ColumnInfo(name = "is_cursed") val isCursed: Int)
+data class LimitedItemTemplate(
+    @ColumnInfo(name = "ref_id") val templateID: Int,
+    @ColumnInfo(name = "wt") val weight: Int,
+    @ColumnInfo(name = "is_cursed") val isCursed: Int,
+    @ColumnInfo(name = "ref_type") val sourceCode: ReferenceType
+)
 
 @Entity(tableName = "hackmaster_magic_item_reference")
 data class MagicItemTemplate(

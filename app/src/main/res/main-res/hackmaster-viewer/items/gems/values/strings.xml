@@ -2,4 +2,6 @@
 <resources>
     <string name="action_reevaluate_gems">Re-evaluate gems</string>
     <string name="action_reroll_art_name">Roll new Art Object name</string>
+    <string name="generator_options_hackjournal_tooltip">Material published in the first 30 issues of the HackJournal</string>
+    <string name="generator_options_modules_tooltip">Material published in other official sources, such as adventure modules and KoDT issues</string>
 </resources>

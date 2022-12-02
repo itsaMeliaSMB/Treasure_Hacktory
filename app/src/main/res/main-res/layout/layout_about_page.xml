@@ -1132,6 +1132,25 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/xjon_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/exlist_bottom_margin"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/xjon_thanks"
+                    android:textSize="16sp" />
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
                 android:id="@+id/puzwed_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1196,17 +1215,6 @@
                             android:textSize="18sp"
                             android:drawablePadding="16dp"
                             android:layout_marginBottom="8dp"
-                            app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
-
-                        <TextView
-                            android:id="@+id/puzwed_twitter_link"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:minHeight="32dp"
-                            android:gravity="center_vertical"
-                            android:text="@string/puzwed_twitter"
-                            android:textSize="18sp"
-                            android:drawablePadding="16dp"
                             app:drawableStartCompat="@drawable/clipart_link_vector_icon" />
 
                     </LinearLayout>

@@ -273,7 +273,7 @@ class HoardEventLogFragment : Fragment() {
                         arrayOf(
                             intArrayOf(android.R.attr.state_enabled)
                         ),
-                        intArrayOf(resources.getColor(R.color.gemPrimary,null))
+                        intArrayOf(resources.getColor(R.color.magicPrimary,null))
                     )
                     "spell-collection"->    ColorStateList(
                         arrayOf(
