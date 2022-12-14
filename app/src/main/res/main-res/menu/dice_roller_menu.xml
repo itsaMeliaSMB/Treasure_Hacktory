@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_view_history"
+        android:title="View history"
+        android:icon="@drawable/clipart_history_vector_icon"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_copy_roll"
+        android:title="View history"
+        android:icon="@drawable/clipart_clipboard_vector_icon"
+        app:showAsAction="ifRoom"/>
+
+</menu>

@@ -203,6 +203,17 @@ class HoardListFragment : Fragment() {
                         true
                     }
 
+                    R.id.action_dice_roller -> {
+
+                        if (hoardListViewModel.isRunningAsyncLiveData.value != true) {
+
+                            val actionID = R.id.hoard_list_to_dice_roller_action
+                            findNavController().navigate(actionID)
+                        }
+
+                        true
+                    }
+
                     // Default case
                     else    -> false
                 }
@@ -655,6 +666,10 @@ class HoardListFragment : Fragment() {
     private fun updateUI(hoards: List<Hoard>) {
         hoardAdapter = HoardAdapter(hoards)
         binding.hoardListRecycler.adapter = hoardAdapter
+    }
+
+    private fun refreshDatabaseTables() {
+
     }
 
     private fun showContentFrameCrossfade() {

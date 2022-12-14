@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/backgroundColor">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/dice_roller_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbar_height"
+            android:minHeight="4dp"
+            app:layout_scrollFlags="noScroll"
+            app:title="@string/dice_roller_toolbar_title"
+            app:titleTextColor="?attr/colorOnPrimary"
+            app:subtitleTextAppearance="@style/TextAppearance.Material3.TitleSmall"
+            app:navigationIcon="@drawable/clipart_back_vector_icon"
+            app:buttonGravity="center_vertical"
+            tools:menu="@menu/dice_roller_menu"
+            style="@style/Widget.Design.AppBarLayout" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/dice_roller_result_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/dice_roller_result_top_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="?attr/colorOnSurface"
+                        android:alpha="1"
+                        android:text="Result:"
+                        tools:text="Result (10d10,000+100 p(+1){-1} [HON +1]):"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/dice_roller_result_total"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/dice_roller_result_top_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="?attr/colorOnSurface"
+                        android:fontFamily="sans-serif-black"
+                        android:alpha="1"
+                        android:text="\?"
+                        tools:text="1,000,000"
+                        android:textSize="70sp"/>
+
+                    <TextView
+                        android:id="@+id/dice_roller_result_standard_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/dice_roller_result_total"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="?attr/colorOnSurface"
+                        android:alpha="1"
+                        android:text="Standard rolls:"
+                        tools:text="Standard rolls (10,000 over 16 rolls):"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/dice_roller_result_standard_values"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/dice_roller_result_standard_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textAlignment="center"
+                        android:textColor="?attr/colorOnSurface"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:alpha="0.65"
+                        android:text="none"
+                        tools:text="1, 2, 4, 8, 1, 5, 5, 8"/>
+
+                    <TextView
+                        android:id="@+id/dice_roller_result_extra_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintTop_toBottomOf="@id/dice_roller_result_standard_values"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="?attr/colorOnSurface"
+                        android:alpha="1"
+                        android:text="Standard rolls:"
+                        tools:text="Penetration rolls (10,000 over 16 rolls):"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/dice_roller_result_extra_values"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/dice_roller_result_extra_label"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textAlignment="center"
+                        android:textColor="?attr/colorOnSurface"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:alpha="0.65"
+                        android:text="none"
+                        tools:text="1, 2, 4, 8, 1, 5, 5, 8"/>
+
+                    <TextView
+                        android:id="@+id/dice_roller_result_timestamp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/dice_roller_result_extra_values"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="center"
+                        android:textColor="?attr/colorOnSurface"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:textStyle="italic"
+                        android:alpha="0.65"
+                        android:text="Results will appear here"
+                        tools:text="Rolled at 12:34:56 PM EST"/>
+
+                    <ImageView
+                        android:id="@+id/dice_roller_result_backdrop"
+                        android:layout_width="176dp"
+                        android:layout_height="176dp"
+                        android:src="@drawable/clipart_d20_vector_icon"
+                        android:alpha="0.125"
+                        android:elevation="-1dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dice_roller_roll_button"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_marginTop="8dp"
+                android:paddingVertical="12dp"
+                android:layout_marginHorizontal="8dp"
+                android:text="@string/button_roll"
+                app:layout_constraintTop_toBottomOf="@id/dice_roller_result_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:drawableTint="?attr/colorOnPrimary"
+                android:drawableEnd="@drawable/clipart_dice_cup_vector_icon"
+                app:cornerRadius="16dp"
+                tools:text="Alea iacta est"/>
+
+            <ImageView
+                android:id="@+id/dice_roller_dice_icon"
+                android:layout_width="48dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:paddingEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/dice_roller_die_sides_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/dice_roller_die_sides_input"
+                android:src="@drawable/clipart_d20_vector_icon"
+                android:elevation="-1dp"
+                app:tint="?attr/colorOnBackground" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dice_roller_die_count_input"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@id/dice_roller_d_label"
+                app:layout_constraintTop_toBottomOf="@id/dice_roller_roll_button">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dice_roller_die_count_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="#"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:text="1"
+                    tools:text="100" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/dice_roller_d_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="d"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="16sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/dice_roller_die_sides_input"
+                app:layout_constraintEnd_toStartOf="@id/dice_roller_die_sides_input" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dice_roller_die_sides_input"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@id/dice_roller_die_mod_sign_button"
+                app:layout_constraintTop_toBottomOf="@id/dice_roller_roll_button">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dice_roller_die_sides_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Sides"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:maxLines="1"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:text="20"
+                    tools:text="100000" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dice_roller_die_mod_sign_button"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@id/dice_roller_die_mod_input"
+                app:layout_constraintEnd_toStartOf="@id/dice_roller_die_mod_input"
+                app:layout_constraintTop_toTopOf="@id/dice_roller_die_mod_input"
+                tools:text="+" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dice_roller_die_mod_input"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dice_roller_roll_button">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dice_roller_die_mod_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mod"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:text="0"
+                    tools:text="10000" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/dice_roller_advanced_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dice_roller_die_mod_input"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/dice_roller_advanced_header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorSecondary"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="8dp">
+
+                        <ImageView
+                            android:id="@+id/dice_roller_advanced_indicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:src="@drawable/clipart_indicator_vector_icon"
+                            app:tint="?attr/colorOnSecondary"
+                            tools:rotation="90f"/>
+
+                        <TextView
+                            android:layout_alignTop="@id/dice_roller_advanced_indicator"
+                            android:layout_alignBottom="@id/dice_roller_advanced_indicator"
+                            android:layout_toEndOf="@id/dice_roller_advanced_indicator"
+                            android:text="Advanced options"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:gravity="center_vertical"
+                            android:textAllCaps="true"
+                            android:textColor="?attr/colorOnSecondary"
+                            android:textStyle="bold" />
+
+                        <ImageView
+                            style="@style/generator_cardview_letter_header_icon"
+                            android:src="@drawable/clipart_die_target_vector_icon"
+                            app:tint="?attr/colorOnSecondary" />
+
+                    </RelativeLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/dice_roller_advanced_body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"
+                        android:background="?attr/cardBackgroundColor"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/dice_roller_penetration_icon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/dice_roller_penetration_infodot"
+                            app:layout_constraintBottom_toBottomOf="@id/dice_roller_penetration_infodot"
+                            android:src="@drawable/clipart_die_target_vector_icon"/>
+
+                        <TextView
+                            android:id="@+id/dice_roller_penetration_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toEndOf="@id/dice_roller_penetration_icon"
+                            app:layout_constraintTop_toTopOf="@id/dice_roller_penetration_infodot"
+                            app:layout_constraintBottom_toBottomOf="@id/dice_roller_penetration_infodot"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:text="Penetration threshold"/>
+
+                        <ImageView
+                            android:id="@+id/dice_roller_penetration_infodot"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:src="@drawable/clipart_info_vector_icon"
+                            app:tint="?attr/colorAccent"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/dice_roller_penetration_upward_input"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="wrap_content"
+                            android:minWidth="92dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginTop="4dp"
+                            app:startIconDrawable="@drawable/clipart_upward_vector_icon"
+                            app:layout_constraintEnd_toStartOf="@id/dice_roller_penetration_downward_input"
+                            app:layout_constraintTop_toBottomOf="@id/dice_roller_penetration_infodot">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/dice_roller_penetration_upward_edit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Upper"
+                                android:text="1"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:maxLines="1"
+                                android:textAlignment="center"
+                                android:textSize="18sp"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/dice_roller_penetration_downward_input"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
+                            android:layout_marginTop="4dp"
+                            app:startIconDrawable="@drawable/clipart_downward_vector_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/dice_roller_penetration_infodot">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/dice_roller_penetration_downward_edit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minWidth="92dp"
+                                android:hint="Lower"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:maxLines="1"
+                                android:text="0"
+                                android:textAlignment="center"
+                                android:textSize="18sp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/dice_roller_penetration_auto_switch"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@id/dice_roller_penetration_downward_input"
+                            app:layout_constraintStart_toEndOf="@id/dice_roller_penetration_icon"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginHorizontal="8dp"
+                            android:textStyle="italic"
+                            android:checked="false"
+                            android:text="Auto-penetrate on first roll"/>
+
+                        <ImageView
+                            android:id="@+id/dice_roller_honor_mod_icon"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/dice_roller_honor_mod_infodot"
+                            app:layout_constraintBottom_toBottomOf="@id/dice_roller_honor_mod_infodot"
+                            android:src="@drawable/clipart_honor_vector_icon"/>
+
+                        <TextView
+                            android:id="@+id/dice_roller_honor_mod_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toEndOf="@id/dice_roller_honor_mod_icon"
+                            app:layout_constraintTop_toTopOf="@id/dice_roller_honor_mod_infodot"
+                            app:layout_constraintBottom_toBottomOf="@id/dice_roller_honor_mod_infodot"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            tools:text="Honor modifier"/>
+
+                        <ImageView
+                            android:id="@+id/dice_roller_honor_mod_infodot"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:padding="8dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/dice_roller_penetration_auto_switch"
+                            android:src="@drawable/clipart_info_vector_icon"
+                            app:tint="?attr/colorAccent"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/dice_roller_honor_mod_input"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="8dp"
+                            android:layout_marginTop="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/dice_roller_honor_mod_infodot">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/dice_roller_honor_mod_edit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minWidth="92dp"
+                                android:inputType="numberSigned"
+                                android:maxLength="2"
+                                android:maxLines="1"
+                                android:text="0"
+                                android:textAlignment="center"
+                                android:textSize="18sp" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/dice_roller_advanced_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:paddingVertical="8dp"
+                android:layout_marginHorizontal="16dp"
+                android:textAlignment="center"
+                android:text="CAUTION:\nBacking out to the hoard list or closing this app will clear both the dice settings and roll history!"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <include layout="@layout/overlay_waiting_card"
+        android:id="@+id/dice_roller_waiting_card"
+        android:visibility="gone"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

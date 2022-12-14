@@ -48,7 +48,7 @@ class HoardEditBottomDialog : BottomSheetDialogFragment() {
             null,"clipart_default_vector_icon")
     }
 
-    //region [ Overriden functions ]
+    //region [ Overridden functions ]
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

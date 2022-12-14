@@ -2804,7 +2804,6 @@ class UniqueDetailsFragment : Fragment() {
 
                 result.append("Parent Hoard: " + parentHoard.name + "[id:" +
                         parentHoard.hoardID + "]")
-                result.toString()
 
                 return result.toString()
         }
