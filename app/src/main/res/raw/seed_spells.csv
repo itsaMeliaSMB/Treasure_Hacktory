@@ -648,1056 +648,1057 @@
 648¤"Rope Trick"¤0¤0¤"Player’s Handbook"¤195¤0¤2¤"Alt"¤¤¤¤¤"sS"
 649¤"Scare"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Enc"¤¤¤¤¤"sS"
 650¤"Shatter"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Alt"¤¤¤¤¤"sS"
-651¤"Shield Screen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤2¤"Evo"¤¤¤¤¤"S"
-652¤"Slow Healing"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤2¤"Nec"¤¤¤¤¤"S"
-653¤"Smoke Screen"¤0¤2¤"HackJournal #13"¤16¤0¤2¤"Alt"¤¤¤¤¤
-654¤"Soften Stone"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤0¤2¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-655¤"Spectral Hand"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Nec"¤¤¤¤¤"sS"
-656¤"Spider Charm"¤0¤3¤"Annihilate the Giants"¤95¤0¤2¤"Enc"¤¤¤¤¤
-657¤"Spy of Derijnah"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤2¤"Nec"¤¤¤¤¤"S"
-658¤"Stinking Cloud"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Evo"¤¤"Air"¤¤¤"sS"
-659¤"Strength"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Alt"¤¤¤¤¤"sS"
-660¤"Summon Swarm"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Con"¤¤¤¤¤"s"
-661¤"Tattoo of Shame"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Alt"¤¤¤¤¤"sS"
-662¤"Telepathic Mute"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Alt"¤¤¤¤¤"s"
-663¤"Total Control"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Enc"¤¤¤¤¤"sS"
-664¤"Unseen Accountant"¤0¤2¤"HackJournal #24"¤11¤0¤2¤"Con/Div"¤¤¤¤¤
-665¤"UT’s Short Range Blink"¤0¤2¤"HackJournal #25"¤14¤0¤2¤"Alt"¤¤¤¤¤
-666¤"Vocalize"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤2¤"Alt"¤¤¤¤¤
-667¤"Ward Off Violence"¤0¤2¤"HackJournal #27"¤3¤0¤2¤"Abj"¤¤¤¤¤
-668¤"Web"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Evo"¤¤¤¤¤"sS"
-669¤"Whip"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Evo"¤¤¤¤¤"sS"
-670¤"Whispering Wind"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Alt/Ill"¤¤"Air"¤¤¤"sS"
-671¤"White Hot Metal"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Alt"¤¤"Fire"¤¤¤"sS"
-672¤"Wizard Lock"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Alt"¤¤¤¤¤"sS"
-673¤"Zed’s Crystal Dagger"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤2¤"Con/Evo"¤¤"Earth"¤¤¤"S"
-674¤"Zeebart’s Rust Resistance"¤0¤3¤"Annihilate the Giants"¤94¤0¤2¤"Abj"¤¤¤¤¤
-675¤"A Day in the Life"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤89¤0¤3¤"Alt"¤¤¤¤¤"S"
-676¤"Ajamar’s Greater Swarm"¤0¤2¤"HackJournal #11"¤8¤0¤3¤"Con"¤¤¤¤¤
-677¤"Alternate Reality"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤89¤0¤3¤"Alt"¤"Wild_Mage"¤¤"Wild"¤¤
-678¤"Ariellene’s Sprout Field"¤0¤2¤"HackJournal #15"¤15¤0¤3¤"Alt"¤¤¤¤¤
-679¤"Arinthor’s Dark Limbs"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤3¤"Alt"¤¤¤¤¤"S"
-680¤"Bash Face"¤0¤0¤"Player’s Handbook"¤198¤0¤3¤"Evo"¤¤"Earth"¤¤¤"sS"
-681¤"Blink"¤0¤0¤"Player’s Handbook"¤198¤0¤3¤"Alt"¤¤¤¤¤"S"
-682¤"Bloodball"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤3¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-683¤"Bob & Mooch’s Armor Repair"¤0¤2¤"HackJournal #14"¤3¤0¤3¤"Alt"¤¤¤¤¤
-684¤"Bone Club"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤3¤"Nec/Enc"¤¤¤¤¤"S"
-685¤"Call Lightning"¤0¤0¤"Player’s Handbook"¤281¤0¤3¤"Alt"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-686¤"Carter’s Energy Conservation"¤0¤3¤"Annihilate the Giants"¤94¤0¤3¤"Alt"¤¤¤¤¤
-687¤"Charm Undead"¤0¤0¤"Player’s Handbook"¤198¤0¤3¤"Nec"¤¤¤¤¤"sS"
-688¤"Chill Fire"¤0¤1¤"HackJammer"¤121¤0¤3¤"Alt"¤¤¤¤¤
-689¤"Clairaudience"¤0¤0¤"Player’s Handbook"¤198¤0¤3¤"Div"¤¤¤¤¤"sS"
-690¤"Clairvoyance"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Div"¤¤¤¤¤"sS"
-691¤"Cloudburst"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Alt"¤¤"Air"¤¤¤"sS"
-692¤"Continual Darkness"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Alt"¤¤¤¤¤"sS"
-693¤"Delay Death"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤95¤0¤3¤"Nec/Enc"¤¤¤¤¤"S"
-694¤"Delude"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Alt"¤¤¤¤¤"sS"
-695¤"Dispel Magic"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Abj"¤¤¤¤¤"sS"
-696¤"Dispel Silence"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤3¤"Abj/Alt"¤¤¤¤¤"S"
-697¤"Elenwyd’s Flawless Smile"¤0¤2¤"HackJournal #5"¤12¤0¤3¤"Alt"¤¤¤¤¤
-698¤"Elenwyd’s Wondrous Gown"¤0¤2¤"HackJournal #5"¤12¤0¤3¤"Alt/Con"¤¤¤¤¤
-699¤"Elephant’s Overrun"¤0¤2¤"HackJournal #24"¤22¤0¤3¤"Alt"¤¤¤¤¤
-700¤"Empathic Link"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤98¤0¤3¤"Enc"¤¤¤¤¤"S"
-701¤"Enhance Rating"¤1¤1¤"HackJammer"¤121¤0¤3¤"Alt"¤¤¤¤¤
-702¤"Eternal Flame"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤0¤3¤"Evo"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
-703¤"Explosive Runes"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Alt"¤¤¤¤¤"sS"
-704¤"Extinguish"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤0¤3¤"Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
-705¤"Extract Truth"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤99¤0¤3¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-706¤"Feign Death"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Nec"¤¤¤¤¤"sS"
-707¤"Fireball"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Evo"¤¤"Fire"¤¤¤"sS"
-708¤"Fireball, Scatter-Blast"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Evo"¤¤"Fire"¤¤¤"sS"
-709¤"Fireball, Sidewinder Factor 3"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Evo"¤¤"Fire"¤¤¤"sS"
-710¤"Fireflow"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤3¤"Alt"¤"Wild_Mage"¤¤"Wild"¤¤"S"
-711¤"Flame Arrow"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Con"¤¤"Fire"¤¤¤"sS"
-712¤"Fly"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤¤¤¤"sS"
-713¤"Fool’s Speech"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤3¤"Alt"¤"Wild_Mage"¤¤"Wild"¤¤"S"
-714¤"Gandle’s Humble Hut"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤¤¤¤"sS"
-715¤"Glyph of Ice"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤3¤"Abj/Evo"¤¤"Water"¤¤¤"S"
-716¤"Glyph of Sniping"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤3¤"Abj/Evo"¤¤¤¤¤"S"
-717¤"Grounded"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤63¤0¤3¤"Abj"¤¤¤¤¤
-718¤"Grow"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤¤¤¤"sS"
-719¤"Gust of Wind"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤"Air"¤¤¤"sS"
-720¤"Haste"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤¤¤¤"sS"
-721¤"Hold Person"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Enc"¤¤¤¤¤"sS"
-722¤"Hold Undead"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Nec"¤¤¤¤¤"sS"
-723¤"Hovering Skull"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤104¤0¤3¤"Nec"¤¤¤¤¤"S"
-724¤"Icy Sphere"¤0¤2¤"HackJournal #16"¤5¤0¤3¤"Evo"¤¤¤¤¤
-725¤"Ignite"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤0¤3¤"Alt"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
-726¤"Illusionary Script"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Ill"¤¤¤¤¤"sS"
-727¤"Infravision"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Alt"¤¤¤¤¤"sS"
-728¤"Invisibility, 10’ Radius"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Ill"¤¤¤¤¤"sS"
-729¤"Item"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Alt"¤¤¤¤¤"sS"
-730¤"Lightning Bolt"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Evo"¤¤¤¤¤"sS"
-731¤"Material"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Evo/Con"¤¤¤¤¤"sS"
-732¤"Meld Into Stone"¤0¤0¤"Player’s Handbook"¤262¤0¤3¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-733¤"Merge Gem Pile"¤0¤2¤"HackJournal #24"¤10¤0¤3¤"Alt"¤¤¤¤¤
-734¤"Merge Pixie Dust"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤63¤0¤3¤"Alt"¤¤¤¤"See Errata"¤
-735¤"Mergenszer’s Spectral Watch Duck"¤0¤3¤"Wryneck’s Wheelhouse"¤41¤0¤3¤"Con"¤¤¤¤¤
-736¤"Mericutyn’s Grotesquely Distended Nose"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤3¤"Alt"¤¤¤¤¤"S"
-737¤"Monster Summoning I"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Con"¤¤¤¤¤"sS"
-738¤"Morton’s Minute Meteors"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤3¤"Alt/Evo"¤¤"Earth"¤¤¤"S"
-739¤"Murgain’s Migraine"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Nec"¤¤¤¤¤"sS"
-740¤"Mushu’s Falling Foot"¤0¤2¤"HackJournal #24"¤22¤0¤3¤"Evo"¤¤¤¤¤
-741¤"Negative Plane Protection (Codex ver.)"¤0¤2¤"HackJournal #27"¤3¤0¤3¤"Abj"¤¤¤¤¤
-742¤"No Fear"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Enc"¤¤¤¤¤"sS"
-743¤"Non-Detection"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Abj"¤¤¤¤¤"sS"
-744¤"Pain Touch"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤3¤"Nec"¤¤¤¤¤"S"
-745¤"Paralyzation"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Ill"¤¤¤¤¤"sS"
-746¤"Perceived Malignment"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Enc"¤¤¤¤¤"sS"
-747¤"Phantom Steed"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Con/Ill"¤¤¤¤¤"sS"
-748¤"Phantom Wind"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Alt/Ill"¤¤¤¤¤"sS"
-749¤"Polymorph to Amphibian"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Alt"¤¤¤¤¤"sS"
-750¤"Polymorph to Insect"¤0¤0¤"Player’s Handbook"¤112¤0¤3¤"Alt"¤¤¤¤¤"S"
-751¤"Polymorph to Primate"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤204¤0¤3¤"Alt"¤¤¤¤¤"sS"
-752¤"Porpher’s Game Call Spell"¤0¤3¤"Porpher’s Enchanted Garden"¤39¤0¤3¤"Con"¤¤¤¤¤
-753¤"Power Word: Attack"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤3¤"Con"¤¤¤¤¤"S"
-754¤"Power Word: Burn"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤3¤"Con"¤¤¤¤¤"S"
-755¤"Power Word: Chill"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤3¤"Con"¤¤¤¤¤"S"
-756¤"Preemptive Strike"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Evo"¤¤¤¤¤"sS"
-757¤"Proof from Teleportation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤116¤0¤3¤"Abj"¤¤¤¤¤"S"
-758¤"Protection from Fire"¤0¤0¤"Player’s Handbook"¤282¤0¤3¤"Abj"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
-759¤"Protection From Fire (Codex ver.)"¤0¤2¤"HackJournal #27"¤3¤0¤3¤"Abj"¤¤¤¤¤
-760¤"Protection from Normal Missiles"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Abj"¤¤¤¤¤"sS"
-761¤"Quarantine"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤116¤0¤3¤"Abj"¤¤¤¤¤"S"
-762¤"Rodnard’s Red Letter Rejoinder"¤0¤3¤"Wryneck’s Wheelhouse"¤42¤0¤3¤"Con"¤¤¤¤¤
-763¤"Rot Dawgs"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤117¤0¤3¤"Nec"¤¤¤¤¤"S"
-764¤"Runes of Eyeball Implosion"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Alt"¤¤¤¤¤"sS"
-765¤"Runes of Instantaneous Esophoria"¤0¤3¤"Wryneck’s Wheelhouse"¤44¤0¤3¤"Alt"¤¤¤¤¤
-766¤"Secret Page"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Alt"¤¤¤¤¤"sS"
-767¤"Selective Invisibility"¤0¤3¤"Prophecy of Shardar"¤41¤0¤3¤"Ill"¤¤¤¤¤
-768¤"Sepia Snake Sigil"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Con"¤¤¤¤¤"sS"
-769¤"Shanty’s Pestilence"¤0¤2¤"HackJournal #21"¤13¤0¤3¤"Nec"¤¤¤¤¤
-770¤"Sliggderlisp’s Noxious Depilatory Cloud"¤0¤3¤"White Doom Mountain"¤38¤0¤3¤"Evo"¤¤¤¤¤
-771¤"Slow"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Alt"¤¤¤¤¤"sS"
-772¤"Smoke Bomb"¤0¤2¤"HackJournal #13"¤16¤0¤3¤"Alt/Evo"¤¤¤¤¤
-773¤"Smoke Signals"¤0¤2¤"HackJournal #13"¤16¤0¤3¤"Alt"¤¤¤¤¤
-774¤"Smoke Visions"¤0¤2¤"HackJournal #13"¤16¤0¤3¤"Alt/Div"¤¤¤¤¤
-775¤"Snarcher’s Multi-Missile Smoke Volley"¤0¤3¤"Wryneck’s Wheelhouse"¤43¤0¤3¤"Alt"¤¤¤¤¤
-776¤"Spectral Force"¤0¤0¤"Player’s Handbook"¤206¤0¤3¤"Ill"¤¤¤¤¤"sS"
-777¤"Spyware"¤0¤2¤"HackJournal #20"¤15¤0¤3¤"Evo"¤¤¤¤¤
-778¤"Stone Shape"¤0¤0¤"Player’s Handbook"¤283¤0¤3¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-779¤"Suggestion"¤0¤0¤"Player’s Handbook"¤206¤0¤3¤"Enc"¤¤¤¤¤"sS"
-780¤"Sure Grip Snare"¤0¤0¤"Player’s Handbook"¤206¤0¤3¤"Evo"¤¤¤¤¤"sS"
-781¤"Tongues"¤1¤0¤"Player’s Handbook"¤206¤0¤3¤"Alt"¤¤¤¤¤"sS"
-782¤"Transmute Wood to Steel"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤3¤"Alt"¤¤¤¤¤"S"
-783¤"Vampiric Touch"¤0¤0¤"Player’s Handbook"¤206¤0¤3¤"Nec"¤¤¤¤¤"sS"
-784¤"Wall of Water"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤3¤"Evo"¤¤"Water"¤¤¤"S"
-785¤"Ward Off Evil"¤1¤0¤"Player’s Handbook"¤206¤0¤3¤"Abj"¤¤¤¤¤
-786¤"Water Breathing"¤1¤0¤"Player’s Handbook"¤206¤0¤3¤"Alt"¤¤"Air/Water"¤¤¤"S"
-787¤"Water Walk"¤0¤0¤"Player’s Handbook"¤263¤0¤3¤"Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
-788¤"Weather Prediction"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤0¤3¤"Div"¤"Air_Elementalist/Earth_Elementalist/Fire_Elementalist/Water_Elementalist"¤"Air/Earth/Fire/Water"¤"Elementalist"¤¤
-789¤"Wild Ball"¤0¤2¤"HackJournal #19"¤4¤0¤3¤"Evo"¤"Wild_Mage"¤¤"Wild"¤¤
-790¤"Wind Wall"¤0¤0¤"Player’s Handbook"¤207¤0¤3¤"Alt"¤¤"Air"¤¤¤"s"
-791¤"Wraithform"¤0¤0¤"Player’s Handbook"¤207¤0¤3¤"Alt/Ill"¤¤¤¤¤"sS"
-792¤"Yargroove’s Eidelon"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤3¤"Enc"¤¤¤¤¤"S"
-793¤"Zargosa’s Flaming Spheres of Torment"¤0¤0¤"Player’s Handbook"¤207¤0¤3¤"Evo/Alt"¤¤"Fire"¤¤¤"sS"
-794¤"Zed’s Crystal Dirk"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤3¤"Con/Evo"¤¤"Earth"¤¤¤"S"
-795¤"Zone of Magical Resonance"¤0¤2¤"HackJournal #27"¤3¤0¤3¤"Abj"¤¤¤¤¤
-796¤"Ajamar’s Demonic Enchantment"¤0¤2¤"HackJournal #11"¤8¤0¤4¤"Con"¤¤¤¤¤
-797¤"Arbraxious’s Hyper Evolution"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤4¤"Alt"¤¤¤¤¤
-798¤"Arbraxious’s Levitation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤4¤"Alt"¤¤¤¤¤
-799¤"Boiling Blood"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤4¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-800¤"Charm Monster"¤0¤0¤"Player’s Handbook"¤207¤0¤4¤"Enc"¤¤¤¤¤"sS"
-801¤"Circle of Protection"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤93¤0¤4¤"Abj"¤¤¤¤¤"S"
-802¤"Close Portal"¤0¤0¤"Player’s Handbook"¤207¤0¤4¤"Alt"¤¤¤¤¤"sS"
-803¤"Confusion"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Enc"¤¤¤¤¤"sS"
-804¤"Contagion"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Nec"¤¤¤¤¤"sS"
-805¤"Delayed Magic Missile"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤96¤0¤4¤"Evo"¤¤¤¤¤"S"
-806¤"Demi-Smoke Monsters"¤0¤2¤"HackJournal #13"¤15¤0¤4¤"Ill"¤¤¤¤¤
-807¤"Detect Lie"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤96¤0¤4¤"Div"¤"Diviner/DS_Diviner/Detective"¤¤¤¤"S"
-808¤"Detect Scrying"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Div"¤¤¤¤¤"sS"
-809¤"Dig"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Evo"¤¤"Earth"¤¤¤"sS"
-810¤"Dimension Door"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Alt"¤¤¤¤¤"sS"
-811¤"Dispel Exhaustion"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Ill"¤¤¤¤¤"sS"
-812¤"Divination Enhancement"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤4¤"Div"¤¤¤¤¤"S"
-813¤"Drifting Polymorph"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤98¤0¤4¤"Alt"¤"Conjurer/DS_Conjurer/SP_Conjurer"¤¤"Wild"¤¤
-814¤"Duplicate"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤98¤0¤4¤"Con"¤¤¤¤¤"S"
-815¤"Elenwyd’s Charm of Vitality"¤0¤2¤"HackJournal #5"¤12¤0¤4¤"Alt"¤¤¤¤¤
-816¤"Elenywd’s Miracle Diet"¤0¤2¤"HackJournal #5"¤12¤0¤4¤"Alt/Nec"¤¤¤¤¤
-817¤"Emergency Teleport at Random"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Alt"¤¤¤¤¤"sS"
-818¤"Emotion"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Enc"¤¤¤¤¤"sS"
-819¤"Enchanted Weapon"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Enc"¤¤¤¤¤"sS"
-820¤"Enervation"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Nec"¤¤¤¤¤"sS"
-821¤"Exploding Glyph"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤99¤0¤4¤"Abj/Evo"¤¤¤¤¤"S"
-822¤"Extension I"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Alt"¤¤¤¤¤"sS"
-823¤"Fear"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Ill"¤¤¤¤¤"sS"
-824¤"Find Treasure"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤100¤0¤4¤"Div"¤¤¤¤¤"S"
-825¤"Fire Charm"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Enc"¤¤"Fire"¤¤¤"sS"
-826¤"Fire Shield"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Evo/Alt"¤¤"Fire"¤¤¤"sS"
-827¤"Fire Trap"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Abj/Evo"¤¤"Fire"¤¤¤"sS"
-828¤"Fireball, Land Scraper"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Evo"¤¤"Fire"¤¤¤"sS"
-829¤"Fireball, Sidewinder Factor 4"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Evo"¤¤"Fire"¤¤¤"sS"
-830¤"Fireball, Smoker"¤0¤2¤"HackJournal #26"¤5¤0¤4¤"Evo"¤¤¤¤¤
-831¤"Fireball, Twin-Twister"¤0¤2¤"HackJournal #26"¤5¤0¤4¤"Evo"¤¤¤¤¤
-832¤"Fireball, Volley"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Evo"¤¤"Fire"¤¤¤"sS"
-833¤"Flying Familiar"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤4¤"Alt"¤¤¤¤¤"S"
-834¤"Force Grenade"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤4¤"Evo"¤¤¤¤¤"S"
-835¤"Free Action (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤4¤"Abj"¤¤¤¤¤
-836¤"Fumble"¤0¤0¤"Player’s Handbook"¤211¤0¤4¤"Enc"¤¤¤¤¤"sS"
-837¤"Gargezone’s Sphere of Chromatic Fever"¤0¤2¤"HackJournal #19"¤4¤0¤4¤"Evo/Ill/Enc"¤"Wild_Mage"¤¤"Wild"¤¤
-838¤"Haarpang’s Magnificent Sphere of Resiliency"¤0¤0¤"Player’s Handbook"¤211¤0¤4¤"Alt/Evo"¤¤¤¤¤"sS"
-839¤"Haarpang’s Memory Kick"¤0¤0¤"Player’s Handbook"¤211¤0¤4¤"Alt"¤¤¤¤¤"sS"
-840¤"Hallucinatory Terrain"¤0¤0¤"Player’s Handbook"¤211¤0¤4¤"Ill"¤¤¤¤¤"sS"
-841¤"Hurl Animal"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Alt"¤¤¤¤¤"sS"
-842¤"Ice Storm"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Evo"¤¤"Water"¤¤¤"sS"
-843¤"Illusionary Wall"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Ill"¤¤¤¤¤"sS"
-844¤"Improved Invisibility"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Ill"¤¤¤¤¤"sS"
-845¤"Improved Selective Invisibility"¤0¤3¤"Prophecy of Shardar"¤41¤0¤4¤"Ill"¤¤¤¤¤
-846¤"Le Matt’s Artfinder (for Diviners)"¤0¤2¤"HackJournal #24"¤10¤0¤4¤"Div"¤"Diviner/DS_Diviner/Detective/Seer"¤¤¤¤
-847¤"Lower Water"¤0¤0¤"Player’s Handbook"¤266¤0¤4¤"Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
-848¤"Lozhen’s Breath"¤0¤2¤"HackJournal #24"¤22¤0¤4¤"Con"¤¤¤¤"Does not require a spell license"¤
-849¤"Mage Lock"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Enc"¤¤¤¤¤"sS"
-850¤"Magic Mirror"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Enc/Div"¤¤¤¤¤"sS"
-851¤"Massmorph"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Alt"¤¤¤¤¤"sS"
-852¤"Minor Creation"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Ill"¤¤¤¤¤"sS"
-853¤"Minor Globe of Invulnerability"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Abj"¤¤¤¤¤"sS"
-854¤"Mist of Corralling"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Evo"¤¤¤¤¤"sS"
-855¤"Monster Summoning II"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Con"¤¤¤¤¤"sS"
-856¤"Mulderi’s Climbing Claws"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤4¤"Alt"¤¤¤¤¤
-857¤"Murgander’s Gamble"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤4¤"Alt/Evo"¤"Wild_Mage"¤¤"Wild"¤¤
-858¤"Neutralize Poison"¤0¤0¤"Player’s Handbook"¤266¤0¤4¤"Nec"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-859¤"Omen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤4¤"Div"¤¤¤¤¤"S"
-860¤"Perpetual Shocking Grasp"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Alt"¤¤¤¤¤"sS"
-861¤"Phantasmal Killer"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Ill"¤¤¤¤¤"sS"
-862¤"Pixie Wings"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤4¤"Alt"¤¤¤¤"Also see Adventurer’s Guide to Pixie Fairies, pg 63"¤"S"
-863¤"Plant Growth"¤0¤0¤"Player’s Handbook"¤214¤0¤4¤"Alt"¤¤¤¤¤"sS"
-864¤"Poison"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤4¤"Nec"¤¤¤¤¤"S"
-865¤"Polymorph Other"¤0¤0¤"Player’s Handbook"¤214¤0¤4¤"Alt"¤¤¤¤¤"sS"
-866¤"Polymorph Self"¤0¤0¤"Player’s Handbook"¤214¤0¤4¤"Alt"¤¤¤¤¤"sS"
-867¤"Power Word: Anosmitize"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤4¤"Con"¤¤¤¤¤"S"
-868¤"Power Word: Freeze"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤4¤"Con"¤¤¤¤¤"S"
-869¤"Power Word: Slow"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤4¤"Con"¤¤¤¤¤"S"
-870¤"Produce Fire"¤0¤0¤"Player’s Handbook"¤285¤0¤4¤"Alt"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
-871¤"Protection from Elementals"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤0¤4¤"Abj"¤"Air_Elementalist/Earth_Elementalist/Fire_Elementalist/Water_Elementalist"¤"Air/Earth/Fire/Water"¤"Elementalist"¤¤
-872¤"Protection from Lightning"¤0¤0¤"Player’s Handbook"¤286¤0¤4¤"Abj"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-873¤"Protection from Lightning (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤4¤"Abj"¤¤¤¤¤
-874¤"Protection from Water"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤0¤4¤"Abj/Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
-875¤"Rainbow Pattern"¤0¤0¤"Player’s Handbook"¤214¤0¤4¤"Alt/Ill"¤¤¤¤¤"sS"
-876¤"Remove Curse"¤1¤0¤"Player’s Handbook"¤215¤0¤4¤"Abj"¤¤¤¤¤"sS"
-877¤"Remove Limb"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤117¤0¤4¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-878¤"Segwick’s Tool Box"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤4¤"Con"¤¤¤¤¤"S"
-879¤"Shadow Monsters"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Ill"¤¤¤¤¤"sS"
-880¤"Shout"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Evo"¤¤¤¤¤"sS"
-881¤"Silver Globes"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤4¤"Evo/Con"¤¤¤¤"See Errata"¤"S"
-882¤"Sliggderlisp’s Particularly Noxious Depilatory Cloud"¤0¤3¤"White Doom Mountain"¤39¤0¤4¤"Evo"¤¤¤¤¤
-883¤"Smoke Signals, Greater"¤0¤2¤"HackJournal #13"¤15¤0¤4¤"Alt"¤¤¤¤¤
-884¤"Solid Fog"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Alt"¤¤"Air"¤¤¤"sS"
-885¤"Spell Immunity (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤4¤"Abj"¤¤¤¤¤
-886¤"Spike Stones"¤0¤0¤"Player’s Handbook"¤288¤0¤4¤"Alt/Enc"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-887¤"Stirring Oration"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Enc"¤¤¤¤¤"sS"
-888¤"Stone Passage"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Alt"¤¤"Earth"¤¤¤"sS"
-889¤"Stones to Spiders"¤0¤3¤"Annihilate the Giants"¤95¤0¤4¤"Alt"¤¤"Earth"¤¤¤
-890¤"Stoneskin"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Alt"¤¤"Earth"¤¤¤"sS"
-891¤"There/Not There"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤4¤"Alt/Evo"¤"Wild_Mage"¤¤"Wild"¤¤
-892¤"Toxic Web"¤0¤3¤"Annihilate the Giants"¤94¤0¤4¤"Evo"¤¤¤¤¤
-893¤"Tusks of the Oliphant"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤122¤0¤4¤"Alt"¤¤¤¤¤"S"
-894¤"Ultravision"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Alt"¤¤¤¤¤"sS"
-895¤"Unluck"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤122¤0¤4¤"Evo"¤"Wild_Mage"¤¤"Wild"¤¤
-896¤"Unseen Repair Crew"¤0¤1¤"HackJammer"¤121¤0¤4¤"Alt"¤¤¤¤¤
-897¤"Unseen Weightlifter"¤0¤2¤"HackJournal #24"¤11¤0¤4¤"Con"¤¤¤¤¤
-898¤"Vacancy"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Alt/Ill"¤¤¤¤¤"sS"
-899¤"Wall of Acid"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Evo"¤¤¤¤¤"sS"
-900¤"Wall of Bronze"¤0¤2¤"HackJournal #24"¤25¤0¤4¤"Evo"¤¤¤¤¤
-901¤"Wall of Fire"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Evo"¤¤"Fire"¤¤¤"sS"
-902¤"Wall of Ice"¤0¤0¤"Player’s Handbook"¤217¤0¤4¤"Evo"¤¤"Water"¤¤¤"sS"
-903¤"Warp Stone or Metal"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤0¤4¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-904¤"Wimpel’s Dispelling Screen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤4¤"Abj/Evo"¤¤¤¤¤"S"
-905¤"Wizard Eye"¤0¤0¤"Player’s Handbook"¤217¤0¤4¤"Alt"¤¤¤¤¤"sS"
-906¤"Zargosa’s Lodge of Protection"¤0¤0¤"Player’s Handbook"¤217¤0¤4¤"Alt/Enc"¤¤¤¤¤"sS"
-907¤"Zargosa’s Tentacled Fury"¤0¤0¤"Player’s Handbook"¤217¤0¤4¤"Con"¤¤¤¤¤"sS"
-908¤"Zombie Slave"¤0¤0¤"Player’s Handbook"¤218¤0¤4¤"Nec"¤¤¤¤¤"sS"
-909¤"Zone of Sweet Air"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤118¤0¤4¤"Abj"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-910¤"Zone of Sweet Air (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤4¤"Abj"¤¤¤¤¤
-911¤"Abjure (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤5¤"Abj"¤¤¤¤¤
-912¤"Advanced Illusion"¤0¤0¤"Player’s Handbook"¤218¤0¤5¤"Ill"¤¤¤¤¤"sS"
-913¤"Air Walk"¤0¤0¤"Player’s Handbook"¤267¤0¤5¤"Alt"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-914¤"Airy Water"¤0¤0¤"Player’s Handbook"¤218¤0¤5¤"Alt"¤¤"Air/Water"¤¤¤"sS"
-915¤"Animal Growth"¤1¤0¤"Player’s Handbook"¤218¤0¤5¤"Alt"¤¤¤¤¤"sS"
-916¤"Animate Dead"¤0¤0¤"Player’s Handbook"¤218¤0¤5¤"Nec"¤¤¤¤¤"sS"
-917¤"Arbraxious’s Horrid Maw"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤5¤"Alt"¤¤¤¤¤
-918¤"Avoidance"¤1¤0¤"Player’s Handbook"¤218¤0¤5¤"Abj/Alt"¤¤¤¤¤"sS"
-919¤"Blood Rot"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤5¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-920¤"Breed Fusion"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤93¤0¤5¤"Alt"¤¤¤¤¤"S"
-921¤"Centaur’s Gift, The"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤93¤0¤5¤"Alt"¤¤¤¤¤"S"
-922¤"Chaos"¤0¤0¤"Player’s Handbook"¤219¤0¤5¤"Enc"¤¤¤¤¤"sS"
-923¤"Cloudkill"¤0¤0¤"Player’s Handbook"¤219¤0¤5¤"Evo"¤¤"Air"¤¤¤"sS"
-924¤"Conjure Elemental"¤0¤0¤"Player’s Handbook"¤219¤0¤5¤"Con"¤¤"Air/Earth/Fire/Water"¤¤¤"sS"
-925¤"Contact Other Plane"¤0¤0¤"Player’s Handbook"¤219¤0¤5¤"Div"¤¤¤¤¤"sS"
-926¤"Containment"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Abj"¤¤¤¤¤"s"
-927¤"Create Portal"¤0¤1¤"HackJammer"¤121¤0¤5¤"Alt"¤¤¤¤¤
-928¤"Demi-Shadow Monster"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Ill"¤¤¤¤¤"sS"
-929¤"Dismissal"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Abj"¤¤¤¤¤"sS"
-930¤"Distance Distortion"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Alt"¤¤¤¤¤"sS"
-931¤"Dolor"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Enc"¤¤¤¤¤"sS"
-932¤"Domination"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Enc"¤¤¤¤¤"sS"
-933¤"Drayton’s Engaging Conversation"¤0¤0¤"Player’s Handbook"¤221¤0¤5¤"Enc/Evo"¤¤¤¤¤"sS"
-934¤"Drayton’s Hidden Stash"¤0¤0¤"Player’s Handbook"¤221¤0¤5¤"Alt/Con"¤¤¤¤¤"S"
-935¤"Dream"¤0¤0¤"Player’s Handbook"¤221¤0¤5¤"Evo/Ill"¤¤¤¤¤"sS"
-936¤"Elenwyd’s Beautiful Flower"¤0¤2¤"HackJournal #5"¤12¤0¤5¤"Alt"¤¤¤¤¤
-937¤"Elenwyd’s Fashion Sense"¤0¤2¤"HackJournal #5"¤12¤0¤5¤"Alt/Enc"¤¤¤¤¤
-938¤"Enhance Maneuverability"¤1¤1¤"HackJammer"¤121¤0¤5¤"Alt"¤¤¤¤¤
-939¤"Extension II"¤0¤0¤"Player’s Handbook"¤221¤0¤5¤"Alt"¤¤¤¤¤"sS"
-940¤"Fabricate"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Enc"¤¤¤¤¤"sS"
-941¤"False Vision"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Div"¤¤¤¤¤"sS"
-942¤"Feeblemind"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Enc"¤¤¤¤¤"sS"
-943¤"Fireball, Sidewinder Factor 5"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Evo"¤¤"Fire"¤¤¤"sS"
-944¤"Fireball, Splatterball"¤0¤2¤"HackJournal #26"¤5¤0¤5¤"Evo"¤¤¤¤¤
-945¤"Fireball, Torrential"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Evo"¤¤"Fire"¤¤¤"sS"
-946¤"Flame Strike"¤0¤0¤"Player’s Handbook"¤268¤0¤5¤"Evo"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
-947¤"Force Shapechange"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤5¤"Nec"¤¤¤¤¤"S"
-948¤"Gabal’s Permanent Magical Aura"¤0¤3¤"Descent into the NetherDeep"¤44¤0¤5¤"Ill"¤¤¤¤¤
-949¤"Haarpang’s Polar Screen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤5¤"Evo"¤¤¤¤¤"S"
-950¤"Hiamohr’s Unfortunate Incident"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤5¤"Alt"¤¤¤¤¤"S"
-951¤"Hold Monster"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Enc"¤¤¤¤¤"sS"
-952¤"Hyptor’s Faithful Bitch-Hound"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Con"¤¤¤¤¤"sS"
-953¤"Jorrel’s Private Sanctum"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤106¤0¤5¤"Abj/Alt"¤¤¤¤¤"S"
-954¤"Le Matt’s Artfinder"¤0¤2¤"HackJournal #24"¤10¤0¤5¤"Div"¤¤¤¤¤
-955¤"Lizenz’s Dark Wings"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤63¤0¤5¤"Alt"¤¤¤¤"See Errata"¤
-956¤"Lyggl’s Cone of Cold"¤0¤0¤"Player’s Handbook"¤223¤0¤5¤"Evo"¤¤¤¤¤"sS"
-957¤"Magic Jar"¤0¤0¤"Player’s Handbook"¤223¤0¤5¤"Nec"¤¤¤¤¤"S"
-958¤"Magic Staff"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤107¤0¤5¤"Enc"¤¤¤¤¤"S"
-959¤"Major Creation"¤0¤0¤"Player’s Handbook"¤223¤0¤5¤"Ill"¤¤¤¤¤"sS"
-960¤"Manor’s Mindsight"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤108¤0¤5¤"Alt/Div"¤¤¤¤¤"S"
-961¤"Minor Globe of Invulnerability, Mobile"¤0¤2¤"HackJournal #27"¤4¤0¤5¤"Abj"¤¤¤¤¤
-962¤"Monster Summoning III"¤0¤0¤"Player’s Handbook"¤223¤0¤5¤"Con"¤¤¤¤¤"sS"
-963¤"Mummy Rot"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤5¤"Nec"¤¤¤¤¤"sS"
-964¤"Non-Magical Aura"¤0¤2¤"HackJournal #27"¤5¤0¤5¤"Abj"¤¤¤¤¤
-965¤"Pathorgian Death Hex"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤5¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-966¤"Polymorph Plant to Mammal"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤5¤"Alt"¤¤¤¤¤"S"
-967¤"Power Word: Charm"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤5¤"Con"¤¤¤¤¤"S"
-968¤"Power Word: Fear"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤5¤"Con"¤¤¤¤¤"S"
-969¤"Power Word: Sleep"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤5¤"Con"¤¤¤¤¤"S"
-970¤"Preemptive Dispel"¤0¤2¤"HackJournal #27"¤5¤0¤5¤"Abj"¤¤¤¤¤
-971¤"Preston’s Moonbow"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤5¤"Evo"¤¤¤¤¤"S"
-972¤"Protection from Acid (Codex ver.)"¤0¤2¤"HackJournal #27"¤5¤0¤5¤"Abj"¤¤¤¤¤
-973¤"Protection from Neferians (Codex ver.)"¤0¤2¤"HackJournal #27"¤5¤0¤5¤"Abj"¤¤¤¤¤
-974¤"Protection from Petrification (Codex ver.)"¤0¤2¤"HackJournal #27"¤6¤0¤5¤"Abj"¤¤¤¤¤
-975¤"Rainbow"¤0¤0¤"Player’s Handbook"¤268¤0¤5¤"Evo/Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
-976¤"Retain Air Envelope"¤0¤1¤"HackJammer"¤122¤0¤5¤"Alt"¤¤"Air"¤¤¤
-977¤"Seeming"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Ill"¤¤¤¤¤"sS"
-978¤"Segwick’s Seeking"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤5¤"Div"¤¤¤¤¤"S"
-979¤"Sending"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Evo"¤¤¤¤¤"sS"
-980¤"Sensory Control"¤0¤3¤"Prophecy of Shardar"¤41¤0¤5¤"Ill"¤¤¤¤¤
-981¤"Shadow Door"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Ill"¤¤¤¤¤"sS"
-982¤"Shadow Magic"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Ill"¤¤¤¤¤"sS"
-983¤"Shaheezeer’s Molten Encompassment"¤0¤1¤"Sir Robilar’s City of Brass"¤123¤0¤5¤"Alt"¤¤¤¤¤
-984¤"Shincock’s Major Missile"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤5¤"Evo"¤¤¤¤¤"S"
-985¤"Sink Into Earth"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤0¤5¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-986¤"Smoking Spheres of DOOM"¤0¤2¤"HackJournal #13"¤16¤0¤5¤"Alt/Nec"¤¤¤¤¤
-987¤"Snarcher’s Corkscrewing Smoking Magic Missile"¤0¤3¤"Wryneck’s Wheelhouse"¤43¤0¤5¤"Alt"¤¤¤¤¤
-988¤"Spell Shield"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤5¤"Abj"¤¤¤¤¤"S"
-989¤"Spike Growth"¤0¤0¤"Player’s Handbook"¤270¤0¤5¤"Alt/Enc"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-990¤"Spike Stones"¤0¤0¤"Player’s Handbook"¤288¤0¤5¤"Alt/Enc"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-991¤"Stone Shape"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Alt"¤¤"Earth"¤¤¤"sS"
-992¤"Stone Sphere"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Evo"¤¤"Earth"¤¤¤"sS"
-993¤"Summon Shadow"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Con/Nec"¤¤¤¤¤"sS"
-994¤"Telekinesis"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Alt"¤¤¤¤¤"sS"
-995¤"Teleport"¤0¤0¤"Player’s Handbook"¤225¤0¤5¤"Alt"¤¤¤¤¤"sS"
-996¤"Tempus Fugit"¤1¤0¤"Player’s Handbook"¤225¤0¤5¤"Ill"¤¤¤¤¤"sS"
-997¤"Throbbing Bones"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤5¤"Nec"¤¤¤¤¤"S"
-998¤"Touch of Death"¤0¤0¤"Player’s Handbook"¤225¤0¤5¤"Nec"¤¤¤¤¤"sS"
-999¤"Transmute Stone to Mud"¤1¤0¤"Player’s Handbook"¤225¤0¤5¤"Alt"¤¤"Earth"¤¤¤"sS"
-1000¤"Vortex"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤5¤"Evo"¤"Wild_Mage"¤¤"Wild"¤¤
-1001¤"Wall of Bones"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤5¤"Nec/Con"¤¤¤¤¤"S"
-1002¤"Wall of Force"¤0¤0¤"Player’s Handbook"¤225¤0¤5¤"Evo"¤¤¤¤¤"sS"
-1003¤"Wall of Iron"¤0¤0¤"Player’s Handbook"¤226¤0¤5¤"Evo"¤¤¤¤¤"sS"
-1004¤"Wall of Stone"¤0¤0¤"Player’s Handbook"¤226¤0¤5¤"Evo"¤¤"Earth"¤¤¤"sS"
-1005¤"Wall Passage"¤0¤0¤"Player’s Handbook"¤226¤0¤5¤"Alt"¤¤¤¤¤"sS"
-1006¤"Water Bomb"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤124¤0¤5¤"Con"¤¤"Water"¤¤¤"S"
-1007¤"Waveform"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤124¤0¤5¤"Alt"¤"Wild_Mage/Water_Elementalist/Icer"¤"Water"¤"Wild"¤¤
-1008¤"Wild Terrain"¤0¤2¤"HackJournal #19"¤5¤0¤5¤"Ill"¤"Wild_Mage"¤¤"Wild"¤¤
-1009¤"Wings of PanDemonium"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤5¤"Alt"¤¤¤¤¤"S"
-1010¤"Wizard’s Oracle"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤5¤"Div"¤¤¤¤¤"S"
-1011¤"Zarba’s Guardian Hand"¤0¤0¤"Player’s Handbook"¤226¤0¤5¤"Evo"¤¤¤¤¤"sS"
-1012¤"Aerial Servant"¤0¤0¤"Player’s Handbook"¤270¤0¤6¤"Con"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-1013¤"Air Barrage"¤0¤2¤"HackJournal #24"¤21¤0¤6¤"Evo"¤¤¤¤¤
-1014¤"Aliron’s Dark Graft"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤89¤0¤6¤"Nec"¤¤"Air"¤¤¤"S"
-1015¤"Anti-Animal Shell"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤6¤"Abj"¤"Abjurer/DS_Abjurer/Guardian"¤¤¤¤"S"
-1016¤"Anti-Magic Shell"¤0¤0¤"Player’s Handbook"¤226¤0¤6¤"Abj"¤¤¤¤¤"sS"
-1017¤"Blazing Blood"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤6¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-1018¤"Body Heat Activation Spell"¤0¤0¤"Player’s Handbook"¤226¤0¤6¤"Evo"¤¤¤¤¤"sS"
-1019¤"Bradley’s Besieging Bolt"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤6¤"Evo"¤¤¤¤¤"S"
-1020¤"Break Hex"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Abj"¤¤¤¤¤"sS"
-1021¤"Caltrops of Chaos"¤0¤2¤"HackJournal #19"¤3¤0¤6¤"Evo/Alt"¤"Wild_Mage"¤¤"Wild"¤¤
-1022¤"Chain Lightning"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Evo"¤¤¤¤¤"sS"
-1023¤"Charm of Undying Devotion"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Enc"¤¤¤¤¤"sS"
-1024¤"Conjure Animals"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Con"¤¤¤¤¤"sS"
-1025¤"Contingency"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Evo"¤¤¤¤¤"sS"
-1026¤"Control Weather"¤0¤0¤"Player’s Handbook"¤228¤0¤6¤"Alt"¤¤"Air/Water"¤¤¤"sS"
-1027¤"Control Winds"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤0¤6¤"Alt"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-1028¤"Create Minor Helm"¤0¤1¤"HackJammer"¤122¤0¤6¤"Enc"¤¤¤¤¤
-1029¤"Cytogenesis"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤94¤0¤6¤"Alt/Nec"¤¤¤¤¤"S"
-1030¤"Dead Man’s Eyes"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤95¤0¤6¤"Nec"¤¤¤¤¤"S"
-1031¤"Death Fog"¤0¤0¤"Player’s Handbook"¤228¤0¤6¤"Alt/Nec"¤¤"Air"¤¤¤"sS"
-1032¤"Death Spell"¤0¤0¤"Player’s Handbook"¤228¤0¤6¤"Nec"¤¤¤¤¤"sS"
-1033¤"Demi-Shadow Magic"¤0¤0¤"Player’s Handbook"¤228¤0¤6¤"Ill"¤¤¤¤¤"sS"
-1034¤"Detect Ulterior Motive"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤6¤"Div"¤"Diviner/DS_Diviner/Detective"¤¤¤¤"S"
-1035¤"Disintegrate"¤0¤0¤"Player’s Handbook"¤229¤0¤6¤"Alt"¤¤"Earth"¤¤¤"sS"
-1036¤"Dispel Evil (Codex Ver.)"¤1¤2¤"HackJournal #27"¤6¤0¤6¤"Abj"¤¤¤¤¤
-1037¤"Elenwyd’s Day in the Life of a Courtesan"¤0¤2¤"HackJournal #5"¤12¤0¤6¤"Alt"¤¤¤¤¤
-1038¤"Enchant an Item"¤0¤0¤"Player’s Handbook"¤229¤0¤6¤"Enc/Evo"¤¤¤¤¤"sS"
-1039¤"Ensnarement"¤0¤0¤"Player’s Handbook"¤229¤0¤6¤"Con"¤¤¤¤¤"sS"
-1040¤"Extension III"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Alt"¤¤¤¤¤"sS"
-1041¤"Eyebite"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Enc/Ill"¤¤¤¤¤"sS"
-1042¤"Fandango’s Fiery Constrictor"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤99¤0¤6¤"Con"¤¤"Fire"¤¤¤"S"
-1043¤"Fire Seeds"¤0¤0¤"Player’s Handbook"¤289¤0¤6¤"Con"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
-1044¤"Fireball, Aerial Firework"¤0¤2¤"HackJournal #26"¤5¤0¤6¤"Evo"¤¤¤¤¤
-1045¤"Fireball, Proximity Fused"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Evo"¤¤"Fire"¤¤¤"sS"
-1046¤"Fireball, Show-No-Mercy"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Evo"¤¤"Fire"¤¤¤"sS"
-1047¤"Gauntlet of Teeth"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤102¤0¤6¤"Evo"¤¤¤¤¤"S"
-1048¤"Geas"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Enc"¤¤¤¤¤"sS"
-1049¤"Glassee"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Alt"¤¤¤¤¤"sS"
-1050¤"Globe of Invulnerability"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Abj"¤¤¤¤¤"sS"
-1051¤"Guards and Wards"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Evo/Alt/Enc"¤¤¤¤¤"sS"
-1052¤"Haarpang’s Magnificent Sphere of Freezing"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Alt/Evo"¤¤¤¤¤"sS"
-1053¤"Haarpang’s Orb of Containment"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤6¤"Evo"¤¤¤¤¤"S"
-1054¤"Hyptor’s Total Recall"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Alt"¤¤¤¤¤"sS"
-1055¤"Illstiwilly’s Great Smoky Dodecagon Veil"¤0¤2¤"HackJournal #13"¤15¤0¤6¤"Alt/Ill"¤¤¤¤¤
-1056¤"Invisible Stalker"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Con"¤¤"Air"¤¤¤"sS"
-1057¤"Invulnerability to Magical Weapons"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤105¤0¤6¤"Abj"¤¤¤¤¤"S"
-1058¤"Karnaac’s Transformation"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Alt/Evo"¤¤¤¤¤"sS"
-1059¤"Legend Lore"¤0¤0¤"Player’s Handbook"¤232¤0¤6¤"Div"¤¤¤¤¤"sS"
-1060¤"Lower Water"¤1¤0¤"Player’s Handbook"¤232¤0¤6¤"Alt"¤¤¤¤¤"sS"
-1061¤"Major Dispel"¤0¤2¤"HackJournal #27"¤6¤0¤6¤"Abj"¤¤¤¤¤
-1062¤"Mass Suggestion"¤0¤0¤"Player’s Handbook"¤232¤0¤6¤"Enc"¤¤¤¤¤"sS"
-1063¤"Mirage Arcana"¤0¤0¤"Player’s Handbook"¤232¤0¤6¤"Ill/Alt"¤¤¤¤¤"sS"
-1064¤"Mislead"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Ill"¤¤¤¤¤"sS"
-1065¤"Monster Summoning IV"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Con"¤¤¤¤¤"sS"
-1066¤"Move Earth"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Alt"¤¤"Earth"¤¤¤"sS"
-1067¤"Part Water"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Alt"¤¤"Water"¤¤¤"sS"
-1068¤"Perpetual Illusion"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Ill"¤¤¤¤¤"sS"
-1069¤"Phantasmagoria"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Ill"¤¤¤¤¤"sS"
-1070¤"Power Word: Forget"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤6¤"Con"¤¤¤¤¤"S"
-1071¤"Power Word: Silence"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤6¤"Con"¤¤¤¤¤"S"
-1072¤"Programmed Illusion"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Ill"¤¤¤¤¤"sS"
-1073¤"Project Image"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Alt/Ill"¤¤¤¤¤"sS"
-1074¤"Reincarnation"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Nec"¤¤¤¤¤"sS"
-1075¤"Repulsion"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Abj"¤¤¤¤¤"sS"
-1076¤"Revelation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤117¤0¤6¤"Div"¤¤¤¤¤"S"
-1077¤"Shades"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Ill"¤¤¤¤¤"sS"
-1078¤"Snap Drake"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤6¤"Evo"¤¤¤¤¤"S"
-1079¤"Spiritwrack"¤0¤0¤"Player’s Handbook"¤235¤0¤6¤"Evo/Abj"¤¤¤¤¤"sS"
-1080¤"Stone Tell"¤0¤0¤"Player’s Handbook"¤272¤0¤6¤"Div"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-1081¤"Stone to Flesh"¤1¤0¤"Player’s Handbook"¤235¤0¤6¤"Alt"¤¤"Earth"¤¤¤"sS"
-1082¤"Tentacles"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤6¤"Alt/Con"¤¤¤¤¤"S"
-1083¤"Transmute Metal to Water"¤1¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤6¤"Alt"¤¤"Water"¤¤¤"S"
-1084¤"Transmute Water to Dust"¤0¤0¤"Player’s Handbook"¤235¤0¤6¤"Alt"¤¤"Water"¤¤¤"S"
-1085¤"True Seeing"¤0¤0¤"Player’s Handbook"¤235¤0¤6¤"Div"¤¤¤¤¤"S"
-1086¤"Veil"¤0¤0¤"Player’s Handbook"¤235¤0¤6¤"Ill"¤¤¤¤¤"sS"
-1087¤"Velimurio’s Merger"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤6¤"Alt"¤¤¤¤¤"S"
-1088¤"Wall of Blood"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤6¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-1089¤"Wall of Thorns"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤6¤"Con"¤"Conjurer/DS_Conjurer/SP_Conjurer"¤¤¤¤"S"
-1090¤"Weather Summoning"¤0¤0¤"Player’s Handbook"¤291¤0¤6¤"Con"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-1091¤"Whirlwind"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤0¤6¤"Evo"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-1092¤"Wildshield"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤6¤"Con"¤"Wild_Mage/Guardian"¤¤"Wild"¤¤
-1093¤"Wildstrike"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤6¤"Con"¤"Wild_Mage/Anti-Mage"¤¤"Wild"¤¤
-1094¤"Zarba’s Shoving Hand"¤0¤0¤"Player’s Handbook"¤236¤0¤6¤"Evo"¤¤¤¤¤"sS"
-1095¤"Zarba’s Sphere of Personal Inclement Weather"¤0¤0¤"Player’s Handbook"¤236¤0¤6¤"Alt"¤¤¤¤¤"sS"
-1096¤"Anger Deity"¤0¤0¤"Player’s Handbook"¤236¤0¤7¤"Enc"¤¤¤¤¤"sS"
-1097¤"Animate Rock"¤0¤0¤"Player’s Handbook"¤291¤0¤7¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-1098¤"Anticipation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤7¤"Div"¤¤¤¤¤"S"
-1099¤"Banishment"¤0¤0¤"Player’s Handbook"¤236¤0¤7¤"Abj"¤¤¤¤¤"sS"
-1100¤"Blood Drain"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤7¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-1101¤"Bone Javelin"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤7¤"Alt/Evo"¤¤¤¤¤"S"
-1102¤"Cacodemon"¤0¤0¤"Player’s Handbook"¤236¤0¤7¤"Con"¤¤¤¤¤"sS"
-1103¤"Chariot of Sustarre"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤93¤0¤7¤"Alt"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
-1104¤"Charm Plants"¤0¤0¤"Player’s Handbook"¤237¤0¤7¤"Enc"¤¤¤¤¤"sS"
-1105¤"Command Element"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤94¤0¤7¤"Alt"¤¤"Air/Earth/Fire/Water"¤¤¤"S"
-1106¤"Control Undead"¤0¤0¤"Player’s Handbook"¤237¤0¤7¤"Nec"¤¤¤¤¤"sS"
-1107¤"Create Blood Golem"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤94¤0¤7¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-1108¤"Create Major Helm"¤0¤1¤"HackJammer"¤122¤0¤7¤"Enc"¤¤¤¤¤
-1109¤"Create Shade"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤94¤0¤7¤"Alt"¤¤¤¤¤"S"
-1110¤"Dragon Breath"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤98¤0¤7¤"Evo"¤¤¤¤¤"S"
-1111¤"Duo-Dimension"¤0¤0¤"Player’s Handbook"¤237¤0¤7¤"Alt"¤¤¤¤¤"sS"
-1112¤"Earthquake"¤0¤0¤"Player’s Handbook"¤273¤0¤7¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
-1113¤"Find the Path"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤100¤0¤7¤"Div"¤"Diviner/DS_Diviner/Detective"¤¤¤¤"S"
-1114¤"Finger of Death"¤0¤0¤"Player’s Handbook"¤237¤0¤7¤"Nec"¤¤¤¤¤"sS"
-1115¤"Fire Storm"¤0¤0¤"Player’s Handbook"¤293¤0¤7¤"Evo"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
-1116¤"Fireball, Delayed Blast"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Evo"¤¤"Fire"¤¤¤"sS"
-1117¤"Flame Chase"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤100¤0¤7¤"Evo"¤¤¤¤¤"S"
-1118¤"Forcecage"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Evo"¤¤¤¤¤"sS"
-1119¤"Guntar’s Dweomer of Elusive Enchantment"¤0¤2¤"HackJournal #8"¤10¤0¤7¤"Alt"¤¤¤¤¤
-1120¤"Harm"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤7¤"Nec"¤¤¤¤¤"S"
-1121¤"Hyptor’s Shimmering Sword"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Evo"¤¤¤¤¤"sS"
-1122¤"Life Creation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤106¤0¤7¤"Alt"¤¤¤¤¤"S"
-1123¤"Limited Wish"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Con/Evo"¤¤¤¤¤"sS"
-1124¤"Major Domination"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤108¤0¤7¤"Enc"¤¤¤¤¤"S"
-1125¤"Manor’s Mind Vision"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤108¤0¤7¤"Div"¤¤¤¤¤"S"
-1126¤"Mass Hypnosis"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤7¤"Enc/Ill"¤¤¤¤¤"S"
-1127¤"Mass Invisibility"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Ill"¤¤¤¤¤"sS"
-1128¤"Merrywether’s Dramatic Death"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤7¤"Ill"¤¤"Water"¤¤¤"S"
-1129¤"Merrywether’s Frost Fist"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤7¤"Evo"¤¤¤¤¤"S"
-1130¤"Monster Summoning V"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Con"¤¤¤¤¤"sS"
-1131¤"Phase Door"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Alt"¤¤¤¤¤"sS"
-1132¤"Power Word: Deafen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤7¤"Con"¤¤¤¤¤"S"
-1133¤"Power Word: Dispel"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤7¤"Con"¤¤¤¤¤"S"
-1134¤"Power Word: Heal"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤7¤"Con"¤¤¤¤¤"S"
-1135¤"Power Word: Stun"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Con"¤¤¤¤¤"sS"
-1136¤"Prismatic Wall"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Con"¤¤¤¤¤"s"
-1137¤"Reverse Gravity"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Alt"¤¤"Earth"¤¤¤"sS"
-1138¤"Sanboreg’s Surge Selector"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤7¤"Alt"¤"Wild_Mage/Magician"¤¤"Wild"¤¤
-1139¤"Sequester"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Ill/Abj"¤¤¤¤¤"sS"
-1140¤"Shadow Walk"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Ill"¤¤¤¤¤"sS"
-1141¤"Shadowcat"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤7¤"Ill"¤¤¤¤¤"S"
-1142¤"Simulacrum"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Ill"¤¤¤¤¤"sS"
-1143¤"Spell Shape"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤7¤"Alt"¤"Wild_Mage/Anti-Mage"¤¤"Wild"¤¤
-1144¤"Spell Turning"¤0¤0¤"Player’s Handbook"¤240¤0¤7¤"Abj"¤¤¤¤¤"sS"
-1145¤"Statue"¤0¤0¤"Player’s Handbook"¤240¤0¤7¤"Alt"¤¤"Earth"¤¤¤"sS"
-1146¤"Steal Enchantment"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤7¤"Enc"¤¤¤¤¤"S"
-1147¤"Teleport without Error"¤0¤0¤"Player’s Handbook"¤240¤0¤7¤"Alt"¤¤¤¤¤"sS"
-1148¤"Torment"¤0¤0¤"Player’s Handbook"¤240¤0¤7¤"Evo/Alt"¤¤¤¤¤"sS"
-1149¤"Transmute Rock to Lava"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Alt"¤¤"Earth/Fire"¤¤¤"sS"
-1150¤"Truename"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Enc/Alt"¤¤¤¤¤"sS"
-1151¤"Tybalt’s Planar Pacifier"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤122¤0¤7¤"Alt/Enc"¤¤¤¤¤"S"
-1152¤"Vanish"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Alt"¤¤¤¤¤"sS"
-1153¤"Vision"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Div"¤¤¤¤¤"sS"
-1154¤"Volley"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Abj"¤¤¤¤¤"sS"
-1155¤"Wind Walk"¤0¤0¤"Player’s Handbook"¤275¤0¤7¤"Alt"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
-1156¤"Zarba’s Grasping Hand"¤0¤0¤"Player’s Handbook"¤242¤0¤7¤"Evo"¤¤¤¤¤"sS"
-1157¤"Zarba’s Sphere of Insanity"¤0¤0¤"Player’s Handbook"¤242¤0¤7¤"Enc"¤¤¤¤¤"sS"
-1158¤"Zargosa’s Instant Summons"¤0¤0¤"Player’s Handbook"¤242¤0¤7¤"Con"¤¤¤¤¤"sS"
-1159¤"Zargosa’s Opulent Manor House"¤0¤0¤"Player’s Handbook"¤242¤0¤7¤"Alt"¤¤¤¤¤"sS"
-1160¤"Zombie Double"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤7¤"Nec"¤¤¤¤¤"S"
-1161¤"Zone of Weakened Magicks"¤0¤2¤"HackJournal #27"¤6¤0¤7¤"Abj"¤¤¤¤¤
-1162¤"Age"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤89¤0¤8¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-1163¤"Antipathy-Sympathy"¤0¤0¤"Player’s Handbook"¤243¤0¤8¤"Enc"¤¤¤¤¤"s"
-1164¤"Binding"¤0¤0¤"Player’s Handbook"¤243¤0¤8¤"Enc/Evo"¤¤¤¤¤"s"
-1165¤"Blizzard"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤8¤"Evo"¤¤"Water"¤¤¤"S"
-1166¤"Clone"¤0¤0¤"Player’s Handbook"¤243¤0¤8¤"Nec"¤¤¤¤¤"sS"
-1167¤"Cluo’s Curse"¤0¤2¤"HackJournal #24"¤22¤0¤8¤"Nec"¤¤¤¤"AKA Cluo’s Folly"¤
-1168¤"Conjure Greater Elemental"¤0¤2¤"HackJournal #11"¤8¤0¤8¤"Con"¤¤¤¤¤
-1169¤"Create Atmosphere"¤1¤1¤"HackJammer"¤122¤0¤8¤"Alt"¤¤¤¤¤
-1170¤"Death Chain"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤95¤0¤8¤"Nec"¤¤¤¤¤"S"
-1171¤"Defoliate"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤95¤0¤8¤"Nec"¤¤"Earth"¤¤¤"S"
-1172¤"Demand"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Evo/Enc"¤¤¤¤¤"sS"
-1173¤"Dispel Enchantment"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤8¤"Abj"¤¤¤¤¤"S"
-1174¤"Diviner’s Insight"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤8¤"Div"¤¤¤¤¤"S"
-1175¤"Elemental Transference"¤0¤1¤"Sir Robilar’s City of Brass"¤123¤0¤8¤"Alt"¤¤¤"Elementalist"¤¤
-1176¤"Fireball, Death Brusher"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Evo"¤¤"Fire"¤¤¤"sS"
-1177¤"Fireball, Maximus"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Evo"¤¤"Fire"¤¤¤"sS"
-1178¤"Freeze"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤8¤"Evo"¤¤"Water"¤¤¤"S"
-1179¤"Gandle’s Spell Immunity"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Abj"¤¤¤¤¤"sS"
-1180¤"Glassteel"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Alt"¤¤"Earth"¤¤¤"sS"
-1181¤"Grasping Death"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Con"¤¤¤¤¤"sS"
-1182¤"Haarpang’s Magnificent Sphere of Telekinesis"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤244¤0¤8¤"Evo/Alt"¤¤¤¤¤"sS"
-1183¤"Hornet’s Nest"¤0¤0¤"Player’s Handbook"¤103¤0¤8¤"Evo"¤¤¤¤¤"S"
-1184¤"Incendiary Cloud"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤245¤0¤8¤"Alt/Evo"¤¤"Air/Fire"¤¤¤"sS"
-1185¤"Jonid’s Jewel"¤0¤0¤"Player’s Handbook"¤105¤0¤8¤"Con/Div"¤¤¤¤¤"S"
-1186¤"Life Drain"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤107¤0¤8¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
-1187¤"Mass Charm"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Enc"¤¤¤¤¤"sS"
-1188¤"Maze"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Con"¤¤"Earth"¤¤¤"sS"
-1189¤"Mimic Caster"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Enc"¤"Wild_Mage/Anti-Mage/Warder"¤¤¤"Mind Masters may learn and cast this spell."¤"sS"
-1190¤"Mind Blank"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Abj"¤¤¤¤¤"sS"
-1191¤"Mind Maze"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤8¤"Ill"¤¤¤¤¤"S"
-1192¤"Monster Summoning VI"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Con"¤¤¤¤¤"sS"
-1193¤"Munari’s Irresistible Jig"¤0¤0¤"Player’s Handbook"¤246¤0¤8¤"Enc"¤¤¤¤¤"sS"
-1194¤"Nemesis"¤0¤2¤"HackJournal #24"¤23¤0¤8¤"Ill"¤¤¤¤¤
-1195¤"Permanency"¤0¤0¤"Player’s Handbook"¤246¤0¤8¤"Alt"¤¤¤¤¤"sS"
-1196¤"Polymorph Any Object"¤0¤0¤"Player’s Handbook"¤246¤0¤8¤"Alt"¤¤¤¤¤"sS"
-1197¤"Power Word: Banish"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤8¤"Con"¤¤¤¤¤"S"
-1198¤"Power Word: Blind"¤0¤0¤"Player’s Handbook"¤246¤0¤8¤"Con"¤¤¤¤¤"sS"
-1199¤"Power Word: Terrify"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤8¤"Con"¤¤¤¤¤"S"
-1200¤"Protective Touch"¤0¤2¤"HackJournal #27"¤6¤0¤8¤"Abj"¤¤¤¤¤
-1201¤"Sanboreg’s Random Dispatcher"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤8¤"Abj"¤"Wild_Mage"¤¤"Wild"¤¤
-1202¤"Screen"¤0¤0¤"Player’s Handbook"¤247¤0¤8¤"Div/Ill"¤¤¤¤¤"sS"
-1203¤"Shadow Form"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤8¤"Nec/Ill"¤¤¤¤¤"S"
-1204¤"Shooting Stars"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤8¤"Evo"¤¤¤¤¤"S"
-1205¤"Sink"¤0¤0¤"Player’s Handbook"¤247¤0¤8¤"Enc/Alt"¤¤¤¤¤"sS"
-1206¤"Symbol"¤0¤0¤"Player’s Handbook"¤247¤0¤8¤"Con"¤¤¤¤¤"s"
-1207¤"Trap the Soul"¤0¤0¤"Player’s Handbook"¤248¤0¤8¤"Con"¤¤¤¤¤"sS"
-1208¤"Wild Hex"¤0¤2¤"HackJournal #19"¤4¤0¤8¤"Abj"¤"Wild_Mage"¤¤"Wild"¤¤
-1209¤"Wildzone"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤8¤"Con"¤"Wild_Mage/Guardian"¤¤"Wild"¤¤
-1210¤"Youthful"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤63¤0¤8¤"Nec"¤¤¤"Vengeance"¤"See Errata"¤
-1211¤"Zarba’s Fist of Rage"¤0¤0¤"Player’s Handbook"¤248¤0¤8¤"Evo"¤¤¤¤¤"sS"
-1212¤"Alter Reality"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤9¤"Con/Ill"¤"Illusionist/DS_Illusionist/Conjurer/DS_Conjurer/Hypnotist"¤¤¤¤"S"
-1213¤"Astral Spell"¤0¤0¤"Player’s Handbook"¤248¤0¤9¤"Evo"¤¤¤¤¤"sS"
-1214¤"Blood Curse"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤9¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤"S"
-1215¤"Create Lich Master"¤0¤3¤"Tomb of Unspeakable Horrors"¤39¤0¤9¤"Nec"¤¤¤¤¤
-1216¤"Crystalbrittle"¤0¤0¤"Player’s Handbook"¤248¤0¤9¤"Alt"¤¤"Earth"¤¤¤"sS"
-1217¤"Death Rune"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Nec"¤¤¤¤¤"sS"
-1218¤"Demon Flame"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤249¤0¤9¤"Alt"¤¤¤¤¤"sS"
-1219¤"Detect All"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤96¤0¤9¤"Nec"¤¤¤¤¤"S"
-1220¤"Elemental Aura"¤0¤0¤"Player’s Handbook"¤98¤0¤9¤"Abj/Evo"¤¤"Air/Earth/Fire/Water"¤¤¤"S"
-1221¤"Energy Drain"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Evo/Nec"¤¤¤¤¤"sS"
-1222¤"Fawlgar’s Grasping Death"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Nec"¤¤¤¤¤"sS"
-1223¤"Fireball, Lava Yield"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Evo"¤¤"Fire"¤¤¤"sS"
-1224¤"Fireball, Nuclear Winter"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Evo"¤¤¤"RESCINDED"¤¤
-1225¤"Foresight"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Div"¤¤¤¤¤"sS"
-1226¤"Gate"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Con"¤¤¤¤¤"sS"
-1227¤"Globe of Invulnerability, Mobile"¤0¤2¤"HackJournal #27"¤7¤0¤9¤"Abj"¤¤¤¤¤
-1228¤"Glyph of Divination"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤102¤0¤9¤"Div"¤¤¤¤¤"S"
-1229¤"Greater Divination Enhancement"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤9¤"Div"¤¤¤¤¤"S"
-1230¤"Hyptor’s Disjunction"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Alt/Enc"¤¤¤¤¤"sS"
-1231¤"Ice Juggernaut"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤104¤0¤9¤"Evo"¤¤"Water"¤¤¤"S"
-1232¤"Immunity to Undeath"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤105¤0¤9¤"Nec/Abj"¤¤¤¤¤"S"
-1233¤"Imprisonment"¤1¤0¤"Player’s Handbook"¤250¤0¤9¤"Abj"¤¤¤¤¤"sS"
-1234¤"Jebidiah’s Ultimate Circle"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤106¤0¤9¤"Abj"¤¤¤¤¤"S"
-1235¤"Kachirut’s White Lance"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤106¤0¤9¤"Evo"¤¤¤¤¤"S"
-1236¤"Mass Domination"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤108¤0¤9¤"Enc"¤¤¤¤¤"S"
-1237¤"Master Undead"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤9¤"Nec"¤¤¤¤¤"S"
-1238¤"Meteor Swarm"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Evo"¤¤"Earth/Fire"¤¤¤"sS"
-1239¤"Monster Summoning VII"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Con"¤¤¤¤¤"sS"
-1240¤"Power Word: Annihilate"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤9¤"Con"¤¤¤¤¤"S"
-1241¤"Power Word: Dance"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤9¤"Con"¤¤¤¤¤"S"
-1242¤"Power Word: Kill"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Con"¤¤¤¤¤"sS"
-1243¤"Prismatic Sphere"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Abj/Con"¤¤¤¤¤"sS"
-1244¤"Programmed Amnesia"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤9¤"Enc"¤¤¤¤¤"S"
-1245¤"Ring of Swords"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤117¤0¤9¤"Alt"¤¤¤¤¤"S"
-1246¤"Seek Teleporter"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤9¤"Div"¤¤¤¤¤"S"
-1247¤"Shadow Creep"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤9¤"Ill"¤¤¤¤¤"S"
-1248¤"Shape Change"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt"¤¤¤¤¤"sS"
-1249¤"Stabilize"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤9¤"Abj"¤"Wild_Mage"¤¤"Wild"¤¤
-1250¤"Succor"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt/Enc"¤¤¤¤¤"sS"
-1251¤"Teleport Intercampaignia"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt"¤¤¤¤¤"sS"
-1252¤"Teleport Intragenre"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt"¤¤¤¤¤"sS"
-1253¤"Tempestcone"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤9¤"Alt/Evo"¤¤¤¤¤"S"
-1254¤"Temporal Stasis"¤1¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt"¤¤¤¤¤"sS"
-1255¤"Time Stop"¤0¤0¤"Player’s Handbook"¤252¤0¤9¤"Alt"¤¤¤¤¤"sS"
-1256¤"Wave of Death"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤124¤0¤9¤"Nec"¤"Blood_Mage/Water_Elementalist"¤"Water"¤"Vengeance"¤¤
-1257¤"Weird"¤0¤0¤"Player’s Handbook"¤252¤0¤9¤"Ill"¤¤¤¤¤"sS"
-1258¤"Wildfire"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤124¤0¤9¤"Evo"¤"Wild_Mage"¤¤"Wild"¤¤
-1259¤"Wildwind"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤9¤"Con"¤"Wild_Mage/Anti-Mage"¤¤"Wild"¤¤
-1260¤"Wish"¤0¤0¤"Player’s Handbook"¤252¤0¤9¤"Con"¤¤¤¤¤"sS"
-1261¤"Zarba’s Crushing Hand"¤0¤0¤"Player’s Handbook"¤252¤0¤9¤"Evo"¤¤¤¤¤"sS"
-1262¤"Alleviate Headache"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤102¤1¤1¤"Alt"¤¤"Healing"¤¤¤
-1263¤"Awaken"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤1¤"Nec"¤¤"Necromantic"¤¤¤
-1264¤"Befriend"¤0¤0¤"Player’s Handbook"¤253¤1¤1¤"Enc"¤¤"Charm"¤¤¤
-1265¤"Bless"¤0¤0¤"Player’s Handbook"¤253¤1¤1¤"Con"¤¤"Devotional"¤¤¤
-1266¤"Call Upon Faith"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤1¤"Evo"¤¤"Summoning"¤¤¤
-1267¤"Cause Fear"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Charm"¤¤¤
-1268¤"Cause Light Wounds"¤1¤0¤"Player’s Handbook"¤255¤1¤1¤"Nec"¤¤"Hurting"¤¤¤
-1269¤"Ceremony"¤0¤0¤"Player’s Handbook"¤153¤1¤1¤"Evo"¤¤"Devotional"¤¤¤
-1270¤"Combine"¤0¤0¤"Player’s Handbook"¤254¤1¤1¤"Evo"¤¤"Devotional"¤¤¤
-1271¤"Command"¤0¤0¤"Player’s Handbook"¤254¤1¤1¤"Enc"¤¤"Charm"¤¤¤
-1272¤"Consecrate Holy Symbol"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤1¤"Evo"¤¤"Devotional"¤¤¤
-1273¤"Contact Home Gawd"¤0¤1¤"HackJammer"¤122¤1¤1¤"Div"¤¤"Devotional"¤¤¤
-1274¤"Create Water"¤0¤0¤"Player’s Handbook"¤254¤1¤1¤"Alt"¤¤"Creation/Water"¤¤¤
-1275¤"Cure Light Wounds"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Nec"¤¤"Healing"¤¤¤
-1276¤"Curse"¤1¤0¤"Player’s Handbook"¤253¤1¤1¤"Con"¤¤"Devotional"¤¤¤
-1277¤"Darkness"¤1¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Sun"¤¤¤
-1278¤"Destroy Water"¤1¤0¤"Player’s Handbook"¤254¤1¤1¤"Alt"¤¤"Water"¤¤¤
-1279¤"Detect Evil"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Div"¤¤"Devotional"¤¤¤
-1280¤"Detect Good"¤1¤0¤"Player’s Handbook"¤255¤1¤1¤"Div"¤¤"Devotional"¤¤¤
-1281¤"Detect Magic"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Div"¤¤"Divination/Healing"¤¤¤
-1282¤"Diagnose Injury"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤1¤"Div"¤¤"Divination/Healing"¤¤¤
-1283¤"Endure Cold"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Warding"¤¤¤
-1284¤"Endure Heat"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Warding"¤¤¤
-1285¤"Estrange"¤1¤0¤"Player’s Handbook"¤253¤1¤1¤"Enc"¤¤"Charm"¤¤¤
-1286¤"Flutter Soft"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Warding"¤¤¤
-1287¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤1¤"Alt"¤¤"Devotional"¤¤¤
-1288¤"Invisibility to Undead"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Abj"¤¤"Necromantic"¤¤¤
-1289¤"Know Direction"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤1¤1¤"Div"¤¤"Divination/Traveler"¤¤¤
-1290¤"Light"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Sun"¤¤¤
-1291¤"Log of Everburning"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤1¤1¤"Alt"¤¤"Fire"¤¤¤
-1292¤"Magical Stone"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Enc"¤¤"Combat"¤¤¤
-1293¤"Nauseate"¤0¤2¤"HackJournal #24"¤23¤1¤1¤"Nec"¤¤"Harming"¤¤¤
-1294¤"Primal’s Braciation"¤0¤2¤"HackJournal #24"¤24¤1¤1¤"Alt"¤¤"Animal"¤¤¤
-1295¤"Protection from Evil"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Warding"¤¤¤
-1296¤"Protection from Good"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Warding"¤¤¤
-1297¤"Purify Food & Drink"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Alt"¤¤"Devotional"¤¤¤
-1298¤"Putrify Food & Drink"¤1¤0¤"Player’s Handbook"¤256¤1¤1¤"Alt"¤¤"Devotional"¤¤¤
-1299¤"Remove Fear"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Charm"¤¤¤
-1300¤"Repair Strain or Sprain"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤1¤"Alt"¤¤"Healing"¤¤¤
-1301¤"Sanctuary"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Warding"¤¤¤
-1302¤"Strength of Stone"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤1¤"Evo"¤¤"Earth"¤¤¤
-1303¤"Summon Divine Lackey"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤1¤"Con"¤¤"Summoning"¤¤¤
-1304¤"Walking Corpse"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Nec"¤¤"Necromantic"¤¤¤
-1305¤"Wind Column"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤1¤1¤"Evo"¤¤"Air"¤¤¤
-1306¤"Aid"¤0¤0¤"Player’s Handbook"¤256¤1¤2¤"Nec/Con"¤¤"Necromantic"¤¤¤
-1307¤"Animated Corpse"¤0¤0¤"Player’s Handbook"¤256¤1¤2¤"Nec"¤¤"Necromantic"¤¤¤
-1308¤"Augury"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Div"¤¤"Divination"¤¤¤
-1309¤"Aura of Comfort"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤2¤"Evo"¤¤"Traveler"¤¤¤
-1310¤"Cause Moderate Wounds"¤1¤0¤"Player’s Handbook"¤257¤1¤2¤"Nec"¤¤"Hurting"¤¤¤
-1311¤"Chant"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Con"¤¤"Combat"¤¤¤
-1312¤"Create Holy Symbol"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤2¤"Con"¤¤"Creation"¤¤¤
-1313¤"Create Obstacle"¤0¤1¤"By the Sword"¤23¤1¤2¤"Con"¤¤"Creation"¤¤¤
-1314¤"Cure Color Blindness"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤2¤"Abj"¤¤"Healing"¤¤¤
-1315¤"Cure Moderate Wounds"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Nec"¤¤"Healing"¤¤¤
-1316¤"Detect Charm"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Div"¤¤"Divination"¤¤¤
-1317¤"Detect Gawds"¤0¤1¤"HackJammer"¤122¤1¤2¤"Div"¤¤"Divination"¤¤¤
-1318¤"Diminished Rite"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Nec"¤¤"Necromantic"¤¤¤
-1319¤"Draw Upon Holy Might"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤2¤"Evo"¤¤"Summoning"¤¤¤
-1320¤"Dust Devil"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Con"¤¤"Air/Summoning"¤¤¤
-1321¤"Elephant’s Overrun"¤0¤2¤"HackJournal #24"¤22¤1¤2¤"Alt"¤¤"Combat"¤¤¤
-1322¤"Enthrall"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Enc"¤¤"Charm"¤¤¤
-1323¤"Find Traps"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Div"¤¤"Divination"¤¤¤
-1324¤"Heal Light Wounds"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Nec"¤¤"Healing"¤¤¤
-1325¤"Hold Person"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤2¤"Enc"¤¤"Charm"¤¤¤
-1326¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤2¤"Alt"¤¤"Devotional"¤¤¤
-1327¤"Know Alignment"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Div"¤¤"Divination"¤¤¤
-1328¤"Lighten Load"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤101¤1¤2¤"Alt"¤¤"Traveler"¤¤¤
-1329¤"Mend Limb"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤101¤1¤2¤"Alt"¤¤"Healing"¤¤¤
-1330¤"Mend Tendon"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤101¤1¤2¤"Alt"¤¤"Healing"¤¤¤
-1331¤"Precipitation"¤0¤0¤"Player’s Handbook"¤278¤1¤2¤"Alt"¤¤"Weather"¤¤¤
-1332¤"Premonition"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Div"¤¤"Divination"¤¤¤
-1333¤"Resist Electricity"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤2¤"Alt"¤¤"Warding"¤¤¤
-1334¤"Resist Cold"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Alt"¤¤"Warding"¤¤¤
-1335¤"Resist Fire"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Alt"¤¤"Warding"¤¤¤
-1336¤"Resist Gas"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤2¤"Alt"¤¤"Warding"¤¤¤
-1337¤"Restore Movement"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤2¤"Alt"¤¤"Healing"¤¤¤
-1338¤"Rigor Mortis"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Nec"¤¤"Charm"¤¤¤
-1339¤"Silence, 15’ Radius"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Alt"¤¤"Warding"¤¤¤
-1340¤"Slow Poison"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Nec"¤¤"Healing"¤¤¤
-1341¤"Snake Charm"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Enc"¤¤"Animal"¤¤¤
-1342¤"Speak With Animals"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Alt"¤¤"Animal"¤¤¤
-1343¤"Spider Charm"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤2¤"Alt"¤¤"Animal"¤¤¤
-1344¤"Spiritual Hammer"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Evo"¤¤"Combat"¤¤¤
-1345¤"Spittle Splash"¤0¤2¤"HackJournal #24"¤24¤1¤2¤"Con"¤¤"Animal"¤¤¤
-1346¤"Staunch Bleeding"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤2¤"Alt"¤¤"Healing"¤¤¤
-1347¤"Telepathy"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤65¤1¤2¤"Enc/Evo"¤¤"Charm"¤¤¤
-1348¤"Undetectable Alignment"¤1¤0¤"Player’s Handbook"¤258¤1¤2¤"Div"¤¤"Divination"¤¤¤
-1349¤"Undetectable Charm"¤1¤0¤"Player’s Handbook"¤257¤1¤2¤"Div"¤¤"Divination"¤¤¤
-1350¤"Withdraw"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Alt"¤¤"Warding"¤¤¤
-1351¤"Wyvern Watch"¤0¤0¤"Player’s Handbook"¤260¤1¤2¤"Evo"¤¤"Warding"¤¤¤
-1352¤"Adjustable Light"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤102¤1¤3¤"Alt"¤¤"Sun"¤¤¤
-1353¤"Animate Dead"¤0¤0¤"Player’s Handbook"¤260¤1¤3¤"Nec"¤¤"Necromantic"¤¤¤
-1354¤"Animate Vine"¤0¤2¤"HackJournal #24"¤22¤1¤3¤"Alt"¤¤"Plant"¤¤¤
-1355¤"Bestow Curse"¤1¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
-1356¤"Cause Blindness or Deafness"¤1¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Necromantic"¤¤¤
-1357¤"Cause Disease"¤1¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Necromantic"¤¤¤
-1358¤"Cause Nasty Wounds"¤1¤0¤"Player’s Handbook"¤261¤1¤3¤"Nec"¤¤"Hurting"¤¤¤
-1359¤"Cloudburst"¤0¤0¤"Player’s Handbook"¤260¤1¤3¤"Alt"¤¤"Weather"¤¤¤
-1360¤"Continual Light"¤0¤0¤"Player’s Handbook"¤260¤1¤3¤"Alt"¤¤"Sun"¤¤¤
-1361¤"Create Campsite"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤3¤"Alt"¤¤"Sun"¤¤¤
-1362¤"Create Food & Water"¤0¤0¤"Player’s Handbook"¤260¤1¤3¤"Con"¤¤"Traveler"¤¤¤
-1363¤"Cure Blindness or Deafness"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Creation"¤¤¤
-1364¤"Cure Disease"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Nec"¤¤"Necromantic"¤¤¤
-1365¤"Cure Nasty Wounds"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Necromantic"¤¤¤
-1366¤"Dispel Magic"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Alt"¤¤"Healing"¤¤¤
-1367¤"Durward’s Discerning Eye"¤0¤3¤"Wryneck’s Wheelhouse"¤40¤1¤3¤"Alt"¤¤"Combat/Divination"¤¤¤
-1368¤"Durward’s Paen of Protection from Archers"¤0¤3¤"Wryneck’s Wheelhouse"¤40¤1¤3¤"Alt"¤¤"Combat/Warding"¤¤¤
-1369¤"Emotion Control"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤106¤1¤3¤"Alt/Enc"¤¤"Charm"¤¤¤
-1370¤"Extinguish"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤1¤3¤"Alt"¤¤"Water"¤¤¤
-1371¤"Feign Death"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Nec"¤¤"Necromantic"¤¤¤
-1372¤"Fertile Land"¤0¤2¤"HackJournal #15"¤15¤1¤3¤"Alt"¤¤"Plant"¤¤¤
-1373¤"Flame Walk"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Fire"¤¤¤
-1374¤"Glyph of Warding"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj/Evo"¤¤"Warding"¤¤¤
-1375¤"Greater Create Obstacle"¤0¤1¤"By the Sword"¤23¤1¤3¤"Alt"¤¤"Creation"¤¤¤
-1376¤"Heal Moderate Wounds"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Nec"¤¤"Healing"¤¤¤
-1377¤"Helping Hand"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤3¤"Evo"¤¤"Traveler"¤¤¤
-1378¤"Hold Persons"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤3¤"Enc"¤¤"Charm"¤¤¤
-1379¤"Ignite"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤3¤"Alt"¤¤"Fire"¤¤¤
-1380¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤3¤"Alt"¤¤"Devotional"¤¤¤
-1381¤"Infertile Land"¤1¤2¤"HackJournal #15"¤15¤1¤3¤"Alt"¤¤"Plant"¤¤¤
-1382¤"Lesser Reanimation"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Nec"¤¤"Necromantic"¤¤¤
-1383¤"Locate Object"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Div"¤¤"Divination"¤¤¤
-1384¤"Magic Vestment"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Enc"¤¤"Warding"¤¤¤
-1385¤"Meld Into Stone"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Alt"¤¤"Earth"¤¤¤
-1386¤"Mend Broken Bone"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤1¤3¤"Alt"¤¤"Healing"¤¤¤
-1387¤"Negative Plane Protection"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Abj"¤¤"Necromantic/Warding"¤¤¤
-1388¤"Obscure Object"¤1¤0¤"Player’s Handbook"¤262¤1¤3¤"Div"¤¤"Divination"¤¤¤
-1389¤"Prayer"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Con"¤¤"Combat"¤¤¤
-1390¤"Remove Curse"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
-1391¤"Remove Paralysis"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
-1392¤"Resist Acid and Caustic"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤3¤"Alt"¤¤"Warding"¤¤¤
-1393¤"Shock Therapy"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤3¤"Nec"¤¤"Healing"¤¤¤
-1394¤"Shock Therapy"¤1¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤3¤"Nec"¤¤"Hurting"¤¤¤
-1395¤"Speak to the Dead"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Nec"¤¤"Divination"¤¤¤
-1396¤"Stirring Sermon"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Enc"¤¤"Charm"¤¤¤
-1397¤"Surrogacy"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤1¤3¤"Alt/Enc"¤¤"Devotional"¤¤¤
-1398¤"Turn"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤3¤"Con"¤¤"Summoning"¤¤¤
-1399¤"Vitality"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤3¤"Alt/Nec"¤¤"Healing"¤¤¤
-1400¤"Ward Off Evil"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
-1401¤"Ward Off Good"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
-1402¤"Water Walk"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Alt"¤¤"Water"¤¤¤
-1403¤"Weather Prediction"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤3¤"Div"¤¤"Divination/Weather"¤¤¤
-1404¤"White Hot Metal"¤0¤0¤"Player’s Handbook"¤283¤1¤3¤"Alt"¤¤"Fire"¤¤¤
-1405¤"Abjure"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Abj"¤¤"Summoning"¤¤¤
-1406¤"Air Barrage (for Zealots with Air sphere)"¤0¤2¤"HackJournal #24"¤21¤1¤4¤"Evo"¤¤"Air"¤¤¤
-1407¤"Babble"¤1¤0¤"Player’s Handbook"¤267¤1¤4¤"Alt"¤¤"Divination"¤¤¤
-1408¤"Blessed Warmth"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤4¤"Con"¤¤"Sun"¤¤¤
-1409¤"Cause Lycanthropy"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤4¤"Nec"¤¤"Animal"¤¤¤
-1410¤"Cause Serious Wounds"¤1¤0¤"Player’s Handbook"¤264¤1¤4¤"Nec"¤¤"Hurting"¤¤¤
-1411¤"Cloak of Bravery"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Con"¤¤"Charm"¤¤¤
-1412¤"Cloak of Fear"¤1¤0¤"Player’s Handbook"¤264¤1¤4¤"Con"¤¤"Charm"¤¤¤
-1413¤"Cure Serious Wounds"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Nec"¤¤"Healing"¤¤¤
-1414¤"Detect Lie"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Div"¤¤"Divination"¤¤¤
-1415¤"Divination"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Div"¤¤"Divination"¤¤¤
-1416¤"Feign Life"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤1¤4¤"Nec"¤¤"Necromantic"¤¤¤
-1417¤"Focus"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤1¤4¤"Ievo"¤¤"Devotional"¤¤¤
-1418¤"Free Action"¤0¤0¤"Player’s Handbook"¤265¤1¤4¤"Abj/Enc"¤¤"Charm"¤¤¤
-1419¤"Giant Insect"¤0¤0¤"Player’s Handbook"¤265¤1¤4¤"Alt"¤¤"Animal"¤¤¤
-1420¤"Gourmet Dinner"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤108¤1¤4¤"Alt"¤¤"Creation"¤¤¤
-1421¤"Greater Restore Movement"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤108¤1¤4¤"Alt"¤¤"Healing"¤¤¤
-1422¤"Heal Nasty Wounds"¤0¤0¤"Player’s Handbook"¤265¤1¤4¤"Nec"¤¤"Healing"¤¤¤
-1423¤"Imbue With Spell Ability"¤0¤0¤"Player’s Handbook"¤265¤1¤4¤"Enc"¤¤"Charm"¤¤¤
-1424¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤4¤"Alt"¤¤"Devotional"¤¤¤
-1425¤"Join With Astral Traveler"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤1¤4¤"Alt"¤¤"Traveler"¤¤¤
-1426¤"Leaves To Bees"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤1¤4¤"Alt"¤¤"Animal"¤¤¤
-1427¤"Lower Water"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Alt"¤¤"Water"¤¤¤
-1428¤"Minor Raise Dead"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Nec"¤¤"Necromantic"¤¤¤
-1429¤"Neutralize Poison"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Nec"¤¤"Healing"¤¤¤
-1430¤"No Fear"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Enc"¤¤"Charm"¤¤¤
-1431¤"Poison"¤1¤0¤"Player’s Handbook"¤266¤1¤4¤"Nec"¤¤"Hurting"¤¤¤
-1432¤"Protection From Grel"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤1¤4¤"Abj"¤¤"Warding"¤¤¤
-1433¤"Protection from Lycanthropes"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤111¤1¤4¤"Alt"¤¤"Warding"¤¤¤
-1434¤"Protection from Possession"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤111¤1¤4¤"Alt"¤¤"Warding"¤¤¤
-1435¤"Protection from Undead"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤111¤1¤4¤"Abj"¤¤"Warding"¤¤¤
-1436¤"Raise Water"¤1¤0¤"Player’s Handbook"¤266¤1¤4¤"Alt"¤¤"Water"¤¤¤
-1437¤"Shrink Insect"¤1¤0¤"Player’s Handbook"¤265¤1¤4¤"Alt"¤¤"Animal"¤¤¤
-1438¤"Snakes to Sticks"¤1¤0¤"Player’s Handbook"¤266¤1¤4¤"Alt"¤¤"Plant"¤¤¤
-1439¤"Spell Immunity"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Abj"¤¤"Warding"¤¤¤
-1440¤"Spike Stones"¤0¤0¤"Player’s Handbook"¤288¤1¤4¤"Alt/Enc"¤¤"Earth"¤¤¤
-1441¤"Spiritual Brigade"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤4¤"Evo"¤¤"Combat"¤¤¤
-1442¤"Sticks to Snakes"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Alt"¤¤"Plant"¤¤¤
-1443¤"Stones to Spiders"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤4¤"Alt"¤¤"Animal"¤¤¤
-1444¤"Tongues"¤0¤0¤"Player’s Handbook"¤267¤1¤4¤"Alt"¤¤"Divination"¤¤¤
-1445¤"Touch of Death"¤0¤0¤"Player’s Handbook"¤267¤1¤4¤"Nec"¤¤"Necromantic"¤¤¤
-1446¤"Undetectable Lie"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Div"¤¤"Divination"¤¤¤
-1447¤"Air Barrage (for Clerics)"¤0¤2¤"HackJournal #24"¤21¤1¤5¤"Evo"¤¤"Air"¤¤¤
-1448¤"Air Walk"¤0¤0¤"Player’s Handbook"¤267¤1¤5¤"Alt"¤¤"Air"¤¤¤
-1449¤"Atonement"¤0¤0¤"Player’s Handbook"¤267¤1¤5¤"Abj"¤¤"Devotional"¤¤¤
-1450¤"Blessed Abundance"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤5¤"Con"¤¤"Creation"¤¤¤
-1451¤"Break Hex"¤0¤0¤"Player’s Handbook"¤267¤1¤5¤"Abj"¤¤"Warding"¤¤¤
-1452¤"Cause Critical Wounds"¤1¤0¤"Player’s Handbook"¤268¤1¤5¤"Nec"¤¤"Hurting"¤¤¤
-1453¤"Commune"¤0¤0¤"Player’s Handbook"¤267¤1¤5¤"Div"¤¤"Divination"¤¤¤
-1454¤"Create Minor Helm"¤0¤1¤"HackJammer"¤122¤1¤5¤"Enc"¤¤"Creation"¤¤¤
-1455¤"Cure Critical Wounds"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Nec"¤¤"Healing"¤¤¤
-1456¤"Detect Ulterior Motives"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Div"¤¤"Divination"¤¤¤
-1457¤"Dispel Evil"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Abj"¤¤"Summoning/Warding"¤¤¤
-1458¤"Dispel Good"¤1¤0¤"Player’s Handbook"¤268¤1¤5¤"Abj"¤¤"Summoning/Warding"¤¤¤
-1459¤"Exorcism"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤106¤1¤5¤"Nec"¤¤"Necromantic"¤¤¤
-1460¤"False Seeing"¤1¤0¤"Player’s Handbook"¤270¤1¤5¤"Div"¤¤"Divination"¤¤¤
-1461¤"Flame Strike"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Evo"¤¤"Combat/Fire"¤¤¤
-1462¤"Heal Serious Wounds"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Nec"¤¤"Healing"¤¤¤
-1463¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤5¤"Alt"¤¤"Devotional"¤¤¤
-1464¤"Insect Plague"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Con"¤¤"Combat"¤¤¤
-1465¤"Last Resort"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤64¤1¤5¤"Alt/Enc"¤¤"Necromantic"¤¤¤
-1466¤"Magic Font"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Div"¤¤"Divination"¤¤¤
-1467¤"Plane Shift"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Alt"¤¤"Traveler"¤¤¤
-1468¤"Protection from Nefarians"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤111¤1¤5¤"Abj"¤¤"Warding"¤¤¤
-1469¤"Quest"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Enc"¤¤"Charm"¤¤¤
-1470¤"Rainbow"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Evo"¤¤"Sun/Weather"¤¤¤
-1471¤"Raise Dead"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Nec"¤¤"Necromantic"¤¤¤
-1472¤"Reattach Limb"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤5¤"Alt/Nec"¤¤"Necromantic"¤¤¤
-1473¤"Rigor Mortis, 10’ Radius"¤0¤0¤"Player’s Handbook"¤270¤1¤5¤"Nec"¤¤"Charm"¤¤¤
-1474¤"Slay Living"¤1¤0¤"Player’s Handbook"¤269¤1¤5¤"Nec"¤¤"Necromantic"¤¤¤
-1475¤"Spike Growth"¤0¤0¤"Player’s Handbook"¤270¤1¤5¤"Alt/Enc"¤¤"Plant"¤¤¤
-1476¤"Touch of the Dark One"¤0¤2¤"HackJournal #24"¤24¤1¤5¤"Nec"¤¤"Sun"¤¤"Sphere is actually Sun (reversed)"¤
-1477¤"True Seeing"¤0¤0¤"Player’s Handbook"¤270¤1¤5¤"Div"¤¤"Divination"¤¤¤
-1478¤"Aerial Servant"¤0¤0¤"Player’s Handbook"¤270¤1¤6¤"Con"¤¤"Summoning"¤¤¤
-1479¤"Animate Object"¤0¤0¤"Player’s Handbook"¤270¤1¤6¤"Alt"¤¤"Creation/Summoning"¤¤¤
-1480¤"Attach Limb"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤6¤"Alt/Nec"¤¤"Necromantic"¤¤¤
-1481¤"Blade Barrier"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Evo"¤¤"Creation/Warding"¤¤¤
-1482¤"Conjure Animals"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Con"¤¤"Animal/Summoning"¤¤¤
-1483¤"Control Winds"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤6¤"Alt"¤¤"Air/Weather"¤¤¤
-1484¤"Cure-All"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Nec"¤¤"Healing"¤¤¤
-1485¤"Easy March"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤106¤1¤6¤"Evo"¤¤"Traveler"¤¤¤
-1486¤"False Dawn"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤1¤6¤"Evo"¤¤"Sun"¤¤¤
-1487¤"Find the Path"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤271¤1¤6¤"Div"¤¤"Divination"¤¤¤
-1488¤"Forbiddance"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Abj"¤¤"Warding"¤¤¤
-1489¤"Harm"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Nec"¤¤"Hurting"¤¤¤
-1490¤"Heal Critical Wounds"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Nec"¤¤"Healing"¤¤¤
-1491¤"Heroes’ Feast"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Evo"¤¤"Healing"¤¤¤
-1492¤"Hold Crowd"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤6¤"Enc"¤¤"Charm"¤¤¤
-1493¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤6¤"Alt"¤¤"Devotional"¤¤¤
-1494¤"Lose the Path"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Div"¤¤"Divination"¤¤¤
-1495¤"Onahu’s Cloak of Courage"¤0¤2¤"HackJournal #24"¤23¤1¤6¤"Enc"¤¤"Charm"¤¤¤
-1496¤"Part Water"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Alt"¤¤"Water"¤¤¤
-1497¤"Rain of Fire"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤6¤"Evo"¤¤"Combat/Fire"¤¤¤
-1498¤"Speak With Monsters"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Alt"¤¤"Animal/Divination"¤¤¤
-1499¤"Stone Tell"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Div"¤¤"Earth"¤¤¤
-1500¤"Teleport Via Column"¤0¤2¤"HackJournal #24"¤24¤1¤6¤"Alt"¤¤"Earth"¤¤¤
-1501¤"Whirlwind"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤6¤"Evo"¤¤"Weather"¤¤¤
-1502¤"Word of Recall"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Alt"¤¤"Summoning"¤¤¤
-1503¤"Astral Spell"¤0¤0¤"Player’s Handbook"¤272¤1¤7¤"Alt"¤¤"Traveler"¤¤¤
-1504¤"Construct Temple"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤7¤"Con"¤¤"Creation"¤¤¤
-1505¤"Control Weather"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Alt"¤¤"Weather"¤¤¤
-1506¤"Destruction"¤1¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
-1507¤"Divine Inspiration"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤7¤"Div"¤¤"Devotional/Divination"¤¤¤
-1508¤"Divine Miracle"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤7¤"Evo"¤¤"Devotional"¤¤¤
-1509¤"Earthquake"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Alt"¤¤"Earth"¤¤¤
-1510¤"Energy Drain"¤1¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
-1511¤"Exaction"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Evo/Alt"¤¤"Charm/Summoning"¤¤¤
-1512¤"Gate"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Con"¤¤"Summoning"¤¤¤
-1513¤"Henley’s Digit of Destruction"¤0¤3¤"Lost Caverns"¤36¤1¤7¤"Evo"¤¤"Combat"¤¤¤
-1514¤"Holy Word"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Con"¤¤"Combat"¤¤¤
-1515¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤7¤"Alt"¤¤"Devotional"¤¤¤
-1516¤"Regenerate"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
-1517¤"Restoration"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
-1518¤"Restorative Cure-All"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Healing"¤¤¤
-1519¤"Resurrection"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
-1520¤"Succor"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Alt/Enc"¤¤"Summoning"¤¤¤
-1521¤"Sunray"¤0¤0¤"Player’s Handbook"¤294¤1¤7¤"Alt/Evo"¤¤"Sun"¤¤¤
-1522¤"Symbol"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Con"¤¤"Warding"¤¤¤
-1523¤"Unholy Word"¤1¤0¤"Player’s Handbook"¤273¤1¤7¤"Con"¤¤"Combat"¤¤¤
-1524¤"Wind Walk"¤0¤0¤"Player’s Handbook"¤275¤1¤7¤"Alt"¤¤"Air"¤¤¤
-1525¤"Wither"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
-1526¤"Animal Friendship"¤0¤0¤"Player’s Handbook"¤275¤2¤1¤"Enc"¤¤"Animal"¤¤¤
-1527¤"Bless"¤0¤0¤"Player’s Handbook"¤253¤2¤1¤"Con"¤¤"Devotional"¤¤¤
-1528¤"Bloom"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤2¤1¤"Alt"¤¤"Plant"¤¤¤
-1529¤"Cause Minor Injury"¤1¤0¤"Player’s Handbook"¤276¤2¤1¤"Nec"¤¤"Hurting"¤¤¤
-1530¤"Ceremony"¤0¤0¤"Player’s Handbook"¤253¤2¤1¤"Evo"¤¤"Devotional"¤¤¤
-1531¤"Contact Home Gawd"¤0¤1¤"HackJammer"¤122¤2¤1¤"Div"¤¤"Devotional"¤¤¤
-1532¤"Contaminate Water"¤1¤0¤"Player’s Handbook"¤278¤2¤1¤"Alt"¤¤"Devotional"¤¤¤
-1533¤"Create Air"¤0¤1¤"HackJammer"¤123¤2¤1¤"Alt"¤¤"Air"¤¤¤
-1534¤"Cure Minor Injury"¤0¤0¤"Player’s Handbook"¤276¤2¤1¤"Nec"¤¤"Healing"¤¤¤
-1535¤"Destroy Air*"¤1¤1¤"HackJammer"¤123¤2¤1¤"Alt"¤¤"Air"¤¤¤
-1536¤"Detect Balance"¤0¤0¤"Player’s Handbook"¤276¤2¤1¤"Div"¤¤"Divination"¤¤¤
-1537¤"Detect Magic"¤0¤0¤"Player’s Handbook"¤255¤2¤1¤"Div"¤¤"Divination"¤¤¤
-1538¤"Detect Pits & Snares"¤0¤0¤"Player’s Handbook"¤276¤2¤1¤"Div"¤¤"Divination"¤¤¤
-1539¤"Detect Poison"¤0¤0¤"Player’s Handbook"¤276¤2¤1¤"Div"¤¤"Divination"¤¤¤
-1540¤"Entangle"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Alt"¤¤"Plant"¤¤¤
-1541¤"Faerie Fire"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Alt"¤¤"Combat"¤¤¤
-1542¤"Fog Vision"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Div"¤¤"Divination"¤¤¤
-1543¤"Invisibility to Animals"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Alt"¤¤"Animal"¤¤¤
-1544¤"Locate Animals or Plants"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Enc"¤¤"Animal/Plant"¤¤¤
-1545¤"Log of Everburning"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤2¤1¤"Alt"¤¤"Fire"¤¤¤
-1546¤"Pass Without Trace"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Div"¤¤"Plant"¤¤¤
-1547¤"Precipitation"¤0¤0¤"Player’s Handbook"¤278¤2¤1¤"Alt"¤¤"Weather"¤¤¤
-1548¤"Predict Weather"¤0¤0¤"Player’s Handbook"¤278¤2¤1¤"Div"¤¤"Divination/Weather"¤¤¤
-1549¤"Primal’s Braciation"¤0¤2¤"HackJournal #24"¤24¤2¤1¤"Alt"¤¤"Animal"¤¤¤
-1550¤"Purify Water"¤0¤0¤"Player’s Handbook"¤278¤2¤1¤"Alt"¤¤"Devotional"¤¤¤
-1551¤"Shillelagh"¤0¤0¤"Player’s Handbook"¤278¤2¤1¤"Alt"¤¤"Combat/Plant"¤¤¤
-1552¤"Speak with Animals"¤0¤0¤"Player’s Handbook"¤259¤2¤1¤"Alt"¤¤"Animal"¤¤¤
-1553¤"Strength of Stone"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤2¤1¤"Evo"¤¤"Earth"¤¤¤
-1554¤"Trailblaze"¤0¤2¤"HackJournal #24"¤24¤2¤1¤"Evo"¤¤"Travel"¤¤¤
-1555¤"Wind Column"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤2¤1¤"Evo"¤¤"Air"¤¤¤
-1556¤"Animate Vine"¤0¤2¤"HackJournal #24"¤22¤2¤2¤"Alt"¤¤"Plant"¤¤¤
-1557¤"Badberry"¤1¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt/Evo"¤¤"Plant"¤¤¤
-1558¤"Barkskin"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt"¤¤"Plant"¤¤¤
-1559¤"Cause Light Wounds"¤1¤0¤"Player’s Handbook"¤255¤2¤2¤"Nec"¤¤"Hurting"¤¤¤
-1560¤"Charm Person or Mammal"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Enc"¤¤"Charm"¤¤¤
-1561¤"Chill Metal"¤1¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt"¤¤"Fire"¤¤¤
-1562¤"Conjure Demi-Elemental"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤2¤2¤"Con"¤¤"Summoning"¤¤¤
-1563¤"Create Obstacle"¤0¤1¤"By the Sword"¤23¤2¤2¤"Con"¤¤"Creation"¤¤¤
-1564¤"Create Water"¤0¤0¤"Player’s Handbook"¤254¤2¤2¤"Alt"¤¤"Creation/Water"¤¤¤
-1565¤"Cure Light Wounds"¤0¤0¤"Player’s Handbook"¤255¤2¤2¤"Nec"¤¤"Healing"¤¤¤
-1566¤"Destroy Water*"¤1¤0¤"Player’s Handbook"¤254¤2¤2¤"Alt"¤¤"Water"¤¤¤
-1567¤"Detect Gawds"¤0¤1¤"HackJammer"¤122¤2¤2¤"Div"¤¤"Divination"¤¤¤
-1568¤"Elephant’s Overrun"¤0¤2¤"HackJournal #24"¤22¤2¤2¤"Alt"¤¤"Combat"¤¤¤
-1569¤"Extinguish"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤2¤2¤"Alt"¤¤"Water"¤¤¤
-1570¤"Feign Death"¤0¤0¤"Player’s Handbook"¤261¤2¤2¤"Nec"¤¤"Necromantic"¤¤¤
-1571¤"Fire Trap"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Abj/Evo"¤¤"Fire"¤¤¤
-1572¤"Flame Blade"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Evo"¤¤"Fire"¤¤¤
-1573¤"Goodberry"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt/Evo"¤¤"Plant"¤¤¤
-1574¤"Heat Metal"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt"¤¤"Fire"¤¤¤
-1575¤"Ignite"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤2¤2¤"Alt"¤¤"Fire"¤¤¤
-1576¤"Lozhen’s Breath"¤0¤2¤"HackJournal #24"¤22¤2¤2¤"Con"¤¤"Air"¤¤¤
-1577¤"Messenger"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Enc"¤¤"Animal"¤¤¤
-1578¤"Obscurement"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Alt"¤¤"Weather"¤¤¤
-1579¤"Produce Flame"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Alt"¤¤"Fire"¤¤¤
-1580¤"Reflecting Pool"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Div"¤¤"Divination"¤¤¤
-1581¤"Slow Poison"¤0¤0¤"Player’s Handbook"¤259¤2¤2¤"Nec"¤¤"Healing"¤¤¤
-1582¤"Soften Shape"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤2¤"Alt"¤¤"Earth"¤¤¤
-1583¤"Spider Charm"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤2¤2¤"Alt"¤¤"Animal"¤¤¤
-1584¤"Staunch Bleeding"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤2¤2¤"Alt"¤¤"Healing"¤¤¤
-1585¤"Straighten Wood"¤1¤0¤"Player’s Handbook"¤281¤2¤2¤"Alt"¤¤"Plant"¤¤¤
-1586¤"Trip"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Enc"¤¤"Plant"¤¤¤
-1587¤"Warp Wood"¤0¤0¤"Player’s Handbook"¤281¤2¤2¤"Alt"¤¤"Plant"¤¤¤
-1588¤"Air Breathing"¤1¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Air"¤¤¤
-1589¤"Call Lightning"¤0¤0¤"Player’s Handbook"¤281¤2¤3¤"Alt"¤¤"Weather"¤¤¤
-1590¤"Cloud Burst"¤0¤0¤"Player’s Handbook"¤281¤2¤3¤"Alt"¤¤"Weather"¤¤¤
-1591¤"Create Obstacle, Greater"¤0¤1¤"By the Sword"¤23¤2¤3¤"Con"¤¤"Creation"¤¤¤
-1592¤"Cure Disease"¤0¤0¤"Player’s Handbook"¤261¤2¤3¤"Abj"¤¤"Necromantic"¤¤¤
-1593¤"Estrangle"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤2¤3¤"Alt"¤¤"Plant"¤¤¤
-1594¤"Eternal Flame"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤2¤3¤"Evo"¤¤"Fire"¤¤¤
-1595¤"Fertile Land"¤0¤2¤"HackJournal #15"¤15¤2¤3¤"Alt"¤¤"Plant"¤¤¤
-1596¤"Heal Light Wounds"¤0¤0¤"Player’s Handbook"¤258¤2¤3¤"Nec"¤¤"Healing"¤¤¤
-1597¤"Hold Animal"¤0¤0¤"Player’s Handbook"¤281¤2¤3¤"Enc"¤¤"Animal"¤¤¤
-1598¤"Infertile Land"¤1¤2¤"HackJournal #15"¤15¤2¤3¤"Alt"¤¤"Plant"¤¤¤
-1599¤"Know Alignment"¤0¤0¤"Player’s Handbook"¤258¤2¤3¤"Div"¤¤"Divination"¤¤¤
-1600¤"Neutralize Poison"¤0¤0¤"Player’s Handbook"¤266¤2¤3¤"Nec"¤¤"Healing"¤¤¤
-1601¤"Plant Growth"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Alt"¤¤"Plant"¤¤¤
-1602¤"Poison"¤1¤0¤"Player’s Handbook"¤266¤2¤3¤"Nec"¤¤"Hurting"¤¤¤
-1603¤"Protection from Fire"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Abj"¤¤"Warding"¤¤¤
-1604¤"Pyrotechnics"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Alt"¤¤"Fire"¤¤¤
-1605¤"Snare"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Enc"¤¤"Plant"¤¤¤
-1606¤"Spike Growth"¤0¤0¤"Player’s Handbook"¤270¤2¤3¤"Alt/Enc"¤¤"Plant"¤¤¤
-1607¤"Starshine"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Evo/Ill"¤¤"Sun"¤¤¤
-1608¤"Stone Shape"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Earth"¤¤¤
-1609¤"Summon Insects"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Con"¤¤"Animal"¤¤¤
-1610¤"Tree"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Plant"¤¤¤
-1611¤"Undetectable Alignment"¤1¤0¤"Player’s Handbook"¤258¤2¤3¤"Div"¤¤"Divination"¤¤¤
-1612¤"Vohven Vipers"¤0¤2¤"HackJournal #24"¤25¤2¤3¤"Con"¤¤"Animal"¤¤¤
-1613¤"Wall of Vines"¤0¤2¤"HackJournal #24"¤25¤2¤3¤"Con"¤¤"Plant"¤¤¤
-1614¤"Water Breathing"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Air"¤¤¤
-1615¤"Weather Prediction"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤2¤3¤"Div"¤¤"Divination/Weather"¤¤¤
-1616¤"White Hot Metal"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Fire"¤¤¤
-1617¤"Wood Shape"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Plant"¤¤¤
-1618¤"Animal Summoning I"¤0¤0¤"Player’s Handbook"¤284¤2¤4¤"Con"¤¤"Animal/Summoning"¤¤¤
-1619¤"Call Woodland Beings"¤0¤0¤"Player’s Handbook"¤284¤2¤4¤"Con"¤¤"Animal/Summoning"¤¤¤
-1620¤"Cause Lycanthropy"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤2¤4¤"Nec"¤¤"Animal"¤¤¤
-1621¤"Cause Serious Wounds"¤1¤0¤"Player’s Handbook"¤264¤2¤4¤"Nec"¤¤"Hurting"¤¤¤
-1622¤"Control Temperature, 10’ Radius"¤0¤0¤"Player’s Handbook"¤284¤2¤4¤"Alt"¤¤"Weather"¤¤¤
-1623¤"Cure Serious Wounds"¤0¤0¤"Player’s Handbook"¤264¤2¤4¤"Nec"¤¤"Healing"¤¤¤
-1624¤"Dispel Magic"¤0¤0¤"Player’s Handbook"¤261¤2¤4¤"Abj"¤¤"Warding"¤¤¤
-1625¤"Focus"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤2¤4¤"Evo"¤¤"Devotional"¤¤¤
-1626¤"Grow"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Alt"¤¤"Animal"¤¤¤
-1627¤"Hallucinatory Forest"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Ill"¤¤"Plant"¤¤¤
-1628¤"Hold Plant"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Enc"¤¤"Plant"¤¤¤
-1629¤"Leaves to Bees"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤2¤4¤"Alt"¤¤"Animal"¤¤¤
-1630¤"Plant Door"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Alt"¤¤"Plant"¤¤¤
-1631¤"Produce Fire"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Alt"¤¤"Fire"¤¤¤
-1632¤"Protection from Elementals"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤2¤4¤"Abj"¤¤"Air/Earth/Fire/Water"¤¤¤
-1633¤"Protection from Lightning"¤0¤0¤"Player’s Handbook"¤286¤2¤4¤"Abj"¤¤"Warding"¤¤¤
-1634¤"Protection from Plants & Fungi"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤2¤4¤"Abj"¤¤"Plant"¤¤¤
-1635¤"Protection from Water"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤2¤4¤"Abj/Alt"¤¤"Water"¤¤¤
-1636¤"Quench Fire"¤1¤0¤"Player’s Handbook"¤285¤2¤4¤"Alt"¤¤"Fire"¤¤¤
-1637¤"Repel Insects"¤0¤0¤"Player’s Handbook"¤286¤2¤4¤"Abj/Alt"¤¤"Animal/Warding"¤¤¤
-1638¤"Softwood"¤0¤1¤"HackJammer"¤123¤2¤4¤"Alt"¤¤"Plant"¤¤¤
-1639¤"Speak with Plants"¤0¤0¤"Player’s Handbook"¤286¤2¤4¤"Alt"¤¤"Plant"¤¤¤
-1640¤"Stone Passage"¤0¤0¤"Player’s Handbook"¤286¤2¤4¤"Alt"¤¤"Earth"¤¤¤
-1641¤"Stones to Spiders"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤4¤"Alt"¤¤"Animal"¤¤¤
-1642¤"Surrogacy"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤2¤4¤"Alt/Enc"¤¤"Devotional"¤¤¤
-1643¤"Warp Stone or Metal"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤4¤"Alt"¤¤"Earth"¤¤¤
-1644¤"Weather Stasis"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤118¤2¤4¤"Abj"¤¤"Weather"¤¤¤
-1645¤"Zone of Sweet Air"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤118¤2¤4¤"Abj"¤¤"Air"¤¤¤
-1646¤"Animal Growth"¤0¤0¤"Player’s Handbook"¤286¤2¤5¤"Alt"¤¤"Animal"¤¤¤
-1647¤"Animal Reduction"¤1¤0¤"Player’s Handbook"¤286¤2¤5¤"Alt"¤¤"Animal"¤¤¤
-1648¤"Animal Summoning II"¤0¤0¤"Player’s Handbook"¤286¤2¤5¤"Con"¤¤"Animal/Summoning"¤¤¤
-1649¤"Anti-Plant Shell"¤0¤0¤"Player’s Handbook"¤286¤2¤5¤"Abj"¤¤"Plant/Warding"¤¤¤
-1650¤"Commune with Nature"¤0¤0¤"Player’s Handbook"¤287¤2¤5¤"Div"¤¤"Divination"¤¤¤
-1651¤"Control Winds"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤2¤5¤"Alt"¤¤"Air/Weather"¤¤¤
-1652¤"Heal Serious Wounds"¤0¤0¤"Player’s Handbook"¤268¤2¤5¤"Nec"¤¤"Healing"¤¤¤
-1653¤"Insect Plague"¤0¤0¤"Player’s Handbook"¤268¤2¤5¤"Con"¤¤"Combat"¤¤¤
-1654¤"Lesser Reincarnation"¤0¤0¤"Player’s Handbook"¤287¤2¤5¤"Nec"¤¤"Necromantic"¤¤¤
-1655¤"Moonbeam"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt/Evo"¤¤"Sun"¤¤¤
-1656¤"Pass Plant"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt"¤¤"Plant"¤¤¤
-1657¤"Protection from Acid"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Abj"¤¤"Warding"¤¤¤
-1658¤"Protection from Petrification"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Abj"¤¤"Warding"¤¤¤
-1659¤"Sink Into Earth"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤5¤"Alt"¤¤"Earth"¤¤¤
-1660¤"Snakes to Sticks"¤1¤0¤"Player’s Handbook"¤266¤2¤5¤"Alt"¤¤"Plant"¤¤¤
-1661¤"Spike Stones"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt/Enc"¤¤"Earth"¤¤¤
-1662¤"Sticks to Snakes"¤0¤0¤"Player’s Handbook"¤266¤2¤5¤"Alt"¤¤"Plant"¤¤¤
-1663¤"Transmute Mud to Rock"¤1¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt"¤¤"Earth/Water"¤¤¤
-1664¤"Transmute Rock to Mud"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt"¤¤"Earth/Water"¤¤¤
-1665¤"Wall of Fire"¤0¤0¤"Player’s Handbook"¤289¤2¤5¤"Con"¤¤"Fire"¤¤¤
-1666¤"Animal Summoning III"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Con"¤¤"Animal/Summoning"¤¤¤
-1667¤"Anti-Animal Shell"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Abj"¤¤"Animal/Warding"¤¤¤
-1668¤"Cause Critical Wounds"¤1¤0¤"Player’s Handbook"¤268¤2¤6¤"Nec"¤¤"Hurting"¤¤¤
-1669¤"Conjure Fire Elemental"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Con"¤¤"Fire"¤¤¤
-1670¤"Cure Critical Wounds"¤0¤0¤"Player’s Handbook"¤268¤2¤6¤"Nec"¤¤"Healing"¤¤¤
-1671¤"Dismiss Fire Elemental"¤1¤0¤"Player’s Handbook"¤289¤2¤6¤"Con"¤¤"Fire"¤¤¤
-1672¤"Feeblemind"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Enc"¤¤"Charm"¤¤¤
-1673¤"Fire Seeds"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Con"¤¤"Fire"¤¤¤
-1674¤"Liveoak"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Enc"¤¤"Plant"¤¤¤
-1675¤"Transmute Dust to Water"¤1¤0¤"Player’s Handbook"¤290¤2¤6¤"Alt"¤¤"Earth/Water"¤¤¤
-1676¤"Transmute Water to Dust"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Alt"¤¤"Earth/Water"¤¤¤
-1677¤"Transport Via Plants"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Alt"¤¤"Plant"¤¤¤
-1678¤"Turn Wood"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Alt"¤¤"Plant"¤¤¤
-1679¤"Wall of Thorns"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Con"¤¤"Plant/Summoning"¤¤¤
-1680¤"Weather Summoning"¤0¤0¤"Player’s Handbook"¤291¤2¤6¤"Con"¤¤"Summoning/Weather"¤¤¤
-1681¤"Whirlwind"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤6¤"Evo"¤¤"Weather"¤¤¤
-1682¤"Animate Rock"¤0¤0¤"Player’s Handbook"¤291¤2¤7¤"Alt"¤¤"Earth"¤¤¤
-1683¤"Cause Inclement Weather"¤0¤0¤"Player’s Handbook"¤291¤2¤7¤"Alt"¤¤"Weather"¤¤¤
-1684¤"Changestaff"¤0¤0¤"Player’s Handbook"¤291¤2¤7¤"Enc/Evo"¤¤"Creation/Plant"¤¤¤
-1685¤"Chariot of Sustarre"¤0¤0¤"Player’s Handbook"¤292¤2¤7¤"Evo"¤¤"Creation/Fire"¤¤¤
-1686¤"Confusion"¤0¤0¤"Player’s Handbook"¤292¤2¤7¤"Enc"¤¤"Charm"¤¤¤
-1687¤"Conjure Earth Elemental"¤0¤0¤"Player’s Handbook"¤292¤2¤7¤"Con"¤¤"Earth/Summoning"¤¤¤
-1688¤"Control Weather"¤0¤0¤"Player’s Handbook"¤273¤2¤7¤"Alt"¤¤"Weather"¤¤¤
-1689¤"Create Atmosphere"¤0¤1¤"HackJammer"¤123¤2¤7¤"Alt"¤¤"Air"¤¤¤
-1690¤"Creeping Doom"¤0¤0¤"Player’s Handbook"¤293¤2¤7¤"Con"¤¤"Air/Summoning"¤¤¤
-1691¤"Destroy Atmosphere"¤1¤1¤"HackJammer"¤123¤2¤7¤"Alt"¤¤"Air"¤¤¤
-1692¤"Dismiss Earth Elemental"¤1¤0¤"Player’s Handbook"¤292¤2¤7¤"Con"¤¤"Earth/Summoning"¤¤¤
-1693¤"False Dawn"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤2¤7¤"Evo"¤¤"Sun"¤¤¤
-1694¤"Finger of Death"¤0¤0¤"Player’s Handbook"¤293¤2¤7¤"Enc"¤¤"Necromantic"¤¤¤
-1695¤"Fire Quench"¤1¤0¤"Player’s Handbook"¤293¤2¤7¤"Evo"¤¤"Fire"¤¤¤
-1696¤"Fire Storm"¤0¤0¤"Player’s Handbook"¤293¤2¤7¤"Evo"¤¤"Fire"¤¤¤
-1697¤"Heal Critical Wounds"¤0¤0¤"Player’s Handbook"¤271¤2¤7¤"Nec"¤¤"Healing"¤¤¤
-1698¤"Reincarnate"¤0¤0¤"Player’s Handbook"¤293¤2¤7¤"Nec"¤¤"Necromantic"¤¤¤
-1699¤"Repel Living Plants & Animals"¤0¤0¤"Player’s Handbook"¤294¤2¤7¤"Abj"¤¤"Animal/Plant/Warding"¤¤¤
-1700¤"Sunray"¤0¤0¤"Player’s Handbook"¤294¤2¤7¤"Alt/Evo"¤¤"Sun"¤¤¤
-1701¤"Thicket"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤65¤2¤7¤"Con"¤¤"Plant"¤¤¤
-1702¤"Transmute Metal to Wood"¤0¤0¤"Player’s Handbook"¤294¤2¤7¤"Alt"¤¤"Earth"¤¤¤
-1703¤"Transmute Rock to Lava"¤0¤0¤"Player’s Handbook"¤294¤2¤7¤"Alt"¤¤"Earth"¤¤¤
+651¤"Shell of Purity"¤1¤3¤"House of Madness"¤17¤0¤2¤"Alt"¤¤¤¤¤
+652¤"Shield Screen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤2¤"Evo"¤¤¤¤¤"S"
+653¤"Slow Healing"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤2¤"Nec"¤¤¤¤¤"S"
+654¤"Smoke Screen"¤0¤2¤"HackJournal #13"¤16¤0¤2¤"Alt"¤¤¤¤¤
+655¤"Soften Stone"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤0¤2¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+656¤"Spectral Hand"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Nec"¤¤¤¤¤"sS"
+657¤"Spider Charm"¤0¤3¤"Annihilate the Giants"¤95¤0¤2¤"Enc"¤¤¤¤¤
+658¤"Spy of Derijnah"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤2¤"Nec"¤¤¤¤¤"S"
+659¤"Stinking Cloud"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Evo"¤¤"Air"¤¤¤"sS"
+660¤"Strength"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Alt"¤¤¤¤¤"sS"
+661¤"Summon Swarm"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Con"¤¤¤¤¤"s"
+662¤"Tattoo of Shame"¤0¤0¤"Player’s Handbook"¤196¤0¤2¤"Alt"¤¤¤¤¤"sS"
+663¤"Telepathic Mute"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Alt"¤¤¤¤¤"s"
+664¤"Total Control"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Enc"¤¤¤¤¤"sS"
+665¤"Unseen Accountant"¤0¤2¤"HackJournal #24"¤11¤0¤2¤"Con/Div"¤¤¤¤¤
+666¤"UT’s Short Range Blink"¤0¤2¤"HackJournal #25"¤14¤0¤2¤"Alt"¤¤¤¤¤
+667¤"Vocalize"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤2¤"Alt"¤¤¤¤¤
+668¤"Ward Off Violence"¤0¤2¤"HackJournal #27"¤3¤0¤2¤"Abj"¤¤¤¤¤
+669¤"Web"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Evo"¤¤¤¤¤"sS"
+670¤"Whip"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Evo"¤¤¤¤¤"sS"
+671¤"Whispering Wind"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Alt/Ill"¤¤"Air"¤¤¤"sS"
+672¤"White Hot Metal"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Alt"¤¤"Fire"¤¤¤"sS"
+673¤"Wizard Lock"¤0¤0¤"Player’s Handbook"¤197¤0¤2¤"Alt"¤¤¤¤¤"sS"
+674¤"Zed’s Crystal Dagger"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤2¤"Con/Evo"¤¤"Earth"¤¤¤"S"
+675¤"Zeebart’s Rust Resistance"¤0¤3¤"Annihilate the Giants"¤94¤0¤2¤"Abj"¤¤¤¤¤
+676¤"A Day in the Life"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤89¤0¤3¤"Alt"¤¤¤¤¤"S"
+677¤"Ajamar’s Greater Swarm"¤0¤2¤"HackJournal #11"¤8¤0¤3¤"Con"¤¤¤¤¤
+678¤"Alternate Reality"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤89¤0¤3¤"Alt"¤"Wild_Mage"¤¤"Wild"¤¤
+679¤"Ariellene’s Sprout Field"¤0¤2¤"HackJournal #15"¤15¤0¤3¤"Alt"¤¤¤¤¤
+680¤"Arinthor’s Dark Limbs"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤3¤"Alt"¤¤¤¤¤"S"
+681¤"Bash Face"¤0¤0¤"Player’s Handbook"¤198¤0¤3¤"Evo"¤¤"Earth"¤¤¤"sS"
+682¤"Blink"¤0¤0¤"Player’s Handbook"¤198¤0¤3¤"Alt"¤¤¤¤¤"S"
+683¤"Bloodball"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤3¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+684¤"Bob & Mooch’s Armor Repair"¤0¤2¤"HackJournal #14"¤3¤0¤3¤"Alt"¤¤¤¤¤
+685¤"Bone Club"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤3¤"Nec/Enc"¤¤¤¤¤"S"
+686¤"Call Lightning"¤0¤0¤"Player’s Handbook"¤281¤0¤3¤"Alt"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+687¤"Carter’s Energy Conservation"¤0¤3¤"Annihilate the Giants"¤94¤0¤3¤"Alt"¤¤¤¤¤
+688¤"Charm Undead"¤0¤0¤"Player’s Handbook"¤198¤0¤3¤"Nec"¤¤¤¤¤"sS"
+689¤"Chill Fire"¤0¤1¤"HackJammer"¤121¤0¤3¤"Alt"¤¤¤¤¤
+690¤"Clairaudience"¤0¤0¤"Player’s Handbook"¤198¤0¤3¤"Div"¤¤¤¤¤"sS"
+691¤"Clairvoyance"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Div"¤¤¤¤¤"sS"
+692¤"Cloudburst"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Alt"¤¤"Air"¤¤¤"sS"
+693¤"Continual Darkness"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Alt"¤¤¤¤¤"sS"
+694¤"Delay Death"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤95¤0¤3¤"Nec/Enc"¤¤¤¤¤"S"
+695¤"Delude"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Alt"¤¤¤¤¤"sS"
+696¤"Dispel Magic"¤0¤0¤"Player’s Handbook"¤199¤0¤3¤"Abj"¤¤¤¤¤"sS"
+697¤"Dispel Silence"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤3¤"Abj/Alt"¤¤¤¤¤"S"
+698¤"Elenwyd’s Flawless Smile"¤0¤2¤"HackJournal #5"¤12¤0¤3¤"Alt"¤¤¤¤¤
+699¤"Elenwyd’s Wondrous Gown"¤0¤2¤"HackJournal #5"¤12¤0¤3¤"Alt/Con"¤¤¤¤¤
+700¤"Elephant’s Overrun"¤0¤2¤"HackJournal #24"¤22¤0¤3¤"Alt"¤¤¤¤¤
+701¤"Empathic Link"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤98¤0¤3¤"Enc"¤¤¤¤¤"S"
+702¤"Enhance Rating"¤1¤1¤"HackJammer"¤121¤0¤3¤"Alt"¤¤¤¤¤
+703¤"Eternal Flame"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤0¤3¤"Evo"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
+704¤"Explosive Runes"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Alt"¤¤¤¤¤"sS"
+705¤"Extinguish"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤0¤3¤"Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
+706¤"Extract Truth"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤99¤0¤3¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+707¤"Feign Death"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Nec"¤¤¤¤¤"sS"
+708¤"Fireball"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Evo"¤¤"Fire"¤¤¤"sS"
+709¤"Fireball, Scatter-Blast"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Evo"¤¤"Fire"¤¤¤"sS"
+710¤"Fireball, Sidewinder Factor 3"¤0¤0¤"Player’s Handbook"¤200¤0¤3¤"Evo"¤¤"Fire"¤¤¤"sS"
+711¤"Fireflow"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤3¤"Alt"¤"Wild_Mage"¤¤"Wild"¤¤"S"
+712¤"Flame Arrow"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Con"¤¤"Fire"¤¤¤"sS"
+713¤"Fly"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤¤¤¤"sS"
+714¤"Fool’s Speech"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤3¤"Alt"¤"Wild_Mage"¤¤"Wild"¤¤"S"
+715¤"Gandle’s Humble Hut"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤¤¤¤"sS"
+716¤"Glyph of Ice"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤3¤"Abj/Evo"¤¤"Water"¤¤¤"S"
+717¤"Glyph of Sniping"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤3¤"Abj/Evo"¤¤¤¤¤"S"
+718¤"Grounded"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤63¤0¤3¤"Abj"¤¤¤¤¤
+719¤"Grow"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤¤¤¤"sS"
+720¤"Gust of Wind"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤"Air"¤¤¤"sS"
+721¤"Haste"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Alt"¤¤¤¤¤"sS"
+722¤"Hold Person"¤0¤0¤"Player’s Handbook"¤201¤0¤3¤"Enc"¤¤¤¤¤"sS"
+723¤"Hold Undead"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Nec"¤¤¤¤¤"sS"
+724¤"Hovering Skull"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤104¤0¤3¤"Nec"¤¤¤¤¤"S"
+725¤"Icy Sphere"¤0¤2¤"HackJournal #16"¤5¤0¤3¤"Evo"¤¤¤¤¤
+726¤"Ignite"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤0¤3¤"Alt"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
+727¤"Illusionary Script"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Ill"¤¤¤¤¤"sS"
+728¤"Infravision"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Alt"¤¤¤¤¤"sS"
+729¤"Invisibility, 10’ Radius"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Ill"¤¤¤¤¤"sS"
+730¤"Item"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Alt"¤¤¤¤¤"sS"
+731¤"Lightning Bolt"¤0¤0¤"Player’s Handbook"¤202¤0¤3¤"Evo"¤¤¤¤¤"sS"
+732¤"Material"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Evo/Con"¤¤¤¤¤"sS"
+733¤"Meld Into Stone"¤0¤0¤"Player’s Handbook"¤262¤0¤3¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+734¤"Merge Gem Pile"¤0¤2¤"HackJournal #24"¤10¤0¤3¤"Alt"¤¤¤¤¤
+735¤"Merge Pixie Dust"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤63¤0¤3¤"Alt"¤¤¤¤"See Errata"¤
+736¤"Mergenszer’s Spectral Watch Duck"¤0¤3¤"Wryneck’s Wheelhouse"¤41¤0¤3¤"Con"¤¤¤¤¤
+737¤"Mericutyn’s Grotesquely Distended Nose"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤3¤"Alt"¤¤¤¤¤"S"
+738¤"Monster Summoning I"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Con"¤¤¤¤¤"sS"
+739¤"Morton’s Minute Meteors"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤3¤"Alt/Evo"¤¤"Earth"¤¤¤"S"
+740¤"Murgain’s Migraine"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Nec"¤¤¤¤¤"sS"
+741¤"Mushu’s Falling Foot"¤0¤2¤"HackJournal #24"¤22¤0¤3¤"Evo"¤¤¤¤¤
+742¤"Negative Plane Protection (Codex ver.)"¤0¤2¤"HackJournal #27"¤3¤0¤3¤"Abj"¤¤¤¤¤
+743¤"No Fear"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Enc"¤¤¤¤¤"sS"
+744¤"Non-Detection"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Abj"¤¤¤¤¤"sS"
+745¤"Pain Touch"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤3¤"Nec"¤¤¤¤¤"S"
+746¤"Paralyzation"¤0¤0¤"Player’s Handbook"¤203¤0¤3¤"Ill"¤¤¤¤¤"sS"
+747¤"Perceived Malignment"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Enc"¤¤¤¤¤"sS"
+748¤"Phantom Steed"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Con/Ill"¤¤¤¤¤"sS"
+749¤"Phantom Wind"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Alt/Ill"¤¤¤¤¤"sS"
+750¤"Polymorph to Amphibian"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Alt"¤¤¤¤¤"sS"
+751¤"Polymorph to Insect"¤0¤0¤"Player’s Handbook"¤112¤0¤3¤"Alt"¤¤¤¤¤"S"
+752¤"Polymorph to Primate"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤204¤0¤3¤"Alt"¤¤¤¤¤"sS"
+753¤"Porpher’s Game Call Spell"¤0¤3¤"Porpher’s Enchanted Garden"¤39¤0¤3¤"Con"¤¤¤¤¤
+754¤"Power Word: Attack"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤3¤"Con"¤¤¤¤¤"S"
+755¤"Power Word: Burn"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤3¤"Con"¤¤¤¤¤"S"
+756¤"Power Word: Chill"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤3¤"Con"¤¤¤¤¤"S"
+757¤"Preemptive Strike"¤0¤0¤"Player’s Handbook"¤204¤0¤3¤"Evo"¤¤¤¤¤"sS"
+758¤"Proof from Teleportation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤116¤0¤3¤"Abj"¤¤¤¤¤"S"
+759¤"Protection from Fire"¤0¤0¤"Player’s Handbook"¤282¤0¤3¤"Abj"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
+760¤"Protection From Fire (Codex ver.)"¤0¤2¤"HackJournal #27"¤3¤0¤3¤"Abj"¤¤¤¤¤
+761¤"Protection from Normal Missiles"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Abj"¤¤¤¤¤"sS"
+762¤"Quarantine"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤116¤0¤3¤"Abj"¤¤¤¤¤"S"
+763¤"Rodnard’s Red Letter Rejoinder"¤0¤3¤"Wryneck’s Wheelhouse"¤42¤0¤3¤"Con"¤¤¤¤¤
+764¤"Rot Dawgs"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤117¤0¤3¤"Nec"¤¤¤¤¤"S"
+765¤"Runes of Eyeball Implosion"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Alt"¤¤¤¤¤"sS"
+766¤"Runes of Instantaneous Esophoria"¤0¤3¤"Wryneck’s Wheelhouse"¤44¤0¤3¤"Alt"¤¤¤¤¤
+767¤"Secret Page"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Alt"¤¤¤¤¤"sS"
+768¤"Selective Invisibility"¤0¤3¤"Prophecy of Shardar"¤41¤0¤3¤"Ill"¤¤¤¤¤
+769¤"Sepia Snake Sigil"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Con"¤¤¤¤¤"sS"
+770¤"Shanty’s Pestilence"¤0¤2¤"HackJournal #21"¤13¤0¤3¤"Nec"¤¤¤¤¤
+771¤"Sliggderlisp’s Noxious Depilatory Cloud"¤0¤3¤"White Doom Mountain"¤38¤0¤3¤"Evo"¤¤¤¤¤
+772¤"Slow"¤0¤0¤"Player’s Handbook"¤205¤0¤3¤"Alt"¤¤¤¤¤"sS"
+773¤"Smoke Bomb"¤0¤2¤"HackJournal #13"¤16¤0¤3¤"Alt/Evo"¤¤¤¤¤
+774¤"Smoke Signals"¤0¤2¤"HackJournal #13"¤16¤0¤3¤"Alt"¤¤¤¤¤
+775¤"Smoke Visions"¤0¤2¤"HackJournal #13"¤16¤0¤3¤"Alt/Div"¤¤¤¤¤
+776¤"Snarcher’s Multi-Missile Smoke Volley"¤0¤3¤"Wryneck’s Wheelhouse"¤43¤0¤3¤"Alt"¤¤¤¤¤
+777¤"Spectral Force"¤0¤0¤"Player’s Handbook"¤206¤0¤3¤"Ill"¤¤¤¤¤"sS"
+778¤"Spyware"¤0¤2¤"HackJournal #20"¤15¤0¤3¤"Evo"¤¤¤¤¤
+779¤"Stone Shape"¤0¤0¤"Player’s Handbook"¤283¤0¤3¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+780¤"Suggestion"¤0¤0¤"Player’s Handbook"¤206¤0¤3¤"Enc"¤¤¤¤¤"sS"
+781¤"Sure Grip Snare"¤0¤0¤"Player’s Handbook"¤206¤0¤3¤"Evo"¤¤¤¤¤"sS"
+782¤"Tongues"¤1¤0¤"Player’s Handbook"¤206¤0¤3¤"Alt"¤¤¤¤¤"sS"
+783¤"Transmute Wood to Steel"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤3¤"Alt"¤¤¤¤¤"S"
+784¤"Vampiric Touch"¤0¤0¤"Player’s Handbook"¤206¤0¤3¤"Nec"¤¤¤¤¤"sS"
+785¤"Wall of Water"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤3¤"Evo"¤¤"Water"¤¤¤"S"
+786¤"Ward Off Evil"¤1¤0¤"Player’s Handbook"¤206¤0¤3¤"Abj"¤¤¤¤¤
+787¤"Water Breathing"¤1¤0¤"Player’s Handbook"¤206¤0¤3¤"Alt"¤¤"Air/Water"¤¤¤"S"
+788¤"Water Walk"¤0¤0¤"Player’s Handbook"¤263¤0¤3¤"Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
+789¤"Weather Prediction"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤0¤3¤"Div"¤"Air_Elementalist/Earth_Elementalist/Fire_Elementalist/Water_Elementalist"¤"Air/Earth/Fire/Water"¤"Elementalist"¤¤
+790¤"Wild Ball"¤0¤2¤"HackJournal #19"¤4¤0¤3¤"Evo"¤"Wild_Mage"¤¤"Wild"¤¤
+791¤"Wind Wall"¤0¤0¤"Player’s Handbook"¤207¤0¤3¤"Alt"¤¤"Air"¤¤¤"s"
+792¤"Wraithform"¤0¤0¤"Player’s Handbook"¤207¤0¤3¤"Alt/Ill"¤¤¤¤¤"sS"
+793¤"Yargroove’s Eidelon"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤3¤"Enc"¤¤¤¤¤"S"
+794¤"Zargosa’s Flaming Spheres of Torment"¤0¤0¤"Player’s Handbook"¤207¤0¤3¤"Evo/Alt"¤¤"Fire"¤¤¤"sS"
+795¤"Zed’s Crystal Dirk"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤3¤"Con/Evo"¤¤"Earth"¤¤¤"S"
+796¤"Zone of Magical Resonance"¤0¤2¤"HackJournal #27"¤3¤0¤3¤"Abj"¤¤¤¤¤
+797¤"Ajamar’s Demonic Enchantment"¤0¤2¤"HackJournal #11"¤8¤0¤4¤"Con"¤¤¤¤¤
+798¤"Arbraxious’s Hyper Evolution"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤4¤"Alt"¤¤¤¤¤
+799¤"Arbraxious’s Levitation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤4¤"Alt"¤¤¤¤¤
+800¤"Boiling Blood"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤4¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+801¤"Charm Monster"¤0¤0¤"Player’s Handbook"¤207¤0¤4¤"Enc"¤¤¤¤¤"sS"
+802¤"Circle of Protection"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤93¤0¤4¤"Abj"¤¤¤¤¤"S"
+803¤"Close Portal"¤0¤0¤"Player’s Handbook"¤207¤0¤4¤"Alt"¤¤¤¤¤"sS"
+804¤"Confusion"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Enc"¤¤¤¤¤"sS"
+805¤"Contagion"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Nec"¤¤¤¤¤"sS"
+806¤"Delayed Magic Missile"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤96¤0¤4¤"Evo"¤¤¤¤¤"S"
+807¤"Demi-Smoke Monsters"¤0¤2¤"HackJournal #13"¤15¤0¤4¤"Ill"¤¤¤¤¤
+808¤"Detect Lie"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤96¤0¤4¤"Div"¤"Diviner/DS_Diviner/Detective"¤¤¤¤"S"
+809¤"Detect Scrying"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Div"¤¤¤¤¤"sS"
+810¤"Dig"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Evo"¤¤"Earth"¤¤¤"sS"
+811¤"Dimension Door"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Alt"¤¤¤¤¤"sS"
+812¤"Dispel Exhaustion"¤0¤0¤"Player’s Handbook"¤208¤0¤4¤"Ill"¤¤¤¤¤"sS"
+813¤"Divination Enhancement"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤4¤"Div"¤¤¤¤¤"S"
+814¤"Drifting Polymorph"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤98¤0¤4¤"Alt"¤"Conjurer/DS_Conjurer/SP_Conjurer"¤¤"Wild"¤¤
+815¤"Duplicate"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤98¤0¤4¤"Con"¤¤¤¤¤"S"
+816¤"Elenwyd’s Charm of Vitality"¤0¤2¤"HackJournal #5"¤12¤0¤4¤"Alt"¤¤¤¤¤
+817¤"Elenywd’s Miracle Diet"¤0¤2¤"HackJournal #5"¤12¤0¤4¤"Alt/Nec"¤¤¤¤¤
+818¤"Emergency Teleport at Random"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Alt"¤¤¤¤¤"sS"
+819¤"Emotion"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Enc"¤¤¤¤¤"sS"
+820¤"Enchanted Weapon"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Enc"¤¤¤¤¤"sS"
+821¤"Enervation"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Nec"¤¤¤¤¤"sS"
+822¤"Exploding Glyph"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤99¤0¤4¤"Abj/Evo"¤¤¤¤¤"S"
+823¤"Extension I"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Alt"¤¤¤¤¤"sS"
+824¤"Fear"¤0¤0¤"Player’s Handbook"¤209¤0¤4¤"Ill"¤¤¤¤¤"sS"
+825¤"Find Treasure"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤100¤0¤4¤"Div"¤¤¤¤¤"S"
+826¤"Fire Charm"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Enc"¤¤"Fire"¤¤¤"sS"
+827¤"Fire Shield"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Evo/Alt"¤¤"Fire"¤¤¤"sS"
+828¤"Fire Trap"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Abj/Evo"¤¤"Fire"¤¤¤"sS"
+829¤"Fireball, Land Scraper"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Evo"¤¤"Fire"¤¤¤"sS"
+830¤"Fireball, Sidewinder Factor 4"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Evo"¤¤"Fire"¤¤¤"sS"
+831¤"Fireball, Smoker"¤0¤2¤"HackJournal #26"¤5¤0¤4¤"Evo"¤¤¤¤¤
+832¤"Fireball, Twin-Twister"¤0¤2¤"HackJournal #26"¤5¤0¤4¤"Evo"¤¤¤¤¤
+833¤"Fireball, Volley"¤0¤0¤"Player’s Handbook"¤210¤0¤4¤"Evo"¤¤"Fire"¤¤¤"sS"
+834¤"Flying Familiar"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤4¤"Alt"¤¤¤¤¤"S"
+835¤"Force Grenade"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤4¤"Evo"¤¤¤¤¤"S"
+836¤"Free Action (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤4¤"Abj"¤¤¤¤¤
+837¤"Fumble"¤0¤0¤"Player’s Handbook"¤211¤0¤4¤"Enc"¤¤¤¤¤"sS"
+838¤"Gargezone’s Sphere of Chromatic Fever"¤0¤2¤"HackJournal #19"¤4¤0¤4¤"Evo/Ill/Enc"¤"Wild_Mage"¤¤"Wild"¤¤
+839¤"Haarpang’s Magnificent Sphere of Resiliency"¤0¤0¤"Player’s Handbook"¤211¤0¤4¤"Alt/Evo"¤¤¤¤¤"sS"
+840¤"Haarpang’s Memory Kick"¤0¤0¤"Player’s Handbook"¤211¤0¤4¤"Alt"¤¤¤¤¤"sS"
+841¤"Hallucinatory Terrain"¤0¤0¤"Player’s Handbook"¤211¤0¤4¤"Ill"¤¤¤¤¤"sS"
+842¤"Hurl Animal"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Alt"¤¤¤¤¤"sS"
+843¤"Ice Storm"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Evo"¤¤"Water"¤¤¤"sS"
+844¤"Illusionary Wall"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Ill"¤¤¤¤¤"sS"
+845¤"Improved Invisibility"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Ill"¤¤¤¤¤"sS"
+846¤"Improved Selective Invisibility"¤0¤3¤"Prophecy of Shardar"¤41¤0¤4¤"Ill"¤¤¤¤¤
+847¤"Le Matt’s Artfinder (for Diviners)"¤0¤2¤"HackJournal #24"¤10¤0¤4¤"Div"¤"Diviner/DS_Diviner/Detective/Seer"¤¤¤¤
+848¤"Lower Water"¤0¤0¤"Player’s Handbook"¤266¤0¤4¤"Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
+849¤"Lozhen’s Breath"¤0¤2¤"HackJournal #24"¤22¤0¤4¤"Con"¤¤¤¤"Does not require a spell license"¤
+850¤"Mage Lock"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Enc"¤¤¤¤¤"sS"
+851¤"Magic Mirror"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Enc/Div"¤¤¤¤¤"sS"
+852¤"Massmorph"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Alt"¤¤¤¤¤"sS"
+853¤"Minor Creation"¤0¤0¤"Player’s Handbook"¤212¤0¤4¤"Ill"¤¤¤¤¤"sS"
+854¤"Minor Globe of Invulnerability"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Abj"¤¤¤¤¤"sS"
+855¤"Mist of Corralling"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Evo"¤¤¤¤¤"sS"
+856¤"Monster Summoning II"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Con"¤¤¤¤¤"sS"
+857¤"Mulderi’s Climbing Claws"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤4¤"Alt"¤¤¤¤¤
+858¤"Murgander’s Gamble"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤4¤"Alt/Evo"¤"Wild_Mage"¤¤"Wild"¤¤
+859¤"Neutralize Poison"¤0¤0¤"Player’s Handbook"¤266¤0¤4¤"Nec"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+860¤"Omen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤4¤"Div"¤¤¤¤¤"S"
+861¤"Perpetual Shocking Grasp"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Alt"¤¤¤¤¤"sS"
+862¤"Phantasmal Killer"¤0¤0¤"Player’s Handbook"¤213¤0¤4¤"Ill"¤¤¤¤¤"sS"
+863¤"Pixie Wings"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤4¤"Alt"¤¤¤¤"Also see Adventurer’s Guide to Pixie Fairies, pg 63"¤"S"
+864¤"Plant Growth"¤0¤0¤"Player’s Handbook"¤214¤0¤4¤"Alt"¤¤¤¤¤"sS"
+865¤"Poison"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤4¤"Nec"¤¤¤¤¤"S"
+866¤"Polymorph Other"¤0¤0¤"Player’s Handbook"¤214¤0¤4¤"Alt"¤¤¤¤¤"sS"
+867¤"Polymorph Self"¤0¤0¤"Player’s Handbook"¤214¤0¤4¤"Alt"¤¤¤¤¤"sS"
+868¤"Power Word: Anosmitize"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤4¤"Con"¤¤¤¤¤"S"
+869¤"Power Word: Freeze"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤4¤"Con"¤¤¤¤¤"S"
+870¤"Power Word: Slow"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤4¤"Con"¤¤¤¤¤"S"
+871¤"Produce Fire"¤0¤0¤"Player’s Handbook"¤285¤0¤4¤"Alt"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
+872¤"Protection from Elementals"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤0¤4¤"Abj"¤"Air_Elementalist/Earth_Elementalist/Fire_Elementalist/Water_Elementalist"¤"Air/Earth/Fire/Water"¤"Elementalist"¤¤
+873¤"Protection from Lightning"¤0¤0¤"Player’s Handbook"¤286¤0¤4¤"Abj"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+874¤"Protection from Lightning (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤4¤"Abj"¤¤¤¤¤
+875¤"Protection from Water"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤0¤4¤"Abj/Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
+876¤"Rainbow Pattern"¤0¤0¤"Player’s Handbook"¤214¤0¤4¤"Alt/Ill"¤¤¤¤¤"sS"
+877¤"Remove Curse"¤1¤0¤"Player’s Handbook"¤215¤0¤4¤"Abj"¤¤¤¤¤"sS"
+878¤"Remove Limb"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤117¤0¤4¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+879¤"Segwick’s Tool Box"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤4¤"Con"¤¤¤¤¤"S"
+880¤"Shadow Monsters"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Ill"¤¤¤¤¤"sS"
+881¤"Shout"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Evo"¤¤¤¤¤"sS"
+882¤"Silver Globes"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤4¤"Evo/Con"¤¤¤¤"See Errata"¤"S"
+883¤"Sliggderlisp’s Particularly Noxious Depilatory Cloud"¤0¤3¤"White Doom Mountain"¤39¤0¤4¤"Evo"¤¤¤¤¤
+884¤"Smoke Signals, Greater"¤0¤2¤"HackJournal #13"¤15¤0¤4¤"Alt"¤¤¤¤¤
+885¤"Solid Fog"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Alt"¤¤"Air"¤¤¤"sS"
+886¤"Spell Immunity (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤4¤"Abj"¤¤¤¤¤
+887¤"Spike Stones"¤0¤0¤"Player’s Handbook"¤288¤0¤4¤"Alt/Enc"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+888¤"Stirring Oration"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Enc"¤¤¤¤¤"sS"
+889¤"Stone Passage"¤0¤0¤"Player’s Handbook"¤215¤0¤4¤"Alt"¤¤"Earth"¤¤¤"sS"
+890¤"Stones to Spiders"¤0¤3¤"Annihilate the Giants"¤95¤0¤4¤"Alt"¤¤"Earth"¤¤¤
+891¤"Stoneskin"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Alt"¤¤"Earth"¤¤¤"sS"
+892¤"There/Not There"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤4¤"Alt/Evo"¤"Wild_Mage"¤¤"Wild"¤¤
+893¤"Toxic Web"¤0¤3¤"Annihilate the Giants"¤94¤0¤4¤"Evo"¤¤¤¤¤
+894¤"Tusks of the Oliphant"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤122¤0¤4¤"Alt"¤¤¤¤¤"S"
+895¤"Ultravision"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Alt"¤¤¤¤¤"sS"
+896¤"Unluck"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤122¤0¤4¤"Evo"¤"Wild_Mage"¤¤"Wild"¤¤
+897¤"Unseen Repair Crew"¤0¤1¤"HackJammer"¤121¤0¤4¤"Alt"¤¤¤¤¤
+898¤"Unseen Weightlifter"¤0¤2¤"HackJournal #24"¤11¤0¤4¤"Con"¤¤¤¤¤
+899¤"Vacancy"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Alt/Ill"¤¤¤¤¤"sS"
+900¤"Wall of Acid"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Evo"¤¤¤¤¤"sS"
+901¤"Wall of Bronze"¤0¤2¤"HackJournal #24"¤25¤0¤4¤"Evo"¤¤¤¤¤
+902¤"Wall of Fire"¤0¤0¤"Player’s Handbook"¤216¤0¤4¤"Evo"¤¤"Fire"¤¤¤"sS"
+903¤"Wall of Ice"¤0¤0¤"Player’s Handbook"¤217¤0¤4¤"Evo"¤¤"Water"¤¤¤"sS"
+904¤"Warp Stone or Metal"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤0¤4¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+905¤"Wimpel’s Dispelling Screen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤4¤"Abj/Evo"¤¤¤¤¤"S"
+906¤"Wizard Eye"¤0¤0¤"Player’s Handbook"¤217¤0¤4¤"Alt"¤¤¤¤¤"sS"
+907¤"Zargosa’s Lodge of Protection"¤0¤0¤"Player’s Handbook"¤217¤0¤4¤"Alt/Enc"¤¤¤¤¤"sS"
+908¤"Zargosa’s Tentacled Fury"¤0¤0¤"Player’s Handbook"¤217¤0¤4¤"Con"¤¤¤¤¤"sS"
+909¤"Zombie Slave"¤0¤0¤"Player’s Handbook"¤218¤0¤4¤"Nec"¤¤¤¤¤"sS"
+910¤"Zone of Sweet Air"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤118¤0¤4¤"Abj"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+911¤"Zone of Sweet Air (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤4¤"Abj"¤¤¤¤¤
+912¤"Abjure (Codex ver.)"¤0¤2¤"HackJournal #27"¤4¤0¤5¤"Abj"¤¤¤¤¤
+913¤"Advanced Illusion"¤0¤0¤"Player’s Handbook"¤218¤0¤5¤"Ill"¤¤¤¤¤"sS"
+914¤"Air Walk"¤0¤0¤"Player’s Handbook"¤267¤0¤5¤"Alt"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+915¤"Airy Water"¤0¤0¤"Player’s Handbook"¤218¤0¤5¤"Alt"¤¤"Air/Water"¤¤¤"sS"
+916¤"Animal Growth"¤1¤0¤"Player’s Handbook"¤218¤0¤5¤"Alt"¤¤¤¤¤"sS"
+917¤"Animate Dead"¤0¤0¤"Player’s Handbook"¤218¤0¤5¤"Nec"¤¤¤¤¤"sS"
+918¤"Arbraxious’s Horrid Maw"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤5¤"Alt"¤¤¤¤¤
+919¤"Avoidance"¤1¤0¤"Player’s Handbook"¤218¤0¤5¤"Abj/Alt"¤¤¤¤¤"sS"
+920¤"Blood Rot"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤5¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+921¤"Breed Fusion"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤93¤0¤5¤"Alt"¤¤¤¤¤"S"
+922¤"Centaur’s Gift, The"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤93¤0¤5¤"Alt"¤¤¤¤¤"S"
+923¤"Chaos"¤0¤0¤"Player’s Handbook"¤219¤0¤5¤"Enc"¤¤¤¤¤"sS"
+924¤"Cloudkill"¤0¤0¤"Player’s Handbook"¤219¤0¤5¤"Evo"¤¤"Air"¤¤¤"sS"
+925¤"Conjure Elemental"¤0¤0¤"Player’s Handbook"¤219¤0¤5¤"Con"¤¤"Air/Earth/Fire/Water"¤¤¤"sS"
+926¤"Contact Other Plane"¤0¤0¤"Player’s Handbook"¤219¤0¤5¤"Div"¤¤¤¤¤"sS"
+927¤"Containment"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Abj"¤¤¤¤¤"s"
+928¤"Create Portal"¤0¤1¤"HackJammer"¤121¤0¤5¤"Alt"¤¤¤¤¤
+929¤"Demi-Shadow Monster"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Ill"¤¤¤¤¤"sS"
+930¤"Dismissal"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Abj"¤¤¤¤¤"sS"
+931¤"Distance Distortion"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Alt"¤¤¤¤¤"sS"
+932¤"Dolor"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Enc"¤¤¤¤¤"sS"
+933¤"Domination"¤0¤0¤"Player’s Handbook"¤220¤0¤5¤"Enc"¤¤¤¤¤"sS"
+934¤"Drayton’s Engaging Conversation"¤0¤0¤"Player’s Handbook"¤221¤0¤5¤"Enc/Evo"¤¤¤¤¤"sS"
+935¤"Drayton’s Hidden Stash"¤0¤0¤"Player’s Handbook"¤221¤0¤5¤"Alt/Con"¤¤¤¤¤"S"
+936¤"Dream"¤0¤0¤"Player’s Handbook"¤221¤0¤5¤"Evo/Ill"¤¤¤¤¤"sS"
+937¤"Elenwyd’s Beautiful Flower"¤0¤2¤"HackJournal #5"¤12¤0¤5¤"Alt"¤¤¤¤¤
+938¤"Elenwyd’s Fashion Sense"¤0¤2¤"HackJournal #5"¤12¤0¤5¤"Alt/Enc"¤¤¤¤¤
+939¤"Enhance Maneuverability"¤1¤1¤"HackJammer"¤121¤0¤5¤"Alt"¤¤¤¤¤
+940¤"Extension II"¤0¤0¤"Player’s Handbook"¤221¤0¤5¤"Alt"¤¤¤¤¤"sS"
+941¤"Fabricate"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Enc"¤¤¤¤¤"sS"
+942¤"False Vision"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Div"¤¤¤¤¤"sS"
+943¤"Feeblemind"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Enc"¤¤¤¤¤"sS"
+944¤"Fireball, Sidewinder Factor 5"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Evo"¤¤"Fire"¤¤¤"sS"
+945¤"Fireball, Splatterball"¤0¤2¤"HackJournal #26"¤5¤0¤5¤"Evo"¤¤¤¤¤
+946¤"Fireball, Torrential"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Evo"¤¤"Fire"¤¤¤"sS"
+947¤"Flame Strike"¤0¤0¤"Player’s Handbook"¤268¤0¤5¤"Evo"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
+948¤"Force Shapechange"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤5¤"Nec"¤¤¤¤¤"S"
+949¤"Gabal’s Permanent Magical Aura"¤0¤3¤"Descent into the NetherDeep"¤44¤0¤5¤"Ill"¤¤¤¤¤
+950¤"Haarpang’s Polar Screen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤5¤"Evo"¤¤¤¤¤"S"
+951¤"Hiamohr’s Unfortunate Incident"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤5¤"Alt"¤¤¤¤¤"S"
+952¤"Hold Monster"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Enc"¤¤¤¤¤"sS"
+953¤"Hyptor’s Faithful Bitch-Hound"¤0¤0¤"Player’s Handbook"¤222¤0¤5¤"Con"¤¤¤¤¤"sS"
+954¤"Jorrel’s Private Sanctum"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤106¤0¤5¤"Abj/Alt"¤¤¤¤¤"S"
+955¤"Le Matt’s Artfinder"¤0¤2¤"HackJournal #24"¤10¤0¤5¤"Div"¤¤¤¤¤
+956¤"Lizenz’s Dark Wings"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤63¤0¤5¤"Alt"¤¤¤¤"See Errata"¤
+957¤"Lyggl’s Cone of Cold"¤0¤0¤"Player’s Handbook"¤223¤0¤5¤"Evo"¤¤¤¤¤"sS"
+958¤"Magic Jar"¤0¤0¤"Player’s Handbook"¤223¤0¤5¤"Nec"¤¤¤¤¤"S"
+959¤"Magic Staff"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤107¤0¤5¤"Enc"¤¤¤¤¤"S"
+960¤"Major Creation"¤0¤0¤"Player’s Handbook"¤223¤0¤5¤"Ill"¤¤¤¤¤"sS"
+961¤"Manor’s Mindsight"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤108¤0¤5¤"Alt/Div"¤¤¤¤¤"S"
+962¤"Minor Globe of Invulnerability, Mobile"¤0¤2¤"HackJournal #27"¤4¤0¤5¤"Abj"¤¤¤¤¤
+963¤"Monster Summoning III"¤0¤0¤"Player’s Handbook"¤223¤0¤5¤"Con"¤¤¤¤¤"sS"
+964¤"Mummy Rot"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤110¤0¤5¤"Nec"¤¤¤¤¤"sS"
+965¤"Non-Magical Aura"¤0¤2¤"HackJournal #27"¤5¤0¤5¤"Abj"¤¤¤¤¤
+966¤"Pathorgian Death Hex"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤111¤0¤5¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+967¤"Polymorph Plant to Mammal"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤5¤"Alt"¤¤¤¤¤"S"
+968¤"Power Word: Charm"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤5¤"Con"¤¤¤¤¤"S"
+969¤"Power Word: Fear"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤5¤"Con"¤¤¤¤¤"S"
+970¤"Power Word: Sleep"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤5¤"Con"¤¤¤¤¤"S"
+971¤"Preemptive Dispel"¤0¤2¤"HackJournal #27"¤5¤0¤5¤"Abj"¤¤¤¤¤
+972¤"Preston’s Moonbow"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤5¤"Evo"¤¤¤¤¤"S"
+973¤"Protection from Acid (Codex ver.)"¤0¤2¤"HackJournal #27"¤5¤0¤5¤"Abj"¤¤¤¤¤
+974¤"Protection from Neferians (Codex ver.)"¤0¤2¤"HackJournal #27"¤5¤0¤5¤"Abj"¤¤¤¤¤
+975¤"Protection from Petrification (Codex ver.)"¤0¤2¤"HackJournal #27"¤6¤0¤5¤"Abj"¤¤¤¤¤
+976¤"Rainbow"¤0¤0¤"Player’s Handbook"¤268¤0¤5¤"Evo/Alt"¤"Water_Elementalist"¤"Water"¤"Elementalist"¤¤
+977¤"Retain Air Envelope"¤0¤1¤"HackJammer"¤122¤0¤5¤"Alt"¤¤"Air"¤¤¤
+978¤"Seeming"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Ill"¤¤¤¤¤"sS"
+979¤"Segwick’s Seeking"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤5¤"Div"¤¤¤¤¤"S"
+980¤"Sending"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Evo"¤¤¤¤¤"sS"
+981¤"Sensory Control"¤0¤3¤"Prophecy of Shardar"¤41¤0¤5¤"Ill"¤¤¤¤¤
+982¤"Shadow Door"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Ill"¤¤¤¤¤"sS"
+983¤"Shadow Magic"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Ill"¤¤¤¤¤"sS"
+984¤"Shaheezeer’s Molten Encompassment"¤0¤1¤"City of Brass"¤123¤0¤5¤"Alt"¤¤¤¤¤
+985¤"Shincock’s Major Missile"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤5¤"Evo"¤¤¤¤¤"S"
+986¤"Sink Into Earth"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤0¤5¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+987¤"Smoking Spheres of DOOM"¤0¤2¤"HackJournal #13"¤16¤0¤5¤"Alt/Nec"¤¤¤¤¤
+988¤"Snarcher’s Corkscrewing Smoking Magic Missile"¤0¤3¤"Wryneck’s Wheelhouse"¤43¤0¤5¤"Alt"¤¤¤¤¤
+989¤"Spell Shield"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤5¤"Abj"¤¤¤¤¤"S"
+990¤"Spike Growth"¤0¤0¤"Player’s Handbook"¤270¤0¤5¤"Alt/Enc"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+991¤"Spike Stones"¤0¤0¤"Player’s Handbook"¤288¤0¤5¤"Alt/Enc"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+992¤"Stone Shape"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Alt"¤¤"Earth"¤¤¤"sS"
+993¤"Stone Sphere"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Evo"¤¤"Earth"¤¤¤"sS"
+994¤"Summon Shadow"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Con/Nec"¤¤¤¤¤"sS"
+995¤"Telekinesis"¤0¤0¤"Player’s Handbook"¤224¤0¤5¤"Alt"¤¤¤¤¤"sS"
+996¤"Teleport"¤0¤0¤"Player’s Handbook"¤225¤0¤5¤"Alt"¤¤¤¤¤"sS"
+997¤"Tempus Fugit"¤1¤0¤"Player’s Handbook"¤225¤0¤5¤"Ill"¤¤¤¤¤"sS"
+998¤"Throbbing Bones"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤5¤"Nec"¤¤¤¤¤"S"
+999¤"Touch of Death"¤0¤0¤"Player’s Handbook"¤225¤0¤5¤"Nec"¤¤¤¤¤"sS"
+1000¤"Transmute Stone to Mud"¤1¤0¤"Player’s Handbook"¤225¤0¤5¤"Alt"¤¤"Earth"¤¤¤"sS"
+1001¤"Vortex"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤5¤"Evo"¤"Wild_Mage"¤¤"Wild"¤¤
+1002¤"Wall of Bones"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤5¤"Nec/Con"¤¤¤¤¤"S"
+1003¤"Wall of Force"¤0¤0¤"Player’s Handbook"¤225¤0¤5¤"Evo"¤¤¤¤¤"sS"
+1004¤"Wall of Iron"¤0¤0¤"Player’s Handbook"¤226¤0¤5¤"Evo"¤¤¤¤¤"sS"
+1005¤"Wall of Stone"¤0¤0¤"Player’s Handbook"¤226¤0¤5¤"Evo"¤¤"Earth"¤¤¤"sS"
+1006¤"Wall Passage"¤0¤0¤"Player’s Handbook"¤226¤0¤5¤"Alt"¤¤¤¤¤"sS"
+1007¤"Water Bomb"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤124¤0¤5¤"Con"¤¤"Water"¤¤¤"S"
+1008¤"Waveform"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤124¤0¤5¤"Alt"¤"Wild_Mage/Water_Elementalist/Icer"¤"Water"¤"Wild"¤¤
+1009¤"Wild Terrain"¤0¤2¤"HackJournal #19"¤5¤0¤5¤"Ill"¤"Wild_Mage"¤¤"Wild"¤¤
+1010¤"Wings of PanDemonium"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤5¤"Alt"¤¤¤¤¤"S"
+1011¤"Wizard’s Oracle"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤5¤"Div"¤¤¤¤¤"S"
+1012¤"Zarba’s Guardian Hand"¤0¤0¤"Player’s Handbook"¤226¤0¤5¤"Evo"¤¤¤¤¤"sS"
+1013¤"Aerial Servant"¤0¤0¤"Player’s Handbook"¤270¤0¤6¤"Con"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+1014¤"Air Barrage"¤0¤2¤"HackJournal #24"¤21¤0¤6¤"Evo"¤¤¤¤¤
+1015¤"Aliron’s Dark Graft"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤89¤0¤6¤"Nec"¤¤"Air"¤¤¤"S"
+1016¤"Anti-Animal Shell"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤6¤"Abj"¤"Abjurer/DS_Abjurer/Guardian"¤¤¤¤"S"
+1017¤"Anti-Magic Shell"¤0¤0¤"Player’s Handbook"¤226¤0¤6¤"Abj"¤¤¤¤¤"sS"
+1018¤"Blazing Blood"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤6¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+1019¤"Body Heat Activation Spell"¤0¤0¤"Player’s Handbook"¤226¤0¤6¤"Evo"¤¤¤¤¤"sS"
+1020¤"Bradley’s Besieging Bolt"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤6¤"Evo"¤¤¤¤¤"S"
+1021¤"Break Hex"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Abj"¤¤¤¤¤"sS"
+1022¤"Caltrops of Chaos"¤0¤2¤"HackJournal #19"¤3¤0¤6¤"Evo/Alt"¤"Wild_Mage"¤¤"Wild"¤¤
+1023¤"Chain Lightning"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Evo"¤¤¤¤¤"sS"
+1024¤"Charm of Undying Devotion"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Enc"¤¤¤¤¤"sS"
+1025¤"Conjure Animals"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Con"¤¤¤¤¤"sS"
+1026¤"Contingency"¤0¤0¤"Player’s Handbook"¤227¤0¤6¤"Evo"¤¤¤¤¤"sS"
+1027¤"Control Weather"¤0¤0¤"Player’s Handbook"¤228¤0¤6¤"Alt"¤¤"Air/Water"¤¤¤"sS"
+1028¤"Control Winds"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤0¤6¤"Alt"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+1029¤"Create Minor Helm"¤0¤1¤"HackJammer"¤122¤0¤6¤"Enc"¤¤¤¤¤
+1030¤"Cytogenesis"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤94¤0¤6¤"Alt/Nec"¤¤¤¤¤"S"
+1031¤"Dead Man’s Eyes"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤95¤0¤6¤"Nec"¤¤¤¤¤"S"
+1032¤"Death Fog"¤0¤0¤"Player’s Handbook"¤228¤0¤6¤"Alt/Nec"¤¤"Air"¤¤¤"sS"
+1033¤"Death Spell"¤0¤0¤"Player’s Handbook"¤228¤0¤6¤"Nec"¤¤¤¤¤"sS"
+1034¤"Demi-Shadow Magic"¤0¤0¤"Player’s Handbook"¤228¤0¤6¤"Ill"¤¤¤¤¤"sS"
+1035¤"Detect Ulterior Motive"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤6¤"Div"¤"Diviner/DS_Diviner/Detective"¤¤¤¤"S"
+1036¤"Disintegrate"¤0¤0¤"Player’s Handbook"¤229¤0¤6¤"Alt"¤¤"Earth"¤¤¤"sS"
+1037¤"Dispel Evil (Codex Ver.)"¤1¤2¤"HackJournal #27"¤6¤0¤6¤"Abj"¤¤¤¤¤
+1038¤"Elenwyd’s Day in the Life of a Courtesan"¤0¤2¤"HackJournal #5"¤12¤0¤6¤"Alt"¤¤¤¤¤
+1039¤"Enchant an Item"¤0¤0¤"Player’s Handbook"¤229¤0¤6¤"Enc/Evo"¤¤¤¤¤"sS"
+1040¤"Ensnarement"¤0¤0¤"Player’s Handbook"¤229¤0¤6¤"Con"¤¤¤¤¤"sS"
+1041¤"Extension III"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Alt"¤¤¤¤¤"sS"
+1042¤"Eyebite"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Enc/Ill"¤¤¤¤¤"sS"
+1043¤"Fandango’s Fiery Constrictor"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤99¤0¤6¤"Con"¤¤"Fire"¤¤¤"S"
+1044¤"Fire Seeds"¤0¤0¤"Player’s Handbook"¤289¤0¤6¤"Con"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
+1045¤"Fireball, Aerial Firework"¤0¤2¤"HackJournal #26"¤5¤0¤6¤"Evo"¤¤¤¤¤
+1046¤"Fireball, Proximity Fused"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Evo"¤¤"Fire"¤¤¤"sS"
+1047¤"Fireball, Show-No-Mercy"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Evo"¤¤"Fire"¤¤¤"sS"
+1048¤"Gauntlet of Teeth"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤102¤0¤6¤"Evo"¤¤¤¤¤"S"
+1049¤"Geas"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Enc"¤¤¤¤¤"sS"
+1050¤"Glassee"¤0¤0¤"Player’s Handbook"¤230¤0¤6¤"Alt"¤¤¤¤¤"sS"
+1051¤"Globe of Invulnerability"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Abj"¤¤¤¤¤"sS"
+1052¤"Guards and Wards"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Evo/Alt/Enc"¤¤¤¤¤"sS"
+1053¤"Haarpang’s Magnificent Sphere of Freezing"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Alt/Evo"¤¤¤¤¤"sS"
+1054¤"Haarpang’s Orb of Containment"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤6¤"Evo"¤¤¤¤¤"S"
+1055¤"Hyptor’s Total Recall"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Alt"¤¤¤¤¤"sS"
+1056¤"Illstiwilly’s Great Smoky Dodecagon Veil"¤0¤2¤"HackJournal #13"¤15¤0¤6¤"Alt/Ill"¤¤¤¤¤
+1057¤"Invisible Stalker"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Con"¤¤"Air"¤¤¤"sS"
+1058¤"Invulnerability to Magical Weapons"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤105¤0¤6¤"Abj"¤¤¤¤¤"S"
+1059¤"Karnaac’s Transformation"¤0¤0¤"Player’s Handbook"¤231¤0¤6¤"Alt/Evo"¤¤¤¤¤"sS"
+1060¤"Legend Lore"¤0¤0¤"Player’s Handbook"¤232¤0¤6¤"Div"¤¤¤¤¤"sS"
+1061¤"Lower Water"¤1¤0¤"Player’s Handbook"¤232¤0¤6¤"Alt"¤¤¤¤¤"sS"
+1062¤"Major Dispel"¤0¤2¤"HackJournal #27"¤6¤0¤6¤"Abj"¤¤¤¤¤
+1063¤"Mass Suggestion"¤0¤0¤"Player’s Handbook"¤232¤0¤6¤"Enc"¤¤¤¤¤"sS"
+1064¤"Mirage Arcana"¤0¤0¤"Player’s Handbook"¤232¤0¤6¤"Ill/Alt"¤¤¤¤¤"sS"
+1065¤"Mislead"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Ill"¤¤¤¤¤"sS"
+1066¤"Monster Summoning IV"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Con"¤¤¤¤¤"sS"
+1067¤"Move Earth"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Alt"¤¤"Earth"¤¤¤"sS"
+1068¤"Part Water"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Alt"¤¤"Water"¤¤¤"sS"
+1069¤"Perpetual Illusion"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Ill"¤¤¤¤¤"sS"
+1070¤"Phantasmagoria"¤0¤0¤"Player’s Handbook"¤233¤0¤6¤"Ill"¤¤¤¤¤"sS"
+1071¤"Power Word: Forget"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤6¤"Con"¤¤¤¤¤"S"
+1072¤"Power Word: Silence"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤6¤"Con"¤¤¤¤¤"S"
+1073¤"Programmed Illusion"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Ill"¤¤¤¤¤"sS"
+1074¤"Project Image"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Alt/Ill"¤¤¤¤¤"sS"
+1075¤"Reincarnation"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Nec"¤¤¤¤¤"sS"
+1076¤"Repulsion"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Abj"¤¤¤¤¤"sS"
+1077¤"Revelation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤117¤0¤6¤"Div"¤¤¤¤¤"S"
+1078¤"Shades"¤0¤0¤"Player’s Handbook"¤234¤0¤6¤"Ill"¤¤¤¤¤"sS"
+1079¤"Snap Drake"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤6¤"Evo"¤¤¤¤¤"S"
+1080¤"Spiritwrack"¤0¤0¤"Player’s Handbook"¤235¤0¤6¤"Evo/Abj"¤¤¤¤¤"sS"
+1081¤"Stone Tell"¤0¤0¤"Player’s Handbook"¤272¤0¤6¤"Div"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+1082¤"Stone to Flesh"¤1¤0¤"Player’s Handbook"¤235¤0¤6¤"Alt"¤¤"Earth"¤¤¤"sS"
+1083¤"Tentacles"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤6¤"Alt/Con"¤¤¤¤¤"S"
+1084¤"Transmute Metal to Water"¤1¤1¤"Spellslinger’s Guide to Wurld Domination"¤121¤0¤6¤"Alt"¤¤"Water"¤¤¤"S"
+1085¤"Transmute Water to Dust"¤0¤0¤"Player’s Handbook"¤235¤0¤6¤"Alt"¤¤"Water"¤¤¤"S"
+1086¤"True Seeing"¤0¤0¤"Player’s Handbook"¤235¤0¤6¤"Div"¤¤¤¤¤"S"
+1087¤"Veil"¤0¤0¤"Player’s Handbook"¤235¤0¤6¤"Ill"¤¤¤¤¤"sS"
+1088¤"Velimurio’s Merger"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤6¤"Alt"¤¤¤¤¤"S"
+1089¤"Wall of Blood"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤6¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+1090¤"Wall of Thorns"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤123¤0¤6¤"Con"¤"Conjurer/DS_Conjurer/SP_Conjurer"¤¤¤¤"S"
+1091¤"Weather Summoning"¤0¤0¤"Player’s Handbook"¤291¤0¤6¤"Con"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+1092¤"Whirlwind"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤0¤6¤"Evo"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+1093¤"Wildshield"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤6¤"Con"¤"Wild_Mage/Guardian"¤¤"Wild"¤¤
+1094¤"Wildstrike"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤6¤"Con"¤"Wild_Mage/Anti-Mage"¤¤"Wild"¤¤
+1095¤"Zarba’s Shoving Hand"¤0¤0¤"Player’s Handbook"¤236¤0¤6¤"Evo"¤¤¤¤¤"sS"
+1096¤"Zarba’s Sphere of Personal Inclement Weather"¤0¤0¤"Player’s Handbook"¤236¤0¤6¤"Alt"¤¤¤¤¤"sS"
+1097¤"Anger Deity"¤0¤0¤"Player’s Handbook"¤236¤0¤7¤"Enc"¤¤¤¤¤"sS"
+1098¤"Animate Rock"¤0¤0¤"Player’s Handbook"¤291¤0¤7¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+1099¤"Anticipation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤7¤"Div"¤¤¤¤¤"S"
+1100¤"Banishment"¤0¤0¤"Player’s Handbook"¤236¤0¤7¤"Abj"¤¤¤¤¤"sS"
+1101¤"Blood Drain"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤7¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+1102¤"Bone Javelin"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤92¤0¤7¤"Alt/Evo"¤¤¤¤¤"S"
+1103¤"Cacodemon"¤0¤0¤"Player’s Handbook"¤236¤0¤7¤"Con"¤¤¤¤¤"sS"
+1104¤"Chariot of Sustarre"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤93¤0¤7¤"Alt"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
+1105¤"Charm Plants"¤0¤0¤"Player’s Handbook"¤237¤0¤7¤"Enc"¤¤¤¤¤"sS"
+1106¤"Command Element"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤94¤0¤7¤"Alt"¤¤"Air/Earth/Fire/Water"¤¤¤"S"
+1107¤"Control Undead"¤0¤0¤"Player’s Handbook"¤237¤0¤7¤"Nec"¤¤¤¤¤"sS"
+1108¤"Create Blood Golem"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤94¤0¤7¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+1109¤"Create Major Helm"¤0¤1¤"HackJammer"¤122¤0¤7¤"Enc"¤¤¤¤¤
+1110¤"Create Shade"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤94¤0¤7¤"Alt"¤¤¤¤¤"S"
+1111¤"Dragon Breath"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤98¤0¤7¤"Evo"¤¤¤¤¤"S"
+1112¤"Duo-Dimension"¤0¤0¤"Player’s Handbook"¤237¤0¤7¤"Alt"¤¤¤¤¤"sS"
+1113¤"Earthquake"¤0¤0¤"Player’s Handbook"¤273¤0¤7¤"Alt"¤"Earth_Elementalist"¤"Earth"¤"Elementalist"¤¤
+1114¤"Find the Path"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤100¤0¤7¤"Div"¤"Diviner/DS_Diviner/Detective"¤¤¤¤"S"
+1115¤"Finger of Death"¤0¤0¤"Player’s Handbook"¤237¤0¤7¤"Nec"¤¤¤¤¤"sS"
+1116¤"Fire Storm"¤0¤0¤"Player’s Handbook"¤293¤0¤7¤"Evo"¤"Fire_Elementalist"¤"Fire"¤"Elementalist"¤¤
+1117¤"Fireball, Delayed Blast"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Evo"¤¤"Fire"¤¤¤"sS"
+1118¤"Flame Chase"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤100¤0¤7¤"Evo"¤¤¤¤¤"S"
+1119¤"Forcecage"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Evo"¤¤¤¤¤"sS"
+1120¤"Guntar’s Dweomer of Elusive Enchantment"¤0¤2¤"HackJournal #8"¤10¤0¤7¤"Alt"¤¤¤¤¤
+1121¤"Harm"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤7¤"Nec"¤¤¤¤¤"S"
+1122¤"Hyptor’s Shimmering Sword"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Evo"¤¤¤¤¤"sS"
+1123¤"Life Creation"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤106¤0¤7¤"Alt"¤¤¤¤¤"S"
+1124¤"Limited Wish"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Con/Evo"¤¤¤¤¤"sS"
+1125¤"Major Domination"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤108¤0¤7¤"Enc"¤¤¤¤¤"S"
+1126¤"Manor’s Mind Vision"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤108¤0¤7¤"Div"¤¤¤¤¤"S"
+1127¤"Mass Hypnosis"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤7¤"Enc/Ill"¤¤¤¤¤"S"
+1128¤"Mass Invisibility"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Ill"¤¤¤¤¤"sS"
+1129¤"Merrywether’s Dramatic Death"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤7¤"Ill"¤¤"Water"¤¤¤"S"
+1130¤"Merrywether’s Frost Fist"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤7¤"Evo"¤¤¤¤¤"S"
+1131¤"Monster Summoning V"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Con"¤¤¤¤¤"sS"
+1132¤"Phase Door"¤0¤0¤"Player’s Handbook"¤238¤0¤7¤"Alt"¤¤¤¤¤"sS"
+1133¤"Power Word: Deafen"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤7¤"Con"¤¤¤¤¤"S"
+1134¤"Power Word: Dispel"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤7¤"Con"¤¤¤¤¤"S"
+1135¤"Power Word: Heal"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤114¤0¤7¤"Con"¤¤¤¤¤"S"
+1136¤"Power Word: Stun"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Con"¤¤¤¤¤"sS"
+1137¤"Prismatic Wall"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Con"¤¤¤¤¤"s"
+1138¤"Reverse Gravity"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Alt"¤¤"Earth"¤¤¤"sS"
+1139¤"Sanboreg’s Surge Selector"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤7¤"Alt"¤"Wild_Mage/Magician"¤¤"Wild"¤¤
+1140¤"Sequester"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Ill/Abj"¤¤¤¤¤"sS"
+1141¤"Shadow Walk"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Ill"¤¤¤¤¤"sS"
+1142¤"Shadowcat"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤7¤"Ill"¤¤¤¤¤"S"
+1143¤"Simulacrum"¤0¤0¤"Player’s Handbook"¤239¤0¤7¤"Ill"¤¤¤¤¤"sS"
+1144¤"Spell Shape"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤7¤"Alt"¤"Wild_Mage/Anti-Mage"¤¤"Wild"¤¤
+1145¤"Spell Turning"¤0¤0¤"Player’s Handbook"¤240¤0¤7¤"Abj"¤¤¤¤¤"sS"
+1146¤"Statue"¤0¤0¤"Player’s Handbook"¤240¤0¤7¤"Alt"¤¤"Earth"¤¤¤"sS"
+1147¤"Steal Enchantment"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤7¤"Enc"¤¤¤¤¤"S"
+1148¤"Teleport without Error"¤0¤0¤"Player’s Handbook"¤240¤0¤7¤"Alt"¤¤¤¤¤"sS"
+1149¤"Torment"¤0¤0¤"Player’s Handbook"¤240¤0¤7¤"Evo/Alt"¤¤¤¤¤"sS"
+1150¤"Transmute Rock to Lava"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Alt"¤¤"Earth/Fire"¤¤¤"sS"
+1151¤"Truename"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Enc/Alt"¤¤¤¤¤"sS"
+1152¤"Tybalt’s Planar Pacifier"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤122¤0¤7¤"Alt/Enc"¤¤¤¤¤"S"
+1153¤"Vanish"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Alt"¤¤¤¤¤"sS"
+1154¤"Vision"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Div"¤¤¤¤¤"sS"
+1155¤"Volley"¤0¤0¤"Player’s Handbook"¤241¤0¤7¤"Abj"¤¤¤¤¤"sS"
+1156¤"Wind Walk"¤0¤0¤"Player’s Handbook"¤275¤0¤7¤"Alt"¤"Air_Elementalist"¤"Air"¤"Elementalist"¤¤
+1157¤"Zarba’s Grasping Hand"¤0¤0¤"Player’s Handbook"¤242¤0¤7¤"Evo"¤¤¤¤¤"sS"
+1158¤"Zarba’s Sphere of Insanity"¤0¤0¤"Player’s Handbook"¤242¤0¤7¤"Enc"¤¤¤¤¤"sS"
+1159¤"Zargosa’s Instant Summons"¤0¤0¤"Player’s Handbook"¤242¤0¤7¤"Con"¤¤¤¤¤"sS"
+1160¤"Zargosa’s Opulent Manor House"¤0¤0¤"Player’s Handbook"¤242¤0¤7¤"Alt"¤¤¤¤¤"sS"
+1161¤"Zombie Double"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤126¤0¤7¤"Nec"¤¤¤¤¤"S"
+1162¤"Zone of Weakened Magicks"¤0¤2¤"HackJournal #27"¤6¤0¤7¤"Abj"¤¤¤¤¤
+1163¤"Age"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤89¤0¤8¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+1164¤"Antipathy-Sympathy"¤0¤0¤"Player’s Handbook"¤243¤0¤8¤"Enc"¤¤¤¤¤"s"
+1165¤"Binding"¤0¤0¤"Player’s Handbook"¤243¤0¤8¤"Enc/Evo"¤¤¤¤¤"s"
+1166¤"Blizzard"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤8¤"Evo"¤¤"Water"¤¤¤"S"
+1167¤"Clone"¤0¤0¤"Player’s Handbook"¤243¤0¤8¤"Nec"¤¤¤¤¤"sS"
+1168¤"Cluo’s Curse"¤0¤2¤"HackJournal #24"¤22¤0¤8¤"Nec"¤¤¤¤"AKA Cluo’s Folly"¤
+1169¤"Conjure Greater Elemental"¤0¤2¤"HackJournal #11"¤8¤0¤8¤"Con"¤¤¤¤¤
+1170¤"Create Atmosphere"¤1¤1¤"HackJammer"¤122¤0¤8¤"Alt"¤¤¤¤¤
+1171¤"Death Chain"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤95¤0¤8¤"Nec"¤¤¤¤¤"S"
+1172¤"Defoliate"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤95¤0¤8¤"Nec"¤¤"Earth"¤¤¤"S"
+1173¤"Demand"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Evo/Enc"¤¤¤¤¤"sS"
+1174¤"Dispel Enchantment"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤8¤"Abj"¤¤¤¤¤"S"
+1175¤"Diviner’s Insight"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤97¤0¤8¤"Div"¤¤¤¤¤"S"
+1176¤"Elemental Transference"¤0¤1¤"City of Brass"¤123¤0¤8¤"Alt"¤¤¤"Elementalist"¤¤
+1177¤"Fireball, Death Brusher"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Evo"¤¤"Fire"¤¤¤"sS"
+1178¤"Fireball, Maximus"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Evo"¤¤"Fire"¤¤¤"sS"
+1179¤"Freeze"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤101¤0¤8¤"Evo"¤¤"Water"¤¤¤"S"
+1180¤"Gandle’s Spell Immunity"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Abj"¤¤¤¤¤"sS"
+1181¤"Glassteel"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Alt"¤¤"Earth"¤¤¤"sS"
+1182¤"Grasping Death"¤0¤0¤"Player’s Handbook"¤244¤0¤8¤"Con"¤¤¤¤¤"sS"
+1183¤"Haarpang’s Magnificent Sphere of Telekinesis"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤244¤0¤8¤"Evo/Alt"¤¤¤¤¤"sS"
+1184¤"Hornet’s Nest"¤0¤0¤"Player’s Handbook"¤103¤0¤8¤"Evo"¤¤¤¤¤"S"
+1185¤"Incendiary Cloud"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤245¤0¤8¤"Alt/Evo"¤¤"Air/Fire"¤¤¤"sS"
+1186¤"Jonid’s Jewel"¤0¤0¤"Player’s Handbook"¤105¤0¤8¤"Con/Div"¤¤¤¤¤"S"
+1187¤"Life Drain"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤107¤0¤8¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤
+1188¤"Mass Charm"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Enc"¤¤¤¤¤"sS"
+1189¤"Maze"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Con"¤¤"Earth"¤¤¤"sS"
+1190¤"Mimic Caster"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Enc"¤"Wild_Mage/Anti-Mage/Warder"¤¤¤"Mind Masters may learn and cast this spell."¤"sS"
+1191¤"Mind Blank"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Abj"¤¤¤¤¤"sS"
+1192¤"Mind Maze"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤8¤"Ill"¤¤¤¤¤"S"
+1193¤"Monster Summoning VI"¤0¤0¤"Player’s Handbook"¤245¤0¤8¤"Con"¤¤¤¤¤"sS"
+1194¤"Munari’s Irresistible Jig"¤0¤0¤"Player’s Handbook"¤246¤0¤8¤"Enc"¤¤¤¤¤"sS"
+1195¤"Nemesis"¤0¤2¤"HackJournal #24"¤23¤0¤8¤"Ill"¤¤¤¤¤
+1196¤"Permanency"¤0¤0¤"Player’s Handbook"¤246¤0¤8¤"Alt"¤¤¤¤¤"sS"
+1197¤"Polymorph Any Object"¤0¤0¤"Player’s Handbook"¤246¤0¤8¤"Alt"¤¤¤¤¤"sS"
+1198¤"Power Word: Banish"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤8¤"Con"¤¤¤¤¤"S"
+1199¤"Power Word: Blind"¤0¤0¤"Player’s Handbook"¤246¤0¤8¤"Con"¤¤¤¤¤"sS"
+1200¤"Power Word: Terrify"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤8¤"Con"¤¤¤¤¤"S"
+1201¤"Protective Touch"¤0¤2¤"HackJournal #27"¤6¤0¤8¤"Abj"¤¤¤¤¤
+1202¤"Sanboreg’s Random Dispatcher"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤8¤"Abj"¤"Wild_Mage"¤¤"Wild"¤¤
+1203¤"Screen"¤0¤0¤"Player’s Handbook"¤247¤0¤8¤"Div/Ill"¤¤¤¤¤"sS"
+1204¤"Shadow Form"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤8¤"Nec/Ill"¤¤¤¤¤"S"
+1205¤"Shooting Stars"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤8¤"Evo"¤¤¤¤¤"S"
+1206¤"Sink"¤0¤0¤"Player’s Handbook"¤247¤0¤8¤"Enc/Alt"¤¤¤¤¤"sS"
+1207¤"Symbol"¤0¤0¤"Player’s Handbook"¤247¤0¤8¤"Con"¤¤¤¤¤"s"
+1208¤"Trap the Soul"¤0¤0¤"Player’s Handbook"¤248¤0¤8¤"Con"¤¤¤¤¤"sS"
+1209¤"Wild Hex"¤0¤2¤"HackJournal #19"¤4¤0¤8¤"Abj"¤"Wild_Mage"¤¤"Wild"¤¤
+1210¤"Wildzone"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤8¤"Con"¤"Wild_Mage/Guardian"¤¤"Wild"¤¤
+1211¤"Youthful"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤63¤0¤8¤"Nec"¤¤¤"Vengeance"¤"See Errata"¤
+1212¤"Zarba’s Fist of Rage"¤0¤0¤"Player’s Handbook"¤248¤0¤8¤"Evo"¤¤¤¤¤"sS"
+1213¤"Alter Reality"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤90¤0¤9¤"Con/Ill"¤"Illusionist/DS_Illusionist/Conjurer/DS_Conjurer/Hypnotist"¤¤¤¤"S"
+1214¤"Astral Spell"¤0¤0¤"Player’s Handbook"¤248¤0¤9¤"Evo"¤¤¤¤¤"sS"
+1215¤"Blood Curse"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤91¤0¤9¤"Nec"¤"Blood_Mage"¤¤"Vengeance"¤¤"S"
+1216¤"Create Lich Master"¤0¤3¤"Tomb of Unspeakable Horrors"¤39¤0¤9¤"Nec"¤¤¤¤¤
+1217¤"Crystalbrittle"¤0¤0¤"Player’s Handbook"¤248¤0¤9¤"Alt"¤¤"Earth"¤¤¤"sS"
+1218¤"Death Rune"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Nec"¤¤¤¤¤"sS"
+1219¤"Demon Flame"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤249¤0¤9¤"Alt"¤¤¤¤¤"sS"
+1220¤"Detect All"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤96¤0¤9¤"Nec"¤¤¤¤¤"S"
+1221¤"Elemental Aura"¤0¤0¤"Player’s Handbook"¤98¤0¤9¤"Abj/Evo"¤¤"Air/Earth/Fire/Water"¤¤¤"S"
+1222¤"Energy Drain"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Evo/Nec"¤¤¤¤¤"sS"
+1223¤"Fawlgar’s Grasping Death"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Nec"¤¤¤¤¤"sS"
+1224¤"Fireball, Lava Yield"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Evo"¤¤"Fire"¤¤¤"sS"
+1225¤"Fireball, Nuclear Winter"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Evo"¤¤¤"RESCINDED"¤¤
+1226¤"Foresight"¤0¤0¤"Player’s Handbook"¤249¤0¤9¤"Div"¤¤¤¤¤"sS"
+1227¤"Gate"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Con"¤¤¤¤¤"sS"
+1228¤"Globe of Invulnerability, Mobile"¤0¤2¤"HackJournal #27"¤7¤0¤9¤"Abj"¤¤¤¤¤
+1229¤"Glyph of Divination"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤102¤0¤9¤"Div"¤¤¤¤¤"S"
+1230¤"Greater Divination Enhancement"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤103¤0¤9¤"Div"¤¤¤¤¤"S"
+1231¤"Hyptor’s Disjunction"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Alt/Enc"¤¤¤¤¤"sS"
+1232¤"Ice Juggernaut"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤104¤0¤9¤"Evo"¤¤"Water"¤¤¤"S"
+1233¤"Immunity to Undeath"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤105¤0¤9¤"Nec/Abj"¤¤¤¤¤"S"
+1234¤"Imprisonment"¤1¤0¤"Player’s Handbook"¤250¤0¤9¤"Abj"¤¤¤¤¤"sS"
+1235¤"Jebidiah’s Ultimate Circle"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤106¤0¤9¤"Abj"¤¤¤¤¤"S"
+1236¤"Kachirut’s White Lance"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤106¤0¤9¤"Evo"¤¤¤¤¤"S"
+1237¤"Mass Domination"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤108¤0¤9¤"Enc"¤¤¤¤¤"S"
+1238¤"Master Undead"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤109¤0¤9¤"Nec"¤¤¤¤¤"S"
+1239¤"Meteor Swarm"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Evo"¤¤"Earth/Fire"¤¤¤"sS"
+1240¤"Monster Summoning VII"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Con"¤¤¤¤¤"sS"
+1241¤"Power Word: Annihilate"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤112¤0¤9¤"Con"¤¤¤¤¤"S"
+1242¤"Power Word: Dance"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤113¤0¤9¤"Con"¤¤¤¤¤"S"
+1243¤"Power Word: Kill"¤0¤0¤"Player’s Handbook"¤250¤0¤9¤"Con"¤¤¤¤¤"sS"
+1244¤"Prismatic Sphere"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Abj/Con"¤¤¤¤¤"sS"
+1245¤"Programmed Amnesia"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤115¤0¤9¤"Enc"¤¤¤¤¤"S"
+1246¤"Ring of Swords"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤117¤0¤9¤"Alt"¤¤¤¤¤"S"
+1247¤"Seek Teleporter"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤118¤0¤9¤"Div"¤¤¤¤¤"S"
+1248¤"Shadow Creep"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤119¤0¤9¤"Ill"¤¤¤¤¤"S"
+1249¤"Shape Change"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt"¤¤¤¤¤"sS"
+1250¤"Stabilize"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤9¤"Abj"¤"Wild_Mage"¤¤"Wild"¤¤
+1251¤"Succor"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt/Enc"¤¤¤¤¤"sS"
+1252¤"Teleport Intercampaignia"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt"¤¤¤¤¤"sS"
+1253¤"Teleport Intragenre"¤0¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt"¤¤¤¤¤"sS"
+1254¤"Tempestcone"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤120¤0¤9¤"Alt/Evo"¤¤¤¤¤"S"
+1255¤"Temporal Stasis"¤1¤0¤"Player’s Handbook"¤251¤0¤9¤"Alt"¤¤¤¤¤"sS"
+1256¤"Time Stop"¤0¤0¤"Player’s Handbook"¤252¤0¤9¤"Alt"¤¤¤¤¤"sS"
+1257¤"Wave of Death"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤124¤0¤9¤"Nec"¤"Blood_Mage/Water_Elementalist"¤"Water"¤"Vengeance"¤¤
+1258¤"Weird"¤0¤0¤"Player’s Handbook"¤252¤0¤9¤"Ill"¤¤¤¤¤"sS"
+1259¤"Wildfire"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤124¤0¤9¤"Evo"¤"Wild_Mage"¤¤"Wild"¤¤
+1260¤"Wildwind"¤0¤1¤"Spellslinger’s Guide to Wurld Domination"¤125¤0¤9¤"Con"¤"Wild_Mage/Anti-Mage"¤¤"Wild"¤¤
+1261¤"Wish"¤0¤0¤"Player’s Handbook"¤252¤0¤9¤"Con"¤¤¤¤¤"sS"
+1262¤"Zarba’s Crushing Hand"¤0¤0¤"Player’s Handbook"¤252¤0¤9¤"Evo"¤¤¤¤¤"sS"
+1263¤"Alleviate Headache"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤102¤1¤1¤"Alt"¤¤"Healing"¤¤¤
+1264¤"Awaken"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤1¤"Nec"¤¤"Necromantic"¤¤¤
+1265¤"Befriend"¤0¤0¤"Player’s Handbook"¤253¤1¤1¤"Enc"¤¤"Charm"¤¤¤
+1266¤"Bless"¤0¤0¤"Player’s Handbook"¤253¤1¤1¤"Con"¤¤"Devotional"¤¤¤
+1267¤"Call Upon Faith"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤1¤"Evo"¤¤"Summoning"¤¤¤
+1268¤"Cause Fear"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Charm"¤¤¤
+1269¤"Cause Light Wounds"¤1¤0¤"Player’s Handbook"¤255¤1¤1¤"Nec"¤¤"Hurting"¤¤¤
+1270¤"Ceremony"¤0¤0¤"Player’s Handbook"¤153¤1¤1¤"Evo"¤¤"Devotional"¤¤¤
+1271¤"Combine"¤0¤0¤"Player’s Handbook"¤254¤1¤1¤"Evo"¤¤"Devotional"¤¤¤
+1272¤"Command"¤0¤0¤"Player’s Handbook"¤254¤1¤1¤"Enc"¤¤"Charm"¤¤¤
+1273¤"Consecrate Holy Symbol"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤1¤"Evo"¤¤"Devotional"¤¤¤
+1274¤"Contact Home Gawd"¤0¤1¤"HackJammer"¤122¤1¤1¤"Div"¤¤"Devotional"¤¤¤
+1275¤"Create Water"¤0¤0¤"Player’s Handbook"¤254¤1¤1¤"Alt"¤¤"Creation/Water"¤¤¤
+1276¤"Cure Light Wounds"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Nec"¤¤"Healing"¤¤¤
+1277¤"Curse"¤1¤0¤"Player’s Handbook"¤253¤1¤1¤"Con"¤¤"Devotional"¤¤¤
+1278¤"Darkness"¤1¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Sun"¤¤¤
+1279¤"Destroy Water"¤1¤0¤"Player’s Handbook"¤254¤1¤1¤"Alt"¤¤"Water"¤¤¤
+1280¤"Detect Evil"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Div"¤¤"Devotional"¤¤¤
+1281¤"Detect Good"¤1¤0¤"Player’s Handbook"¤255¤1¤1¤"Div"¤¤"Devotional"¤¤¤
+1282¤"Detect Magic"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Div"¤¤"Divination/Healing"¤¤¤
+1283¤"Diagnose Injury"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤1¤"Div"¤¤"Divination/Healing"¤¤¤
+1284¤"Endure Cold"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Warding"¤¤¤
+1285¤"Endure Heat"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Warding"¤¤¤
+1286¤"Estrange"¤1¤0¤"Player’s Handbook"¤253¤1¤1¤"Enc"¤¤"Charm"¤¤¤
+1287¤"Flutter Soft"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Warding"¤¤¤
+1288¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤1¤"Alt"¤¤"Devotional"¤¤¤
+1289¤"Invisibility to Undead"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Abj"¤¤"Necromantic"¤¤¤
+1290¤"Know Direction"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤1¤1¤"Div"¤¤"Divination/Traveler"¤¤¤
+1291¤"Light"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Alt"¤¤"Sun"¤¤¤
+1292¤"Log of Everburning"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤1¤1¤"Alt"¤¤"Fire"¤¤¤
+1293¤"Magical Stone"¤0¤0¤"Player’s Handbook"¤255¤1¤1¤"Enc"¤¤"Combat"¤¤¤
+1294¤"Nauseate"¤0¤2¤"HackJournal #24"¤23¤1¤1¤"Nec"¤¤"Harming"¤¤¤
+1295¤"Primal’s Braciation"¤0¤2¤"HackJournal #24"¤24¤1¤1¤"Alt"¤¤"Animal"¤¤¤
+1296¤"Protection from Evil"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Warding"¤¤¤
+1297¤"Protection from Good"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Warding"¤¤¤
+1298¤"Purify Food & Drink"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Alt"¤¤"Devotional"¤¤¤
+1299¤"Putrify Food & Drink"¤1¤0¤"Player’s Handbook"¤256¤1¤1¤"Alt"¤¤"Devotional"¤¤¤
+1300¤"Remove Fear"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Charm"¤¤¤
+1301¤"Repair Strain or Sprain"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤1¤"Alt"¤¤"Healing"¤¤¤
+1302¤"Sanctuary"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Abj"¤¤"Warding"¤¤¤
+1303¤"Strength of Stone"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤1¤"Evo"¤¤"Earth"¤¤¤
+1304¤"Summon Divine Lackey"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤1¤"Con"¤¤"Summoning"¤¤¤
+1305¤"Walking Corpse"¤0¤0¤"Player’s Handbook"¤256¤1¤1¤"Nec"¤¤"Necromantic"¤¤¤
+1306¤"Wind Column"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤1¤1¤"Evo"¤¤"Air"¤¤¤
+1307¤"Aid"¤0¤0¤"Player’s Handbook"¤256¤1¤2¤"Nec/Con"¤¤"Necromantic"¤¤¤
+1308¤"Animated Corpse"¤0¤0¤"Player’s Handbook"¤256¤1¤2¤"Nec"¤¤"Necromantic"¤¤¤
+1309¤"Augury"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Div"¤¤"Divination"¤¤¤
+1310¤"Aura of Comfort"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤2¤"Evo"¤¤"Traveler"¤¤¤
+1311¤"Cause Moderate Wounds"¤1¤0¤"Player’s Handbook"¤257¤1¤2¤"Nec"¤¤"Hurting"¤¤¤
+1312¤"Chant"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Con"¤¤"Combat"¤¤¤
+1313¤"Create Holy Symbol"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤2¤"Con"¤¤"Creation"¤¤¤
+1314¤"Create Obstacle"¤0¤1¤"By the Sword"¤23¤1¤2¤"Con"¤¤"Creation"¤¤¤
+1315¤"Cure Color Blindness"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤2¤"Abj"¤¤"Healing"¤¤¤
+1316¤"Cure Moderate Wounds"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Nec"¤¤"Healing"¤¤¤
+1317¤"Detect Charm"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Div"¤¤"Divination"¤¤¤
+1318¤"Detect Gawds"¤0¤1¤"HackJammer"¤122¤1¤2¤"Div"¤¤"Divination"¤¤¤
+1319¤"Diminished Rite"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Nec"¤¤"Necromantic"¤¤¤
+1320¤"Draw Upon Holy Might"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤2¤"Evo"¤¤"Summoning"¤¤¤
+1321¤"Dust Devil"¤0¤0¤"Player’s Handbook"¤257¤1¤2¤"Con"¤¤"Air/Summoning"¤¤¤
+1322¤"Elephant’s Overrun"¤0¤2¤"HackJournal #24"¤22¤1¤2¤"Alt"¤¤"Combat"¤¤¤
+1323¤"Enthrall"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Enc"¤¤"Charm"¤¤¤
+1324¤"Find Traps"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Div"¤¤"Divination"¤¤¤
+1325¤"Heal Light Wounds"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Nec"¤¤"Healing"¤¤¤
+1326¤"Hold Person"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤2¤"Enc"¤¤"Charm"¤¤¤
+1327¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤2¤"Alt"¤¤"Devotional"¤¤¤
+1328¤"Know Alignment"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Div"¤¤"Divination"¤¤¤
+1329¤"Lighten Load"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤101¤1¤2¤"Alt"¤¤"Traveler"¤¤¤
+1330¤"Mend Limb"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤101¤1¤2¤"Alt"¤¤"Healing"¤¤¤
+1331¤"Mend Tendon"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤101¤1¤2¤"Alt"¤¤"Healing"¤¤¤
+1332¤"Precipitation"¤0¤0¤"Player’s Handbook"¤278¤1¤2¤"Alt"¤¤"Weather"¤¤¤
+1333¤"Premonition"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Div"¤¤"Divination"¤¤¤
+1334¤"Resist Electricity"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤2¤"Alt"¤¤"Warding"¤¤¤
+1335¤"Resist Cold"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Alt"¤¤"Warding"¤¤¤
+1336¤"Resist Fire"¤0¤0¤"Player’s Handbook"¤258¤1¤2¤"Alt"¤¤"Warding"¤¤¤
+1337¤"Resist Gas"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤2¤"Alt"¤¤"Warding"¤¤¤
+1338¤"Restore Movement"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤2¤"Alt"¤¤"Healing"¤¤¤
+1339¤"Rigor Mortis"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Nec"¤¤"Charm"¤¤¤
+1340¤"Silence, 15’ Radius"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Alt"¤¤"Warding"¤¤¤
+1341¤"Slow Poison"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Nec"¤¤"Healing"¤¤¤
+1342¤"Snake Charm"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Enc"¤¤"Animal"¤¤¤
+1343¤"Speak With Animals"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Alt"¤¤"Animal"¤¤¤
+1344¤"Spider Charm"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤2¤"Alt"¤¤"Animal"¤¤¤
+1345¤"Spiritual Hammer"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Evo"¤¤"Combat"¤¤¤
+1346¤"Spittle Splash"¤0¤2¤"HackJournal #24"¤24¤1¤2¤"Con"¤¤"Animal"¤¤¤
+1347¤"Staunch Bleeding"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤2¤"Alt"¤¤"Healing"¤¤¤
+1348¤"Telepathy"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤65¤1¤2¤"Enc/Evo"¤¤"Charm"¤¤¤
+1349¤"Undetectable Alignment"¤1¤0¤"Player’s Handbook"¤258¤1¤2¤"Div"¤¤"Divination"¤¤¤
+1350¤"Undetectable Charm"¤1¤0¤"Player’s Handbook"¤257¤1¤2¤"Div"¤¤"Divination"¤¤¤
+1351¤"Withdraw"¤0¤0¤"Player’s Handbook"¤259¤1¤2¤"Alt"¤¤"Warding"¤¤¤
+1352¤"Wyvern Watch"¤0¤0¤"Player’s Handbook"¤260¤1¤2¤"Evo"¤¤"Warding"¤¤¤
+1353¤"Adjustable Light"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤102¤1¤3¤"Alt"¤¤"Sun"¤¤¤
+1354¤"Animate Dead"¤0¤0¤"Player’s Handbook"¤260¤1¤3¤"Nec"¤¤"Necromantic"¤¤¤
+1355¤"Animate Vine"¤0¤2¤"HackJournal #24"¤22¤1¤3¤"Alt"¤¤"Plant"¤¤¤
+1356¤"Bestow Curse"¤1¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
+1357¤"Cause Blindness or Deafness"¤1¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Necromantic"¤¤¤
+1358¤"Cause Disease"¤1¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Necromantic"¤¤¤
+1359¤"Cause Nasty Wounds"¤1¤0¤"Player’s Handbook"¤261¤1¤3¤"Nec"¤¤"Hurting"¤¤¤
+1360¤"Cloudburst"¤0¤0¤"Player’s Handbook"¤260¤1¤3¤"Alt"¤¤"Weather"¤¤¤
+1361¤"Continual Light"¤0¤0¤"Player’s Handbook"¤260¤1¤3¤"Alt"¤¤"Sun"¤¤¤
+1362¤"Create Campsite"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤3¤"Alt"¤¤"Sun"¤¤¤
+1363¤"Create Food & Water"¤0¤0¤"Player’s Handbook"¤260¤1¤3¤"Con"¤¤"Traveler"¤¤¤
+1364¤"Cure Blindness or Deafness"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Creation"¤¤¤
+1365¤"Cure Disease"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Nec"¤¤"Necromantic"¤¤¤
+1366¤"Cure Nasty Wounds"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Necromantic"¤¤¤
+1367¤"Dispel Magic"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Alt"¤¤"Healing"¤¤¤
+1368¤"Durward’s Discerning Eye"¤0¤3¤"Wryneck’s Wheelhouse"¤40¤1¤3¤"Alt"¤¤"Combat/Divination"¤¤¤
+1369¤"Durward’s Paen of Protection from Archers"¤0¤3¤"Wryneck’s Wheelhouse"¤40¤1¤3¤"Alt"¤¤"Combat/Warding"¤¤¤
+1370¤"Emotion Control"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤106¤1¤3¤"Alt/Enc"¤¤"Charm"¤¤¤
+1371¤"Extinguish"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤1¤3¤"Alt"¤¤"Water"¤¤¤
+1372¤"Feign Death"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Nec"¤¤"Necromantic"¤¤¤
+1373¤"Fertile Land"¤0¤2¤"HackJournal #15"¤15¤1¤3¤"Alt"¤¤"Plant"¤¤¤
+1374¤"Flame Walk"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj"¤¤"Fire"¤¤¤
+1375¤"Glyph of Warding"¤0¤0¤"Player’s Handbook"¤261¤1¤3¤"Abj/Evo"¤¤"Warding"¤¤¤
+1376¤"Greater Create Obstacle"¤0¤1¤"By the Sword"¤23¤1¤3¤"Alt"¤¤"Creation"¤¤¤
+1377¤"Heal Moderate Wounds"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Nec"¤¤"Healing"¤¤¤
+1378¤"Helping Hand"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤3¤"Evo"¤¤"Traveler"¤¤¤
+1379¤"Hold Persons"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤3¤"Enc"¤¤"Charm"¤¤¤
+1380¤"Ignite"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤3¤"Alt"¤¤"Fire"¤¤¤
+1381¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤3¤"Alt"¤¤"Devotional"¤¤¤
+1382¤"Infertile Land"¤1¤2¤"HackJournal #15"¤15¤1¤3¤"Alt"¤¤"Plant"¤¤¤
+1383¤"Lesser Reanimation"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Nec"¤¤"Necromantic"¤¤¤
+1384¤"Locate Object"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Div"¤¤"Divination"¤¤¤
+1385¤"Magic Vestment"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Enc"¤¤"Warding"¤¤¤
+1386¤"Meld Into Stone"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Alt"¤¤"Earth"¤¤¤
+1387¤"Mend Broken Bone"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤1¤3¤"Alt"¤¤"Healing"¤¤¤
+1388¤"Negative Plane Protection"¤0¤0¤"Player’s Handbook"¤262¤1¤3¤"Abj"¤¤"Necromantic/Warding"¤¤¤
+1389¤"Obscure Object"¤1¤0¤"Player’s Handbook"¤262¤1¤3¤"Div"¤¤"Divination"¤¤¤
+1390¤"Prayer"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Con"¤¤"Combat"¤¤¤
+1391¤"Remove Curse"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
+1392¤"Remove Paralysis"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
+1393¤"Resist Acid and Caustic"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤3¤"Alt"¤¤"Warding"¤¤¤
+1394¤"Shock Therapy"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤3¤"Nec"¤¤"Healing"¤¤¤
+1395¤"Shock Therapy"¤1¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤3¤"Nec"¤¤"Hurting"¤¤¤
+1396¤"Speak to the Dead"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Nec"¤¤"Divination"¤¤¤
+1397¤"Stirring Sermon"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Enc"¤¤"Charm"¤¤¤
+1398¤"Surrogacy"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤1¤3¤"Alt/Enc"¤¤"Devotional"¤¤¤
+1399¤"Turn"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤3¤"Con"¤¤"Summoning"¤¤¤
+1400¤"Vitality"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤3¤"Alt/Nec"¤¤"Healing"¤¤¤
+1401¤"Ward Off Evil"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
+1402¤"Ward Off Good"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Abj"¤¤"Warding"¤¤¤
+1403¤"Water Walk"¤0¤0¤"Player’s Handbook"¤263¤1¤3¤"Alt"¤¤"Water"¤¤¤
+1404¤"Weather Prediction"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤3¤"Div"¤¤"Divination/Weather"¤¤¤
+1405¤"White Hot Metal"¤0¤0¤"Player’s Handbook"¤283¤1¤3¤"Alt"¤¤"Fire"¤¤¤
+1406¤"Abjure"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Abj"¤¤"Summoning"¤¤¤
+1407¤"Air Barrage (for Zealots with Air sphere)"¤0¤2¤"HackJournal #24"¤21¤1¤4¤"Evo"¤¤"Air"¤¤¤
+1408¤"Babble"¤1¤0¤"Player’s Handbook"¤267¤1¤4¤"Alt"¤¤"Divination"¤¤¤
+1409¤"Blessed Warmth"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤4¤"Con"¤¤"Sun"¤¤¤
+1410¤"Cause Lycanthropy"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤4¤"Nec"¤¤"Animal"¤¤¤
+1411¤"Cause Serious Wounds"¤1¤0¤"Player’s Handbook"¤264¤1¤4¤"Nec"¤¤"Hurting"¤¤¤
+1412¤"Cloak of Bravery"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Con"¤¤"Charm"¤¤¤
+1413¤"Cloak of Fear"¤1¤0¤"Player’s Handbook"¤264¤1¤4¤"Con"¤¤"Charm"¤¤¤
+1414¤"Cure Serious Wounds"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Nec"¤¤"Healing"¤¤¤
+1415¤"Detect Lie"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Div"¤¤"Divination"¤¤¤
+1416¤"Divination"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Div"¤¤"Divination"¤¤¤
+1417¤"Feign Life"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤1¤4¤"Nec"¤¤"Necromantic"¤¤¤
+1418¤"Focus"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤1¤4¤"Ievo"¤¤"Devotional"¤¤¤
+1419¤"Free Action"¤0¤0¤"Player’s Handbook"¤265¤1¤4¤"Abj/Enc"¤¤"Charm"¤¤¤
+1420¤"Giant Insect"¤0¤0¤"Player’s Handbook"¤265¤1¤4¤"Alt"¤¤"Animal"¤¤¤
+1421¤"Gourmet Dinner"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤108¤1¤4¤"Alt"¤¤"Creation"¤¤¤
+1422¤"Greater Restore Movement"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤108¤1¤4¤"Alt"¤¤"Healing"¤¤¤
+1423¤"Heal Nasty Wounds"¤0¤0¤"Player’s Handbook"¤265¤1¤4¤"Nec"¤¤"Healing"¤¤¤
+1424¤"Imbue With Spell Ability"¤0¤0¤"Player’s Handbook"¤265¤1¤4¤"Enc"¤¤"Charm"¤¤¤
+1425¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤4¤"Alt"¤¤"Devotional"¤¤¤
+1426¤"Join With Astral Traveler"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤1¤4¤"Alt"¤¤"Traveler"¤¤¤
+1427¤"Leaves To Bees"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤1¤4¤"Alt"¤¤"Animal"¤¤¤
+1428¤"Lower Water"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Alt"¤¤"Water"¤¤¤
+1429¤"Minor Raise Dead"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Nec"¤¤"Necromantic"¤¤¤
+1430¤"Neutralize Poison"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Nec"¤¤"Healing"¤¤¤
+1431¤"No Fear"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Enc"¤¤"Charm"¤¤¤
+1432¤"Poison"¤1¤0¤"Player’s Handbook"¤266¤1¤4¤"Nec"¤¤"Hurting"¤¤¤
+1433¤"Protection From Grel"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤1¤4¤"Abj"¤¤"Warding"¤¤¤
+1434¤"Protection from Lycanthropes"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤111¤1¤4¤"Alt"¤¤"Warding"¤¤¤
+1435¤"Protection from Possession"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤111¤1¤4¤"Alt"¤¤"Warding"¤¤¤
+1436¤"Protection from Undead"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤111¤1¤4¤"Abj"¤¤"Warding"¤¤¤
+1437¤"Raise Water"¤1¤0¤"Player’s Handbook"¤266¤1¤4¤"Alt"¤¤"Water"¤¤¤
+1438¤"Shrink Insect"¤1¤0¤"Player’s Handbook"¤265¤1¤4¤"Alt"¤¤"Animal"¤¤¤
+1439¤"Snakes to Sticks"¤1¤0¤"Player’s Handbook"¤266¤1¤4¤"Alt"¤¤"Plant"¤¤¤
+1440¤"Spell Immunity"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Abj"¤¤"Warding"¤¤¤
+1441¤"Spike Stones"¤0¤0¤"Player’s Handbook"¤288¤1¤4¤"Alt/Enc"¤¤"Earth"¤¤¤
+1442¤"Spiritual Brigade"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤4¤"Evo"¤¤"Combat"¤¤¤
+1443¤"Sticks to Snakes"¤0¤0¤"Player’s Handbook"¤266¤1¤4¤"Alt"¤¤"Plant"¤¤¤
+1444¤"Stones to Spiders"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤1¤4¤"Alt"¤¤"Animal"¤¤¤
+1445¤"Tongues"¤0¤0¤"Player’s Handbook"¤267¤1¤4¤"Alt"¤¤"Divination"¤¤¤
+1446¤"Touch of Death"¤0¤0¤"Player’s Handbook"¤267¤1¤4¤"Nec"¤¤"Necromantic"¤¤¤
+1447¤"Undetectable Lie"¤0¤0¤"Player’s Handbook"¤264¤1¤4¤"Div"¤¤"Divination"¤¤¤
+1448¤"Air Barrage (for Clerics)"¤0¤2¤"HackJournal #24"¤21¤1¤5¤"Evo"¤¤"Air"¤¤¤
+1449¤"Air Walk"¤0¤0¤"Player’s Handbook"¤267¤1¤5¤"Alt"¤¤"Air"¤¤¤
+1450¤"Atonement"¤0¤0¤"Player’s Handbook"¤267¤1¤5¤"Abj"¤¤"Devotional"¤¤¤
+1451¤"Blessed Abundance"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤5¤"Con"¤¤"Creation"¤¤¤
+1452¤"Break Hex"¤0¤0¤"Player’s Handbook"¤267¤1¤5¤"Abj"¤¤"Warding"¤¤¤
+1453¤"Cause Critical Wounds"¤1¤0¤"Player’s Handbook"¤268¤1¤5¤"Nec"¤¤"Hurting"¤¤¤
+1454¤"Commune"¤0¤0¤"Player’s Handbook"¤267¤1¤5¤"Div"¤¤"Divination"¤¤¤
+1455¤"Create Minor Helm"¤0¤1¤"HackJammer"¤122¤1¤5¤"Enc"¤¤"Creation"¤¤¤
+1456¤"Cure Critical Wounds"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Nec"¤¤"Healing"¤¤¤
+1457¤"Detect Ulterior Motives"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Div"¤¤"Divination"¤¤¤
+1458¤"Dispel Evil"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Abj"¤¤"Summoning/Warding"¤¤¤
+1459¤"Dispel Good"¤1¤0¤"Player’s Handbook"¤268¤1¤5¤"Abj"¤¤"Summoning/Warding"¤¤¤
+1460¤"Exorcism"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤106¤1¤5¤"Nec"¤¤"Necromantic"¤¤¤
+1461¤"False Seeing"¤1¤0¤"Player’s Handbook"¤270¤1¤5¤"Div"¤¤"Divination"¤¤¤
+1462¤"Flame Strike"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Evo"¤¤"Combat/Fire"¤¤¤
+1463¤"Heal Serious Wounds"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Nec"¤¤"Healing"¤¤¤
+1464¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤5¤"Alt"¤¤"Devotional"¤¤¤
+1465¤"Insect Plague"¤0¤0¤"Player’s Handbook"¤268¤1¤5¤"Con"¤¤"Combat"¤¤¤
+1466¤"Last Resort"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤64¤1¤5¤"Alt/Enc"¤¤"Necromantic"¤¤¤
+1467¤"Magic Font"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Div"¤¤"Divination"¤¤¤
+1468¤"Plane Shift"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Alt"¤¤"Traveler"¤¤¤
+1469¤"Protection from Nefarians"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤111¤1¤5¤"Abj"¤¤"Warding"¤¤¤
+1470¤"Quest"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Enc"¤¤"Charm"¤¤¤
+1471¤"Rainbow"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Evo"¤¤"Sun/Weather"¤¤¤
+1472¤"Raise Dead"¤0¤0¤"Player’s Handbook"¤269¤1¤5¤"Nec"¤¤"Necromantic"¤¤¤
+1473¤"Reattach Limb"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤5¤"Alt/Nec"¤¤"Necromantic"¤¤¤
+1474¤"Rigor Mortis, 10’ Radius"¤0¤0¤"Player’s Handbook"¤270¤1¤5¤"Nec"¤¤"Charm"¤¤¤
+1475¤"Slay Living"¤1¤0¤"Player’s Handbook"¤269¤1¤5¤"Nec"¤¤"Necromantic"¤¤¤
+1476¤"Spike Growth"¤0¤0¤"Player’s Handbook"¤270¤1¤5¤"Alt/Enc"¤¤"Plant"¤¤¤
+1477¤"Touch of the Dark One"¤0¤2¤"HackJournal #24"¤24¤1¤5¤"Nec"¤¤"Sun"¤¤"Sphere is actually Sun (reversed)"¤
+1478¤"True Seeing"¤0¤0¤"Player’s Handbook"¤270¤1¤5¤"Div"¤¤"Divination"¤¤¤
+1479¤"Aerial Servant"¤0¤0¤"Player’s Handbook"¤270¤1¤6¤"Con"¤¤"Summoning"¤¤¤
+1480¤"Animate Object"¤0¤0¤"Player’s Handbook"¤270¤1¤6¤"Alt"¤¤"Creation/Summoning"¤¤¤
+1481¤"Attach Limb"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤103¤1¤6¤"Alt/Nec"¤¤"Necromantic"¤¤¤
+1482¤"Blade Barrier"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Evo"¤¤"Creation/Warding"¤¤¤
+1483¤"Conjure Animals"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Con"¤¤"Animal/Summoning"¤¤¤
+1484¤"Control Winds"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤6¤"Alt"¤¤"Air/Weather"¤¤¤
+1485¤"Cure-All"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Nec"¤¤"Healing"¤¤¤
+1486¤"Easy March"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤106¤1¤6¤"Evo"¤¤"Traveler"¤¤¤
+1487¤"False Dawn"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤1¤6¤"Evo"¤¤"Sun"¤¤¤
+1488¤"Find the Path"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤271¤1¤6¤"Div"¤¤"Divination"¤¤¤
+1489¤"Forbiddance"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Abj"¤¤"Warding"¤¤¤
+1490¤"Harm"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Nec"¤¤"Hurting"¤¤¤
+1491¤"Heal Critical Wounds"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Nec"¤¤"Healing"¤¤¤
+1492¤"Heroes’ Feast"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Evo"¤¤"Healing"¤¤¤
+1493¤"Hold Crowd"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤6¤"Enc"¤¤"Charm"¤¤¤
+1494¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤6¤"Alt"¤¤"Devotional"¤¤¤
+1495¤"Lose the Path"¤0¤0¤"Player’s Handbook"¤271¤1¤6¤"Div"¤¤"Divination"¤¤¤
+1496¤"Onahu’s Cloak of Courage"¤0¤2¤"HackJournal #24"¤23¤1¤6¤"Enc"¤¤"Charm"¤¤¤
+1497¤"Part Water"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Alt"¤¤"Water"¤¤¤
+1498¤"Rain of Fire"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤112¤1¤6¤"Evo"¤¤"Combat/Fire"¤¤¤
+1499¤"Speak With Monsters"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Alt"¤¤"Animal/Divination"¤¤¤
+1500¤"Stone Tell"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Div"¤¤"Earth"¤¤¤
+1501¤"Teleport Via Column"¤0¤2¤"HackJournal #24"¤24¤1¤6¤"Alt"¤¤"Earth"¤¤¤
+1502¤"Whirlwind"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤1¤6¤"Evo"¤¤"Weather"¤¤¤
+1503¤"Word of Recall"¤0¤0¤"Player’s Handbook"¤272¤1¤6¤"Alt"¤¤"Summoning"¤¤¤
+1504¤"Astral Spell"¤0¤0¤"Player’s Handbook"¤272¤1¤7¤"Alt"¤¤"Traveler"¤¤¤
+1505¤"Construct Temple"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤1¤7¤"Con"¤¤"Creation"¤¤¤
+1506¤"Control Weather"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Alt"¤¤"Weather"¤¤¤
+1507¤"Destruction"¤1¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
+1508¤"Divine Inspiration"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤7¤"Div"¤¤"Devotional/Divination"¤¤¤
+1509¤"Divine Miracle"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤105¤1¤7¤"Evo"¤¤"Devotional"¤¤¤
+1510¤"Earthquake"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Alt"¤¤"Earth"¤¤¤
+1511¤"Energy Drain"¤1¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
+1512¤"Exaction"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Evo/Alt"¤¤"Charm/Summoning"¤¤¤
+1513¤"Gate"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Con"¤¤"Summoning"¤¤¤
+1514¤"Henley’s Digit of Destruction"¤0¤3¤"Lost Caverns"¤36¤1¤7¤"Evo"¤¤"Combat"¤¤¤
+1515¤"Holy Word"¤0¤0¤"Player’s Handbook"¤273¤1¤7¤"Con"¤¤"Combat"¤¤¤
+1516¤"Indulgence"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤1¤7¤"Alt"¤¤"Devotional"¤¤¤
+1517¤"Regenerate"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
+1518¤"Restoration"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
+1519¤"Restorative Cure-All"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Healing"¤¤¤
+1520¤"Resurrection"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
+1521¤"Succor"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Alt/Enc"¤¤"Summoning"¤¤¤
+1522¤"Sunray"¤0¤0¤"Player’s Handbook"¤294¤1¤7¤"Alt/Evo"¤¤"Sun"¤¤¤
+1523¤"Symbol"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Con"¤¤"Warding"¤¤¤
+1524¤"Unholy Word"¤1¤0¤"Player’s Handbook"¤273¤1¤7¤"Con"¤¤"Combat"¤¤¤
+1525¤"Wind Walk"¤0¤0¤"Player’s Handbook"¤275¤1¤7¤"Alt"¤¤"Air"¤¤¤
+1526¤"Wither"¤0¤0¤"Player’s Handbook"¤274¤1¤7¤"Nec"¤¤"Necromantic"¤¤¤
+1527¤"Animal Friendship"¤0¤0¤"Player’s Handbook"¤275¤2¤1¤"Enc"¤¤"Animal"¤¤¤
+1528¤"Bless"¤0¤0¤"Player’s Handbook"¤253¤2¤1¤"Con"¤¤"Devotional"¤¤¤
+1529¤"Bloom"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤2¤1¤"Alt"¤¤"Plant"¤¤¤
+1530¤"Cause Minor Injury"¤1¤0¤"Player’s Handbook"¤276¤2¤1¤"Nec"¤¤"Hurting"¤¤¤
+1531¤"Ceremony"¤0¤0¤"Player’s Handbook"¤253¤2¤1¤"Evo"¤¤"Devotional"¤¤¤
+1532¤"Contact Home Gawd"¤0¤1¤"HackJammer"¤122¤2¤1¤"Div"¤¤"Devotional"¤¤¤
+1533¤"Contaminate Water"¤1¤0¤"Player’s Handbook"¤278¤2¤1¤"Alt"¤¤"Devotional"¤¤¤
+1534¤"Create Air"¤0¤1¤"HackJammer"¤123¤2¤1¤"Alt"¤¤"Air"¤¤¤
+1535¤"Cure Minor Injury"¤0¤0¤"Player’s Handbook"¤276¤2¤1¤"Nec"¤¤"Healing"¤¤¤
+1536¤"Destroy Air*"¤1¤1¤"HackJammer"¤123¤2¤1¤"Alt"¤¤"Air"¤¤¤
+1537¤"Detect Balance"¤0¤0¤"Player’s Handbook"¤276¤2¤1¤"Div"¤¤"Divination"¤¤¤
+1538¤"Detect Magic"¤0¤0¤"Player’s Handbook"¤255¤2¤1¤"Div"¤¤"Divination"¤¤¤
+1539¤"Detect Pits & Snares"¤0¤0¤"Player’s Handbook"¤276¤2¤1¤"Div"¤¤"Divination"¤¤¤
+1540¤"Detect Poison"¤0¤0¤"Player’s Handbook"¤276¤2¤1¤"Div"¤¤"Divination"¤¤¤
+1541¤"Entangle"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Alt"¤¤"Plant"¤¤¤
+1542¤"Faerie Fire"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Alt"¤¤"Combat"¤¤¤
+1543¤"Fog Vision"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Div"¤¤"Divination"¤¤¤
+1544¤"Invisibility to Animals"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Alt"¤¤"Animal"¤¤¤
+1545¤"Locate Animals or Plants"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Enc"¤¤"Animal/Plant"¤¤¤
+1546¤"Log of Everburning"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤110¤2¤1¤"Alt"¤¤"Fire"¤¤¤
+1547¤"Pass Without Trace"¤0¤0¤"Player’s Handbook"¤277¤2¤1¤"Div"¤¤"Plant"¤¤¤
+1548¤"Precipitation"¤0¤0¤"Player’s Handbook"¤278¤2¤1¤"Alt"¤¤"Weather"¤¤¤
+1549¤"Predict Weather"¤0¤0¤"Player’s Handbook"¤278¤2¤1¤"Div"¤¤"Divination/Weather"¤¤¤
+1550¤"Primal’s Braciation"¤0¤2¤"HackJournal #24"¤24¤2¤1¤"Alt"¤¤"Animal"¤¤¤
+1551¤"Purify Water"¤0¤0¤"Player’s Handbook"¤278¤2¤1¤"Alt"¤¤"Devotional"¤¤¤
+1552¤"Shillelagh"¤0¤0¤"Player’s Handbook"¤278¤2¤1¤"Alt"¤¤"Combat/Plant"¤¤¤
+1553¤"Speak with Animals"¤0¤0¤"Player’s Handbook"¤259¤2¤1¤"Alt"¤¤"Animal"¤¤¤
+1554¤"Strength of Stone"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤2¤1¤"Evo"¤¤"Earth"¤¤¤
+1555¤"Trailblaze"¤0¤2¤"HackJournal #24"¤24¤2¤1¤"Evo"¤¤"Travel"¤¤¤
+1556¤"Wind Column"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤2¤1¤"Evo"¤¤"Air"¤¤¤
+1557¤"Animate Vine"¤0¤2¤"HackJournal #24"¤22¤2¤2¤"Alt"¤¤"Plant"¤¤¤
+1558¤"Badberry"¤1¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt/Evo"¤¤"Plant"¤¤¤
+1559¤"Barkskin"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt"¤¤"Plant"¤¤¤
+1560¤"Cause Light Wounds"¤1¤0¤"Player’s Handbook"¤255¤2¤2¤"Nec"¤¤"Hurting"¤¤¤
+1561¤"Charm Person or Mammal"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Enc"¤¤"Charm"¤¤¤
+1562¤"Chill Metal"¤1¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt"¤¤"Fire"¤¤¤
+1563¤"Conjure Demi-Elemental"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤2¤2¤"Con"¤¤"Summoning"¤¤¤
+1564¤"Create Obstacle"¤0¤1¤"By the Sword"¤23¤2¤2¤"Con"¤¤"Creation"¤¤¤
+1565¤"Create Water"¤0¤0¤"Player’s Handbook"¤254¤2¤2¤"Alt"¤¤"Creation/Water"¤¤¤
+1566¤"Cure Light Wounds"¤0¤0¤"Player’s Handbook"¤255¤2¤2¤"Nec"¤¤"Healing"¤¤¤
+1567¤"Destroy Water*"¤1¤0¤"Player’s Handbook"¤254¤2¤2¤"Alt"¤¤"Water"¤¤¤
+1568¤"Detect Gawds"¤0¤1¤"HackJammer"¤122¤2¤2¤"Div"¤¤"Divination"¤¤¤
+1569¤"Elephant’s Overrun"¤0¤2¤"HackJournal #24"¤22¤2¤2¤"Alt"¤¤"Combat"¤¤¤
+1570¤"Extinguish"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤2¤2¤"Alt"¤¤"Water"¤¤¤
+1571¤"Feign Death"¤0¤0¤"Player’s Handbook"¤261¤2¤2¤"Nec"¤¤"Necromantic"¤¤¤
+1572¤"Fire Trap"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Abj/Evo"¤¤"Fire"¤¤¤
+1573¤"Flame Blade"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Evo"¤¤"Fire"¤¤¤
+1574¤"Goodberry"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt/Evo"¤¤"Plant"¤¤¤
+1575¤"Heat Metal"¤0¤0¤"Player’s Handbook"¤279¤2¤2¤"Alt"¤¤"Fire"¤¤¤
+1576¤"Ignite"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤109¤2¤2¤"Alt"¤¤"Fire"¤¤¤
+1577¤"Lozhen’s Breath"¤0¤2¤"HackJournal #24"¤22¤2¤2¤"Con"¤¤"Air"¤¤¤
+1578¤"Messenger"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Enc"¤¤"Animal"¤¤¤
+1579¤"Obscurement"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Alt"¤¤"Weather"¤¤¤
+1580¤"Produce Flame"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Alt"¤¤"Fire"¤¤¤
+1581¤"Reflecting Pool"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Div"¤¤"Divination"¤¤¤
+1582¤"Slow Poison"¤0¤0¤"Player’s Handbook"¤259¤2¤2¤"Nec"¤¤"Healing"¤¤¤
+1583¤"Soften Shape"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤2¤"Alt"¤¤"Earth"¤¤¤
+1584¤"Spider Charm"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤2¤2¤"Alt"¤¤"Animal"¤¤¤
+1585¤"Staunch Bleeding"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤113¤2¤2¤"Alt"¤¤"Healing"¤¤¤
+1586¤"Straighten Wood"¤1¤0¤"Player’s Handbook"¤281¤2¤2¤"Alt"¤¤"Plant"¤¤¤
+1587¤"Trip"¤0¤0¤"Player’s Handbook"¤280¤2¤2¤"Enc"¤¤"Plant"¤¤¤
+1588¤"Warp Wood"¤0¤0¤"Player’s Handbook"¤281¤2¤2¤"Alt"¤¤"Plant"¤¤¤
+1589¤"Air Breathing"¤1¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Air"¤¤¤
+1590¤"Call Lightning"¤0¤0¤"Player’s Handbook"¤281¤2¤3¤"Alt"¤¤"Weather"¤¤¤
+1591¤"Cloud Burst"¤0¤0¤"Player’s Handbook"¤281¤2¤3¤"Alt"¤¤"Weather"¤¤¤
+1592¤"Create Obstacle, Greater"¤0¤1¤"By the Sword"¤23¤2¤3¤"Con"¤¤"Creation"¤¤¤
+1593¤"Cure Disease"¤0¤0¤"Player’s Handbook"¤261¤2¤3¤"Abj"¤¤"Necromantic"¤¤¤
+1594¤"Estrangle"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤115¤2¤3¤"Alt"¤¤"Plant"¤¤¤
+1595¤"Eternal Flame"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤2¤3¤"Evo"¤¤"Fire"¤¤¤
+1596¤"Fertile Land"¤0¤2¤"HackJournal #15"¤15¤2¤3¤"Alt"¤¤"Plant"¤¤¤
+1597¤"Heal Light Wounds"¤0¤0¤"Player’s Handbook"¤258¤2¤3¤"Nec"¤¤"Healing"¤¤¤
+1598¤"Hold Animal"¤0¤0¤"Player’s Handbook"¤281¤2¤3¤"Enc"¤¤"Animal"¤¤¤
+1599¤"Infertile Land"¤1¤2¤"HackJournal #15"¤15¤2¤3¤"Alt"¤¤"Plant"¤¤¤
+1600¤"Know Alignment"¤0¤0¤"Player’s Handbook"¤258¤2¤3¤"Div"¤¤"Divination"¤¤¤
+1601¤"Neutralize Poison"¤0¤0¤"Player’s Handbook"¤266¤2¤3¤"Nec"¤¤"Healing"¤¤¤
+1602¤"Plant Growth"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Alt"¤¤"Plant"¤¤¤
+1603¤"Poison"¤1¤0¤"Player’s Handbook"¤266¤2¤3¤"Nec"¤¤"Hurting"¤¤¤
+1604¤"Protection from Fire"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Abj"¤¤"Warding"¤¤¤
+1605¤"Pyrotechnics"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Alt"¤¤"Fire"¤¤¤
+1606¤"Snare"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Enc"¤¤"Plant"¤¤¤
+1607¤"Spike Growth"¤0¤0¤"Player’s Handbook"¤270¤2¤3¤"Alt/Enc"¤¤"Plant"¤¤¤
+1608¤"Starshine"¤0¤0¤"Player’s Handbook"¤282¤2¤3¤"Evo/Ill"¤¤"Sun"¤¤¤
+1609¤"Stone Shape"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Earth"¤¤¤
+1610¤"Summon Insects"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Con"¤¤"Animal"¤¤¤
+1611¤"Tree"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Plant"¤¤¤
+1612¤"Undetectable Alignment"¤1¤0¤"Player’s Handbook"¤258¤2¤3¤"Div"¤¤"Divination"¤¤¤
+1613¤"Vohven Vipers"¤0¤2¤"HackJournal #24"¤25¤2¤3¤"Con"¤¤"Animal"¤¤¤
+1614¤"Wall of Vines"¤0¤2¤"HackJournal #24"¤25¤2¤3¤"Con"¤¤"Plant"¤¤¤
+1615¤"Water Breathing"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Air"¤¤¤
+1616¤"Weather Prediction"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤114¤2¤3¤"Div"¤¤"Divination/Weather"¤¤¤
+1617¤"White Hot Metal"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Fire"¤¤¤
+1618¤"Wood Shape"¤0¤0¤"Player’s Handbook"¤283¤2¤3¤"Alt"¤¤"Plant"¤¤¤
+1619¤"Animal Summoning I"¤0¤0¤"Player’s Handbook"¤284¤2¤4¤"Con"¤¤"Animal/Summoning"¤¤¤
+1620¤"Call Woodland Beings"¤0¤0¤"Player’s Handbook"¤284¤2¤4¤"Con"¤¤"Animal/Summoning"¤¤¤
+1621¤"Cause Lycanthropy"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤2¤4¤"Nec"¤¤"Animal"¤¤¤
+1622¤"Cause Serious Wounds"¤1¤0¤"Player’s Handbook"¤264¤2¤4¤"Nec"¤¤"Hurting"¤¤¤
+1623¤"Control Temperature, 10’ Radius"¤0¤0¤"Player’s Handbook"¤284¤2¤4¤"Alt"¤¤"Weather"¤¤¤
+1624¤"Cure Serious Wounds"¤0¤0¤"Player’s Handbook"¤264¤2¤4¤"Nec"¤¤"Healing"¤¤¤
+1625¤"Dispel Magic"¤0¤0¤"Player’s Handbook"¤261¤2¤4¤"Abj"¤¤"Warding"¤¤¤
+1626¤"Focus"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤2¤4¤"Evo"¤¤"Devotional"¤¤¤
+1627¤"Grow"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Alt"¤¤"Animal"¤¤¤
+1628¤"Hallucinatory Forest"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Ill"¤¤"Plant"¤¤¤
+1629¤"Hold Plant"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Enc"¤¤"Plant"¤¤¤
+1630¤"Leaves to Bees"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤2¤4¤"Alt"¤¤"Animal"¤¤¤
+1631¤"Plant Door"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Alt"¤¤"Plant"¤¤¤
+1632¤"Produce Fire"¤0¤0¤"Player’s Handbook"¤285¤2¤4¤"Alt"¤¤"Fire"¤¤¤
+1633¤"Protection from Elementals"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤2¤4¤"Abj"¤¤"Air/Earth/Fire/Water"¤¤¤
+1634¤"Protection from Lightning"¤0¤0¤"Player’s Handbook"¤286¤2¤4¤"Abj"¤¤"Warding"¤¤¤
+1635¤"Protection from Plants & Fungi"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤2¤4¤"Abj"¤¤"Plant"¤¤¤
+1636¤"Protection from Water"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤116¤2¤4¤"Abj/Alt"¤¤"Water"¤¤¤
+1637¤"Quench Fire"¤1¤0¤"Player’s Handbook"¤285¤2¤4¤"Alt"¤¤"Fire"¤¤¤
+1638¤"Repel Insects"¤0¤0¤"Player’s Handbook"¤286¤2¤4¤"Abj/Alt"¤¤"Animal/Warding"¤¤¤
+1639¤"Softwood"¤0¤1¤"HackJammer"¤123¤2¤4¤"Alt"¤¤"Plant"¤¤¤
+1640¤"Speak with Plants"¤0¤0¤"Player’s Handbook"¤286¤2¤4¤"Alt"¤¤"Plant"¤¤¤
+1641¤"Stone Passage"¤0¤0¤"Player’s Handbook"¤286¤2¤4¤"Alt"¤¤"Earth"¤¤¤
+1642¤"Stones to Spiders"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤4¤"Alt"¤¤"Animal"¤¤¤
+1643¤"Surrogacy"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤64¤2¤4¤"Alt/Enc"¤¤"Devotional"¤¤¤
+1644¤"Warp Stone or Metal"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤4¤"Alt"¤¤"Earth"¤¤¤
+1645¤"Weather Stasis"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤118¤2¤4¤"Abj"¤¤"Weather"¤¤¤
+1646¤"Zone of Sweet Air"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤118¤2¤4¤"Abj"¤¤"Air"¤¤¤
+1647¤"Animal Growth"¤0¤0¤"Player’s Handbook"¤286¤2¤5¤"Alt"¤¤"Animal"¤¤¤
+1648¤"Animal Reduction"¤1¤0¤"Player’s Handbook"¤286¤2¤5¤"Alt"¤¤"Animal"¤¤¤
+1649¤"Animal Summoning II"¤0¤0¤"Player’s Handbook"¤286¤2¤5¤"Con"¤¤"Animal/Summoning"¤¤¤
+1650¤"Anti-Plant Shell"¤0¤0¤"Player’s Handbook"¤286¤2¤5¤"Abj"¤¤"Plant/Warding"¤¤¤
+1651¤"Commune with Nature"¤0¤0¤"Player’s Handbook"¤287¤2¤5¤"Div"¤¤"Divination"¤¤¤
+1652¤"Control Winds"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤104¤2¤5¤"Alt"¤¤"Air/Weather"¤¤¤
+1653¤"Heal Serious Wounds"¤0¤0¤"Player’s Handbook"¤268¤2¤5¤"Nec"¤¤"Healing"¤¤¤
+1654¤"Insect Plague"¤0¤0¤"Player’s Handbook"¤268¤2¤5¤"Con"¤¤"Combat"¤¤¤
+1655¤"Lesser Reincarnation"¤0¤0¤"Player’s Handbook"¤287¤2¤5¤"Nec"¤¤"Necromantic"¤¤¤
+1656¤"Moonbeam"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt/Evo"¤¤"Sun"¤¤¤
+1657¤"Pass Plant"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt"¤¤"Plant"¤¤¤
+1658¤"Protection from Acid"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Abj"¤¤"Warding"¤¤¤
+1659¤"Protection from Petrification"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Abj"¤¤"Warding"¤¤¤
+1660¤"Sink Into Earth"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤5¤"Alt"¤¤"Earth"¤¤¤
+1661¤"Snakes to Sticks"¤1¤0¤"Player’s Handbook"¤266¤2¤5¤"Alt"¤¤"Plant"¤¤¤
+1662¤"Spike Stones"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt/Enc"¤¤"Earth"¤¤¤
+1663¤"Sticks to Snakes"¤0¤0¤"Player’s Handbook"¤266¤2¤5¤"Alt"¤¤"Plant"¤¤¤
+1664¤"Transmute Mud to Rock"¤1¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt"¤¤"Earth/Water"¤¤¤
+1665¤"Transmute Rock to Mud"¤0¤0¤"Player’s Handbook"¤288¤2¤5¤"Alt"¤¤"Earth/Water"¤¤¤
+1666¤"Wall of Fire"¤0¤0¤"Player’s Handbook"¤289¤2¤5¤"Con"¤¤"Fire"¤¤¤
+1667¤"Animal Summoning III"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Con"¤¤"Animal/Summoning"¤¤¤
+1668¤"Anti-Animal Shell"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Abj"¤¤"Animal/Warding"¤¤¤
+1669¤"Cause Critical Wounds"¤1¤0¤"Player’s Handbook"¤268¤2¤6¤"Nec"¤¤"Hurting"¤¤¤
+1670¤"Conjure Fire Elemental"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Con"¤¤"Fire"¤¤¤
+1671¤"Cure Critical Wounds"¤0¤0¤"Player’s Handbook"¤268¤2¤6¤"Nec"¤¤"Healing"¤¤¤
+1672¤"Dismiss Fire Elemental"¤1¤0¤"Player’s Handbook"¤289¤2¤6¤"Con"¤¤"Fire"¤¤¤
+1673¤"Feeblemind"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Enc"¤¤"Charm"¤¤¤
+1674¤"Fire Seeds"¤0¤0¤"Player’s Handbook"¤289¤2¤6¤"Con"¤¤"Fire"¤¤¤
+1675¤"Liveoak"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Enc"¤¤"Plant"¤¤¤
+1676¤"Transmute Dust to Water"¤1¤0¤"Player’s Handbook"¤290¤2¤6¤"Alt"¤¤"Earth/Water"¤¤¤
+1677¤"Transmute Water to Dust"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Alt"¤¤"Earth/Water"¤¤¤
+1678¤"Transport Via Plants"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Alt"¤¤"Plant"¤¤¤
+1679¤"Turn Wood"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Alt"¤¤"Plant"¤¤¤
+1680¤"Wall of Thorns"¤0¤0¤"Player’s Handbook"¤290¤2¤6¤"Con"¤¤"Plant/Summoning"¤¤¤
+1681¤"Weather Summoning"¤0¤0¤"Player’s Handbook"¤291¤2¤6¤"Con"¤¤"Summoning/Weather"¤¤¤
+1682¤"Whirlwind"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤117¤2¤6¤"Evo"¤¤"Weather"¤¤¤
+1683¤"Animate Rock"¤0¤0¤"Player’s Handbook"¤291¤2¤7¤"Alt"¤¤"Earth"¤¤¤
+1684¤"Cause Inclement Weather"¤0¤0¤"Player’s Handbook"¤291¤2¤7¤"Alt"¤¤"Weather"¤¤¤
+1685¤"Changestaff"¤0¤0¤"Player’s Handbook"¤291¤2¤7¤"Enc/Evo"¤¤"Creation/Plant"¤¤¤
+1686¤"Chariot of Sustarre"¤0¤0¤"Player’s Handbook"¤292¤2¤7¤"Evo"¤¤"Creation/Fire"¤¤¤
+1687¤"Confusion"¤0¤0¤"Player’s Handbook"¤292¤2¤7¤"Enc"¤¤"Charm"¤¤¤
+1688¤"Conjure Earth Elemental"¤0¤0¤"Player’s Handbook"¤292¤2¤7¤"Con"¤¤"Earth/Summoning"¤¤¤
+1689¤"Control Weather"¤0¤0¤"Player’s Handbook"¤273¤2¤7¤"Alt"¤¤"Weather"¤¤¤
+1690¤"Create Atmosphere"¤0¤1¤"HackJammer"¤123¤2¤7¤"Alt"¤¤"Air"¤¤¤
+1691¤"Creeping Doom"¤0¤0¤"Player’s Handbook"¤293¤2¤7¤"Con"¤¤"Air/Summoning"¤¤¤
+1692¤"Destroy Atmosphere"¤1¤1¤"HackJammer"¤123¤2¤7¤"Alt"¤¤"Air"¤¤¤
+1693¤"Dismiss Earth Elemental"¤1¤0¤"Player’s Handbook"¤292¤2¤7¤"Con"¤¤"Earth/Summoning"¤¤¤
+1694¤"False Dawn"¤0¤1¤"Zealot’s Guide to Wurld Conversion"¤107¤2¤7¤"Evo"¤¤"Sun"¤¤¤
+1695¤"Finger of Death"¤0¤0¤"Player’s Handbook"¤293¤2¤7¤"Enc"¤¤"Necromantic"¤¤¤
+1696¤"Fire Quench"¤1¤0¤"Player’s Handbook"¤293¤2¤7¤"Evo"¤¤"Fire"¤¤¤
+1697¤"Fire Storm"¤0¤0¤"Player’s Handbook"¤293¤2¤7¤"Evo"¤¤"Fire"¤¤¤
+1698¤"Heal Critical Wounds"¤0¤0¤"Player’s Handbook"¤271¤2¤7¤"Nec"¤¤"Healing"¤¤¤
+1699¤"Reincarnate"¤0¤0¤"Player’s Handbook"¤293¤2¤7¤"Nec"¤¤"Necromantic"¤¤¤
+1700¤"Repel Living Plants & Animals"¤0¤0¤"Player’s Handbook"¤294¤2¤7¤"Abj"¤¤"Animal/Plant/Warding"¤¤¤
+1701¤"Sunray"¤0¤0¤"Player’s Handbook"¤294¤2¤7¤"Alt/Evo"¤¤"Sun"¤¤¤
+1702¤"Thicket"¤0¤1¤"Adventurer’s Guide to Pixie Fairies"¤65¤2¤7¤"Con"¤¤"Plant"¤¤¤
+1703¤"Transmute Metal to Wood"¤0¤0¤"Player’s Handbook"¤294¤2¤7¤"Alt"¤¤"Earth"¤¤¤
+1704¤"Transmute Rock to Lava"¤0¤0¤"Player’s Handbook"¤294¤2¤7¤"Alt"¤¤"Earth"¤¤¤

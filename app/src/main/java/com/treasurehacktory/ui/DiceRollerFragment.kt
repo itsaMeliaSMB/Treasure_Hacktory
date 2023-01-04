@@ -47,7 +47,7 @@ class DiceRollerFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
 
         _binding = LayoutDiceRollerBinding.inflate(inflater,container,false)
-        val view = binding.root //TODO crash occurs here when trying to inflate xml line 364. 12/14/2022
+        val view = binding.root
 
         shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
 
@@ -117,8 +117,8 @@ class DiceRollerFragment : Fragment() {
             @ColorInt
             val colorOnPrimary = typedValue.data
 
-            inflateMenu(R.menu.unique_details_toolbar_menu)
-            title = getString(R.string.item_details)
+            inflateMenu(R.menu.dice_roller_menu)
+            title = getString(R.string.dice_roller_toolbar_title)
             setTitleTextColor(colorOnPrimary)
             setSubtitleTextColor(colorOnPrimary)
             navigationIcon?.apply {
@@ -203,6 +203,7 @@ class DiceRollerFragment : Fragment() {
                             "Alea iacta est",
                             "Baby needs a new pair of shoes",
                             "Big bucks, no whammies",
+                            "CHANCE TIME",
                             "Chuck-a-luck",
                             "Dicequake!",
                             "Escalators, escalators, escalators!",
@@ -210,7 +211,10 @@ class DiceRollerFragment : Fragment() {
                             "High and winner, got a hot hand",
                             "Hoody hoo!",
                             "I'm feeling lucky",
+                            "Just one more roll...",
                             "Keep it rollin'",
+                            "Leave luck to heaven",
+                            "Let it ride",
                             "Let 'er rip",
                             "Make it the hard way",
                             "Now, do it again",
@@ -227,7 +231,6 @@ class DiceRollerFragment : Fragment() {
                     // endregion
 
                     //region [ Roll new penetrating roll ]
-                    //TODO valid text fields first
                     with(binding) {
                         diceRollerViewModel.rollNewRoll(
                             this.diceRollerDieCountEdit.text.toString().toIntOrNull() ?: 1,
@@ -242,16 +245,8 @@ class DiceRollerFragment : Fragment() {
                     }
 
                     // endregion
-
-                } else {
-
-
                 }
-
             }
-
-            //TODO implement all text fields with validation below the roll button
-            //TODO remember to update left-side die icon upon updating sides field
 
             diceRollerDieCountEdit.apply{
                 addTextChangedListener { input ->
@@ -427,8 +422,8 @@ class DiceRollerFragment : Fragment() {
 
                     "${roll.getDiceDescription()}=".also { diceRollOverviewLabel.text = it }
 
-                    "${NumberFormat.getNumberInstance().format(roll.getRollTotal())}=".also {
-                        diceRollOverviewLabel.text = it }
+                    NumberFormat.getNumberInstance().format(roll.getRollTotal()).also {
+                        diceRollOverviewTotalValue.text = it }
 
                     (SimpleDateFormat("hh:mm:ss aaa z")
                         .format(timestamp)).also { diceRollOverviewTimestamp.text = it }
@@ -439,8 +434,8 @@ class DiceRollerFragment : Fragment() {
 
                     "Standard ${if (roll.standardRolls.size == 1) "roll" else "rolls"} (${
                         NumberFormat.getNumberInstance().format(roll.standardRolls.sum())
-                    } over ${NumberFormat.getNumberInstance().format(roll.standardRolls.size)}" +
-                            " ${if (roll.standardRolls.size == 1) "die" else "dice"}):\n".also { diceRollStandardLabel.text = it }
+                    } over ${NumberFormat.getNumberInstance().format(roll.standardRolls.size)} ${if (roll.standardRolls.size == 1) "die" else "dice"}):\n"
+                                .also { diceRollStandardLabel.text = it }
 
                     val standardBuilder = StringBuilder()
                     roll.standardRolls.forEachIndexed { index, subRoll ->
@@ -533,6 +528,17 @@ class DiceRollerFragment : Fragment() {
                  text = it
                  visibility = View.VISIBLE
              } }
+
+             diceRollerResultBackdrop.setImageResource(when(latestRoll.numberOfSides){
+                 2      -> R.drawable.clipart_coin_vector_icon
+                 4      -> R.drawable.clipart_d4_vector_icon
+                 6      -> R.drawable.clipart_d6_vector_icon
+                 8      -> R.drawable.clipart_d8_vector_icon
+                 10, 100, 1000, 10000, 100000 -> R.drawable.clipart_d10_vector_icon
+                 12     -> R.drawable.clipart_d12_vector_icon
+                 20     -> R.drawable.clipart_d20_vector_icon
+                 else   -> R.drawable.clipart_dice_cup_vector_icon
+             })
          }
     }
 
@@ -562,7 +568,7 @@ class DiceRollerFragment : Fragment() {
 
             val result = StringBuilder()
 
-            result.append(roll.getDiceDescription() + "=\n")
+            result.append(roll.getDiceDescription() + "\n= ")
 
             result.append(roll.getRollTotal())
 
@@ -572,27 +578,42 @@ class DiceRollerFragment : Fragment() {
                     " ${if (roll.standardRolls.size == 1) "die" else "dice"})\n"
             )
 
-            result.append("=" + roll.standardRolls.forEachIndexed { index, subRoll ->
-                if (index > 0) { if (subRoll >= 0) " + " else " - " } else { if (index < 0) "-" else "" } +
-                        NumberFormat.getNumberInstance().format(subRoll.absoluteValue)})
+            val standardRollBuilder = StringBuilder("= ")
+
+            roll.standardRolls.forEachIndexed { index, subRoll ->
+                standardRollBuilder.append(
+                    if (index > 0) { if (subRoll >= 0) " + " else " - " } else { if (index < 0) "-" else "" } +
+                            NumberFormat.getNumberInstance().format(subRoll.absoluteValue)
+                )
+            }
+
+            result.append(standardRollBuilder.toString())
+
 
             if (roll.extraRolls.isNotEmpty()) {
                 result.append("\nPenetration ${if (roll.extraRolls.size == 1) "roll" else "rolls"} (${
                     NumberFormat.getNumberInstance().format(
                         roll.extraRolls.fold(0) {total, roll -> total + roll - 1 })
                 } before penalty over ${NumberFormat.getNumberInstance().format(roll.extraRolls.size)}" +
-                        " ${if (roll.extraRolls.size == 1) "die" else "dice"})"
+                        " ${if (roll.extraRolls.size == 1) "die" else "dice"})\n"
                         )
             }
 
-            result.append("=" + roll.extraRolls.forEachIndexed { index, subRoll ->
-                if (index > 0) { if (subRoll >= 0) " + " else " - " } else { if (index < 0) "-" else "" } +
-                        NumberFormat.getNumberInstance().format(subRoll.absoluteValue)})
+            val extraRollsBuilder = StringBuilder("= ")
+
+            roll.extraRolls.forEachIndexed { index, subRoll ->
+                extraRollsBuilder.append(
+                    if (index > 0) { if (subRoll >= 0) " + " else " - " } else { if (index < 0) "-" else "" } +
+                            NumberFormat.getNumberInstance().format(subRoll.absoluteValue)
+                )
+            }
+
+            result.append(extraRollsBuilder.toString())
 
             if (roll.honorModifier != 0) { result.append("\nTotal honor modifier: ${
                 roll.honorModifier * (roll.standardRolls.size + roll.extraRolls.size)}") }
 
-            result.append("\nRolled at " + SimpleDateFormat("hh:mm:ss aaa z"))
+            result.append("\nRolled at " + SimpleDateFormat("hh:mm:ss aaa z").format(timestamp))
 
             return result.toString()
         }

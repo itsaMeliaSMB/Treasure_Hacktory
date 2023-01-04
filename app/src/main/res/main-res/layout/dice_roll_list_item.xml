@@ -13,6 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:tint="?attr/colorOnSurface"
+        android:alpha="0.8"
         tools:src="@drawable/clipart_d20_vector_icon" />
 
     <TextView
@@ -60,7 +61,8 @@
         app:layout_constraintBottom_toBottomOf="@id/dice_roll_icon"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="?attr/colorOnSurface"
-        tools:src="@drawable/clipart_clipboard_vector_icon" />
+        android:alpha="0.8"
+        android:src="@drawable/clipart_clipboard_vector_icon" />
 
     <LinearLayout
         android:id="@+id/dice_roll_details_group"
@@ -87,8 +89,8 @@
         <TextView
             android:id="@+id/dice_roll_standard_label"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingTop="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:paddingHorizontal="8dp"
             tools:text="Standard rolls (20 over 2 dice):"
             android:textStyle="bold"
@@ -99,9 +101,9 @@
         <TextView
             android:id="@+id/dice_roll_standard_values"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingStart="16dp"
-            android:paddingEnd="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             tools:text="20 + 20"
             app:layout_constraintTop_toTopOf="@id/dice_roll_icon"
             app:layout_constraintBottom_toTopOf="@id/dice_roll_overview_total_value"
@@ -110,7 +112,7 @@
         <TextView
             android:id="@+id/dice_roll_extra_label"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:text="Extra rolls (6 over 2 dice):"
             android:textStyle="bold"
             android:layout_marginTop="4dp"
@@ -122,10 +124,9 @@
         <TextView
             android:id="@+id/dice_roll_extra_values"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-
-            android:paddingStart="16dp"
-            android:paddingEnd="8dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
             android:paddingBottom="8dp"
             tools:text="4 + 2"
             app:layout_constraintTop_toTopOf="@id/dice_roll_icon"

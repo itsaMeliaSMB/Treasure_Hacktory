@@ -241,6 +241,7 @@
                 android:id="@+id/dice_roller_die_sides_input"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="wrap_content"
+                android:minWidth="58dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
@@ -251,6 +252,7 @@
                     android:id="@+id/dice_roller_die_sides_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minWidth="58dp"
                     android:hint="Sides"
                     android:inputType="number"
                     android:maxLength="6"
@@ -271,7 +273,7 @@
                 app:layout_constraintBottom_toBottomOf="@id/dice_roller_die_mod_input"
                 app:layout_constraintEnd_toStartOf="@id/dice_roller_die_mod_input"
                 app:layout_constraintTop_toTopOf="@id/dice_roller_die_mod_input"
-                tools:text="+" />
+                android:text="+" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -287,6 +289,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/dice_roller_die_mod_edit"
                     android:layout_width="match_parent"
+                    android:minWidth="58dp"
                     android:layout_height="wrap_content"
                     android:hint="Mod"
                     android:inputType="number"
@@ -348,11 +351,6 @@
                             android:textColor="?attr/colorOnSecondary"
                             android:textStyle="bold" />
 
-                        <ImageView
-                            style="@style/generator_cardview_letter_header_icon"
-                            android:src="@drawable/clipart_die_target_vector_icon"
-                            app:tint="?attr/colorOnSecondary" />
-
                     </RelativeLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -360,8 +358,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="8dp"
-                        android:background="?attr/cardBackgroundColor"
-                        android:visibility="gone">
+                        android:backgroundTint="?attr/colorSurface"
+                        android:visibility="gone"
+                        tools:visibility="visible">
 
                         <ImageView
                             android:id="@+id/dice_roller_penetration_icon"
@@ -371,7 +370,8 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@id/dice_roller_penetration_infodot"
                             app:layout_constraintBottom_toBottomOf="@id/dice_roller_penetration_infodot"
-                            android:src="@drawable/clipart_die_target_vector_icon"/>
+                            android:src="@drawable/clipart_die_target_vector_icon"
+                            android:alpha="0.65"/>
 
                         <TextView
                             android:id="@+id/dice_roller_penetration_label"
@@ -468,7 +468,8 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="@id/dice_roller_honor_mod_infodot"
                             app:layout_constraintBottom_toBottomOf="@id/dice_roller_honor_mod_infodot"
-                            android:src="@drawable/clipart_honor_vector_icon"/>
+                            android:src="@drawable/clipart_honor_vector_icon"
+                            android:alpha="0.65"/>
 
                         <TextView
                             android:id="@+id/dice_roller_honor_mod_label"
@@ -480,7 +481,7 @@
                             app:layout_constraintBottom_toBottomOf="@id/dice_roller_honor_mod_infodot"
                             android:textStyle="bold"
                             android:textSize="16sp"
-                            tools:text="Honor modifier"/>
+                            android:text="Honor modifier"/>
 
                         <ImageView
                             android:id="@+id/dice_roller_honor_mod_infodot"
