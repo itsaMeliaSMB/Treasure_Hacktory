@@ -8,10 +8,12 @@ import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.Keep
 import androidx.core.animation.addListener
 import androidx.fragment.app.Fragment
 import com.treasurehacktory.databinding.LayoutAboutPageBinding
 
+@Keep
 class AboutFragment : Fragment() {
 
     //region [ Property declarations ]

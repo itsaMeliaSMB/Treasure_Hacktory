@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -36,6 +37,7 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import kotlin.io.path.bufferedWriter
 
+@Keep
 class HoardOverviewFragment : Fragment() {
 
     // region [ Property declarations ]

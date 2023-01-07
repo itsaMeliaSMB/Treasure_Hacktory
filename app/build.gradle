@@ -12,10 +12,11 @@ android {
         applicationId 'com.treasurehacktory'
         minSdk 28
         targetSdkVersion 33
-        versionCode 5
+        versionCode 6
         versionName "1.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.debug
     }
 
     buildTypes {

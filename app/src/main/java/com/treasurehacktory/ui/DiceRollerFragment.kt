@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,6 +31,7 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import kotlin.math.absoluteValue
 
+@Keep
 class DiceRollerFragment : Fragment() {
 
     private var _binding: LayoutDiceRollerBinding? = null

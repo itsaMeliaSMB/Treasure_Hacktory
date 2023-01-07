@@ -13,6 +13,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,6 +32,7 @@ import com.treasurehacktory.viewmodel.HoardListViewModelFactory
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
+@Keep
 class HoardListFragment : Fragment() {
 
     interface Callbacks{

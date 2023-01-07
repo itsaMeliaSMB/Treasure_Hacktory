@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Filter
+import androidx.annotation.Keep
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -26,6 +27,7 @@ import com.treasurehacktory.viewmodel.HoardEditViewModel
 import com.treasurehacktory.viewmodel.HoardEditViewModelFactory
 import kotlin.math.roundToInt
 
+@Keep
 class HoardEditBottomDialog : BottomSheetDialogFragment() {
 
     private lateinit var activeHoard: Hoard

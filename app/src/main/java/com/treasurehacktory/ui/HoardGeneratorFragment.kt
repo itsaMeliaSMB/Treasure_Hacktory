@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import androidx.core.animation.addListener
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -41,6 +42,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
+@Keep
 class HoardGeneratorFragment : Fragment() {
 
     // region [ Property declarations ]
@@ -1933,7 +1935,8 @@ class HoardGeneratorFragment : Fragment() {
                                 value = entry.second
                                 wrapSelectorWheel = false
                             }
-                        qtyDialogView.findViewById<TextView>(R.id.dialog_letter_qty_current).text =
+
+                            qtyDialogView.findViewById<TextView>(R.id.dialog_letter_qty_current).text =
                             entry.second.toString()
 
                             // Build and show dialog

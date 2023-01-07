@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.Keep
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,6 +17,7 @@ import com.treasurehacktory.model.HoardEvent
 import com.treasurehacktory.viewmodel.AddHoardEventViewModel
 import com.treasurehacktory.viewmodel.AddHoardEventViewModelFactory
 
+@Keep
 class AddHoardEventDialog() : DialogFragment() {
 
     private var targetHoardID = 0
