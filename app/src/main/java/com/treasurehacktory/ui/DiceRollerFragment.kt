@@ -591,26 +591,26 @@ class DiceRollerFragment : Fragment() {
 
             result.append(standardRollBuilder.toString())
 
-
             if (roll.extraRolls.isNotEmpty()) {
+
                 result.append("\nPenetration ${if (roll.extraRolls.size == 1) "roll" else "rolls"} (${
                     NumberFormat.getNumberInstance().format(
                         roll.extraRolls.fold(0) {total, roll -> total + roll - 1 })
                 } before penalty over ${NumberFormat.getNumberInstance().format(roll.extraRolls.size)}" +
                         " ${if (roll.extraRolls.size == 1) "die" else "dice"})\n"
                         )
+
+                val extraRollsBuilder = StringBuilder("= ")
+
+                roll.extraRolls.forEachIndexed { index, subRoll ->
+                    extraRollsBuilder.append(
+                        if (index > 0) { if (subRoll >= 0) " + " else " - " } else { if (index < 0) "-" else "" } +
+                                NumberFormat.getNumberInstance().format(subRoll.absoluteValue)
+                    )
+                }
+
+                result.append(extraRollsBuilder.toString())
             }
-
-            val extraRollsBuilder = StringBuilder("= ")
-
-            roll.extraRolls.forEachIndexed { index, subRoll ->
-                extraRollsBuilder.append(
-                    if (index > 0) { if (subRoll >= 0) " + " else " - " } else { if (index < 0) "-" else "" } +
-                            NumberFormat.getNumberInstance().format(subRoll.absoluteValue)
-                )
-            }
-
-            result.append(extraRollsBuilder.toString())
 
             if (roll.honorModifier != 0) { result.append("\nTotal honor modifier: ${
                 roll.honorModifier * (roll.standardRolls.size + roll.extraRolls.size)}") }

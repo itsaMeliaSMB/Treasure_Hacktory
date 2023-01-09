@@ -98,5 +98,6 @@
     <string name="hoard_event_log_filter_including_label">Including:</string>
     <string name="action_filter_events">Filter shown events</string>
     <string name="button_delete_even_favorites">Yes, delete even marked favorites.</string>
+    <string name="testers_thanks">Xjon, Kaito Sinclaire, TrashBoat, MyDude, and Raspberry Floof for helping as testers.</string>
 
 </resources>

@@ -21,4 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 -keepnames class androidx.navigation.fragment.NavHostFragment
--printusage C:/Users/Jacob/Documents/proguard-report/usage.txt
+
+-keep class com.google.gson.reflect.TypeToken
+-keep class * extends com.google.gson.reflect.TypeToken
+-keep public class * implements java.lang.reflect.Type
