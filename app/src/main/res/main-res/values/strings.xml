@@ -46,7 +46,7 @@
     <string name="game_icons_site_link">Available on <a href="https://game-icons.net/">Game-icons website</a></string>
     <string name="game_icons_contributors">Caro Asercion\nDarkZaitzev\nDelapouite\nLorc\nSkoll\nViscious Speed\nWilldabeast</string>
     <string name="item_vector_icons">Item Vector Icons (Game-icons.net)</string>
-    <string name="app_version_string">version 1.0.0</string>
+    <string name="app_version_string">version 1.0.1</string>
     <string name="app_title_text">Treasure Hacktory</string>
     <string name="material_icons_apache_link">Provided under the <a href="https://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a></string>
     <string name="material_icons_library_link"><a href="https://fonts.google.com/icons">Material Icons Library</a></string>
@@ -60,7 +60,12 @@
     <string name="special_thanks_header">Special Thanks</string>
     <string name="about_page_description">A fan-made HackMaster 4th edition companion app for treasure generation and management</string>
     <string name="action_about">About / Credits</string>
+    <string name="action_refresh_database">Refresh reference tables</string>
+    <string name="action_dice_roller">Penetrating Dice Roller</string>
     <string name="max_icons_creator_link"><a href="https://www.flaticon.com/authors/maxicons">Creator\'s profile</a> on flaticon</string>
     <string name="keep_originals_after_merging">Keep originals after merging</string>
-
+    <string name="dice_roller_toolbar_title">Penetrating Dice Roller</string>
+    <string name="action_close">Close</string>
+    <string name="penetration_infodot_message">The range of possible rolls that will trigger extra penetration rolls.\n\nUPPER penetration starts from the maximum roll.\nLOWER penetration starts from the minimum, and its subsequent rolls will subtract from the total.\n\nFor example, a d20 with an upper threshold of 2 and a lower threshold of 1 will penetrate up on a roll of 19 or 20 while penetrating downward on a roll of 1.</string>
+    <string name="honor_infodot_message">Flat modifier added to EVERY roll due to a character\'s honor.</string>
 </resources>

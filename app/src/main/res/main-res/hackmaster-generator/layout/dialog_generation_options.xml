@@ -350,6 +350,7 @@
                 android:maxLines="1"
                 android:textAlignment="center"
                 android:textSize="18sp"
+                tools:ignore="TouchTargetSizeCheck"
                 tools:text="100" />
 
         </com.google.android.material.textfield.TextInputLayout>

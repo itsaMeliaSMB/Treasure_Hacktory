@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.treasurehacktory.model.ReferenceType
-import org.jetbrains.annotations.NotNull
 
 // region [ Read-only template entities ]
 
@@ -64,12 +63,12 @@ data class MagicItemTemplate(
 
 @Entity(tableName = "command_word_suggestions")
 data class CommandWord(
-    @PrimaryKey @NotNull val commandWord: String,
+    @PrimaryKey val commandWord: String,
     val themeWord: String )
 
 @Entity(tableName = "hackmaster_letter_codes")
 data class LetterCode(
-    @PrimaryKey @NotNull val letterID: String,
+    @PrimaryKey val letterID: String,
     val cpChance: Int = 0, val cpMin : Int = 0, val cpMax : Int = 0,
     val spChance: Int = 0, val spMin : Int = 0, val spMax : Int = 0,
     val epChance: Int = 0, val epMin : Int = 0, val epMax : Int = 0,

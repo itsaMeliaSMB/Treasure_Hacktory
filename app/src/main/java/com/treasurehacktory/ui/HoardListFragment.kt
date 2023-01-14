@@ -13,6 +13,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -31,6 +32,7 @@ import com.treasurehacktory.viewmodel.HoardListViewModelFactory
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
+@Keep
 class HoardListFragment : Fragment() {
 
     interface Callbacks{
@@ -197,6 +199,17 @@ class HoardListFragment : Fragment() {
                         if (hoardListViewModel.isRunningAsyncLiveData.value != true) {
 
                             val actionID = R.id.hoard_list_to_about_page_action
+                            findNavController().navigate(actionID)
+                        }
+
+                        true
+                    }
+
+                    R.id.action_dice_roller -> {
+
+                        if (hoardListViewModel.isRunningAsyncLiveData.value != true) {
+
+                            val actionID = R.id.hoard_list_to_dice_roller_action
                             findNavController().navigate(actionID)
                         }
 
@@ -655,6 +668,10 @@ class HoardListFragment : Fragment() {
     private fun updateUI(hoards: List<Hoard>) {
         hoardAdapter = HoardAdapter(hoards)
         binding.hoardListRecycler.adapter = hoardAdapter
+    }
+
+    private fun refreshDatabaseTables() {
+
     }
 
     private fun showContentFrameCrossfade() {

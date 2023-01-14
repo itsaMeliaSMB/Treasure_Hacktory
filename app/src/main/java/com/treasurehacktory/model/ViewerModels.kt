@@ -1,5 +1,6 @@
 package com.treasurehacktory.model
 
+import androidx.annotation.Keep
 import com.treasurehacktory.repository.HMRepository
 
 // region [ Listable ]
@@ -284,6 +285,7 @@ class SimpleSpellEntry(
 
 // endregion
 
+@Keep
 enum class UniqueItemType{
     GEM,
     ART_OBJECT,

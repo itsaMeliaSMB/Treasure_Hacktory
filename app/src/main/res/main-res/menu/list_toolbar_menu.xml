@@ -16,6 +16,14 @@
         />
 
     <item
+        android:id="@+id/action_dice_roller"
+        android:title="@string/action_dice_roller"
+        android:titleCondensed="Dice Roller"
+        android:icon="@drawable/clipart_dice_cup_vector_icon"
+        android:iconTint="?attr/colorOnPrimary"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/action_about"
         android:title="@string/action_about"
         android:titleCondensed="About"

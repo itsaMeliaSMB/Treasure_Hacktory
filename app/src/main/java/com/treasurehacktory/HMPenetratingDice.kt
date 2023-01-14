@@ -1,29 +1,28 @@
 package com.treasurehacktory
 
+import java.text.NumberFormat
+import kotlin.math.absoluteValue
 import kotlin.random.Random
 
-data class PenDiceRoll(var baseRoll: Int = 0, var baseCount: Int = 0,
-                       var penetrationRoll: Int = 0, var penetrationCount: Int = 0) {
+data class PenDiceRoll(val numberOfDice: Int = 1, val numberOfSides: Int, val dieModifier: Int = 0,
+                       val highThreshold: Int = 1, val lowThreshold: Int = 0,
+                       val honorModifier: Int = 0, val willAutoPenetrate: Boolean,
+                       val standardRolls : List<Int>, val extraRolls : List<Int>) {
 
-    fun clearAll(){
+    fun getRollTotal() = standardRolls.sum() + dieModifier +
+            extraRolls.fold(0) {total, roll -> total + roll - 1 } +
+            ((standardRolls.size + extraRolls.size) * honorModifier)
 
-        baseRoll = 0
-        baseCount = 0
-        penetrationRoll = 0
-        penetrationCount = 0
-    }
-
-    fun addToThis(addend: PenDiceRoll){
-
-        baseRoll           += addend.baseRoll
-        baseCount           += addend.baseCount
-        penetrationRoll    += addend.penetrationRoll
-        penetrationCount    += addend.penetrationCount
-    }
-
-    fun getRollTotal() = baseRoll + penetrationRoll
-
-    fun getDiceCount() = baseCount + penetrationCount
+    fun getDiceDescription() = NumberFormat.getNumberInstance().format(numberOfDice) + "d" +
+            NumberFormat.getNumberInstance().format(numberOfSides) + when {
+                dieModifier > 0 -> "+" + NumberFormat.getNumberInstance().format(dieModifier)
+                dieModifier < 0 -> "-" + NumberFormat.getNumberInstance().format(dieModifier.absoluteValue)
+                else    -> ""
+            } +
+            (if (highThreshold + lowThreshold > 0) " p${if (willAutoPenetrate) "a" else ""}" else "") +
+            (if (highThreshold > 0) "(+${NumberFormat.getNumberInstance().format(highThreshold)})" else ("")) +
+            (if (lowThreshold > 0) "{-${NumberFormat.getNumberInstance().format(lowThreshold)}}" else ("")) +
+            (if (honorModifier != 0) " [HON ${if(honorModifier > 0)"+" else "-"}${honorModifier.absoluteValue}]" else "")
 }
 
 /**
@@ -40,80 +39,59 @@ fun rollPenetratingDice(numberOfDice: Int = 1, numberOfSides: Int, dieModifier: 
                         highThreshold: Int = 1, lowThreshold: Int = 0,
                         honorModifier: Int = 0, willAutoPenetrate: Boolean = false) : PenDiceRoll {
 
-    val roll                        = PenDiceRoll()
     var remainingRolls              = numberOfDice
-    var remainingPenetrationRolls   = 0
-    var isPositivePenetration       = false
+    var remainingPositiveRolls      = 0
+    var remainingNegativeRolls      = 0
     var currentRoll                 = 0
+    val standardRolls               = ArrayList<Int>()
+    val extraRolls                  = ArrayList<Int>()
 
     /// *** Perform base rolls ***
 
     do {
         currentRoll = Random.nextInt(1,numberOfSides + 1)   // Get actual roll
 
-        roll.baseRoll += currentRoll + honorModifier               // Add to total value w/ HON mod
-        roll.baseCount ++                                          // Increment dice counter
-        remainingRolls --                                          // Decrement remaining base rolls
-
-        // *** Determine penetration direction and applicability ***
+        standardRolls.add(currentRoll)
+        remainingRolls --
 
         if (numberOfSides >= 4) {
 
             when {
 
-                (currentRoll <= lowThreshold) -> {
+                (currentRoll > numberOfSides - highThreshold) || (willAutoPenetrate) ->
+                    remainingPositiveRolls++
 
-                    isPositivePenetration = false
-                    remainingPenetrationRolls++
-                }
-
-                (currentRoll > numberOfSides - highThreshold) || (willAutoPenetrate) -> {
-
-                    isPositivePenetration = true
-                    remainingPenetrationRolls++
-                }
+                (currentRoll <= lowThreshold) ->
+                    remainingNegativeRolls++
             }
         }
 
     } while(remainingRolls > 0)
 
-    roll.baseRoll += dieModifier                       // Add one-time modifier to total
-
     // *** Roll penetration dice, if applicable ***
 
-    while (remainingPenetrationRolls > 0) {
+    while (remainingPositiveRolls > 0 && extraRolls.size <= numberOfDice * 16) {
 
         currentRoll = Random.nextInt(1,numberOfSides + 1)
 
-        if (isPositivePenetration)  {
-            roll.penetrationRoll += currentRoll - 1 + honorModifier
-        } else {
-            roll.penetrationRoll -= currentRoll - 1 + honorModifier
-        }
+        extraRolls.add(currentRoll)
 
-        roll.penetrationCount ++
-        remainingPenetrationRolls --
+        remainingPositiveRolls --
 
-        // *** Determine penetration direction and applicability***
-
-        if (numberOfSides >= 4) {
-
-            when {
-
-                (currentRoll <= lowThreshold) -> {
-
-                    isPositivePenetration = false
-                    remainingPenetrationRolls ++
-                }
-
-                (currentRoll > numberOfSides - highThreshold) -> {
-
-                    isPositivePenetration = true
-                    remainingPenetrationRolls ++
-                }
-            }
-        }
+        if (currentRoll > numberOfSides - highThreshold) { remainingPositiveRolls ++ }
     }
 
-    return roll
+    while (remainingNegativeRolls > 0 && extraRolls.size <= numberOfDice * 16) {
+
+        currentRoll = Random.nextInt(1,numberOfSides + 1)
+
+        extraRolls.add(-1 * currentRoll)
+
+        remainingNegativeRolls --
+
+        if (currentRoll > numberOfSides - lowThreshold) { remainingNegativeRolls ++ }
+    }
+
+    return PenDiceRoll(numberOfDice, numberOfSides, dieModifier, highThreshold, lowThreshold,
+        honorModifier, willAutoPenetrate, standardRolls, extraRolls)
 }

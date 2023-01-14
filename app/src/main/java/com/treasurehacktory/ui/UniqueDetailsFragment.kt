@@ -14,6 +14,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat.getColor
@@ -39,6 +40,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
+@Keep
 class UniqueDetailsFragment : Fragment() {
 
     // region [ Property declarations ]
@@ -2802,9 +2804,8 @@ class UniqueDetailsFragment : Fragment() {
                     result.append("Originally: " + viewedItem.originalName + "\n")
                 }
 
-                result.append("Parent Hoard: " + parentHoard.name + "[id:" +
+                result.append("Parent Hoard: " + parentHoard.name + " [id:" +
                         parentHoard.hoardID + "]")
-                result.toString()
 
                 return result.toString()
         }

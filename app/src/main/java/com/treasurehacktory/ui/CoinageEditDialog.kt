@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
@@ -25,6 +26,7 @@ import java.text.NumberFormat
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
+@Keep
 class CoinageEditDialog(): DialogFragment() {
 
     private lateinit var activeHoard: Hoard

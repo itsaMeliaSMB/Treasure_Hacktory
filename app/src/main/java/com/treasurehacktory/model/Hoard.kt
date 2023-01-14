@@ -1,7 +1,6 @@
 package com.treasurehacktory.model
 
 import androidx.room.*
-import org.jetbrains.annotations.NotNull
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -13,7 +12,7 @@ import kotlin.math.roundToInt
  */
 @Entity (tableName = "hackmaster_hoard_table", indices = [Index(value = ["hoardID"])])
 data class Hoard(
-    @PrimaryKey(autoGenerate = true) @NotNull val hoardID: Int = 0,
+    @PrimaryKey(autoGenerate = true) val hoardID: Int = 0,
     var name: String = "",
     var creationDate: Date = Date(),
     var badge: HoardBadge = HoardBadge.NONE,
@@ -103,7 +102,7 @@ data class HoardUniqueItemBundle(val hoardGems: List<Gem>,
  */
 @Entity(tableName = "hoard_events_log")
 data class HoardEvent(
-    @PrimaryKey(autoGenerate = true) @NotNull val eventID: Int = 0,
+    @PrimaryKey(autoGenerate = true) val eventID: Int = 0,
     val hoardID: Int = 0,
     val timestamp: Long,
     val description: String,

@@ -16,6 +16,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.ColorInt
+import androidx.annotation.Keep
+import androidx.core.animation.addListener
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -40,6 +42,7 @@ import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
+@Keep
 class HoardGeneratorFragment : Fragment() {
 
     // region [ Property declarations ]
@@ -1932,7 +1935,8 @@ class HoardGeneratorFragment : Fragment() {
                                 value = entry.second
                                 wrapSelectorWheel = false
                             }
-                        qtyDialogView.findViewById<TextView>(R.id.dialog_letter_qty_current).text =
+
+                            qtyDialogView.findViewById<TextView>(R.id.dialog_letter_qty_current).text =
                             entry.second.toString()
 
                             // Build and show dialog
@@ -2459,15 +2463,10 @@ class HoardGeneratorFragment : Fragment() {
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
 
-        addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationStart(animation: Animator?) {
-                view.isEnabled = false
-            }
-
-            override fun onAnimationEnd(animation: Animator?) {
-                view.isEnabled = (view.visibility == View.VISIBLE)
-            }
-        })
+        addListener(onStart = { _ ->
+                view.isEnabled = false },
+            onEnd = { _ ->
+                view.isEnabled = (view.visibility == View.VISIBLE) })
     }
 
     //endregion

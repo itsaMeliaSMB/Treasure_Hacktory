@@ -23,6 +23,9 @@
         <action
             android:id="@+id/hoard_list_to_about_page_action"
             app:destination="@id/aboutFragment" />
+        <action
+            android:id="@+id/hoard_list_to_dice_roller_action"
+            app:destination="@id/diceRollerFragment" />
     </fragment>
 
     <fragment
@@ -173,5 +176,10 @@
             android:name="hoardID"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/diceRollerFragment"
+        android:name="com.treasurehacktory.ui.DiceRollerFragment"
+        android:label="DiceRollerFragment"
+        tools:layout="@layout/layout_dice_roller"/>
 
 </navigation>

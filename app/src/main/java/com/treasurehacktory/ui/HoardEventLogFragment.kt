@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.Keep
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -31,6 +32,7 @@ import java.util.*
 
 private const val ARG_HOARD_ID = "hoard_id"
 
+@Keep
 class HoardEventLogFragment : Fragment() {
 
     private val safeArgs : HoardEventLogFragmentArgs by navArgs()
